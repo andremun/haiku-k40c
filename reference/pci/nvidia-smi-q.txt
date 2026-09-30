@@ -1,0 +1,611 @@
+
+==============NVSMI LOG==============
+
+Timestamp                                 : Tue Sep 29 13:08:52 2026
+Driver Version                            : 470.256.02
+CUDA Version                              : 11.4
+
+Attached GPUs                             : 3
+GPU 00000000:03:00.0
+    Product Name                          : Quadro K600
+    Product Brand                         : Quadro
+    Display Mode                          : Enabled
+    Display Active                        : Enabled
+    Persistence Mode                      : Disabled
+    MIG Mode
+        Current                           : N/A
+        Pending                           : N/A
+    Accounting Mode                       : Disabled
+    Accounting Mode Buffer Size           : 4000
+    Driver Model
+        Current                           : N/A
+        Pending                           : N/A
+    Serial Number                         : 0322514062007
+    GPU UUID                              : GPU-aa99b21e-607e-e55f-aa9f-f7cf0d9ba204
+    Minor Number                          : 0
+    VBIOS Version                         : 80.07.C5.00.05
+    MultiGPU Board                        : No
+    Board ID                              : 0x300
+    GPU Part Number                       : N/A
+    Module ID                             : 0
+    Inforom Version
+        Image Version                     : 2012.0501.00.01
+        OEM Object                        : 1.1
+        ECC Object                        : N/A
+        Power Management Object           : N/A
+    GPU Operation Mode
+        Current                           : N/A
+        Pending                           : N/A
+    GSP Firmware Version                  : N/A
+    GPU Virtualization Mode
+        Virtualization Mode               : None
+        Host VGPU Mode                    : N/A
+    IBMNPU
+        Relaxed Ordering Mode             : N/A
+    PCI
+        Bus                               : 0x03
+        Device                            : 0x00
+        Domain                            : 0x0000
+        Device Id                         : 0x0FFA10DE
+        Bus Id                            : 00000000:03:00.0
+        Sub System Id                     : 0x094B10DE
+        GPU Link Info
+            PCIe Generation
+                Max                       : 2
+                Current                   : 2
+            Link Width
+                Max                       : 16x
+                Current                   : 16x
+        Bridge Chip
+            Type                          : N/A
+            Firmware                      : N/A
+        Replays Since Reset               : 0
+        Replay Number Rollovers           : 0
+        Tx Throughput                     : N/A
+        Rx Throughput                     : N/A
+    Fan Speed                             : 41 %
+    Performance State                     : P0
+    Clocks Throttle Reasons
+        Idle                              : Not Active
+        Applications Clocks Setting       : Not Active
+        SW Power Cap                      : Not Active
+        HW Slowdown                       : Not Active
+            HW Thermal Slowdown           : N/A
+            HW Power Brake Slowdown       : N/A
+        Sync Boost                        : Not Active
+        SW Thermal Slowdown               : Not Active
+        Display Clock Setting             : Not Active
+    FB Memory Usage
+        Total                             : 979 MiB
+        Used                              : 481 MiB
+        Free                              : 498 MiB
+    BAR1 Memory Usage
+        Total                             : 256 MiB
+        Used                              : 6 MiB
+        Free                              : 250 MiB
+    Compute Mode                          : Default
+    Utilization
+        Gpu                               : 28 %
+        Memory                            : 14 %
+        Encoder                           : 0 %
+        Decoder                           : 0 %
+    Encoder Stats
+        Active Sessions                   : 0
+        Average FPS                       : 0
+        Average Latency                   : 0
+    FBC Stats
+        Active Sessions                   : 0
+        Average FPS                       : 0
+        Average Latency                   : 0
+    Ecc Mode
+        Current                           : N/A
+        Pending                           : N/A
+    ECC Errors
+        Volatile
+            Single Bit            
+                Device Memory             : N/A
+                Register File             : N/A
+                L1 Cache                  : N/A
+                L2 Cache                  : N/A
+                Texture Memory            : N/A
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : N/A
+            Double Bit            
+                Device Memory             : N/A
+                Register File             : N/A
+                L1 Cache                  : N/A
+                L2 Cache                  : N/A
+                Texture Memory            : N/A
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : N/A
+        Aggregate
+            Single Bit            
+                Device Memory             : N/A
+                Register File             : N/A
+                L1 Cache                  : N/A
+                L2 Cache                  : N/A
+                Texture Memory            : N/A
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : N/A
+            Double Bit            
+                Device Memory             : N/A
+                Register File             : N/A
+                L1 Cache                  : N/A
+                L2 Cache                  : N/A
+                Texture Memory            : N/A
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : N/A
+    Retired Pages
+        Single Bit ECC                    : N/A
+        Double Bit ECC                    : N/A
+        Pending Page Blacklist            : N/A
+    Remapped Rows                         : N/A
+    Temperature
+        GPU Current Temp                  : 80 C
+        GPU Shutdown Temp                 : 106 C
+        GPU Slowdown Temp                 : 101 C
+        GPU Max Operating Temp            : N/A
+        GPU Target Temperature            : N/A
+        Memory Current Temp               : N/A
+        Memory Max Operating Temp         : N/A
+    Power Readings
+        Power Management                  : N/A
+        Power Draw                        : N/A
+        Power Limit                       : N/A
+        Default Power Limit               : N/A
+        Enforced Power Limit              : N/A
+        Min Power Limit                   : N/A
+        Max Power Limit                   : N/A
+    Clocks
+        Graphics                          : 706 MHz
+        SM                                : 706 MHz
+        Memory                            : 891 MHz
+        Video                             : 540 MHz
+    Applications Clocks
+        Graphics                          : N/A
+        Memory                            : N/A
+    Default Applications Clocks
+        Graphics                          : N/A
+        Memory                            : N/A
+    Max Clocks
+        Graphics                          : 875 MHz
+        SM                                : 875 MHz
+        Memory                            : 891 MHz
+        Video                             : 540 MHz
+    Max Customer Boost Clocks
+        Graphics                          : N/A
+    Clock Policy
+        Auto Boost                        : N/A
+        Auto Boost Default                : N/A
+    Voltage
+        Graphics                          : N/A
+    Processes
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 5599
+            Type                          : G
+            Name                          : /usr/lib/xorg/Xorg
+            Used GPU Memory               : 203 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 5985
+            Type                          : G
+            Name                          : /usr/bin/gnome-shell
+            Used GPU Memory               : 33 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 18726
+            Type                          : G
+            Name                          : /usr/lib/github-desktop/github-desktop --type=gpu-process --enable-crash-reporter=a622b78b-5d83-4488-bde6-89197a652cdd,no_channel --user-data-dir=/home/unimelb.edu.au/mariom1/.config/GitHub Desktop --gpu-preferences=UAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAABgAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAABAAAAAAAAAAEAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA --shared-files --field-trial-handle=3,i,2197767806673063685,655646737581139443,262144 --disable-features=SpareRendererForSitePerProcess --variations-seed-version
+            Used GPU Memory               : 35 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 40796
+            Type                          : G
+            Name                          : /usr/libexec/gnome-remote-desktop-daemon
+            Used GPU Memory               : 0 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 102284
+            Type                          : G
+            Name                          : /usr/lib/chatgpt/ChatGPT --type=gpu-process --ozone-platform=x11 --crashpad-handler-pid=102238 --enable-crash-reporter=, --user-data-dir=/home/unimelb.edu.au/mariom1/.config/Codex --change-stack-guard-on-fork=enable --gpu-preferences=YAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAEAAAAAAAAACAAAAAAAAAAMAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,3588555033252686901,16067498905998339769,262144 --field-trial-handle=3,i,15386029419797300563,3295262259465830347,262144 --enable-features=ReportStuckThrottle --disable-features=DropInputEventsWhilePaintHolding,WebUIOmniboxAimPopup,WebUIOmniboxPopup --variations-seed-version --pseudonymization-salt-handle=7,i,11758159700204698343,4708604757227657622,4 --trace-process-track-uuid=3190708988185955192
+            Used GPU Memory               : 28 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 168104
+            Type                          : G
+            Name                          : /opt/google/chrome/chrome --type=gpu-process --gpu-recent-crash-count=1 --ozone-platform=x11 --crashpad-handler-pid=1366219 --enable-crash-reporter=2e8594b1-984f-4b61-9cd9-6e47dd1131b1, --change-stack-guard-on-fork=enable --gpu-preferences=YAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAEAAAAAAAAACAAAAAAAAAAMAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,16603035965052603559,7556025110895494606,262144 --field-trial-handle=3,i,7660024128489282473,3378000715664036893,262144 --variations-seed-version=20260922-170059.280000-production --pseudonymization-salt-handle=7,i,1530515586612180738,2031316418599731350,4 --trace-process-track-uuid=3190711393572381575
+            Used GPU Memory               : 88 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 883979
+            Type                          : G
+            Name                          : /usr/lib/claude-desktop/claude-desktop --type=gpu-process --ozone-platform=x11 --crashpad-handler-pid=883962 --enable-crash-reporter=6ae0f3c8-f268-4507-8544-4e24ca4503be,no_channel --user-data-dir=/home/unimelb.edu.au/mariom1/.config/Claude --gpu-preferences=YAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAEAAAAAAAAACAAAAAAAAAAMAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --field-trial-handle=3,i,8408472334238528580,13983630997531125192,262144 --enable-features=DocumentPolicyIncludeJSCallStacksInCrashReports,GlobalShortcutsPortal,GlobalShortcutsPortalPreferredTrigger,IsolatesPriorityUseProcessPriority,PdfUseShowSaveFilePicker --disable-features=DropInputEventsWhilePaintHolding,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --pseudonymization-salt-handle=7,i,7704997672470833318,3791732048419312342,4 --trace-process-track-uuid=3190708988185955192 --disable-logging
+            Used GPU Memory               : 41 MiB
+
+GPU 00000000:04:00.0
+    Product Name                          : Tesla K40c
+    Product Brand                         : Tesla
+    Display Mode                          : Disabled
+    Display Active                        : Disabled
+    Persistence Mode                      : Disabled
+    MIG Mode
+        Current                           : N/A
+        Pending                           : N/A
+    Accounting Mode                       : Disabled
+    Accounting Mode Buffer Size           : 4000
+    Driver Model
+        Current                           : N/A
+        Pending                           : N/A
+    Serial Number                         : 0321216032972
+    GPU UUID                              : GPU-305da5a6-e0a3-a36a-963b-4c099fd262f5
+    Minor Number                          : 1
+    VBIOS Version                         : 80.80.65.00.01
+    MultiGPU Board                        : No
+    Board ID                              : 0x400
+    GPU Part Number                       : 900-22081-2250-000
+    Module ID                             : 0
+    Inforom Version
+        Image Version                     : 2081.0206.01.04
+        OEM Object                        : 1.1
+        ECC Object                        : 3.0
+        Power Management Object           : N/A
+    GPU Operation Mode
+        Current                           : N/A
+        Pending                           : N/A
+    GSP Firmware Version                  : N/A
+    GPU Virtualization Mode
+        Virtualization Mode               : None
+        Host VGPU Mode                    : N/A
+    IBMNPU
+        Relaxed Ordering Mode             : N/A
+    PCI
+        Bus                               : 0x04
+        Device                            : 0x00
+        Domain                            : 0x0000
+        Device Id                         : 0x102410DE
+        Bus Id                            : 00000000:04:00.0
+        Sub System Id                     : 0x098310DE
+        GPU Link Info
+            PCIe Generation
+                Max                       : 3
+                Current                   : 3
+            Link Width
+                Max                       : 16x
+                Current                   : 16x
+        Bridge Chip
+            Type                          : N/A
+            Firmware                      : N/A
+        Replays Since Reset               : 0
+        Replay Number Rollovers           : 0
+        Tx Throughput                     : N/A
+        Rx Throughput                     : N/A
+    Fan Speed                             : 29 %
+    Performance State                     : P0
+    Clocks Throttle Reasons
+        Idle                              : Not Active
+        Applications Clocks Setting       : Active
+        SW Power Cap                      : Not Active
+        HW Slowdown                       : Not Active
+            HW Thermal Slowdown           : N/A
+            HW Power Brake Slowdown       : N/A
+        Sync Boost                        : Not Active
+        SW Thermal Slowdown               : Not Active
+        Display Clock Setting             : Not Active
+    FB Memory Usage
+        Total                             : 11441 MiB
+        Used                              : 10823 MiB
+        Free                              : 618 MiB
+    BAR1 Memory Usage
+        Total                             : 256 MiB
+        Used                              : 2 MiB
+        Free                              : 254 MiB
+    Compute Mode                          : Default
+    Utilization
+        Gpu                               : 0 %
+        Memory                            : 0 %
+        Encoder                           : 0 %
+        Decoder                           : 0 %
+    Encoder Stats
+        Active Sessions                   : 0
+        Average FPS                       : 0
+        Average Latency                   : 0
+    FBC Stats
+        Active Sessions                   : 0
+        Average FPS                       : 0
+        Average Latency                   : 0
+    Ecc Mode
+        Current                           : Enabled
+        Pending                           : Enabled
+    ECC Errors
+        Volatile
+            Single Bit            
+                Device Memory             : 0
+                Register File             : 0
+                L1 Cache                  : 0
+                L2 Cache                  : 0
+                Texture Memory            : 0
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : 0
+            Double Bit            
+                Device Memory             : 0
+                Register File             : 0
+                L1 Cache                  : 0
+                L2 Cache                  : 0
+                Texture Memory            : 0
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : 0
+        Aggregate
+            Single Bit            
+                Device Memory             : 0
+                Register File             : 1
+                L1 Cache                  : 0
+                L2 Cache                  : 0
+                Texture Memory            : 0
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : 1
+            Double Bit            
+                Device Memory             : 8
+                Register File             : 0
+                L1 Cache                  : 0
+                L2 Cache                  : 0
+                Texture Memory            : 0
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : 8
+    Retired Pages
+        Single Bit ECC                    : 0
+        Double Bit ECC                    : 3
+        Pending Page Blacklist            : No
+    Remapped Rows                         : N/A
+    Temperature
+        GPU Current Temp                  : 57 C
+        GPU Shutdown Temp                 : 95 C
+        GPU Slowdown Temp                 : 90 C
+        GPU Max Operating Temp            : N/A
+        GPU Target Temperature            : N/A
+        Memory Current Temp               : N/A
+        Memory Max Operating Temp         : N/A
+    Power Readings
+        Power Management                  : Supported
+        Power Draw                        : 63.23 W
+        Power Limit                       : 235.00 W
+        Default Power Limit               : 235.00 W
+        Enforced Power Limit              : 235.00 W
+        Min Power Limit                   : 180.00 W
+        Max Power Limit                   : 235.00 W
+    Clocks
+        Graphics                          : 745 MHz
+        SM                                : 745 MHz
+        Memory                            : 3004 MHz
+        Video                             : 540 MHz
+    Applications Clocks
+        Graphics                          : 745 MHz
+        Memory                            : 3004 MHz
+    Default Applications Clocks
+        Graphics                          : 745 MHz
+        Memory                            : 3004 MHz
+    Max Clocks
+        Graphics                          : 875 MHz
+        SM                                : 875 MHz
+        Memory                            : 3004 MHz
+        Video                             : 540 MHz
+    Max Customer Boost Clocks
+        Graphics                          : N/A
+    Clock Policy
+        Auto Boost                        : N/A
+        Auto Boost Default                : N/A
+    Voltage
+        Graphics                          : N/A
+    Processes
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 5599
+            Type                          : G
+            Name                          : /usr/lib/xorg/Xorg
+            Used GPU Memory               : 4 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 273362
+            Type                          : C
+            Name                          : /home/unimelb.edu.au/mariom1/llm-server/llama.cpp/build/bin/llama-server
+            Used GPU Memory               : 10811 MiB
+
+GPU 00000000:81:00.0
+    Product Name                          : Tesla K40c
+    Product Brand                         : Tesla
+    Display Mode                          : Disabled
+    Display Active                        : Disabled
+    Persistence Mode                      : Disabled
+    MIG Mode
+        Current                           : N/A
+        Pending                           : N/A
+    Accounting Mode                       : Disabled
+    Accounting Mode Buffer Size           : 4000
+    Driver Model
+        Current                           : N/A
+        Pending                           : N/A
+    Serial Number                         : 0321216032972
+    GPU UUID                              : GPU-fe68b526-b148-5b7b-0fa1-309819b4527e
+    Minor Number                          : 2
+    VBIOS Version                         : 80.80.65.00.01
+    MultiGPU Board                        : No
+    Board ID                              : 0x8100
+    GPU Part Number                       : 900-22081-2250-000
+    Module ID                             : 0
+    Inforom Version
+        Image Version                     : 2081.0206.01.04
+        OEM Object                        : 1.1
+        ECC Object                        : 3.0
+        Power Management Object           : N/A
+    GPU Operation Mode
+        Current                           : N/A
+        Pending                           : N/A
+    GSP Firmware Version                  : N/A
+    GPU Virtualization Mode
+        Virtualization Mode               : None
+        Host VGPU Mode                    : N/A
+    IBMNPU
+        Relaxed Ordering Mode             : N/A
+    PCI
+        Bus                               : 0x81
+        Device                            : 0x00
+        Domain                            : 0x0000
+        Device Id                         : 0x102410DE
+        Bus Id                            : 00000000:81:00.0
+        Sub System Id                     : 0x098310DE
+        GPU Link Info
+            PCIe Generation
+                Max                       : 3
+                Current                   : 3
+            Link Width
+                Max                       : 16x
+                Current                   : 16x
+        Bridge Chip
+            Type                          : N/A
+            Firmware                      : N/A
+        Replays Since Reset               : 0
+        Replay Number Rollovers           : 0
+        Tx Throughput                     : N/A
+        Rx Throughput                     : N/A
+    Fan Speed                             : 32 %
+    Performance State                     : P0
+    Clocks Throttle Reasons
+        Idle                              : Not Active
+        Applications Clocks Setting       : Active
+        SW Power Cap                      : Not Active
+        HW Slowdown                       : Not Active
+            HW Thermal Slowdown           : N/A
+            HW Power Brake Slowdown       : N/A
+        Sync Boost                        : Not Active
+        SW Thermal Slowdown               : Not Active
+        Display Clock Setting             : Not Active
+    FB Memory Usage
+        Total                             : 11441 MiB
+        Used                              : 10793 MiB
+        Free                              : 648 MiB
+    BAR1 Memory Usage
+        Total                             : 256 MiB
+        Used                              : 2 MiB
+        Free                              : 254 MiB
+    Compute Mode                          : Default
+    Utilization
+        Gpu                               : 0 %
+        Memory                            : 0 %
+        Encoder                           : 0 %
+        Decoder                           : 0 %
+    Encoder Stats
+        Active Sessions                   : 0
+        Average FPS                       : 0
+        Average Latency                   : 0
+    FBC Stats
+        Active Sessions                   : 0
+        Average FPS                       : 0
+        Average Latency                   : 0
+    Ecc Mode
+        Current                           : Enabled
+        Pending                           : Enabled
+    ECC Errors
+        Volatile
+            Single Bit            
+                Device Memory             : 0
+                Register File             : 0
+                L1 Cache                  : 0
+                L2 Cache                  : 0
+                Texture Memory            : 0
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : 0
+            Double Bit            
+                Device Memory             : 0
+                Register File             : 0
+                L1 Cache                  : 0
+                L2 Cache                  : 0
+                Texture Memory            : 0
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : 0
+        Aggregate
+            Single Bit            
+                Device Memory             : 0
+                Register File             : 1
+                L1 Cache                  : 0
+                L2 Cache                  : 0
+                Texture Memory            : 0
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : 1
+            Double Bit            
+                Device Memory             : 8
+                Register File             : 0
+                L1 Cache                  : 0
+                L2 Cache                  : 0
+                Texture Memory            : 0
+                Texture Shared            : N/A
+                CBU                       : N/A
+                Total                     : 8
+    Retired Pages
+        Single Bit ECC                    : 0
+        Double Bit ECC                    : 3
+        Pending Page Blacklist            : No
+    Remapped Rows                         : N/A
+    Temperature
+        GPU Current Temp                  : 67 C
+        GPU Shutdown Temp                 : 95 C
+        GPU Slowdown Temp                 : 90 C
+        GPU Max Operating Temp            : N/A
+        GPU Target Temperature            : N/A
+        Memory Current Temp               : N/A
+        Memory Max Operating Temp         : N/A
+    Power Readings
+        Power Management                  : Supported
+        Power Draw                        : 72.49 W
+        Power Limit                       : 235.00 W
+        Default Power Limit               : 235.00 W
+        Enforced Power Limit              : 235.00 W
+        Min Power Limit                   : 180.00 W
+        Max Power Limit                   : 235.00 W
+    Clocks
+        Graphics                          : 745 MHz
+        SM                                : 745 MHz
+        Memory                            : 3004 MHz
+        Video                             : 540 MHz
+    Applications Clocks
+        Graphics                          : 745 MHz
+        Memory                            : 3004 MHz
+    Default Applications Clocks
+        Graphics                          : 745 MHz
+        Memory                            : 3004 MHz
+    Max Clocks
+        Graphics                          : 875 MHz
+        SM                                : 875 MHz
+        Memory                            : 3004 MHz
+        Video                             : 540 MHz
+    Max Customer Boost Clocks
+        Graphics                          : N/A
+    Clock Policy
+        Auto Boost                        : N/A
+        Auto Boost Default                : N/A
+    Voltage
+        Graphics                          : N/A
+    Processes
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 5599
+            Type                          : G
+            Name                          : /usr/lib/xorg/Xorg
+            Used GPU Memory               : 4 MiB
+        GPU instance ID                   : N/A
+        Compute instance ID               : N/A
+        Process ID                        : 273362
+            Type                          : C
+            Name                          : /home/unimelb.edu.au/mariom1/llm-server/llama.cpp/build/bin/llama-server
+            Used GPU Memory               : 10782 MiB
+

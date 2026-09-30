@@ -1,0 +1,55 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "llamacpp/qwen3.6-dual",
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "sudo*": "ask",
+      "su *": "ask",
+      "doas *": "ask",
+      "pkexec*": "ask",
+      "modprobe*": "ask",
+      "rmmod*": "ask",
+      "insmod*": "ask",
+      "setpci*": "ask",
+      "dd *": "ask",
+      "mkfs*": "ask",
+      "mount *": "ask",
+      "umount *": "ask",
+      "reboot*": "ask",
+      "shutdown*": "ask",
+      "systemctl*": "ask",
+      "nvidia-smi -*": "ask",
+      "nvidia-smi --*": "ask",
+      "git push*": "ask",
+      "git reset --hard*": "ask",
+      "git clean*": "ask",
+      "git rebase*": "ask",
+      "git filter-branch*": "ask",
+      "rm -rf*": "ask",
+      "rm -fr*": "ask",
+      "curl*": "ask",
+      "wget*": "ask",
+      "apt*": "ask",
+      "pip install*": "ask",
+      "opencode*": "ask"
+    },
+    "edit": {
+      "*": "allow",
+      "reference/*": "deny",
+      "reference/**": "deny",
+      "docs/design/*": "deny",
+      "AGENTS.md": "ask",
+      "opencode.json": "deny",
+      ".opencode/*": "deny",
+      ".opencode/**": "deny"
+    },
+    "webfetch": "ask",
+    "task": "deny",
+    "external_directory": {
+      "*": "ask",
+      "/home/unimelb.edu.au/mariom1/llm-server/agent-refs/*": "allow",
+      "/home/unimelb.edu.au/mariom1/llm-server/agent-refs/**": "allow"
+    }
+  }
+}
