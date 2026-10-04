@@ -1,0 +1,4 @@
+device 0000:04:00.0
+PMC_BOOT_0 = 0x0f1240a1
+chipset field (bits 28:20) = 0x0f1
+Nouveau: 0x0f0 -> nvf0_chipset (GK110), 0x0f1 -> nvf1_chipset (GK110B)

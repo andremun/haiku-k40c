@@ -11,5 +11,7 @@ Do not edit them. Cite files as `reference/<name>/<path>:<line>`.
 | `haiku/` | Haiku (sparse: `headers/os`, `headers/private/{kernel,drivers,graphics}`, `src/add-ons/kernel/drivers/graphics/nvidia`, `docs/develop`) | 49a0af9585d80e42240af63ab66e31e9873f59b8 | 2026-09-28 |
 | `pci/` | Captures from this T7610, 2026-09-29, without root (copied, not linked) | - | - |
 
-Captures that need root are listed in `docs/REQUESTS.md`. When the user
-runs them, the output goes to `reference/pci/root/`.
+`pci/root/` holds the captures that need root (2026-10-05): full config
+space, capabilities, setpci reads, `/proc/iomem`, dmidecode, and
+PMC_BOOT_0 of 0000:04:00.0. `dmesg-gpu.txt` has no boot-time driver
+messages (the kernel log had rotated). Capture again after a reboot if needed.
