@@ -1,6 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "llamacpp/qwen3.6-dual",
   "permission": {
     "bash": {
       "*": "allow",

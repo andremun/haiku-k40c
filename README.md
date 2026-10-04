@@ -20,6 +20,17 @@ Commands:
 | `/escalate` | Write an escalation and stop the task. |
 | `/review` | Read-only review of a task's outputs (`review` agent). |
 
+Model configurations (`~/llm-server/llm-mode.sh`):
+
+| Mode | Use |
+|---|---|
+| `dual` | One model on both K40c. Default, fastest single session. |
+| `two` | One model per K40c. Two sessions at a time: `opencode` and `opencode -m llamacpp/qwen3.6-k40b`. |
+| `one` | One model on the K40c at 81:00.0. No process on the K40c at 04:00.0, for hardware tests. |
+
+The project config has no fixed model. It uses the OpenCode default, which
+`llm-mode.sh` sets.
+
 Start a new OpenCode session for each task. The repository is the memory:
 `docs/STATUS.md`, `docs/PHASES.md`, `work/<task>/`.
 
