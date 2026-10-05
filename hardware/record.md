@@ -17,6 +17,40 @@
 | Link width | x16 | `reference/pci/sysfs-04_00_0.txt` line 4: `current_link_width: 16` |
 | Nouveau chipset | `nvf1_chipset` (GK110B) | PMC_BOOT_0=0x0f1240a1; bits[28:20]=0x0f1; `reference/nouveau/nvkm/engine/device/base.c:3218` |
 
+### PCI Capabilities
+
+| Offset | Name | Version | Source |
+|--------|------|---------|--------|
+| 0x60 | Power Management | 3 | `reference/pci/root/lspci-vvv-04_00_0.txt` line 12: `Capabilities: [60] Power Management version 3` |
+| 0x68 | MSI | — | `reference/pci/root/lspci-vvv-04_00_0.txt` line 15: `Capabilities: [68] MSI: Enable+ Count=1/1 Maskable- 64bit+` |
+| 0x78 | Express | 2 | `reference/pci/root/lspci-vvv-04_00_0.txt` line 17: `Capabilities: [78] Express (v2) Endpoint, MSI 00` |
+| 0x100 | Virtual Channel | 1 | `reference/pci/root/lspci-vvv-04_00_0.txt` line 44: `Capabilities: [100 v1] Virtual Channel` |
+| 0x128 | Power Budgeting | 1 | `reference/pci/root/lspci-vvv-04_00_0.txt` line 53: `Capabilities: [128 v1] Power Budgeting <?>` |
+| 0x420 | Advanced Error Reporting | 2 | `reference/pci/root/lspci-vvv-04_00_0.txt` line 54: `Capabilities: [420 v2] Advanced Error Reporting` |
+| 0x600 | Vendor Specific Information | 1 | `reference/pci/root/lspci-vvv-04_00_0.txt` line 63: `Capabilities: [600 v1] Vendor Specific Information: ID=0001 Rev=1 Len=024 <?>` |
+| 0x900 | Secondary PCI Express | 1 | `reference/pci/root/lspci-vvv-04_00_0.txt` line 64: `Capabilities: [900 v1] Secondary PCI Express` |
+
+### Interrupt
+
+| Field | Value | Source |
+|-------|-------|--------|
+| Pin | A | `reference/pci/root/lspci-vvv-04_00_0.txt` line 6: `Interrupt: pin A routed to IRQ 66` |
+| IRQ | 66 | `reference/pci/root/lspci-vvv-04_00_0.txt` line 6: `routed to IRQ 66` |
+| MSI offset | 0x68 | `reference/pci/root/lspci-vvv-04_00_0.txt` line 15: `Capabilities: [68] MSI` |
+| MSI enabled | true | `reference/pci/root/lspci-vvv-04_00_0.txt` line 15: `Enable+` |
+| MSI count | 1/1 | `reference/pci/root/lspci-vvv-04_00_0.txt` line 15: `Count=1/1` |
+| MSI 64-bit | true | `reference/pci/root/lspci-vvv-04_00_0.txt` line 15: `64bit+` |
+| MSI maskable | false | `reference/pci/root/lspci-vvv-04_00_0.txt` line 15: `Maskable-` |
+
+### Link capability
+
+| Field | Value | Source |
+|-------|-------|--------|
+| Speed | 8GT/s | `reference/pci/root/lspci-vvv-04_00_0.txt` line 24: `LnkCap: Port #0, Speed 8GT/s` |
+| Width | x16 | `reference/pci/root/lspci-vvv-04_00_0.txt` line 24: `Width x16` |
+| ASPM | not supported | `reference/pci/root/lspci-vvv-04_00_0.txt` line 24: `ASPM not supported` |
+| LnkSta agrees | Speed 8GT/s (ok), Width x16 (ok) | `reference/pci/root/lspci-vvv-04_00_0.txt` line 28: `LnkSta: Speed 8GT/s (ok), Width x16 (ok)` — agrees with existing `link` field (8.0 GT/s PCIe, x16) |
+
 ## GPU 0000:81:00.0
 
 | Field | Value | Source |
@@ -33,6 +67,40 @@
 | Link speed | 8.0 GT/s PCIe | `reference/pci/sysfs-81_00_0.txt` line 3: `current_link_speed: 8.0 GT/s PCIe` |
 | Link width | x16 | `reference/pci/sysfs-81_00_0.txt` line 4: `current_link_width: 16` |
 | Nouveau chipset | `nvf1_chipset` (GK110B) | INFERRED — same PCI ID and VBIOS as 04:00.0; PMC_BOOT_0 not read (Q1) |
+
+### PCI Capabilities
+
+| Offset | Name | Version | Source |
+|--------|------|---------|--------|
+| 0x60 | Power Management | 3 | `reference/pci/root/lspci-vvv-81_00_0.txt` line 12: `Capabilities: [60] Power Management version 3` |
+| 0x68 | MSI | — | `reference/pci/root/lspci-vvv-81_00_0.txt` line 15: `Capabilities: [68] MSI: Enable+ Count=1/1 Maskable- 64bit+` |
+| 0x78 | Express | 2 | `reference/pci/root/lspci-vvv-81_00_0.txt` line 17: `Capabilities: [78] Express (v2) Endpoint, MSI 00` |
+| 0x100 | Virtual Channel | 1 | `reference/pci/root/lspci-vvv-81_00_0.txt` line 44: `Capabilities: [100 v1] Virtual Channel` |
+| 0x128 | Power Budgeting | 1 | `reference/pci/root/lspci-vvv-81_00_0.txt` line 53: `Capabilities: [128 v1] Power Budgeting <?>` |
+| 0x420 | Advanced Error Reporting | 2 | `reference/pci/root/lspci-vvv-81_00_0.txt` line 54: `Capabilities: [420 v2] Advanced Error Reporting` |
+| 0x600 | Vendor Specific Information | 1 | `reference/pci/root/lspci-vvv-81_00_0.txt` line 63: `Capabilities: [600 v1] Vendor Specific Information: ID=0001 Rev=1 Len=024 <?>` |
+| 0x900 | Secondary PCI Express | 1 | `reference/pci/root/lspci-vvv-81_00_0.txt` line 64: `Capabilities: [900 v1] Secondary PCI Express` |
+
+### Interrupt
+
+| Field | Value | Source |
+|-------|-------|--------|
+| Pin | A | `reference/pci/root/lspci-vvv-81_00_0.txt` line 6: `Interrupt: pin A routed to IRQ 67` |
+| IRQ | 67 | `reference/pci/root/lspci-vvv-81_00_0.txt` line 6: `routed to IRQ 67` |
+| MSI offset | 0x68 | `reference/pci/root/lspci-vvv-81_00_0.txt` line 15: `Capabilities: [68] MSI` |
+| MSI enabled | true | `reference/pci/root/lspci-vvv-81_00_0.txt` line 15: `Enable+` |
+| MSI count | 1/1 | `reference/pci/root/lspci-vvv-81_00_0.txt` line 15: `Count=1/1` |
+| MSI 64-bit | true | `reference/pci/root/lspci-vvv-81_00_0.txt` line 15: `64bit+` |
+| MSI maskable | false | `reference/pci/root/lspci-vvv-81_00_0.txt` line 15: `Maskable-` |
+
+### Link capability
+
+| Field | Value | Source |
+|-------|-------|--------|
+| Speed | 8GT/s | `reference/pci/root/lspci-vvv-81_00_0.txt` line 24: `LnkCap: Port #0, Speed 8GT/s` |
+| Width | x16 | `reference/pci/root/lspci-vvv-81_00_0.txt` line 24: `Width x16` |
+| ASPM | not supported | `reference/pci/root/lspci-vvv-81_00_0.txt` line 24: `ASPM not supported` |
+| LnkSta agrees | Speed 8GT/s (ok), Width x16 (ok) | `reference/pci/root/lspci-vvv-81_00_0.txt` line 28: `LnkSta: Speed 8GT/s (ok), Width x16 (ok)` — agrees with existing `link` field (8.0 GT/s PCIe, x16) |
 
 ## Open Questions
 
