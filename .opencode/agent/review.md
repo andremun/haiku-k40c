@@ -31,6 +31,8 @@ the work by hand:
 - BAR base and size, and the NUMA node, against the captures;
 - that `file:line` references into the Nouveau tree exist;
 - that every task marked DONE has `work/<task-id>/RESULT.md`.
+- that every cited `reference/...` path exists (not that it contains
+  the claimed value: that is your job).
 
 Never decode a capture file yourself (`config-*.hex`, `resource-*.txt`,
 lspci dumps). If you think a checked value is wrong, write one line that

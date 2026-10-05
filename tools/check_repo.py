@@ -62,6 +62,17 @@ for m in re.finditer(r"^\|\s*([A-D]\d+)\s*\|\s*DONE\b", status, re.M):
         fail(f"docs/STATUS.md marks {m.group(1)} DONE but work/{m.group(1)}/RESULT.md is missing "
              f"(run the /handoff steps)")
 
+# Every cited capture or reference path in the outputs must exist.
+for doc in sorted(glob.glob(os.path.join(ROOT, "hardware", "*.md"))
+                  + glob.glob(os.path.join(ROOT, "work", "*", "*.md"))
+                  + glob.glob(os.path.join(ROOT, "analysis", "*.md"))
+                  + [os.path.join(ROOT, "docs", "OPEN_QUESTIONS.md")]):
+    if not os.path.exists(doc):
+        continue
+    for cited in sorted(set(re.findall(r"`(reference/[A-Za-z0-9_./-]+?)(?::\d+)?`", open(doc).read()))):
+        if not os.path.exists(os.path.join(ROOT, cited)):
+            fail(f"{os.path.relpath(doc, ROOT)}: cites {cited}, which does not exist")
+
 # A1 hardware record --------------------------------------------------
 rec = load_json("hardware/record.json")
 if rec is not None:
