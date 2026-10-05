@@ -74,6 +74,27 @@ if rec is not None:
                         and is_hex(b.get("size"))):
                     fail(f"hardware/record.json[{i}]: bar entries need index and hex-string base/size")
                     break
+            # Cross-check BARs and NUMA node against the captures.
+            tag = str(r["pci_address"]).replace("0000:", "").replace(":", "_").replace(".", "_")
+            cap = os.path.join(ROOT, "reference", "pci", f"resource-{tag}.txt")
+            if os.path.exists(cap):
+                want = {}
+                for n, line in enumerate(open(cap).read().split("\n")[:6]):
+                    f = line.split()
+                    if len(f) == 3 and int(f[0], 16):
+                        want[n] = (int(f[0], 16), int(f[1], 16) - int(f[0], 16) + 1)
+                try:
+                    got = {int(b["index"]): (int(b["base"], 16), int(b["size"], 16)) for b in r["bars"]}
+                except (TypeError, ValueError, KeyError):
+                    got = None
+                if got is not None and got != want:
+                    fail(f"hardware/record.json[{i}]: bars differ from reference/pci/resource-{tag}.txt "
+                         f"(see reference/pci/README.md)")
+            cap = os.path.join(ROOT, "reference", "pci", f"sysfs-{tag}.txt")
+            if os.path.exists(cap):
+                m = re.search(r"^numa_node:\s*(-?\d+)", open(cap).read(), re.M)
+                if m and r["numa_node"] != int(m.group(1)):
+                    fail(f"hardware/record.json[{i}]: numa_node differs from reference/pci/sysfs-{tag}.txt")
             ch = r["nouveau_chipset"]
             if not isinstance(ch, dict) or ch.get("status") not in ("KNOWN", "INFERRED", "UNKNOWN"):
                 fail(f"hardware/record.json[{i}]: nouveau_chipset.status must be KNOWN, INFERRED or UNKNOWN")

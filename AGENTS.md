@@ -51,6 +51,12 @@ the truth.
 - Search narrowly (`grep -rn` with specific patterns, `| head -50`,
   `sed -n 'A,Bp'`). Nouveau is inherited code: follow the chain from the
   chipset entry through gk110, gk104 and gf100 implementations.
+- Capture file formats are documented in `reference/pci/README.md`. Read
+  it before you decode a capture. The captures agree with each other: do
+  not re-derive a format, and do not spend more than one attempt on a
+  mismatch before you check that file.
+- When `make check` verifies a value against a capture, accept it. Do not
+  verify the same value again by hand.
 - Generate data (JSON/YAML) with scripts in `tools/`, not by hand.
 - Do not start sub-agents.
 
