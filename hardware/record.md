@@ -40,5 +40,5 @@
 
 ## Notes
 
-- BAR flags from `resource-*`: BAR0 = `0x00040200` (Memory, 32-bit, non-prefetchable per `lspci-vvv-*.txt` Region 0); BAR1 = `0x0014220c` (64-bit, prefetchable, bits 63-32 = `0x20fe0000` for GPU 0, `0x21fe0000` for GPU 1).
+- BAR flags from `resource-*`: BAR0 = `0x00040200` (Memory, 32-bit, non-prefetchable per `lspci-vvv-*.txt` Region 0); BAR1 = `0x0014220c` (64-bit, prefetchable, bits 63-32 = `0x0000020f` for GPU 0, `0x0000021f` for GPU 1).
 - GPUs are on different NUMA nodes (04:00.0 → node 0, 81:00.0 → node 1) — dual-socket Xeon with PCIe slots distributed across nodes.
