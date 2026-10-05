@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Compile Haiku kernel add-on sources on Linux with the cross compiler.
+# Usage: tools/haiku/kcc [gcc options] -c file.c -o file.o
+# Kernel add-ons are position-independent code (the compiler default). Do
+# not add -fno-pic or -mcmodel=kernel: those are for the kernel itself.
+. "$(dirname "$0")/config.sh"
+CC=gcc; EXTRA=()
+for a in "$@"; do case "$a" in *.cpp|*.cc) CC=g++; EXTRA=(-fno-exceptions -fno-rtti);; esac; done
+INC=(-I"$HAIKU_HEADERS" -I"$HAIKU_CROSS/haiku/build/config_headers")
+for d in os os/kernel os/drivers os/drivers/bus os/device os/support os/storage os/interface os/app \
+         os/add-ons/graphics posix config private private/kernel private/kernel/arch/x86 \
+         private/kernel/util private/system private/system/arch/x86_64 private/shared \
+         private/drivers private/graphics private/graphics/common private/libroot; do
+    INC+=(-I"$HAIKU_HEADERS/$d")
+done
+exec "${HAIKU_GCC_PREFIX}$CC" -D_KERNEL_MODE -ffreestanding -fno-builtin -mno-red-zone \
+    -fno-omit-frame-pointer -Wall -Wno-multichar "${EXTRA[@]}" "${INC[@]}" "$@"

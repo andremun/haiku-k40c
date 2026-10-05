@@ -12,6 +12,8 @@ holds rules only. Project knowledge lives in the files below.
 - `work/<task-id>/`: `PLAN.md`, `FINDINGS.md`, `RESULT.md` of each task.
 - `escalations/`: problems that need a human decision.
 - `reference/`: pinned read-only sources. Commits: `reference/MANIFEST.md`.
+- `docs/HAIKU_BUILD_TEST.md`: how to compile a Haiku driver on this machine
+  and load it in a test VM (`tools/haiku/`). Read it before any Haiku code.
 
 Do not reconstruct project history from the conversation. The files are
 the truth.
@@ -34,6 +36,9 @@ last finished task (last row of the task log), not the current task.
 - Both K40c cards run the language model you are running on. Never touch
   them: no `sudo`, no module load or unload, no `setpci` writes, no BAR or
   `/dev/mem` access, no `nvidia-smi` with options, no GPU reset.
+- The Haiku test VM (`tools/haiku/vm-test.sh`) has no GPU. Never give it
+  one: no `vfio-pci`, no QEMU host-device options, no change to that
+  script's QEMU command line. A VM result is never hardware evidence.
 - If a task needs data that only root can read, write the exact read-only
   command into `docs/REQUESTS.md` and continue with other work.
 
@@ -75,6 +80,12 @@ The task outputs exist in the format that `docs/PHASES.md` specifies,
 `make check` passes, `docs/STATUS.md` is updated and the work is
 committed. Never report a task as done while a check fails. Say what is
 still open.
+
+## License
+
+MIT (`LICENSE`). New source files start with a copyright line and "Distributed
+under the terms of the MIT License." Record every consulted Nouveau file in
+`docs/licensing.md`.
 
 ## Git
 

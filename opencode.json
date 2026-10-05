@@ -31,7 +31,9 @@
       "wget*": "ask",
       "apt*": "ask",
       "pip install*": "ask",
-      "opencode*": "ask"
+      "opencode*": "ask",
+      "qemu*": "ask",
+      "*vfio*": "ask"
     },
     "edit": {
       "*": "allow",
@@ -41,14 +43,18 @@
       "AGENTS.md": "ask",
       "opencode.json": "deny",
       ".opencode/*": "deny",
-      ".opencode/**": "deny"
+      ".opencode/**": "deny",
+      "tools/haiku/*": "ask",
+      "LICENSE": "deny"
     },
     "webfetch": "ask",
     "task": "deny",
     "external_directory": {
       "*": "ask",
       "/home/unimelb.edu.au/mariom1/llm-server/agent-refs/*": "allow",
-      "/home/unimelb.edu.au/mariom1/llm-server/agent-refs/**": "allow"
+      "/home/unimelb.edu.au/mariom1/llm-server/agent-refs/**": "allow",
+      "/home/unimelb.edu.au/mariom1/haiku-cross/*": "allow",
+      "/home/unimelb.edu.au/mariom1/haiku-cross/**": "allow"
     }
   }
 }
