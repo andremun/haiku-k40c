@@ -26,6 +26,9 @@ the truth.
    `work/<task-id>/RESULT.md`, record open questions, commit.
 6. Stop. The next task starts in a new session.
 
+`/review` runs in its own new session after the handoff. It reviews the
+last finished task (last row of the task log), not the current task.
+
 ## Hardware safety (never break these)
 
 - Both K40c cards run the language model you are running on. Never touch

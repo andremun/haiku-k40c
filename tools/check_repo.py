@@ -56,6 +56,12 @@ for key in ("Current phase:", "Current task:"):
     if key not in status:
         fail(f"docs/STATUS.md: no '{key}' line")
 
+# Every task marked DONE in the task log needs its RESULT.md.
+for m in re.finditer(r"^\|\s*([A-D]\d+)\s*\|\s*DONE\b", status, re.M):
+    if not os.path.exists(os.path.join(ROOT, "work", m.group(1), "RESULT.md")):
+        fail(f"docs/STATUS.md marks {m.group(1)} DONE but work/{m.group(1)}/RESULT.md is missing "
+             f"(run the /handoff steps)")
+
 # A1 hardware record --------------------------------------------------
 rec = load_json("hardware/record.json")
 if rec is not None:
