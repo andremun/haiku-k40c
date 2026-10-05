@@ -26,7 +26,7 @@
     ],
     "numa_node": 0,
     "vbios": "80.80.65.00.01",
-    "vram_mib": 12288,
+    "vram_mib": 11441,
     "link": {
       "speed": "8.0 GT/s PCIe",
       "width": 16
@@ -64,7 +64,7 @@
     ],
     "numa_node": 1,
     "vbios": "80.80.65.00.01",
-    "vram_mib": 12288,
+    "vram_mib": 11441,
     "link": {
       "speed": "8.0 GT/s PCIe",
       "width": 16
