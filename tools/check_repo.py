@@ -112,6 +112,28 @@ if rec is not None:
                 m = re.search(r"^numa_node:\s*(-?\d+)", open(cap).read(), re.M)
                 if m and r["numa_node"] != int(m.group(1)):
                     fail(f"hardware/record.json[{i}]: numa_node differs from reference/pci/sysfs-{tag}.txt")
+            # A2: PCI capabilities and interrupt against the root capture.
+            a2_done = re.search(r"^\|\s*A2\s*\|\s*DONE\b", status, re.M) is not None
+            a2_keys = ("pci_capabilities", "interrupt", "link_capability")
+            if a2_done:
+                missing = [k for k in a2_keys if k not in r]
+                if missing:
+                    fail(f"hardware/record.json[{i}]: A2 is DONE but {missing} missing")
+            cap = os.path.join(ROOT, "reference", "pci", "root", f"lspci-vvv-{tag}.txt")
+            if os.path.exists(cap) and "pci_capabilities" in r:
+                text = open(cap).read()
+                want = [int(x, 16) for x in re.findall(r"^\s*Capabilities: \[([0-9a-f]+)", text, re.M)]
+                try:
+                    got = [int(c["offset"], 16) for c in r["pci_capabilities"]]
+                except (TypeError, ValueError, KeyError):
+                    got = None
+                if got != want:
+                    fail(f"hardware/record.json[{i}]: pci_capabilities offsets differ from "
+                         f"reference/pci/root/lspci-vvv-{tag}.txt (expected {len(want)} entries, in order)")
+                m = re.search(r"routed to IRQ (\d+)", text)
+                irq = r.get("interrupt", {}).get("irq") if isinstance(r.get("interrupt"), dict) else None
+                if m and "interrupt" in r and irq != int(m.group(1)):
+                    fail(f"hardware/record.json[{i}]: interrupt.irq differs from the capture")
             ch = r["nouveau_chipset"]
             if not isinstance(ch, dict) or ch.get("status") not in ("KNOWN", "INFERRED", "UNKNOWN"):
                 fail(f"hardware/record.json[{i}]: nouveau_chipset.status must be KNOWN, INFERRED or UNKNOWN")
