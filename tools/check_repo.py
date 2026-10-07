@@ -141,6 +141,81 @@ if rec is not None:
                 fail(f"hardware/record.json[{i}]: vram_mib must be an integer")
 
 # B1 file inventory ---------------------------------------------------
+# Subdevices and engines on the compute path (docs/PHASES.md, task B1).
+B1_REQUIRED = ("bar", "bus", "fb", "imem", "ltc", "mc", "mmu", "pci", "privring",
+               "top", "fifo", "gr", "ce")
+B1_CHIPSET = "nvf1_chipset"
+B1_ROOT = "nvkm/engine/device/base.c"   # the chipset table: names every chip
+
+
+def nvkm_definitions():
+    """Map each function or table name to the nvkm .c files that define it.
+
+    Nouveau puts the name of a definition at the start of a line:
+    `name(args)` followed by `{` for a function, `name = {` for a table.
+    """
+    src, defs = {}, {}
+    for path in glob.glob(os.path.join(NV, "nvkm", "**", "*.c"), recursive=True):
+        rel = os.path.relpath(path, NV)
+        with open(path, errors="replace") as f:
+            src[rel] = f.read()
+        names = re.findall(r"^(\w+)\s*\([^;{]*\)\s*\{", src[rel], re.M)
+        names += re.findall(r"^(\w+)(?:\[\w*\])?\s*=\s*\{", src[rel], re.M)
+        names += re.findall(r"^(?:static\s+)?(?:const\s+)?struct\s+\w+\s+\*?(\w+)(?:\[\w*\])?\s*=\s*\{",
+                            src[rel], re.M)
+        for n in names:
+            defs.setdefault(n, set()).add(rel)
+    return src, defs
+
+
+def check_b1_inventory(entries):
+    """The inventory must follow each constructor into the code it inherits.
+
+    1. The file that defines the chipset constructor of every compute-path
+       subdevice and engine is listed.
+    2. The list is closed inside each directory: when a listed file uses a
+       function or table that another file of the same directory defines,
+       that file is listed too. gr/gk110b.c only calls gf100_gr_new_(), so
+       gr/gf100.c and the files it uses belong to the inventory.
+    Names with more than one definition are skipped. Files in other
+    directories are not required by this check.
+    """
+    rel = "analysis/files.json"
+    src, defs = nvkm_definitions()
+    listed = {str(e.get("path")) for e in entries if isinstance(e, dict)}
+    if B1_ROOT not in src:
+        return
+    m = re.search(r"\b%s\s*=\s*\{(.*?)\n\};" % B1_CHIPSET, src[B1_ROOT], re.S)
+    ctors = dict(re.findall(r"\.(\w+)\s*=\s*\{[^,]*,\s*(\w+)\s*\}", m.group(1))) if m else {}
+    need_dirs = set()
+    for field in B1_REQUIRED:
+        where = defs.get(ctors.get(field, ""), set())
+        need_dirs |= {os.path.dirname(w) for w in where}
+        if len(where) != 1:
+            fail(f"{rel}: cannot find the {B1_CHIPSET} constructor of '{field}' in the Nouveau tree")
+        elif not where <= listed:
+            fail(f"{rel}: '{field}' constructor {ctors[field]} is in {min(where)}, which is not listed")
+    missing = {}
+    for f in sorted(listed & set(src)):
+        if f == B1_ROOT:
+            continue
+        for name in sorted(set(re.findall(r"\b[a-z]\w+\b", src[f]))):
+            where = defs.get(name, ())
+            if len(where) != 1:
+                continue
+            g = min(where)
+            if g != f and g not in listed and os.path.dirname(g) == os.path.dirname(f):
+                missing.setdefault(g, (f, name))
+    # Compute-path directories first.
+    order = sorted(missing.items(), key=lambda kv: (os.path.dirname(kv[0]) not in need_dirs, kv[0]))
+    for g, (f, name) in order[:8]:
+        fail(f"{rel}: {f} uses {name} from {g}, which is not listed")
+    if missing:
+        fail(f"{rel}: {len(missing)} file(s) used by listed files in the same directory are not "
+             f"listed (first 8 shown). Add them and run the check again: each added file can "
+             f"require more. See docs/PHASES.md, task B1.")
+
+
 files = load_json("analysis/files.json")
 classes = {"GK110-specific", "GK104-inherited", "GF100-inherited", "generic-NVKM", "Linux-only"}
 if files is not None:
@@ -151,6 +226,8 @@ if files is not None:
             fail(f"analysis/files.json[{i}]: class must be one of {sorted(classes)}")
     if not isinstance(files, list):
         fail("analysis/files.json: must be a list")
+    else:
+        check_b1_inventory(files)
 
 # B2 call graph -------------------------------------------------------
 cg = load_json("analysis/callgraph.json")

@@ -33,6 +33,9 @@ the work by hand:
 - that every task marked DONE has `work/<task-id>/RESULT.md`.
 - that every cited `reference/...` path exists (not that it contains
   the claimed value: that is your job).
+- for `analysis/files.json` (B1): that the constructor file of each
+  compute-path subsystem is listed and that the list is closed inside
+  each directory.
 
 Never decode a capture file yourself (`config-*.hex`, `resource-*.txt`,
 lspci dumps). If you think a checked value is wrong, write one line that

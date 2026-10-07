@@ -56,7 +56,23 @@ Paths to Nouveau files in any output are relative to `reference/nouveau/`
   `GK110-specific`, `GK104-inherited`, `GF100-inherited`,
   `generic-NVKM`, `Linux-only`.
 - Check: every path exists. Every constructor named in the chipset entry
-  for the listed subdevices has its file listed.
+  for the listed subdevices has its file listed. `make check` also
+  requires the list to be closed inside each directory: when a listed
+  file uses a function or table that another file of the same directory
+  defines, that file is listed too. Example: `gr/gk110b.c` only calls
+  `gf100_gr_new_()`, so `gr/gf100.c` and the files that it uses belong to
+  the list. For the 13 subsystems above that is about 88 files.
+- The tool must find the files by reading the source (constructor, then
+  the functions and tables that each file uses). A table of names written
+  by hand in the tool is not accepted.
+- Subsystems that are not on the compute path (disp, mspdec, msppp,
+  msvld, sw, ...) may be left out. A subsystem that is listed must be
+  closed. Files in other directories that the path needs (for example
+  `nvkm/core/`, `nvkm/falcon/`) are your decision: list them and say why
+  in `role`.
+- `class` comes from what the file is, not only from its name: a
+  `base.c`, `chan.c` or `vmm.c` that all chips share is `generic-NVKM`.
+  `role` says what the file does on this card's path in a few words.
 
 ### B2. Call graph
 - Outputs: `tools/callgraph.py`, `analysis/callgraph.json`

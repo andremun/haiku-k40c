@@ -1,10 +1,15 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B1 (chipset path and file inventory) — DONE
+Current task: B1 (chipset path and file inventory) — REWORK. Read `work/B1/REVIEW.md` first.
 Last updated: 2026-10-07
 
 ## Last result
+
+B1 is in rework (review of 2026-10-07, `work/B1/REVIEW.md`): the
+inventory lists only the 31 constructor files and does not follow them
+into the inherited code. `make check` now fails on it. The text below is
+the result of the first attempt.
 
 Task B1 mapped `nvf1_chipset` (GK110B) from `base.c:1770-1803` to its 31
 constructor entries, resolved each to its source file in the Nouveau tree,
@@ -28,4 +33,4 @@ the old layout. Details: `reference/pci/README.md`.
 |---|---|---|---|
 | A1 | DONE | 2026-10-05 | `hardware/record.json` + `record.md` for 2 GPUs; reworked 2026-10-05, review ACCEPT |
 | A2 | DONE | 2026-10-06 | Added `pci_capabilities`, `interrupt`, `link_capability` to record.json; sections in record.md; LnkSta agrees with link for both GPUs |
-| B1 | DONE | 2026-10-07 | `nvf1_chipset` (31 constructors) mapped to source files, classified, `analysis/files.json` + `tools/nouveau_files.py` generated; make check passes |
+| B1 | REWORK | 2026-10-07 | First attempt: 31 constructor files only. Review REWORK (`work/B1/REVIEW.md`): inherited files missing, tool uses a hand-written table. |
