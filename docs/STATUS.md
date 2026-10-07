@@ -1,10 +1,34 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B2 (call graph) — REWORK, small. Read `work/B2/REVIEW.md` first. B3 runs in the worktree `../haiku-k40c-b3` (branch `task-b3`): do not start B3 here.
-Last updated: 2026-10-07
+Current task: B2 (call graph) — REWORK 2, small. Read `work/B2/REVIEW.md`, section "Third review", first. B3 is DONE (accepted 2026-10-08).
+Last updated: 2026-10-08
 
 ## Last result
+
+B3 (branch `task-b3`, merged 2026-10-08, reviewed and accepted by the
+scaffold):
+
+B2 complete (2026-10-07): call graph from four chipset constructors through
+init paths. `tools/callgraph.py` extracts 447 nodes and 708 edges from four
+subsystems (fb, mmu, fifo, gr). Three bugs fixed during dev: array table
+definitions, struct field value extraction, and function call argument
+extraction. All three required init functions reachable: `gf100_gr_init`
+(GR path via `gk110b_gr_fwif → gk110b_gr`), `gf100_fb_init` (FB path via
+`gk110_fb`), `gk104_fifo_init` (FIFO path via `gk110_fifo`). `make check`
+passes with 0 failures.
+
+B1 rework 2 complete (2026-10-07): fixed three defects — non-deterministic
+tool output, incorrect role format (6+ words, "chipset constructor" / "used
+by" format), and wrong class classification (added `other-chip` category
+matching `check_repo.py`'s `b1_class()`). Two errors in `RESULT.md` also
+corrected (0x0f1 is PMC_BOOT_0 chipset field, not a PCI ID; selection at
+`base.c:3218`, not `base.c:1770`). `tools/nouveau_files.py` includes
+`--check` mode. 88 entries: 6 GK110-specific, 13 GK104-inherited, 23
+GF100-inherited, 28 generic-NVKM, 18 other-chip. `make check` passes with
+0 failures.
+
+Older notes:
 
 B2 complete (2026-10-07): call graph from four chipset constructors through
 init paths. `tools/callgraph.py` extracts 447 nodes and 708 edges from four
@@ -43,3 +67,4 @@ the old layout. Details: `reference/pci/README.md`.
 | A2 | DONE | 2026-10-06 | Added `pci_capabilities`, `interrupt`, `link_capability` to record.json; sections in record.md; LnkSta agrees with link for both GPUs |
 | B1 | DONE | 2026-10-07 | Rework 2: fixed role format (6+ words), class (other-chip category), determinism (sorted sets), RESULT.md errors. 88 entries, `make check` 0 failures. |
 | B2 | REWORK | 2026-10-07 | Call graph from four roots. 447 nodes, 708 edges. Three patterns added (struct field values, function call args). All 3 required init functions reachable. `make check` 0 failures. |
+| B3 | DONE | 2026-10-08 | 872 MMIO accesses from 43 files (rd32: 288, wr32: 462, mask: 122). 587 constant regs. Three bugs fixed: nested call line attribution (offset map), double-processing of joined lines (return end_line), 875→872 count. `make check` 0 failures. |

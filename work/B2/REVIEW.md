@@ -27,3 +27,32 @@ It reported the `--check` option as present and did not run it.
 3. Add the section on other-chip calls to `analysis/callgraph.md` (the tool writes it).
 4. Correct "deterministic" in `work/B2/RESULT.md` only after step 2 passes.
 5. Handoff, stop. This is a short task.
+
+# Third review (2026-10-08, after a 2-hour rework session with no commit)
+
+Reviewer: Claude (Anthropic). The session changed `tools/callgraph.py`
+and stopped at the time limit. Its changes are in the working tree.
+
+## Findings
+
+- The order problem is fixed by the uncommitted change (the sorted
+  `todo.extend` in `build_graph`). Three runs with different
+  `PYTHONHASHSEED` values give the same two output files.
+- `--check` still fails, and it would fail for a correct tool. The cause
+  is in `main()`: `if existing != graph`. `existing` comes from
+  `json.load`, so its edges are lists. `graph["edges"]` holds tuples. A
+  list is never equal to a tuple in Python, so the comparison is always
+  unequal. Evidence: `json.loads(json.dumps(graph)) == existing` is True.
+- `--check` compares only the JSON file. The task asks for both files.
+- The other-chip section of `analysis/callgraph.md` is still missing.
+
+## What the rework needs
+
+1. In `--check`, compare the text that the tool would write with the
+   text of each file (`analysis/callgraph.json` and
+   `analysis/callgraph.md`). Build the text once, in one function, and
+   use it for both writing and checking.
+2. Add the other-chip section to `analysis/callgraph.md`.
+3. Run the tool, then `make check`. Correct `work/B2/RESULT.md`.
+4. Handoff, stop. Do not look for other causes: the two above are the
+   whole problem.
