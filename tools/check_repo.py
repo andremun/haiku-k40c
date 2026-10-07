@@ -345,6 +345,18 @@ if cg is not None:
     lost = sorted(names - seen)
     if lost:
         fail(f"{rel}: {len(lost)} nodes are not reached from a root (first: {lost[0]})")
+    # The tool must reproduce the file, on every run.
+    tool = os.path.join(ROOT, "tools", "callgraph.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/callgraph.py: missing, or no --check option (docs/PHASES.md, task B2)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/callgraph.py --check (run {run}): {rel} is not what the tool generates. "
+                     f"The tool must give the same output on every run.")
+                break
     # Nouveau reaches its init code through function tables, not calls.
     for need in ("gf100_gr_init", "gf100_fb_init", "gk104_fifo_init"):
         if need not in names:

@@ -134,7 +134,10 @@ is no reference for S3 and the project stops at S2.
   table; the four roots are nodes; every edge joins two nodes and the
   caller's body uses the callee; every node is reached from a root;
   `gf100_gr_init`, `gf100_fb_init` and `gk104_fifo_init` are nodes.
-- The tool gives the same output on every run (sort every set).
+- The tool gives the same output on every run (sort every set, and sort
+  the lines of `callgraph.md`). `tools/callgraph.py --check` writes
+  nothing and exits 0 when both output files are what the tool
+  generates, else 1. `make check` runs it twice.
 
 ### B3. MMIO access extraction
 - Outputs: `tools/extract_mmio.py`,

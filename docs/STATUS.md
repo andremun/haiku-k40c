@@ -1,7 +1,7 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B3 (MMIO access extraction). B2 is DONE and waits for its review (`/review B2`).
+Current task: B2 (call graph) — REWORK, small. Read `work/B2/REVIEW.md` first. B3 runs in the worktree `../haiku-k40c-b3` (branch `task-b3`): do not start B3 here.
 Last updated: 2026-10-07
 
 ## Last result
@@ -42,4 +42,4 @@ the old layout. Details: `reference/pci/README.md`.
 | A1 | DONE | 2026-10-05 | `hardware/record.json` + `record.md` for 2 GPUs; reworked 2026-10-05, review ACCEPT |
 | A2 | DONE | 2026-10-06 | Added `pci_capabilities`, `interrupt`, `link_capability` to record.json; sections in record.md; LnkSta agrees with link for both GPUs |
 | B1 | DONE | 2026-10-07 | Rework 2: fixed role format (6+ words), class (other-chip category), determinism (sorted sets), RESULT.md errors. 88 entries, `make check` 0 failures. |
-| B2 | DONE | 2026-10-07 | Call graph from four roots. 447 nodes, 708 edges. Three patterns added (struct field values, function call args). All 3 required init functions reachable. `make check` 0 failures. |
+| B2 | REWORK | 2026-10-07 | Call graph from four roots. 447 nodes, 708 edges. Three patterns added (struct field values, function call args). All 3 required init functions reachable. `make check` 0 failures. |
