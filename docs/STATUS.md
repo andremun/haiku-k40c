@@ -1,7 +1,7 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B2 (call graph). B1 is DONE (second rework accepted 2026-10-07).
+Current task: B3 (MMIO access extraction). B2 is DONE and waits for its review (`/review B2`).
 Last updated: 2026-10-07
 
 ## Last result
