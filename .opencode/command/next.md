@@ -3,7 +3,9 @@ description: Start the current task from docs/STATUS.md
 ---
 Start work on the current task.
 
-1. Read `docs/STATUS.md`, then the current task in `docs/PHASES.md`.
+1. Read `docs/STATUS.md`. The line `Current task:` names one task ID.
+   Read `docs/tasks/<ID>.md` (not the other task files). If
+   `work/<ID>/REVIEW.md` or `work/<ID>/FINDINGS.md` exists, read it next.
 2. Read `docs/OPEN_QUESTIONS.md` and `docs/REQUESTS.md` only for entries
    about this task.
 3. If the task is blocked by an open request, say so, pick the next

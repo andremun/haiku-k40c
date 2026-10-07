@@ -206,6 +206,7 @@ def build_graph():
     """Build the call graph from files.json scope."""
     entries = load_files()
     scope_dirs_list = scope_dirs(entries)
+    inventory = {e["path"] for e in entries}
 
     # Read all source files in scope and extract definitions
     all_defs = {}  # name -> (file, line, kind)
@@ -217,6 +218,10 @@ def build_graph():
             continue
         for fname in sorted(os.listdir(src_dir)):
             if not fname.endswith(".c"):
+                continue
+            # Only files of the B1 inventory (docs/tasks/B2.md). Other files
+            # of the directory belong to chips that are not on this path.
+            if os.path.join(rel, fname) not in inventory:
                 continue
             source = read_source(os.path.join(rel, fname))
             if source is None:
@@ -273,14 +278,11 @@ def build_graph():
     return {"nodes": nodes, "edges": edges}, all_defs, edges
 
 
-def write_outputs(graph):
-    """Write callgraph.json and callgraph.md."""
+def render(graph):
+    """Return the text of callgraph.json and of callgraph.md."""
     nodes = graph["nodes"]
     edges = graph["edges"]
-
-    with open(CG_JSON, "w") as f:
-        json.dump(graph, f, indent=2)
-        f.write("\n")
+    json_text = json.dumps(graph, indent=2) + "\n"
 
     # Build adjacency for markdown
     out = {}  # caller -> set of callees
@@ -347,8 +349,39 @@ def write_outputs(graph):
     if len(leaves) > 30:
         md_lines.append(f"  - … and {len(leaves) - 30} more\n")
 
+    # Which nodes are in files named for another chip. The class of each
+    # file comes from analysis/files.json (task B1).
+    with open(FILES_JSON) as f:
+        file_class = {e["path"]: e["class"] for e in json.load(f)}
+    md_lines.append("\n## Code for other chips\n")
+    md_lines.append(
+        "A graph of names cannot tell which of these nodes the GK110B card "
+        "runs. A node is in the graph when a reachable function or table "
+        "uses its name. Shared tables name functions for several chips, and "
+        "a branch on the chipset is not visible here. Nodes in `GK110-specific` "
+        "and `GK104-inherited` files are on the card's own path. Nodes in "
+        "`other-chip` files are reached by name only, until a trace or a "
+        "reading of the branch shows that the card uses them (UNKNOWN).\n")
+    md_lines.append("| Subsystem | Class of the file | Nodes |")
+    md_lines.append("|---|---|---|")
+    counts = {}
+    for n in nodes:
+        m = re.search(r"nvkm/\w+/(\w+)/", n["file"])
+        key = (m.group(1) if m else "?", file_class.get(n["file"], "not in files.json"))
+        counts[key] = counts.get(key, 0) + 1
+    for (sub, cls), c in sorted(counts.items()):
+        md_lines.append(f"| {sub} | {cls} | {c} |")
+
+    return json_text, "\n".join(md_lines)
+
+
+def write_outputs(graph):
+    """Write callgraph.json and callgraph.md."""
+    json_text, md_text = render(graph)
+    with open(CG_JSON, "w") as f:
+        f.write(json_text)
     with open(CG_MD, "w") as f:
-        f.write("\n".join(md_lines))
+        f.write(md_text)
 
 
 def main():
@@ -356,18 +389,17 @@ def main():
     graph, all_defs, edges = build_graph()
 
     if check:
-        if not os.path.exists(CG_JSON):
-            print(f"FAIL: {CG_JSON} does not exist", file=sys.stderr)
-            sys.exit(1)
-        with open(CG_JSON) as f:
-            existing = json.load(f)
-        if existing != graph:
-            print(
-                "FAIL: analysis/callgraph.json is not what the tool generates. "
-                "Run without --check to update it.",
-                file=sys.stderr
-            )
-            sys.exit(1)
+        # Compare text with text. A loaded JSON file has lists where the
+        # graph in memory has tuples, so a comparison of objects always fails.
+        json_text, md_text = render(graph)
+        for path, text in ((CG_JSON, json_text), (CG_MD, md_text)):
+            if not os.path.exists(path) or open(path).read() != text:
+                print(
+                    f"FAIL: {os.path.relpath(path, ROOT)} is not what the tool "
+                    "generates. Run without --check to update it.",
+                    file=sys.stderr
+                )
+                sys.exit(1)
     else:
         write_outputs(graph)
         print(f"Call graph: {len(graph['nodes'])} nodes, {len(graph['edges'])} edges")

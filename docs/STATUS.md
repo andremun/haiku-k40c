@@ -2,7 +2,7 @@
 
 Current phase: B (Nouveau analysis)
 Current task: B6
-Task state: NEW. This worktree is for B6 only. Read the "How to do it" list of task B6 in `docs/PHASES.md`. B2 is in rework in another tree: do not touch `tools/callgraph.py` or `analysis/callgraph.*`.
+Task state: REWORK. A first session wrote the tool and the outputs and stopped at the time limit. Read `docs/tasks/B6.md`, then `work/B6/REVIEW.md`, and finish the task. This worktree is for B6 only.
 Last updated: 2026-10-08
 
 ## Last result
@@ -67,5 +67,5 @@ the old layout. Details: `reference/pci/README.md`.
 | A1 | DONE | 2026-10-05 | `hardware/record.json` + `record.md` for 2 GPUs; reworked 2026-10-05, review ACCEPT |
 | A2 | DONE | 2026-10-06 | Added `pci_capabilities`, `interrupt`, `link_capability` to record.json; sections in record.md; LnkSta agrees with link for both GPUs |
 | B1 | DONE | 2026-10-07 | Rework 2: fixed role format (6+ words), class (other-chip category), determinism (sorted sets), RESULT.md errors. 88 entries, `make check` 0 failures. |
-| B2 | REWORK | 2026-10-07 | Call graph from four roots. 447 nodes, 708 edges. Three patterns added (struct field values, function call args). All 3 required init functions reachable. `make check` 0 failures. |
+| B2 | DONE | 2026-10-08 | Call graph from four roots with function tables: 446 nodes, 704 edges. Three rework sessions; the last defects (check mode, other-chip section, two nodes outside the inventory) were fixed by the scaffold, see `work/B2/REVIEW.md`. |
 | B3 | DONE | 2026-10-08 | 872 MMIO accesses from 43 files (rd32: 288, wr32: 462, mask: 122). 587 constant regs. Three bugs fixed: nested call line attribution (offset map), double-processing of joined lines (return end_line), 875→872 count. `make check` 0 failures. |

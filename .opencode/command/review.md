@@ -12,11 +12,11 @@ Steps, in this order. Do not add steps.
 
 1. Run `make check`. Report its result. Everything it verifies is settled
    (see the list in your instructions). Do not verify it again.
-2. Read the task's entry in `docs/PHASES.md` and list its outputs. For
+2. Read `docs/tasks/<task-id>.md` and list its outputs. For
    each output: does the file exist? If none exist, say so in one line
    and stop.
 3. Read the outputs and `work/<task-id>/RESULT.md`. Check only:
-   - every field or section that `docs/PHASES.md` asks for is present;
+   - every field or section that the task file asks for is present;
    - each KNOWN label has a source that says exactly that (open the cited
      file and line); otherwise it is INFERRED;
    - the outputs agree with each other (for example `.json` and `.md`);

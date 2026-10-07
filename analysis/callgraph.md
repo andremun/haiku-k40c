@@ -1,12 +1,12 @@
 # Call Graph
 
-Generated from 447 nodes and 708 edges.
+Generated from 446 nodes and 704 edges.
 
 ## Nodes by subsystem
 
 ### engine
 
-- **289** nodes
+- **288** nodes
 
 | Function/Table | File | Line | Kind |
 
@@ -588,8 +588,6 @@ Generated from 447 nodes and 708 edges.
 
 | `gk110b_gr_new` | `nvkm/engine/gr/gk110b.c` | 150 | function |
 
-| `hdr` | `nvkm/engine/gr/gm200.c` | 63 | table |
-
 ### subdev
 
 - **158** nodes
@@ -615,8 +613,6 @@ Generated from 447 nodes and 708 edges.
 | `nvkm_fb` | `nvkm/subdev/fb/base.c` | 263 | table |
 
 | `nvkm_fb_ctor` | `nvkm/subdev/fb/base.c` | 272 | function |
-
-| `ramxlat` | `nvkm/subdev/fb/gddr3.c` | 33 | function |
 
 | `nvkm_gddr5_calc` | `nvkm/subdev/fb/gddr5.c` | 35 | function |
 
@@ -719,6 +715,8 @@ Generated from 447 nodes and 708 edges.
 | `gk104_ram` | `nvkm/subdev/fb/ramgk104.c` | 1700 | table |
 
 | `gk104_ram_new` | `nvkm/subdev/fb/ramgk104.c` | 1713 | function |
+
+| `ramxlat` | `nvkm/subdev/fb/sddr3.c` | 34 | function |
 
 | `ramddr3_cl` | `nvkm/subdev/fb/sddr3.c` | 45 | table |
 
@@ -1009,15 +1007,11 @@ Generated from 447 nodes and 708 edges.
 
 - gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram → gk104_ram_init → gk104_ram_train_init
 
-- gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram → gk104_ram_init → hdr
-
 - gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram → gk104_ram_prog → gk104_ram_prog_0
 
 - gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram_new_ → gf100_ram_ctor → nvkm_fb_bios_memtype
 
 - gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram_new_ → gf100_ram_ctor → nvkm_ram_ctor
-
-- gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram_new_ → gk104_ram_ctor_data → hdr
 
 - gk110_fb_new → gk110_fb → gf100_fb_dtor → gf100_fb → gf100_ram_new → gf100_ram → gf100_ram_calc
 
@@ -1045,8 +1039,6 @@ Generated from 447 nodes and 708 edges.
 
 - gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram → gk104_ram_init → gk104_ram_train_init → gk104_ram_train_type
 
-- gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram_new_ → gf100_ram_ctor → nvkm_fb_bios_memtype → hdr
-
 - gk110_fb_new → gk110_fb → gf100_fb_dtor → gf100_fb → gf100_ram_new → gf100_ram → gf100_ram_calc → gf100_ram_train
 
 - gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram → gk104_ram_calc → gk104_ram_calc_xits → gk104_ram_calc_gddr5 → gk104_ram_train
@@ -1066,8 +1058,6 @@ Generated from 447 nodes and 708 edges.
 - gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram → gk104_ram_calc → gk104_ram_calc_xits → nvkm_sddr3_calc → ramddr3_wr
 
 - gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram → gk104_ram_calc → gk104_ram_calc_xits → nvkm_sddr3_calc → ramxlat
-
-- gk110_fb_new → gk110_fb → gk104_ram_new → gk104_ram → gk104_ram_init → gk104_ram_train_init → gk104_ram_train_type → hdr
 
 ### gk104_mmu_new
 
@@ -2168,7 +2158,7 @@ Generated from 447 nodes and 708 edges.
 
 ## Top-level callers
 
-- **197** leaf nodes (no outgoing edges in scope):
+- **199** leaf nodes (no outgoing edges in scope):
 
   - `args`
 
@@ -2230,4 +2220,28 @@ Generated from 447 nodes and 708 edges.
 
   - `gf100_gr_fecs_ucode`
 
-  - … and 167 more
+  - … and 169 more
+
+
+## Code for other chips
+
+A graph of names cannot tell which of these nodes the GK110B card runs. A node is in the graph when a reachable function or table uses its name. Shared tables name functions for several chips, and a branch on the chipset is not visible here. Nodes in `GK110-specific` and `GK104-inherited` files are on the card's own path. Nodes in `other-chip` files are reached by name only, until a trace or a reading of the branch shows that the card uses them (UNKNOWN).
+
+| Subsystem | Class of the file | Nodes |
+|---|---|---|
+| fb | GF100-inherited | 21 |
+| fb | GK104-inherited | 22 |
+| fb | GK110-specific | 3 |
+| fb | generic-NVKM | 19 |
+| fifo | GF100-inherited | 23 |
+| fifo | GK104-inherited | 44 |
+| fifo | GK110-specific | 9 |
+| fifo | generic-NVKM | 70 |
+| fifo | other-chip | 3 |
+| gr | GF100-inherited | 98 |
+| gr | GK104-inherited | 11 |
+| gr | GK110-specific | 17 |
+| gr | generic-NVKM | 13 |
+| mmu | GF100-inherited | 3 |
+| mmu | GK104-inherited | 2 |
+| mmu | generic-NVKM | 88 |

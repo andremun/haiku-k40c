@@ -1489,12 +1489,6 @@
       "kind": "table"
     },
     {
-      "name": "hdr",
-      "file": "nvkm/engine/gr/gm200.c",
-      "line": 63,
-      "kind": "table"
-    },
-    {
       "name": "kind",
       "file": "nvkm/subdev/mmu/gf100.c",
       "line": 36,
@@ -2666,8 +2660,8 @@
     },
     {
       "name": "ramxlat",
-      "file": "nvkm/subdev/fb/gddr3.c",
-      "line": 33,
+      "file": "nvkm/subdev/fb/sddr3.c",
+      "line": 34,
       "kind": "function"
     },
     {
@@ -3617,20 +3611,12 @@
       "nvkm_sddr3_calc"
     ],
     [
-      "gk104_ram_ctor_data",
-      "hdr"
-    ],
-    [
       "gk104_ram_dtor",
       "gk104_ram"
     ],
     [
       "gk104_ram_init",
       "gk104_ram_train_init"
-    ],
-    [
-      "gk104_ram_init",
-      "hdr"
     ],
     [
       "gk104_ram_new",
@@ -3667,10 +3653,6 @@
     [
       "gk104_ram_train_init",
       "gk104_ram_train_type"
-    ],
-    [
-      "gk104_ram_train_type",
-      "hdr"
     ],
     [
       "gk104_runq",
@@ -4247,10 +4229,6 @@
     [
       "nvkm_fb",
       "nvkm_fb_preinit"
-    ],
-    [
-      "nvkm_fb_bios_memtype",
-      "hdr"
     ],
     [
       "nvkm_fb_ctor",

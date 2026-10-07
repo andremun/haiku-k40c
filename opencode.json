@@ -55,6 +55,12 @@
       "/home/unimelb.edu.au/mariom1/llm-server/agent-refs/**": "allow",
       "/home/unimelb.edu.au/mariom1/haiku-cross/*": "allow",
       "/home/unimelb.edu.au/mariom1/haiku-cross/**": "allow"
+    },
+    "read": {
+      "*": "allow",
+      "*analysis/callgraph.json": "deny",
+      "*analysis/callgraph.md": "deny",
+      "*registers/mmio_accesses.json": "deny"
     }
   }
 }

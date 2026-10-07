@@ -7,7 +7,8 @@ holds rules only. Project knowledge lives in the files below.
 ## Where the project state is
 
 - `docs/STATUS.md`: current phase, current task, last result. Read first.
-- `docs/PHASES.md`: phases, tasks, outputs and acceptance checks.
+- `docs/tasks/<ID>.md`: the text of one task (outputs and checks). Read
+  only the file of the current task. `docs/PHASES.md` is the index.
 - `docs/OPEN_QUESTIONS.md`, `docs/ASSUMPTIONS.md`: unresolved items.
 - `work/<task-id>/`: `PLAN.md`, `FINDINGS.md`, `RESULT.md` of each task.
 - `escalations/`: problems that need a human decision.
@@ -20,7 +21,8 @@ the truth.
 
 ## Session protocol
 
-1. Read `docs/STATUS.md` and the current task in `docs/PHASES.md`.
+1. Read `docs/STATUS.md`. Its line `Current task:` names one task ID.
+   Read `docs/tasks/<ID>.md`. Do that task and no other.
 2. Read only the files that the task needs.
 3. Do one task. Write `work/<task-id>/PLAN.md` before large work.
 4. Run `make check`. Fix what fails.
@@ -69,6 +71,24 @@ last finished task (last row of the task log), not the current task.
 - When `make check` verifies a value against a capture, accept it. Do not
   verify the same value again by hand.
 - Generate data (JSON/YAML) with scripts in `tools/`, not by hand.
+- Your context is small: about 25,000 tokens are free for the work. One
+  large file fills it, the session is then compressed and you lose what
+  you read. So:
+  - Never read a generated file whole (`analysis/*.json`,
+    `analysis/callgraph.md`, `registers/*.json`). Look at it with
+    `grep -n`, `head -30`, `wc -l`, or a short `python3 -c` that prints
+    counts or a few entries.
+  - Never read a source file of more than 200 lines whole. Find the place
+    with `grep -n`, then read at most 80 lines (`sed -n 'A,Bp'`, or the
+    read tool with `offset` and `limit`).
+  - Let the tool that you write do the reading. Do not copy source into
+    your own notes to analyse it by hand.
+  - Write what you learn into `work/<task-id>/FINDINGS.md` in a few
+    lines as you go. After a compression, read that file first.
+- A tool that generates an output file has a `--check` option: it writes
+  nothing and exits 0 when the file is what the tool generates. Compare
+  the text that would be written with the text of the file. Sort every
+  set before use: the output must be the same on every run.
 - Do not start sub-agents.
 
 ## Escalation
@@ -79,7 +99,7 @@ evidence contradicts the reference, stop. Write `escalations/ESC-NNN.md`
 
 ## Definition of done (task)
 
-The task outputs exist in the format that `docs/PHASES.md` specifies,
+The task outputs exist in the format that `docs/tasks/<ID>.md` specifies,
 `make check` passes, `docs/STATUS.md` is updated and the work is
 committed. Never report a task as done while a check fails. Say what is
 still open.

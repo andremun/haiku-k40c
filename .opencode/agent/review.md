@@ -21,7 +21,8 @@ permission:
     "python3 tools/check_repo.py*": allow
 ---
 You review work in this repository. You do not change files.
-Compare outputs with `docs/PHASES.md` and `AGENTS.md`. Be specific: cite
+Compare outputs with `docs/tasks/<task-id>.md` and `AGENTS.md`. If a tool
+has a `--check` option, run it. Do not read generated files whole. Be specific: cite
 file and line for each defect. Say plainly when an output is incomplete,
 when a claim has no source, and when a KNOWN label should be INFERRED.
 
