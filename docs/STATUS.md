@@ -1,10 +1,18 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B1 (chipset path and file inventory) — DONE. Next: B2.
+Current task: B1 (chipset path and file inventory) — REWORK 2. Read `work/B1/REVIEW.md`, section "Second review", first.
 Last updated: 2026-10-07
 
 ## Last result
+
+B1 is in rework again (second review, 2026-10-07): the file list is
+accepted and must not change. The open defects are `role`, `class`, a tool
+that gives different output on each run, and two wrong statements in
+`work/B1/RESULT.md`. This rework is small: do only what the second review
+lists, run the handoff and stop. Do not start B2 in the same session.
+`work/B2/PLAN.md` exists from an early start of B2: leave it for the B2
+session. The text below is the result of the first rework.
 
 B1 rework complete (2026-10-07). `tools/nouveau_files.py` rewritten to derive
 the file list from source code (not a hand-written map), iteratively closing
@@ -27,4 +35,4 @@ the old layout. Details: `reference/pci/README.md`.
 |---|---|---|---|
 | A1 | DONE | 2026-10-05 | `hardware/record.json` + `record.md` for 2 GPUs; reworked 2026-10-05, review ACCEPT |
 | A2 | DONE | 2026-10-06 | Added `pci_capabilities`, `interrupt`, `link_capability` to record.json; sections in record.md; LnkSta agrees with link for both GPUs |
-| B1 | DONE | 2026-10-07 | First attempt: 31 constructor files, hand-written map. Rework: source-based parsing with intra-directory closure, 88 entries. |
+| B1 | REWORK | 2026-10-07 | First attempt: 31 constructor files, hand-written map. Rework 1: source-based tool, 88 files (list accepted). Second review REWORK: role, class, tool output differs between runs, RESULT.md errors. |

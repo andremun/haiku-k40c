@@ -53,7 +53,7 @@ Paths to Nouveau files in any output are relative to `reference/nouveau/`
   inherited gk104, gf100 and nv50 code.
 - Outputs: `tools/nouveau_files.py`, `analysis/files.json`: a list of
   `{"path", "subsystem", "class", "role"}` where `class` is one of
-  `GK110-specific`, `GK104-inherited`, `GF100-inherited`,
+  `GK110-specific`, `GK104-inherited`, `GF100-inherited`, `other-chip`,
   `generic-NVKM`, `Linux-only`.
 - Check: every path exists. Every constructor named in the chipset entry
   for the listed subdevices has its file listed. `make check` also
@@ -70,9 +70,23 @@ Paths to Nouveau files in any output are relative to `reference/nouveau/`
   closed. Files in other directories that the path needs (for example
   `nvkm/core/`, `nvkm/falcon/`) are your decision: list them and say why
   in `role`.
-- `class` comes from what the file is, not only from its name: a
-  `base.c`, `chan.c` or `vmm.c` that all chips share is `generic-NVKM`.
-  `role` says what the file does on this card's path in a few words.
+- `class` follows the chip name in the file name (`make check` verifies
+  it): `gk110` is `GK110-specific`; `gk104` is `GK104-inherited`;
+  `gf100` to `gf119` is `GF100-inherited`; another chip name (`nv04`,
+  `nv50`, `g84`, `gt215`, `r535`, ...) is `other-chip`; no chip name
+  (`base.c`, `chan.c`, `vmm.c`) is `generic-NVKM`. Use `Linux-only` only
+  for a file that has no hardware code, and give the reason in `role`.
+- `role` is one sentence of 6 words or more that the tool generates. It
+  says what the file provides and how the path reaches it. A constructor
+  file says `chipset constructor <name>`. Every other file says
+  `used by <path of a listed file> (<symbol>)`. Examples:
+  "GR engine entry: chipset constructor gk110b_gr_new, calls gf100_gr_new_"
+  and "Fermi GR implementation, used by nvkm/engine/gr/gk110b.c (gf100_gr_new_)".
+  When several files or symbols qualify, take the first in sorted order.
+- The tool gives the same output on every run. `tools/nouveau_files.py
+  --check` writes nothing and exits 0 when `analysis/files.json` is what
+  the tool generates, else 1. `make check` runs it twice. Sort every set
+  before you use it: Python changes the order of a set between runs.
 
 ### B2. Call graph
 - Outputs: `tools/callgraph.py`, `analysis/callgraph.json`

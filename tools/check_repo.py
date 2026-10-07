@@ -216,8 +216,71 @@ def check_b1_inventory(entries):
              f"require more. See docs/PHASES.md, task B1.")
 
 
+def b1_class(path):
+    """Class that the file name gives (docs/PHASES.md, task B1)."""
+    base = os.path.basename(path)
+    if re.search(r"gk110", base):
+        return "GK110-specific"
+    if re.search(r"gk104", base):
+        return "GK104-inherited"
+    if re.search(r"gf1\d\d", base):
+        return "GF100-inherited"
+    if re.search(r"(nv[0-9a-f]{2}|g\d\d|gt\d{3}|mcp\d\d|gk\d|gm\d|gp\d|gv\d|tu\d|ga\d|r\d{3})", base):
+        return "other-chip"
+    return "generic-NVKM"
+
+
+def check_b1_fields(entries):
+    """`class` follows the file name; `role` says how the path reaches the file."""
+    rel = "analysis/files.json"
+    paths = {str(e.get("path")) for e in entries if isinstance(e, dict)}
+    badclass, badrole = [], []
+    for e in entries:
+        if not isinstance(e, dict):
+            continue
+        path, role = str(e.get("path")), str(e.get("role", ""))
+        if e.get("class") != "Linux-only" and e.get("class") != b1_class(path):
+            badclass.append(f"{path}: {e.get('class')}, expected {b1_class(path)}")
+        m = re.search(r"used by (nvkm/[\w/]+\.c)", role)
+        reached = "chipset constructor" in role or (m and m.group(1) in paths and m.group(1) != path)
+        if len(role.split()) < 6 or not reached:
+            badrole.append(path)
+    for b in badclass[:5]:
+        fail(f"{rel}: class of {b}")
+    if len(badclass) > 5:
+        fail(f"{rel}: {len(badclass)} entries with a class that does not follow the file name")
+    if badrole:
+        fail(f"{rel}: {len(badrole)} entries (first: {badrole[0]}) have a role that does not say what "
+             f"the file provides and how the path reaches it. See docs/PHASES.md, task B1.")
+
+
+def check_b1_tool():
+    """`tools/nouveau_files.py --check` must agree with files.json, twice."""
+    import subprocess
+    tool = os.path.join(ROOT, "tools", "nouveau_files.py")
+    if not os.path.exists(tool):
+        fail("tools/nouveau_files.py: missing")
+        return
+    # A tool without the option would write the output file when it is run.
+    if "--check" not in open(tool, errors="replace").read():
+        fail("tools/nouveau_files.py: no --check option (docs/PHASES.md, task B1)")
+        return
+    for run in (1, 2):
+        try:
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True,
+                               text=True, timeout=120)
+        except subprocess.TimeoutExpired:
+            fail("tools/nouveau_files.py --check: no result in 120 s")
+            return
+        if r.returncode != 0:
+            fail(f"tools/nouveau_files.py --check (run {run}): analysis/files.json is not what the "
+                 f"tool generates. The tool must give the same output on every run.")
+            return
+
+
 files = load_json("analysis/files.json")
-classes = {"GK110-specific", "GK104-inherited", "GF100-inherited", "generic-NVKM", "Linux-only"}
+classes = {"GK110-specific", "GK104-inherited", "GF100-inherited", "other-chip", "generic-NVKM",
+           "Linux-only"}
 if files is not None:
     for i, e in enumerate(files if isinstance(files, list) else []):
         if src_lines(str(e.get("path", ""))) is None:
@@ -228,6 +291,8 @@ if files is not None:
         fail("analysis/files.json: must be a list")
     else:
         check_b1_inventory(files)
+        check_b1_fields(files)
+        check_b1_tool()
 
 # B2 call graph -------------------------------------------------------
 cg = load_json("analysis/callgraph.json")
