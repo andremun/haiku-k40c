@@ -1,0 +1,396 @@
+{
+  "compute_class": "0x0000a1c0",
+  "class_source": "reference/mesa/src/gallium/drivers/nouveau/nv_object.xml.h",
+  "setup": [
+    {
+      "method": "NV01_SUBCHAN_OBJECT",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 51,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": null
+    },
+    {
+      "method": "TEMP_ADDRESS_HIGH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 54,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00000790"
+    },
+    {
+      "method": "MP_TEMP_SIZE_HIGH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 61,
+      "macro": "BEGIN_NVC0",
+      "count": 3,
+      "offset": "0x000002e4"
+    },
+    {
+      "method": "MP_TEMP_SIZE_HIGH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 66,
+      "macro": "BEGIN_NVC0",
+      "count": 3,
+      "offset": "0x000002e4"
+    },
+    {
+      "method": "LOCAL_BASE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 78,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x0000077c"
+    },
+    {
+      "method": "SHARED_BASE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 80,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x00000214"
+    },
+    {
+      "method": "CODE_ADDRESS_HIGH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 83,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00001608"
+    },
+    {
+      "method": "0x2a0",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 87,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": null
+    },
+    {
+      "method": "0x7b0",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 90,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": null
+    },
+    {
+      "method": "0x0310",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 95,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": null
+    },
+    {
+      "method": "TIC_ADDRESS_HIGH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 99,
+      "macro": "BEGIN_NVC0",
+      "count": 3,
+      "offset": "0x00001574"
+    },
+    {
+      "method": "TSC_ADDRESS_HIGH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 103,
+      "macro": "BEGIN_NVC0",
+      "count": 3,
+      "offset": "0x0000155c"
+    },
+    {
+      "method": "0x0248",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 113,
+      "macro": "BEGIN_NIC0",
+      "count": 64,
+      "offset": null
+    },
+    {
+      "method": "NV50_GRAPH_SERIALIZE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 116,
+      "macro": "IMMED_NVC0",
+      "count": 0,
+      "offset": null
+    },
+    {
+      "method": "TEX_CB_INDEX",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 119,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x00002608"
+    },
+    {
+      "method": "UPLOAD_DST_ADDRESS_HIGH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 131,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00000188"
+    },
+    {
+      "method": "UPLOAD_LINE_LENGTH_IN",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 134,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00000180"
+    },
+    {
+      "method": "UPLOAD_EXEC",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 137,
+      "macro": "BEGIN_1IC0",
+      "count": 17,
+      "offset": "0x000001b0"
+    },
+    {
+      "method": "FLUSH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 174,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x00001698"
+    }
+  ],
+  "launch": [
+    {
+      "method": "UPLOAD_DST_ADDRESS_HIGH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 846,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00000188"
+    },
+    {
+      "method": "UPLOAD_LINE_LENGTH_IN",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 849,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00000180"
+    },
+    {
+      "method": "LAUNCH_DESC_ADDRESS",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 872,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x000002b4"
+    },
+    {
+      "method": "LAUNCH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 875,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x000002bc"
+    },
+    {
+      "method": "0x02c0",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 878,
+      "macro": "BEGIN_NIC0",
+      "count": 2,
+      "offset": null
+    },
+    {
+      "method": "NV50_GRAPH_SERIALIZE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 882,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": null
+    }
+  ],
+  "descriptor_fields": [
+    {
+      "field": "INVALIDATE_TEXTURE_HEADER_CACHE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 581,
+      "type": "DEF_SET",
+      "value": "TRUE",
+      "bits": "250:250"
+    },
+    {
+      "field": "INVALIDATE_TEXTURE_SAMPLER_CACHE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 582,
+      "type": "DEF_SET",
+      "value": "TRUE",
+      "bits": "251:251"
+    },
+    {
+      "field": "INVALIDATE_TEXTURE_DATA_CACHE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 583,
+      "type": "DEF_SET",
+      "value": "TRUE",
+      "bits": "252:252"
+    },
+    {
+      "field": "INVALIDATE_SHADER_DATA_CACHE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 584,
+      "type": "DEF_SET",
+      "value": "TRUE",
+      "bits": "253:253"
+    },
+    {
+      "field": "INVALIDATE_SHADER_CONSTANT_CACHE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 585,
+      "type": "DEF_SET",
+      "value": "TRUE",
+      "bits": "255:255"
+    },
+    {
+      "field": "RELEASE_MEMBAR_TYPE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 586,
+      "type": "DEF_SET",
+      "value": "FE_SYSMEMBAR",
+      "bits": "366:366"
+    },
+    {
+      "field": "CWD_MEMBAR_TYPE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 587,
+      "type": "DEF_SET",
+      "value": "L1_SYSMEMBAR",
+      "bits": "369:368"
+    },
+    {
+      "field": "API_VISIBLE_CALL_LIMIT",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 588,
+      "type": "DEF_SET",
+      "value": "NO_CHECK",
+      "bits": "378:378"
+    },
+    {
+      "field": "SASS_VERSION",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 589,
+      "type": "VAL_SET",
+      "value": "0x30",
+      "bits": "1535:1528"
+    },
+    {
+      "field": "PROGRAM_OFFSET",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 591,
+      "type": "VAL_SET",
+      "value": "cp->code_base",
+      "bits": "287:256"
+    },
+    {
+      "field": "CTA_RASTER_WIDTH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 593,
+      "type": "VAL_SET",
+      "value": "info->grid[0]",
+      "bits": "415:384"
+    },
+    {
+      "field": "CTA_RASTER_HEIGHT",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 594,
+      "type": "VAL_SET",
+      "value": "info->grid[1]",
+      "bits": "431:416"
+    },
+    {
+      "field": "CTA_RASTER_DEPTH",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 595,
+      "type": "VAL_SET",
+      "value": "info->grid[2]",
+      "bits": "447:432"
+    },
+    {
+      "field": "CTA_THREAD_DIMENSION0",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 596,
+      "type": "VAL_SET",
+      "value": "info->block[0]",
+      "bits": "607:592"
+    },
+    {
+      "field": "CTA_THREAD_DIMENSION1",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 597,
+      "type": "VAL_SET",
+      "value": "info->block[1]",
+      "bits": "623:608"
+    },
+    {
+      "field": "CTA_THREAD_DIMENSION2",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 598,
+      "type": "VAL_SET",
+      "value": "info->block[2]",
+      "bits": "639:624"
+    },
+    {
+      "field": "SHARED_MEMORY_SIZE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 600,
+      "type": "VAL_SET",
+      "value": "align(shared_size, 0x100",
+      "bits": "561:544"
+    },
+    {
+      "field": "SHADER_LOCAL_MEMORY_LOW_SIZE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 601,
+      "type": "VAL_SET",
+      "value": "cp->hdr[1] & 0xfffff0",
+      "bits": "1463:1440"
+    },
+    {
+      "field": "SHADER_LOCAL_MEMORY_HIGH_SIZE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 602,
+      "type": "VAL_SET",
+      "value": "0",
+      "bits": "1495:1472"
+    },
+    {
+      "field": "SHADER_LOCAL_MEMORY_CRS_SIZE",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 603,
+      "type": "VAL_SET",
+      "value": "0x800",
+      "bits": "1527:1504"
+    },
+    {
+      "field": "REGISTER_COUNT",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 616,
+      "type": "VAL_SET",
+      "value": "cp->num_gprs",
+      "bits": "1503:1496"
+    },
+    {
+      "field": "BARRIER_COUNT",
+      "file": "reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 617,
+      "type": "VAL_SET",
+      "value": "cp->num_barriers",
+      "bits": "1471:1467"
+    }
+  ],
+  "kernel_needs": [
+    "SASS version 0x30 (GK110 compute shader ISA)",
+    "QMD v0.0.6 format (a0c0 class)",
+    "512-byte launch descriptor buffer (256-word QMD)",
+    "MP temporary memory per-SM (screen->tls)",
+    "TIC (texture instruction cache) table",
+    "TSC (texture sampler cache) table",
+    "Unified constant buffer for compute",
+    "Text section (code) with GPU-addressable offset"
+  ]
+}
