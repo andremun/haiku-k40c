@@ -372,6 +372,55 @@ if mm is not None:
         fail(f"registers/mmio_accesses.json: {badop} entries with op not rd32/wr32/mask")
     if badval:
         fail(f"registers/mmio_accesses.json: {badval} constant registers without the correct reg_value")
+    # Complete: one entry for each call in each file of the B1 inventory.
+    rel = "registers/mmio_accesses.json"
+    have, badfn, badreg = {}, 0, 0
+    for e in mm if isinstance(mm, list) else []:
+        key = (str(e.get("file")), e.get("line"))
+        have[key] = have.get(key, 0) + 1
+    want, func_at = {}, {}
+    for f in sorted({str(x.get("path")) for x in (files or []) if isinstance(x, dict)}):
+        cur = None
+        for i, text in enumerate(src_lines(f) or [], 1):
+            m = re.match(r"^(\w+)\s*\(", text)
+            if m:
+                cur = m.group(1)
+            n = len(MMIO.findall(text))
+            if n:
+                want[(f, i)] = n
+                func_at[(f, i)] = cur
+    if files is not None and have != want:
+        short = sorted(k for k in want if have.get(k, 0) < want[k])
+        extra = sorted(k for k in have if have[k] > want.get(k, 0))
+        fail(f"{rel}: {sum(have.values())} entries, but the files of analysis/files.json have "
+             f"{sum(want.values())} calls (a line with two calls needs two entries). "
+             f"Missing at {len(short)} lines"
+             + (f" (first: {short[0][0]}:{short[0][1]})" if short else "")
+             + f", too many at {len(extra)} lines"
+             + (f" (first: {extra[0][0]}:{extra[0][1]})" if extra else "") + ".")
+    for e in mm if isinstance(mm, list) else []:
+        key = (str(e.get("file")), e.get("line"))
+        L = src_lines(key[0])
+        if key in func_at and e.get("function") != func_at[key]:
+            badfn += 1
+        r = str(e.get("reg", "")).strip()
+        if L and isinstance(key[1], int) and 0 < key[1] <= len(L) and (
+                not r or r.replace(" ", "") not in L[key[1] - 1].replace(" ", "")):
+            badreg += 1
+    if badfn:
+        fail(f"{rel}: {badfn} entries where 'function' is not the function that contains the line")
+    if badreg:
+        fail(f"{rel}: {badreg} entries where 'reg' is not the register expression written on the line")
+    tool = os.path.join(ROOT, "tools", "extract_mmio.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/extract_mmio.py: missing, or no --check option (docs/PHASES.md, task B3)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/extract_mmio.py --check (run {run}): {rel} is not what the tool generates")
+                break
 
 # B6 compute launch path ----------------------------------------------
 cl = load_json("analysis/compute_launch.json")

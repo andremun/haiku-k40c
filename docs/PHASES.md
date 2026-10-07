@@ -143,9 +143,25 @@ is no reference for S3 and the project stops at S2.
   "mask", "subsystem"}`. `op` is `rd32`, `wr32` or `mask`. `reg_value` is
   the integer value when `reg` is a constant, else `null`.
 - Scope: every `nvkm_rd32`, `nvkm_wr32`, `nvkm_mask` in the files of
-  `analysis/files.json`.
-- Check: each `file:line` contains the call. Report the count per file
-  and compare it with `grep -c` in `RESULT.md`.
+  `analysis/files.json` (872 calls in the 88 files). One entry for each
+  call: a line with two calls (`nvkm_wr32(device, a, nvkm_rd32(device,
+  b))`) gives two entries with the same `line`.
+- `reg` is the register expression as it is written (`0x100c80`,
+  `GPC_BCAST(0x08ac)`, `0x002a00 + (i * 4)`). `function` is the function
+  that contains the line. `value` and `mask` are the argument texts, or
+  `null` when the call has none (`rd32` has neither, `wr32` has no mask).
+  A call that continues on the next line: join the lines before you
+  split the arguments. `line` is the line of the call name.
+- `subsystem` is the `subsystem` of the file in `analysis/files.json`.
+- `tools/extract_mmio.py --check` writes nothing and exits 0 when the
+  JSON file is what the tool generates, else 1. Sort the output by file
+  and line. The tool gives the same output on every run.
+- Check (`make check`): each `file:line` contains the call; the entries
+  are complete (the number of entries equals the number of calls, line
+  by line); `function` and `reg` agree with the source; `reg_value` is
+  right for a constant; `--check` passes twice.
+- `RESULT.md`: the count per subsystem and per `op`, and how many `reg`
+  values are constants.
 
 ### B4. Linux dependency map
 - Outputs: `tools/linux_deps.py`, `analysis/linux_deps.json`: a list of
