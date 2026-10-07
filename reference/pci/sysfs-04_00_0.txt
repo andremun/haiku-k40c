@@ -4,4 +4,4 @@ current_link_speed: 8.0 GT/s PCIe
 current_link_width: 16
 max_link_speed: 8.0 GT/s PCIe
 max_link_width: 16
-irq: 66
+irq: 67

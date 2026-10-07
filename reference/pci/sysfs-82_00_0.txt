@@ -1,7 +1,7 @@
 numa_node: 1
 local_cpulist: 6-11,18-23
-current_link_speed: 8.0 GT/s PCIe
+current_link_speed: 5.0 GT/s PCIe
 current_link_width: 16
-max_link_speed: 8.0 GT/s PCIe
+max_link_speed: 5.0 GT/s PCIe
 max_link_width: 16
-irq: 67
+irq: 65

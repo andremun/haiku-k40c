@@ -3,17 +3,17 @@
 	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
 	Latency: 0
-	Interrupt: pin A routed to IRQ 66
+	Interrupt: pin A routed to IRQ 67
 	NUMA node: 0
 	IOMMU group: 23
-	Region 0: Memory at e6000000 (32-bit, non-prefetchable) [size=16M]
+	Region 0: Memory at e5000000 (32-bit, non-prefetchable) [size=16M]
 	Region 1: Memory at 20fe0000000 (64-bit, prefetchable) [size=256M]
 	Region 3: Memory at 20ff0000000 (64-bit, prefetchable) [size=32M]
 	Capabilities: [60] Power Management version 3
 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0-,D1-,D2-,D3hot-,D3cold-)
 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
 	Capabilities: [68] MSI: Enable+ Count=1/1 Maskable- 64bit+
-		Address: 00000000fee00778  Data: 0000
+		Address: 00000000fee00758  Data: 0000
 	Capabilities: [78] Express (v2) Endpoint, MSI 00
 		DevCap:	MaxPayload 256 bytes, PhantFunc 0, Latency L0s unlimited, L1 <64us
 			ExtTag+ AttnBtn- AttnInd- PwrInd- RBE+ FLReset- SlotPowerLimit 75.000W

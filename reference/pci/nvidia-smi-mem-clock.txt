@@ -1,81 +1,59 @@
 
 ==============NVSMI LOG==============
 
-Timestamp                                 : Tue Sep 29 13:08:52 2026
+Timestamp                                 : Wed Oct  7 14:01:11 2026
 Driver Version                            : 470.256.02
 CUDA Version                              : 11.4
 
 Attached GPUs                             : 3
 GPU 00000000:03:00.0
-    Performance State                     : P0
-    Clocks Throttle Reasons
-        Idle                              : Not Active
-        Applications Clocks Setting       : Not Active
-        SW Power Cap                      : Not Active
-        HW Slowdown                       : Not Active
-            HW Thermal Slowdown           : N/A
-            HW Power Brake Slowdown       : N/A
-        Sync Boost                        : Not Active
-        SW Thermal Slowdown               : Not Active
-        Display Clock Setting             : Not Active
     FB Memory Usage
-        Total                             : 979 MiB
-        Used                              : 481 MiB
-        Free                              : 498 MiB
+        Total                             : 11441 MiB
+        Used                              : 11082 MiB
+        Free                              : 359 MiB
     BAR1 Memory Usage
         Total                             : 256 MiB
-        Used                              : 6 MiB
-        Free                              : 250 MiB
+        Used                              : 3 MiB
+        Free                              : 253 MiB
     Clocks
-        Graphics                          : 706 MHz
-        SM                                : 706 MHz
-        Memory                            : 891 MHz
+        Graphics                          : 745 MHz
+        SM                                : 745 MHz
+        Memory                            : 3004 MHz
         Video                             : 540 MHz
     Applications Clocks
-        Graphics                          : N/A
-        Memory                            : N/A
+        Graphics                          : 745 MHz
+        Memory                            : 3004 MHz
     Default Applications Clocks
-        Graphics                          : N/A
-        Memory                            : N/A
+        Graphics                          : 745 MHz
+        Memory                            : 3004 MHz
     Max Clocks
         Graphics                          : 875 MHz
         SM                                : 875 MHz
-        Memory                            : 891 MHz
+        Memory                            : 3004 MHz
         Video                             : 540 MHz
     Max Customer Boost Clocks
         Graphics                          : N/A
     SM Clock Samples
-        Duration                          : 7514.42 sec
-        Number of Samples                 : 100
-        Max                               : 875 MHz
+        Duration                          : 233.69 sec
+        Number of Samples                 : 5
+        Max                               : 745 MHz
         Min                               : 324 MHz
-        Avg                               : 514 MHz
+        Avg                               : 715 MHz
     Memory Clock Samples
-        Duration                          : 7514.42 sec
-        Number of Samples                 : 100
-        Max                               : 891 MHz
+        Duration                          : 233.69 sec
+        Number of Samples                 : 5
+        Max                               : 3004 MHz
         Min                               : 324 MHz
-        Avg                               : 563 MHz
+        Avg                               : 2814 MHz
     Clock Policy
         Auto Boost                        : N/A
         Auto Boost Default                : N/A
 
 GPU 00000000:04:00.0
-    Performance State                     : P0
-    Clocks Throttle Reasons
-        Idle                              : Not Active
-        Applications Clocks Setting       : Active
-        SW Power Cap                      : Not Active
-        HW Slowdown                       : Not Active
-            HW Thermal Slowdown           : N/A
-            HW Power Brake Slowdown       : N/A
-        Sync Boost                        : Not Active
-        SW Thermal Slowdown               : Not Active
-        Display Clock Setting             : Not Active
     FB Memory Usage
         Total                             : 11441 MiB
-        Used                              : 10823 MiB
-        Free                              : 618 MiB
+        Used                              : 11024 MiB
+        Free                              : 417 MiB
     BAR1 Memory Usage
         Total                             : 256 MiB
         Used                              : 2 MiB
@@ -99,71 +77,60 @@ GPU 00000000:04:00.0
     Max Customer Boost Clocks
         Graphics                          : N/A
     SM Clock Samples
-        Duration                          : 618373.94 sec
-        Number of Samples                 : 78
+        Duration                          : 7114.24 sec
+        Number of Samples                 : 18
         Max                               : 745 MHz
         Min                               : 324 MHz
-        Avg                               : 329 MHz
+        Avg                               : 709 MHz
     Memory Clock Samples
-        Duration                          : 618373.94 sec
-        Number of Samples                 : 78
+        Duration                          : 7114.24 sec
+        Number of Samples                 : 18
         Max                               : 3004 MHz
         Min                               : 324 MHz
-        Avg                               : 366 MHz
+        Avg                               : 2796 MHz
     Clock Policy
         Auto Boost                        : N/A
         Auto Boost Default                : N/A
 
-GPU 00000000:81:00.0
-    Performance State                     : P0
-    Clocks Throttle Reasons
-        Idle                              : Not Active
-        Applications Clocks Setting       : Active
-        SW Power Cap                      : Not Active
-        HW Slowdown                       : Not Active
-            HW Thermal Slowdown           : N/A
-            HW Power Brake Slowdown       : N/A
-        Sync Boost                        : Not Active
-        SW Thermal Slowdown               : Not Active
-        Display Clock Setting             : Not Active
+GPU 00000000:82:00.0
     FB Memory Usage
-        Total                             : 11441 MiB
-        Used                              : 10793 MiB
-        Free                              : 648 MiB
+        Total                             : 979 MiB
+        Used                              : 476 MiB
+        Free                              : 503 MiB
     BAR1 Memory Usage
         Total                             : 256 MiB
-        Used                              : 2 MiB
-        Free                              : 254 MiB
+        Used                              : 6 MiB
+        Free                              : 250 MiB
     Clocks
-        Graphics                          : 745 MHz
-        SM                                : 745 MHz
-        Memory                            : 3004 MHz
+        Graphics                          : 875 MHz
+        SM                                : 875 MHz
+        Memory                            : 891 MHz
         Video                             : 540 MHz
     Applications Clocks
-        Graphics                          : 745 MHz
-        Memory                            : 3004 MHz
+        Graphics                          : N/A
+        Memory                            : N/A
     Default Applications Clocks
-        Graphics                          : 745 MHz
-        Memory                            : 3004 MHz
+        Graphics                          : N/A
+        Memory                            : N/A
     Max Clocks
         Graphics                          : 875 MHz
         SM                                : 875 MHz
-        Memory                            : 3004 MHz
+        Memory                            : 891 MHz
         Video                             : 540 MHz
     Max Customer Boost Clocks
         Graphics                          : N/A
     SM Clock Samples
-        Duration                          : 618392.72 sec
-        Number of Samples                 : 57
-        Max                               : 745 MHz
+        Duration                          : 1551.31 sec
+        Number of Samples                 : 100
+        Max                               : 875 MHz
         Min                               : 324 MHz
-        Avg                               : 362 MHz
+        Avg                               : 795 MHz
     Memory Clock Samples
-        Duration                          : 618392.72 sec
-        Number of Samples                 : 57
-        Max                               : 3004 MHz
+        Duration                          : 1551.31 sec
+        Number of Samples                 : 100
+        Max                               : 891 MHz
         Min                               : 324 MHz
-        Avg                               : 612 MHz
+        Avg                               : 852 MHz
     Clock Policy
         Auto Boost                        : N/A
         Auto Boost Default                : N/A

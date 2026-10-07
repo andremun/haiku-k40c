@@ -1,4 +1,4 @@
-# Captured 2026-09-29T13:08:51+10:00 without root. Root-only fields show as <access denied>/zeros.
+# Captured 2026-10-07T14:01:10+11:00 without root. Root-only fields show as <access denied>/zeros.
 00:00.0 Host bridge [0600]: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 DMI2 [8086:0e00] (rev 04)
 00:01.0 PCI bridge [0604]: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 PCI Express Root Port 1a [8086:0e02] (rev 04)
 00:01.1 PCI bridge [0604]: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 PCI Express Root Port 1b [8086:0e03] (rev 04)
@@ -20,8 +20,7 @@
 00:1f.2 SATA controller [0106]: Intel Corporation C600/X79 series chipset 6-Port SATA AHCI Controller [8086:1d02] (rev 06)
 00:1f.3 SMBus [0c05]: Intel Corporation C600/X79 series chipset SMBus Host Controller [8086:1d22] (rev 06)
 01:00.0 Serial Attached SCSI controller [0107]: Broadcom / LSI SAS2308 PCI-Express Fusion-MPT SAS-2 [1000:0087] (rev 05)
-03:00.0 VGA compatible controller [0300]: NVIDIA Corporation GK107GL [Quadro K600] [10de:0ffa] (rev a1)
-03:00.1 Audio device [0403]: NVIDIA Corporation GK107 HDMI Audio Controller [10de:0e1b] (rev a1)
+03:00.0 3D controller [0302]: NVIDIA Corporation GK180GL [Tesla K40c] [10de:1024] (rev a1)
 04:00.0 3D controller [0302]: NVIDIA Corporation GK180GL [Tesla K40c] [10de:1024] (rev a1)
 06:00.0 USB controller [0c03]: Renesas Technology Corp. uPD720201 USB 3.0 Host Controller [1912:0014] (rev 03)
 07:00.0 Ethernet controller [0200]: Intel Corporation I210 Gigabit Network Connection [8086:1533] (rev 03)
@@ -67,7 +66,8 @@
 80:05.0 System peripheral [0880]: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 VTd/Memory Map/Misc [8086:0e28] (rev 04)
 80:05.2 System peripheral [0880]: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 IIO RAS [8086:0e2a] (rev 04)
 80:05.4 PIC [0800]: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 IOAPIC [8086:0e2c] (rev 04)
-81:00.0 3D controller [0302]: NVIDIA Corporation GK180GL [Tesla K40c] [10de:1024] (rev a1)
+82:00.0 VGA compatible controller [0300]: NVIDIA Corporation GK107GL [Quadro K600] [10de:0ffa] (rev a1)
+82:00.1 Audio device [0403]: NVIDIA Corporation GK107 HDMI Audio Controller [10de:0e1b] (rev a1)
 ff:08.0 System peripheral [0880]: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 QPI Link 0 [8086:0e80] (rev 04)
 ff:09.0 System peripheral [0880]: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 QPI Link 1 [8086:0e90] (rev 04)
 ff:0a.0 System peripheral [0880]: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Power Control Unit 0 [8086:0ec0] (rev 04)

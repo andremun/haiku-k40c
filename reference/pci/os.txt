@@ -1,9 +1,14 @@
 Linux uld-jvnhw22.mobility.unimelb.net.au 6.8.0-138-generic #138~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Aug  7 13:43:15 UTC  x86_64 x86_64 x86_64 GNU/Linux
 NVRM version: NVIDIA UNIX x86_64 Kernel Module  470.256.02  Thu May  2 14:37:44 UTC 2024
 GCC version:  gcc version 12.3.0 (Ubuntu 12.3.0-1ubuntu1~22.04.3) 
-nvidia_uvm           1413120  4
-nvidia_drm             77824  30
-nvidia_modeset       1212416  16 nvidia_drm
-nvidia              35643392  1409 nvidia_uvm,nvidia_modeset
+videobuf2_vmalloc      20480  1 uvcvideo
+videobuf2_memops       16384  1 videobuf2_vmalloc
+videobuf2_v4l2         36864  1 uvcvideo
+videodev              356352  2 videobuf2_v4l2,uvcvideo
+videobuf2_common       81920  4 videobuf2_vmalloc,videobuf2_v4l2,uvcvideo,videobuf2_memops
+nvidia_uvm           1413120  6
+nvidia_drm             77824  29
+nvidia_modeset       1212416  14 nvidia_drm
+nvidia              35643392  1504 nvidia_uvm,nvidia_modeset
 video                  77824  1 nvidia_modeset
 blacklist nvidiafb

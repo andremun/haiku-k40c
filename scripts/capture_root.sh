@@ -6,8 +6,15 @@ set -euo pipefail
 [[ ${EUID} -eq 0 ]] || { echo "Run with sudo." >&2; exit 1; }
 OUT="$(cd "$(dirname "$0")/.." && pwd)/reference/pci/root"
 mkdir -p "${OUT}"
-for bdf in 04:00.0 81:00.0 03:00.0; do
-    tag=${bdf//[:.]/_}
+# Every NVIDIA display device that is present (2 x K40c and the K600).
+gpus=()
+for d in /sys/bus/pci/devices/*; do
+    [[ $(cat "$d/vendor") == 0x10de && $(cat "$d/class") == 0x03* ]] && gpus+=("$(basename "$d")")
+done
+[[ ${#gpus[@]} -gt 0 ]] || { echo "No NVIDIA display device found." >&2; exit 1; }
+pat=$(IFS='|'; echo "${gpus[*]}")
+for dev in "${gpus[@]}"; do
+    bdf=${dev#0000:}; tag=${bdf//[:.]/_}
     lspci -vvv -nn -s "${bdf}" > "${OUT}/lspci-vvv-${tag}.txt"
     lspci -xxxx -s "${bdf}" > "${OUT}/lspci-xxxx-${tag}.txt"
     { echo "COMMAND=$(setpci -s "${bdf}" COMMAND)"
@@ -15,9 +22,9 @@ for bdf in 04:00.0 81:00.0 03:00.0; do
       echo "INTERRUPT_LINE=$(setpci -s "${bdf}" INTERRUPT_LINE)"
       echo "INTERRUPT_PIN=$(setpci -s "${bdf}" INTERRUPT_PIN)"; } > "${OUT}/setpci-${tag}.txt"
 done
-grep -iE "nvidia|0000:(03|04|81):00" /proc/iomem > "${OUT}/iomem.txt" || true
-dmesg | grep -iE "nvidia|nouveau|NVRM|0000:(04|81):00" > "${OUT}/dmesg-gpu.txt" || true
+grep -iE "nvidia|${pat}" /proc/iomem > "${OUT}/iomem.txt" || true
+dmesg | grep -iE "nvidia|nouveau|NVRM|${pat}" > "${OUT}/dmesg-gpu.txt" || true
 dmidecode -t memory > "${OUT}/dmidecode-memory.txt"
 dmidecode -t bios -t system > "${OUT}/dmidecode-system.txt"
 chown -R "${SUDO_USER:-root}:" "${OUT}"
-echo "Written to ${OUT}"
+echo "Written to ${OUT} for: ${gpus[*]}"

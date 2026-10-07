@@ -51,7 +51,7 @@ Model configurations (`~/llm-server/llm-mode.sh`):
 |---|---|
 | `dual` | One model on both K40c. Default, fastest single session. |
 | `two` | One model per K40c. Two sessions at a time: `opencode` and `opencode -m llamacpp/qwen3.6-k40b`. |
-| `one` | One model on the K40c at 81:00.0. No process on the K40c at 04:00.0, for hardware tests. |
+| `one` | One model on the K40c at 03:00.0. No process on the K40c at 04:00.0, for hardware tests. |
 
 The project config has no fixed model. It uses the OpenCode default, which
 `llm-mode.sh` sets.
@@ -67,8 +67,8 @@ Start a new OpenCode session for each task. The repository is the memory:
 | `docs/` | Status, phases, open questions, requests, design documents. |
 | `reference/` | Pinned read-only sources (`MANIFEST.md`) and PCI captures. |
 | `tools/` | Analysis scripts and `check_repo.py`. |
-| `tools/haiku/` | Cross-compile a Haiku driver on Linux and load it in a test VM (`docs/HAIKU_BUILD_TEST.md`). |
+| `tools/haiku/` | Cross-compile a Haiku driver on Linux and load it in a test VM (`docs/HAIKU_BUILD_TEST.md`). `setup.sh` builds the toolchain and VM in `~/haiku-cross`. |
 | `hardware/`, `analysis/`, `registers/`, `firmware/` | Task outputs. |
 | `work/` | Per-task plans, findings and results. |
 | `escalations/` | Problems that need a decision. |
-| `scripts/capture_root.sh` | Read-only PCI captures for the user to run with sudo. |
+| `scripts/capture_user.sh`, `scripts/capture_root.sh` | Read-only PCI captures: without root, and for the user to run with sudo. Run both after a hardware change, then `tools/hardware_record.py`. |

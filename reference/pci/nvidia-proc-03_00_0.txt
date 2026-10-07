@@ -1,10 +1,10 @@
 Model: 		 Tesla K40c
-IRQ:   		 67
+IRQ:   		 66
 GPU UUID: 	 GPU-fe68b526-b148-5b7b-0fa1-309819b4527e
 Video BIOS: 	 80.80.65.00.01
 Bus Type: 	 PCIe
 DMA Size: 	 40 bits
 DMA Mask: 	 0xffffffffff
-Bus Location: 	 0000:81:00.0
-Device Minor: 	 2
+Bus Location: 	 0000:03:00.0
+Device Minor: 	 0
 GPU Excluded:	 No

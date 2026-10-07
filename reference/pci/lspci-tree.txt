@@ -35,8 +35,9 @@
  |           +-16.0  Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 System Address Decoder
  |           +-16.1  Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Broadcast Registers
  |           \-16.2  Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Broadcast Registers
- +-[0000:80]-+-02.0-[81]----00.0  NVIDIA Corporation GK180GL [Tesla K40c]
- |           +-03.0-[82]--
+ +-[0000:80]-+-02.0-[81]--
+ |           +-03.0-[82]--+-00.0  NVIDIA Corporation GK107GL [Quadro K600]
+ |           |            \-00.1  NVIDIA Corporation GK107 HDMI Audio Controller
  |           +-05.0  Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 VTd/Memory Map/Misc
  |           +-05.2  Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 IIO RAS
  |           \-05.4  Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 IOAPIC
@@ -80,8 +81,7 @@
  \-[0000:00]-+-00.0  Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 DMI2
              +-01.0-[01]----00.0  Broadcom / LSI SAS2308 PCI-Express Fusion-MPT SAS-2
              +-01.1-[02]--
-             +-02.0-[03]--+-00.0  NVIDIA Corporation GK107GL [Quadro K600]
-             |            \-00.1  NVIDIA Corporation GK107 HDMI Audio Controller
+             +-02.0-[03]----00.0  NVIDIA Corporation GK180GL [Tesla K40c]
              +-03.0-[04]----00.0  NVIDIA Corporation GK180GL [Tesla K40c]
              +-05.0  Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 VTd/Memory Map/Misc
              +-05.2  Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 IIO RAS

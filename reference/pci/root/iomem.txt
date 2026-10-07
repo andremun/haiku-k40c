@@ -1,13 +1,12 @@
     d0000000-dfffffff : 0000:03:00.0
     e0000000-e1ffffff : 0000:03:00.0
-    e4000000-e4ffffff : 0000:03:00.0
-      e4000000-e4ffffff : nvidia
-    e5080000-e5083fff : 0000:03:00.1
-    e6000000-e6ffffff : 0000:04:00.0
+    e5000000-e5ffffff : 0000:04:00.0
+      e5000000-e5ffffff : nvidia
+    e6000000-e6ffffff : 0000:03:00.0
       e6000000-e6ffffff : nvidia
-    fa000000-faffffff : 0000:81:00.0
+    fa000000-faffffff : 0000:82:00.0
       fa000000-faffffff : nvidia
     20fe0000000-20fefffffff : 0000:04:00.0
     20ff0000000-20ff1ffffff : 0000:04:00.0
-    21fe0000000-21fefffffff : 0000:81:00.0
-    21ff0000000-21ff1ffffff : 0000:81:00.0
+    21fe0000000-21fefffffff : 0000:82:00.0
+    21ff0000000-21ff1ffffff : 0000:82:00.0

@@ -1,0 +1,10 @@
+Model: 		 Quadro K600
+IRQ:   		 65
+GPU UUID: 	 GPU-aa99b21e-607e-e55f-aa9f-f7cf0d9ba204
+Video BIOS: 	 80.07.c5.00.05
+Bus Type: 	 PCIe
+DMA Size: 	 40 bits
+DMA Mask: 	 0xffffffffff
+Bus Location: 	 0000:82:00.0
+Device Minor: 	 2
+GPU Excluded:	 No
