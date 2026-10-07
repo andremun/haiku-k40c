@@ -1,8 +1,8 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B3 (MMIO access extraction). B2 is DONE and waits for its review (`/review B2`).
-Last updated: 2026-10-07
+Current task: B3 DONE. B2 is DONE and waits for its review (`/review B2`).
+Last updated: 2026-10-08
 
 ## Last result
 
@@ -43,3 +43,4 @@ the old layout. Details: `reference/pci/README.md`.
 | A2 | DONE | 2026-10-06 | Added `pci_capabilities`, `interrupt`, `link_capability` to record.json; sections in record.md; LnkSta agrees with link for both GPUs |
 | B1 | DONE | 2026-10-07 | Rework 2: fixed role format (6+ words), class (other-chip category), determinism (sorted sets), RESULT.md errors. 88 entries, `make check` 0 failures. |
 | B2 | DONE | 2026-10-07 | Call graph from four roots. 447 nodes, 708 edges. Three patterns added (struct field values, function call args). All 3 required init functions reachable. `make check` 0 failures. |
+| B3 | DONE | 2026-10-08 | 872 MMIO accesses from 43 files (rd32: 288, wr32: 462, mask: 122). 587 constant regs. Three bugs fixed: nested call line attribution (offset map), double-processing of joined lines (return end_line), 875→872 count. `make check` 0 failures. |
