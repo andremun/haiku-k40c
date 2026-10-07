@@ -2,8 +2,8 @@
   "nodes": [
     {
       "name": "args",
-      "file": "nvkm/engine/gr/gf100.c",
-      "line": 383,
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 180,
       "kind": "table"
     },
     {
@@ -1502,8 +1502,8 @@
     },
     {
       "name": "map",
-      "file": "nvkm/subdev/mmu/mem.c",
-      "line": 74,
+      "file": "nvkm/subdev/fb/ram.c",
+      "line": 49,
       "kind": "table"
     },
     {

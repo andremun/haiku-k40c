@@ -152,6 +152,8 @@ Generated from 447 nodes and 708 edges.
 
 | `gk104_ectx_ctor` | `nvkm/engine/fifo/gk104.c` | 178 | function |
 
+| `args` | `nvkm/engine/fifo/gk104.c` | 180 | table |
+
 | `gk104_engn_status` | `nvkm/engine/fifo/gk104.c` | 204 | function |
 
 | `gk104_engn_cxid` | `nvkm/engine/fifo/gk104.c` | 245 | function |
@@ -442,8 +444,6 @@ Generated from 447 nodes and 708 edges.
 
 | `gf100_gr_object_get` | `nvkm/engine/gr/gf100.c` | 299 | function |
 
-| `args` | `nvkm/engine/gr/gf100.c` | 383 | table |
-
 | `gf100_gr_pack_mmio` | `nvkm/engine/gr/gf100.c` | 708 | table |
 
 | `gf100_gr_ctxsw_inst` | `nvkm/engine/gr/gf100.c` | 744 | function |
@@ -642,6 +642,8 @@ Generated from 447 nodes and 708 edges.
 
 | `gk110_fb_new` | `nvkm/subdev/fb/gk110.c` | 69 | function |
 
+| `map` | `nvkm/subdev/fb/ram.c` | 49 | table |
+
 | `nvkm_ram_init` | `nvkm/subdev/fb/ram.c` | 195 | function |
 
 | `nvkm_ram_del` | `nvkm/subdev/fb/ram.c` | 203 | function |
@@ -763,8 +765,6 @@ Generated from 447 nodes and 708 edges.
 | `gk104_mmu` | `nvkm/subdev/mmu/gk104.c` | 28 | table |
 
 | `gk104_mmu_new` | `nvkm/subdev/mmu/gk104.c` | 38 | function |
-
-| `map` | `nvkm/subdev/mmu/mem.c` | 74 | table |
 
 | `nvkm_mem_map_host` | `nvkm/subdev/mmu/mem.c` | 133 | function |
 

@@ -1,35 +1,25 @@
-# B2: Call graph — PLAN
+# B2 REWORK: Determinism + other-chip section — PLAN
 
-## Objective
-Build a call graph from the four chipset constructors (fb, mmu, fifo, gr) through
-their init paths. Output JSON (`analysis/callgraph.json`) and markdown
-(`analysis/callgraph.md`).
+## Defects to fix (from work/B2/REVIEW.md)
 
-## Scope
-Only files listed in `analysis/files.json`. Four roots:
-- `gk110_fb_new` → `gk110_fb` table → functions/tables it names
-- `gk104_mmu_new` → `gk104_mmu` table → functions/tables it names
-- `gk110_fifo_new` → `gk110_fifo` table → functions/tables it names
-- `gk110b_gr_new` → `gk110b_gr` table → functions/tables it names
+1. **Non-deterministic output**: `scope_dirs()` returns a `set()` and the
+   BFS adjacency dict has unsorted sets. This makes JSON node order vary
+   between runs. Fix: sort every set before iteration.
 
-## Approach
-1. Read all `.c` files in the four scope directories.
-2. Extract **function definitions** (`name(args) {`) and **table definitions**
-   (`name = {` or `name[] = {` or `const struct … name = {`). Record
-   `(name, file, line_number)`.
-3. For each function body, find every identifier that is also a node name → edge.
-4. For each table body (lines between `name = {` and closing `}`), find every
-   identifier after `.` that is a node name → edge.
-5. Nodes get optional `"kind"`: `"function"` or `"table"`.
-6. Sort all sets before use for determinism.
+2. **Missing "other chip" section**: `analysis/callgraph.md` must report,
+   for each subsystem (fb, mmu, fifo, gr), which calls go to other-chip
+   files (nv04, nv50, gf108, etc.). The tool writes this.
 
-## Outputs
-- `tools/callgraph.py` — the tool (with `--check` mode)
-- `analysis/callgraph.json` — graph JSON
-- `analysis/callgraph.md` — readable per-subsystem paths
+3. **RESULT.md says "deterministic"**: correct it only after `--check`
+   passes twice.
 
-## Verification
-`make check` validates: every node's `file:line` defines that name; the four
-roots are nodes; every edge joins two nodes; caller body uses callee; every node
-is reached from a root; `gf100_gr_init`, `gf100_fb_init`, `gk104_fifo_init` are
-nodes.
+## Steps
+
+1. Fix `callgraph.py`:
+   a. `scope_dirs()`: convert set to sorted list.
+   b. BFS `todo`: use sorted list from set.
+   c. Write "other chip" section in markdown generation.
+2. Regenerate `analysis/callgraph.json` and `analysis/callgraph.md`.
+3. Run `make check` — fix any failures.
+4. Update `work/B2/RESULT.md`.
+5. Handoff.

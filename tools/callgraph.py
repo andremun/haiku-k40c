@@ -29,7 +29,7 @@ def load_files():
 
 
 def scope_dirs(entries):
-    """Return the set of nvkm/… subdirectories for the four scope subsystems."""
+    """Return the sorted list of nvkm/… subdirectories for the four scope subsystems."""
     subsystems = {"fb", "mmu", "fifo", "gr"}
     dirs = set()
     for e in entries:
@@ -37,7 +37,7 @@ def scope_dirs(entries):
         subsystem = e.get("subsystem", "")
         if subsystem in subsystems:
             dirs.add(os.path.dirname(path))
-    return dirs
+    return sorted(dirs)
 
 
 def read_source(rel):
@@ -261,7 +261,7 @@ def build_graph():
         x = todo.pop()
         if x not in seen:
             seen.add(x)
-            todo.extend(out.get(x, ()))
+            todo.extend(sorted(out.get(x, ())))
     reachable = seen & all_names  # only keep if the node exists in all_nodes
 
     # Filter nodes

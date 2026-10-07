@@ -491,6 +491,16 @@ if cl is not None:
         fail(f"{rel}: 'launch' must have LAUNCH_DESC_ADDRESS and then LAUNCH")
     if not cl.get("kernel_needs"):
         fail(f"{rel}: 'kernel_needs' is empty")
+    tool = os.path.join(ROOT, "tools", "compute_launch.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/compute_launch.py: missing, or no --check option (docs/PHASES.md, task B6)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/compute_launch.py --check (run {run}): {rel} is not what the tool generates")
+                break
 
 # B4 Linux dependencies -----------------------------------------------
 ld = load_json("analysis/linux_deps.json")
