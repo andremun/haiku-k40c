@@ -2,9 +2,10 @@
 
 ## Chipset
 
-The K40c (PCI ID 0x0f1) uses **`nvf1_chipset`** (GK110B), selected at
-`reference/nouveau/nvkm/engine/device/base.c:1770` via `case 0x0f1` from
-`PMC_BOOT_0` bits [28:20].
+The K40c (PCI ID 10de:1024, GK110B) uses **`nvf1_chipset`**, selected at
+`reference/nouveau/nvkm/engine/device/base.c:3218` via `case 0x0f1` from
+`PMC_BOOT_0` bits [28:20]. The struct `nvf1_chipset` is defined at
+`base.c:1770-1803`.
 
 The struct is defined at `base.c:1770-1803` and contains **31 constructor
 entries** — 22 subdevices and 9 engines.
@@ -28,8 +29,9 @@ code instead of a hand-written map. It:
 |---|---|
 | GK110-specific | 6 |
 | GK104-inherited | 13 |
-| GF100-inherited | 15 |
-| generic-NVKM | 54 |
+| GF100-inherited | 23 |
+| generic-NVKM | 28 |
+| other-chip | 18 |
 | Linux-only | 0 |
 
 ### Subsystem breakdown (compute-path subsystems)
@@ -99,43 +101,61 @@ code instead of a hand-written map. It:
 | mmu | `nvkm/subdev/mmu/vmmgf100.c` | `gf100_vmm_aper` |
 | pci | `nvkm/subdev/pci/gf100.c` | `gf100_pcie_set_cap_speed` |
 
-### generic-NVKM files (54)
+### generic-NVKM files (28)
 
-These cover NV04, NV17, NV40, NV41, NV46, NV50, G84, G92, GF104, GF108,
-GT215, and base implementations across all compute-path subsystems.
+These are base implementations with no chip-specific pattern in their names.
 
 | Subsystem | Count | Files |
 |---|---|---|
-| fifo | 10 | `base.c`, `cgrp.c`, `chan.c`, `chid.c`, `nv04.c`, `nv50.c`, `runl.c`, `runq.c`, `ucgrp.c`, `uchan.c` |
-| gr | 10 | `base.c`, `ctxgf104.c`, `ctxgf108.c`, `ctxgf110.c`, `ctxgf117.c`, `ctxnv50.c`, `gf104.c`, `gf108.c`, `gf117.c`, `nv50.c` |
-| mmu | 7 | `base.c`, `mem.c`, `umem.c`, `ummu.c`, `uvmm.c`, `vmm.c`, `vmmnv04.c` |
-| pci | 7 | `agp.c`, `base.c`, `g84.c`, `g92.c`, `nv40.c`, `nv46.c`, `pcie.c` |
-| fb | 5 | `base.c`, `gddr5.c`, `ram.c`, `ramgf108.c`, `sddr3.c` |
-| mc | 5 | `base.c`, `gt215.c`, `nv04.c`, `nv17.c`, `nv50.c` |
-| imem | 4 | `base.c`, `nv04.c`, `nv50.c`, `r535.c` |
-| bar | 3 | `base.c`, `g84.c`, `nv50.c` |
-| ltc | 1 | `base.c` |
-| top | 1 | `base.c` |
+| fifo | 8 | `base.c`, `cgrp.c`, `chan.c`, `chid.c`, `runl.c`, `runq.c`, `ucgrp.c`, `uchan.c` |
+| mmu | 6 | `base.c`, `mem.c`, `umem.c`, `ummu.c`, `uvmm.c`, `vmm.c` |
+| fb | 4 | `base.c`, `gddr5.c`, `ram.c`, `sddr3.c` |
+| pci | 3 | `agp.c`, `base.c`, `pcie.c` |
+| bar | 1 | `base.c` |
 | bus | 1 | `base.c` |
+| gr | 1 | `base.c` |
+| imem | 1 | `base.c` |
+| ltc | 1 | `base.c` |
+| mc | 1 | `base.c` |
+| top | 1 | `base.c` |
 | ce | 0 | — |
 | privring | 0 | — |
 
-Note: Counts per subsystem are generic-NVKM only. Adding chip-specific files
-gives the subsystem total shown in the breakdown table above.
+### other-chip files (18)
+
+These carry a chip name that is neither GK110, GK104, nor a GF1xx pattern:
+NV04, NV17, NV40, NV46, NV50, G84, G92, GT215, R535. They are inherited
+through the constructor chain.
+
+| Subsystem | Count | Files |
+|---|---|---|
+| pci | 4 | `g84.c`, `g92.c`, `nv40.c`, `nv46.c` |
+| mc | 4 | `gt215.c`, `nv04.c`, `nv17.c`, `nv50.c` |
+| imem | 3 | `nv04.c`, `nv50.c`, `r535.c` |
+| bar | 2 | `g84.c`, `nv50.c` |
+| fifo | 2 | `nv04.c`, `nv50.c` |
+| gr | 2 | `ctxnv50.c`, `nv50.c` |
+| mmu | 1 | `vmmnv04.c` |
+
+Note: Counts per subsystem are per-class only. Adding all classes gives the
+subsystem total shown in the breakdown table above.
 
 ## Outputs
 
 - `analysis/files.json` — 88 entries in `{"path", "subsystem", "class", "role"}`
-  format. Closure is closed inside every directory.
+  format. Closure is closed inside every directory. Roles are 6+ words and
+  follow the "chipset constructor" / "used by" format. `--check` mode exits 0
+  when the file matches the tool output, 1 otherwise.
 - `tools/nouveau_files.py` — Source-based tool: extracts constructors from
   `nvf1_chipset`, resolves them to files, then iteratively follows references
-  within each directory. Classifies by chip pattern in basename.
+  within each directory. Classifies by chip pattern in basename (including
+  `other-chip`). Deterministic: all sets are sorted before use.
 - `make check` — passes with 0 failures.
 
 ## Open questions
 
-- Some generic-NVKM files (e.g. `gt215.c`, `gf104.c`, `gf108.c`) belong to
-  GPU families between GF100 and GK104. These are not relevant for the
-  GK110/K40c compute path but are transitively pulled in by closure.
-- The `role` field shows the defining function/table name. It does not
-  describe the file's purpose in natural language.
+- Some other-chip files (e.g. `gt215.c`, `nv40.c`, `r535.c`) belong to GPU
+  families between the original GeForce and GK104/K40c. These are transitively
+  pulled in by the closure algorithm because the constructor chain traverses
+  through them. They are not relevant for the GK110 compute path but are
+  correctly listed because the constructor chain requires them.

@@ -3,528 +3,528 @@
     "path": "nvkm/engine/ce/gk104.c",
     "subsystem": "ce",
     "class": "GK104-inherited",
-    "role": "gk104_ce_new \u2014 ce"
+    "role": "chipset constructor gk104_ce_new in ce subsystem"
   },
   {
     "path": "nvkm/engine/fifo/base.c",
     "subsystem": "fifo",
     "class": "generic-NVKM",
-    "role": "nvkm_fifo_new_ \u2014 fifo"
+    "role": "Generic NVKM, used by nvkm/engine/fifo/gk110.c (nvkm_fifo)"
   },
   {
     "path": "nvkm/engine/fifo/cgrp.c",
     "subsystem": "fifo",
     "class": "generic-NVKM",
-    "role": "nvkm_cgrp_ref \u2014 fifo"
+    "role": "Generic NVKM, used by nvkm/engine/fifo/chan.c (nvkm_cgrp_new)"
   },
   {
     "path": "nvkm/engine/fifo/chan.c",
     "subsystem": "fifo",
     "class": "generic-NVKM",
-    "role": "nvkm_chan_event \u2014 fifo"
+    "role": "Generic NVKM, used by nvkm/engine/fifo/gk110.c (nvkm_chan_event)"
   },
   {
     "path": "nvkm/engine/fifo/chid.c",
     "subsystem": "fifo",
     "class": "generic-NVKM",
-    "role": "nvkm_chid_new \u2014 fifo"
+    "role": "Generic NVKM, used by nvkm/engine/fifo/gk110.c (nvkm_chid_new)"
   },
   {
     "path": "nvkm/engine/fifo/gf100.c",
     "subsystem": "fifo",
     "class": "GF100-inherited",
-    "role": "gf100_fifo_intr_mmu_fault_unit \u2014 fifo"
+    "role": "Fermi implementation, used by nvkm/engine/fifo/gk110.c (gf100_chan_inst)"
   },
   {
     "path": "nvkm/engine/fifo/gk104.c",
     "subsystem": "fifo",
     "class": "GK104-inherited",
-    "role": "gk104_runl_pending \u2014 fifo"
+    "role": "Kepler inherited, used by nvkm/engine/fifo/gk110.c (gk104_chan_bind)"
   },
   {
     "path": "nvkm/engine/fifo/gk110.c",
     "subsystem": "fifo",
     "class": "GK110-specific",
-    "role": "gk110_fifo_new \u2014 fifo"
+    "role": "chipset constructor gk110_fifo_new in fifo subsystem"
   },
   {
     "path": "nvkm/engine/fifo/nv04.c",
     "subsystem": "fifo",
-    "class": "generic-NVKM",
-    "role": "nv04_fifo_pause \u2014 fifo"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/engine/fifo/gf100.c (nv04_cgrp)"
   },
   {
     "path": "nvkm/engine/fifo/nv50.c",
     "subsystem": "fifo",
-    "class": "generic-NVKM",
-    "role": "nv50_runl_update \u2014 fifo"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/engine/fifo/gk110.c (nv50_runl_update)"
   },
   {
     "path": "nvkm/engine/fifo/runl.c",
     "subsystem": "fifo",
     "class": "generic-NVKM",
-    "role": "nvkm_runl_update_pending \u2014 fifo"
+    "role": "Generic NVKM, used by nvkm/engine/fifo/base.c (nvkm_runl_del)"
   },
   {
     "path": "nvkm/engine/fifo/runq.c",
     "subsystem": "fifo",
     "class": "generic-NVKM",
-    "role": "nvkm_runq_del \u2014 fifo"
+    "role": "Generic NVKM, used by nvkm/engine/fifo/base.c (nvkm_runq_del)"
   },
   {
     "path": "nvkm/engine/fifo/ucgrp.c",
     "subsystem": "fifo",
     "class": "generic-NVKM",
-    "role": "nvkm_ucgrp_new \u2014 fifo"
+    "role": "Generic NVKM, used by nvkm/engine/fifo/base.c (nvkm_ucgrp_new)"
   },
   {
     "path": "nvkm/engine/fifo/uchan.c",
     "subsystem": "fifo",
     "class": "generic-NVKM",
-    "role": "nvkm_uchan_new \u2014 fifo"
+    "role": "Generic NVKM, used by nvkm/engine/fifo/base.c (nvkm_uchan_new)"
   },
   {
     "path": "nvkm/engine/gr/base.c",
     "subsystem": "gr",
     "class": "generic-NVKM",
-    "role": "nvkm_gr \u2014 gr"
+    "role": "Generic NVKM, used by nvkm/engine/gr/gk110b.c (nvkm_gr)"
   },
   {
     "path": "nvkm/engine/gr/ctxgf100.c",
     "subsystem": "gr",
     "class": "GF100-inherited",
-    "role": "gf100_grctx \u2014 gr"
+    "role": "Fermi implementation, used by nvkm/engine/gr/ctxgk110b.c (gf100_grctx_generate_attrib_cb)"
   },
   {
     "path": "nvkm/engine/gr/ctxgf104.c",
     "subsystem": "gr",
-    "class": "generic-NVKM",
-    "role": "gf104_grctx_init_l1c_0 \u2014 gr"
+    "class": "GF100-inherited",
+    "role": "Fermi implementation, used by nvkm/engine/gr/ctxgf108.c (gf104_grctx_init_l1c_0)"
   },
   {
     "path": "nvkm/engine/gr/ctxgf108.c",
     "subsystem": "gr",
-    "class": "generic-NVKM",
-    "role": "gf108_grctx \u2014 gr"
+    "class": "GF100-inherited",
+    "role": "Fermi implementation, used by nvkm/engine/gr/gf108.c (gf108_grctx)"
   },
   {
     "path": "nvkm/engine/gr/ctxgf110.c",
     "subsystem": "gr",
-    "class": "generic-NVKM",
-    "role": "gf110_grctx_init_9297_0 \u2014 gr"
+    "class": "GF100-inherited",
+    "role": "Fermi implementation, used by nvkm/engine/gr/ctxgf119.c (gf110_grctx_init_9197_0)"
   },
   {
     "path": "nvkm/engine/gr/ctxgf117.c",
     "subsystem": "gr",
-    "class": "generic-NVKM",
-    "role": "gf117_grctx_init_pe_0 \u2014 gr"
+    "class": "GF100-inherited",
+    "role": "Fermi implementation, used by nvkm/engine/gr/ctxgk110b.c (gf117_grctx_generate_attrib)"
   },
   {
     "path": "nvkm/engine/gr/ctxgf119.c",
     "subsystem": "gr",
     "class": "GF100-inherited",
-    "role": "gf119_grctx \u2014 gr"
+    "role": "Fermi implementation, used by nvkm/engine/gr/gf119.c (gf119_grctx)"
   },
   {
     "path": "nvkm/engine/gr/ctxgk104.c",
     "subsystem": "gr",
     "class": "GK104-inherited",
-    "role": "gk104_grctx \u2014 gr"
+    "role": "Kepler inherited, used by nvkm/engine/gr/ctxgk110b.c (gk104_grctx_generate_alpha_beta_tables)"
   },
   {
     "path": "nvkm/engine/gr/ctxgk110.c",
     "subsystem": "gr",
     "class": "GK110-specific",
-    "role": "gk110_grctx \u2014 gr"
+    "role": "Kepler+ specific, used by nvkm/engine/gr/ctxgk110b.c (gk110_grctx_generate_r419eb0)"
   },
   {
     "path": "nvkm/engine/gr/ctxgk110b.c",
     "subsystem": "gr",
     "class": "GK110-specific",
-    "role": "gk110b_grctx \u2014 gr"
+    "role": "Kepler+ specific, used by nvkm/engine/gr/gk110b.c (gk110b_grctx)"
   },
   {
     "path": "nvkm/engine/gr/ctxnv50.c",
     "subsystem": "gr",
-    "class": "generic-NVKM",
-    "role": "nv50_grctx_fill \u2014 gr"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/engine/gr/nv50.c (nv50_grctx_fill)"
   },
   {
     "path": "nvkm/engine/gr/gf100.c",
     "subsystem": "gr",
     "class": "GF100-inherited",
-    "role": "gf100_gr_init_fecs_exceptions \u2014 gr"
+    "role": "Fermi implementation, used by nvkm/engine/gr/gk110b.c (gf100_fermi)"
   },
   {
     "path": "nvkm/engine/gr/gf104.c",
     "subsystem": "gr",
-    "class": "generic-NVKM",
-    "role": "gf104_gr_init_sm_0 \u2014 gr"
+    "class": "GF100-inherited",
+    "role": "Fermi implementation, used by nvkm/engine/gr/gf108.c (gf104_gr_init_ds_0)"
   },
   {
     "path": "nvkm/engine/gr/gf108.c",
     "subsystem": "gr",
-    "class": "generic-NVKM",
-    "role": "gf108_gr_init_gpc_unk_0 \u2014 gr"
+    "class": "GF100-inherited",
+    "role": "Fermi implementation, used by nvkm/engine/gr/gk110b.c (gf108_gr_init_gpc_unk_0)"
   },
   {
     "path": "nvkm/engine/gr/gf117.c",
     "subsystem": "gr",
-    "class": "generic-NVKM",
-    "role": "gf117_gr_init_pes_0 \u2014 gr"
+    "class": "GF100-inherited",
+    "role": "Fermi implementation, used by nvkm/engine/gr/gk110b.c (gf117_gr_init_cbm_0)"
   },
   {
     "path": "nvkm/engine/gr/gf119.c",
     "subsystem": "gr",
     "class": "GF100-inherited",
-    "role": "gf119_gr_init_prop_0 \u2014 gr"
+    "role": "Fermi implementation, used by nvkm/engine/gr/gk110b.c (gf119_gr_init_gpm_0)"
   },
   {
     "path": "nvkm/engine/gr/gk104.c",
     "subsystem": "gr",
     "class": "GK104-inherited",
-    "role": "gk104_gr_init_sked_hww_esr \u2014 gr"
+    "role": "Kepler inherited, used by nvkm/engine/gr/gk110b.c (gk104_gr_init_be_0)"
   },
   {
     "path": "nvkm/engine/gr/gk110.c",
     "subsystem": "gr",
     "class": "GK110-specific",
-    "role": "gk110_gr_init_gpc_unk_1 \u2014 gr"
+    "role": "Kepler+ specific, used by nvkm/engine/gr/gk110b.c (gk110_gr_fecs_ucode)"
   },
   {
     "path": "nvkm/engine/gr/gk110b.c",
     "subsystem": "gr",
     "class": "GK110-specific",
-    "role": "gk110b_gr_new \u2014 gr"
+    "role": "chipset constructor gk110b_gr_new in gr subsystem"
   },
   {
     "path": "nvkm/engine/gr/nv50.c",
     "subsystem": "gr",
-    "class": "generic-NVKM",
-    "role": "nv50_data_error_names \u2014 gr"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/engine/gr/gf100.c (nv50_data_error_names)"
   },
   {
     "path": "nvkm/subdev/bar/base.c",
     "subsystem": "bar",
     "class": "generic-NVKM",
-    "role": "nvkm_bar_ctor \u2014 bar"
+    "role": "Generic NVKM, used by nvkm/subdev/bar/gf100.c (nvkm_bar)"
   },
   {
     "path": "nvkm/subdev/bar/g84.c",
     "subsystem": "bar",
-    "class": "generic-NVKM",
-    "role": "g84_bar_flush \u2014 bar"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/bar/gf100.c (g84_bar_flush)"
   },
   {
     "path": "nvkm/subdev/bar/gf100.c",
     "subsystem": "bar",
     "class": "GF100-inherited",
-    "role": "gf100_bar_new \u2014 bar"
+    "role": "chipset constructor gf100_bar_new in bar subsystem"
   },
   {
     "path": "nvkm/subdev/bar/nv50.c",
     "subsystem": "bar",
-    "class": "generic-NVKM",
-    "role": "nv50_bar_init \u2014 bar"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/bar/g84.c (nv50_bar_bar1_fini)"
   },
   {
     "path": "nvkm/subdev/bus/base.c",
     "subsystem": "bus",
     "class": "generic-NVKM",
-    "role": "nvkm_bus \u2014 bus"
+    "role": "Generic NVKM, used by nvkm/subdev/bus/gf100.c (nvkm_bus)"
   },
   {
     "path": "nvkm/subdev/bus/gf100.c",
     "subsystem": "bus",
     "class": "GF100-inherited",
-    "role": "gf100_bus_new \u2014 bus"
+    "role": "chipset constructor gf100_bus_new in bus subsystem"
   },
   {
     "path": "nvkm/subdev/fb/base.c",
     "subsystem": "fb",
     "class": "generic-NVKM",
-    "role": "nvkm_fb \u2014 fb"
+    "role": "Generic NVKM, used by nvkm/subdev/fb/gk110.c (nvkm_fb)"
   },
   {
     "path": "nvkm/subdev/fb/gddr5.c",
     "subsystem": "fb",
     "class": "generic-NVKM",
-    "role": "nvkm_gddr5_calc \u2014 fb"
+    "role": "Generic NVKM, used by nvkm/subdev/fb/ramgk104.c (nvkm_gddr5_calc)"
   },
   {
     "path": "nvkm/subdev/fb/gf100.c",
     "subsystem": "fb",
     "class": "GF100-inherited",
-    "role": "gf100_fb_init_page \u2014 fb"
+    "role": "Fermi implementation, used by nvkm/subdev/fb/gk110.c (gf100_fb_dtor)"
   },
   {
     "path": "nvkm/subdev/fb/gk104.c",
     "subsystem": "fb",
     "class": "GK104-inherited",
-    "role": "gk104_fb_clkgate_blcg_init_main_0 \u2014 fb"
+    "role": "Kepler inherited, used by nvkm/subdev/fb/gk110.c (gk104_fb_clkgate_blcg_init_bcast_0)"
   },
   {
     "path": "nvkm/subdev/fb/gk110.c",
     "subsystem": "fb",
     "class": "GK110-specific",
-    "role": "gk110_fb_new \u2014 fb"
+    "role": "chipset constructor gk110_fb_new in fb subsystem"
   },
   {
     "path": "nvkm/subdev/fb/ram.c",
     "subsystem": "fb",
     "class": "generic-NVKM",
-    "role": "nvkm_ram_init \u2014 fb"
+    "role": "Generic NVKM, used by nvkm/subdev/fb/base.c (nvkm_ram_del)"
   },
   {
     "path": "nvkm/subdev/fb/ramgf100.c",
     "subsystem": "fb",
     "class": "GF100-inherited",
-    "role": "gf100_ram_new \u2014 fb"
+    "role": "Fermi implementation, used by nvkm/subdev/fb/gf100.c (gf100_ram_new)"
   },
   {
     "path": "nvkm/subdev/fb/ramgf108.c",
     "subsystem": "fb",
-    "class": "generic-NVKM",
-    "role": "gf108_ram_probe_fbp_amount \u2014 fb"
+    "class": "GF100-inherited",
+    "role": "Fermi implementation, used by nvkm/subdev/fb/ramgk104.c (gf108_ram_probe_fbp_amount)"
   },
   {
     "path": "nvkm/subdev/fb/ramgk104.c",
     "subsystem": "fb",
     "class": "GK104-inherited",
-    "role": "gk104_ram_new \u2014 fb"
+    "role": "Kepler inherited, used by nvkm/subdev/fb/gk110.c (gk104_ram_new)"
   },
   {
     "path": "nvkm/subdev/fb/sddr3.c",
     "subsystem": "fb",
     "class": "generic-NVKM",
-    "role": "nvkm_sddr3_calc \u2014 fb"
+    "role": "Generic NVKM, used by nvkm/subdev/fb/ramgk104.c (nvkm_sddr3_calc)"
   },
   {
     "path": "nvkm/subdev/instmem/base.c",
     "subsystem": "imem",
     "class": "generic-NVKM",
-    "role": "nvkm_instmem_ctor \u2014 imem"
+    "role": "Generic NVKM, used by nvkm/subdev/instmem/nv50.c (nvkm_instmem)"
   },
   {
     "path": "nvkm/subdev/instmem/nv04.c",
     "subsystem": "imem",
-    "class": "generic-NVKM",
-    "role": "nv04_instmem_suspend \u2014 imem"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/instmem/nv50.c (nv04_instmem_resume)"
   },
   {
     "path": "nvkm/subdev/instmem/nv50.c",
     "subsystem": "imem",
-    "class": "generic-NVKM",
-    "role": "nv50_instmem_new \u2014 imem"
+    "class": "other-chip",
+    "role": "chipset constructor nv50_instmem_new in imem subsystem"
   },
   {
     "path": "nvkm/subdev/instmem/r535.c",
     "subsystem": "imem",
-    "class": "generic-NVKM",
-    "role": "r535_instmem_new \u2014 imem"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/instmem/nv50.c (r535_instmem_new)"
   },
   {
     "path": "nvkm/subdev/ltc/base.c",
     "subsystem": "ltc",
     "class": "generic-NVKM",
-    "role": "nvkm_ltc_new_ \u2014 ltc"
+    "role": "Generic NVKM, used by nvkm/subdev/ltc/gk104.c (nvkm_ltc)"
   },
   {
     "path": "nvkm/subdev/ltc/gf100.c",
     "subsystem": "ltc",
     "class": "GF100-inherited",
-    "role": "gf100_ltc_zbc_clear_color \u2014 ltc"
+    "role": "Fermi implementation, used by nvkm/subdev/ltc/gk104.c (gf100_ltc_cbc_clear)"
   },
   {
     "path": "nvkm/subdev/ltc/gk104.c",
     "subsystem": "ltc",
     "class": "GK104-inherited",
-    "role": "gk104_ltc_new \u2014 ltc"
+    "role": "chipset constructor gk104_ltc_new in ltc subsystem"
   },
   {
     "path": "nvkm/subdev/mc/base.c",
     "subsystem": "mc",
     "class": "generic-NVKM",
-    "role": "nvkm_mc \u2014 mc"
+    "role": "Generic NVKM, used by nvkm/subdev/mc/gk104.c (nvkm_mc)"
   },
   {
     "path": "nvkm/subdev/mc/gf100.c",
     "subsystem": "mc",
     "class": "GF100-inherited",
-    "role": "gf100_mc_unk260 \u2014 mc"
+    "role": "Fermi implementation, used by nvkm/subdev/mc/gk104.c (gf100_mc_unk260)"
   },
   {
     "path": "nvkm/subdev/mc/gk104.c",
     "subsystem": "mc",
     "class": "GK104-inherited",
-    "role": "gk104_mc_new \u2014 mc"
+    "role": "chipset constructor gk104_mc_new in mc subsystem"
   },
   {
     "path": "nvkm/subdev/mc/gt215.c",
     "subsystem": "mc",
-    "class": "generic-NVKM",
-    "role": "gt215_mc_intr \u2014 mc"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/mc/gk104.c (gt215_mc_intr)"
   },
   {
     "path": "nvkm/subdev/mc/nv04.c",
     "subsystem": "mc",
-    "class": "generic-NVKM",
-    "role": "nv04_mc_device \u2014 mc"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/mc/gk104.c (nv04_mc_device)"
   },
   {
     "path": "nvkm/subdev/mc/nv17.c",
     "subsystem": "mc",
-    "class": "generic-NVKM",
-    "role": "nv17_mc_reset \u2014 mc"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/mc/nv50.c (nv17_mc_reset)"
   },
   {
     "path": "nvkm/subdev/mc/nv50.c",
     "subsystem": "mc",
-    "class": "generic-NVKM",
-    "role": "nv50_mc_init \u2014 mc"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/mc/gk104.c (nv50_mc_init)"
   },
   {
     "path": "nvkm/subdev/mmu/base.c",
     "subsystem": "mmu",
     "class": "generic-NVKM",
-    "role": "nvkm_mmu \u2014 mmu"
+    "role": "Generic NVKM, used by nvkm/subdev/mmu/gk104.c (nvkm_mmu)"
   },
   {
     "path": "nvkm/subdev/mmu/gf100.c",
     "subsystem": "mmu",
     "class": "GF100-inherited",
-    "role": "gf100_mmu_kind \u2014 mmu"
+    "role": "Fermi implementation, used by nvkm/subdev/mmu/gk104.c (gf100_mmu_kind)"
   },
   {
     "path": "nvkm/subdev/mmu/gk104.c",
     "subsystem": "mmu",
     "class": "GK104-inherited",
-    "role": "gk104_mmu_new \u2014 mmu"
+    "role": "chipset constructor gk104_mmu_new in mmu subsystem"
   },
   {
     "path": "nvkm/subdev/mmu/mem.c",
     "subsystem": "mmu",
     "class": "generic-NVKM",
-    "role": "nvkm_mem_new_type \u2014 mmu"
+    "role": "Generic NVKM, used by nvkm/subdev/mmu/umem.c (nvkm_mem_map_host)"
   },
   {
     "path": "nvkm/subdev/mmu/memgf100.c",
     "subsystem": "mmu",
     "class": "GF100-inherited",
-    "role": "gf100_mem_map \u2014 mmu"
+    "role": "Fermi implementation, used by nvkm/subdev/mmu/gk104.c (gf100_mem_map)"
   },
   {
     "path": "nvkm/subdev/mmu/umem.c",
     "subsystem": "mmu",
     "class": "generic-NVKM",
-    "role": "nvkm_umem_new \u2014 mmu"
+    "role": "Generic NVKM, used by nvkm/subdev/mmu/ummu.c (nvkm_umem_new)"
   },
   {
     "path": "nvkm/subdev/mmu/ummu.c",
     "subsystem": "mmu",
     "class": "generic-NVKM",
-    "role": "nvkm_ummu_new \u2014 mmu"
+    "role": "Generic NVKM, used by nvkm/subdev/mmu/base.c (nvkm_ummu_new)"
   },
   {
     "path": "nvkm/subdev/mmu/uvmm.c",
     "subsystem": "mmu",
     "class": "generic-NVKM",
-    "role": "nvkm_uvmm_new \u2014 mmu"
+    "role": "Generic NVKM, used by nvkm/subdev/mmu/ummu.c (nvkm_uvmm_new)"
   },
   {
     "path": "nvkm/subdev/mmu/vmm.c",
     "subsystem": "mmu",
     "class": "generic-NVKM",
-    "role": "nvkm_vmm_get \u2014 mmu"
+    "role": "Generic NVKM, used by nvkm/subdev/mmu/base.c (nvkm_vmm_new)"
   },
   {
     "path": "nvkm/subdev/mmu/vmmgf100.c",
     "subsystem": "mmu",
     "class": "GF100-inherited",
-    "role": "gf100_vmm_aper \u2014 mmu"
+    "role": "Fermi implementation, used by nvkm/subdev/mmu/gf100.c (gf100_vmm_new)"
   },
   {
     "path": "nvkm/subdev/mmu/vmmgk104.c",
     "subsystem": "mmu",
     "class": "GK104-inherited",
-    "role": "gk104_vmm_new \u2014 mmu"
+    "role": "Kepler inherited, used by nvkm/subdev/mmu/gk104.c (gk104_vmm_new)"
   },
   {
     "path": "nvkm/subdev/mmu/vmmnv04.c",
     "subsystem": "mmu",
-    "class": "generic-NVKM",
-    "role": "nv04_vmm_new_ \u2014 mmu"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/mmu/vmmgf100.c (nv04_vmm_new_)"
   },
   {
     "path": "nvkm/subdev/pci/agp.c",
     "subsystem": "pci",
     "class": "generic-NVKM",
-    "role": "nvkm_agp_init \u2014 pci"
+    "role": "Generic NVKM, used by nvkm/subdev/pci/base.c (nvkm_agp_ctor)"
   },
   {
     "path": "nvkm/subdev/pci/base.c",
     "subsystem": "pci",
     "class": "generic-NVKM",
-    "role": "nvkm_pci_rd32 \u2014 pci"
+    "role": "Generic NVKM, used by nvkm/subdev/pci/gk104.c (nvkm_pci_func)"
   },
   {
     "path": "nvkm/subdev/pci/g84.c",
     "subsystem": "pci",
-    "class": "generic-NVKM",
-    "role": "g84_pcie_cur_speed \u2014 pci"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/pci/gk104.c (g84_pci_init)"
   },
   {
     "path": "nvkm/subdev/pci/g92.c",
     "subsystem": "pci",
-    "class": "generic-NVKM",
-    "role": "g92_pcie_version_supported \u2014 pci"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/pci/gf100.c (g92_pcie_version_supported)"
   },
   {
     "path": "nvkm/subdev/pci/gf100.c",
     "subsystem": "pci",
     "class": "GF100-inherited",
-    "role": "gf100_pcie_set_cap_speed \u2014 pci"
+    "role": "Fermi implementation, used by nvkm/subdev/pci/gk104.c (gf100_pcie_cap_speed)"
   },
   {
     "path": "nvkm/subdev/pci/gk104.c",
     "subsystem": "pci",
     "class": "GK104-inherited",
-    "role": "gk104_pci_new \u2014 pci"
+    "role": "chipset constructor gk104_pci_new in pci subsystem"
   },
   {
     "path": "nvkm/subdev/pci/nv40.c",
     "subsystem": "pci",
-    "class": "generic-NVKM",
-    "role": "nv40_pci_wr08 \u2014 pci"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/pci/gk104.c (nv40_pci_msi_rearm)"
   },
   {
     "path": "nvkm/subdev/pci/nv46.c",
     "subsystem": "pci",
-    "class": "generic-NVKM",
-    "role": "nv46_pci_msi_rearm \u2014 pci"
+    "class": "other-chip",
+    "role": "Legacy chip, used by nvkm/subdev/pci/g84.c (nv46_pci_msi_rearm)"
   },
   {
     "path": "nvkm/subdev/pci/pcie.c",
     "subsystem": "pci",
     "class": "generic-NVKM",
-    "role": "nvkm_pcie_speed \u2014 pci"
+    "role": "Generic NVKM, used by nvkm/subdev/pci/gk104.c (nvkm_pcie_speed)"
   },
   {
     "path": "nvkm/subdev/privring/gk104.c",
     "subsystem": "privring",
     "class": "GK104-inherited",
-    "role": "gk104_privring_new \u2014 privring"
+    "role": "chipset constructor gk104_privring_new in privring subsystem"
   },
   {
     "path": "nvkm/subdev/top/base.c",
     "subsystem": "top",
     "class": "generic-NVKM",
-    "role": "nvkm_top_device_new \u2014 top"
+    "role": "Generic NVKM, used by nvkm/subdev/top/gk104.c (nvkm_top)"
   },
   {
     "path": "nvkm/subdev/top/gk104.c",
     "subsystem": "top",
     "class": "GK104-inherited",
-    "role": "gk104_top_new \u2014 top"
+    "role": "chipset constructor gk104_top_new in top subsystem"
   }
 ]

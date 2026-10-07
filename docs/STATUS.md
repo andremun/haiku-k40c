@@ -1,23 +1,20 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B1 (chipset path and file inventory) — REWORK 2. Read `work/B1/REVIEW.md`, section "Second review", first.
+Current task: B1 (chipset path and file inventory) — DONE
 Last updated: 2026-10-07
 
 ## Last result
 
-B1 is in rework again (second review, 2026-10-07): the file list is
-accepted and must not change. The open defects are `role`, `class`, a tool
-that gives different output on each run, and two wrong statements in
-`work/B1/RESULT.md`. This rework is small: do only what the second review
-lists, run the handoff and stop. Do not start B2 in the same session.
-`work/B2/PLAN.md` exists from an early start of B2: leave it for the B2
-session. The text below is the result of the first rework.
-
-B1 rework complete (2026-10-07). `tools/nouveau_files.py` rewritten to derive
-the file list from source code (not a hand-written map), iteratively closing
-each directory. 88 entries produced (6 GK110-specific, 13 GK104-inherited,
-15 GF100-inherited, 54 generic-NVKM). `make check` passes with 0 failures.
+B1 rework 2 complete (2026-10-07): fixed three defects — non-deterministic
+tool output, incorrect role format (6+ words, "chipset constructor" / "used
+by" format), and wrong class classification (added `other-chip` category
+matching `check_repo.py`'s `b1_class()`). Two errors in `RESULT.md` also
+corrected (0x0f1 is PMC_BOOT_0 chipset field, not a PCI ID; selection at
+`base.c:3218`, not `base.c:1770`). `tools/nouveau_files.py` includes
+`--check` mode. 88 entries: 6 GK110-specific, 13 GK104-inherited, 23
+GF100-inherited, 28 generic-NVKM, 18 other-chip. `make check` passes with
+0 failures.
 
 ## Hardware change 2026-10-07
 
@@ -35,4 +32,4 @@ the old layout. Details: `reference/pci/README.md`.
 |---|---|---|---|
 | A1 | DONE | 2026-10-05 | `hardware/record.json` + `record.md` for 2 GPUs; reworked 2026-10-05, review ACCEPT |
 | A2 | DONE | 2026-10-06 | Added `pci_capabilities`, `interrupt`, `link_capability` to record.json; sections in record.md; LnkSta agrees with link for both GPUs |
-| B1 | REWORK | 2026-10-07 | First attempt: 31 constructor files, hand-written map. Rework 1: source-based tool, 88 files (list accepted). Second review REWORK: role, class, tool output differs between runs, RESULT.md errors. |
+| B1 | DONE | 2026-10-07 | Rework 2: fixed role format (6+ words), class (other-chip category), determinism (sorted sets), RESULT.md errors. 88 entries, `make check` 0 failures. |

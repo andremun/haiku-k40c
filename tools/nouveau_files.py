@@ -6,9 +6,9 @@ resolves each constructor to its source file, then iteratively follows all
 function and table references within each directory until the list is closed.
 
 Usage:
-    python3 tools/nouveau_files.py [--dry-run]
+    python3 tools/nouveau_files.py [--dry-run] [--check]
 
-The script is idempotent: re-running produces the same output.
+The script is deterministic: re-running produces the same output.
 """
 import json
 import os
@@ -24,16 +24,10 @@ OUTPUT = os.path.join(ROOT, "analysis", "files.json")
 B1_REQUIRED = ("bar", "bus", "fb", "imem", "ltc", "mc", "mmu", "pci",
                "privring", "top", "fifo", "gr", "ce")
 
-# Non-compute-path subsystems that may appear as transitive dependencies
-# and should be included with a generic role.
-KNOWN_EXTRA = ("bios", "clk", "devinit", "fuse", "gpio", "i2c", "iccsense",
-               "mxm", "pmu", "therm", "timer", "volt",
-               "disp", "dma", "mspdec", "msppp", "msvld", "sw")
-
 
 def scan_all_files():
     """Return (src, defs) where src maps rel-path -> text and defs maps
-    name -> set of rel-paths that define it (function or table).
+    name -> sorted list of rel-paths that define it (function or table).
 
     Uses the same patterns as tools/check_repo.py (which passes).
     """
@@ -54,6 +48,9 @@ def scan_all_files():
             src[rel], re.M)
         for n in names:
             defs.setdefault(n, set()).add(rel)
+    # Convert sets to sorted lists for determinism
+    for k in defs:
+        defs[k] = sorted(defs[k])
     return src, defs
 
 
@@ -63,8 +60,8 @@ def find_ctor_file(ctor_name, defs):
     if where is None:
         return None, None  # unknown
     if len(where) == 1:
-        return where.pop(), None  # unique
-    return None, where  # ambiguous
+        return where[0], None  # unique
+    return None, sorted(where)  # ambiguous
 
 
 def extract_chipset_entries():
@@ -90,15 +87,15 @@ def extract_chipset_entries():
     entries = []
     for m in re.finditer(r"\.(\w+)\s*=\s*\{[^,]*,\s*(\w+)\s*\}", block):
         entries.append((m.group(1), m.group(2)))
+    # Sort for determinism
+    entries.sort()
     return entries
 
 
-def collect_refs(filepath, src):
-    """Find all function names used (but not defined) in a file.
+def collect_refs(filepath, src, defs):
+    """Find all function/table names used (but not defined) in a file.
 
-    Returns the set of names that look like function/table references:
-    identifiers starting with a lowercase letter that are not keywords,
-    not already defined in this file.
+    Returns the sorted list of names that look like function/table references.
     """
     text = src[filepath]
     # Get names defined in this file
@@ -122,29 +119,62 @@ def collect_refs(filepath, src):
     refs = all_ids - defined - keywords
 
     # Filter: keep identifiers longer than 2 chars
-    # Most false positives are already removed by the defined/keywords sets
     refs = {r for r in refs if len(r) > 2}
-    return refs
+    return sorted(refs)
 
 
-def classify(filepath, subsystem):
+def classify(filepath):
     """Classify a file based on chip-specific patterns in its basename.
 
-    Matches chip identifiers as substrings (e.g. ctxgk110.c → GK110-specific,
-    vmmgk104.c → GK104-inherited) rather than requiring a prefix.
+    Matches chip identifiers as substrings (e.g. ctxgk110.c -> GK110-specific,
+    vmmgk104.c -> GK104-inherited). Follows check_repo.py's b1_class() exactly.
     """
     base = os.path.basename(filepath).lower()
-    if "gk110" in base or "gk110b" in base:
+    if "gk110" in base:
         return "GK110-specific"
     if "gk104" in base:
         return "GK104-inherited"
-    if "gf100" in base or "gf119" in base:
+    if re.search(r"gf1\d\d", base):
         return "GF100-inherited"
+    if re.search(r"(nv[0-9a-f]{2}|g\d\d|gt\d{3}|mcp\d\d|gk\d|gm\d|gp\d|gv\d|tu\d|ga\d|r\d{3})", base):
+        return "other-chip"
     return "generic-NVKM"
+
+
+def build_role(rel_path, info, all_listed_paths, class_name):
+    """Build a role string following the PHASES.md specification.
+
+    Constructor files: "chipset constructor <name> in <subsystem> subsystem"
+        (at least 6 words).
+    Closure files: "<class> <noun>, used by <listed_file> (<symbol>)"
+        (at least 6 words).
+    """
+    subsystem, field, ctor = info
+    # Phase 1 entries: ctor is None, field holds the ctor name.
+    # Closure entries: ctor holds the reference name that brought this file in.
+    if ctor is None:
+        # Constructor file — describe it as a chipset constructor
+        role = f"chipset constructor {field} in {subsystem} subsystem"
+    else:
+        # Closure entry — describe which listed file uses it, with a prefix
+        # that adds at least 2 words so the total reaches 6.
+        if class_name == "GF100-inherited":
+            prefix = "Fermi implementation,"
+        elif class_name == "GK104-inherited":
+            prefix = "Kepler inherited,"
+        elif class_name == "GK110-specific":
+            prefix = "Kepler+ specific,"
+        elif class_name == "other-chip":
+            prefix = "Legacy chip,"
+        else:
+            prefix = "Generic NVKM,"
+        role = f"{prefix} used by {field} ({ctor})"
+    return role
 
 
 def main():
     dry_run = "--dry-run" in sys.argv
+    check_mode = "--check" in sys.argv
     src, defs = scan_all_files()
 
     # Extract chipset entries
@@ -174,15 +204,15 @@ def main():
     changed = True
     while changed:
         changed = False
-        for filepath in list(listed):
+        for filepath in sorted(listed):
             dirpath = os.path.dirname(filepath)
             subsystem = listed[filepath][0]
-            refs = collect_refs(filepath, src)
+            refs = collect_refs(filepath, src, defs)
             for name in refs:
                 where = defs.get(name)
                 if where is None or len(where) != 1:
                     continue
-                target = min(where)
+                target = where[0]
                 if target == filepath:
                     continue
                 if os.path.dirname(target) != dirpath:
@@ -191,37 +221,49 @@ def main():
                     listed[target] = (subsystem, filepath, name)
                     changed = True
 
-    # Phase 3: for files outside compute-path dirs, check if they are
-    # dependencies that should be included
-    all_subsystems = set()
-    for rel_path in list(listed):
-        parts = rel_path.split("/")
-        if len(parts) >= 3:
-            sub = parts[2]  # nvkm/<subsys>/<file>
-            all_subsystems.add(sub)
-
-    # Add known extra subsystems if they appear in closure references
-    # We already got them from closure above, so just ensure all are included
-
-    # Phase 4: build the output
+    # Phase 3: build the output
     results = []
-    for rel_path, info in sorted(listed.items()):
-        subsystem, field, ctor = info
-        # Phase 1 entries: ctor is None, field holds the ctor name.
-        # Closure entries: ctor holds the reference name that brought this file in.
-        name = field if ctor is None else ctor
-        role = f"{name} — {subsystem}"
+    all_listed_paths = sorted(listed.keys())
+    for rel_path in all_listed_paths:
+        info = listed[rel_path]
+        class_name = classify(rel_path)
+        role = build_role(rel_path, info, all_listed_paths, class_name)
         entry = {
             "path": rel_path,
-            "subsystem": subsystem,
-            "class": classify(rel_path, subsystem),
+            "subsystem": info[0],
+            "class": class_name,
             "role": role,
         }
         results.append(entry)
 
-    # Sort: compute-path subsystems first, then others
+    # Sort: compute-path subsystems first (alphabetically), then others (alphabetically)
     order_key = lambda e: (0 if e["subsystem"] in B1_REQUIRED else 1, e["path"])
     results.sort(key=order_key)
+
+    if check_mode:
+        # Check mode: compare with the existing files.json
+        if not os.path.exists(OUTPUT):
+            print(f"{OUTPUT}: does not exist", file=sys.stderr)
+            sys.exit(1)
+        with open(OUTPUT) as f:
+            existing = json.load(f)
+        if existing != results:
+            # Show differences
+            existing_str = json.dumps(existing, indent=2)
+            new_str = json.dumps(results, indent=2)
+            print(f"MISMATCH: {OUTPUT} differs from tool output", file=sys.stderr)
+            # Find first difference
+            for i, (a, b) in enumerate(zip(existing, results)):
+                if a != b:
+                    print(f"  First diff at index {i}:", file=sys.stderr)
+                    print(f"    existing: {json.dumps(a)}", file=sys.stderr)
+                    print(f"    expected: {json.dumps(b)}", file=sys.stderr)
+                    break
+            if len(existing) != len(results):
+                print(f"  Length: existing={len(existing)}, expected={len(results)}", file=sys.stderr)
+            sys.exit(1)
+        # If we get here, the file matches — write nothing and exit 0
+        sys.exit(0)
 
     if dry_run:
         classes = defaultdict(int)
