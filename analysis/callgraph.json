@@ -1,0 +1,5520 @@
+{
+  "nodes": [
+    {
+      "name": "args",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 383,
+      "kind": "table"
+    },
+    {
+      "name": "cclass",
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 55,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_chan_inst",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 142,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_chan_preempt",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 41,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_chan_userd_clear",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 118,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_engn_mmu_fault_trigger",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 222,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_engn_mmu_fault_triggered",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 202,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_engn_sw",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 298,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_fb",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 121,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_fb_dtor",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 99,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fb_init",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 87,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fb_init_page",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 68,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fb_intr",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 32,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fb_new_",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 107,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fb_oneinit",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 45,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fb_sysmem_flush_page_init",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 81,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fermi",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 246,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_fermi_mthd",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 231,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fermi_mthd_zbc_color",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 161,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fermi_mthd_zbc_depth",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 207,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fifo_chid_ctor",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 939,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fifo_intr_ctxsw_timeout",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 618,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fifo_intr_mmu_fault",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 720,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fifo_intr_mmu_fault_unit",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 696,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fifo_intr_pbdma",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 733,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fifo_intr_sched",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 674,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fifo_intr_sched_ctxsw",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 645,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fifo_intr_sched_names",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 668,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_fifo_mmu_fault_access",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 527,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_fifo_mmu_fault_recover",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 534,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fifo_nonstall",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 462,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_fifo_nonstall_allow",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 440,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fifo_nonstall_block",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 451,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_fifo_runq_nr",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 927,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2526,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_gr_",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2509,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_gr_chsw_load",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 982,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_ctxctl_debug",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1554,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_ctxctl_debug_unit",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1535,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_ctxsw_inst",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 744,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_dtor",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2128,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_ctrl_ctxsw",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 750,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_discover_image_size",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 956,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_discover_pm_image_size",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 924,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_discover_reglist_image_size",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 886,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_discover_zcull_image_size",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 940,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_elpg_bind",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 902,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_halt_pipeline",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 800,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_reset",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2466,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_set_reglist_bind_instance",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 869,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_set_reglist_virtual_address",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 852,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_set_watchdog_timeout",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 972,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_start_ctxsw",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 770,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_stop_ctxsw",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 785,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_fecs_ucode",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2480,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_gr_fini",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2115,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_flcn",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2162,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_gr_gpccs_ucode",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2490,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_gr_icmd",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1095,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2342,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2064,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_400054",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2186,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_40601c",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2251,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_419cc0",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2237,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_419eb4",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2230,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_ctxctl",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1882,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_ctxctl_ext",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1750,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_ctxctl_int",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1831,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_exception2",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2192,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_fecs_exceptions",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2257,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_fw",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1699,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_gpc_mmu",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2264,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_num_active_ltcs",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2280,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_num_tpc_per_gpc",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2169,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_rop_exceptions",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2201,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_shader_exceptions",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2215,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_tex_hww_esr",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2223,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_vsc_stream_master",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2315,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_init_zcull",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2287,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_mmio",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1078,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_mthd",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1135,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_new_",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2620,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_nonstall",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2498,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_object_get",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 299,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_oneinit",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1989,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_oneinit_sm_id",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1895,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_oneinit_tiles",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1913,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_pack_mmio",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 708,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_gr_reset",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2322,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_rops",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 998,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_trap_mp",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1295,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_units",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1160,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_wait_idle",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1049,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_zbc",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 145,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_gr_zbc_clear_color",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 49,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_zbc_clear_depth",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 100,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_zbc_color_get",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 64,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_zbc_depth_get",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 111,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_gr_zbc_init",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1005,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1561,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_grctx_generate_alpha_beta_tables",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1249,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_attrib",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1032,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_attrib_cb",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1053,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_attrib_cb_size",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1060,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_bundle",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1014,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_floorsweep",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1303,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_main",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1342,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_max_ways_evict",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1139,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_pagepool",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1023,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_r4060a8",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1073,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_r419cb8",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1007,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_rop_mapping",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1093,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_sm_id",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1293,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_tpc_nr",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1285,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_generate_unkn",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1068,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_grctx_pack_gpc_0",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 854,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_grctx_pack_gpc_1",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 864,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_grctx_pack_hub",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 756,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_grctx_pack_icmd",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 274,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_grctx_pack_mthd",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 629,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_grctx_pack_tpc",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 979,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_grctx_pack_zcull",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 901,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_grctx_patch_wr32",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 995,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_mmu_kind",
+      "file": "nvkm/subdev/mmu/gf100.c",
+      "line": 33,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_mp_warp_error",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1255,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_ram",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 657,
+      "kind": "table"
+    },
+    {
+      "name": "gf100_ram_calc",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 127,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_ram_ctor",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 491,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_ram_init",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 423,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_ram_new",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 669,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_ram_new_",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 567,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_ram_probe_fbp",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 483,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_ram_probe_fbp_amount",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 472,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_ram_probe_fbpa_amount",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 466,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_ram_prog",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 407,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_ram_tidy",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 416,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_ram_train",
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 107,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_runl_preempt_pending",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 370,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_runq_init",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 353,
+      "kind": "function"
+    },
+    {
+      "name": "gf100_runq_intr",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 310,
+      "kind": "function"
+    },
+    {
+      "name": "gf108_ram_probe_fbp_amount",
+      "file": "nvkm/subdev/fb/ramgf108.c",
+      "line": 27,
+      "kind": "function"
+    },
+    {
+      "name": "gf117_gr_init_zcull",
+      "file": "nvkm/engine/gr/gf117.c",
+      "line": 124,
+      "kind": "function"
+    },
+    {
+      "name": "gf117_grctx_generate_attrib",
+      "file": "nvkm/engine/gr/ctxgf117.c",
+      "line": 244,
+      "kind": "function"
+    },
+    {
+      "name": "gf117_grctx_generate_dist_skip_table",
+      "file": "nvkm/engine/gr/ctxgf117.c",
+      "line": 188,
+      "kind": "function"
+    },
+    {
+      "name": "gf117_grctx_generate_rop_mapping",
+      "file": "nvkm/engine/gr/ctxgf117.c",
+      "line": 198,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_chan_bind",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 72,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_chan_bind_inst",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 64,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_chan_ramfc",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 108,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_chan_ramfc_write",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 82,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_chan_start",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 48,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_chan_stop",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 40,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_chan_unbind",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 56,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_chan_userd",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 115,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_ectx_bind",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 134,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ectx_ctor",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 178,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_engn",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 271,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_engn_ce",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 281,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_engn_chsw",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 259,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_engn_cxid",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 245,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_engn_status",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 204,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_fifo_chid_nr",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 802,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_fifo_init",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 744,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_fifo_init_pbdmas",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 735,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_fifo_intr",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 652,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_fifo_intr_bind",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 609,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_fifo_intr_bind_reason",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 598,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_fifo_intr_chsw",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 620,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_fifo_intr_dropped_fault",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 631,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_fifo_intr_runlist",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 640,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_fifo_mmu_fault",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 588,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_fifo_mmu_fault_engine",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 473,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_fifo_mmu_fault_gpcclient",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 562,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_fifo_mmu_fault_hubclient",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 525,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_fifo_mmu_fault_reason",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 504,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_fifo_runl_ctor",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 756,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_gr_init_ppc_exceptions",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 415,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_gr_init_rop_active_fbps",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 406,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_gr_init_sked_hww_esr",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 391,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_gr_init_vsc_stream_master",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 430,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_grctx_generate_alpha_beta_tables",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 922,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_grctx_generate_bundle",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 876,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_grctx_generate_gpc_tpc_nr",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 915,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_grctx_generate_pagepool",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 887,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_grctx_generate_patch_ltc",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 864,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_grctx_generate_r418800",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 849,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_grctx_generate_unkn",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 894,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_mmu",
+      "file": "nvkm/subdev/mmu/gk104.c",
+      "line": 28,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_mmu_new",
+      "file": "nvkm/subdev/mmu/gk104.c",
+      "line": 38,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1700,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_ram_calc",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1112,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_calc_data",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 962,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_calc_gddr5",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 252,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_calc_sddr3",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 700,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_calc_xits",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1041,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_ctor_data",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1439,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_dtor",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1508,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_init",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1397,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_new",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1713,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_new_",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1521,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_prog",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1231,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_prog_0",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1155,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_tidy",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1251,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_train",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 141,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_train_init",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1368,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_train_init_0",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1332,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_ram_train_type",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1271,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_runl_allow",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 410,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_runl_block",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 416,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_runl_commit",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 430,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_runl_fault_clear",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 404,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_runl_insert_chan",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 452,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_runl_pending",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 422,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_runq",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 396,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_runq_idle",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 289,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_runq_init",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 379,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_runq_intr",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 370,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_runq_intr_0_names",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 335,
+      "kind": "table"
+    },
+    {
+      "name": "gk104_runq_intr_1",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 307,
+      "kind": "function"
+    },
+    {
+      "name": "gk104_runq_runm",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 390,
+      "kind": "function"
+    },
+    {
+      "name": "gk110_cgrp",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 67,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_cgrp_preempt",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 61,
+      "kind": "function"
+    },
+    {
+      "name": "gk110_chan",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 49,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_chan_preempt",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 36,
+      "kind": "function"
+    },
+    {
+      "name": "gk110_fb",
+      "file": "nvkm/subdev/fb/gk110.c",
+      "line": 56,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_fb_clkgate_pack",
+      "file": "nvkm/subdev/fb/gk110.c",
+      "line": 47,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_fb_new",
+      "file": "nvkm/subdev/fb/gk110.c",
+      "line": 69,
+      "kind": "function"
+    },
+    {
+      "name": "gk110_fifo",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 107,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_fifo_chid_ctor",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 95,
+      "kind": "function"
+    },
+    {
+      "name": "gk110_fifo_new",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 128,
+      "kind": "function"
+    },
+    {
+      "name": "gk110_gr_fecs_ucode",
+      "file": "nvkm/engine/gr/gk110.c",
+      "line": 321,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_gr_gpccs_ucode",
+      "file": "nvkm/engine/gr/gk110.c",
+      "line": 331,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_gr_init_419eb4",
+      "file": "nvkm/engine/gr/gk110.c",
+      "line": 339,
+      "kind": "function"
+    },
+    {
+      "name": "gk110_grctx_generate_r419eb0",
+      "file": "nvkm/engine/gr/ctxgk110.c",
+      "line": 817,
+      "kind": "function"
+    },
+    {
+      "name": "gk110_grctx_generate_r419f78",
+      "file": "nvkm/engine/gr/ctxgk110.c",
+      "line": 824,
+      "kind": "function"
+    },
+    {
+      "name": "gk110_grctx_pack_gpc_0",
+      "file": "nvkm/engine/gr/ctxgk110.c",
+      "line": 707,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_grctx_pack_gpc_1",
+      "file": "nvkm/engine/gr/ctxgk110.c",
+      "line": 717,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_grctx_pack_hub",
+      "file": "nvkm/engine/gr/ctxgk110.c",
+      "line": 671,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_grctx_pack_icmd",
+      "file": "nvkm/engine/gr/ctxgk110.c",
+      "line": 282,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_grctx_pack_mthd",
+      "file": "nvkm/engine/gr/ctxgk110.c",
+      "line": 590,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_grctx_pack_ppc",
+      "file": "nvkm/engine/gr/ctxgk110.c",
+      "line": 805,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_runl",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 80,
+      "kind": "table"
+    },
+    {
+      "name": "gk110_runl_insert_cgrp",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 72,
+      "kind": "function"
+    },
+    {
+      "name": "gk110b_gr",
+      "file": "nvkm/engine/gr/gk110b.c",
+      "line": 105,
+      "kind": "table"
+    },
+    {
+      "name": "gk110b_gr_fwif",
+      "file": "nvkm/engine/gr/gk110b.c",
+      "line": 143,
+      "kind": "table"
+    },
+    {
+      "name": "gk110b_gr_new",
+      "file": "nvkm/engine/gr/gk110b.c",
+      "line": 150,
+      "kind": "function"
+    },
+    {
+      "name": "gk110b_gr_pack_mmio",
+      "file": "nvkm/engine/gr/gk110b.c",
+      "line": 66,
+      "kind": "table"
+    },
+    {
+      "name": "gk110b_grctx",
+      "file": "nvkm/engine/gr/ctxgk110b.c",
+      "line": 73,
+      "kind": "table"
+    },
+    {
+      "name": "gk110b_grctx_pack_tpc",
+      "file": "nvkm/engine/gr/ctxgk110b.c",
+      "line": 59,
+      "kind": "table"
+    },
+    {
+      "name": "hdr",
+      "file": "nvkm/engine/gr/gm200.c",
+      "line": 63,
+      "kind": "table"
+    },
+    {
+      "name": "kind",
+      "file": "nvkm/subdev/mmu/gf100.c",
+      "line": 36,
+      "kind": "table"
+    },
+    {
+      "name": "map",
+      "file": "nvkm/subdev/mmu/mem.c",
+      "line": 74,
+      "kind": "table"
+    },
+    {
+      "name": "nv50_runl_alloc",
+      "file": "nvkm/engine/fifo/nv50.c",
+      "line": 254,
+      "kind": "function"
+    },
+    {
+      "name": "nv50_runl_update",
+      "file": "nvkm/engine/fifo/nv50.c",
+      "line": 285,
+      "kind": "function"
+    },
+    {
+      "name": "nv50_runl_wait",
+      "file": "nvkm/engine/fifo/nv50.c",
+      "line": 224,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_cgrp_del",
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 175,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_cgrp_new",
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 222,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_cgrp_put",
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 210,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_cgrp_unref",
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 189,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_allow",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 251,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_block",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 243,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_block_locked",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 219,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_del",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 261,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_error",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 227,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_event",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 37,
+      "kind": "table"
+    },
+    {
+      "name": "nvkm_chan_get_chid",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 332,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_get_inst",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 311,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_insert",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 195,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_preempt_locked",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 136,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_put",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 299,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_remove",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 182,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chan_remove_locked",
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 163,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chid_del",
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 54,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chid_get",
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 38,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chid_new",
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 86,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chid_put",
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 25,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chid_ref",
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 77,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_chid_unref",
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 65,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_engn_cgrp_get",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 34,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fb",
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 263,
+      "kind": "table"
+    },
+    {
+      "name": "nvkm_fb_bios_memtype",
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 70,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fb_ctor",
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 272,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fb_dtor",
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 232,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fb_init",
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 190,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fb_intr",
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 98,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fb_oneinit",
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 106,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fb_preinit",
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 225,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fb_sysmem_flush_page_init",
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 61,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fifo",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 364,
+      "kind": "table"
+    },
+    {
+      "name": "nvkm_fifo_class",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 89,
+      "kind": "table"
+    },
+    {
+      "name": "nvkm_fifo_class_get",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 94,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fifo_class_new",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 73,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fifo_ctxsw_in_progress",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 39,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fifo_dtor",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 334,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fifo_fault",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 67,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fifo_fini",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 125,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fifo_info",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 169,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fifo_init",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 139,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fifo_new_",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 375,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fifo_oneinit",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 241,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_fifo_preinit",
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 328,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gddr5_calc",
+      "file": "nvkm/subdev/fb/gddr5.c",
+      "line": 35,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 189,
+      "kind": "table"
+    },
+    {
+      "name": "nvkm_gr_cclass_new",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 112,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr_chsw_load",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 56,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr_ctor",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 204,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr_dtor",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 180,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr_fini",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 171,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr_init",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 160,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr_intr",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 122,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr_nonstall",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 129,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr_oclass_get",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 89,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr_oneinit",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 140,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr_reset",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 149,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_gr_tile",
+      "file": "nvkm/engine/gr/base.c",
+      "line": 65,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mem_map_host",
+      "file": "nvkm/subdev/mmu/mem.c",
+      "line": 133,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 414,
+      "kind": "table"
+    },
+    {
+      "name": "nvkm_mmu_ctor",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 421,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_dtor",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 398,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_heap",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 265,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_host",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 278,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_init",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 389,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_new_",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 434,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_oneinit",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 368,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_ptc_dump",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 220,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_ptc_fini",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 234,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_ptc_init",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 246,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_ptc_put",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 141,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_ptp_put",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 42,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_type",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 255,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_mmu_vram",
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 315,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ram_ctor",
+      "file": "nvkm/subdev/fb/ram.c",
+      "line": 217,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ram_del",
+      "file": "nvkm/subdev/fb/ram.c",
+      "line": 203,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ram_init",
+      "file": "nvkm/subdev/fb/ram.c",
+      "line": 195,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_add",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 338,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_allow",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 281,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_block",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 295,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_cgrp_get_cgid",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 228,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_chan_get_chid",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 207,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_chan_get_inst",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 183,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_del",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 318,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_fini",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 309,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_get",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 382,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_new",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 395,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_preempt_wait",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 249,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_rc",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 58,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_rc_cgrp",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 145,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_rc_engn",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 155,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_rc_runl",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 132,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_update_locked",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 271,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_update_pending",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 261,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runl_work",
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 172,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runq_del",
+      "file": "nvkm/engine/fifo/runq.c",
+      "line": 26,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_runq_new",
+      "file": "nvkm/engine/fifo/runq.c",
+      "line": 33,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_sddr3_calc",
+      "file": "nvkm/subdev/fb/sddr3.c",
+      "line": 70,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_sddr3_dll_disable",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 689,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_sddr3_dll_reset",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 681,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ucgrp",
+      "file": "nvkm/engine/fifo/ucgrp.c",
+      "line": 75,
+      "kind": "table"
+    },
+    {
+      "name": "nvkm_ucgrp_dtor",
+      "file": "nvkm/engine/fifo/ucgrp.c",
+      "line": 66,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ucgrp_new",
+      "file": "nvkm/engine/fifo/ucgrp.c",
+      "line": 81,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ucgrp_sclass",
+      "file": "nvkm/engine/fifo/ucgrp.c",
+      "line": 46,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uchan",
+      "file": "nvkm/engine/fifo/uchan.c",
+      "line": 311,
+      "kind": "table"
+    },
+    {
+      "name": "nvkm_uchan_dtor",
+      "file": "nvkm/engine/fifo/uchan.c",
+      "line": 302,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uchan_fini",
+      "file": "nvkm/engine/fifo/uchan.c",
+      "line": 272,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uchan_init",
+      "file": "nvkm/engine/fifo/uchan.c",
+      "line": 286,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uchan_map",
+      "file": "nvkm/engine/fifo/uchan.c",
+      "line": 255,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uchan_new",
+      "file": "nvkm/engine/fifo/uchan.c",
+      "line": 330,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uchan_sclass",
+      "file": "nvkm/engine/fifo/uchan.c",
+      "line": 204,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uchan_uevent",
+      "file": "nvkm/engine/fifo/uchan.c",
+      "line": 42,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_umem",
+      "file": "nvkm/subdev/mmu/umem.c",
+      "line": 135,
+      "kind": "table"
+    },
+    {
+      "name": "nvkm_umem_dtor",
+      "file": "nvkm/subdev/mmu/umem.c",
+      "line": 124,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_umem_map",
+      "file": "nvkm/subdev/mmu/umem.c",
+      "line": 86,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_umem_search",
+      "file": "nvkm/subdev/mmu/umem.c",
+      "line": 35,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_umem_unmap",
+      "file": "nvkm/subdev/mmu/umem.c",
+      "line": 63,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ummu",
+      "file": "nvkm/subdev/mmu/ummu.c",
+      "line": 147,
+      "kind": "table"
+    },
+    {
+      "name": "nvkm_ummu_heap",
+      "file": "nvkm/subdev/mmu/ummu.c",
+      "line": 57,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ummu_kind",
+      "file": "nvkm/subdev/mmu/ummu.c",
+      "line": 106,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ummu_mthd",
+      "file": "nvkm/subdev/mmu/ummu.c",
+      "line": 133,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ummu_new",
+      "file": "nvkm/subdev/mmu/ummu.c",
+      "line": 153,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ummu_sclass",
+      "file": "nvkm/subdev/mmu/ummu.c",
+      "line": 32,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_ummu_type",
+      "file": "nvkm/subdev/mmu/ummu.c",
+      "line": 77,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 526,
+      "kind": "table"
+    },
+    {
+      "name": "nvkm_uvmm_dtor",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 518,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 492,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_get",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 268,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_map",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 151,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_page",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 302,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_pfnclr",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 46,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_pfnmap",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 74,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_put",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 232,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_raw",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 462,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_raw_get",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 354,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_raw_map",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 390,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_raw_put",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 371,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_raw_sparse",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 451,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_raw_unmap",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 431,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_mthd_unmap",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 107,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_page_index",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 330,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_uvmm_search",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 34,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vma_dump",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1003,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vma_new",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 800,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vma_tail",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 813,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_del",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1944,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_dtor",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1028,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_dump",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1019,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_free_delete",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 842,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_free_insert",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 850,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_free_remove",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 836,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_get",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1843,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_get_locked",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1705,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_node_delete",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 884,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_node_insert",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 892,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_node_merge",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 934,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_node_remove",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 878,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_node_search",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 914,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_node_split",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 976,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_part",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1893,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_pfn_map",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1274,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_pfn_split_merge",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1215,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_pfn_unmap",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1238,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_pt_del",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 28,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_ptes_get",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 722,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_ptes_put",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 713,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_ptes_put_locked",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 705,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_ptes_sparse",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 630,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_ptes_sparse_get",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 612,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_ptes_sparse_put",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 602,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_ptes_unmap",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 680,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_ptes_unmap_put",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 753,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_put",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1693,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_put_locked",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1611,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_put_region",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1592,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_raw_get",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1870,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_raw_put",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1862,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_raw_sparse",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1881,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_raw_unmap",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1853,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_ref",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1962,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_unmap_locked",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1414,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_unmap_region",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1397,
+      "kind": "function"
+    },
+    {
+      "name": "nvkm_vmm_unref",
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1952,
+      "kind": "function"
+    },
+    {
+      "name": "r1373f4_fini",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 207,
+      "kind": "function"
+    },
+    {
+      "name": "r1373f4_init",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 157,
+      "kind": "function"
+    },
+    {
+      "name": "ramddr3_cl",
+      "file": "nvkm/subdev/fb/sddr3.c",
+      "line": 45,
+      "kind": "table"
+    },
+    {
+      "name": "ramddr3_cwl",
+      "file": "nvkm/subdev/fb/sddr3.c",
+      "line": 62,
+      "kind": "table"
+    },
+    {
+      "name": "ramddr3_wr",
+      "file": "nvkm/subdev/fb/sddr3.c",
+      "line": 54,
+      "kind": "table"
+    },
+    {
+      "name": "ramxlat",
+      "file": "nvkm/subdev/fb/gddr3.c",
+      "line": 33,
+      "kind": "function"
+    },
+    {
+      "name": "uvmm",
+      "file": "nvkm/subdev/mmu/memgf100.c",
+      "line": 37,
+      "kind": "table"
+    },
+    {
+      "name": "vma",
+      "file": "nvkm/subdev/mmu/uvmm.c",
+      "line": 394,
+      "kind": "table"
+    }
+  ],
+  "edges": [
+    [
+      "gf100_fb",
+      "gf100_fb_dtor"
+    ],
+    [
+      "gf100_fb",
+      "gf100_fb_init"
+    ],
+    [
+      "gf100_fb",
+      "gf100_fb_init_page"
+    ],
+    [
+      "gf100_fb",
+      "gf100_fb_intr"
+    ],
+    [
+      "gf100_fb",
+      "gf100_fb_oneinit"
+    ],
+    [
+      "gf100_fb",
+      "gf100_fb_sysmem_flush_page_init"
+    ],
+    [
+      "gf100_fb",
+      "gf100_ram_new"
+    ],
+    [
+      "gf100_fb_dtor",
+      "gf100_fb"
+    ],
+    [
+      "gf100_fb_init",
+      "gf100_fb"
+    ],
+    [
+      "gf100_fb_intr",
+      "gf100_fb"
+    ],
+    [
+      "gf100_fb_new_",
+      "nvkm_fb_ctor"
+    ],
+    [
+      "gf100_fb_oneinit",
+      "gf100_fb"
+    ],
+    [
+      "gf100_fermi",
+      "gf100_fermi_mthd"
+    ],
+    [
+      "gf100_fermi_mthd",
+      "gf100_fermi_mthd_zbc_color"
+    ],
+    [
+      "gf100_fermi_mthd",
+      "gf100_fermi_mthd_zbc_depth"
+    ],
+    [
+      "gf100_fermi_mthd_zbc_color",
+      "args"
+    ],
+    [
+      "gf100_fermi_mthd_zbc_color",
+      "gf100_gr"
+    ],
+    [
+      "gf100_fermi_mthd_zbc_color",
+      "gf100_gr_zbc_color_get"
+    ],
+    [
+      "gf100_fermi_mthd_zbc_color",
+      "nvkm_gr"
+    ],
+    [
+      "gf100_fermi_mthd_zbc_depth",
+      "args"
+    ],
+    [
+      "gf100_fermi_mthd_zbc_depth",
+      "gf100_gr"
+    ],
+    [
+      "gf100_fermi_mthd_zbc_depth",
+      "gf100_gr_zbc_depth_get"
+    ],
+    [
+      "gf100_fermi_mthd_zbc_depth",
+      "nvkm_gr"
+    ],
+    [
+      "gf100_fifo_chid_ctor",
+      "nvkm_chan_event"
+    ],
+    [
+      "gf100_fifo_chid_ctor",
+      "nvkm_chid_new"
+    ],
+    [
+      "gf100_fifo_intr_ctxsw_timeout",
+      "nvkm_runl_allow"
+    ],
+    [
+      "gf100_fifo_intr_ctxsw_timeout",
+      "nvkm_runl_block"
+    ],
+    [
+      "gf100_fifo_intr_mmu_fault_unit",
+      "nvkm_fifo_fault"
+    ],
+    [
+      "gf100_fifo_intr_sched",
+      "gf100_fifo_intr_sched_ctxsw"
+    ],
+    [
+      "gf100_fifo_intr_sched",
+      "gf100_fifo_intr_sched_names"
+    ],
+    [
+      "gf100_fifo_mmu_fault_recover",
+      "nvkm_chan_get_inst"
+    ],
+    [
+      "gf100_fifo_mmu_fault_recover",
+      "nvkm_chan_put"
+    ],
+    [
+      "gf100_fifo_mmu_fault_recover",
+      "nvkm_runl_rc_cgrp"
+    ],
+    [
+      "gf100_fifo_mmu_fault_recover",
+      "nvkm_runl_rc_engn"
+    ],
+    [
+      "gf100_fifo_nonstall",
+      "gf100_fifo_nonstall_allow"
+    ],
+    [
+      "gf100_fifo_nonstall",
+      "gf100_fifo_nonstall_block"
+    ],
+    [
+      "gf100_gr",
+      "gf100_fermi"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_fecs_reset"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_fecs_ucode"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_gpccs_ucode"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_400054"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_40601c"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_419cc0"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_419eb4"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_exception2"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_fecs_exceptions"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_gpc_mmu"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_num_active_ltcs"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_rop_exceptions"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_shader_exceptions"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_tex_hww_esr"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_vsc_stream_master"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_init_zcull"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_oneinit_sm_id"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_oneinit_tiles"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_pack_mmio"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_rops"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_trap_mp"
+    ],
+    [
+      "gf100_gr",
+      "gf100_gr_zbc"
+    ],
+    [
+      "gf100_gr",
+      "gf100_grctx"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_chsw_load"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_ctxsw_inst"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_dtor"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_fecs_start_ctxsw"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_fecs_stop_ctxsw"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_fini"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_init_"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_nonstall"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_object_get"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_oneinit"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_reset"
+    ],
+    [
+      "gf100_gr_",
+      "gf100_gr_units"
+    ],
+    [
+      "gf100_gr_chsw_load",
+      "gf100_gr"
+    ],
+    [
+      "gf100_gr_ctxctl_debug",
+      "gf100_gr_ctxctl_debug_unit"
+    ],
+    [
+      "gf100_gr_dtor",
+      "gf100_gr"
+    ],
+    [
+      "gf100_gr_fecs_elpg_bind",
+      "gf100_gr_fecs_discover_reglist_image_size"
+    ],
+    [
+      "gf100_gr_fecs_elpg_bind",
+      "gf100_gr_fecs_set_reglist_bind_instance"
+    ],
+    [
+      "gf100_gr_fecs_elpg_bind",
+      "gf100_gr_fecs_set_reglist_virtual_address"
+    ],
+    [
+      "gf100_gr_fecs_halt_pipeline",
+      "gf100_gr_fecs_ctrl_ctxsw"
+    ],
+    [
+      "gf100_gr_fecs_start_ctxsw",
+      "gf100_gr"
+    ],
+    [
+      "gf100_gr_fecs_start_ctxsw",
+      "gf100_gr_fecs_ctrl_ctxsw"
+    ],
+    [
+      "gf100_gr_fecs_stop_ctxsw",
+      "gf100_gr"
+    ],
+    [
+      "gf100_gr_fecs_stop_ctxsw",
+      "gf100_gr_fecs_ctrl_ctxsw"
+    ],
+    [
+      "gf100_gr_fini",
+      "gf100_gr"
+    ],
+    [
+      "gf100_gr_icmd",
+      "gf100_gr_wait_idle"
+    ],
+    [
+      "gf100_gr_init",
+      "gf100_gr_init_ctxctl"
+    ],
+    [
+      "gf100_gr_init",
+      "gf100_gr_mmio"
+    ],
+    [
+      "gf100_gr_init",
+      "gf100_gr_wait_idle"
+    ],
+    [
+      "gf100_gr_init",
+      "gf100_gr_zbc_init"
+    ],
+    [
+      "gf100_gr_init_",
+      "gf100_gr"
+    ],
+    [
+      "gf100_gr_init_ctxctl",
+      "gf100_gr_init_ctxctl_ext"
+    ],
+    [
+      "gf100_gr_init_ctxctl",
+      "gf100_gr_init_ctxctl_int"
+    ],
+    [
+      "gf100_gr_init_ctxctl_ext",
+      "gf100_gr_fecs_discover_image_size"
+    ],
+    [
+      "gf100_gr_init_ctxctl_ext",
+      "gf100_gr_fecs_discover_pm_image_size"
+    ],
+    [
+      "gf100_gr_init_ctxctl_ext",
+      "gf100_gr_fecs_discover_zcull_image_size"
+    ],
+    [
+      "gf100_gr_init_ctxctl_ext",
+      "gf100_gr_fecs_elpg_bind"
+    ],
+    [
+      "gf100_gr_init_ctxctl_ext",
+      "gf100_gr_fecs_set_watchdog_timeout"
+    ],
+    [
+      "gf100_gr_init_ctxctl_ext",
+      "gf100_gr_init_fw"
+    ],
+    [
+      "gf100_gr_init_ctxctl_int",
+      "gf100_gr_ctxctl_debug"
+    ],
+    [
+      "gf100_gr_new_",
+      "gf100_gr_"
+    ],
+    [
+      "gf100_gr_new_",
+      "gf100_gr_flcn"
+    ],
+    [
+      "gf100_gr_new_",
+      "nvkm_gr_ctor"
+    ],
+    [
+      "gf100_gr_nonstall",
+      "gf100_gr"
+    ],
+    [
+      "gf100_gr_object_get",
+      "gf100_gr"
+    ],
+    [
+      "gf100_gr_oneinit",
+      "gf100_gr"
+    ],
+    [
+      "gf100_gr_reset",
+      "gf100_gr"
+    ],
+    [
+      "gf100_gr_reset",
+      "gf100_gr_fecs_halt_pipeline"
+    ],
+    [
+      "gf100_gr_trap_mp",
+      "gf100_mp_warp_error"
+    ],
+    [
+      "gf100_gr_units",
+      "gf100_gr"
+    ],
+    [
+      "gf100_gr_wait_idle",
+      "nvkm_fifo_ctxsw_in_progress"
+    ],
+    [
+      "gf100_gr_zbc",
+      "gf100_gr_zbc_clear_color"
+    ],
+    [
+      "gf100_gr_zbc",
+      "gf100_gr_zbc_clear_depth"
+    ],
+    [
+      "gf100_gr_zbc_init",
+      "gf100_gr_zbc_color_get"
+    ],
+    [
+      "gf100_gr_zbc_init",
+      "gf100_gr_zbc_depth_get"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_alpha_beta_tables"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_attrib"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_attrib_cb"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_attrib_cb_size"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_bundle"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_main"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_max_ways_evict"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_pagepool"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_r4060a8"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_r419cb8"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_rop_mapping"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_sm_id"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_tpc_nr"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_generate_unkn"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_pack_gpc_0"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_pack_gpc_1"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_pack_hub"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_pack_icmd"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_pack_mthd"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_pack_tpc"
+    ],
+    [
+      "gf100_grctx",
+      "gf100_grctx_pack_zcull"
+    ],
+    [
+      "gf100_grctx_generate_attrib",
+      "gf100_grctx_patch_wr32"
+    ],
+    [
+      "gf100_grctx_generate_attrib_cb",
+      "gf100_grctx_patch_wr32"
+    ],
+    [
+      "gf100_grctx_generate_bundle",
+      "gf100_grctx_patch_wr32"
+    ],
+    [
+      "gf100_grctx_generate_floorsweep",
+      "gf100_gr_init_num_tpc_per_gpc"
+    ],
+    [
+      "gf100_grctx_generate_main",
+      "gf100_gr_icmd"
+    ],
+    [
+      "gf100_grctx_generate_main",
+      "gf100_gr_mmio"
+    ],
+    [
+      "gf100_grctx_generate_main",
+      "gf100_gr_mthd"
+    ],
+    [
+      "gf100_grctx_generate_main",
+      "gf100_gr_wait_idle"
+    ],
+    [
+      "gf100_grctx_generate_main",
+      "gf100_grctx_generate_floorsweep"
+    ],
+    [
+      "gf100_grctx_generate_pagepool",
+      "gf100_grctx_patch_wr32"
+    ],
+    [
+      "gf100_mmu_kind",
+      "kind"
+    ],
+    [
+      "gf100_ram",
+      "gf100_ram_calc"
+    ],
+    [
+      "gf100_ram",
+      "gf100_ram_init"
+    ],
+    [
+      "gf100_ram",
+      "gf100_ram_probe_fbp"
+    ],
+    [
+      "gf100_ram",
+      "gf100_ram_probe_fbp_amount"
+    ],
+    [
+      "gf100_ram",
+      "gf100_ram_probe_fbpa_amount"
+    ],
+    [
+      "gf100_ram",
+      "gf100_ram_prog"
+    ],
+    [
+      "gf100_ram",
+      "gf100_ram_tidy"
+    ],
+    [
+      "gf100_ram_calc",
+      "gf100_ram"
+    ],
+    [
+      "gf100_ram_calc",
+      "gf100_ram_train"
+    ],
+    [
+      "gf100_ram_ctor",
+      "nvkm_fb_bios_memtype"
+    ],
+    [
+      "gf100_ram_ctor",
+      "nvkm_ram_ctor"
+    ],
+    [
+      "gf100_ram_init",
+      "gf100_ram"
+    ],
+    [
+      "gf100_ram_new",
+      "gf100_ram"
+    ],
+    [
+      "gf100_ram_new",
+      "gf100_ram_new_"
+    ],
+    [
+      "gf100_ram_new_",
+      "gf100_ram_ctor"
+    ],
+    [
+      "gf100_ram_prog",
+      "gf100_ram"
+    ],
+    [
+      "gf100_ram_tidy",
+      "gf100_ram"
+    ],
+    [
+      "gf100_runq_intr",
+      "nvkm_chan_error"
+    ],
+    [
+      "gf100_runq_intr",
+      "nvkm_chan_get_chid"
+    ],
+    [
+      "gf100_runq_intr",
+      "nvkm_chan_put"
+    ],
+    [
+      "gf117_grctx_generate_attrib",
+      "gf100_grctx_patch_wr32"
+    ],
+    [
+      "gk104_chan_bind",
+      "gk104_chan_bind_inst"
+    ],
+    [
+      "gk104_chan_ramfc",
+      "gk104_chan_ramfc_write"
+    ],
+    [
+      "gk104_chan_userd",
+      "gf100_chan_userd_clear"
+    ],
+    [
+      "gk104_ectx_ctor",
+      "args"
+    ],
+    [
+      "gk104_ectx_ctor",
+      "nvkm_vmm_get"
+    ],
+    [
+      "gk104_engn",
+      "gf100_engn_mmu_fault_trigger"
+    ],
+    [
+      "gk104_engn",
+      "gf100_engn_mmu_fault_triggered"
+    ],
+    [
+      "gk104_engn",
+      "gk104_ectx_bind"
+    ],
+    [
+      "gk104_engn",
+      "gk104_ectx_ctor"
+    ],
+    [
+      "gk104_engn",
+      "gk104_engn_chsw"
+    ],
+    [
+      "gk104_engn",
+      "gk104_engn_cxid"
+    ],
+    [
+      "gk104_engn_ce",
+      "gf100_engn_mmu_fault_trigger"
+    ],
+    [
+      "gk104_engn_ce",
+      "gf100_engn_mmu_fault_triggered"
+    ],
+    [
+      "gk104_engn_ce",
+      "gk104_engn_chsw"
+    ],
+    [
+      "gk104_engn_ce",
+      "gk104_engn_cxid"
+    ],
+    [
+      "gk104_engn_chsw",
+      "gk104_engn_status"
+    ],
+    [
+      "gk104_engn_cxid",
+      "gk104_engn_status"
+    ],
+    [
+      "gk104_fifo_intr",
+      "gf100_fifo_intr_mmu_fault"
+    ],
+    [
+      "gk104_fifo_intr",
+      "gf100_fifo_intr_pbdma"
+    ],
+    [
+      "gk104_fifo_intr",
+      "gf100_fifo_intr_sched"
+    ],
+    [
+      "gk104_fifo_intr",
+      "gk104_fifo_intr_bind"
+    ],
+    [
+      "gk104_fifo_intr",
+      "gk104_fifo_intr_chsw"
+    ],
+    [
+      "gk104_fifo_intr",
+      "gk104_fifo_intr_dropped_fault"
+    ],
+    [
+      "gk104_fifo_intr",
+      "gk104_fifo_intr_runlist"
+    ],
+    [
+      "gk104_fifo_intr_bind",
+      "gk104_fifo_intr_bind_reason"
+    ],
+    [
+      "gk104_fifo_mmu_fault",
+      "gf100_fifo_mmu_fault_access"
+    ],
+    [
+      "gk104_fifo_mmu_fault",
+      "gf100_fifo_mmu_fault_recover"
+    ],
+    [
+      "gk104_fifo_mmu_fault",
+      "gk104_fifo_mmu_fault_engine"
+    ],
+    [
+      "gk104_fifo_mmu_fault",
+      "gk104_fifo_mmu_fault_gpcclient"
+    ],
+    [
+      "gk104_fifo_mmu_fault",
+      "gk104_fifo_mmu_fault_hubclient"
+    ],
+    [
+      "gk104_fifo_mmu_fault",
+      "gk104_fifo_mmu_fault_reason"
+    ],
+    [
+      "gk104_fifo_runl_ctor",
+      "gf100_engn_sw"
+    ],
+    [
+      "gk104_fifo_runl_ctor",
+      "gk104_runq_runm"
+    ],
+    [
+      "gk104_fifo_runl_ctor",
+      "nvkm_runl_add"
+    ],
+    [
+      "gk104_fifo_runl_ctor",
+      "nvkm_runl_get"
+    ],
+    [
+      "gk104_fifo_runl_ctor",
+      "nvkm_runl_new"
+    ],
+    [
+      "gk104_grctx_generate_bundle",
+      "gf100_grctx_generate_bundle"
+    ],
+    [
+      "gk104_grctx_generate_bundle",
+      "gf100_grctx_patch_wr32"
+    ],
+    [
+      "gk104_grctx_generate_pagepool",
+      "gf100_grctx_generate_pagepool"
+    ],
+    [
+      "gk104_grctx_generate_pagepool",
+      "gf100_grctx_patch_wr32"
+    ],
+    [
+      "gk104_grctx_generate_patch_ltc",
+      "gf100_grctx_patch_wr32"
+    ],
+    [
+      "gk104_mmu",
+      "gf100_mmu_kind"
+    ],
+    [
+      "gk104_mmu",
+      "kind"
+    ],
+    [
+      "gk104_mmu_new",
+      "gk104_mmu"
+    ],
+    [
+      "gk104_mmu_new",
+      "nvkm_mmu_new_"
+    ],
+    [
+      "gk104_ram",
+      "gf100_ram_probe_fbp"
+    ],
+    [
+      "gk104_ram",
+      "gf100_ram_probe_fbpa_amount"
+    ],
+    [
+      "gk104_ram",
+      "gf108_ram_probe_fbp_amount"
+    ],
+    [
+      "gk104_ram",
+      "gk104_ram_calc"
+    ],
+    [
+      "gk104_ram",
+      "gk104_ram_dtor"
+    ],
+    [
+      "gk104_ram",
+      "gk104_ram_init"
+    ],
+    [
+      "gk104_ram",
+      "gk104_ram_prog"
+    ],
+    [
+      "gk104_ram",
+      "gk104_ram_tidy"
+    ],
+    [
+      "gk104_ram_calc",
+      "gk104_ram"
+    ],
+    [
+      "gk104_ram_calc",
+      "gk104_ram_calc_data"
+    ],
+    [
+      "gk104_ram_calc",
+      "gk104_ram_calc_xits"
+    ],
+    [
+      "gk104_ram_calc_gddr5",
+      "gk104_ram_train"
+    ],
+    [
+      "gk104_ram_calc_gddr5",
+      "r1373f4_fini"
+    ],
+    [
+      "gk104_ram_calc_gddr5",
+      "r1373f4_init"
+    ],
+    [
+      "gk104_ram_calc_sddr3",
+      "nvkm_sddr3_dll_disable"
+    ],
+    [
+      "gk104_ram_calc_sddr3",
+      "nvkm_sddr3_dll_reset"
+    ],
+    [
+      "gk104_ram_calc_xits",
+      "gk104_ram_calc_gddr5"
+    ],
+    [
+      "gk104_ram_calc_xits",
+      "gk104_ram_calc_sddr3"
+    ],
+    [
+      "gk104_ram_calc_xits",
+      "nvkm_gddr5_calc"
+    ],
+    [
+      "gk104_ram_calc_xits",
+      "nvkm_sddr3_calc"
+    ],
+    [
+      "gk104_ram_ctor_data",
+      "hdr"
+    ],
+    [
+      "gk104_ram_dtor",
+      "gk104_ram"
+    ],
+    [
+      "gk104_ram_init",
+      "gk104_ram_train_init"
+    ],
+    [
+      "gk104_ram_init",
+      "hdr"
+    ],
+    [
+      "gk104_ram_new",
+      "gk104_ram"
+    ],
+    [
+      "gk104_ram_new",
+      "gk104_ram_new_"
+    ],
+    [
+      "gk104_ram_new_",
+      "gf100_ram_ctor"
+    ],
+    [
+      "gk104_ram_new_",
+      "gk104_ram_ctor_data"
+    ],
+    [
+      "gk104_ram_prog",
+      "gk104_ram"
+    ],
+    [
+      "gk104_ram_prog",
+      "gk104_ram_prog_0"
+    ],
+    [
+      "gk104_ram_tidy",
+      "gk104_ram"
+    ],
+    [
+      "gk104_ram_train_init",
+      "gk104_ram_train_init_0"
+    ],
+    [
+      "gk104_ram_train_init",
+      "gk104_ram_train_type"
+    ],
+    [
+      "gk104_ram_train_type",
+      "hdr"
+    ],
+    [
+      "gk104_runq",
+      "gk104_runq_idle"
+    ],
+    [
+      "gk104_runq",
+      "gk104_runq_init"
+    ],
+    [
+      "gk104_runq",
+      "gk104_runq_intr"
+    ],
+    [
+      "gk104_runq",
+      "gk104_runq_intr_0_names"
+    ],
+    [
+      "gk104_runq_init",
+      "gf100_runq_init"
+    ],
+    [
+      "gk104_runq_intr",
+      "gf100_runq_intr"
+    ],
+    [
+      "gk104_runq_intr",
+      "gk104_runq_intr_1"
+    ],
+    [
+      "gk110_cgrp",
+      "gk110_cgrp_preempt"
+    ],
+    [
+      "gk110_chan",
+      "gf100_chan_inst"
+    ],
+    [
+      "gk110_chan",
+      "gk104_chan_bind"
+    ],
+    [
+      "gk110_chan",
+      "gk104_chan_ramfc"
+    ],
+    [
+      "gk110_chan",
+      "gk104_chan_start"
+    ],
+    [
+      "gk110_chan",
+      "gk104_chan_stop"
+    ],
+    [
+      "gk110_chan",
+      "gk104_chan_unbind"
+    ],
+    [
+      "gk110_chan",
+      "gk104_chan_userd"
+    ],
+    [
+      "gk110_chan",
+      "gk110_chan_preempt"
+    ],
+    [
+      "gk110_chan_preempt",
+      "gf100_chan_preempt"
+    ],
+    [
+      "gk110_fb",
+      "gf100_fb_dtor"
+    ],
+    [
+      "gk110_fb",
+      "gf100_fb_init"
+    ],
+    [
+      "gk110_fb",
+      "gf100_fb_init_page"
+    ],
+    [
+      "gk110_fb",
+      "gf100_fb_intr"
+    ],
+    [
+      "gk110_fb",
+      "gf100_fb_oneinit"
+    ],
+    [
+      "gk110_fb",
+      "gf100_fb_sysmem_flush_page_init"
+    ],
+    [
+      "gk110_fb",
+      "gk104_ram_new"
+    ],
+    [
+      "gk110_fb",
+      "gk110_fb_clkgate_pack"
+    ],
+    [
+      "gk110_fb_new",
+      "gf100_fb_new_"
+    ],
+    [
+      "gk110_fb_new",
+      "gk110_fb"
+    ],
+    [
+      "gk110_fifo",
+      "gf100_fifo_intr_ctxsw_timeout"
+    ],
+    [
+      "gk110_fifo",
+      "gf100_fifo_intr_mmu_fault_unit"
+    ],
+    [
+      "gk110_fifo",
+      "gf100_fifo_nonstall"
+    ],
+    [
+      "gk110_fifo",
+      "gf100_fifo_runq_nr"
+    ],
+    [
+      "gk110_fifo",
+      "gk104_engn"
+    ],
+    [
+      "gk110_fifo",
+      "gk104_engn_ce"
+    ],
+    [
+      "gk110_fifo",
+      "gk104_fifo_chid_nr"
+    ],
+    [
+      "gk110_fifo",
+      "gk104_fifo_init"
+    ],
+    [
+      "gk110_fifo",
+      "gk104_fifo_init_pbdmas"
+    ],
+    [
+      "gk110_fifo",
+      "gk104_fifo_intr"
+    ],
+    [
+      "gk110_fifo",
+      "gk104_fifo_mmu_fault"
+    ],
+    [
+      "gk110_fifo",
+      "gk104_fifo_runl_ctor"
+    ],
+    [
+      "gk110_fifo",
+      "gk104_runq"
+    ],
+    [
+      "gk110_fifo",
+      "gk110_cgrp"
+    ],
+    [
+      "gk110_fifo",
+      "gk110_chan"
+    ],
+    [
+      "gk110_fifo",
+      "gk110_fifo_chid_ctor"
+    ],
+    [
+      "gk110_fifo",
+      "gk110_runl"
+    ],
+    [
+      "gk110_fifo_chid_ctor",
+      "gf100_fifo_chid_ctor"
+    ],
+    [
+      "gk110_fifo_chid_ctor",
+      "nvkm_chan_event"
+    ],
+    [
+      "gk110_fifo_chid_ctor",
+      "nvkm_chid_new"
+    ],
+    [
+      "gk110_fifo_new",
+      "gk110_fifo"
+    ],
+    [
+      "gk110_fifo_new",
+      "nvkm_fifo_new_"
+    ],
+    [
+      "gk110_runl",
+      "gf100_runl_preempt_pending"
+    ],
+    [
+      "gk110_runl",
+      "gk104_runl_allow"
+    ],
+    [
+      "gk110_runl",
+      "gk104_runl_block"
+    ],
+    [
+      "gk110_runl",
+      "gk104_runl_commit"
+    ],
+    [
+      "gk110_runl",
+      "gk104_runl_fault_clear"
+    ],
+    [
+      "gk110_runl",
+      "gk104_runl_insert_chan"
+    ],
+    [
+      "gk110_runl",
+      "gk104_runl_pending"
+    ],
+    [
+      "gk110_runl",
+      "gk110_runl_insert_cgrp"
+    ],
+    [
+      "gk110_runl",
+      "nv50_runl_update"
+    ],
+    [
+      "gk110_runl",
+      "nv50_runl_wait"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_fermi"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_fecs_reset"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_init"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_init_400054"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_init_419cc0"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_init_exception2"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_init_fecs_exceptions"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_init_gpc_mmu"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_init_num_active_ltcs"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_init_rop_exceptions"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_init_shader_exceptions"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_init_tex_hww_esr"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_oneinit_sm_id"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_oneinit_tiles"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_rops"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_trap_mp"
+    ],
+    [
+      "gk110b_gr",
+      "gf100_gr_zbc"
+    ],
+    [
+      "gk110b_gr",
+      "gf117_gr_init_zcull"
+    ],
+    [
+      "gk110b_gr",
+      "gk104_gr_init_ppc_exceptions"
+    ],
+    [
+      "gk110b_gr",
+      "gk104_gr_init_rop_active_fbps"
+    ],
+    [
+      "gk110b_gr",
+      "gk104_gr_init_sked_hww_esr"
+    ],
+    [
+      "gk110b_gr",
+      "gk104_gr_init_vsc_stream_master"
+    ],
+    [
+      "gk110b_gr",
+      "gk110_gr_fecs_ucode"
+    ],
+    [
+      "gk110b_gr",
+      "gk110_gr_gpccs_ucode"
+    ],
+    [
+      "gk110b_gr",
+      "gk110_gr_init_419eb4"
+    ],
+    [
+      "gk110b_gr",
+      "gk110b_gr_pack_mmio"
+    ],
+    [
+      "gk110b_gr",
+      "gk110b_grctx"
+    ],
+    [
+      "gk110b_gr_fwif",
+      "gk110b_gr"
+    ],
+    [
+      "gk110b_gr_new",
+      "gf100_gr_new_"
+    ],
+    [
+      "gk110b_gr_new",
+      "gk110b_gr_fwif"
+    ],
+    [
+      "gk110b_grctx",
+      "gf100_grctx_generate_attrib_cb"
+    ],
+    [
+      "gk110b_grctx",
+      "gf100_grctx_generate_attrib_cb_size"
+    ],
+    [
+      "gk110b_grctx",
+      "gf100_grctx_generate_main"
+    ],
+    [
+      "gk110b_grctx",
+      "gf100_grctx_generate_sm_id"
+    ],
+    [
+      "gk110b_grctx",
+      "gf100_grctx_generate_tpc_nr"
+    ],
+    [
+      "gk110b_grctx",
+      "gf100_grctx_pack_zcull"
+    ],
+    [
+      "gk110b_grctx",
+      "gf117_grctx_generate_attrib"
+    ],
+    [
+      "gk110b_grctx",
+      "gf117_grctx_generate_dist_skip_table"
+    ],
+    [
+      "gk110b_grctx",
+      "gf117_grctx_generate_rop_mapping"
+    ],
+    [
+      "gk110b_grctx",
+      "gk104_grctx_generate_alpha_beta_tables"
+    ],
+    [
+      "gk110b_grctx",
+      "gk104_grctx_generate_bundle"
+    ],
+    [
+      "gk110b_grctx",
+      "gk104_grctx_generate_gpc_tpc_nr"
+    ],
+    [
+      "gk110b_grctx",
+      "gk104_grctx_generate_pagepool"
+    ],
+    [
+      "gk110b_grctx",
+      "gk104_grctx_generate_patch_ltc"
+    ],
+    [
+      "gk110b_grctx",
+      "gk104_grctx_generate_r418800"
+    ],
+    [
+      "gk110b_grctx",
+      "gk104_grctx_generate_unkn"
+    ],
+    [
+      "gk110b_grctx",
+      "gk110_grctx_generate_r419eb0"
+    ],
+    [
+      "gk110b_grctx",
+      "gk110_grctx_generate_r419f78"
+    ],
+    [
+      "gk110b_grctx",
+      "gk110_grctx_pack_gpc_0"
+    ],
+    [
+      "gk110b_grctx",
+      "gk110_grctx_pack_gpc_1"
+    ],
+    [
+      "gk110b_grctx",
+      "gk110_grctx_pack_hub"
+    ],
+    [
+      "gk110b_grctx",
+      "gk110_grctx_pack_icmd"
+    ],
+    [
+      "gk110b_grctx",
+      "gk110_grctx_pack_mthd"
+    ],
+    [
+      "gk110b_grctx",
+      "gk110_grctx_pack_ppc"
+    ],
+    [
+      "gk110b_grctx",
+      "gk110b_grctx_pack_tpc"
+    ],
+    [
+      "nv50_runl_update",
+      "nv50_runl_alloc"
+    ],
+    [
+      "nv50_runl_wait",
+      "nvkm_runl_update_pending"
+    ],
+    [
+      "nvkm_cgrp_del",
+      "nvkm_chid_put"
+    ],
+    [
+      "nvkm_cgrp_del",
+      "nvkm_vmm_unref"
+    ],
+    [
+      "nvkm_cgrp_new",
+      "nvkm_cgrp_unref"
+    ],
+    [
+      "nvkm_cgrp_new",
+      "nvkm_chid_get"
+    ],
+    [
+      "nvkm_cgrp_new",
+      "nvkm_vmm_ref"
+    ],
+    [
+      "nvkm_cgrp_unref",
+      "nvkm_cgrp_del"
+    ],
+    [
+      "nvkm_chan_block",
+      "nvkm_chan_block_locked"
+    ],
+    [
+      "nvkm_chan_del",
+      "nvkm_cgrp_unref"
+    ],
+    [
+      "nvkm_chan_del",
+      "nvkm_chid_put"
+    ],
+    [
+      "nvkm_chan_del",
+      "nvkm_vmm_part"
+    ],
+    [
+      "nvkm_chan_del",
+      "nvkm_vmm_unref"
+    ],
+    [
+      "nvkm_chan_error",
+      "nvkm_chan_block_locked"
+    ],
+    [
+      "nvkm_chan_get_chid",
+      "nvkm_runl_chan_get_chid"
+    ],
+    [
+      "nvkm_chan_get_inst",
+      "nvkm_runl_chan_get_inst"
+    ],
+    [
+      "nvkm_chan_insert",
+      "nvkm_runl_update_locked"
+    ],
+    [
+      "nvkm_chan_preempt_locked",
+      "nvkm_runl_preempt_wait"
+    ],
+    [
+      "nvkm_chan_remove",
+      "nvkm_chan_preempt_locked"
+    ],
+    [
+      "nvkm_chan_remove",
+      "nvkm_chan_remove_locked"
+    ],
+    [
+      "nvkm_chan_remove",
+      "nvkm_runl_update_locked"
+    ],
+    [
+      "nvkm_chid_new",
+      "nvkm_chid_unref"
+    ],
+    [
+      "nvkm_chid_unref",
+      "nvkm_chid_del"
+    ],
+    [
+      "nvkm_engn_cgrp_get",
+      "nvkm_runl_cgrp_get_cgid"
+    ],
+    [
+      "nvkm_engn_cgrp_get",
+      "nvkm_runl_chan_get_chid"
+    ],
+    [
+      "nvkm_fb",
+      "nvkm_fb_dtor"
+    ],
+    [
+      "nvkm_fb",
+      "nvkm_fb_init"
+    ],
+    [
+      "nvkm_fb",
+      "nvkm_fb_intr"
+    ],
+    [
+      "nvkm_fb",
+      "nvkm_fb_oneinit"
+    ],
+    [
+      "nvkm_fb",
+      "nvkm_fb_preinit"
+    ],
+    [
+      "nvkm_fb_bios_memtype",
+      "hdr"
+    ],
+    [
+      "nvkm_fb_ctor",
+      "nvkm_fb"
+    ],
+    [
+      "nvkm_fb_dtor",
+      "nvkm_fb"
+    ],
+    [
+      "nvkm_fb_dtor",
+      "nvkm_ram_del"
+    ],
+    [
+      "nvkm_fb_init",
+      "nvkm_fb"
+    ],
+    [
+      "nvkm_fb_init",
+      "nvkm_fb_sysmem_flush_page_init"
+    ],
+    [
+      "nvkm_fb_init",
+      "nvkm_ram_init"
+    ],
+    [
+      "nvkm_fb_intr",
+      "nvkm_fb"
+    ],
+    [
+      "nvkm_fb_oneinit",
+      "nvkm_fb"
+    ],
+    [
+      "nvkm_fb_preinit",
+      "nvkm_fb_sysmem_flush_page_init"
+    ],
+    [
+      "nvkm_fifo",
+      "nvkm_fifo_class_get"
+    ],
+    [
+      "nvkm_fifo",
+      "nvkm_fifo_dtor"
+    ],
+    [
+      "nvkm_fifo",
+      "nvkm_fifo_fini"
+    ],
+    [
+      "nvkm_fifo",
+      "nvkm_fifo_info"
+    ],
+    [
+      "nvkm_fifo",
+      "nvkm_fifo_init"
+    ],
+    [
+      "nvkm_fifo",
+      "nvkm_fifo_oneinit"
+    ],
+    [
+      "nvkm_fifo",
+      "nvkm_fifo_preinit"
+    ],
+    [
+      "nvkm_fifo_class",
+      "nvkm_fifo_class_new"
+    ],
+    [
+      "nvkm_fifo_class_get",
+      "nvkm_fifo"
+    ],
+    [
+      "nvkm_fifo_class_get",
+      "nvkm_fifo_class"
+    ],
+    [
+      "nvkm_fifo_class_new",
+      "nvkm_fifo"
+    ],
+    [
+      "nvkm_fifo_class_new",
+      "nvkm_ucgrp_new"
+    ],
+    [
+      "nvkm_fifo_class_new",
+      "nvkm_uchan_new"
+    ],
+    [
+      "nvkm_fifo_dtor",
+      "nvkm_chid_unref"
+    ],
+    [
+      "nvkm_fifo_dtor",
+      "nvkm_fifo"
+    ],
+    [
+      "nvkm_fifo_dtor",
+      "nvkm_runl_del"
+    ],
+    [
+      "nvkm_fifo_dtor",
+      "nvkm_runq_del"
+    ],
+    [
+      "nvkm_fifo_dtor",
+      "nvkm_vmm_put"
+    ],
+    [
+      "nvkm_fifo_fini",
+      "nvkm_fifo"
+    ],
+    [
+      "nvkm_fifo_fini",
+      "nvkm_runl_fini"
+    ],
+    [
+      "nvkm_fifo_info",
+      "nvkm_fifo"
+    ],
+    [
+      "nvkm_fifo_info",
+      "nvkm_runl_get"
+    ],
+    [
+      "nvkm_fifo_init",
+      "nvkm_fifo"
+    ],
+    [
+      "nvkm_fifo_new_",
+      "nvkm_fifo"
+    ],
+    [
+      "nvkm_fifo_oneinit",
+      "nvkm_fifo"
+    ],
+    [
+      "nvkm_fifo_oneinit",
+      "nvkm_runq_new"
+    ],
+    [
+      "nvkm_fifo_oneinit",
+      "nvkm_vmm_get"
+    ],
+    [
+      "nvkm_gr",
+      "cclass"
+    ],
+    [
+      "nvkm_gr",
+      "nvkm_gr_cclass_new"
+    ],
+    [
+      "nvkm_gr",
+      "nvkm_gr_chsw_load"
+    ],
+    [
+      "nvkm_gr",
+      "nvkm_gr_dtor"
+    ],
+    [
+      "nvkm_gr",
+      "nvkm_gr_fini"
+    ],
+    [
+      "nvkm_gr",
+      "nvkm_gr_init"
+    ],
+    [
+      "nvkm_gr",
+      "nvkm_gr_intr"
+    ],
+    [
+      "nvkm_gr",
+      "nvkm_gr_nonstall"
+    ],
+    [
+      "nvkm_gr",
+      "nvkm_gr_oclass_get"
+    ],
+    [
+      "nvkm_gr",
+      "nvkm_gr_oneinit"
+    ],
+    [
+      "nvkm_gr",
+      "nvkm_gr_reset"
+    ],
+    [
+      "nvkm_gr",
+      "nvkm_gr_tile"
+    ],
+    [
+      "nvkm_gr_cclass_new",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_gr_chsw_load",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_gr_ctor",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_gr_dtor",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_gr_fini",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_gr_init",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_gr_intr",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_gr_nonstall",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_gr_oclass_get",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_gr_oneinit",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_gr_reset",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_gr_tile",
+      "nvkm_gr"
+    ],
+    [
+      "nvkm_mmu",
+      "nvkm_mmu_dtor"
+    ],
+    [
+      "nvkm_mmu",
+      "nvkm_mmu_init"
+    ],
+    [
+      "nvkm_mmu",
+      "nvkm_mmu_oneinit"
+    ],
+    [
+      "nvkm_mmu_ctor",
+      "nvkm_mmu"
+    ],
+    [
+      "nvkm_mmu_ctor",
+      "nvkm_mmu_ptc_init"
+    ],
+    [
+      "nvkm_mmu_ctor",
+      "nvkm_ummu_new"
+    ],
+    [
+      "nvkm_mmu_dtor",
+      "nvkm_mmu"
+    ],
+    [
+      "nvkm_mmu_dtor",
+      "nvkm_mmu_ptc_fini"
+    ],
+    [
+      "nvkm_mmu_dtor",
+      "nvkm_vmm_unref"
+    ],
+    [
+      "nvkm_mmu_host",
+      "nvkm_mmu_heap"
+    ],
+    [
+      "nvkm_mmu_host",
+      "nvkm_mmu_type"
+    ],
+    [
+      "nvkm_mmu_init",
+      "nvkm_mmu"
+    ],
+    [
+      "nvkm_mmu_new_",
+      "nvkm_mmu_ctor"
+    ],
+    [
+      "nvkm_mmu_oneinit",
+      "nvkm_mmu"
+    ],
+    [
+      "nvkm_mmu_oneinit",
+      "nvkm_mmu_host"
+    ],
+    [
+      "nvkm_mmu_oneinit",
+      "nvkm_mmu_vram"
+    ],
+    [
+      "nvkm_mmu_ptc_put",
+      "nvkm_mmu_ptp_put"
+    ],
+    [
+      "nvkm_mmu_ptp_put",
+      "nvkm_mmu_ptc_put"
+    ],
+    [
+      "nvkm_mmu_vram",
+      "nvkm_mmu_heap"
+    ],
+    [
+      "nvkm_mmu_vram",
+      "nvkm_mmu_host"
+    ],
+    [
+      "nvkm_mmu_vram",
+      "nvkm_mmu_type"
+    ],
+    [
+      "nvkm_runl_add",
+      "map"
+    ],
+    [
+      "nvkm_runl_del",
+      "nvkm_chid_unref"
+    ],
+    [
+      "nvkm_runl_new",
+      "nvkm_chan_event"
+    ],
+    [
+      "nvkm_runl_new",
+      "nvkm_chid_new"
+    ],
+    [
+      "nvkm_runl_new",
+      "nvkm_chid_ref"
+    ],
+    [
+      "nvkm_runl_new",
+      "nvkm_runl_del"
+    ],
+    [
+      "nvkm_runl_new",
+      "nvkm_runl_work"
+    ],
+    [
+      "nvkm_runl_preempt_wait",
+      "nvkm_runl_rc"
+    ],
+    [
+      "nvkm_runl_rc",
+      "nvkm_cgrp_put"
+    ],
+    [
+      "nvkm_runl_rc",
+      "nvkm_chan_error"
+    ],
+    [
+      "nvkm_runl_rc",
+      "nvkm_chan_remove_locked"
+    ],
+    [
+      "nvkm_runl_rc",
+      "nvkm_engn_cgrp_get"
+    ],
+    [
+      "nvkm_runl_rc",
+      "nvkm_runl_allow"
+    ],
+    [
+      "nvkm_runl_rc_cgrp",
+      "nvkm_runl_rc_runl"
+    ],
+    [
+      "nvkm_runl_rc_engn",
+      "nvkm_cgrp_put"
+    ],
+    [
+      "nvkm_runl_rc_engn",
+      "nvkm_engn_cgrp_get"
+    ],
+    [
+      "nvkm_runl_rc_engn",
+      "nvkm_runl_rc_cgrp"
+    ],
+    [
+      "nvkm_runl_rc_runl",
+      "nvkm_runl_block"
+    ],
+    [
+      "nvkm_runl_update_pending",
+      "nvkm_runl_rc"
+    ],
+    [
+      "nvkm_runl_work",
+      "nvkm_runl_rc"
+    ],
+    [
+      "nvkm_sddr3_calc",
+      "ramddr3_cl"
+    ],
+    [
+      "nvkm_sddr3_calc",
+      "ramddr3_cwl"
+    ],
+    [
+      "nvkm_sddr3_calc",
+      "ramddr3_wr"
+    ],
+    [
+      "nvkm_sddr3_calc",
+      "ramxlat"
+    ],
+    [
+      "nvkm_ucgrp",
+      "nvkm_ucgrp_dtor"
+    ],
+    [
+      "nvkm_ucgrp",
+      "nvkm_ucgrp_sclass"
+    ],
+    [
+      "nvkm_ucgrp_dtor",
+      "nvkm_cgrp_unref"
+    ],
+    [
+      "nvkm_ucgrp_dtor",
+      "nvkm_ucgrp"
+    ],
+    [
+      "nvkm_ucgrp_new",
+      "args"
+    ],
+    [
+      "nvkm_ucgrp_new",
+      "nvkm_cgrp_new"
+    ],
+    [
+      "nvkm_ucgrp_new",
+      "nvkm_runl_get"
+    ],
+    [
+      "nvkm_ucgrp_new",
+      "nvkm_ucgrp"
+    ],
+    [
+      "nvkm_ucgrp_new",
+      "nvkm_uvmm_search"
+    ],
+    [
+      "nvkm_ucgrp_new",
+      "nvkm_vmm_unref"
+    ],
+    [
+      "nvkm_ucgrp_sclass",
+      "nvkm_ucgrp"
+    ],
+    [
+      "nvkm_uchan",
+      "map"
+    ],
+    [
+      "nvkm_uchan",
+      "nvkm_uchan_dtor"
+    ],
+    [
+      "nvkm_uchan",
+      "nvkm_uchan_fini"
+    ],
+    [
+      "nvkm_uchan",
+      "nvkm_uchan_init"
+    ],
+    [
+      "nvkm_uchan",
+      "nvkm_uchan_map"
+    ],
+    [
+      "nvkm_uchan",
+      "nvkm_uchan_sclass"
+    ],
+    [
+      "nvkm_uchan",
+      "nvkm_uchan_uevent"
+    ],
+    [
+      "nvkm_uchan_dtor",
+      "nvkm_chan_del"
+    ],
+    [
+      "nvkm_uchan_dtor",
+      "nvkm_uchan"
+    ],
+    [
+      "nvkm_uchan_fini",
+      "nvkm_chan_block"
+    ],
+    [
+      "nvkm_uchan_fini",
+      "nvkm_chan_remove"
+    ],
+    [
+      "nvkm_uchan_fini",
+      "nvkm_uchan"
+    ],
+    [
+      "nvkm_uchan_init",
+      "nvkm_chan_allow"
+    ],
+    [
+      "nvkm_uchan_init",
+      "nvkm_chan_insert"
+    ],
+    [
+      "nvkm_uchan_init",
+      "nvkm_uchan"
+    ],
+    [
+      "nvkm_uchan_map",
+      "nvkm_uchan"
+    ],
+    [
+      "nvkm_uchan_new",
+      "args"
+    ],
+    [
+      "nvkm_uchan_new",
+      "nvkm_runl_get"
+    ],
+    [
+      "nvkm_uchan_new",
+      "nvkm_uchan"
+    ],
+    [
+      "nvkm_uchan_new",
+      "nvkm_umem_search"
+    ],
+    [
+      "nvkm_uchan_new",
+      "nvkm_uvmm_search"
+    ],
+    [
+      "nvkm_uchan_new",
+      "nvkm_vmm_unref"
+    ],
+    [
+      "nvkm_uchan_sclass",
+      "nvkm_uchan"
+    ],
+    [
+      "nvkm_uchan_uevent",
+      "args"
+    ],
+    [
+      "nvkm_uchan_uevent",
+      "nvkm_uchan"
+    ],
+    [
+      "nvkm_umem",
+      "map"
+    ],
+    [
+      "nvkm_umem",
+      "nvkm_umem_dtor"
+    ],
+    [
+      "nvkm_umem",
+      "nvkm_umem_map"
+    ],
+    [
+      "nvkm_umem",
+      "nvkm_umem_unmap"
+    ],
+    [
+      "nvkm_umem_dtor",
+      "nvkm_umem"
+    ],
+    [
+      "nvkm_umem_map",
+      "nvkm_mem_map_host"
+    ],
+    [
+      "nvkm_umem_map",
+      "nvkm_umem"
+    ],
+    [
+      "nvkm_umem_search",
+      "nvkm_umem"
+    ],
+    [
+      "nvkm_umem_unmap",
+      "nvkm_umem"
+    ],
+    [
+      "nvkm_umem_unmap",
+      "nvkm_vmm_put"
+    ],
+    [
+      "nvkm_ummu",
+      "nvkm_ummu_mthd"
+    ],
+    [
+      "nvkm_ummu",
+      "nvkm_ummu_sclass"
+    ],
+    [
+      "nvkm_ummu_heap",
+      "args"
+    ],
+    [
+      "nvkm_ummu_kind",
+      "args"
+    ],
+    [
+      "nvkm_ummu_kind",
+      "kind"
+    ],
+    [
+      "nvkm_ummu_mthd",
+      "nvkm_ummu"
+    ],
+    [
+      "nvkm_ummu_mthd",
+      "nvkm_ummu_heap"
+    ],
+    [
+      "nvkm_ummu_mthd",
+      "nvkm_ummu_kind"
+    ],
+    [
+      "nvkm_ummu_mthd",
+      "nvkm_ummu_type"
+    ],
+    [
+      "nvkm_ummu_new",
+      "args"
+    ],
+    [
+      "nvkm_ummu_new",
+      "kind"
+    ],
+    [
+      "nvkm_ummu_new",
+      "nvkm_ummu"
+    ],
+    [
+      "nvkm_ummu_sclass",
+      "nvkm_ummu"
+    ],
+    [
+      "nvkm_ummu_type",
+      "args"
+    ],
+    [
+      "nvkm_ummu_type",
+      "kind"
+    ],
+    [
+      "nvkm_uvmm",
+      "nvkm_uvmm_dtor"
+    ],
+    [
+      "nvkm_uvmm",
+      "nvkm_uvmm_mthd"
+    ],
+    [
+      "nvkm_uvmm_dtor",
+      "nvkm_uvmm"
+    ],
+    [
+      "nvkm_uvmm_dtor",
+      "nvkm_vmm_unref"
+    ],
+    [
+      "nvkm_uvmm_dtor",
+      "uvmm"
+    ],
+    [
+      "nvkm_uvmm_mthd",
+      "nvkm_uvmm"
+    ],
+    [
+      "nvkm_uvmm_mthd",
+      "nvkm_uvmm_mthd_get"
+    ],
+    [
+      "nvkm_uvmm_mthd",
+      "nvkm_uvmm_mthd_map"
+    ],
+    [
+      "nvkm_uvmm_mthd",
+      "nvkm_uvmm_mthd_page"
+    ],
+    [
+      "nvkm_uvmm_mthd",
+      "nvkm_uvmm_mthd_pfnclr"
+    ],
+    [
+      "nvkm_uvmm_mthd",
+      "nvkm_uvmm_mthd_pfnmap"
+    ],
+    [
+      "nvkm_uvmm_mthd",
+      "nvkm_uvmm_mthd_put"
+    ],
+    [
+      "nvkm_uvmm_mthd",
+      "nvkm_uvmm_mthd_raw"
+    ],
+    [
+      "nvkm_uvmm_mthd",
+      "nvkm_uvmm_mthd_unmap"
+    ],
+    [
+      "nvkm_uvmm_mthd",
+      "uvmm"
+    ],
+    [
+      "nvkm_uvmm_mthd_get",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_get",
+      "nvkm_vmm_get_locked"
+    ],
+    [
+      "nvkm_uvmm_mthd_get",
+      "vma"
+    ],
+    [
+      "nvkm_uvmm_mthd_map",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_map",
+      "nvkm_umem_search"
+    ],
+    [
+      "nvkm_uvmm_mthd_map",
+      "nvkm_vmm_node_search"
+    ],
+    [
+      "nvkm_uvmm_mthd_map",
+      "nvkm_vmm_node_split"
+    ],
+    [
+      "nvkm_uvmm_mthd_map",
+      "nvkm_vmm_unmap_region"
+    ],
+    [
+      "nvkm_uvmm_mthd_map",
+      "vma"
+    ],
+    [
+      "nvkm_uvmm_mthd_page",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_pfnclr",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_pfnclr",
+      "nvkm_vmm_pfn_unmap"
+    ],
+    [
+      "nvkm_uvmm_mthd_pfnmap",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_pfnmap",
+      "nvkm_vmm_pfn_map"
+    ],
+    [
+      "nvkm_uvmm_mthd_put",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_put",
+      "nvkm_vmm_node_search"
+    ],
+    [
+      "nvkm_uvmm_mthd_put",
+      "nvkm_vmm_put_locked"
+    ],
+    [
+      "nvkm_uvmm_mthd_put",
+      "vma"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw",
+      "nvkm_uvmm_mthd_raw_get"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw",
+      "nvkm_uvmm_mthd_raw_map"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw",
+      "nvkm_uvmm_mthd_raw_put"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw",
+      "nvkm_uvmm_mthd_raw_sparse"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw",
+      "nvkm_uvmm_mthd_raw_unmap"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw",
+      "uvmm"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_get",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_get",
+      "nvkm_uvmm_page_index"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_get",
+      "nvkm_vmm_raw_get"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_get",
+      "uvmm"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_map",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_map",
+      "nvkm_umem_search"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_map",
+      "nvkm_uvmm_page_index"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_map",
+      "uvmm"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_map",
+      "vma"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_put",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_put",
+      "nvkm_uvmm_page_index"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_put",
+      "nvkm_vmm_raw_put"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_put",
+      "uvmm"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_sparse",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_sparse",
+      "nvkm_vmm_raw_sparse"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_unmap",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_unmap",
+      "nvkm_uvmm_page_index"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_unmap",
+      "nvkm_vmm_raw_unmap"
+    ],
+    [
+      "nvkm_uvmm_mthd_raw_unmap",
+      "uvmm"
+    ],
+    [
+      "nvkm_uvmm_mthd_unmap",
+      "args"
+    ],
+    [
+      "nvkm_uvmm_mthd_unmap",
+      "nvkm_vmm_node_search"
+    ],
+    [
+      "nvkm_uvmm_mthd_unmap",
+      "nvkm_vmm_unmap_locked"
+    ],
+    [
+      "nvkm_uvmm_mthd_unmap",
+      "vma"
+    ],
+    [
+      "nvkm_uvmm_search",
+      "nvkm_uvmm"
+    ],
+    [
+      "nvkm_uvmm_search",
+      "nvkm_vmm_ref"
+    ],
+    [
+      "nvkm_vma_new",
+      "vma"
+    ],
+    [
+      "nvkm_vma_tail",
+      "nvkm_vma_new"
+    ],
+    [
+      "nvkm_vma_tail",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_del",
+      "nvkm_vmm_dtor"
+    ],
+    [
+      "nvkm_vmm_dtor",
+      "nvkm_mmu_ptc_dump"
+    ],
+    [
+      "nvkm_vmm_dtor",
+      "nvkm_mmu_ptc_put"
+    ],
+    [
+      "nvkm_vmm_dtor",
+      "nvkm_vmm_dump"
+    ],
+    [
+      "nvkm_vmm_dtor",
+      "nvkm_vmm_pt_del"
+    ],
+    [
+      "nvkm_vmm_dtor",
+      "nvkm_vmm_ptes_put"
+    ],
+    [
+      "nvkm_vmm_dtor",
+      "nvkm_vmm_put"
+    ],
+    [
+      "nvkm_vmm_dtor",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_dump",
+      "nvkm_vma_dump"
+    ],
+    [
+      "nvkm_vmm_dump",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_free_delete",
+      "nvkm_vmm_free_remove"
+    ],
+    [
+      "nvkm_vmm_free_delete",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_free_insert",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_free_remove",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_get",
+      "nvkm_vmm_get_locked"
+    ],
+    [
+      "nvkm_vmm_get_locked",
+      "nvkm_vma_tail"
+    ],
+    [
+      "nvkm_vmm_get_locked",
+      "nvkm_vmm_free_insert"
+    ],
+    [
+      "nvkm_vmm_get_locked",
+      "nvkm_vmm_free_remove"
+    ],
+    [
+      "nvkm_vmm_get_locked",
+      "nvkm_vmm_node_insert"
+    ],
+    [
+      "nvkm_vmm_get_locked",
+      "nvkm_vmm_ptes_get"
+    ],
+    [
+      "nvkm_vmm_get_locked",
+      "nvkm_vmm_ptes_sparse"
+    ],
+    [
+      "nvkm_vmm_get_locked",
+      "nvkm_vmm_ptes_sparse_get"
+    ],
+    [
+      "nvkm_vmm_get_locked",
+      "nvkm_vmm_put_region"
+    ],
+    [
+      "nvkm_vmm_get_locked",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_node_delete",
+      "nvkm_vmm_node_remove"
+    ],
+    [
+      "nvkm_vmm_node_delete",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_node_insert",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_node_merge",
+      "nvkm_vmm_node_delete"
+    ],
+    [
+      "nvkm_vmm_node_merge",
+      "nvkm_vmm_node_insert"
+    ],
+    [
+      "nvkm_vmm_node_merge",
+      "nvkm_vmm_node_remove"
+    ],
+    [
+      "nvkm_vmm_node_merge",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_node_remove",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_node_split",
+      "nvkm_vma_tail"
+    ],
+    [
+      "nvkm_vmm_node_split",
+      "nvkm_vmm_node_insert"
+    ],
+    [
+      "nvkm_vmm_node_split",
+      "nvkm_vmm_node_merge"
+    ],
+    [
+      "nvkm_vmm_node_split",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_pfn_map",
+      "args"
+    ],
+    [
+      "nvkm_vmm_pfn_map",
+      "map"
+    ],
+    [
+      "nvkm_vmm_pfn_map",
+      "nvkm_vmm_node_search"
+    ],
+    [
+      "nvkm_vmm_pfn_map",
+      "nvkm_vmm_pfn_split_merge"
+    ],
+    [
+      "nvkm_vmm_pfn_map",
+      "nvkm_vmm_ptes_unmap_put"
+    ],
+    [
+      "nvkm_vmm_pfn_map",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_pfn_split_merge",
+      "nvkm_vmm_node_merge"
+    ],
+    [
+      "nvkm_vmm_pfn_split_merge",
+      "nvkm_vmm_node_split"
+    ],
+    [
+      "nvkm_vmm_pfn_split_merge",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_pfn_unmap",
+      "nvkm_vmm_node_search"
+    ],
+    [
+      "nvkm_vmm_pfn_unmap",
+      "nvkm_vmm_pfn_split_merge"
+    ],
+    [
+      "nvkm_vmm_pfn_unmap",
+      "nvkm_vmm_ptes_unmap_put"
+    ],
+    [
+      "nvkm_vmm_pfn_unmap",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_ptes_get",
+      "nvkm_vmm_ptes_put_locked"
+    ],
+    [
+      "nvkm_vmm_ptes_put",
+      "nvkm_vmm_ptes_put_locked"
+    ],
+    [
+      "nvkm_vmm_ptes_sparse",
+      "nvkm_vmm_ptes_sparse_get"
+    ],
+    [
+      "nvkm_vmm_ptes_sparse",
+      "nvkm_vmm_ptes_sparse_put"
+    ],
+    [
+      "nvkm_vmm_ptes_sparse_get",
+      "nvkm_vmm_ptes_sparse_put"
+    ],
+    [
+      "nvkm_vmm_ptes_unmap_put",
+      "nvkm_vmm_ptes_put"
+    ],
+    [
+      "nvkm_vmm_ptes_unmap_put",
+      "nvkm_vmm_ptes_unmap"
+    ],
+    [
+      "nvkm_vmm_put",
+      "nvkm_vmm_put_locked"
+    ],
+    [
+      "nvkm_vmm_put",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_put_locked",
+      "map"
+    ],
+    [
+      "nvkm_vmm_put_locked",
+      "nvkm_vmm_node_remove"
+    ],
+    [
+      "nvkm_vmm_put_locked",
+      "nvkm_vmm_ptes_put"
+    ],
+    [
+      "nvkm_vmm_put_locked",
+      "nvkm_vmm_ptes_sparse"
+    ],
+    [
+      "nvkm_vmm_put_locked",
+      "nvkm_vmm_ptes_sparse_put"
+    ],
+    [
+      "nvkm_vmm_put_locked",
+      "nvkm_vmm_ptes_unmap_put"
+    ],
+    [
+      "nvkm_vmm_put_locked",
+      "nvkm_vmm_put_region"
+    ],
+    [
+      "nvkm_vmm_put_locked",
+      "nvkm_vmm_unmap_region"
+    ],
+    [
+      "nvkm_vmm_put_locked",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_put_region",
+      "nvkm_vmm_free_delete"
+    ],
+    [
+      "nvkm_vmm_put_region",
+      "nvkm_vmm_free_insert"
+    ],
+    [
+      "nvkm_vmm_put_region",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_raw_get",
+      "nvkm_vmm_ptes_get"
+    ],
+    [
+      "nvkm_vmm_raw_put",
+      "nvkm_vmm_ptes_put"
+    ],
+    [
+      "nvkm_vmm_raw_sparse",
+      "nvkm_vmm_ptes_sparse"
+    ],
+    [
+      "nvkm_vmm_raw_unmap",
+      "nvkm_vmm_ptes_unmap"
+    ],
+    [
+      "nvkm_vmm_unmap_locked",
+      "nvkm_vmm_ptes_unmap"
+    ],
+    [
+      "nvkm_vmm_unmap_locked",
+      "nvkm_vmm_ptes_unmap_put"
+    ],
+    [
+      "nvkm_vmm_unmap_locked",
+      "nvkm_vmm_unmap_region"
+    ],
+    [
+      "nvkm_vmm_unmap_locked",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_unmap_region",
+      "nvkm_vmm_node_merge"
+    ],
+    [
+      "nvkm_vmm_unmap_region",
+      "vma"
+    ],
+    [
+      "nvkm_vmm_unref",
+      "nvkm_vmm_del"
+    ],
+    [
+      "vma",
+      "args"
+    ]
+  ]
+}
