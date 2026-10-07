@@ -11,6 +11,7 @@ merged, and the Nouveau code that this project studies is MIT-licensed.
 |---|---|---|
 | Haiku (`reference/haiku`) | MIT | Headers and interfaces may be used. Same license as this project. |
 | Nouveau (`reference/nouveau`, Linux v6.12) | MIT in 403 file headers; one file `GPL-2.0 OR MIT`; one file `GPL-2.0-only` (`Kconfig`, not code); 54 files with neither an SPDX line nor the MIT text | Study and reimplement. Check the header of each consulted file and record it below. Take nothing from a file without a license notice. |
+| Mesa (`reference/mesa`, nouveau driver and codegen) | MIT (check each file header) | Study and reimplement, as for Nouveau. A shader binary that Mesa generates for our own source is our output, not Mesa code. |
 | envytools `rnndb` | MIT | Register names and bit fields may be used with the source cited. |
 | NVIDIA open-gpu-doc | MIT (check each file) | As for envytools. |
 | NVIDIA firmware and the proprietary driver | Proprietary | Never copy into this repository. Firmware is loaded from the user's system at run time (see phase C2). |

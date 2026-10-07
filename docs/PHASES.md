@@ -8,6 +8,27 @@ pass (`make check`) and `docs/STATUS.md` is updated.
 Paths to Nouveau files in any output are relative to `reference/nouveau/`
 (for example `nvkm/engine/gr/gk110.c`). Line numbers are 1-based.
 
+## Success milestones (set 2026-10-07)
+
+The design documents name one goal: a verified compute job. That goal is
+far away and has parts that the first plan did not list (S3 below). The
+project now has three success milestones. Each one is a result on its
+own, and the work may stop at any of them.
+
+| ID | Milestone | Needs | Proof |
+|---|---|---|---|
+| S1 | The GPU accepts a command. A channel exists, a GPFIFO entry is submitted, and the GPU consumes it. | PCI, MMIO, MC, FB/VRAM, instance memory, MMU, FIFO/PBDMA, runlist. No GR, no firmware. | The GPFIFO GET pointer of the channel advances to PUT, read from the host, with no fault interrupt pending. |
+| S2 | The GPU copies a buffer. The copy engine (class `KEPLER_DMA_COPY_A`) copies N bytes between two buffers in VRAM. | S1 and the copy engine (`nvkm/engine/ce/gk104.c`). INFERRED: no firmware and no GR context are needed (the file has no falcon or firmware code). Task C3 must confirm it. | The host reads the destination buffer and it equals the source. |
+| S3 | The GPU computes. A compute shader does `output[i] = input[i] + 1`. | S1, the GR engine with FECS/GPCCS firmware and a GR context, the compute class `0xa1c0`, a launch descriptor, and a shader binary in GK110 machine code. The last two are user-space work that Nouveau's kernel driver does not contain: they are in Mesa (`reference/mesa`). Tasks B6, C5 and D5 cover them. | The host reads the output buffer and checks every element. |
+
+S1 is the first success criterion of the project. S2 is the first real
+work done by the GPU. S3 is the goal of the design documents.
+
+Before S3 work starts on Haiku, the same job must run on this card under
+Linux with Nouveau and Mesa (task C5, in a Linux guest with the card
+passed through: `docs/PASSTHROUGH.md`). If it does not run there, there
+is no reference for S3 and the project stops at S2.
+
 ## Phase A: Ubuntu reference data
 
 ### A1. Hardware record
@@ -140,6 +161,37 @@ Paths to Nouveau files in any output are relative to `reference/nouveau/`
 - Must say which parts of the GR path are needed for compute and which
   are graphics-only, and which firmware is needed and where it comes from.
 
+### B6. Compute launch path (user-space half)
+- Why: the Nouveau kernel driver gives a channel and engines. The code
+  that makes a compute job is in Mesa: it uploads the shader code, fills
+  a launch descriptor and sends compute methods through the channel.
+- Inputs: `reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c`
+  (start at `nve4_launch_grid` and `nve4_screen_compute_setup`),
+  `nve4_compute.xml.h`, `cla0c0qmd.h`, `qmda0c0.c`,
+  `reference/mesa/src/gallium/drivers/nouveau/nv_object.xml.h`.
+- Outputs: `tools/compute_launch.py`, `analysis/compute_launch.json`,
+  `analysis/compute_launch.md`.
+- `compute_launch.json`:
+  `{"compute_class": "0xa1c0", "class_source": "file:line",
+  "setup": [...], "launch": [...], "descriptor_fields": [...],
+  "kernel_needs": [...]}`.
+  `setup` and `launch` are the compute methods in the order that Mesa
+  sends them in `nve4_screen_compute_setup` and `nve4_launch_grid`:
+  `{"method": "LAUNCH_DESC_ADDRESS", "offset": "0x...", "file": "...",
+  "line": 0, "value": "what Mesa writes"}`. `offset` comes from
+  `nve4_compute.xml.h`. `descriptor_fields` lists the launch descriptor
+  fields that `nve4_compute_setup_launch_desc` sets:
+  `{"field", "file", "line"}`. `kernel_needs` lists what the job needs
+  from the kernel side (channel, compute object, address space, buffers),
+  each with the Mesa call that shows it.
+- `compute_launch.md`: the sequence in words, which parts are for other
+  chips (GM107, GP100, GV100) and not for GK110, and how the shader code
+  reaches the GPU (`CODE_ADDRESS`).
+- File paths are relative to `reference/mesa/`.
+- Check: the class value is the one that `nv_object.xml.h` gives for
+  `NVF0_COMPUTE_CLASS`; each `file:line` holds the method or field name;
+  `LAUNCH_DESC_ADDRESS` and `LAUNCH` are in `launch`, in that order.
+
 ## Phase C: hardware database and firmware
 
 ### C1. Register database
@@ -170,6 +222,23 @@ Paths to Nouveau files in any output are relative to `reference/nouveau/`
   `docs/06-gr-design.md`, `docs/07-firmware-analysis.md`,
   `docs/register-provenance.md` (design document sections 48 and 65).
 
+### C5. Reference run under Linux and the first shader binary
+- This task has a user part (root, the Linux guest with the card). The
+  agent prepares and analyses. See `docs/PASSTHROUGH.md`.
+- User part: run `tools/guest/compute_test.c` in the Linux guest
+  (Nouveau and Mesa on the K40c). It runs `output[i] = input[i] + 1` as
+  a GL compute shader and prints PASS or FAIL. Run it again with
+  `NV50_PROG_DEBUG=1` to print the generated GK110 code, and once under
+  `mmiotrace` for the kernel side. Put the logs in `reference/linux-run/`.
+- Agent part, outputs: `firmware/compute_add1.md` (the shader source,
+  the Mesa version, the code words from the debug log, how to make them
+  again) and `firmware/compute_add1.bin`; `docs/08-compute-launch.md`
+  (what the trace shows between channel creation and the launch).
+- Check: `reference/linux-run/RESULT.txt` says PASS; the binary has the
+  size that the log gives.
+- If the job does not run under Linux: write `escalations/ESC-NNN.md`.
+  The project then stops at milestone S2.
+
 ## Phase D: host-side algorithms and tests
 
 Plain C++17 built with `g++` on Ubuntu. `tests/Makefile` builds and runs
@@ -190,9 +259,17 @@ the tests. `make check` runs them.
 - `tools/compare_register_traces.py` (design document section 41), with
   tests on synthetic traces.
 
+### D5. Launch descriptor and compute method encoding
+- A launch descriptor builder and the compute method sequence of B6 as
+  push-buffer words (uses D3), with tests against values from
+  `reference/mesa` and from the trace of C5.
+
 ## Gate: end of phase D
 
 The user reviews phases A-D before any Haiku work. Phases E-N (Haiku PCI
-skeleton, MMIO, MC/FB/VRAM, MMU, FIFO/PBDMA, GR/Falcon, GPFIFO and
-submission, first computation, interrupts, user-space API) are planned
-at the gate. They need a Haiku boot and GPU access, so the user runs them.
+skeleton, MMIO, MC/FB/VRAM, MMU, FIFO/PBDMA, GPFIFO and submission to
+milestone S1, copy engine to S2, GR/Falcon and first computation to S3,
+interrupts, user-space API) are planned at the gate. They need a Haiku
+boot and GPU access. `docs/PASSTHROUGH.md` describes how a test VM can
+get one K40c, so that these phases do not need a reboot into Haiku. It
+is prepared and not enabled.

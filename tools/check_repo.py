@@ -373,6 +373,56 @@ if mm is not None:
     if badval:
         fail(f"registers/mmio_accesses.json: {badval} constant registers without the correct reg_value")
 
+# B6 compute launch path ----------------------------------------------
+cl = load_json("analysis/compute_launch.json")
+if cl is not None:
+    rel = "analysis/compute_launch.json"
+    MESA = os.path.join(ROOT, "reference", "mesa")
+
+    def mesa_line(f, ln):
+        try:
+            with open(os.path.join(MESA, str(f)), errors="replace") as fh:
+                L = fh.read().split("\n")
+        except OSError:
+            return None
+        return L[ln - 1] if isinstance(ln, int) and 0 < ln <= len(L) else None
+
+    if not isinstance(cl, dict):
+        fail(f"{rel}: must be an object")
+        cl = {}
+    want = None
+    try:
+        with open(os.path.join(MESA, "src/gallium/drivers/nouveau/nv_object.xml.h")) as fh:
+            m = re.search(r"#define NVF0_COMPUTE_CLASS\s+(0x[0-9a-fA-F]+)", fh.read())
+            want = int(m.group(1), 16) if m else None
+    except OSError:
+        pass
+    try:
+        got = int(str(cl.get("compute_class")), 16)
+    except ValueError:
+        got = None
+    if want is not None and got != want:
+        fail(f"{rel}: compute_class must be NVF0_COMPUTE_CLASS from nv_object.xml.h")
+    for key, name in (("setup", "method"), ("launch", "method"), ("descriptor_fields", "field")):
+        rows = cl.get(key)
+        if not isinstance(rows, list) or not rows:
+            fail(f"{rel}: '{key}' must be a list with entries")
+            continue
+        bad = 0
+        for r in rows:
+            text = mesa_line(r.get("file"), r.get("line")) if isinstance(r, dict) else None
+            word = str(r.get(name, "")) if isinstance(r, dict) else ""
+            bad += not (text is not None and word and word.lower() in text.lower())
+        if bad:
+            fail(f"{rel}: {bad} of {len(rows)} '{key}' entries do not point at a line that has "
+                 f"the {name} name (paths are relative to reference/mesa/)")
+    order = [str(r.get("method")) for r in cl.get("launch", []) if isinstance(r, dict)]
+    if not ("LAUNCH_DESC_ADDRESS" in order and "LAUNCH" in order
+            and order.index("LAUNCH_DESC_ADDRESS") < order.index("LAUNCH")):
+        fail(f"{rel}: 'launch' must have LAUNCH_DESC_ADDRESS and then LAUNCH")
+    if not cl.get("kernel_needs"):
+        fail(f"{rel}: 'kernel_needs' is empty")
+
 # B4 Linux dependencies -----------------------------------------------
 ld = load_json("analysis/linux_deps.json")
 if ld is not None:

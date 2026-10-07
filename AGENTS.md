@@ -39,6 +39,9 @@ last finished task (last row of the task log), not the current task.
 - The Haiku test VM (`tools/haiku/vm-test.sh`) has no GPU. Never give it
   one: no `vfio-pci`, no QEMU host-device options, no change to that
   script's QEMU command line. A VM result is never hardware evidence.
+- `scripts/passthrough.sh` and `tools/guest/linux-run.sh --gpu` give a
+  real K40c to a VM. They are user steps (`docs/PASSTHROUGH.md`). Never
+  run them. You may run the Linux guest without `--gpu`.
 - If a task needs data that only root can read, write the exact read-only
   command into `docs/REQUESTS.md` and continue with other work.
 

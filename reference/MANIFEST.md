@@ -9,6 +9,7 @@ Do not edit them. Cite files as `reference/<name>/<path>:<line>`.
 | `envytools/` | envytools (sparse: `rnndb`, `docs`) | f102b82381f3f11cee113d16374c87091db039d9 | 2023-10-26 |
 | `open-gpu-doc/` | NVIDIA open-gpu-doc | 9fdf5c4062007929d9f4e6cbad9c9771fe61b880 | 2026-06-09 |
 | `haiku/` | Haiku (sparse: `headers/os`, `headers/private/{kernel,drivers,graphics}`, `src/add-ons/kernel/drivers/graphics/nvidia`, `docs/develop`) | 49a0af9585d80e42240af63ab66e31e9873f59b8 | 2026-09-28 |
+| `mesa/` | Mesa tag mesa-25.0.7 (sparse: `src/gallium/drivers/nouveau`, `src/nouveau/codegen`, `docs/features.txt`, `docs/license.rst`, `include/drm-uapi/nouveau_drm.h`). The user-space half of a compute job: launch descriptor, compute methods, GK110 shader code emitter. | 742a20f48c59e8649533c84c4d49dd95b403f5da | 2025-05-28 |
 | `pci/` | Captures from this T7610, 2026-10-07, without root (`scripts/capture_user.sh`) | - | - |
 
 `pci/root/` holds the captures that need root (2026-10-07; PMC_BOOT_0 from 2026-10-05): full config

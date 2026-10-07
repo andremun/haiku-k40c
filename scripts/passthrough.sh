@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# Give one K40c to a virtual machine (vfio-pci) and take it back.
+# USER STEP: the agent must not run this (AGENTS.md, hardware safety).
+# NOT TESTED YET (written 2026-10-07 without root). Read docs/PASSTHROUGH.md.
+#
+#   scripts/passthrough.sh status              no root, changes nothing
+#   sudo scripts/passthrough.sh prepare-xorg   once: X uses only the K600
+#   sudo scripts/passthrough.sh revert-xorg    undo prepare-xorg
+#   sudo scripts/passthrough.sh attach         nvidia -> vfio-pci (card for a guest)
+#   sudo scripts/passthrough.sh detach         vfio-pci -> nvidia (card for the model)
+#
+# The card is the development card of tools/guest/config.sh (0000:04:00.0).
+# The other K40c and the K600 are never touched.
+set -euo pipefail
+HERE="$(cd "$(dirname "$0")/.." && pwd)"
+. "$HERE/tools/guest/config.sh"
+DEV=/sys/bus/pci/devices/$GPU_BDF
+XCONF=/etc/X11/xorg.conf.d/20-display-k600-only.conf
+driver() { basename "$(readlink -f "$DEV/driver" 2>/dev/null)" 2>/dev/null || true; }
+need_root() { [[ $EUID -eq 0 ]] || { echo "Run with sudo." >&2; exit 1; }; }
+die() { echo "ERROR: $*" >&2; exit 1; }
+
+# Refuse to continue unless the card is the K40c that the project expects.
+check_card() {
+    [[ -d $DEV ]] || die "no PCI device $GPU_BDF"
+    [[ $(cat "$DEV/vendor") == 0x10de && $(cat "$DEV/device") == 0x1024 ]] || die "$GPU_BDF is not a Tesla K40c"
+    [[ $(cat "$DEV/class") == 0x030200 ]] || die "$GPU_BDF is a display adapter, not the compute card"
+    local n; n=$(ls "$DEV/iommu_group/devices" | wc -l)
+    [[ $n -eq 1 ]] || die "$GPU_BDF shares its IOMMU group with $((n - 1)) other device(s)"
+}
+
+status() {
+    check_card
+    echo "card $GPU_BDF: driver '$(driver)', IOMMU group $(basename "$(readlink -f "$DEV/iommu_group")"), reset $(cat "$DEV/reset_method" 2>/dev/null || echo '?')"
+    for d in /sys/bus/pci/devices/*; do
+        [[ $(cat "$d/vendor") == 0x10de && $(cat "$d/class") == 0x03* ]] || continue
+        echo "  $(basename "$d") $(cat "$d/device") driver=$(basename "$(readlink -f "$d/driver" 2>/dev/null)" 2>/dev/null)"
+    done
+    if [[ $(driver) == nvidia ]]; then
+        echo "processes on the card (must be none before attach):"
+        nvidia-smi --query-compute-apps=gpu_uuid,pid,name --format=csv,noheader | grep "$GPU_UUID" || echo "  no compute process"
+        nvidia-smi | awk -v i="$(nvidia-smi --query-gpu=index,uuid --format=csv,noheader | grep "$GPU_UUID" | cut -d, -f1)" \
+            '/Processes/{p=1} p && $2==i && $6=="G"{print "  X client: " $0}'
+    fi
+    [[ -f $XCONF ]] && echo "X config: $XCONF is installed" || echo "X config: not installed (X opens every NVIDIA card)"
+    echo "memlock limit: $(ulimit -l) kB (a guest with the card pins all of its memory)"
+}
+
+case "${1:-status}" in
+status) status ;;
+prepare-xorg)
+    need_root
+    k600=""
+    for d in /sys/bus/pci/devices/*; do
+        [[ $(cat "$d/vendor") == 0x10de && $(cat "$d/class") == 0x030000 ]] && k600=$(basename "$d")
+    done
+    [[ -n $k600 ]] || die "no NVIDIA VGA adapter found"
+    IFS=':.' read -r _ bus slot fn <<< "$k600"
+    mkdir -p "$(dirname "$XCONF")"
+    cat > "$XCONF" <<CONF
+# Written by haiku-k40c/scripts/passthrough.sh. X uses only the display
+# adapter at $k600 and does not open the Tesla K40c cards, so that a
+# K40c can be unbound from the nvidia driver while X runs.
+Section "ServerFlags"
+    Option "AutoAddGPU" "false"
+EndSection
+Section "Device"
+    Identifier "DisplayAdapter"
+    Driver "nvidia"
+    BusID "PCI:$((16#$bus)):$((16#$slot)):$fn"
+    Option "ProbeAllGpus" "false"
+EndSection
+CONF
+    echo "Wrote $XCONF. It takes effect when X starts again (log out and in, or reboot)."
+    echo "If the desktop does not start: boot to a text console and run 'sudo $0 revert-xorg'." ;;
+revert-xorg)
+    need_root; rm -f "$XCONF"; echo "Removed $XCONF. Restart X." ;;
+attach)
+    need_root; check_card
+    [[ $(driver) == vfio-pci ]] && { echo "already attached"; exit 0; }
+    [[ $(driver) == nvidia ]] || die "unexpected driver '$(driver)'"
+    nvidia-smi --query-compute-apps=gpu_uuid --format=csv,noheader | grep -q "$GPU_UUID" \
+        && die "a compute process uses the card. Run ~/llm-server/llm-mode.sh one first."
+    modprobe vfio-pci
+    # Tell the driver to stop using the card, then unbind. The unbind waits
+    # for ever if X or another client still has the card open.
+    nvidia-smi drain -p "$GPU_BDF" -m 1 || die "nvidia-smi drain failed: a client (X?) holds the card. See prepare-xorg."
+    timeout 30 sh -c "echo $GPU_BDF > /sys/bus/pci/drivers/nvidia/unbind" \
+        || die "unbind did not finish in 30 s. A client still holds the card. Reboot to recover if nvidia-smi hangs."
+    echo vfio-pci > "$DEV/driver_override"
+    echo "$GPU_BDF" > /sys/bus/pci/drivers_probe
+    [[ $(driver) == vfio-pci ]] || die "the card did not bind to vfio-pci (driver '$(driver)')"
+    grp=$(basename "$(readlink -f "$DEV/iommu_group")")
+    chown "${SUDO_USER:-root}" "/dev/vfio/$grp"
+    echo "Attached: $GPU_BDF is on vfio-pci, /dev/vfio/$grp belongs to ${SUDO_USER:-root}."
+    echo "Guest: tools/guest/linux-run.sh --gpu     Take it back: sudo $0 detach" ;;
+detach)
+    need_root; check_card
+    [[ $(driver) == nvidia ]] && { echo "already on nvidia"; exit 0; }
+    pgrep -f "vfio-pci,host=${GPU_BDF#0000:}" >/dev/null && die "a guest still uses the card. Shut it down first."
+    [[ $(driver) == vfio-pci ]] && echo "$GPU_BDF" > /sys/bus/pci/drivers/vfio-pci/unbind
+    echo > "$DEV/driver_override"
+    echo "$GPU_BDF" > /sys/bus/pci/drivers_probe
+    nvidia-smi drain -p "$GPU_BDF" -m 0 >/dev/null 2>&1 || true
+    [[ $(driver) == nvidia ]] || die "the card did not return to nvidia (driver '$(driver)'). A reboot restores it."
+    echo "Detached: $GPU_BDF is on nvidia again. Model: ~/llm-server/llm-mode.sh dual" ;;
+*) sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+esac
