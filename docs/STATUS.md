@@ -1,8 +1,8 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B2
-Task state: REWORK. The only job of this session is `work/B2/REVIEW.md`, section "Third review". Do not start B4, B5 or B6.
+Current task: B6
+Task state: NEW. This worktree is for B6 only. Read the "How to do it" list of task B6 in `docs/PHASES.md`. B2 is in rework in another tree: do not touch `tools/callgraph.py` or `analysis/callgraph.*`.
 Last updated: 2026-10-08
 
 ## Last result
