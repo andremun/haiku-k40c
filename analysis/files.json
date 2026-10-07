@@ -1,0 +1,188 @@
+[
+  {
+    "path": "nvkm/subdev/bar/gf100.c",
+    "subsystem": "bar",
+    "class": "GF100-inherited",
+    "role": "gf100_bar_new \u2014 bar (bar)"
+  },
+  {
+    "path": "nvkm/subdev/bios/base.c",
+    "subsystem": "bios",
+    "class": "generic-NVKM",
+    "role": "nvkm_bios_new \u2014 bios (bios)"
+  },
+  {
+    "path": "nvkm/subdev/bus/gf100.c",
+    "subsystem": "bus",
+    "class": "GF100-inherited",
+    "role": "gf100_bus_new \u2014 bus (bus)"
+  },
+  {
+    "path": "nvkm/subdev/clk/gk104.c",
+    "subsystem": "clk",
+    "class": "GK104-inherited",
+    "role": "gk104_clk_new \u2014 clk (clk)"
+  },
+  {
+    "path": "nvkm/subdev/devinit/gf100.c",
+    "subsystem": "devinit",
+    "class": "GF100-inherited",
+    "role": "gf100_devinit_new \u2014 devinit (devinit)"
+  },
+  {
+    "path": "nvkm/subdev/fb/gk110.c",
+    "subsystem": "fb",
+    "class": "GK110-specific",
+    "role": "gk110_fb_new \u2014 fb (fb)"
+  },
+  {
+    "path": "nvkm/subdev/fuse/gf100.c",
+    "subsystem": "fuse",
+    "class": "GF100-inherited",
+    "role": "gf100_fuse_new \u2014 fuse (fuse)"
+  },
+  {
+    "path": "nvkm/subdev/gpio/gk104.c",
+    "subsystem": "gpio",
+    "class": "GK104-inherited",
+    "role": "gk104_gpio_new \u2014 gpio (gpio)"
+  },
+  {
+    "path": "nvkm/subdev/i2c/gk110.c",
+    "subsystem": "i2c",
+    "class": "GK110-specific",
+    "role": "gk110_i2c_new \u2014 i2c (i2c)"
+  },
+  {
+    "path": "nvkm/subdev/iccsense/gf100.c",
+    "subsystem": "iccsense",
+    "class": "GF100-inherited",
+    "role": "gf100_iccsense_new \u2014 iccsense (iccsense)"
+  },
+  {
+    "path": "nvkm/subdev/instmem/nv50.c",
+    "subsystem": "imem",
+    "class": "generic-NVKM",
+    "role": "nv50_instmem_new \u2014 imem (imem)"
+  },
+  {
+    "path": "nvkm/subdev/ltc/gk104.c",
+    "subsystem": "ltc",
+    "class": "GK104-inherited",
+    "role": "gk104_ltc_new \u2014 ltc (ltc)"
+  },
+  {
+    "path": "nvkm/subdev/mc/gk104.c",
+    "subsystem": "mc",
+    "class": "GK104-inherited",
+    "role": "gk104_mc_new \u2014 mc (mc)"
+  },
+  {
+    "path": "nvkm/subdev/mmu/gk104.c",
+    "subsystem": "mmu",
+    "class": "GK104-inherited",
+    "role": "gk104_mmu_new \u2014 mmu (mmu)"
+  },
+  {
+    "path": "nvkm/subdev/mxm/nv50.c",
+    "subsystem": "mxm",
+    "class": "generic-NVKM",
+    "role": "nv50_mxm_new \u2014 mxm (mxm)"
+  },
+  {
+    "path": "nvkm/subdev/pci/gk104.c",
+    "subsystem": "pci",
+    "class": "GK104-inherited",
+    "role": "gk104_pci_new \u2014 pci (pci)"
+  },
+  {
+    "path": "nvkm/subdev/pmu/gk110.c",
+    "subsystem": "pmu",
+    "class": "GK110-specific",
+    "role": "gk110_pmu_new \u2014 pmu (pmu)"
+  },
+  {
+    "path": "nvkm/subdev/privring/gk104.c",
+    "subsystem": "privring",
+    "class": "GK104-inherited",
+    "role": "gk104_privring_new \u2014 privring (privring)"
+  },
+  {
+    "path": "nvkm/subdev/therm/gk104.c",
+    "subsystem": "therm",
+    "class": "GK104-inherited",
+    "role": "gk104_therm_new \u2014 therm (therm)"
+  },
+  {
+    "path": "nvkm/subdev/timer/nv41.c",
+    "subsystem": "timer",
+    "class": "generic-NVKM",
+    "role": "nv41_timer_new \u2014 timer (timer)"
+  },
+  {
+    "path": "nvkm/subdev/top/gk104.c",
+    "subsystem": "top",
+    "class": "GK104-inherited",
+    "role": "gk104_top_new \u2014 top (top)"
+  },
+  {
+    "path": "nvkm/subdev/volt/gk104.c",
+    "subsystem": "volt",
+    "class": "GK104-inherited",
+    "role": "gk104_volt_new \u2014 volt (volt)"
+  },
+  {
+    "path": "nvkm/engine/ce/gk104.c",
+    "subsystem": "ce",
+    "class": "GK104-inherited",
+    "role": "gk104_ce_new \u2014 ce (ce)"
+  },
+  {
+    "path": "nvkm/engine/disp/gk110.c",
+    "subsystem": "disp",
+    "class": "GK110-specific",
+    "role": "gk110_disp_new \u2014 disp (disp)"
+  },
+  {
+    "path": "nvkm/engine/dma/gf119.c",
+    "subsystem": "dma",
+    "class": "GF100-inherited",
+    "role": "gf119_dma_new \u2014 dma (dma)"
+  },
+  {
+    "path": "nvkm/engine/fifo/gk110.c",
+    "subsystem": "fifo",
+    "class": "GK110-specific",
+    "role": "gk110_fifo_new \u2014 fifo (fifo)"
+  },
+  {
+    "path": "nvkm/engine/gr/gk110b.c",
+    "subsystem": "gr",
+    "class": "GK110-specific",
+    "role": "gk110b_gr_new \u2014 gr (gr)"
+  },
+  {
+    "path": "nvkm/engine/mspdec/gk104.c",
+    "subsystem": "mspdec",
+    "class": "GK104-inherited",
+    "role": "gk104_mspdec_new \u2014 mspdec (mspdec)"
+  },
+  {
+    "path": "nvkm/engine/msppp/gf100.c",
+    "subsystem": "msppp",
+    "class": "GF100-inherited",
+    "role": "gf100_msppp_new \u2014 msppp (msppp)"
+  },
+  {
+    "path": "nvkm/engine/msvld/gk104.c",
+    "subsystem": "msvld",
+    "class": "GK104-inherited",
+    "role": "gk104_msvld_new \u2014 msvld (msvld)"
+  },
+  {
+    "path": "nvkm/engine/sw/gf100.c",
+    "subsystem": "sw",
+    "class": "GF100-inherited",
+    "role": "gf100_sw_new \u2014 sw (sw)"
+  }
+]

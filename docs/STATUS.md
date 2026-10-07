@@ -1,15 +1,16 @@
 # Status
 
-Current phase: A (Ubuntu reference data)
-Current task: A2 (root captures) — DONE
+Current phase: B (Nouveau analysis)
+Current task: B1 (chipset path and file inventory) — DONE
 Last updated: 2026-10-07
 
 ## Last result
 
-Task A2 added `pci_capabilities` (8 capabilities per GPU), `interrupt` (pin A,
-IRQ 66/67, MSI config), and `link_capability` (8GT/s, x16, ASPM not supported)
-to both GPU objects in record.json; added corresponding sections to record.md
-with source lines. LnkSta agrees with existing link field on both GPUs.
+Task B1 mapped `nvf1_chipset` (GK110B) from `base.c:1770-1803` to its 31
+constructor entries, resolved each to its source file in the Nouveau tree,
+classified all files (6 GK110-specific, 13 GK104-inherited, 8 GF100-inherited,
+4 generic-NVKM), and produced `analysis/files.json` plus the reusable script
+`tools/nouveau_files.py`. `make check` passes with 0 failures.
 
 ## Hardware change 2026-10-07
 
@@ -27,3 +28,4 @@ the old layout. Details: `reference/pci/README.md`.
 |---|---|---|---|
 | A1 | DONE | 2026-10-05 | `hardware/record.json` + `record.md` for 2 GPUs; reworked 2026-10-05, review ACCEPT |
 | A2 | DONE | 2026-10-06 | Added `pci_capabilities`, `interrupt`, `link_capability` to record.json; sections in record.md; LnkSta agrees with link for both GPUs |
+| B1 | DONE | 2026-10-07 | `nvf1_chipset` (31 constructors) mapped to source files, classified, `analysis/files.json` + `tools/nouveau_files.py` generated; make check passes |
