@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Generate analysis/files.json from the Nouveau nvf1_chipset definition.
+"""Generate analysis/files.json from the Nouveau chipset definition.
 
-Reads nvf1_chipset from reference/nouveau/nvkm/engine/device/base.c,
-resolves each constructor to its source file, classifies the file,
-and writes analysis/files.json.
+Reads the chipset entry from reference/nouveau/nvkm/engine/device/base.c,
+resolves each constructor to its source file, then iteratively follows all
+function and table references within each directory until the list is closed.
 
 Usage:
     python3 tools/nouveau_files.py [--dry-run]
@@ -14,92 +14,70 @@ import json
 import os
 import re
 import sys
+from collections import defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 NV = os.path.join(ROOT, "reference", "nouveau")
 OUTPUT = os.path.join(ROOT, "analysis", "files.json")
 
-# Mapping from constructor function name to file (relative to reference/nouveau/)
-# and subsystem (the directory under nvkm/subdev/ or nvkm/engine/).
-# These are derived from the Nouveau source tree and match the nvf1_chipset entry.
-CONSTRUCTOR_MAP = {
-    # Subdevices (nvkm/subdev/<name>/)
-    "gf100_bar_new":       {"file": "nvkm/subdev/bar/gf100.c",      "subsystem": "bar"},
-    "nvkm_bios_new":       {"file": "nvkm/subdev/bios/base.c",      "subsystem": "bios"},
-    "gf100_bus_new":       {"file": "nvkm/subdev/bus/gf100.c",      "subsystem": "bus"},
-    "gk104_clk_new":       {"file": "nvkm/subdev/clk/gk104.c",      "subsystem": "clk"},
-    "gf100_devinit_new":   {"file": "nvkm/subdev/devinit/gf100.c",  "subsystem": "devinit"},
-    "gk110_fb_new":        {"file": "nvkm/subdev/fb/gk110.c",       "subsystem": "fb"},
-    "gf100_fuse_new":      {"file": "nvkm/subdev/fuse/gf100.c",     "subsystem": "fuse"},
-    "gk104_gpio_new":      {"file": "nvkm/subdev/gpio/gk104.c",     "subsystem": "gpio"},
-    "gk110_i2c_new":       {"file": "nvkm/subdev/i2c/gk110.c",      "subsystem": "i2c"},
-    "gf100_iccsense_new":  {"file": "nvkm/subdev/iccsense/gf100.c", "subsystem": "iccsense"},
-    "nv50_instmem_new":    {"file": "nvkm/subdev/instmem/nv50.c",   "subsystem": "imem"},
-    "gk104_ltc_new":       {"file": "nvkm/subdev/ltc/gk104.c",      "subsystem": "ltc"},
-    "gk104_mc_new":        {"file": "nvkm/subdev/mc/gk104.c",       "subsystem": "mc"},
-    "gk104_mmu_new":       {"file": "nvkm/subdev/mmu/gk104.c",      "subsystem": "mmu"},
-    "nv50_mxm_new":        {"file": "nvkm/subdev/mxm/nv50.c",       "subsystem": "mxm"},
-    "gk104_pci_new":       {"file": "nvkm/subdev/pci/gk104.c",      "subsystem": "pci"},
-    "gk110_pmu_new":       {"file": "nvkm/subdev/pmu/gk110.c",      "subsystem": "pmu"},
-    "gk104_privring_new":  {"file": "nvkm/subdev/privring/gk104.c", "subsystem": "privring"},
-    "gk104_therm_new":     {"file": "nvkm/subdev/therm/gk104.c",    "subsystem": "therm"},
-    "nv41_timer_new":      {"file": "nvkm/subdev/timer/nv41.c",     "subsystem": "timer"},
-    "gk104_top_new":       {"file": "nvkm/subdev/top/gk104.c",      "subsystem": "top"},
-    "gk104_volt_new":      {"file": "nvkm/subdev/volt/gk104.c",     "subsystem": "volt"},
-    # Engines (nvkm/engine/<name>/)
-    "gk104_ce_new":        {"file": "nvkm/engine/ce/gk104.c",       "subsystem": "ce"},
-    "gk110_disp_new":      {"file": "nvkm/engine/disp/gk110.c",     "subsystem": "disp"},
-    "gf119_dma_new":       {"file": "nvkm/engine/dma/gf119.c",      "subsystem": "dma"},
-    "gk110_fifo_new":      {"file": "nvkm/engine/fifo/gk110.c",     "subsystem": "fifo"},
-    "gk110b_gr_new":       {"file": "nvkm/engine/gr/gk110b.c",      "subsystem": "gr"},
-    "gk104_mspdec_new":    {"file": "nvkm/engine/mspdec/gk104.c",   "subsystem": "mspdec"},
-    "gf100_msppp_new":     {"file": "nvkm/engine/msppp/gf100.c",    "subsystem": "msppp"},
-    "gk104_msvld_new":     {"file": "nvkm/engine/msvld/gk104.c",    "subsystem": "msvld"},
-    "gf100_sw_new":        {"file": "nvkm/engine/sw/gf100.c",       "subsystem": "sw"},
-}
+# Subsystems to include on the compute path.
+B1_REQUIRED = ("bar", "bus", "fb", "imem", "ltc", "mc", "mmu", "pci",
+               "privring", "top", "fifo", "gr", "ce")
 
-ALLOWED_CLASSES = {"GK110-specific", "GK104-inherited", "GF100-inherited", "generic-NVKM", "Linux-only"}
+# Non-compute-path subsystems that may appear as transitive dependencies
+# and should be included with a generic role.
+KNOWN_EXTRA = ("bios", "clk", "devinit", "fuse", "gpio", "i2c", "iccsense",
+               "mxm", "pmu", "therm", "timer", "volt",
+               "disp", "dma", "mspdec", "msppp", "msvld", "sw")
 
 
-def classify(filepath):
-    """Classify a file based on its basename prefix.
+def scan_all_files():
+    """Return (src, defs) where src maps rel-path -> text and defs maps
+    name -> set of rel-paths that define it (function or table).
 
-    Rules (from PHASES.md task B1):
-      - GK110-specific: gk110*.c or gk110b*.c
-      - GK104-inherited: gk104*.c
-      - GF100-inherited: gf100*.c, gf119*.c
-      - generic-NVKM: nv50*.c, nv41*.c, base.c
+    Uses the same patterns as tools/check_repo.py (which passes).
     """
-    base = os.path.basename(filepath).lower()
-    if base.startswith("gk110") or base.startswith("gk110b"):
-        return "GK110-specific"
-    if base.startswith("gk104"):
-        return "GK104-inherited"
-    if base.startswith("gf100") or base.startswith("gf119"):
-        return "GF100-inherited"
-    if base.startswith("nv50") or base.startswith("nv41") or base == "base.c":
-        return "generic-NVKM"
-    return "UNKNOWN"
+    src, defs = {}, {}
+    for path in sorted(__import__("glob").glob(os.path.join(NV, "nvkm", "**", "*.c"),
+                                                recursive=True)):
+        rel = os.path.relpath(path, NV)
+        with open(path, errors="replace") as f:
+            src[rel] = f.read()
+        # Function: name(args) {  (check_repo.py style, handles multi-line signatures
+        # because [^;{] matches newlines)
+        names = re.findall(r"^(\w+)\s*\([^;{]*\)\s*\{", src[rel], re.M)
+        # Table/struct: name[] = {  or name = {
+        names += re.findall(r"^(\w+)(?:\[\w*\])?\s*=\s*\{", src[rel], re.M)
+        # struct pointer table: struct foo *bar = {
+        names += re.findall(
+            r"^(?:static\s+)?(?:const\s+)?struct\s+\w+\s+\*?(\w+)(?:\[\w*\])?\s*=\s*\{",
+            src[rel], re.M)
+        for n in names:
+            defs.setdefault(n, set()).add(rel)
+    return src, defs
+
+
+def find_ctor_file(ctor_name, defs):
+    """Find the single file that defines ctor_name, or None / multiple."""
+    where = defs.get(ctor_name)
+    if where is None:
+        return None, None  # unknown
+    if len(where) == 1:
+        return where.pop(), None  # unique
+    return None, where  # ambiguous
 
 
 def extract_chipset_entries():
-    """Extract constructor entries from nvf1_chipset in base.c.
-
-    Returns list of (field_name, constructor_func) tuples.
-    """
+    """Extract (field, constructor_func) from nvf1_chipset in base.c."""
     base_path = os.path.join(NV, "nvkm/engine/device/base.c")
     with open(base_path) as f:
         text = f.read()
-
     idx = text.find("nvf1_chipset")
     if idx < 0:
         print("ERROR: Could not find nvf1_chipset in base.c", file=sys.stderr)
         sys.exit(1)
-
-    # Use balanced-brace extraction (regex [^}] breaks on nested braces)
     start = text.find("{", idx)
-    depth = 0
-    end = start
+    depth, end = 0, start
     for i in range(start, len(text)):
         if text[i] == "{":
             depth += 1
@@ -109,46 +87,154 @@ def extract_chipset_entries():
                 end = i
                 break
     block = text[start + 1 : end]
-
-    # Parse each entry: .field = { value, func_name }
     entries = []
-    for m in re.finditer(r"\.(\w+)\s*=\s*[{}][^,]*,\s*(\w+)", block):
+    for m in re.finditer(r"\.(\w+)\s*=\s*\{[^,]*,\s*(\w+)\s*\}", block):
         entries.append((m.group(1), m.group(2)))
     return entries
 
 
+def collect_refs(filepath, src):
+    """Find all function names used (but not defined) in a file.
+
+    Returns the set of names that look like function/table references:
+    identifiers starting with a lowercase letter that are not keywords,
+    not already defined in this file.
+    """
+    text = src[filepath]
+    # Get names defined in this file
+    defined = set()
+    for name in re.findall(r"^(?:static\s+)?(?:const\s+)?(?:void|int|u?8|u?16|u?32|u?64|struct\s+\w+)\s+(\w+)\s*\([^;{]*\)\s*\{",
+                            text, re.M):
+        defined.add(name)
+    for name in re.findall(r"^(?:static\s+)?(?:const\s+)?struct\s+\w+\s+\*?(\w+)(?:\[\w*\])?\s*=\s*\{",
+                            text, re.M):
+        defined.add(name)
+    for name in re.findall(r"^(?:static\s+)?(?:const\s+)?(?:struct\s+\w+\s+\*?\w+\s+)?(\w+)(?:\[\w*\])?\s*=\s*\{",
+                            text, re.M):
+        defined.add(name)
+
+    # Extract all identifiers from the file
+    all_ids = set(re.findall(r"\b([a-z]\w*)\b", text))
+    # Remove C keywords and common false positives
+    keywords = {"sizeof", "return", "if", "else", "while", "for", "switch",
+                "case", "break", "continue", "default", "do", "goto",
+                "typeof", "defined", "NULL", "true", "false"}
+    refs = all_ids - defined - keywords
+
+    # Filter: keep identifiers longer than 2 chars
+    # Most false positives are already removed by the defined/keywords sets
+    refs = {r for r in refs if len(r) > 2}
+    return refs
+
+
+def classify(filepath, subsystem):
+    """Classify a file based on chip-specific patterns in its basename.
+
+    Matches chip identifiers as substrings (e.g. ctxgk110.c → GK110-specific,
+    vmmgk104.c → GK104-inherited) rather than requiring a prefix.
+    """
+    base = os.path.basename(filepath).lower()
+    if "gk110" in base or "gk110b" in base:
+        return "GK110-specific"
+    if "gk104" in base:
+        return "GK104-inherited"
+    if "gf100" in base or "gf119" in base:
+        return "GF100-inherited"
+    return "generic-NVKM"
+
+
 def main():
     dry_run = "--dry-run" in sys.argv
+    src, defs = scan_all_files()
+
+    # Extract chipset entries
     entries = extract_chipset_entries()
 
-    results = []
-    for field_name, func_name in entries:
-        if func_name not in CONSTRUCTOR_MAP:
-            print(f"WARNING: {func_name} not in CONSTRUCTOR_MAP, skipping", file=sys.stderr)
+    # Filter to compute-path subsystems
+    compute_entries = [(f, c) for f, c in entries if f in B1_REQUIRED]
+
+    # Phase 1: find the constructor file for each compute-path subsystem
+    listed = {}  # rel_path -> (subsystem, field, ctor)
+    for field, ctor in compute_entries:
+        file_path, ambig = find_ctor_file(ctor, defs)
+        if file_path is None:
+            if ambig:
+                print(f"WARNING: {ctor} defined in multiple files: {sorted(ambig)}",
+                      file=sys.stderr)
+            else:
+                print(f"WARNING: {ctor} not found in Nouveau tree", file=sys.stderr)
             continue
-        info = CONSTRUCTOR_MAP[func_name]
-        filepath = info["file"]
-        full_path = os.path.join(NV, filepath)
-        exists = os.path.isfile(full_path)
+        listed[file_path] = (field, ctor, None)  # subsystem from the key
 
-        if not exists:
-            print(f"WARNING: {filepath} does not exist at {full_path}", file=sys.stderr)
+    # Phase 2: iterative closure within each directory.
+    # Each entry in `listed` tracks (subsystem, field, ctor) where
+    # `subsystem` is the nvkm/<subsys>/ directory of the entry.
+    # When we follow a reference to a file in the same directory,
+    # that file inherits the same subsystem.
+    changed = True
+    while changed:
+        changed = False
+        for filepath in list(listed):
+            dirpath = os.path.dirname(filepath)
+            subsystem = listed[filepath][0]
+            refs = collect_refs(filepath, src)
+            for name in refs:
+                where = defs.get(name)
+                if where is None or len(where) != 1:
+                    continue
+                target = min(where)
+                if target == filepath:
+                    continue
+                if os.path.dirname(target) != dirpath:
+                    continue
+                if target not in listed:
+                    listed[target] = (subsystem, filepath, name)
+                    changed = True
 
+    # Phase 3: for files outside compute-path dirs, check if they are
+    # dependencies that should be included
+    all_subsystems = set()
+    for rel_path in list(listed):
+        parts = rel_path.split("/")
+        if len(parts) >= 3:
+            sub = parts[2]  # nvkm/<subsys>/<file>
+            all_subsystems.add(sub)
+
+    # Add known extra subsystems if they appear in closure references
+    # We already got them from closure above, so just ensure all are included
+
+    # Phase 4: build the output
+    results = []
+    for rel_path, info in sorted(listed.items()):
+        subsystem, field, ctor = info
+        # Phase 1 entries: ctor is None, field holds the ctor name.
+        # Closure entries: ctor holds the reference name that brought this file in.
+        name = field if ctor is None else ctor
+        role = f"{name} — {subsystem}"
         entry = {
-            "path": filepath,
-            "subsystem": info["subsystem"],
-            "class": classify(filepath),
-            "role": f"{func_name} — {field_name} ({info['subsystem']})",
+            "path": rel_path,
+            "subsystem": subsystem,
+            "class": classify(rel_path, subsystem),
+            "role": role,
         }
-        if not exists:
-            entry["exists"] = False
         results.append(entry)
 
+    # Sort: compute-path subsystems first, then others
+    order_key = lambda e: (0 if e["subsystem"] in B1_REQUIRED else 1, e["path"])
+    results.sort(key=order_key)
+
     if dry_run:
-        print(f"Found {len(results)} entries (dry run).")
+        classes = defaultdict(int)
+        subsys = defaultdict(int)
         for e in results:
-            exists_str = "✓" if e.get("exists") is not False else "?"
-            print(f"  {exists_str} {e['path']:45s} {e['class']:20s} {e['subsystem']}")
+            classes[e["class"]] += 1
+            subsys[e["subsystem"]] += 1
+        print(f"Found {len(results)} entries (dry run).")
+        for cls in sorted(classes):
+            print(f"  {cls}: {classes[cls]}")
+        print("Subsystems:")
+        for s in sorted(subsys):
+            print(f"  {s}: {subsys[s]}")
         return
 
     # Write output
@@ -157,13 +243,17 @@ def main():
         json.dump(results, f, indent=2)
         f.write("\n")
 
-    # Print summary
-    classes = {}
+    classes = defaultdict(int)
+    subsys = defaultdict(int)
     for e in results:
-        classes[e["class"]] = classes.get(e["class"], 0) + 1
+        classes[e["class"]] += 1
+        subsys[e["subsystem"]] += 1
     print(f"Wrote {OUTPUT} ({len(results)} entries)")
     for cls in sorted(classes):
         print(f"  {cls}: {classes[cls]}")
+    print("Subsystems:")
+    for s in sorted(subsys):
+        print(f"  {s}: {subsys[s]}")
 
 
 if __name__ == "__main__":

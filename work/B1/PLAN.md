@@ -1,23 +1,31 @@
-# B1: Chipset path and file inventory
+# B1 Rework: Chipset path and file inventory
+
+## Problem
+The first attempt only listed the 31 constructor files. The check finds 89
+files used by those files but not listed. The tool uses a hand-written
+CONSTRUCTOR_MAP instead of reading the source.
 
 ## Steps
 
-1. **Identify the chipset**: `nvf1_chipset` (GK110B) selected at `base.c:3218` from
-   `case 0x0f1`. Read the full struct at `base.c:1770-1803`.
+1. Rewrite `tools/nouveau_files.py`:
+   a. Parse `nvf1_chipset` from `base.c` to get constructor function names.
+   b. For each constructor, find the file that defines it by scanning all `.c`
+      files in the Nouveau tree.
+   c. **Iterative closure**: for every file found, scan for function/table
+      references whose definition lives in the same directory. Add those files.
+      Repeat until no new files are found.
+   d. Classify each file by basename rules (GK110-specific, GK104-inherited,
+      GF100-inherited, generic-NVKM). Files outside compute-path dirs are
+      generic-NVKM with a reason in `role`.
+   e. Scope: bar, bus, fb, imem, ltc, mc, mmu, pci, privring, top, fifo, gr, ce.
+      Subsystems not in this list may appear if pulled in by closure.
 
-2. **Resolve all constructor functions**: For each entry in nvf1_chipset, find the
-   `.c` file that defines the constructor function (e.g. `gk110_fb_new` → `nvkm/subdev/fb/gk110.c:69`).
+2. Run the tool: `python3 tools/nouveau_files.py`.
+3. Run `make check`. If it still fails, iterate the closure (some files pull
+   in more files).
 
-3. **Classify each file**:
-   - `GK110-specific`: files named `gk110*.c` or `gk110b*.c`
-   - `GK104-inherited`: files named `gk104*.c`
-   - `GF100-inherited`: files named `gf100*.c`, `gf119*.c`
-   - `generic-NVKM`: files named `nv50*.c`, `nv41*.c`, `base.c`
-   - `Linux-only`: files using Linux kernel APIs only
-
-4. **Generate outputs**:
-   - `tools/nouveau_files.py`: script that produces `analysis/files.json`
-   - `analysis/files.json`: list of `{"path", "subsystem", "class", "role"}`
-
-## Verification
-- `make check` validates every `path` exists and `class` is in the allowed set.
+## Outputs
+- `tools/nouveau_files.py` (rewritten)
+- `analysis/files.json` (updated)
+- `work/B1/RESULT.md` (updated with counts)
+- `make check` passes.

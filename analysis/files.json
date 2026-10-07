@@ -1,188 +1,530 @@
 [
   {
-    "path": "nvkm/subdev/bar/gf100.c",
-    "subsystem": "bar",
-    "class": "GF100-inherited",
-    "role": "gf100_bar_new \u2014 bar (bar)"
-  },
-  {
-    "path": "nvkm/subdev/bios/base.c",
-    "subsystem": "bios",
-    "class": "generic-NVKM",
-    "role": "nvkm_bios_new \u2014 bios (bios)"
-  },
-  {
-    "path": "nvkm/subdev/bus/gf100.c",
-    "subsystem": "bus",
-    "class": "GF100-inherited",
-    "role": "gf100_bus_new \u2014 bus (bus)"
-  },
-  {
-    "path": "nvkm/subdev/clk/gk104.c",
-    "subsystem": "clk",
-    "class": "GK104-inherited",
-    "role": "gk104_clk_new \u2014 clk (clk)"
-  },
-  {
-    "path": "nvkm/subdev/devinit/gf100.c",
-    "subsystem": "devinit",
-    "class": "GF100-inherited",
-    "role": "gf100_devinit_new \u2014 devinit (devinit)"
-  },
-  {
-    "path": "nvkm/subdev/fb/gk110.c",
-    "subsystem": "fb",
-    "class": "GK110-specific",
-    "role": "gk110_fb_new \u2014 fb (fb)"
-  },
-  {
-    "path": "nvkm/subdev/fuse/gf100.c",
-    "subsystem": "fuse",
-    "class": "GF100-inherited",
-    "role": "gf100_fuse_new \u2014 fuse (fuse)"
-  },
-  {
-    "path": "nvkm/subdev/gpio/gk104.c",
-    "subsystem": "gpio",
-    "class": "GK104-inherited",
-    "role": "gk104_gpio_new \u2014 gpio (gpio)"
-  },
-  {
-    "path": "nvkm/subdev/i2c/gk110.c",
-    "subsystem": "i2c",
-    "class": "GK110-specific",
-    "role": "gk110_i2c_new \u2014 i2c (i2c)"
-  },
-  {
-    "path": "nvkm/subdev/iccsense/gf100.c",
-    "subsystem": "iccsense",
-    "class": "GF100-inherited",
-    "role": "gf100_iccsense_new \u2014 iccsense (iccsense)"
-  },
-  {
-    "path": "nvkm/subdev/instmem/nv50.c",
-    "subsystem": "imem",
-    "class": "generic-NVKM",
-    "role": "nv50_instmem_new \u2014 imem (imem)"
-  },
-  {
-    "path": "nvkm/subdev/ltc/gk104.c",
-    "subsystem": "ltc",
-    "class": "GK104-inherited",
-    "role": "gk104_ltc_new \u2014 ltc (ltc)"
-  },
-  {
-    "path": "nvkm/subdev/mc/gk104.c",
-    "subsystem": "mc",
-    "class": "GK104-inherited",
-    "role": "gk104_mc_new \u2014 mc (mc)"
-  },
-  {
-    "path": "nvkm/subdev/mmu/gk104.c",
-    "subsystem": "mmu",
-    "class": "GK104-inherited",
-    "role": "gk104_mmu_new \u2014 mmu (mmu)"
-  },
-  {
-    "path": "nvkm/subdev/mxm/nv50.c",
-    "subsystem": "mxm",
-    "class": "generic-NVKM",
-    "role": "nv50_mxm_new \u2014 mxm (mxm)"
-  },
-  {
-    "path": "nvkm/subdev/pci/gk104.c",
-    "subsystem": "pci",
-    "class": "GK104-inherited",
-    "role": "gk104_pci_new \u2014 pci (pci)"
-  },
-  {
-    "path": "nvkm/subdev/pmu/gk110.c",
-    "subsystem": "pmu",
-    "class": "GK110-specific",
-    "role": "gk110_pmu_new \u2014 pmu (pmu)"
-  },
-  {
-    "path": "nvkm/subdev/privring/gk104.c",
-    "subsystem": "privring",
-    "class": "GK104-inherited",
-    "role": "gk104_privring_new \u2014 privring (privring)"
-  },
-  {
-    "path": "nvkm/subdev/therm/gk104.c",
-    "subsystem": "therm",
-    "class": "GK104-inherited",
-    "role": "gk104_therm_new \u2014 therm (therm)"
-  },
-  {
-    "path": "nvkm/subdev/timer/nv41.c",
-    "subsystem": "timer",
-    "class": "generic-NVKM",
-    "role": "nv41_timer_new \u2014 timer (timer)"
-  },
-  {
-    "path": "nvkm/subdev/top/gk104.c",
-    "subsystem": "top",
-    "class": "GK104-inherited",
-    "role": "gk104_top_new \u2014 top (top)"
-  },
-  {
-    "path": "nvkm/subdev/volt/gk104.c",
-    "subsystem": "volt",
-    "class": "GK104-inherited",
-    "role": "gk104_volt_new \u2014 volt (volt)"
-  },
-  {
     "path": "nvkm/engine/ce/gk104.c",
     "subsystem": "ce",
     "class": "GK104-inherited",
-    "role": "gk104_ce_new \u2014 ce (ce)"
+    "role": "gk104_ce_new \u2014 ce"
   },
   {
-    "path": "nvkm/engine/disp/gk110.c",
-    "subsystem": "disp",
-    "class": "GK110-specific",
-    "role": "gk110_disp_new \u2014 disp (disp)"
+    "path": "nvkm/engine/fifo/base.c",
+    "subsystem": "fifo",
+    "class": "generic-NVKM",
+    "role": "nvkm_fifo_new_ \u2014 fifo"
   },
   {
-    "path": "nvkm/engine/dma/gf119.c",
-    "subsystem": "dma",
+    "path": "nvkm/engine/fifo/cgrp.c",
+    "subsystem": "fifo",
+    "class": "generic-NVKM",
+    "role": "nvkm_cgrp_ref \u2014 fifo"
+  },
+  {
+    "path": "nvkm/engine/fifo/chan.c",
+    "subsystem": "fifo",
+    "class": "generic-NVKM",
+    "role": "nvkm_chan_event \u2014 fifo"
+  },
+  {
+    "path": "nvkm/engine/fifo/chid.c",
+    "subsystem": "fifo",
+    "class": "generic-NVKM",
+    "role": "nvkm_chid_new \u2014 fifo"
+  },
+  {
+    "path": "nvkm/engine/fifo/gf100.c",
+    "subsystem": "fifo",
     "class": "GF100-inherited",
-    "role": "gf119_dma_new \u2014 dma (dma)"
+    "role": "gf100_fifo_intr_mmu_fault_unit \u2014 fifo"
+  },
+  {
+    "path": "nvkm/engine/fifo/gk104.c",
+    "subsystem": "fifo",
+    "class": "GK104-inherited",
+    "role": "gk104_runl_pending \u2014 fifo"
   },
   {
     "path": "nvkm/engine/fifo/gk110.c",
     "subsystem": "fifo",
     "class": "GK110-specific",
-    "role": "gk110_fifo_new \u2014 fifo (fifo)"
+    "role": "gk110_fifo_new \u2014 fifo"
+  },
+  {
+    "path": "nvkm/engine/fifo/nv04.c",
+    "subsystem": "fifo",
+    "class": "generic-NVKM",
+    "role": "nv04_fifo_pause \u2014 fifo"
+  },
+  {
+    "path": "nvkm/engine/fifo/nv50.c",
+    "subsystem": "fifo",
+    "class": "generic-NVKM",
+    "role": "nv50_runl_update \u2014 fifo"
+  },
+  {
+    "path": "nvkm/engine/fifo/runl.c",
+    "subsystem": "fifo",
+    "class": "generic-NVKM",
+    "role": "nvkm_runl_update_pending \u2014 fifo"
+  },
+  {
+    "path": "nvkm/engine/fifo/runq.c",
+    "subsystem": "fifo",
+    "class": "generic-NVKM",
+    "role": "nvkm_runq_del \u2014 fifo"
+  },
+  {
+    "path": "nvkm/engine/fifo/ucgrp.c",
+    "subsystem": "fifo",
+    "class": "generic-NVKM",
+    "role": "nvkm_ucgrp_new \u2014 fifo"
+  },
+  {
+    "path": "nvkm/engine/fifo/uchan.c",
+    "subsystem": "fifo",
+    "class": "generic-NVKM",
+    "role": "nvkm_uchan_new \u2014 fifo"
+  },
+  {
+    "path": "nvkm/engine/gr/base.c",
+    "subsystem": "gr",
+    "class": "generic-NVKM",
+    "role": "nvkm_gr \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/ctxgf100.c",
+    "subsystem": "gr",
+    "class": "GF100-inherited",
+    "role": "gf100_grctx \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/ctxgf104.c",
+    "subsystem": "gr",
+    "class": "generic-NVKM",
+    "role": "gf104_grctx_init_l1c_0 \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/ctxgf108.c",
+    "subsystem": "gr",
+    "class": "generic-NVKM",
+    "role": "gf108_grctx \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/ctxgf110.c",
+    "subsystem": "gr",
+    "class": "generic-NVKM",
+    "role": "gf110_grctx_init_9297_0 \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/ctxgf117.c",
+    "subsystem": "gr",
+    "class": "generic-NVKM",
+    "role": "gf117_grctx_init_pe_0 \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/ctxgf119.c",
+    "subsystem": "gr",
+    "class": "GF100-inherited",
+    "role": "gf119_grctx \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/ctxgk104.c",
+    "subsystem": "gr",
+    "class": "GK104-inherited",
+    "role": "gk104_grctx \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/ctxgk110.c",
+    "subsystem": "gr",
+    "class": "GK110-specific",
+    "role": "gk110_grctx \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/ctxgk110b.c",
+    "subsystem": "gr",
+    "class": "GK110-specific",
+    "role": "gk110b_grctx \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/ctxnv50.c",
+    "subsystem": "gr",
+    "class": "generic-NVKM",
+    "role": "nv50_grctx_fill \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/gf100.c",
+    "subsystem": "gr",
+    "class": "GF100-inherited",
+    "role": "gf100_gr_init_fecs_exceptions \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/gf104.c",
+    "subsystem": "gr",
+    "class": "generic-NVKM",
+    "role": "gf104_gr_init_sm_0 \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/gf108.c",
+    "subsystem": "gr",
+    "class": "generic-NVKM",
+    "role": "gf108_gr_init_gpc_unk_0 \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/gf117.c",
+    "subsystem": "gr",
+    "class": "generic-NVKM",
+    "role": "gf117_gr_init_pes_0 \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/gf119.c",
+    "subsystem": "gr",
+    "class": "GF100-inherited",
+    "role": "gf119_gr_init_prop_0 \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/gk104.c",
+    "subsystem": "gr",
+    "class": "GK104-inherited",
+    "role": "gk104_gr_init_sked_hww_esr \u2014 gr"
+  },
+  {
+    "path": "nvkm/engine/gr/gk110.c",
+    "subsystem": "gr",
+    "class": "GK110-specific",
+    "role": "gk110_gr_init_gpc_unk_1 \u2014 gr"
   },
   {
     "path": "nvkm/engine/gr/gk110b.c",
     "subsystem": "gr",
     "class": "GK110-specific",
-    "role": "gk110b_gr_new \u2014 gr (gr)"
+    "role": "gk110b_gr_new \u2014 gr"
   },
   {
-    "path": "nvkm/engine/mspdec/gk104.c",
-    "subsystem": "mspdec",
-    "class": "GK104-inherited",
-    "role": "gk104_mspdec_new \u2014 mspdec (mspdec)"
+    "path": "nvkm/engine/gr/nv50.c",
+    "subsystem": "gr",
+    "class": "generic-NVKM",
+    "role": "nv50_data_error_names \u2014 gr"
   },
   {
-    "path": "nvkm/engine/msppp/gf100.c",
-    "subsystem": "msppp",
+    "path": "nvkm/subdev/bar/base.c",
+    "subsystem": "bar",
+    "class": "generic-NVKM",
+    "role": "nvkm_bar_ctor \u2014 bar"
+  },
+  {
+    "path": "nvkm/subdev/bar/g84.c",
+    "subsystem": "bar",
+    "class": "generic-NVKM",
+    "role": "g84_bar_flush \u2014 bar"
+  },
+  {
+    "path": "nvkm/subdev/bar/gf100.c",
+    "subsystem": "bar",
     "class": "GF100-inherited",
-    "role": "gf100_msppp_new \u2014 msppp (msppp)"
+    "role": "gf100_bar_new \u2014 bar"
   },
   {
-    "path": "nvkm/engine/msvld/gk104.c",
-    "subsystem": "msvld",
-    "class": "GK104-inherited",
-    "role": "gk104_msvld_new \u2014 msvld (msvld)"
+    "path": "nvkm/subdev/bar/nv50.c",
+    "subsystem": "bar",
+    "class": "generic-NVKM",
+    "role": "nv50_bar_init \u2014 bar"
   },
   {
-    "path": "nvkm/engine/sw/gf100.c",
-    "subsystem": "sw",
+    "path": "nvkm/subdev/bus/base.c",
+    "subsystem": "bus",
+    "class": "generic-NVKM",
+    "role": "nvkm_bus \u2014 bus"
+  },
+  {
+    "path": "nvkm/subdev/bus/gf100.c",
+    "subsystem": "bus",
     "class": "GF100-inherited",
-    "role": "gf100_sw_new \u2014 sw (sw)"
+    "role": "gf100_bus_new \u2014 bus"
+  },
+  {
+    "path": "nvkm/subdev/fb/base.c",
+    "subsystem": "fb",
+    "class": "generic-NVKM",
+    "role": "nvkm_fb \u2014 fb"
+  },
+  {
+    "path": "nvkm/subdev/fb/gddr5.c",
+    "subsystem": "fb",
+    "class": "generic-NVKM",
+    "role": "nvkm_gddr5_calc \u2014 fb"
+  },
+  {
+    "path": "nvkm/subdev/fb/gf100.c",
+    "subsystem": "fb",
+    "class": "GF100-inherited",
+    "role": "gf100_fb_init_page \u2014 fb"
+  },
+  {
+    "path": "nvkm/subdev/fb/gk104.c",
+    "subsystem": "fb",
+    "class": "GK104-inherited",
+    "role": "gk104_fb_clkgate_blcg_init_main_0 \u2014 fb"
+  },
+  {
+    "path": "nvkm/subdev/fb/gk110.c",
+    "subsystem": "fb",
+    "class": "GK110-specific",
+    "role": "gk110_fb_new \u2014 fb"
+  },
+  {
+    "path": "nvkm/subdev/fb/ram.c",
+    "subsystem": "fb",
+    "class": "generic-NVKM",
+    "role": "nvkm_ram_init \u2014 fb"
+  },
+  {
+    "path": "nvkm/subdev/fb/ramgf100.c",
+    "subsystem": "fb",
+    "class": "GF100-inherited",
+    "role": "gf100_ram_new \u2014 fb"
+  },
+  {
+    "path": "nvkm/subdev/fb/ramgf108.c",
+    "subsystem": "fb",
+    "class": "generic-NVKM",
+    "role": "gf108_ram_probe_fbp_amount \u2014 fb"
+  },
+  {
+    "path": "nvkm/subdev/fb/ramgk104.c",
+    "subsystem": "fb",
+    "class": "GK104-inherited",
+    "role": "gk104_ram_new \u2014 fb"
+  },
+  {
+    "path": "nvkm/subdev/fb/sddr3.c",
+    "subsystem": "fb",
+    "class": "generic-NVKM",
+    "role": "nvkm_sddr3_calc \u2014 fb"
+  },
+  {
+    "path": "nvkm/subdev/instmem/base.c",
+    "subsystem": "imem",
+    "class": "generic-NVKM",
+    "role": "nvkm_instmem_ctor \u2014 imem"
+  },
+  {
+    "path": "nvkm/subdev/instmem/nv04.c",
+    "subsystem": "imem",
+    "class": "generic-NVKM",
+    "role": "nv04_instmem_suspend \u2014 imem"
+  },
+  {
+    "path": "nvkm/subdev/instmem/nv50.c",
+    "subsystem": "imem",
+    "class": "generic-NVKM",
+    "role": "nv50_instmem_new \u2014 imem"
+  },
+  {
+    "path": "nvkm/subdev/instmem/r535.c",
+    "subsystem": "imem",
+    "class": "generic-NVKM",
+    "role": "r535_instmem_new \u2014 imem"
+  },
+  {
+    "path": "nvkm/subdev/ltc/base.c",
+    "subsystem": "ltc",
+    "class": "generic-NVKM",
+    "role": "nvkm_ltc_new_ \u2014 ltc"
+  },
+  {
+    "path": "nvkm/subdev/ltc/gf100.c",
+    "subsystem": "ltc",
+    "class": "GF100-inherited",
+    "role": "gf100_ltc_zbc_clear_color \u2014 ltc"
+  },
+  {
+    "path": "nvkm/subdev/ltc/gk104.c",
+    "subsystem": "ltc",
+    "class": "GK104-inherited",
+    "role": "gk104_ltc_new \u2014 ltc"
+  },
+  {
+    "path": "nvkm/subdev/mc/base.c",
+    "subsystem": "mc",
+    "class": "generic-NVKM",
+    "role": "nvkm_mc \u2014 mc"
+  },
+  {
+    "path": "nvkm/subdev/mc/gf100.c",
+    "subsystem": "mc",
+    "class": "GF100-inherited",
+    "role": "gf100_mc_unk260 \u2014 mc"
+  },
+  {
+    "path": "nvkm/subdev/mc/gk104.c",
+    "subsystem": "mc",
+    "class": "GK104-inherited",
+    "role": "gk104_mc_new \u2014 mc"
+  },
+  {
+    "path": "nvkm/subdev/mc/gt215.c",
+    "subsystem": "mc",
+    "class": "generic-NVKM",
+    "role": "gt215_mc_intr \u2014 mc"
+  },
+  {
+    "path": "nvkm/subdev/mc/nv04.c",
+    "subsystem": "mc",
+    "class": "generic-NVKM",
+    "role": "nv04_mc_device \u2014 mc"
+  },
+  {
+    "path": "nvkm/subdev/mc/nv17.c",
+    "subsystem": "mc",
+    "class": "generic-NVKM",
+    "role": "nv17_mc_reset \u2014 mc"
+  },
+  {
+    "path": "nvkm/subdev/mc/nv50.c",
+    "subsystem": "mc",
+    "class": "generic-NVKM",
+    "role": "nv50_mc_init \u2014 mc"
+  },
+  {
+    "path": "nvkm/subdev/mmu/base.c",
+    "subsystem": "mmu",
+    "class": "generic-NVKM",
+    "role": "nvkm_mmu \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/mmu/gf100.c",
+    "subsystem": "mmu",
+    "class": "GF100-inherited",
+    "role": "gf100_mmu_kind \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/mmu/gk104.c",
+    "subsystem": "mmu",
+    "class": "GK104-inherited",
+    "role": "gk104_mmu_new \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/mmu/mem.c",
+    "subsystem": "mmu",
+    "class": "generic-NVKM",
+    "role": "nvkm_mem_new_type \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/mmu/memgf100.c",
+    "subsystem": "mmu",
+    "class": "GF100-inherited",
+    "role": "gf100_mem_map \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/mmu/umem.c",
+    "subsystem": "mmu",
+    "class": "generic-NVKM",
+    "role": "nvkm_umem_new \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/mmu/ummu.c",
+    "subsystem": "mmu",
+    "class": "generic-NVKM",
+    "role": "nvkm_ummu_new \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/mmu/uvmm.c",
+    "subsystem": "mmu",
+    "class": "generic-NVKM",
+    "role": "nvkm_uvmm_new \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/mmu/vmm.c",
+    "subsystem": "mmu",
+    "class": "generic-NVKM",
+    "role": "nvkm_vmm_get \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/mmu/vmmgf100.c",
+    "subsystem": "mmu",
+    "class": "GF100-inherited",
+    "role": "gf100_vmm_aper \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/mmu/vmmgk104.c",
+    "subsystem": "mmu",
+    "class": "GK104-inherited",
+    "role": "gk104_vmm_new \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/mmu/vmmnv04.c",
+    "subsystem": "mmu",
+    "class": "generic-NVKM",
+    "role": "nv04_vmm_new_ \u2014 mmu"
+  },
+  {
+    "path": "nvkm/subdev/pci/agp.c",
+    "subsystem": "pci",
+    "class": "generic-NVKM",
+    "role": "nvkm_agp_init \u2014 pci"
+  },
+  {
+    "path": "nvkm/subdev/pci/base.c",
+    "subsystem": "pci",
+    "class": "generic-NVKM",
+    "role": "nvkm_pci_rd32 \u2014 pci"
+  },
+  {
+    "path": "nvkm/subdev/pci/g84.c",
+    "subsystem": "pci",
+    "class": "generic-NVKM",
+    "role": "g84_pcie_cur_speed \u2014 pci"
+  },
+  {
+    "path": "nvkm/subdev/pci/g92.c",
+    "subsystem": "pci",
+    "class": "generic-NVKM",
+    "role": "g92_pcie_version_supported \u2014 pci"
+  },
+  {
+    "path": "nvkm/subdev/pci/gf100.c",
+    "subsystem": "pci",
+    "class": "GF100-inherited",
+    "role": "gf100_pcie_set_cap_speed \u2014 pci"
+  },
+  {
+    "path": "nvkm/subdev/pci/gk104.c",
+    "subsystem": "pci",
+    "class": "GK104-inherited",
+    "role": "gk104_pci_new \u2014 pci"
+  },
+  {
+    "path": "nvkm/subdev/pci/nv40.c",
+    "subsystem": "pci",
+    "class": "generic-NVKM",
+    "role": "nv40_pci_wr08 \u2014 pci"
+  },
+  {
+    "path": "nvkm/subdev/pci/nv46.c",
+    "subsystem": "pci",
+    "class": "generic-NVKM",
+    "role": "nv46_pci_msi_rearm \u2014 pci"
+  },
+  {
+    "path": "nvkm/subdev/pci/pcie.c",
+    "subsystem": "pci",
+    "class": "generic-NVKM",
+    "role": "nvkm_pcie_speed \u2014 pci"
+  },
+  {
+    "path": "nvkm/subdev/privring/gk104.c",
+    "subsystem": "privring",
+    "class": "GK104-inherited",
+    "role": "gk104_privring_new \u2014 privring"
+  },
+  {
+    "path": "nvkm/subdev/top/base.c",
+    "subsystem": "top",
+    "class": "generic-NVKM",
+    "role": "nvkm_top_device_new \u2014 top"
+  },
+  {
+    "path": "nvkm/subdev/top/gk104.c",
+    "subsystem": "top",
+    "class": "GK104-inherited",
+    "role": "gk104_top_new \u2014 top"
   }
 ]
