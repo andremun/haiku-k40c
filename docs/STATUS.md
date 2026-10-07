@@ -1,7 +1,8 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B2 (call graph) — REWORK 2, small. Read `work/B2/REVIEW.md`, section "Third review", first. B3 is DONE (accepted 2026-10-08).
+Current task: B2
+Task state: REWORK. The only job of this session is `work/B2/REVIEW.md`, section "Third review". Do not start B4, B5 or B6.
 Last updated: 2026-10-08
 
 ## Last result

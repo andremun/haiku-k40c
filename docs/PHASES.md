@@ -203,6 +203,34 @@ is no reference for S3 and the project stops at S2.
   `{"field", "file", "line"}`. `kernel_needs` lists what the job needs
   from the kernel side (channel, compute object, address space, buffers),
   each with the Mesa call that shows it.
+- How to do it (a first session read the inputs whole, filled its
+  context three times and wrote nothing):
+  - Write `work/B6/PLAN.md` (10 lines) and then the tool. The tool does
+    the reading. Do not read `cla0c0qmd.h` (660 lines),
+    `nve4_compute.xml.h` (433 lines) or `nve4_compute.c` (1010 lines)
+    whole. Use `grep -n NAME file` and `sed -n 'A,Bp' file` for at most
+    60 lines at a time.
+  - The three functions are found by name at the start of a line:
+    `nve4_screen_compute_setup` (about 140 lines), `nve4_launch_grid`
+    (about 110 lines), `nve4_compute_setup_launch_desc` (about 50 lines).
+    A function ends at the next line that is `}`.
+  - A method is a line `BEGIN_NVC0(push, NVE4_CP(NAME), n);` (also
+    `BEGIN_1IC0`, `BEGIN_NIC0`). `method` is `NAME` without an index
+    (`MP_TEMP_SIZE_HIGH(0)` gives `MP_TEMP_SIZE_HIGH`). A line with
+    `SUBC_CP(...)` and no `NVE4_CP` is a method too: `method` is the text
+    inside `SUBC_CP(...)` and `offset` is `null` when it is not a number.
+    `value` is the text of the `PUSH_DATA` lines up to the next `BEGIN_`.
+  - `offset` is the number of `#define NVE4_COMPUTE_NAME` in
+    `nve4_compute.xml.h`.
+  - A descriptor field is a line
+    `NVA0C0_QMDV00_06_VAL_SET(qmd, FIELD, value);` or `..._DEF_SET(...)`
+    in `nve4_compute_setup_launch_desc`. Add `"bits"`: the `MW(hi:lo)`
+    text of `#define NVA0C0_QMDV00_06_FIELD` in `cla0c0qmd.h`, and
+    `"value"`: the third argument.
+  - `tools/compute_launch.py --check` writes nothing and exits 0 when
+    the JSON file is what the tool generates. Sorted output is not
+    wanted here: keep the source order. The same output on every run.
+  - The work directory is `work/B6` (capital B).
 - `compute_launch.md`: the sequence in words, which parts are for other
   chips (GM107, GP100, GV100) and not for GK110, and how the shader code
   reaches the GPU (`CODE_ADDRESS`).
