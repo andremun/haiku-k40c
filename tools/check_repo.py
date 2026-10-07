@@ -149,7 +149,7 @@ if rec is not None:
                 fail(f"hardware/record.json[{i}]: vram_mib must be an integer")
 
 # B1 file inventory ---------------------------------------------------
-# Subdevices and engines on the compute path (docs/PHASES.md, task B1).
+# Subdevices and engines on the compute path (docs/tasks/B1.md).
 B1_REQUIRED = ("bar", "bus", "fb", "imem", "ltc", "mc", "mmu", "pci", "privring",
                "top", "fifo", "gr", "ce")
 B1_CHIPSET = "nvf1_chipset"
@@ -221,11 +221,11 @@ def check_b1_inventory(entries):
     if missing:
         fail(f"{rel}: {len(missing)} file(s) used by listed files in the same directory are not "
              f"listed (first 8 shown). Add them and run the check again: each added file can "
-             f"require more. See docs/PHASES.md, task B1.")
+             f"require more. See docs/tasks/B1.md.")
 
 
 def b1_class(path):
-    """Class that the file name gives (docs/PHASES.md, task B1)."""
+    """Class that the file name gives (docs/tasks/B1.md)."""
     base = os.path.basename(path)
     if re.search(r"gk110", base):
         return "GK110-specific"
@@ -259,7 +259,7 @@ def check_b1_fields(entries):
         fail(f"{rel}: {len(badclass)} entries with a class that does not follow the file name")
     if badrole:
         fail(f"{rel}: {len(badrole)} entries (first: {badrole[0]}) have a role that does not say what "
-             f"the file provides and how the path reaches it. See docs/PHASES.md, task B1.")
+             f"the file provides and how the path reaches it. See docs/tasks/B1.md.")
 
 
 def check_b1_tool():
@@ -271,7 +271,7 @@ def check_b1_tool():
         return
     # A tool without the option would write the output file when it is run.
     if "--check" not in open(tool, errors="replace").read():
-        fail("tools/nouveau_files.py: no --check option (docs/PHASES.md, task B1)")
+        fail("tools/nouveau_files.py: no --check option (docs/tasks/B1.md)")
         return
     for run in (1, 2):
         try:
@@ -303,7 +303,7 @@ if files is not None:
         check_b1_tool()
 
 # B2 call graph -------------------------------------------------------
-# Roots: the chipset constructors of fb, mmu, fifo and gr (docs/PHASES.md).
+# Roots: the chipset constructors of fb, mmu, fifo and gr (docs/tasks/B2.md).
 B2_ROOTS = ("gk110_fb_new", "gk104_mmu_new", "gk110_fifo_new", "gk110b_gr_new")
 cg = load_json("analysis/callgraph.json") if "B2" not in SKIP else None
 if cg is not None:
@@ -356,7 +356,7 @@ if cg is not None:
     # The tool must reproduce the file, on every run.
     tool = os.path.join(ROOT, "tools", "callgraph.py")
     if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
-        fail("tools/callgraph.py: missing, or no --check option (docs/PHASES.md, task B2)")
+        fail("tools/callgraph.py: missing, or no --check option (docs/tasks/B2.md)")
     else:
         import subprocess
         for run in (1, 2):
@@ -369,7 +369,7 @@ if cg is not None:
     for need in ("gf100_gr_init", "gf100_fb_init", "gk104_fifo_init"):
         if need not in names:
             fail(f"{rel}: {need} is not a node. It is reached through a function table "
-                 f"(`.init = ...`): see docs/PHASES.md, task B2.")
+                 f"(`.init = ...`): see docs/tasks/B2.md.")
 
 # B3 MMIO accesses ----------------------------------------------------
 mm = load_json("registers/mmio_accesses.json")
@@ -433,7 +433,7 @@ if mm is not None:
         fail(f"{rel}: {badreg} entries where 'reg' is not the register expression written on the line")
     tool = os.path.join(ROOT, "tools", "extract_mmio.py")
     if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
-        fail("tools/extract_mmio.py: missing, or no --check option (docs/PHASES.md, task B3)")
+        fail("tools/extract_mmio.py: missing, or no --check option (docs/tasks/B3.md)")
     else:
         import subprocess
         for run in (1, 2):
@@ -493,7 +493,7 @@ if cl is not None:
         fail(f"{rel}: 'kernel_needs' is empty")
     tool = os.path.join(ROOT, "tools", "compute_launch.py")
     if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
-        fail("tools/compute_launch.py: missing, or no --check option (docs/PHASES.md, task B6)")
+        fail("tools/compute_launch.py: missing, or no --check option (docs/tasks/B6.md)")
     else:
         import subprocess
         for run in (1, 2):

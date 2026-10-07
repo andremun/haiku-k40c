@@ -57,7 +57,7 @@ The project config has no fixed model. It uses the OpenCode default, which
 `llm-mode.sh` sets.
 
 Start a new OpenCode session for each task. The repository is the memory:
-`docs/STATUS.md`, `docs/PHASES.md`, `work/<task>/`.
+`docs/STATUS.md`, `docs/tasks/<task>.md`, `work/<task>/`.
 
 ## Layout
 
