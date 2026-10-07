@@ -17,12 +17,13 @@ It reported the `--check` option as present and did not run it.
 | File | Problem | Evidence | Severity |
 |---|---|---|---|
 | `tools/callgraph.py` | The output is not the same on every run. `work/B2/RESULT.md` says "deterministic". | `python3 tools/callgraph.py --check` exits 1 on the committed files, three times of three. A run without `--check` changes 4 lines in `analysis/callgraph.json` and `analysis/callgraph.md`: the node and edge sets are equal, the order differs. | Medium |
-| `analysis/callgraph.md` | The task asks, for each of fb, mmu, fifo and gr, which calls are only for other chips, or a statement that a graph of names cannot tell. Check that the file says it. | `docs/PHASES.md`, task B2. | Low |
+| `analysis/callgraph.md` | The task asks, for each of fb, mmu, fifo and gr, which calls are only for other chips, or a statement that a graph of names cannot tell. The file has neither. | No line of the file has "other chip" or "cannot tell". The graph has nodes from `nv04.c`, `nv50.c` and `gf108.c` files: say for each subsystem whether the GK110B path uses them or the graph only reaches them by name. | Medium |
 
 ## What the rework needs
 
 1. Find the place where the order depends on a set or a dictionary of
    sets, and sort it. Do not change the nodes or the edges.
 2. `make check` now runs `tools/callgraph.py --check` twice. It must pass.
-3. Correct "deterministic" in `work/B2/RESULT.md` only after step 2 passes.
-4. Handoff, stop. This is a short task.
+3. Add the section on other-chip calls to `analysis/callgraph.md` (the tool writes it).
+4. Correct "deterministic" in `work/B2/RESULT.md` only after step 2 passes.
+5. Handoff, stop. This is a short task.
