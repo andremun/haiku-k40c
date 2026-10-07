@@ -41,6 +41,14 @@ def src_lines(rel):
         return None
 
 
+# A worktree for one task may skip the checks of a task that another
+# worktree is reworking: put the task ID in the untracked file .check-skip.
+SKIP = set()
+if os.path.exists(os.path.join(ROOT, ".check-skip")):
+    SKIP = set(open(os.path.join(ROOT, ".check-skip")).read().split())
+    notes.append(f"checks skipped by .check-skip: {sorted(SKIP)}")
+
+
 def is_hex(v):
     return isinstance(v, str) and re.fullmatch(r"0x[0-9a-fA-F]+", v) is not None
 
@@ -297,7 +305,7 @@ if files is not None:
 # B2 call graph -------------------------------------------------------
 # Roots: the chipset constructors of fb, mmu, fifo and gr (docs/PHASES.md).
 B2_ROOTS = ("gk110_fb_new", "gk104_mmu_new", "gk110_fifo_new", "gk110b_gr_new")
-cg = load_json("analysis/callgraph.json")
+cg = load_json("analysis/callgraph.json") if "B2" not in SKIP else None
 if cg is not None:
     rel = "analysis/callgraph.json"
     nodes = cg.get("nodes", []) if isinstance(cg, dict) else []

@@ -3,3 +3,4 @@ __pycache__/
 build/
 *.o
 tests/bin/
+.check-skip
