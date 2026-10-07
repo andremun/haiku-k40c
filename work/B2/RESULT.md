@@ -3,7 +3,7 @@
 ## Done
 
 Call graph tool (`tools/callgraph.py`) produces `analysis/callgraph.json`
-(447 nodes, 708 edges) and `analysis/callgraph.md` from the four scope
+(446 nodes, 704 edges after the scaffold fix of 2026-10-08, see `REVIEW.md`) and `analysis/callgraph.md` from the four scope
 subsystems (fb, mmu, fifo, gr). `make check` passes with 0 failures.
 
 ## What the tool does

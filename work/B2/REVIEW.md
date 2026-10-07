@@ -56,3 +56,29 @@ and stopped at the time limit. Its changes are in the working tree.
 3. Run the tool, then `make check`. Correct `work/B2/RESULT.md`.
 4. Handoff, stop. Do not look for other causes: the two above are the
    whole problem.
+
+# Resolution (2026-10-08): fixed by the scaffold, B2 accepted
+
+A third rework session (75 minutes) ended with no change. The user's rule
+of 2026-10-08 applies: when an attempt fails with negligible, diagnosed
+errors, the scaffold fixes them and passes the task. Claude made these
+changes to `tools/callgraph.py`:
+
+- `render()` builds the text of both output files once. `--check`
+  compares that text with the files. The old comparison of a loaded JSON
+  object with the graph in memory could never succeed.
+- A section "Code for other chips" in `analysis/callgraph.md`: nodes per
+  subsystem and file class, and the statement that a graph of names
+  cannot tell which nodes the card runs.
+- The scan reads only the files of `analysis/files.json`. Two nodes came
+  from other files (`hdr` in `gr/gm200.c`, `ramxlat` in `fb/gddr3.c`).
+
+Result: 446 nodes and 704 edges (was 447 and 708). `--check` passes
+with three hash seeds. `make check` passes.
+
+History note: the agent's own fix of the output order (the sorted
+`todo.extend` in `build_graph`) and its regenerated outputs entered the
+repository in commit d66d3ec, whose message names only the B6 checker.
+That commit swept in the agent's uncommitted work by mistake of the
+scaffold. The graph, the table handling and the order fix are the
+agent's work.
