@@ -295,20 +295,61 @@ if files is not None:
         check_b1_tool()
 
 # B2 call graph -------------------------------------------------------
+# Roots: the chipset constructors of fb, mmu, fifo and gr (docs/PHASES.md).
+B2_ROOTS = ("gk110_fb_new", "gk104_mmu_new", "gk110_fifo_new", "gk110b_gr_new")
 cg = load_json("analysis/callgraph.json")
 if cg is not None:
-    bad = 0
+    rel = "analysis/callgraph.json"
     nodes = cg.get("nodes", []) if isinstance(cg, dict) else []
-    for n in nodes:
-        L = src_lines(str(n.get("file", "")))
-        ln = n.get("line")
-        ok = L is not None and isinstance(ln, int) and 0 < ln <= len(L) and \
-            re.search(r"\b%s\s*\(" % re.escape(str(n.get("name"))), "\n".join(L[max(0, ln - 2):ln + 1]))
-        bad += not ok
+    edges = cg.get("edges", []) if isinstance(cg, dict) else []
     if not isinstance(cg, dict) or "edges" not in cg:
-        fail("analysis/callgraph.json: needs 'nodes' and 'edges'")
+        fail(f"{rel}: needs 'nodes' and 'edges'")
+    # A node is a function (`name(args)` then `{`) or a function table
+    # (`name = {`). Its body runs to the next line that starts with `}`.
+    bad, body = 0, {}
+    for n in nodes:
+        name, L, ln = str(n.get("name")), src_lines(str(n.get("file", ""))), n.get("line")
+        ok = L is not None and isinstance(ln, int) and 0 < ln <= len(L) and \
+            re.search(r"\b%s(\s*\(|(\[\w*\])?\s*=)" % re.escape(name), "\n".join(L[max(0, ln - 2):ln + 1]))
+        bad += not ok
+        if ok:
+            end = next((i for i in range(ln, len(L)) if L[i].startswith("}")), len(L) - 1)
+            body[name] = "\n".join(L[ln - 1:end + 1])
     if bad:
-        fail(f"analysis/callgraph.json: {bad} of {len(nodes)} nodes do not point at their definition")
+        fail(f"{rel}: {bad} of {len(nodes)} nodes do not point at their definition")
+    names = {str(n.get("name")) for n in nodes}
+    for r in B2_ROOTS:
+        if r not in names:
+            fail(f"{rel}: root {r} is not a node")
+    pairs = [e for e in edges if isinstance(e, list) and len(e) == 2]
+    if len(pairs) != len(edges):
+        fail(f"{rel}: every edge must be [caller, callee]")
+    loose = [e for e in pairs if e[0] not in names or e[1] not in names]
+    if loose:
+        fail(f"{rel}: {len(loose)} edges name a function that is not a node (first: {loose[0]})")
+    unreal = [e for e in pairs if e[0] in body and not re.search(r"\b%s\b" % re.escape(str(e[1])),
+                                                                 body[e[0]].split("\n", 1)[-1])]
+    if unreal:
+        fail(f"{rel}: {len(unreal)} edges where the caller's body does not use the callee "
+             f"(first: {unreal[0]})")
+    # Every node is reached from a root.
+    out = {}
+    for c, d in pairs:
+        out.setdefault(c, set()).add(d)
+    seen, todo = set(), [r for r in B2_ROOTS if r in names]
+    while todo:
+        x = todo.pop()
+        if x not in seen:
+            seen.add(x)
+            todo.extend(out.get(x, ()))
+    lost = sorted(names - seen)
+    if lost:
+        fail(f"{rel}: {len(lost)} nodes are not reached from a root (first: {lost[0]})")
+    # Nouveau reaches its init code through function tables, not calls.
+    for need in ("gf100_gr_init", "gf100_fb_init", "gk104_fifo_init"):
+        if need not in names:
+            fail(f"{rel}: {need} is not a node. It is reached through a function table "
+                 f"(`.init = ...`): see docs/PHASES.md, task B2.")
 
 # B3 MMIO accesses ----------------------------------------------------
 mm = load_json("registers/mmio_accesses.json")

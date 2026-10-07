@@ -1,10 +1,14 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B1 (chipset path and file inventory) — DONE
+Current task: B2 (call graph). B1 is DONE (second rework accepted 2026-10-07).
 Last updated: 2026-10-07
 
 ## Last result
+
+Note for B2: `work/B2/PLAN.md` is from an early start of B2 at the end of
+a B1 session, before the B2 text in `docs/PHASES.md` was extended. Write
+it again from the current task text. Do one task, run the handoff, stop.
 
 B1 rework 2 complete (2026-10-07): fixed three defects — non-deterministic
 tool output, incorrect role format (6+ words, "chipset constructor" / "used

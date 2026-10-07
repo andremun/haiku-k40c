@@ -94,8 +94,26 @@ Paths to Nouveau files in any output are relative to `reference/nouveau/`
   `line` = line of the function definition), plus a readable
   `analysis/callgraph.md`.
 - Scope: from the chipset constructors down through the init paths of fb,
-  mmu, fifo and gr.
-- Check: each node's `file:line` defines that function.
+  mmu, fifo and gr. The roots are `gk110_fb_new`, `gk104_mmu_new`,
+  `gk110_fifo_new` and `gk110b_gr_new`. Use only files of
+  `analysis/files.json`.
+- Nouveau reaches most of its code through function tables, not through
+  direct calls: a constructor passes a table (`&gk110b_gr`) whose fields
+  name the functions (`.init = gf100_gr_init`). A graph of direct calls
+  stops at the constructors. Make each table a node (`line` = the line of
+  `name = {`), with an edge from the function that uses the table to the
+  table, and an edge from the table to every function or table that it
+  names. A node may have an optional `"kind"`: `"function"` or `"table"`.
+- An edge `[a, b]` means that the body of `a` uses the name `b`.
+- `analysis/callgraph.md` lists, for each of fb, mmu, fifo and gr, the
+  path from the root to the init function, and says which calls are only
+  for other chips (a graph of names cannot tell: say so where you do not
+  know).
+- Check (`make check`): each node's `file:line` defines that function or
+  table; the four roots are nodes; every edge joins two nodes and the
+  caller's body uses the callee; every node is reached from a root;
+  `gf100_gr_init`, `gf100_fb_init` and `gk104_fifo_init` are nodes.
+- The tool gives the same output on every run (sort every set).
 
 ### B3. MMIO access extraction
 - Outputs: `tools/extract_mmio.py`,
