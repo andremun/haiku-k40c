@@ -34,3 +34,31 @@ handoff. The scaffold committed the files as work in progress.
 
 Do not read the Mesa files whole. The tool already knows where
 everything is: change the tool.
+
+# Second review (2026-10-08, commit 9448fde) — REWORK, one defect of content
+
+Reviewer: Claude (Anthropic). The rework took 42 minutes and fixed every
+item of the first review: paths, `value`, one data structure for both
+files, `kernel_needs` with sources, the two missing parts of the summary,
+`RESULT.md` and the handoff. `make check` passes and `--check` passes.
+
+## Defects
+
+| File | Problem | Evidence | Severity |
+|---|---|---|---|
+| `analysis/compute_launch.json` | The lists do not say which methods the GK110 card receives. Three entries are in branches for newer chips only, and a driver that sends them would be wrong. | `setup`, lines 87 and 90 (`0x2a0`, `0x7b0`): the `else` branch of `if (obj_class < GV100_COMPUTE_CLASS)` at `src/gallium/drivers/nouveau/nvc0/nve4_compute.c:77`. `launch`, line 878 (`0x02c0`): the `else` branch of `if (... < GA102_COMPUTE_CLASS)` at line 874. | High |
+| `tools/compute_launch.py` | The tool already works this out and then drops it. `gk110_active` is computed for every method and is not put in the entry. | The line `gk110_active = all(cond_stack) if cond_stack else True`, and the entry that follows it. A later step also keeps only some keys of each entry. | High, small fix |
+| `analysis/compute_launch.md` | The first row of "Other-Chip Branches" is wrong. Line 108 is `if (obj_class >= NVF0_COMPUTE_CLASS)`: GK110B takes that branch, and the `0x0248` block that it guards is rightly in the setup list. `SUBC_CP(0x02c4)` is inside a comment and is never sent. The table is written by hand in `other_chip_branches()`. | Lines 108 to 126 of `nve4_compute.c`. | Medium |
+| `analysis/compute_launch.json` | `class_source` has no line number. | The task asks for `file:line`. | Low |
+
+## What the rework needs
+
+1. Add `"gk110": true` or `false` to every `setup` and `launch` entry,
+   from `gk110_active`. Expected: false for the entries at lines 87, 90
+   and 878, true for all others (16 of 19 in `setup`, 5 of 6 in
+   `launch`). `make check` will verify these three lines.
+2. In the summary, list only the methods with `gk110` true in the two
+   sequence tables, and build the other-chip table from the entries with
+   `gk110` false and their conditions. Remove the hand-written rows.
+3. Add the line number to `class_source`.
+4. `make check`, handoff, stop.

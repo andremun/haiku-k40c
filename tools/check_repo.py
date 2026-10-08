@@ -491,6 +491,17 @@ if cl is not None:
         fail(f"{rel}: 'launch' must have LAUNCH_DESC_ADDRESS and then LAUNCH")
     if not cl.get("kernel_needs"):
         fail(f"{rel}: 'kernel_needs' is empty")
+    # Which methods the GK110 card receives (second review of B6).
+    flags = {(k, r.get("line")): r.get("gk110") for k in ("setup", "launch")
+             for r in cl.get(k, []) if isinstance(r, dict)}
+    if any(v not in (True, False) for v in flags.values()):
+        fail(f"{rel}: every 'setup' and 'launch' entry needs \"gk110\": true or false")
+    else:
+        other = sorted(k for k, v in flags.items() if v is False)
+        want_other = [("launch", 878), ("setup", 87), ("setup", 90)]
+        if other != want_other:
+            fail(f"{rel}: entries with gk110 false are {other}; the branches for other chips "
+                 f"are {want_other} (work/B6/REVIEW.md)")
     tool = os.path.join(ROOT, "tools", "compute_launch.py")
     if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
         fail("tools/compute_launch.py: missing, or no --check option (docs/tasks/B6.md)")
