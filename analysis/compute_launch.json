@@ -1,0 +1,517 @@
+{
+  "compute_class": "0x0000a1c0",
+  "class_source": "src/gallium/drivers/nouveau/nv_object.xml.h:209",
+  "setup": [
+    {
+      "method": "NV01_SUBCHAN_OBJECT",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 51,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "value": "screen->compute->oclass"
+    },
+    {
+      "method": "TEMP_ADDRESS_HIGH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 54,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00000790",
+      "value": "screen->tls->offset\nscreen->tls->offset"
+    },
+    {
+      "method": "MP_TEMP_SIZE_HIGH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 61,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 3,
+      "offset": "0x000002e4",
+      "value": "screen->tls->size / screen->mp_count\n(screen->tls->size / screen->mp_count\n0xff"
+    },
+    {
+      "method": "MP_TEMP_SIZE_HIGH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 66,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 3,
+      "offset": "0x000002e4",
+      "value": "screen->tls->size / screen->mp_count\n(screen->tls->size / screen->mp_count\n0xff",
+      "condition": "obj_class < GV100_COMPUTE_CLASS"
+    },
+    {
+      "method": "LOCAL_BASE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 78,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x0000077c",
+      "value": "0xff << 24",
+      "condition": "obj_class < GV100_COMPUTE_CLASS"
+    },
+    {
+      "method": "SHARED_BASE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 80,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x00000214",
+      "value": "0xfe << 24",
+      "condition": "obj_class < GV100_COMPUTE_CLASS"
+    },
+    {
+      "method": "CODE_ADDRESS_HIGH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 83,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00001608",
+      "value": "screen->text->offset\nscreen->text->offset",
+      "condition": "obj_class < GV100_COMPUTE_CLASS"
+    },
+    {
+      "method": "0x2a0",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 87,
+      "gk110": false,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "value": "0xfeULL << 24\n0xfeULL << 24",
+      "condition": "else"
+    },
+    {
+      "method": "0x7b0",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 90,
+      "gk110": false,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "value": "0xffULL << 24\n0xffULL << 24",
+      "condition": "else"
+    },
+    {
+      "method": "0x0310",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 95,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "value": "(obj_class >= NVF0_COMPUTE_CLASS"
+    },
+    {
+      "method": "TIC_ADDRESS_HIGH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 99,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 3,
+      "offset": "0x00001574",
+      "value": "screen->txc->offset\nscreen->txc->offset\nNVC0_TIC_MAX_ENTRIES - 1"
+    },
+    {
+      "method": "TSC_ADDRESS_HIGH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 103,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 3,
+      "offset": "0x0000155c",
+      "value": "screen->txc->offset + 65536\nscreen->txc->offset + 65536\nNVC0_TSC_MAX_ENTRIES - 1"
+    },
+    {
+      "method": "0x0248",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 113,
+      "gk110": true,
+      "macro": "BEGIN_NIC0",
+      "count": 64,
+      "value": "0x38000 | i",
+      "condition": "obj_class >= NVF0_COMPUTE_CLASS"
+    },
+    {
+      "method": "NV50_GRAPH_SERIALIZE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 116,
+      "gk110": true,
+      "macro": "IMMED_NVC0",
+      "count": 0,
+      "condition": "obj_class >= NVF0_COMPUTE_CLASS"
+    },
+    {
+      "method": "TEX_CB_INDEX",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 119,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x00002608",
+      "value": "7"
+    },
+    {
+      "method": "UPLOAD_DST_ADDRESS_HIGH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 131,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00000188",
+      "value": "address + NVC0_CB_AUX_MS_INFO\naddress + NVC0_CB_AUX_MS_INFO"
+    },
+    {
+      "method": "UPLOAD_LINE_LENGTH_IN",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 134,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00000180",
+      "value": "64\n1"
+    },
+    {
+      "method": "UPLOAD_EXEC",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 137,
+      "gk110": true,
+      "macro": "BEGIN_1IC0",
+      "count": 17,
+      "offset": "0x000001b0",
+      "value": "NVE4_COMPUTE_UPLOAD_EXEC_LINEAR | (0x20 << 1\n0\n0\n1\n0\n0\n1\n1\n1\n2\n0\n3\n0\n2\n1\n3\n1"
+    },
+    {
+      "method": "FLUSH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 174,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x00001698",
+      "value": "NVE4_COMPUTE_FLUSH_CB"
+    }
+  ],
+  "launch": [
+    {
+      "method": "UPLOAD_DST_ADDRESS_HIGH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 846,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00000188",
+      "value": "desc_gpuaddr\ndesc_gpuaddr",
+      "condition": "unlikely(info)"
+    },
+    {
+      "method": "UPLOAD_LINE_LENGTH_IN",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 849,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 2,
+      "offset": "0x00000180",
+      "value": "256\n1",
+      "condition": "unlikely(info)"
+    },
+    {
+      "method": "LAUNCH_DESC_ADDRESS",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 872,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x000002b4",
+      "value": "desc_gpuaddr >> 8"
+    },
+    {
+      "method": "LAUNCH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 875,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "offset": "0x000002bc",
+      "value": "0x3",
+      "condition": "screen->compute->oclass < GA102_COMPUTE_CLASS"
+    },
+    {
+      "method": "0x02c0",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 878,
+      "gk110": false,
+      "macro": "BEGIN_NIC0",
+      "count": 2,
+      "value": "1\n2",
+      "condition": "else"
+    },
+    {
+      "method": "NV50_GRAPH_SERIALIZE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 882,
+      "gk110": true,
+      "macro": "BEGIN_NVC0",
+      "count": 1,
+      "value": "0"
+    }
+  ],
+  "descriptor_fields": [
+    {
+      "field": "INVALIDATE_TEXTURE_HEADER_CACHE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 581,
+      "type": "DEF_SET",
+      "value": "TRUE",
+      "bits": "250:250"
+    },
+    {
+      "field": "INVALIDATE_TEXTURE_SAMPLER_CACHE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 582,
+      "type": "DEF_SET",
+      "value": "TRUE",
+      "bits": "251:251"
+    },
+    {
+      "field": "INVALIDATE_TEXTURE_DATA_CACHE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 583,
+      "type": "DEF_SET",
+      "value": "TRUE",
+      "bits": "252:252"
+    },
+    {
+      "field": "INVALIDATE_SHADER_DATA_CACHE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 584,
+      "type": "DEF_SET",
+      "value": "TRUE",
+      "bits": "253:253"
+    },
+    {
+      "field": "INVALIDATE_SHADER_CONSTANT_CACHE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 585,
+      "type": "DEF_SET",
+      "value": "TRUE",
+      "bits": "255:255"
+    },
+    {
+      "field": "RELEASE_MEMBAR_TYPE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 586,
+      "type": "DEF_SET",
+      "value": "FE_SYSMEMBAR",
+      "bits": "366:366"
+    },
+    {
+      "field": "CWD_MEMBAR_TYPE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 587,
+      "type": "DEF_SET",
+      "value": "L1_SYSMEMBAR",
+      "bits": "369:368"
+    },
+    {
+      "field": "API_VISIBLE_CALL_LIMIT",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 588,
+      "type": "DEF_SET",
+      "value": "NO_CHECK",
+      "bits": "378:378"
+    },
+    {
+      "field": "SASS_VERSION",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 589,
+      "type": "VAL_SET",
+      "value": "0x30",
+      "bits": "1535:1528"
+    },
+    {
+      "field": "PROGRAM_OFFSET",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 591,
+      "type": "VAL_SET",
+      "value": "cp->code_base",
+      "bits": "287:256"
+    },
+    {
+      "field": "CTA_RASTER_WIDTH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 593,
+      "type": "VAL_SET",
+      "value": "info->grid[0]",
+      "bits": "415:384"
+    },
+    {
+      "field": "CTA_RASTER_HEIGHT",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 594,
+      "type": "VAL_SET",
+      "value": "info->grid[1]",
+      "bits": "431:416"
+    },
+    {
+      "field": "CTA_RASTER_DEPTH",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 595,
+      "type": "VAL_SET",
+      "value": "info->grid[2]",
+      "bits": "447:432"
+    },
+    {
+      "field": "CTA_THREAD_DIMENSION0",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 596,
+      "type": "VAL_SET",
+      "value": "info->block[0]",
+      "bits": "607:592"
+    },
+    {
+      "field": "CTA_THREAD_DIMENSION1",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 597,
+      "type": "VAL_SET",
+      "value": "info->block[1]",
+      "bits": "623:608"
+    },
+    {
+      "field": "CTA_THREAD_DIMENSION2",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 598,
+      "type": "VAL_SET",
+      "value": "info->block[2]",
+      "bits": "639:624"
+    },
+    {
+      "field": "SHARED_MEMORY_SIZE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 600,
+      "type": "VAL_SET",
+      "value": "align(shared_size, 0x100",
+      "bits": "561:544"
+    },
+    {
+      "field": "SHADER_LOCAL_MEMORY_LOW_SIZE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 601,
+      "type": "VAL_SET",
+      "value": "cp->hdr[1] & 0xfffff0",
+      "bits": "1463:1440"
+    },
+    {
+      "field": "SHADER_LOCAL_MEMORY_HIGH_SIZE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 602,
+      "type": "VAL_SET",
+      "value": "0",
+      "bits": "1495:1472"
+    },
+    {
+      "field": "SHADER_LOCAL_MEMORY_CRS_SIZE",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 603,
+      "type": "VAL_SET",
+      "value": "0x800",
+      "bits": "1527:1504"
+    },
+    {
+      "field": "REGISTER_COUNT",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 616,
+      "type": "VAL_SET",
+      "value": "cp->num_gprs",
+      "bits": "1503:1496"
+    },
+    {
+      "field": "BARRIER_COUNT",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 617,
+      "type": "VAL_SET",
+      "value": "cp->num_barriers",
+      "bits": "1471:1467"
+    }
+  ],
+  "kernel_needs": [
+    {
+      "need": "SASS version 0x30 (GK110 compute shader ISA)",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 589
+    },
+    {
+      "need": "QMD v0.0.6 format (a0c0 class)",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 574
+    },
+    {
+      "need": "512-byte launch descriptor buffer (256-word QMD)",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 853
+    },
+    {
+      "need": "MP temporary memory per-SM (screen->tls)",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 55
+    },
+    {
+      "need": "TIC (texture instruction cache) table",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 99
+    },
+    {
+      "need": "TSC (texture sampler cache) table",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 103
+    },
+    {
+      "need": "Unified constant buffer for compute",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 131
+    },
+    {
+      "need": "Text section (code) with GPU-addressable offset",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 83
+    }
+  ],
+  "code_address": {
+    "description": "The shader code (SASS text section) reaches the GPU through CODE_ADDRESS_HIGH in nve4_screen_compute_setup (line 83), which sets screen->text->offset. In nve4_launch_grid (line 872), the LAUNCH_DESC_ADDRESS method receives desc_gpuaddr pointing to the QMD descriptor buffer. The QMD's PROGRAM_OFFSET field (set at line 591 via cp->code_base) contains the GPU address of the shader code relative to the descriptor. The kernel driver resolves these offsets to actual GPU addresses via the channel's address space.",
+    "setup_line": 83,
+    "launch_line": 872,
+    "desc_field_line": 591
+  },
+  "other_chips": [
+    {
+      "chip": "GM107/GK20A",
+      "condition": "oclass < NVF0_COMPUTE_CLASS",
+      "description": "Uses SUBC_CP(0x02c4) and different upload paths",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 108
+    },
+    {
+      "chip": "GV100 / GA102+",
+      "condition": "oclass >= GV100_COMPUTE_CLASS",
+      "description": "Uses SUBC_CP(0x2a0)/(0x7b0) for local/shared base; MP_TEMP_SIZE_HIGH(1) skipped",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 65
+    },
+    {
+      "chip": "GP100+",
+      "condition": "oclass >= GP100_COMPUTE_CLASS",
+      "description": "Uses gp100_compute_setup_launch_desc (C0C0 class), UPLOAD_EXEC with 0x08 << 1, and SUBC_CP(0x02c0) for launch",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 821
+    },
+    {
+      "chip": "GA102+",
+      "condition": "oclass >= GA102_COMPUTE_CLASS",
+      "description": "Uses SUBC_CP(0x02c0) with values (1, 2) instead of LAUNCH with 0x3",
+      "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+      "line": 874
+    }
+  ]
+}

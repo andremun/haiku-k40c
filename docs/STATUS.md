@@ -1,8 +1,8 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B6
-Task state: IN PROGRESS in the worktree `../haiku-k40c-b3` (branch `task-b6`). Do not start a task in this tree.
+Current task: none
+Task state: WAITING. B1, B2, B3 and B6 are done. B4 and B5 wait for a task text with checks from the scaffold. Do not start a task.
 Last updated: 2026-10-08
 
 ## Last result
@@ -69,3 +69,4 @@ the old layout. Details: `reference/pci/README.md`.
 | B1 | DONE | 2026-10-07 | Rework 2: fixed role format (6+ words), class (other-chip category), determinism (sorted sets), RESULT.md errors. 88 entries, `make check` 0 failures. |
 | B2 | DONE | 2026-10-08 | Call graph from four roots with function tables: 446 nodes, 704 edges. Three rework sessions; the last defects (check mode, other-chip section, two nodes outside the inventory) were fixed by the scaffold, see `work/B2/REVIEW.md`. |
 | B3 | DONE | 2026-10-08 | 872 MMIO accesses from 43 files (rd32: 288, wr32: 462, mask: 122). 587 constant regs. Three bugs fixed: nested call line attribution (offset map), double-processing of joined lines (return end_line), 875→872 count. `make check` 0 failures. |
+| B6 | DONE | 2026-10-08 | Rework 2: added "gk110": true/false to every setup and launch entry; GK110-filtered sequence tables; other-chip table built from gk110=false entries; class_source line number; condition parsing fixes. 3 entries gk110=false (lines 87, 90, 878). `make check` 0 failures. |
