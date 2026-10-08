@@ -55,10 +55,21 @@ files, `kernel_needs` with sources, the two missing parts of the summary,
 
 1. Add `"gk110": true` or `false` to every `setup` and `launch` entry,
    from `gk110_active`. Expected: false for the entries at lines 87, 90
-   and 878, true for all others (16 of 19 in `setup`, 5 of 6 in
-   `launch`). `make check` will verify these three lines.
+   and 878, true for all others (17 of 19 in `setup`, 5 of 6 in
+   `launch`; the first version of this review said 16, a counting error of the reviewer). `make check` will verify these three lines.
 2. In the summary, list only the methods with `gk110` true in the two
    sequence tables, and build the other-chip table from the entries with
    `gk110` false and their conditions. Remove the hand-written rows.
 3. Add the line number to `class_source`.
 4. `make check`, handoff, stop.
+
+# Resolution (2026-10-08, commit 87b195b): accepted
+
+The second rework took 60 minutes. Every entry has the `gk110` mark: 17
+of 19 setup methods and 5 of 6 launch methods are sent on GK110, and the
+three at lines 87, 90 and 878 are not. The summary lists only the GK110
+methods and builds the other-chip table from the data. `class_source`
+has its line. `make check` and `--check` pass.
+
+Left as it is: the other-chip table gives the condition as `else` and not
+as the condition of the `if` that it belongs to (lines 77 and 874).
