@@ -1,8 +1,8 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B6
-Task state: REWORK 2, small. Read `work/B6/REVIEW.md`, section "Second review", and do only what it lists. This worktree is for B6 only.
+Current task: B7
+Task state: B6 done. Ready for next task.
 Last updated: 2026-10-08
 
 ## Last result
@@ -69,4 +69,4 @@ the old layout. Details: `reference/pci/README.md`.
 | B1 | DONE | 2026-10-07 | Rework 2: fixed role format (6+ words), class (other-chip category), determinism (sorted sets), RESULT.md errors. 88 entries, `make check` 0 failures. |
 | B2 | DONE | 2026-10-08 | Call graph from four roots with function tables: 446 nodes, 704 edges. Three rework sessions; the last defects (check mode, other-chip section, two nodes outside the inventory) were fixed by the scaffold, see `work/B2/REVIEW.md`. |
 | B3 | DONE | 2026-10-08 | 872 MMIO accesses from 43 files (rd32: 288, wr32: 462, mask: 122). 587 constant regs. Three bugs fixed: nested call line attribution (offset map), double-processing of joined lines (return end_line), 875→872 count. `make check` 0 failures. |
-| B6 | REWORK | 2026-10-08 | Compute launch path: 19 setup, 6 launch methods, 22 descriptor fields. First review fixed in 42 minutes. Second review: the lists do not mark the three methods that only newer chips receive. |
+| B6 | DONE | 2026-10-08 | Rework 2: added "gk110": true/false to every setup and launch entry; GK110-filtered sequence tables; other-chip table built from gk110=false entries; class_source line number; condition parsing fixes. 3 entries gk110=false (lines 87, 90, 878). `make check` 0 failures. |

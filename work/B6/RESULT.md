@@ -7,6 +7,30 @@
 - `analysis/compute_launch.json` — structured extraction.
 - `analysis/compute_launch.md` — human-readable summary.
 
+## What was fixed (rework 2 — GK110 branch marking)
+
+1. **`gk110` flag on every entry**: Added `"gk110": true/false` to every setup
+   and launch entry. Three entries are `gk110: false` (setup line 87: `0x2a0`,
+   setup line 90: `0x7b0`, launch line 878: `0x02c0`). These are in else
+   branches for newer chips. The tool computes `gk110_active` from the
+   condition stack for each entry.
+
+2. **MD sequence tables filtered to GK110**: The setup and launch tables in
+   the markdown only list entries with `gk110: true` (17 setup, 5 launch).
+
+3. **Other-chip table from data**: The "Other-Chip Branches" table is now
+   built from entries with `gk110: false` and their conditions (extracted
+   from the condition stack), replacing the hand-written rows.
+
+4. **`class_source` line number**: Changed from
+   `"src/gallium/drivers/nouveau/nv_object.xml.h"` to
+   `"src/gallium/drivers/nouveau/nv_object.xml.h:209"`.
+
+5. **Condition parsing fixes**: Extended `COND_PAT` to match `->` in variable
+   names (e.g. `screen->compute->oclass`) and handle `>=`/`<=` operators.
+   Added `unlikely()` wrapper handling: when the inner expression is not a
+   comparison, the branch is assumed taken (gk110: true).
+
 ## What was fixed (rework from previous session)
 
 1. **Path prefix**: Changed all `file` values from reference/mesa/... to

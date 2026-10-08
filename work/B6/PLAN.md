@@ -1,27 +1,17 @@
-# B6 Plan: Compute launch path (user-space half)
+# B6 REWORK 2 Plan
 
-## Inputs (relative to `reference/mesa/`)
-- `src/gallium/drivers/nouveau/nvc0/nve4_compute.c` (1010 lines)
-- `src/gallium/drivers/nouveau/nvc0/nve4_compute.xml.h` (433 lines)
-- `src/gallium/drivers/nouveau/nvc0/cla0c0qmd.h` (660 lines)
-- `src/gallium/drivers/nouveau/nvc0/qmda0c0.c`
-- `src/gallium/drivers/nouveau/nv_object.xml.h`
+## Defects from second review
 
-## Tool: `tools/compute_launch.py`
-1. Read `nv_object.xml.h` → find `NVF0_COMPUTE_CLASS` value (0xa1c0).
-2. In `nve4_compute.c`: find `nve4_screen_compute_setup` (~140 lines),
-   `nve4_launch_grid` (~110 lines), `nve4_compute_setup_launch_desc` (~50 lines).
-3. Parse `BEGIN_NVC0`/`BEGIN_1IC0`/`BEGIN_NIC0` for methods, extract NAME.
-4. Parse `SUBC_CP(...)` for non-BEGIN methods. Collect `PUSH_DATA` as values.
-5. Look up offsets from `nve4_compute.xml.h` (#define NVE4_COMPUTE_XXX).
-6. Parse `NVA0C0_QMDV00_XX_VAL_SET`/`DEF_SET` lines in launch_desc for descriptor fields.
-7. Look up `#define NVA0C0_QMDV00_XX` in `cla0c0qmd.h` for bits (MW(hi:lo)).
-8. Write `analysis/compute_launch.json` and `analysis/compute_launch.md`.
-9. `--check` mode: regenerate JSON and compare (no sort needed, keep source order).
+1. Add `"gk110": true/false` to every setup and launch entry (from `gk110_active`)
+2. Build the MD other-chip table from `gk110` false entries instead of hand-written rows
+3. Add line number to `class_source`
 
-## Checks
-- `compute_class` matches `NVF0_COMPUTE_CLASS` from `nv_object.xml.h`.
-- Each `file:line` holds the method/field name.
-- `LAUNCH_DESC_ADDRESS` then `LAUNCH` in launch order.
-- `kernel_needs` not empty.
-- `make check` passes.
+## Steps
+
+1. In `extract_methods_with_branch_filter`: capture condition strings in cond_stack,
+   add `"gk110"` and `"condition"` to each method entry.
+2. In `clean_method`: include `"gk110"`, drop unused keys.
+3. Fix `class_source` to include line number (209).
+4. Update `build_md`: filter GK110 entries in sequence tables, build other-chip
+   table from `gk110` false entries.
+5. `make check`, handoff, stop.

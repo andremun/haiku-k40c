@@ -172,9 +172,10 @@ def check_gk110_branch(var, op, val):
 # Condition / preprocessor stack helpers
 # ---------------------------------------------------------------------------
 
-METHOD_MACROS = ("BEGIN_NVC0", "BEGIN_1IC0", "BEGIN_NIC0", "IMMED_NVC0")
+METHOD_MACROS = ("BEGIN_NVC0", "BEGIN_1IC0", "BEGIN_NIC0", "IMMED_NVC0",
+                 "SUBC_CP")
 COND_PAT = re.compile(
-    r'if\s*\(\s*(\w+(?:[-.]\w+)*)\s*(<|>|==|!=|>=|<=)\s*(\w+(?:_\w+)?)')
+    r'if\s*\(\s*(\S+)\s*(>=|<=|==|!=|>|<)\s*(\w+(?:_\w+)*)')
 
 
 def extract_push_data_values(abs_lines, abs_start, abs_end):
@@ -238,7 +239,7 @@ def extract_methods_with_branch_filter(lines, abs_start, abs_end):
     in_block_comment = False
     in_preprocessor = False       # inside #if … #endif
     if_depth = 0                   # number of open if-else blocks (brace-gated)
-    cond_stack = []               # GK110-taken status per open block
+    cond_stack = []               # (gk110_taken, condition_string) per open block
 
     for abs_line in range(abs_start, abs_end + 1):
         raw_line = abs_lines[abs_line - 1]
@@ -274,26 +275,47 @@ def extract_methods_with_branch_filter(lines, abs_start, abs_end):
         # ---- if / else / else-if tracking (only brace-gated) ----
         m_if = COND_PAT.search(stripped)
         if m_if and re.search(r'\{', stripped) and not re.search(r'BEGIN_', stripped):
-            var, op, val = m_if.group(1), m_if.group(2), m_if.group(3)
+            var = m_if.group(1)
+            # Handle unlikely() wrapper: skip the macro, parse inner
+            if var.startswith("unlikely("):
+                inner = var[9:-1]
+                # Re-check: inner should be the real condition
+                inner_m = COND_PAT.search(inner)
+                if inner_m:
+                    var, op, val = (inner_m.group(1),
+                                    inner_m.group(2), inner_m.group(3))
+                else:
+                    # Unparseable unlikely: assume taken
+                    gk110 = True
+                    cond = "unlikely(" + inner + ")"
+                    cond_stack.append((gk110, cond))
+                    if_depth += 1
+                    continue
+            else:
+                op, val = m_if.group(2), m_if.group(3)
             gk110 = check_gk110_branch(var, op, val)
-            cond_stack.append(gk110)
+            cond = f"{var} {op} {val}"
+            cond_stack.append((gk110, cond))
             if_depth += 1
             continue
 
         m_else = re.match(r'\}\s*else\s*\{', stripped)
         if m_else and if_depth > 0:
-            cond_stack[-1] = not cond_stack[-1]
+            gk110, cond = cond_stack[-1]
+            cond_stack[-1] = (not gk110, "else")
             # if_depth stays (else replaces the if's block)
             continue
 
         m_else_if = re.match(r'\}\s*else\s*if\s*\(', stripped)
         if m_else_if and if_depth > 0:
-            cond_stack[-1] = not cond_stack[-1]
+            gk110, cond = cond_stack[-1]
+            cond_stack[-1] = (not gk110, "else")
             m2 = COND_PAT.search(stripped[m_else_if.end():])
             if m2:
-                gk110 = check_gk110_branch(m2.group(1), m2.group(2),
-                                            m2.group(3))
-                cond_stack.append(gk110)
+                gk110_2 = check_gk110_branch(m2.group(1), m2.group(2),
+                                             m2.group(3))
+                cond_2 = f"{m2.group(1)} {m2.group(2)} {m2.group(3)}"
+                cond_stack.append((gk110_2, cond_2))
                 if_depth += 1
             continue
 
@@ -304,7 +326,9 @@ def extract_methods_with_branch_filter(lines, abs_start, abs_end):
             continue
 
         # ---- extract method calls ----
-        gk110_active = all(cond_stack) if cond_stack else True
+
+        gk110_active = all(c[0] for c in cond_stack) if cond_stack else True
+        condition_str = cond_stack[-1][1] if cond_stack else None
 
         for macro_name in METHOD_MACROS:
             pat = (macro_name +
@@ -323,6 +347,8 @@ def extract_methods_with_branch_filter(lines, abs_start, abs_end):
                     "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
                     "line": abs_line,
                     "macro": macro_name,
+                    "gk110": gk110_active,
+                    "condition": condition_str,
                 }
                 # Add PUSH_DATA values if available
                 if abs_line in push_values:
@@ -553,6 +579,7 @@ def build_json():
             "method": m["method"],
             "file": m["file"],
             "line": m["line"],
+            "gk110": m["gk110"],
             "macro": m["macro"],
             "count": m["count"],
         }
@@ -562,6 +589,8 @@ def build_json():
             out["value"] = m["value"]
         if m.get("formula"):
             out["formula"] = m["formula"]
+        if m.get("condition"):
+            out["condition"] = m["condition"]
         return out
 
     def clean_field(f):
@@ -578,7 +607,7 @@ def build_json():
 
     result = {
         "compute_class": compute_class,
-        "class_source": "src/gallium/drivers/nouveau/nv_object.xml.h",
+        "class_source": "src/gallium/drivers/nouveau/nv_object.xml.h:209",
         "setup": [clean_method(m) for m in setup],
         "launch": [clean_method(m) for m in launch],
         "descriptor_fields": [clean_field(f) for f in descriptor_fields],
@@ -610,7 +639,7 @@ def build_md(data):
     lines.append("")
     lines.append("| # | Method | Offset | Macro | Count | Value | Line |")
     lines.append("|---|--------|--------|-------|-------|-------|------|")
-    for i, m in enumerate(data["setup"], 1):
+    for i, m in enumerate((x for x in data["setup"] if x.get("gk110")), 1):
         off = m.get("offset") or "N/A"
         val = m.get("value") or "N/A"
         val_display = val.replace("\n", " | ") if isinstance(val, str) else val
@@ -638,7 +667,7 @@ def build_md(data):
     lines.append("")
     lines.append("| # | Method | Offset | Macro | Count | Value | Line |")
     lines.append("|---|--------|--------|-------|-------|-------|------|")
-    for i, m in enumerate(data["launch"], 1):
+    for i, m in enumerate((x for x in data["launch"] if x.get("gk110")), 1):
         off = m.get("offset") or "N/A"
         val = m.get("value") or "N/A"
         val_display = val.replace("\n", " | ") if isinstance(val, str) else val
@@ -664,16 +693,18 @@ def build_md(data):
     lines.append(data["code_address"]["description"])
     lines.append("")
 
-    # Other-chip branches
+    # Other-chip branches (from entries with gk110 false)
     lines.append("## Other-Chip Branches (not taken on GK110)")
     lines.append("")
-    lines.append("| Chip | Condition | Description | Line |")
-    lines.append("|------|-----------|-------------|------|")
-    for branch in data["other_chips"]:
-        lines.append(
-            f"| {branch['chip']} | `{branch['condition']}` | "
-            f"{branch['description']} | "
-            f"{branch['file']}:{branch['line']} |")
+    lines.append("| Method | Condition | Offset | Line |")
+    lines.append("|--------|-----------|--------|------|")
+    for m in data["setup"] + data["launch"]:
+        if m.get("gk110") is False:
+            cond = m.get("condition") or "unknown"
+            off = m.get("offset") or m.get("method", "?")
+            lines.append(
+                f"| `{m['method']}` | `{cond}` | `{off}` | "
+                f"{m['file']}:{m['line']} |")
     lines.append("")
 
     return "\n".join(lines)

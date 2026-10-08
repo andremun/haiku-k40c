@@ -5,7 +5,7 @@ Source: Mesa Nouveau driver, pinned in `reference/mesa/`.
 ## Compute Class
 
 - Class: `0x0000a1c0` (`NVF0_COMPUTE_CLASS`)
-- Source: `src/gallium/drivers/nouveau/nv_object.xml.h`
+- Source: `src/gallium/drivers/nouveau/nv_object.xml.h:209`
 
 ## Setup Methods (`nve4_screen_compute_setup`)
 
@@ -18,18 +18,16 @@ Source: Mesa Nouveau driver, pinned in `reference/mesa/`.
 | 5 | `LOCAL_BASE` | `0x0000077c` | `BEGIN_NVC0` | 1 | 0xff << 24 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:78 |
 | 6 | `SHARED_BASE` | `0x00000214` | `BEGIN_NVC0` | 1 | 0xfe << 24 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:80 |
 | 7 | `CODE_ADDRESS_HIGH` | `0x00001608` | `BEGIN_NVC0` | 2 | screen->text->offset | screen->text->offset | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:83 |
-| 8 | `0x2a0` | `N/A` | `BEGIN_NVC0` | 2 | 0xfeULL << 24 | 0xfeULL << 24 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:87 |
-| 9 | `0x7b0` | `N/A` | `BEGIN_NVC0` | 2 | 0xffULL << 24 | 0xffULL << 24 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:90 |
-| 10 | `0x0310` | `N/A` | `BEGIN_NVC0` | 1 | (obj_class >= NVF0_COMPUTE_CLASS | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:95 |
-| 11 | `TIC_ADDRESS_HIGH` | `0x00001574` | `BEGIN_NVC0` | 3 | screen->txc->offset | screen->txc->offset | NVC0_TIC_MAX_ENTRIES - 1 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:99 |
-| 12 | `TSC_ADDRESS_HIGH` | `0x0000155c` | `BEGIN_NVC0` | 3 | screen->txc->offset + 65536 | screen->txc->offset + 65536 | NVC0_TSC_MAX_ENTRIES - 1 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:103 |
-| 13 | `0x0248` | `N/A` | `BEGIN_NIC0` | 64 | 0x38000 | i | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:113 |
-| 14 | `NV50_GRAPH_SERIALIZE` | `N/A` | `IMMED_NVC0` | 0 | N/A | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:116 |
-| 15 | `TEX_CB_INDEX` | `0x00002608` | `BEGIN_NVC0` | 1 | 7 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:119 |
-| 16 | `UPLOAD_DST_ADDRESS_HIGH` | `0x00000188` | `BEGIN_NVC0` | 2 | address + NVC0_CB_AUX_MS_INFO | address + NVC0_CB_AUX_MS_INFO | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:131 |
-| 17 | `UPLOAD_LINE_LENGTH_IN` | `0x00000180` | `BEGIN_NVC0` | 2 | 64 | 1 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:134 |
-| 18 | `UPLOAD_EXEC` | `0x000001b0` | `BEGIN_1IC0` | 17 | NVE4_COMPUTE_UPLOAD_EXEC_LINEAR | (0x20 << 1 | 0 | 0 | 1 | 0 | 0 | 1 | 1 | 1 | 2 | 0 | 3 | 0 | 2 | 1 | 3 | 1 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:137 |
-| 19 | `FLUSH` | `0x00001698` | `BEGIN_NVC0` | 1 | NVE4_COMPUTE_FLUSH_CB | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:174 |
+| 8 | `0x0310` | `N/A` | `BEGIN_NVC0` | 1 | (obj_class >= NVF0_COMPUTE_CLASS | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:95 |
+| 9 | `TIC_ADDRESS_HIGH` | `0x00001574` | `BEGIN_NVC0` | 3 | screen->txc->offset | screen->txc->offset | NVC0_TIC_MAX_ENTRIES - 1 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:99 |
+| 10 | `TSC_ADDRESS_HIGH` | `0x0000155c` | `BEGIN_NVC0` | 3 | screen->txc->offset + 65536 | screen->txc->offset + 65536 | NVC0_TSC_MAX_ENTRIES - 1 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:103 |
+| 11 | `0x0248` | `N/A` | `BEGIN_NIC0` | 64 | 0x38000 | i | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:113 |
+| 12 | `NV50_GRAPH_SERIALIZE` | `N/A` | `IMMED_NVC0` | 0 | N/A | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:116 |
+| 13 | `TEX_CB_INDEX` | `0x00002608` | `BEGIN_NVC0` | 1 | 7 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:119 |
+| 14 | `UPLOAD_DST_ADDRESS_HIGH` | `0x00000188` | `BEGIN_NVC0` | 2 | address + NVC0_CB_AUX_MS_INFO | address + NVC0_CB_AUX_MS_INFO | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:131 |
+| 15 | `UPLOAD_LINE_LENGTH_IN` | `0x00000180` | `BEGIN_NVC0` | 2 | 64 | 1 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:134 |
+| 16 | `UPLOAD_EXEC` | `0x000001b0` | `BEGIN_1IC0` | 17 | NVE4_COMPUTE_UPLOAD_EXEC_LINEAR | (0x20 << 1 | 0 | 0 | 1 | 0 | 0 | 1 | 1 | 1 | 2 | 0 | 3 | 0 | 2 | 1 | 3 | 1 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:137 |
+| 17 | `FLUSH` | `0x00001698` | `BEGIN_NVC0` | 1 | NVE4_COMPUTE_FLUSH_CB | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:174 |
 
 ## Launch Descriptor Fields (`nve4_compute_setup_launch_desc`)
 
@@ -66,8 +64,7 @@ Source: Mesa Nouveau driver, pinned in `reference/mesa/`.
 | 2 | `UPLOAD_LINE_LENGTH_IN` | `0x00000180` | `BEGIN_NVC0` | 2 | 256 | 1 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:849 |
 | 3 | `LAUNCH_DESC_ADDRESS` | `0x000002b4` | `BEGIN_NVC0` | 1 | desc_gpuaddr >> 8 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:872 |
 | 4 | `LAUNCH` | `0x000002bc` | `BEGIN_NVC0` | 1 | 0x3 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:875 |
-| 5 | `0x02c0` | `N/A` | `BEGIN_NIC0` | 2 | 1 | 2 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:878 |
-| 6 | `NV50_GRAPH_SERIALIZE` | `N/A` | `BEGIN_NVC0` | 1 | 0 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:882 |
+| 5 | `NV50_GRAPH_SERIALIZE` | `N/A` | `BEGIN_NVC0` | 1 | 0 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:882 |
 
 ## Kernel Requirements
 
@@ -88,9 +85,8 @@ The shader code (SASS text section) reaches the GPU through CODE_ADDRESS_HIGH in
 
 ## Other-Chip Branches (not taken on GK110)
 
-| Chip | Condition | Description | Line |
-|------|-----------|-------------|------|
-| GM107/GK20A | `oclass < NVF0_COMPUTE_CLASS` | Uses SUBC_CP(0x02c4) and different upload paths | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:108 |
-| GV100 / GA102+ | `oclass >= GV100_COMPUTE_CLASS` | Uses SUBC_CP(0x2a0)/(0x7b0) for local/shared base; MP_TEMP_SIZE_HIGH(1) skipped | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:65 |
-| GP100+ | `oclass >= GP100_COMPUTE_CLASS` | Uses gp100_compute_setup_launch_desc (C0C0 class), UPLOAD_EXEC with 0x08 << 1, and SUBC_CP(0x02c0) for launch | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:821 |
-| GA102+ | `oclass >= GA102_COMPUTE_CLASS` | Uses SUBC_CP(0x02c0) with values (1, 2) instead of LAUNCH with 0x3 | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:874 |
+| Method | Condition | Offset | Line |
+|--------|-----------|--------|------|
+| `0x2a0` | `else` | `0x2a0` | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:87 |
+| `0x7b0` | `else` | `0x7b0` | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:90 |
+| `0x02c0` | `else` | `0x02c0` | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:878 |
