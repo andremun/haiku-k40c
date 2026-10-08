@@ -2,7 +2,7 @@
 
 Current phase: B (Nouveau analysis)
 Current task: B6
-Task state: REWORK. A first session wrote the tool and the outputs and stopped at the time limit. Read `docs/tasks/B6.md`, then `work/B6/REVIEW.md`, and finish the task. This worktree is for B6 only.
+Task state: DONE. Rework completed: fixed path prefix (relative to reference/mesa/), added PUSH_DATA value extraction, fixed markdown–JSON agreement, structured kernel_needs, added CODE_ADDRESS and other-chip sections, extended --check to both files. `make check` passes.
 Last updated: 2026-10-08
 
 ## Last result
@@ -69,3 +69,4 @@ the old layout. Details: `reference/pci/README.md`.
 | B1 | DONE | 2026-10-07 | Rework 2: fixed role format (6+ words), class (other-chip category), determinism (sorted sets), RESULT.md errors. 88 entries, `make check` 0 failures. |
 | B2 | DONE | 2026-10-08 | Call graph from four roots with function tables: 446 nodes, 704 edges. Three rework sessions; the last defects (check mode, other-chip section, two nodes outside the inventory) were fixed by the scaffold, see `work/B2/REVIEW.md`. |
 | B3 | DONE | 2026-10-08 | 872 MMIO accesses from 43 files (rd32: 288, wr32: 462, mask: 122). 587 constant regs. Three bugs fixed: nested call line attribution (offset map), double-processing of joined lines (return end_line), 875→872 count. `make check` 0 failures. |
+| B6 | DONE | 2026-10-08 | Compute launch path: 19 setup, 6 launch methods, 22 descriptor fields. Rework: fixed path prefix, added PUSH_DATA values, markdown–JSON agreement, structured kernel_needs, CODE_ADDRESS and other-chip sections. `make check` 0 failures. |

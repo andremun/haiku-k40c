@@ -177,6 +177,47 @@ COND_PAT = re.compile(
     r'if\s*\(\s*(\w+(?:[-.]\w+)*)\s*(<|>|==|!=|>=|<=)\s*(\w+(?:_\w+)?)')
 
 
+def extract_push_data_values(abs_lines, abs_start, abs_end):
+    """Extract PUSH_DATA text between BEGIN_ and the next BEGIN_ within
+    abs_start..abs_end.
+
+    Returns a dict: {begin_line: "value_text"}.
+    """
+    values = {}
+    current_begin = None
+    data_parts = []
+
+    for abs_line in range(abs_start, abs_end + 1):
+        raw = abs_lines[abs_line - 1].strip()
+
+        # Check for a new BEGIN_
+        is_begin = False
+        for macro in METHOD_MACROS:
+            if re.search(r'\b' + macro + r'\s*\(', raw):
+                is_begin = True
+                break
+
+        if is_begin:
+            # Save previous block's data
+            if current_begin is not None and data_parts:
+                values[current_begin] = "\n".join(data_parts).strip()
+            current_begin = abs_line
+            data_parts = []
+        elif current_begin is not None:
+            # Collect PUSH_DATA lines
+            if re.search(r'\bPUSH_DATA', raw):
+                # Strip PUSH_DATAh/PUSH_DATAp/PUSH_DATA* and get the pushbuf arg
+                m = re.search(r'PUSH_DATA[hp]?\s*\(\s*push\s*,\s*(.+?)\s*\)', raw)
+                if m:
+                    data_parts.append(m.group(1).strip())
+
+    # Save last block
+    if current_begin is not None and data_parts:
+        values[current_begin] = "\n".join(data_parts).strip()
+
+    return values
+
+
 def extract_methods_with_branch_filter(lines, abs_start, abs_end):
     """Extract method calls from a range of source lines, GK110-filtered.
 
@@ -189,6 +230,9 @@ def extract_methods_with_branch_filter(lines, abs_start, abs_end):
     """
     full_src = read_file(NVE4_COMPUTE_C)
     abs_lines = full_src.split("\n")
+
+    # First, extract PUSH_DATA values for this range
+    push_values = extract_push_data_values(abs_lines, abs_start, abs_end)
 
     methods = []
     in_block_comment = False
@@ -248,7 +292,7 @@ def extract_methods_with_branch_filter(lines, abs_start, abs_end):
             m2 = COND_PAT.search(stripped[m_else_if.end():])
             if m2:
                 gk110 = check_gk110_branch(m2.group(1), m2.group(2),
-                                           m2.group(3))
+                                            m2.group(3))
                 cond_stack.append(gk110)
                 if_depth += 1
             continue
@@ -271,16 +315,19 @@ def extract_methods_with_branch_filter(lines, abs_start, abs_end):
                 count = int(m.group(2))
                 method_name, param = resolve_method_name(raw_method)
                 offset, formula = lookup_offset(method_name, param)
-                methods.append({
+                entry = {
                     "method": method_name,
                     "offset": offset,
                     "formula": formula,
                     "count": count,
-                    "file": ("reference/mesa/src/gallium/drivers/nouveau/"
-                             "nvc0/nve4_compute.c"),
+                    "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
                     "line": abs_line,
                     "macro": macro_name,
-                })
+                }
+                # Add PUSH_DATA values if available
+                if abs_line in push_values:
+                    entry["value"] = push_values[abs_line]
+                methods.append(entry)
                 break  # only one method per macro call
 
     return methods
@@ -329,8 +376,7 @@ def extract_descriptor_fields():
                 "bits": hi + ":" + lo if hi and lo else None,
                 "value": value,
                 "type": "DEF_SET",
-                "file": ("reference/mesa/src/gallium/drivers/nouveau/"
-                         "nvc0/nve4_compute.c"),
+                "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
                 "line": abs_line,
             })
             continue
@@ -349,8 +395,7 @@ def extract_descriptor_fields():
                 "bits": hi + ":" + lo if hi and lo else None,
                 "value": value,
                 "type": "VAL_SET",
-                "file": ("reference/mesa/src/gallium/drivers/nouveau/"
-                         "nvc0/nve4_compute.c"),
+                "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
                 "line": abs_line,
             })
 
@@ -386,20 +431,111 @@ def extract_compute_class():
 
 
 # ---------------------------------------------------------------------------
-# Kernel needs (derived from analysis)
+# Kernel needs (derived from analysis, with source references)
 # ---------------------------------------------------------------------------
 
 def kernel_needs():
+    """Each need with the Mesa call that demonstrates it."""
     return [
-        "SASS version 0x30 (GK110 compute shader ISA)",
-        "QMD v0.0.6 format (a0c0 class)",
-        "512-byte launch descriptor buffer (256-word QMD)",
-        "MP temporary memory per-SM (screen->tls)",
-        "TIC (texture instruction cache) table",
-        "TSC (texture sampler cache) table",
-        "Unified constant buffer for compute",
-        "Text section (code) with GPU-addressable offset",
+        {
+            "need": "SASS version 0x30 (GK110 compute shader ISA)",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 589,
+        },
+        {
+            "need": "QMD v0.0.6 format (a0c0 class)",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 574,
+        },
+        {
+            "need": "512-byte launch descriptor buffer (256-word QMD)",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 853,
+        },
+        {
+            "need": "MP temporary memory per-SM (screen->tls)",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 55,
+        },
+        {
+            "need": "TIC (texture instruction cache) table",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 99,
+        },
+        {
+            "need": "TSC (texture sampler cache) table",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 103,
+        },
+        {
+            "need": "Unified constant buffer for compute",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 131,
+        },
+        {
+            "need": "Text section (code) with GPU-addressable offset",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 83,
+        },
     ]
+
+
+# ---------------------------------------------------------------------------
+# Other-chip branches (for the MD summary)
+# ---------------------------------------------------------------------------
+
+def other_chip_branches():
+    """Describe branches not taken on GK110 and their replacement."""
+    return [
+        {
+            "chip": "GM107/GK20A",
+            "condition": "oclass < NVF0_COMPUTE_CLASS",
+            "description": "Uses SUBC_CP(0x02c4) and different upload paths",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 108,
+        },
+        {
+            "chip": "GV100 / GA102+",
+            "condition": "oclass >= GV100_COMPUTE_CLASS",
+            "description": "Uses SUBC_CP(0x2a0)/(0x7b0) for local/shared base; MP_TEMP_SIZE_HIGH(1) skipped",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 65,
+        },
+        {
+            "chip": "GP100+",
+            "condition": "oclass >= GP100_COMPUTE_CLASS",
+            "description": "Uses gp100_compute_setup_launch_desc (C0C0 class), UPLOAD_EXEC with 0x08 << 1, and SUBC_CP(0x02c0) for launch",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 821,
+        },
+        {
+            "chip": "GA102+",
+            "condition": "oclass >= GA102_COMPUTE_CLASS",
+            "description": "Uses SUBC_CP(0x02c0) with values (1, 2) instead of LAUNCH with 0x3",
+            "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+            "line": 874,
+        },
+    ]
+
+
+def code_address_info():
+    """Describe how the shader code reaches the GPU."""
+    return {
+        "description": (
+            "The shader code (SASS text section) reaches the GPU through "
+            "CODE_ADDRESS_HIGH in nve4_screen_compute_setup (line 83), which "
+            "sets screen->text->offset. In nve4_launch_grid (line 872), the "
+            "LAUNCH_DESC_ADDRESS method receives desc_gpuaddr pointing to the "
+            "QMD descriptor buffer. The QMD's PROGRAM_OFFSET field (set at "
+            "line 591 via cp->code_base) contains the GPU address of the "
+            "shader code relative to the descriptor. The kernel driver "
+            "resolves these offsets to actual GPU addresses via the channel's "
+            "address space."
+        ),
+        "setup_line": 83,
+        "launch_line": 872,
+        "desc_field_line": 591,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -422,8 +558,8 @@ def build_json():
         }
         if m["offset"] is not None:
             out["offset"] = m["offset"]
-        else:
-            out["offset"] = None
+        if "value" in m:
+            out["value"] = m["value"]
         if m.get("formula"):
             out["formula"] = m["formula"]
         return out
@@ -442,8 +578,7 @@ def build_json():
 
     result = {
         "compute_class": compute_class,
-        "class_source": ("reference/mesa/src/gallium/drivers/nouveau/"
-                         "nv_object.xml.h"),
+        "class_source": "src/gallium/drivers/nouveau/nv_object.xml.h",
         "setup": [clean_method(m) for m in setup],
         "launch": [clean_method(m) for m in launch],
         "descriptor_fields": [clean_field(f) for f in descriptor_fields],
@@ -473,13 +608,15 @@ def build_md(data):
     # Setup methods
     lines.append("## Setup Methods (`nve4_screen_compute_setup`)")
     lines.append("")
-    lines.append("| # | Method | Offset | Macro | Count | Line |")
-    lines.append("|---|--------|--------|-------|-------|------|")
+    lines.append("| # | Method | Offset | Macro | Count | Value | Line |")
+    lines.append("|---|--------|--------|-------|-------|-------|------|")
     for i, m in enumerate(data["setup"], 1):
         off = m.get("offset") or "N/A"
+        val = m.get("value") or "N/A"
+        val_display = val.replace("\n", " | ") if isinstance(val, str) else val
         lines.append(
             f"| {i} | `{m['method']}` | `{off}` | `{m['macro']}`"
-            f" | {m['count']} | {m['file']}:{m['line']} |")
+            f" | {m['count']} | {val_display} | {m['file']}:{m['line']} |")
     lines.append("")
 
     # Descriptor fields
@@ -499,20 +636,44 @@ def build_md(data):
     lines.append(
         "## Launch Methods (`nve4_launch_grid`, GK110 path)")
     lines.append("")
-    lines.append("| # | Method | Offset | Macro | Count | Line |")
-    lines.append("|---|--------|--------|-------|-------|------|")
+    lines.append("| # | Method | Offset | Macro | Count | Value | Line |")
+    lines.append("|---|--------|--------|-------|-------|-------|------|")
     for i, m in enumerate(data["launch"], 1):
         off = m.get("offset") or "N/A"
+        val = m.get("value") or "N/A"
+        val_display = val.replace("\n", " | ") if isinstance(val, str) else val
         lines.append(
             f"| {i} | `{m['method']}` | `{off}` | `{m['macro']}`"
-            f" | {m['count']} | {m['file']}:{m['line']} |")
+            f" | {m['count']} | {val_display} | {m['file']}:{m['line']} |")
     lines.append("")
 
     # Kernel needs
     lines.append("## Kernel Requirements")
     lines.append("")
-    for need in data["kernel_needs"]:
-        lines.append(f"- {need}")
+    lines.append("| # | Need | Source |")
+    lines.append("|---|------|--------|")
+    for i, need in enumerate(data["kernel_needs"], 1):
+        lines.append(
+            f"| {i} | {need['need']} | "
+            f"{need['file']}:{need['line']} |")
+    lines.append("")
+
+    # Shader code delivery
+    lines.append("## Shader Code Delivery (CODE_ADDRESS)")
+    lines.append("")
+    lines.append(data["code_address"]["description"])
+    lines.append("")
+
+    # Other-chip branches
+    lines.append("## Other-Chip Branches (not taken on GK110)")
+    lines.append("")
+    lines.append("| Chip | Condition | Description | Line |")
+    lines.append("|------|-----------|-------------|------|")
+    for branch in data["other_chips"]:
+        lines.append(
+            f"| {branch['chip']} | `{branch['condition']}` | "
+            f"{branch['description']} | "
+            f"{branch['file']}:{branch['line']} |")
     lines.append("")
 
     return "\n".join(lines)
@@ -523,20 +684,40 @@ def build_md(data):
 # ---------------------------------------------------------------------------
 
 def check_mode():
-    """Regenerate JSON and compare with existing file."""
-    existing = None
+    """Regenerate both files and compare with existing."""
+    data = build_json()
+
+    # Add derived data for MD
+    data["code_address"] = code_address_info()
+    data["other_chips"] = other_chip_branches()
+
+    # Check JSON
+    existing_json = None
     if os.path.exists(OUT_JSON):
         with open(OUT_JSON) as fh:
-            existing = fh.read()
+            existing_json = fh.read()
+    regenerated_json = json.dumps(data, indent=2) + "\n"
 
-    data = build_json()
-    regenerated = json.dumps(data, indent=2) + "\n"
+    json_changed = (existing_json != regenerated_json)
 
-    if existing != regenerated:
+    # Check MD
+    md = build_md(data)
+    existing_md = None
+    if os.path.exists(OUT_MD):
+        with open(OUT_MD) as fh:
+            existing_md = fh.read()
+    md_changed = (existing_md != md)
+
+    if json_changed or md_changed:
         os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)
-        with open(OUT_JSON, "w") as fh:
-            fh.write(regenerated)
-        print("compute_launch.py --check: regenerated analysis/compute_launch.json")
+        if json_changed:
+            with open(OUT_JSON, "w") as fh:
+                fh.write(regenerated_json)
+            print("compute_launch.py --check: regenerated analysis/compute_launch.json")
+        if md_changed:
+            with open(OUT_MD, "w") as fh:
+                fh.write(md)
+            print("compute_launch.py --check: regenerated analysis/compute_launch.md")
         return 1
     else:
         print("compute_launch.py --check: OK — output matches")
@@ -558,6 +739,8 @@ def main():
         sys.exit(check_mode())
 
     data = build_json()
+    data["code_address"] = code_address_info()
+    data["other_chips"] = other_chip_branches()
     md = build_md(data)
 
     os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)
