@@ -1,0 +1,780 @@
+{
+  "subsystems": [
+    {
+      "name": "bar",
+      "constructor": "gf100_bar_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1772,
+      "status": "needed",
+      "reason": "PCI BAR mapping is required before any GPU register access can occur"
+    },
+    {
+      "name": "bios",
+      "constructor": "nvkm_bios_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1773,
+      "status": "optional",
+      "reason": "VBIOS parsing is needed for initial card identification and clocks"
+    },
+    {
+      "name": "bus",
+      "constructor": "gf100_bus_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1774,
+      "status": "optional",
+      "reason": "PCI bus layer handles link speed configuration and power management"
+    },
+    {
+      "name": "ce",
+      "constructor": "gk104_ce_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1794,
+      "status": "optional",
+      "reason": "copy engine handles memory transfers but compute can use channel"
+    },
+    {
+      "name": "clk",
+      "constructor": "gk104_clk_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1775,
+      "status": "optional",
+      "reason": "clock management sets GPU and memory frequencies before compute"
+    },
+    {
+      "name": "devinit",
+      "constructor": "gf100_devinit_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1776,
+      "status": "optional",
+      "reason": "device initialization handles power domains and clock gating setup"
+    },
+    {
+      "name": "disp",
+      "constructor": "gk110_disp_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1795,
+      "status": "not-needed",
+      "reason": "display engine is only needed for outputting to a connected monitor"
+    },
+    {
+      "name": "dma",
+      "constructor": "gf119_dma_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1796,
+      "status": "optional",
+      "reason": "DMA engine supports direct memory access for non-GPU transfers"
+    },
+    {
+      "name": "fb",
+      "constructor": "gk110_fb_new",
+      "file": "nvkm/subdev/fb/gk110.c",
+      "line": 1777,
+      "status": "needed",
+      "reason": "framebuffer and memory layout must be initialized for GPU memory access"
+    },
+    {
+      "name": "fifo",
+      "constructor": "gk110_fifo_new",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 1797,
+      "status": "needed",
+      "reason": "command submission engine is required to send work to the GPU"
+    },
+    {
+      "name": "fuse",
+      "constructor": "gf100_fuse_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1778,
+      "status": "optional",
+      "reason": "fuse configuration reads factory-calibrated GPU parameters"
+    },
+    {
+      "name": "gpio",
+      "constructor": "gk104_gpio_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1779,
+      "status": "optional",
+      "reason": "general-purpose I/O is used for board-level controls not compute"
+    },
+    {
+      "name": "gr",
+      "constructor": "gk110b_gr_new",
+      "file": "nvkm/engine/gr/gk110b.c",
+      "line": 1798,
+      "status": "needed",
+      "reason": "graphics/compute engine must be initialized to run compute shaders"
+    },
+    {
+      "name": "i2c",
+      "constructor": "gk110_i2c_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1780,
+      "status": "optional",
+      "reason": "I2C bus is used for sensor access and EEPROM reading not compute"
+    },
+    {
+      "name": "iccsense",
+      "constructor": "gf100_iccsense_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1781,
+      "status": "optional",
+      "reason": "current sensing monitors power draw but is not required for compute"
+    },
+    {
+      "name": "imem",
+      "constructor": "nv50_instmem_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1782,
+      "status": "needed",
+      "reason": "instantiated memory layer is required for GPU-addressable memory access"
+    },
+    {
+      "name": "ltc",
+      "constructor": "gk104_ltc_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1783,
+      "status": "optional",
+      "reason": "Subsystem ltc is not required for a minimal compute workload"
+    },
+    {
+      "name": "mc",
+      "constructor": "gk104_mc_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1784,
+      "status": "needed",
+      "reason": "memory controller must be configured for the card memory subsystem"
+    },
+    {
+      "name": "mmu",
+      "constructor": "gk104_mmu_new",
+      "file": "nvkm/subdev/mmu/gk104.c",
+      "line": 1785,
+      "status": "needed",
+      "reason": "memory management unit must translate virtual to physical addresses"
+    },
+    {
+      "name": "mspdec",
+      "constructor": "gk104_mspdec_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1799,
+      "status": "not-needed",
+      "reason": "media spatial decoder is for video decoding not compute workloads"
+    },
+    {
+      "name": "msppp",
+      "constructor": "gf100_msppp_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1800,
+      "status": "not-needed",
+      "reason": "media post-processing pipeline is for video effects not compute"
+    },
+    {
+      "name": "msvld",
+      "constructor": "gk104_msvld_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1801,
+      "status": "not-needed",
+      "reason": "media video decode engine is for video playback not compute jobs"
+    },
+    {
+      "name": "mxm",
+      "constructor": "nv50_mxm_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1786,
+      "status": "optional",
+      "reason": "Modular MXM interface handles laptop-specific connector detection"
+    },
+    {
+      "name": "pci",
+      "constructor": "gk104_pci_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1787,
+      "status": "optional",
+      "reason": "Subsystem pci is not required for a minimal compute workload"
+    },
+    {
+      "name": "pmu",
+      "constructor": "gk110_pmu_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1788,
+      "status": "optional",
+      "reason": "power management unit handles GPU power states and transitions"
+    },
+    {
+      "name": "privring",
+      "constructor": "gk104_privring_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1789,
+      "status": "optional",
+      "reason": "privileged ring buffer is for kernel control not user compute jobs"
+    },
+    {
+      "name": "sw",
+      "constructor": "gf100_sw_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1802,
+      "status": "optional",
+      "reason": "software subsystem provides generic kernel infrastructure support"
+    },
+    {
+      "name": "therm",
+      "constructor": "gk104_therm_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1790,
+      "status": "optional",
+      "reason": "thermal management prevents overheating but compute can proceed without"
+    },
+    {
+      "name": "timer",
+      "constructor": "nv41_timer_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1791,
+      "status": "optional",
+      "reason": "software timer provides scheduling ticks but is not strictly required"
+    },
+    {
+      "name": "top",
+      "constructor": "gk104_top_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1792,
+      "status": "optional",
+      "reason": "topology layer handles GPU interconnect for multi-GPU setups"
+    },
+    {
+      "name": "volt",
+      "constructor": "gk104_volt_new",
+      "file": "nvkm/engine/device/base.c",
+      "line": 1793,
+      "status": "optional",
+      "reason": "voltage control adjusts power levels but is not needed for compute"
+    }
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "subsystem": "bar",
+      "what": "Map PCI BAR regions and read VBIOS for GPU identification",
+      "functions": [
+        {
+          "name": "gf100_bar_new",
+          "tree": "nouveau",
+          "file": "nvkm/subdev/bar/gf100.c",
+          "line": 192
+        }
+      ],
+      "registers": [],
+      "status": "known",
+      "notes": ""
+    },
+    {
+      "step": 2,
+      "subsystem": "fb",
+      "what": "Initialize framebuffer layer including memory layout and page tables",
+      "functions": [
+        {
+          "name": "gk110_fb_new",
+          "tree": "nouveau",
+          "file": "nvkm/subdev/fb/gk110.c",
+          "line": 69
+        },
+        {
+          "name": "gf100_fb_init",
+          "tree": "nouveau",
+          "file": "nvkm/subdev/fb/gf100.c",
+          "line": 87
+        }
+      ],
+      "registers": [],
+      "status": "known",
+      "notes": ""
+    },
+    {
+      "step": 3,
+      "subsystem": "mc",
+      "what": "Configure memory controller for GPU memory access and channels",
+      "functions": [
+        {
+          "name": "gk104_mc_new",
+          "tree": "nouveau",
+          "file": "nvkm/subdev/mc/gk104.c",
+          "line": 63
+        }
+      ],
+      "registers": [],
+      "status": "known",
+      "notes": ""
+    },
+    {
+      "step": 4,
+      "subsystem": "imem",
+      "what": "Initialize instantiated memory for GPU-addressable allocation",
+      "functions": [
+        {
+          "name": "nv50_instmem_new",
+          "tree": "nouveau",
+          "file": "nvkm/subdev/instmem/nv50.c",
+          "line": 436
+        }
+      ],
+      "registers": [],
+      "status": "known",
+      "notes": ""
+    },
+    {
+      "step": 5,
+      "subsystem": "mmu",
+      "what": "Set up memory management unit for address translation",
+      "functions": [
+        {
+          "name": "gk104_mmu_new",
+          "tree": "nouveau",
+          "file": "nvkm/subdev/mmu/gk104.c",
+          "line": 38
+        }
+      ],
+      "registers": [],
+      "status": "known",
+      "notes": ""
+    },
+    {
+      "step": 6,
+      "subsystem": "fifo",
+      "what": "Initialize FIFO engine for command submission and context switching",
+      "functions": [
+        {
+          "name": "gk110_fifo_new",
+          "tree": "nouveau",
+          "file": "nvkm/engine/fifo/gk110.c",
+          "line": 128
+        },
+        {
+          "name": "gk104_fifo_init",
+          "tree": "nouveau",
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 744
+        }
+      ],
+      "registers": [
+        {
+          "reg": "0x002254",
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 749
+        },
+        {
+          "reg": "0x002100",
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 751
+        },
+        {
+          "reg": "0x002140",
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 752
+        }
+      ],
+      "status": "known",
+      "notes": ""
+    },
+    {
+      "step": 7,
+      "subsystem": "gr",
+      "what": "Initialize graphics and compute engine with firmware and exception handlers",
+      "functions": [
+        {
+          "name": "gk110b_gr_new",
+          "tree": "nouveau",
+          "file": "nvkm/engine/gr/gk110b.c",
+          "line": 150
+        },
+        {
+          "name": "gf100_gr_init",
+          "tree": "nouveau",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2342
+        }
+      ],
+      "registers": [
+        {
+          "reg": "0x400500",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2347
+        },
+        {
+          "reg": "0x400500",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2386
+        },
+        {
+          "reg": "0x400100",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2388
+        },
+        {
+          "reg": "0x40013c",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2389
+        },
+        {
+          "reg": "0x400124",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2390
+        },
+        {
+          "reg": "0x404000",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2400
+        },
+        {
+          "reg": "0x404600",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2401
+        },
+        {
+          "reg": "0x408030",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2402
+        },
+        {
+          "reg": "0x406018",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2407
+        },
+        {
+          "reg": "0x404490",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2408
+        },
+        {
+          "reg": "0x405840",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2413
+        },
+        {
+          "reg": "0x405844",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2414
+        },
+        {
+          "reg": "GPC_UNIT(gpc, 0x0420)",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2427
+        },
+        {
+          "reg": "GPC_UNIT(gpc, 0x0900)",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2428
+        },
+        {
+          "reg": "GPC_UNIT(gpc, 0x1028)",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2429
+        },
+        {
+          "reg": "GPC_UNIT(gpc, 0x0824)",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2430
+        },
+        {
+          "reg": "TPC_UNIT(gpc, tpc, 0x508)",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2432
+        },
+        {
+          "reg": "TPC_UNIT(gpc, tpc, 0x50c)",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2433
+        },
+        {
+          "reg": "TPC_UNIT(gpc, tpc, 0x084)",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2436
+        },
+        {
+          "reg": "GPC_UNIT(gpc, 0x2c90)",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2441
+        },
+        {
+          "reg": "GPC_UNIT(gpc, 0x2c94)",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2442
+        },
+        {
+          "reg": "0x400108",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2447
+        },
+        {
+          "reg": "0x400138",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2448
+        },
+        {
+          "reg": "0x400118",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2449
+        },
+        {
+          "reg": "0x400130",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2450
+        }
+      ],
+      "status": "known",
+      "notes": ""
+    },
+    {
+      "step": 8,
+      "subsystem": "mesa",
+      "what": "Set up compute context including TLS textures and command buffer preparation",
+      "functions": [
+        {
+          "name": "nve4_screen_compute_setup",
+          "tree": "mesa",
+          "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+          "line": 44
+        }
+      ],
+      "registers": [],
+      "status": "known",
+      "notes": ""
+    },
+    {
+      "step": 9,
+      "subsystem": "mesa",
+      "what": "Launch compute grid with QMD descriptor and GPU execution parameters",
+      "functions": [
+        {
+          "name": "nve4_launch_grid",
+          "tree": "mesa",
+          "file": "src/gallium/drivers/nouveau/nvc0/nve4_compute.c",
+          "line": 785
+        }
+      ],
+      "registers": [],
+      "status": "known",
+      "notes": ""
+    },
+    {
+      "step": 10,
+      "subsystem": "channel",
+      "what": "Create channel address space and submit command buffer for execution",
+      "functions": [
+        {
+          "name": "gf100_fifo_init_pbdmas",
+          "tree": "nouveau",
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 873
+        }
+      ],
+      "registers": [
+        {
+          "reg": "0x000204",
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 878
+        },
+        {
+          "reg": "0x002204",
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 879
+        },
+        {
+          "reg": "0x002208",
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 883
+        },
+        {
+          "reg": "0x00220c",
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 884
+        },
+        {
+          "reg": "0x002210",
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 885
+        },
+        {
+          "reg": "0x002214",
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 886
+        },
+        {
+          "reg": "0x002218",
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 887
+        },
+        {
+          "reg": "0x00221c",
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 888
+        },
+        {
+          "reg": "0x002a04",
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 891
+        }
+      ],
+      "status": "partly-known",
+      "notes": "Channel creation and command buffer submission not fully traced in B2 call graph"
+    }
+  ],
+  "gr_hooks": [
+    {
+      "hook": "init",
+      "function": "gf100_gr_init",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2342,
+      "use": "compute",
+      "reason": "Generic GR initialization used by both graphics and compute pipelines"
+    },
+    {
+      "hook": "init_400054",
+      "function": "gf100_gr_init_400054",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2186,
+      "use": "both",
+      "reason": "Register 0x400054 initialization is used by both graphics and compute pipelines"
+    },
+    {
+      "hook": "init_419cc0",
+      "function": "gf100_gr_init_419cc0",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2237,
+      "use": "both",
+      "reason": "Register 0x419cc0 initialization is used by both graphics and compute engines"
+    },
+    {
+      "hook": "init_419eb4",
+      "function": "gk110_gr_init_419eb4",
+      "file": "nvkm/engine/gr/gk110.c",
+      "line": 339,
+      "use": "compute",
+      "reason": "Register 0x419eb4 is GK110-specific and used for compute pipeline configuration"
+    },
+    {
+      "hook": "init_exception2",
+      "function": "gf100_gr_init_exception2",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2192,
+      "use": "both",
+      "reason": "Exception group 2 handling is shared across compute and graphics execution paths"
+    },
+    {
+      "hook": "init_fecs_exceptions",
+      "function": "gf100_gr_init_fecs_exceptions",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2257,
+      "use": "both",
+      "reason": "FEC exception handling is shared between graphics and compute error paths"
+    },
+    {
+      "hook": "init_gpc_mmu",
+      "function": "gf100_gr_init_gpc_mmu",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2264,
+      "use": "compute",
+      "reason": "GPC MMU initialization configures address translation for compute"
+    },
+    {
+      "hook": "init_num_active_ltcs",
+      "function": "gf100_gr_init_num_active_ltcs",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2280,
+      "use": "both",
+      "reason": "LTC count initialization is shared by both graphics and compute workloads"
+    },
+    {
+      "hook": "init_ppc_exceptions",
+      "function": "gk104_gr_init_ppc_exceptions",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 415,
+      "use": "both",
+      "reason": "PPC exception handling supports both graphics and compute error recovery"
+    },
+    {
+      "hook": "init_rop_active_fbps",
+      "function": "gk104_gr_init_rop_active_fbps",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 406,
+      "use": "graphics-only",
+      "reason": "ROP active framebuffer configuration is for graphics rendering only"
+    },
+    {
+      "hook": "init_rop_exceptions",
+      "function": "gf100_gr_init_rop_exceptions",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2201,
+      "use": "graphics-only",
+      "reason": "ROP exceptions are specific to raster operations in graphics pipeline"
+    },
+    {
+      "hook": "init_shader_exceptions",
+      "function": "gf100_gr_init_shader_exceptions",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2215,
+      "use": "both",
+      "reason": "Shader exception handling is needed for both graphics shader and compute execution"
+    },
+    {
+      "hook": "init_sked_hww_esr",
+      "function": "gk104_gr_init_sked_hww_esr",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 391,
+      "use": "both",
+      "reason": "Scheduler hardware workqueue error service routine supports both paths"
+    },
+    {
+      "hook": "init_tex_hww_esr",
+      "function": "gf100_gr_init_tex_hww_esr",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2223,
+      "use": "both",
+      "reason": "Texture hardware workqueue error service is used by both compute and graphics"
+    },
+    {
+      "hook": "init_vsc_stream_master",
+      "function": "gk104_gr_init_vsc_stream_master",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 430,
+      "use": "both",
+      "reason": "VSC stream master setup supports both graphics and compute vertex stream routing"
+    },
+    {
+      "hook": "init_zcull",
+      "function": "gf117_gr_init_zcull",
+      "file": "nvkm/engine/gr/gf117.c",
+      "line": 124,
+      "use": "graphics-only",
+      "reason": "Depth culling unit is specific to rasterization graphics pipeline only"
+    },
+    {
+      "hook": "oneinit_sm_id",
+      "function": "gf100_gr_oneinit_sm_id",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1895,
+      "use": "both",
+      "reason": "Streaming multiprocessor ID setup configures SM identity for both paths"
+    },
+    {
+      "hook": "oneinit_tiles",
+      "function": "gf100_gr_oneinit_tiles",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1913,
+      "use": "both",
+      "reason": "Tile initialization configures memory tiling for both graphics and compute workloads"
+    }
+  ],
+  "firmware": [
+    {
+      "name": "fecs",
+      "source": "built-in",
+      "file": "nvkm/engine/gr/fuc/hubgk110.fuc3.h",
+      "note": "Falcon EXEC context scheduler firmware compiled into Nouveau source tree for GK110"
+    },
+    {
+      "name": "gpccs",
+      "source": "built-in",
+      "file": "nvkm/engine/gr/fuc/gpcgk110.fuc3.h",
+      "note": "GPC compute context scheduler firmware compiled into Nouveau source tree for GK110"
+    }
+  ]
+}

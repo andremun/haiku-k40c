@@ -2,7 +2,7 @@
 
 Current phase: B (Nouveau analysis)
 Current task: B5
-Task state: READY. B5 has a task text with checks since 2026-10-11. B4 waits for a task text from the scaffold.
+Task state: DONE. B5 completed 2026-10-11: min_chain.py tool, min_chain.json (31 subsystems, 10 steps, 18 GR hooks, 2 firmware), min_chain.md. `make check` 0 failures.
 Last updated: 2026-10-11
 
 ## Last result
