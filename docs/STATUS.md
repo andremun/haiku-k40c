@@ -1,9 +1,9 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: none
-Task state: WAITING. B1, B2, B3 and B6 are done. B4 and B5 wait for a task text with checks from the scaffold. Do not start a task.
-Last updated: 2026-10-08
+Current task: B5
+Task state: READY. B5 has a task text with checks since 2026-10-11. B4 waits for a task text from the scaffold.
+Last updated: 2026-10-11
 
 ## Last result
 

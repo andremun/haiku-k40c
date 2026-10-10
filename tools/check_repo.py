@@ -513,6 +513,187 @@ if cl is not None:
                 fail(f"tools/compute_launch.py --check (run {run}): {rel} is not what the tool generates")
                 break
 
+# B5 minimum chain ----------------------------------------------------
+mc = load_json("analysis/min_chain.json")
+if mc is not None and "B5" not in SKIP:
+    rel = "analysis/min_chain.json"
+    MESA5 = os.path.join(ROOT, "reference", "mesa")
+    if not isinstance(mc, dict):
+        fail(f"{rel}: must be an object")
+        mc = {}
+
+    def b5_line(tree, f, ln):
+        base = MESA5 if tree == "mesa" else NV
+        try:
+            with open(os.path.join(base, str(f)), errors="replace") as fh:
+                L = fh.read().split("\n")
+        except OSError:
+            return None
+        return L[ln - 1] if isinstance(ln, int) and 0 < ln <= len(L) else None
+
+    def b5_words(v, n=5):
+        return isinstance(v, str) and len(v.split()) >= n
+
+    def b5_rows(key):
+        rows = mc.get(key)
+        if not isinstance(rows, list) or not rows or not all(isinstance(r, dict) for r in rows):
+            fail(f"{rel}: '{key}' must be a list of objects with entries")
+            return []
+        return rows
+
+    # (1) every subsystem of the card's chipset table is classified
+    base_c = src_lines("nvkm/engine/device/base.c") or []
+    want_sub, inside = {}, False
+    for i, text in enumerate(base_c, 1):
+        if text.startswith("nvf1_chipset"):
+            inside = True
+        elif inside and text.startswith("};"):
+            break
+        elif inside:
+            m = re.match(r"\s*\.(\w+)\s*=\s*\{\s*0x[0-9a-f]+,\s*(\w+)\s*\}", text)
+            if m:
+                want_sub[m.group(1)] = (m.group(2), i)
+    subs = b5_rows("subsystems")
+    got_sub = {str(r.get("name")): r for r in subs}
+    if sorted(got_sub) != sorted(want_sub) or len(subs) != len(want_sub):
+        fail(f"{rel}: 'subsystems' must have one entry for each of the {len(want_sub)} members of "
+             f"nvf1_chipset in nvkm/engine/device/base.c; missing {sorted(set(want_sub) - set(got_sub))}, "
+             f"extra {sorted(set(got_sub) - set(want_sub))}")
+    STAT = {"needed", "optional", "not-needed"}
+    bad = [n for n, r in got_sub.items() if n in want_sub and
+           (r.get("constructor"), r.get("line")) != want_sub[n]]
+    if bad:
+        fail(f"{rel}: subsystems with a constructor or line that is not the nvf1_chipset line: {bad}")
+    bad = [n for n, r in got_sub.items() if r.get("status") not in STAT or not b5_words(r.get("reason"))]
+    if bad:
+        fail(f"{rel}: subsystems need \"status\" in {sorted(STAT)} and a \"reason\" of 5 words or more: {bad}")
+    for n in ("bar", "fb", "imem", "mmu", "mc", "fifo", "gr"):
+        if n in got_sub and got_sub[n].get("status") in STAT - {"needed"}:
+            fail(f"{rel}: subsystem '{n}' must be \"needed\": a compute job cannot run without it")
+    for n in ("disp", "mspdec", "msppp", "msvld"):
+        if n in got_sub and got_sub[n].get("status") == "needed":
+            fail(f"{rel}: subsystem '{n}' is display or video decoding and cannot be \"needed\"")
+
+    # (2) ordered steps with real functions and the registers of B3
+    steps = b5_rows("steps")
+    if [r.get("step") for r in steps] != list(range(1, len(steps) + 1)):
+        fail(f"{rel}: 'steps' must be numbered 1, 2, 3, ... in order")
+    if steps and len(steps) < 8:
+        fail(f"{rel}: {len(steps)} steps; the chain from PCI to a finished job has 8 or more")
+    mm = load_json("registers/mmio_accesses.json") or []
+    by_fn = {}
+    for a in mm if isinstance(mm, list) else []:
+        by_fn.setdefault(a.get("function"), set()).add((a.get("file"), a.get("line"), a.get("reg")))
+    where, bad_fn, bad_reg, bad_txt = {}, [], [], []
+    for r in steps:
+        n = r.get("step")
+        if r.get("subsystem") not in set(want_sub) | {"host", "channel", "mesa"}:
+            fail(f"{rel}: step {n}: 'subsystem' must be a subsystems name, \"host\", \"channel\" or \"mesa\"")
+        if r.get("status") not in ("known", "partly-known", "unknown") or not b5_words(r.get("what")):
+            bad_txt.append(n)
+        fns = r.get("functions") if isinstance(r.get("functions"), list) else []
+        want_reg = set()
+        for f in fns:
+            if not isinstance(f, dict):
+                bad_fn.append((n, str(f)))
+                continue
+            text = b5_line(f.get("tree"), f.get("file"), f.get("line"))
+            name = str(f.get("name", ""))
+            if f.get("tree") not in ("nouveau", "mesa") or text is None or not name or name not in text:
+                bad_fn.append((n, name))
+            where.setdefault(name, n)
+            if f.get("tree") == "nouveau":
+                want_reg |= by_fn.get(name, set())
+        regs = r.get("registers") if isinstance(r.get("registers"), list) else None
+        got_reg = {(x.get("file"), x.get("line"), x.get("reg")) for x in regs or [] if isinstance(x, dict)}
+        if regs is None or got_reg != want_reg:
+            bad_reg.append(n)
+    if bad_txt:
+        fail(f"{rel}: steps {bad_txt} need \"status\" known, partly-known or unknown and a \"what\" "
+             f"of 5 words or more")
+    if bad_fn:
+        fail(f"{rel}: {len(bad_fn)} functions do not point at a line that has the name "
+             f"(\"tree\" is \"nouveau\" or \"mesa\"): {bad_fn[:6]}")
+    if bad_reg:
+        fail(f"{rel}: steps {bad_reg}: 'registers' must be exactly the entries of "
+             f"registers/mmio_accesses.json for the step's nouveau functions (file, line, reg)")
+    chain = ["gf100_fb_init", "gk104_fifo_init", "gf100_gr_init",
+             "nve4_screen_compute_setup", "nve4_launch_grid"]
+    miss = [f for f in chain if f not in where]
+    if miss:
+        fail(f"{rel}: no step has the function {miss}")
+    elif [where[f] for f in chain] != sorted(where[f] for f in chain) or \
+            where["gf100_gr_init"] >= where["nve4_screen_compute_setup"] or \
+            where["nve4_screen_compute_setup"] >= where["nve4_launch_grid"]:
+        fail(f"{rel}: the steps must have these functions in this order: {chain}")
+    used = {r.get("subsystem") for r in steps}
+    idle = sorted(n for n, r in got_sub.items() if r.get("status") == "needed" and n not in used)
+    if idle:
+        fail(f"{rel}: subsystems marked needed that no step uses: {idle}")
+
+    # (3) every init hook of the GR function table is classified
+    gr_c = src_lines("nvkm/engine/gr/gk110b.c") or []
+    want_hook, inside = {}, False
+    for text in gr_c:
+        if text.startswith("gk110b_gr = {"):
+            inside = True
+        elif inside and text.startswith("};"):
+            break
+        elif inside:
+            m = re.match(r"\s*\.((?:one)?init\w*)\s*=\s*(\w+),", text)
+            if m:
+                want_hook[m.group(1)] = m.group(2)
+    hooks = b5_rows("gr_hooks")
+    got_hook = {str(r.get("hook")): r for r in hooks}
+    if {k: v.get("function") for k, v in got_hook.items()} != want_hook:
+        fail(f"{rel}: 'gr_hooks' must have each .init* and .oneinit* member of gk110b_gr "
+             f"(nvkm/engine/gr/gk110b.c) with its function: {len(want_hook)} entries; missing or wrong "
+             f"{sorted(k for k in want_hook if got_hook.get(k, {}).get('function') != want_hook[k])}, "
+             f"extra {sorted(set(got_hook) - set(want_hook))}")
+    USE = {"compute", "graphics-only", "both"}
+    bad = []
+    for k, r in got_hook.items():
+        text = b5_line("nouveau", r.get("file"), r.get("line"))
+        if r.get("use") not in USE or not b5_words(r.get("reason")) or text is None \
+                or str(r.get("function")) not in text:
+            bad.append(k)
+    if bad:
+        fail(f"{rel}: gr_hooks need \"use\" in {sorted(USE)}, a \"reason\" of 5 words or more and the "
+             f"file and line of the function definition: {bad}")
+    if "init_zcull" in got_hook and got_hook["init_zcull"].get("use") != "graphics-only":
+        fail(f"{rel}: gr_hooks init_zcull sets up depth culling: it is \"graphics-only\"")
+    if hooks and not any(r.get("use") in ("compute", "both") for r in hooks):
+        fail(f"{rel}: no gr_hooks entry has use compute or both")
+
+    # (4) firmware
+    fw = {str(r.get("name")): r for r in b5_rows("firmware")}
+    for name, hdr in (("fecs", "nvkm/engine/gr/fuc/hubgk110.fuc3.h"),
+                      ("gpccs", "nvkm/engine/gr/fuc/gpcgk110.fuc3.h")):
+        r = fw.get(name)
+        if r is None:
+            fail(f"{rel}: 'firmware' has no entry named \"{name}\"")
+        elif r.get("source") != "built-in" or r.get("file") != hdr:
+            fail(f"{rel}: firmware '{name}': Nouveau has this code in its own source. \"source\" must "
+                 f"be \"built-in\" and \"file\" the header that gk110.c includes for it")
+    for name, r in fw.items():
+        if r.get("source") not in ("built-in", "external-file", "vbios") or not b5_words(r.get("note")):
+            fail(f"{rel}: firmware '{name}' needs \"source\" built-in, external-file or vbios and a "
+                 f"\"note\" of 5 words or more")
+
+    md = os.path.join(ROOT, "analysis", "min_chain.md")
+    if not os.path.exists(md) or len(open(md, errors="replace").read().split("\n")) < 40:
+        fail("analysis/min_chain.md: missing or under 40 lines")
+    tool = os.path.join(ROOT, "tools", "min_chain.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/min_chain.py: missing, or no --check option (docs/tasks/B5.md)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/min_chain.py --check (run {run}): {rel} is not what the tool generates")
+                break
+
 # B4 Linux dependencies -----------------------------------------------
 ld = load_json("analysis/linux_deps.json")
 if ld is not None:
