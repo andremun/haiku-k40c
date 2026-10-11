@@ -811,13 +811,36 @@ if ld is not None and "B4" not in SKIP:
     # Decisions that the check knows.
     for n in ("kzalloc", "kfree", "kmalloc", "mutex_lock", "mutex_unlock", "mutex_init", "spin_lock",
               "spin_unlock", "spin_lock_irqsave", "spin_unlock_irqrestore", "list_add_tail", "list_del",
-              "request_firmware", "dma_map_page", "msleep", "usleep_range"):
+              "dma_map_page", "msleep", "usleep_range"):
         if n in got and got[n].get("category") != "C-replace":
             fail(f"{rel}: '{n}' is Linux infrastructure with a Haiku equivalent: C-replace")
     for n, apis in (("mutex_lock", ["mutex_lock"]), ("spin_lock_irqsave", ["acquire_spinlock", "disable_interrupts"]),
                     ("msleep", ["snooze"]), ("usleep_range", ["snooze"])):
         if n in got and not set(apis) <= set(got[n].get("haiku_api") or []):
             fail(f"{rel}: haiku_api of '{n}' must have {apis}")
+    # First review of B4 (work/B4/REVIEW.md).
+    for n, any_of in (("list_del", ["list_remove_item", "list_remove_link"]),
+                      ("list_del_init", ["list_remove_item", "list_remove_link"]),
+                      ("list_empty", ["list_is_empty"]), ("INIT_LIST_HEAD", ["list_init"]),
+                      ("atomic_inc", ["atomic_add"]), ("atomic_dec", ["atomic_add"]),
+                      ("atomic_dec_and_test", ["atomic_add"]), ("atomic_inc_return", ["atomic_add"]),
+                      ("kref_get", ["atomic_add"]), ("refcount_inc", ["atomic_add"]),
+                      ("refcount_dec_and_test", ["atomic_add"]),
+                      ("spin_lock_init", ["B_INITIALIZE_SPINLOCK", "B_SPINLOCK_INITIALIZER"]),
+                      ("dma_map_page", ["get_memory_map"]), ("printk", ["dprintf"])):
+        if n in got and (got[n].get("category") != "C-replace"
+                         or not set(any_of) & set(got[n].get("haiku_api") or [])):
+            fail(f"{rel}: '{n}' is C-replace and its haiku_api has one of {any_of}")
+    for n in ("request_firmware", "release_firmware"):
+        if n in got and got[n].get("category") != "D-ignore":
+            fail(f"{rel}: '{n}' is D-ignore: only gf100_gr_load_fw calls it, for the external firmware "
+                 f"files that the driver does not use (firmware/README.md)")
+    for n in ("set_bit", "clear_bit", "__set_bit", "__mutex_init"):
+        if n in got and got[n].get("category") == "X-not-linux":
+            fail(f"{rel}: '{n}' is a Linux kernel symbol, not X-not-linux")
+    for n, e in got.items():
+        if n.startswith("dma_") and set(e.get("haiku_api") or []) & {"malloc", "free", "calloc"}:
+            fail(f"{rel}: '{n}' is about physical addresses for the device; malloc and free do not replace it")
     for n in ("agp_enable", "agp_backend_acquire", "pci_enable_msi"):
         if n in got and got[n].get("category") in ("A-reimplement", "B-extract"):
             fail(f"{rel}: '{n}' is not a hardware algorithm or hardware data of the GPU")
