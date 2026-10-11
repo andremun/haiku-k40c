@@ -1,0 +1,1883 @@
+{
+  "subsystem": "gr",
+  "constructor": {
+    "name": "gk110b_gr_new",
+    "file": "nvkm/engine/gr/gk110b.c",
+    "line": 150
+  },
+  "table": {
+    "name": "gk110b_gr",
+    "file": "nvkm/engine/gr/gk110b.c",
+    "line": 105
+  },
+  "members": [
+    {
+      "member": "oneinit_tiles",
+      "value": "gf100_gr_oneinit_tiles",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1913,
+      "parent": null,
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Computes tile-to-GPC mapping using a prime-factor distribution algorithm and sorts GPCs by TPC count",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1946,
+        "quote": "gpc_map[i] = i;"
+      }
+    },
+    {
+      "member": "oneinit_sm_id",
+      "value": "gf100_gr_oneinit_sm_id",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1895,
+      "parent": null,
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Enumerates all valid GPC-TPC pairs into the SM array and returns the total SM count",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1900,
+        "quote": "for (gpc = 0; gpc < gr->gpc_nr; gpc++) {"
+      }
+    },
+    {
+      "member": "init",
+      "value": "gf100_gr_init",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2342,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2347,
+          "op": "mask",
+          "reg": "0x400500"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2386,
+          "op": "wr32",
+          "reg": "0x400500"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2388,
+          "op": "wr32",
+          "reg": "0x400100"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2389,
+          "op": "wr32",
+          "reg": "0x40013c"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2390,
+          "op": "wr32",
+          "reg": "0x400124"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2400,
+          "op": "wr32",
+          "reg": "0x404000"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2401,
+          "op": "wr32",
+          "reg": "0x404600"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2402,
+          "op": "wr32",
+          "reg": "0x408030"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2407,
+          "op": "wr32",
+          "reg": "0x406018"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2408,
+          "op": "wr32",
+          "reg": "0x404490"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2413,
+          "op": "wr32",
+          "reg": "0x405840"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2414,
+          "op": "wr32",
+          "reg": "0x405844"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2427,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x0420)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2428,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x0900)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2429,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x1028)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2430,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x0824)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2432,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x508)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2433,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x50c)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2436,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x084)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2441,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x2c90)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2442,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x2c94)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2447,
+          "op": "wr32",
+          "reg": "0x400108"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2448,
+          "op": "wr32",
+          "reg": "0x400138"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2449,
+          "op": "wr32",
+          "reg": "0x400118"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2450,
+          "op": "wr32",
+          "reg": "0x400130"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Main GR engine init: calls init_gpc_mmu, mmio setup, all sub-init hooks, then writes idle and exception registers",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2347,
+        "quote": "nvkm_mask(device, 0x400500, 0x00010001, 0x00000000);"
+      }
+    },
+    {
+      "member": "init_gpc_mmu",
+      "value": "gf100_gr_init_gpc_mmu",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2264,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2269,
+          "op": "wr32",
+          "reg": "0x418880"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2269,
+          "op": "rd32",
+          "reg": "0x100c80"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2270,
+          "op": "wr32",
+          "reg": "0x4188a4"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2271,
+          "op": "wr32",
+          "reg": "0x418888"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2272,
+          "op": "wr32",
+          "reg": "0x41888c"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2273,
+          "op": "wr32",
+          "reg": "0x418890"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2274,
+          "op": "wr32",
+          "reg": "0x418894"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2275,
+          "op": "wr32",
+          "reg": "0x4188b4"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2276,
+          "op": "wr32",
+          "reg": "0x4188b8"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Reads FB MMU page-table addresses and writes them to GR MMU registers 0x418880-0x4188b8 to set up MMU forwarding",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2269,
+        "quote": "nvkm_wr32(device, 0x418880, nvkm_rd32(device, 0x100c80) & 0x00000001);"
+      }
+    },
+    {
+      "member": "init_vsc_stream_master",
+      "value": "gk104_gr_init_vsc_stream_master",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 430,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gk104.c",
+          "line": 433,
+          "op": "wr32",
+          "reg": "GPC_UNIT(0, 0x3018)"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0x00000001 to GPC register 0x3018 to enable the VSC stream master for pipeline vertex shading",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 433,
+        "quote": "nvkm_wr32(device, GPC_UNIT(0, 0x3018), 0x00000001);"
+      }
+    },
+    {
+      "member": "init_zcull",
+      "value": "gf117_gr_init_zcull",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf117.c",
+      "line": 124,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf117.c",
+          "line": 139,
+          "op": "wr32",
+          "reg": "GPC_BCAST(0x0980 + ((i / 8) * 4))"
+        },
+        {
+          "file": "nvkm/engine/gr/gf117.c",
+          "line": 143,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x0914)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf117.c",
+          "line": 145,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x0910)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf117.c",
+          "line": 147,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x0918)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf117.c",
+          "line": 150,
+          "op": "wr32",
+          "reg": "GPC_BCAST(0x3fd4)"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Computes the tile configuration from the total TPC count and writes bank and tile data to GPC registers 0x0980 to 0x3fd4 (zcull is the depth culling unit)",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 136,
+        "quote": "data |= bank[gr->tile[i + j]] << (j * 4);"
+      }
+    },
+    {
+      "member": "init_num_active_ltcs",
+      "value": "gf100_gr_init_num_active_ltcs",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2280,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2283,
+          "op": "wr32",
+          "reg": "GPC_BCAST(0x08ac)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2283,
+          "op": "rd32",
+          "reg": "0x100800"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Reads register 0x100800 for the number of active LTCs and broadcasts it to GPC register 0x08ac",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2283,
+        "quote": "nvkm_wr32(device, GPC_BCAST(0x08ac), nvkm_rd32(device, 0x100800));"
+      }
+    },
+    {
+      "member": "init_rop_active_fbps",
+      "value": "gk104_gr_init_rop_active_fbps",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 406,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gk104.c",
+          "line": 409,
+          "op": "rd32",
+          "reg": "0x120074"
+        },
+        {
+          "file": "nvkm/engine/gr/gk104.c",
+          "line": 410,
+          "op": "mask",
+          "reg": "0x408850"
+        },
+        {
+          "file": "nvkm/engine/gr/gk104.c",
+          "line": 411,
+          "op": "mask",
+          "reg": "0x408958"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Reads FBP count from register 0x120074 then writes it to registers 0x408850 (zrop) and 0x408958 (crop) via mask",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 409,
+        "quote": "const u32 fbp_count = nvkm_rd32(device, 0x120074);"
+      }
+    },
+    {
+      "member": "init_fecs_exceptions",
+      "value": "gf100_gr_init_fecs_exceptions",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2257,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2260,
+          "op": "wr32",
+          "reg": "0x409c24"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0x000e0000 or 0x000e0001 to register 0x409c24 based on firmware presence to configure FECS exceptions",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2259,
+        "quote": "const u32 data = gr->firmware ? 0x000e0000 : 0x000e0001;"
+      }
+    },
+    {
+      "member": "init_sked_hww_esr",
+      "value": "gk104_gr_init_sked_hww_esr",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 391,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gk104.c",
+          "line": 393,
+          "op": "wr32",
+          "reg": "0x407020"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0x40000000 to register 0x407020 to configure the scheduler hardware warning error status register",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 393,
+        "quote": "nvkm_wr32(gr->base.engine.subdev.device, 0x407020, 0x40000000);"
+      }
+    },
+    {
+      "member": "init_419cc0",
+      "value": "gf100_gr_init_419cc0",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2237,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2242,
+          "op": "mask",
+          "reg": "0x419cc0"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2246,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x48c)"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Masks bit 3 of register 0x419cc0 then loops over all GPC/TPC pairs to write 0xc0000000 to TPC register 0x48c",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2242,
+        "quote": "nvkm_mask(device, 0x419cc0, 0x00000008, 0x00000008);"
+      }
+    },
+    {
+      "member": "init_419eb4",
+      "value": "gk110_gr_init_419eb4",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gk110.c",
+      "line": 339,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gk110.c",
+          "line": 342,
+          "op": "mask",
+          "reg": "0x419eb4"
+        },
+        {
+          "file": "nvkm/engine/gr/gk110.c",
+          "line": 343,
+          "op": "mask",
+          "reg": "0x419eb4"
+        },
+        {
+          "file": "nvkm/engine/gr/gk110.c",
+          "line": 344,
+          "op": "mask",
+          "reg": "0x419eb4"
+        },
+        {
+          "file": "nvkm/engine/gr/gk110.c",
+          "line": 345,
+          "op": "mask",
+          "reg": "0x419eb4"
+        },
+        {
+          "file": "nvkm/engine/gr/gk110.c",
+          "line": 346,
+          "op": "mask",
+          "reg": "0x419eb4"
+        },
+        {
+          "file": "nvkm/engine/gr/gk110.c",
+          "line": 347,
+          "op": "mask",
+          "reg": "0x419eb4"
+        },
+        {
+          "file": "nvkm/engine/gr/gk110.c",
+          "line": 348,
+          "op": "mask",
+          "reg": "0x419eb4"
+        },
+        {
+          "file": "nvkm/engine/gr/gk110.c",
+          "line": 349,
+          "op": "mask",
+          "reg": "0x419eb4"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Applies nvkm_mask on register 0x419eb4 to set bits 0x1000-0x8000 then clears them for a bit-toggle sequence",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 342,
+        "quote": "nvkm_mask(device, 0x419eb4, 0x00001000, 0x00001000);"
+      }
+    },
+    {
+      "member": "init_ppc_exceptions",
+      "value": "gk104_gr_init_ppc_exceptions",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gk104.c",
+      "line": 415,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gk104.c",
+          "line": 424,
+          "op": "wr32",
+          "reg": "PPC_UNIT(gpc, ppc, 0x038)"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Loops over enabled GPC/PPC pairs and writes 0xc0000000 to PPC register 0x038 to configure PPC exception handling",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 424,
+        "quote": "nvkm_wr32(device, PPC_UNIT(gpc, ppc, 0x038), 0xc0000000);"
+      }
+    },
+    {
+      "member": "init_tex_hww_esr",
+      "value": "gf100_gr_init_tex_hww_esr",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2223,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2226,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x224)"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0xc0000000 to TPC register 0x224 to configure the TEX hardware warning error status register",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2226,
+        "quote": "nvkm_wr32(device, TPC_UNIT(gpc, tpc, 0x224), 0xc0000000);"
+      }
+    },
+    {
+      "member": "init_shader_exceptions",
+      "value": "gf100_gr_init_shader_exceptions",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2215,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2218,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x644)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2219,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x64c)"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes to TPC registers 0x644 and 0x64c to configure shader exception masks for a GPC/TPC pair",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2218,
+        "quote": "nvkm_wr32(device, TPC_UNIT(gpc, tpc, 0x644), 0x001ffffe);"
+      }
+    },
+    {
+      "member": "init_rop_exceptions",
+      "value": "gf100_gr_init_rop_exceptions",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2201,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2207,
+          "op": "wr32",
+          "reg": "ROP_UNIT(rop, 0x144)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2208,
+          "op": "wr32",
+          "reg": "ROP_UNIT(rop, 0x070)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2209,
+          "op": "wr32",
+          "reg": "ROP_UNIT(rop, 0x204)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2210,
+          "op": "wr32",
+          "reg": "ROP_UNIT(rop, 0x208)"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Loops over all ROP units and writes to registers 0x144, 0x070, 0x204 and 0x208 to configure ROP exception handling",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2207,
+        "quote": "nvkm_wr32(device, ROP_UNIT(rop, 0x144), 0x40000000);"
+      }
+    },
+    {
+      "member": "init_exception2",
+      "value": "gf100_gr_init_exception2",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2192,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2196,
+          "op": "wr32",
+          "reg": "0x40011c"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2197,
+          "op": "wr32",
+          "reg": "0x400134"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0xffffffff to registers 0x40011c and 0x400134 to enable all exception reporting in GR",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2196,
+        "quote": "nvkm_wr32(device, 0x40011c, 0xffffffff);"
+      }
+    },
+    {
+      "member": "init_400054",
+      "value": "gf100_gr_init_400054",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2186,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2188,
+          "op": "wr32",
+          "reg": "0x400054"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes the constant value 0x34ce3464 to register 0x400054 to configure a GR hardware setting",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2188,
+        "quote": "nvkm_wr32(gr->base.engine.subdev.device, 0x400054, 0x34ce3464);"
+      }
+    },
+    {
+      "member": "trap_mp",
+      "value": "gf100_gr_trap_mp",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1295,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 1299,
+          "op": "rd32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x648)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 1300,
+          "op": "rd32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x650)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 1311,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x648)"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 1312,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x650)"
+        }
+      ],
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Reads TPC error registers 0x648 (warp) and 0x650 (global), decodes them with enum tables, logs the error, then clears 0x648 and updates 0x650",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1299,
+        "quote": "u32 werr = nvkm_rd32(device, TPC_UNIT(gpc, tpc, 0x648));"
+      }
+    },
+    {
+      "member": "mmio",
+      "value": "gk110b_gr_pack_mmio",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "List of register-write tables (gk110b_gr_pack_mmio) that gf100_gr_init applies to the GR registers with gf100_gr_mmio before it calls the init hooks",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 66,
+        "quote": "gk110b_gr_pack_mmio[] = {\n\t{ gk104_gr_init_main_0 },"
+      }
+    },
+    {
+      "member": "fecs.ucode",
+      "value": "gk110_gr_fecs_ucode",
+      "kind": "table",
+      "file": "nvkm/engine/gr/gk110.c",
+      "line": 321,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table with the code and data arrays of the FECS microcode (the controller of the hub; FECS is not expanded in the source)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 105,
+        "quote": ".fecs.ucode = gk110_gr_fecs_ucode,"
+      }
+    },
+    {
+      "member": "code.data",
+      "value": "gk110_grhub_code",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "fecs.ucode",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Pointer to the FECS hub code firmware array (gk110_grhub_code)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 322,
+        "quote": ".code.data = gk110_grhub_code,"
+      }
+    },
+    {
+      "member": "code.size",
+      "value": "sizeof",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "fecs.ucode",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Size in bytes of the FECS hub code firmware array",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 323,
+        "quote": ".code.size = sizeof(gk110_grhub_code),"
+      }
+    },
+    {
+      "member": "data.data",
+      "value": "gk110_grhub_data",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "fecs.ucode",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Pointer to the FECS hub data firmware array (gk110_grhub_data)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 324,
+        "quote": ".data.data = gk110_grhub_data,"
+      }
+    },
+    {
+      "member": "data.size",
+      "value": "sizeof",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "fecs.ucode",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Size in bytes of the FECS hub data firmware array",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 325,
+        "quote": ".data.size = sizeof(gk110_grhub_data),"
+      }
+    },
+    {
+      "member": "fecs.reset",
+      "value": "gf100_gr_fecs_reset",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2466,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2470,
+          "op": "wr32",
+          "reg": "0x409614"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2472,
+          "op": "mask",
+          "reg": "0x409614"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 2474,
+          "op": "rd32",
+          "reg": "0x409614"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0x00000070 to register 0x409614 to assert FECS reset, delays 10us, sets bits 0x700 of 0x409614, then reads back",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2470,
+        "quote": "nvkm_wr32(device, 0x409614, 0x00000070);"
+      }
+    },
+    {
+      "member": "gpccs.ucode",
+      "value": "gk110_gr_gpccs_ucode",
+      "kind": "table",
+      "file": "nvkm/engine/gr/gk110.c",
+      "line": 331,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table with the code and data arrays of the GPCCS microcode (the controller of each GPC; GPCCS is not expanded in the source)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 105,
+        "quote": ".gpccs.ucode = gk110_gr_gpccs_ucode,"
+      }
+    },
+    {
+      "member": "code.data",
+      "value": "gk110_grgpc_code",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "gpccs.ucode",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Pointer to the GPCCS GPC code firmware array (gk110_grgpc_code)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 332,
+        "quote": ".code.data = gk110_grgpc_code,"
+      }
+    },
+    {
+      "member": "code.size",
+      "value": "sizeof",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "gpccs.ucode",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Size in bytes of the GPCCS GPC code firmware array",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 333,
+        "quote": ".code.size = sizeof(gk110_grgpc_code),"
+      }
+    },
+    {
+      "member": "data.data",
+      "value": "gk110_grgpc_data",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "gpccs.ucode",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Pointer to the GPCCS GPC data firmware array (gk110_grgpc_data)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 334,
+        "quote": ".data.data = gk110_grgpc_data,"
+      }
+    },
+    {
+      "member": "data.size",
+      "value": "sizeof",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "gpccs.ucode",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Size in bytes of the GPCCS GPC data firmware array",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 335,
+        "quote": ".data.size = sizeof(gk110_grgpc_data),"
+      }
+    },
+    {
+      "member": "rops",
+      "value": "gf100_gr_rops",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 998,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 1001,
+          "op": "rd32",
+          "reg": "0x409604"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads register 0x409604 and extracts bits 16:20 to return the number of active ROP units on the GPU",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1001,
+        "quote": "return (nvkm_rd32(device, 0x409604) & 0x001f0000) >> 16;"
+      }
+    },
+    {
+      "member": "ppc_nr",
+      "value": "2",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Constant 2: the number of PPC units in each GPC on this chip (PPC is not expanded in the source)",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "grctx",
+      "value": "gk110b_grctx",
+      "kind": "table",
+      "file": "nvkm/engine/gr/ctxgk110b.c",
+      "line": 73,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "GR context function table defining all grctx sub-functions and their configuration values",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "main",
+      "value": "gf100_grctx_generate_main",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1342,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1369,
+          "op": "mask",
+          "reg": "0x404154"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1405,
+          "op": "wr32",
+          "reg": "0x404154"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates the GR context image by calling hub, gpc_0, zcull, gpc_1, tpc, ppc mmio, then pagepool, bundle, attrib, and unkn",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1352,
+        "quote": "gf100_gr_mmio(gr, grctx->hub);"
+      }
+    },
+    {
+      "member": "unkn",
+      "value": "gk104_grctx_generate_unkn",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 894,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 897,
+          "op": "mask",
+          "reg": "0x418c6c"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 898,
+          "op": "mask",
+          "reg": "0x41980c"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 899,
+          "op": "mask",
+          "reg": "0x41be08"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 900,
+          "op": "mask",
+          "reg": "0x4064c0"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 901,
+          "op": "mask",
+          "reg": "0x405800"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 902,
+          "op": "mask",
+          "reg": "0x419c00"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes mask operations on registers 0x418c6c, 0x41980c, 0x41be08, 0x4064c0, 0x405800 and 0x419c00 for unknown GR context setup",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 897,
+        "quote": "nvkm_mask(device, 0x418c6c, 0x00000001, 0x00000001);"
+      }
+    },
+    {
+      "member": "hub",
+      "value": "gk110_grctx_pack_hub",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of register writes (a pack) for the hub part, applied when the context image of a channel is generated",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "gpc_0",
+      "value": "gk110_grctx_pack_gpc_0",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of register writes (a pack) for the gpc_0 part, applied when the context image of a channel is generated",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "gpc_1",
+      "value": "gk110_grctx_pack_gpc_1",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of register writes (a pack) for the gpc_1 part, applied when the context image of a channel is generated",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "zcull",
+      "value": "gf100_grctx_pack_zcull",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of register writes (a pack) for the zcull part, applied when the context image of a channel is generated",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "tpc",
+      "value": "gk110b_grctx_pack_tpc",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of register writes (a pack) for the tpc part, applied when the context image of a channel is generated",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "ppc",
+      "value": "gk110_grctx_pack_ppc",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of register writes (a pack) for the ppc part, applied when the context image of a channel is generated",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "icmd",
+      "value": "gk110_grctx_pack_icmd",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of register writes (a pack) for the icmd part, applied when the context image of a channel is generated",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "mthd",
+      "value": "gk110_grctx_pack_mthd",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of register writes (a pack) for the mthd part, applied when the context image of a channel is generated",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "bundle",
+      "value": "gk104_grctx_generate_bundle",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 876,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates a bundle CB with state_limit and token_limit patches based on bundle_min_gpm_fifo_depth and bundle_token_limit",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 882,
+        "quote": "gf100_grctx_generate_bundle(chan, addr, size);"
+      }
+    },
+    {
+      "member": "bundle_size",
+      "value": "0x3000",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context bundle size constant set to 0x3000 bytes for GK110B channel context",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "bundle_min_gpm_fifo_depth",
+      "value": "0x180",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context bundle minimum GPM FIFO depth constant set to 0x180 for GK110B",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "bundle_token_limit",
+      "value": "0x600",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context bundle token limit constant set to 0x600 for GK110B channel context",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "pagepool",
+      "value": "gk104_grctx_generate_pagepool",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 887,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates a pagepool at the given address with a 0x80000000 patch to register 0x4064cc",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 889,
+        "quote": "gf100_grctx_generate_pagepool(chan, addr);"
+      }
+    },
+    {
+      "member": "pagepool_size",
+      "value": "0x8000",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context pagepool size constant set to 0x8000 bytes for GK110B channel context",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "attrib_cb_size",
+      "value": "gf100_grctx_generate_attrib_cb_size",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1060,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Returns the attrib CB size by computing 0x20 times the sum of attrib and alpha counts times TPC total",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1064,
+        "quote": "return 0x20 * (grctx->attrib_nr_max + grctx->alpha_nr_max) * gr->tpc_total;"
+      }
+    },
+    {
+      "member": "attrib_cb",
+      "value": "gf100_grctx_generate_attrib_cb",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1053,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the attrib CB to the given address containing method data for all registered attrib methods",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1055,
+        "quote": "gf100_grctx_patch_wr32(chan, 0x418810, 0x80000000 | addr >> 12);"
+      }
+    },
+    {
+      "member": "attrib",
+      "value": "gf117_grctx_generate_attrib",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgf117.c",
+      "line": 244,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates attrib method entries by reading the attrib CB and populating the attrib data structures",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 256,
+        "quote": "gf100_grctx_patch_wr32(chan, 0x405830, (beta << 16) | alpha);"
+      }
+    },
+    {
+      "member": "attrib_nr_max",
+      "value": "0x324",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context attrib method count maximum constant set to 0x324 for GK110",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "attrib_nr",
+      "value": "0x218",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context attrib method count value set to 0x218 for GK110 channel context",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "alpha_nr_max",
+      "value": "0x7ff",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context alpha method count maximum constant set to 0x7ff for GK110",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "alpha_nr",
+      "value": "0x648",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "grctx",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context alpha method count value set to 0x648 for GK110 channel context",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "patch_ltc",
+      "value": "gk104_grctx_generate_patch_ltc",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 864,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 867,
+          "op": "rd32",
+          "reg": "0x17e91c"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 868,
+          "op": "rd32",
+          "reg": "0x17e920"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates LTC patch entries for the channel context to configure LTC cache behavior",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 871,
+        "quote": "gf100_grctx_patch_wr32(chan, 0x17e91c, data0);"
+      }
+    },
+    {
+      "member": "sm_id",
+      "value": "gf100_grctx_generate_sm_id",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1293,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1296,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x698)"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1297,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x4e8)"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1298,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x0c10 + tpc * 4)"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1299,
+          "op": "wr32",
+          "reg": "TPC_UNIT(gpc, tpc, 0x088)"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the SM ID array entries to the context image for each valid GPC-TPC pairing",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1296,
+        "quote": "nvkm_wr32(device, TPC_UNIT(gpc, tpc, 0x698), sm);"
+      }
+    },
+    {
+      "member": "tpc_nr",
+      "value": "gf100_grctx_generate_tpc_nr",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1285,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1288,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x0c08)"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1289,
+          "op": "wr32",
+          "reg": "GPC_UNIT(gpc, 0x0c8c)"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the TPC count per GPC to the context image for each GPC in the device configuration",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1288,
+        "quote": "nvkm_wr32(device, GPC_UNIT(gpc, 0x0c08), gr->tpc_nr[gpc]);"
+      }
+    },
+    {
+      "member": "rop_mapping",
+      "value": "gf117_grctx_generate_rop_mapping",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgf117.c",
+      "line": 198,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgf117.c",
+          "line": 224,
+          "op": "wr32",
+          "reg": "0x418bb8"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgf117.c",
+          "line": 227,
+          "op": "wr32",
+          "reg": "0x418b08 + (i * 4)"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgf117.c",
+          "line": 230,
+          "op": "wr32",
+          "reg": "0x41bfd0"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgf117.c",
+          "line": 232,
+          "op": "wr32",
+          "reg": "0x41bfe4"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgf117.c",
+          "line": 234,
+          "op": "wr32",
+          "reg": "0x41bf00 + (i * 4)"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgf117.c",
+          "line": 237,
+          "op": "wr32",
+          "reg": "0x4078bc"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgf117.c",
+          "line": 240,
+          "op": "wr32",
+          "reg": "0x40780c + (i * 4)"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates the ROP mapping table for the context by iterating over ROP units and encoding their configuration",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 207,
+        "quote": "data[i / 6] |= (gr->tile[i] & 0x07) << ((i % 6) * 5);"
+      }
+    },
+    {
+      "member": "alpha_beta_tables",
+      "value": "gk104_grctx_generate_alpha_beta_tables",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 922,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 962,
+          "op": "wr32",
+          "reg": "0x406800 + (i * 0x20) + j"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 963,
+          "op": "wr32",
+          "reg": "0x406c00 + (i * 0x20) + j"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates alpha and beta lookup tables for the context by writing the configured table entries",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 928,
+        "quote": "u32 atarget = max_t(u32, gr->tpc_total * i / 32, 1);"
+      }
+    },
+    {
+      "member": "dist_skip_table",
+      "value": "gf117_grctx_generate_dist_skip_table",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgf117.c",
+      "line": 188,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgf117.c",
+          "line": 194,
+          "op": "wr32",
+          "reg": "0x4064d0 + (i * 0x04)"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates a distance skip table for the context based on the GPC and TPC count configuration",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 193,
+        "quote": "for (i = 0; i < 8; i++)"
+      }
+    },
+    {
+      "member": "gpc_tpc_nr",
+      "value": "gk104_grctx_generate_gpc_tpc_nr",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 915,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 918,
+          "op": "wr32",
+          "reg": "0x405b00"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the GPC-TPC count configuration to the context image for each GPC in the system",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 918,
+        "quote": "nvkm_wr32(device, 0x405b00, (gr->tpc_total << 8) | gr->gpc_nr);"
+      }
+    },
+    {
+      "member": "r418800",
+      "value": "gk104_grctx_generate_r418800",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 849,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 858,
+          "op": "mask",
+          "reg": "0x418800"
+        },
+        {
+          "file": "nvkm/engine/gr/ctxgk104.c",
+          "line": 859,
+          "op": "mask",
+          "reg": "0x41be10"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes to register 0x418800 for GR context initialization with specific bit configuration",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 858,
+        "quote": "nvkm_mask(device, 0x418800, 0x00200000, 0x00200000);"
+      }
+    },
+    {
+      "member": "r419eb0",
+      "value": "gk110_grctx_generate_r419eb0",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgk110.c",
+      "line": 817,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgk110.c",
+          "line": 820,
+          "op": "mask",
+          "reg": "0x419eb0"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes to register 0x419eb0 for GR context setup configuring bit fields for the GK110 engine",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 820,
+        "quote": "nvkm_mask(device, 0x419eb0, 0x00001000, 0x00001000);"
+      }
+    },
+    {
+      "member": "r419f78",
+      "value": "gk110_grctx_generate_r419f78",
+      "kind": "function",
+      "file": "nvkm/engine/gr/ctxgk110.c",
+      "line": 824,
+      "parent": "grctx",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/ctxgk110.c",
+          "line": 829,
+          "op": "mask",
+          "reg": "0x419f78"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes to register 0x419f78 with FP helper invocation configuration for GR context setup",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 829,
+        "quote": "nvkm_mask(device, 0x419f78, 0x00000008, 0x00000000);"
+      }
+    },
+    {
+      "member": "zbc",
+      "value": "gf100_gr_zbc",
+      "kind": "table",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 145,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of ZBC (clear colour and depth) configuration functions",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 105,
+        "quote": ".zbc = gf100_gr_zbc,"
+      }
+    },
+    {
+      "member": "clear_color",
+      "value": "gf100_gr_zbc_clear_color",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 49,
+      "parent": "zbc",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 53,
+          "op": "wr32",
+          "reg": "0x405804"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 54,
+          "op": "wr32",
+          "reg": "0x405808"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 55,
+          "op": "wr32",
+          "reg": "0x40580c"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 56,
+          "op": "wr32",
+          "reg": "0x405810"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 58,
+          "op": "wr32",
+          "reg": "0x405814"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 59,
+          "op": "wr32",
+          "reg": "0x405820"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 60,
+          "op": "wr32",
+          "reg": "0x405824"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes four colour data registers (0x405804-0x405810), the format register (0x405814), selects the ZBC entry (0x405820), and triggers a colour write via 0x405824 set to TRIGGER | WRITE | COLOR",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 60,
+        "quote": "nvkm_wr32(device, 0x405824, 0x00000004); /* TRIGGER | WRITE | COLOR */"
+      }
+    },
+    {
+      "member": "clear_depth",
+      "value": "gf100_gr_zbc_clear_depth",
+      "kind": "function",
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 100,
+      "parent": "zbc",
+      "accesses": [
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 104,
+          "op": "wr32",
+          "reg": "0x405818"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 105,
+          "op": "wr32",
+          "reg": "0x40581c"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 106,
+          "op": "wr32",
+          "reg": "0x405820"
+        },
+        {
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 107,
+          "op": "wr32",
+          "reg": "0x405824"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the depth data register (0x405818), the format register (0x40581c), selects the ZBC entry (0x405820), and triggers a depth write via 0x405824 set to TRIGGER | WRITE | DEPTH",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 107,
+        "quote": "nvkm_wr32(device, 0x405824, 0x00000005); /* TRIGGER | WRITE | DEPTH */"
+      }
+    }
+  ],
+  "depends_on": [
+    "fb",
+    "ltc",
+    "mc",
+    "pmu",
+    "timer",
+    "top"
+  ],
+  "summary": "The GR engine runs the compute job on the GK110B (GR is the engine name in Nouveau; it also does 3D drawing). Two controllers inside it, FECS for the hub and GPCCS for each GPC, run the microcode of task C2. gf100_gr_init starts the engine: it sets up MMU forwarding, applies the register tables in mmio, calls the init hooks of the function table in order and enables exception reporting. For each channel a context image (grctx) is generated from tables of register writes and from the grctx functions. The zbc members keep the table of clear values. For milestone S3 the Haiku driver has to reproduce init with its hooks, the microcode load, and the generation of one context image; which hooks a compute-only driver may leave out (zcull and the two ROP hooks set up drawing units) is not established."
+}
