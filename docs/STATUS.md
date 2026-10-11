@@ -1,8 +1,8 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: none
-Task state: WAITING. B5 is done. B4 and C1 run in their own worktrees (branches task-b4 and task-c1). Do not start a task here.
+Current task: B4
+Task state: READY. This is the worktree of task B4 (branch task-b4). Another task runs in another worktree at the same time: work only on B4 and do not start another task.
 Last updated: 2026-10-11
 
 ## Last result
