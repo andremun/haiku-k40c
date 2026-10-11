@@ -737,34 +737,208 @@ if mc is not None and "B5" not in SKIP:
 
 # B4 Linux dependencies -----------------------------------------------
 ld = load_json("analysis/linux_deps.json")
-if ld is not None:
-    cats = {"A-reimplement", "B-extract", "C-replace", "D-ignore"}
-    n = sum(1 for e in (ld if isinstance(ld, list) else []) if e.get("category") not in cats)
-    if n:
-        fail(f"analysis/linux_deps.json: {n} entries with category not in {sorted(cats)}")
+if ld is not None and "B4" not in SKIP:
+    rel = "analysis/linux_deps.json"
+    HK = os.path.join(ROOT, "reference", "haiku")
+    if not isinstance(ld, list) or not all(isinstance(e, dict) for e in ld):
+        fail(f"{rel}: must be a list of objects")
+        ld = []
+    # The rule of docs/tasks/B4.md, computed here.
+    B4_KW = set("if for while switch return sizeof defined do else case typeof __typeof__ offsetof".split())
+    b4_defined = set()
+    for d, _, fs in os.walk(NV, followlinks=True):
+        for f in fs:
+            if f.endswith((".c", ".h")):
+                t = open(os.path.join(d, f), errors="replace").read()
+                b4_defined |= set(re.findall(r"^(\w+)\s*\(", t, re.M))
+                b4_defined |= set(re.findall(r"^#\s*define\s+(\w+)", t, re.M))
+    b4_count, b4_lines = {}, {}
+    for e in load_json("analysis/files.json") or []:
+        if e.get("class") == "other-chip":
+            continue
+        try:
+            t = open(os.path.join(NV, e["path"]), errors="replace").read()
+        except OSError:
+            continue
+        t = re.sub(r"/\*.*?\*/", lambda m: "\n" * m.group(0).count("\n"), t, flags=re.S)
+        for m in re.finditer(r"(?<![\w.>])([A-Za-z_]\w*)\s*\(", t):
+            n = m.group(1)
+            if n not in B4_KW and n not in b4_defined:
+                b4_count[n] = b4_count.get(n, 0) + 1
+                b4_lines.setdefault(n, set()).add((e["path"], t.count("\n", 0, m.start()) + 1))
+    got = {str(e.get("symbol")): e for e in ld}
+    if sorted(got) != sorted(b4_count) or len(ld) != len(b4_count):
+        fail(f"{rel}: {len(ld)} symbols, the rule of docs/tasks/B4.md gives {len(b4_count)}; missing "
+             f"{sorted(set(b4_count) - set(got))[:8]}, extra {sorted(set(got) - set(b4_count))[:8]}")
+    if [e.get("symbol") for e in ld] != sorted(got):
+        fail(f"{rel}: entries must be sorted by symbol")
+    CATS = {"A-reimplement", "B-extract", "C-replace", "D-ignore", "X-not-linux"}
+    STDC = {"malloc", "calloc", "free", "realloc", "memcpy", "memset", "memcmp", "memmove", "snprintf",
+            "sprintf", "strlcpy", "strlen"}
+    bad = {}
+    for n, e in got.items():
+        if n not in b4_count:
+            continue
+        ex = e.get("example") if isinstance(e.get("example"), dict) else {}
+        if e.get("count") != b4_count[n]:
+            bad.setdefault("count", []).append(n)
+        if (ex.get("file"), ex.get("line")) not in b4_lines[n]:
+            bad.setdefault("example (a file and line with a call of the symbol)", []).append(n)
+        if e.get("category") not in CATS:
+            bad.setdefault(f"category (one of {sorted(CATS)})", []).append(n)
+        if not isinstance(e.get("note"), str) or len(e["note"].split()) < 4:
+            bad.setdefault("note (4 words or more)", []).append(n)
+        api = e.get("haiku_api")
+        if e.get("category") == "C-replace":
+            if not isinstance(api, list) or not api:
+                bad.setdefault("haiku_api (a list with one name or more for C-replace)", []).append(n)
+                continue
+            hdr = e.get("header")
+            if hdr is None:
+                if not set(api) <= STDC:
+                    bad.setdefault("header (null is only for standard C functions)", []).append(n)
+            else:
+                try:
+                    text = open(os.path.join(HK, str(hdr)), errors="replace").read()
+                except OSError:
+                    text = None
+                if text is None or not str(hdr).startswith("headers/") or \
+                        not all(re.search(r"\b%s\b" % re.escape(str(a)), text) for a in api):
+                    bad.setdefault("header (a file under reference/haiku/headers that has every "
+                                   "haiku_api name)", []).append(n)
+    for k, names in sorted(bad.items()):
+        fail(f"{rel}: wrong {k} in {len(names)} entries: {names[:6]}")
+    # Decisions that the check knows.
+    for n in ("kzalloc", "kfree", "kmalloc", "mutex_lock", "mutex_unlock", "mutex_init", "spin_lock",
+              "spin_unlock", "spin_lock_irqsave", "spin_unlock_irqrestore", "list_add_tail", "list_del",
+              "request_firmware", "dma_map_page", "msleep", "usleep_range"):
+        if n in got and got[n].get("category") != "C-replace":
+            fail(f"{rel}: '{n}' is Linux infrastructure with a Haiku equivalent: C-replace")
+    for n, apis in (("mutex_lock", ["mutex_lock"]), ("spin_lock_irqsave", ["acquire_spinlock", "disable_interrupts"]),
+                    ("msleep", ["snooze"]), ("usleep_range", ["snooze"])):
+        if n in got and not set(apis) <= set(got[n].get("haiku_api") or []):
+            fail(f"{rel}: haiku_api of '{n}' must have {apis}")
+    for n in ("agp_enable", "agp_backend_acquire", "pci_enable_msi"):
+        if n in got and got[n].get("category") in ("A-reimplement", "B-extract"):
+            fail(f"{rel}: '{n}' is not a hardware algorithm or hardware data of the GPU")
+    md = os.path.join(ROOT, "analysis", "linux_deps.md")
+    if not os.path.exists(md) or len(open(md, errors="replace").read().split("\n")) < 30:
+        fail("analysis/linux_deps.md: missing or under 30 lines")
+    tool = os.path.join(ROOT, "tools", "linux_deps.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/linux_deps.py: missing, or no --check option (docs/tasks/B4.md)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/linux_deps.py --check (run {run}): {rel} is not what the tool generates")
+                break
 
 # C1 register database ------------------------------------------------
 try:
     import yaml
 except ImportError:
     yaml = None
-for path in sorted(glob.glob(os.path.join(ROOT, "hardware/registers/*.yaml"))):
-    rel = os.path.relpath(path, ROOT)
-    if yaml is None:
-        notes.append(f"{rel}: not checked (no PyYAML)")
-        continue
-    try:
-        data = yaml.safe_load(open(path)) or []
-    except yaml.YAMLError as e:
-        fail(f"{rel}: invalid YAML: {e}")
-        continue
-    entries = data if isinstance(data, list) else data.get("registers", [])
-    for i, e in enumerate(entries):
-        miss = [k for k in ("name", "address", "source", "status") if k not in e]
-        if miss:
-            fail(f"{rel}[{i}]: missing {miss}")
-        elif e["status"] not in ("SOURCE_ONLY", "TRACE_VERIFIED", "HARDWARE_VERIFIED", "HAIKU_VERIFIED"):
-            fail(f"{rel}[{i}]: bad status {e['status']}")
+reg_files = sorted(glob.glob(os.path.join(ROOT, "hardware/registers/*.yaml")))
+if reg_files and yaml is None:
+    notes.append("hardware/registers: not checked (no PyYAML)")
+elif reg_files and "C1" not in SKIP:
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import rnndb
+    macros = {}
+    for text in src_lines("nvkm/engine/gr/gf100.h") or []:
+        m = re.match(r"#define (\w+)\(([\w, ]+)\)\s+(\(.*\))\s*$", text)
+        if m:
+            macros[m.group(1)] = ([a.strip() for a in m.group(2).split(",")], m.group(3))
+
+    def c1_address(reg):
+        m = re.match(r"0x[0-9a-fA-F]+\b", reg)
+        if m:
+            return int(m.group(0), 16)
+        m = re.fullmatch(r"(\w+)\((.*)\)", reg)
+        if m and m.group(1) in macros:
+            names, body = macros[m.group(1)]
+            args = [a.strip() for a in m.group(2).split(",")]
+            if len(args) != len(names):
+                return None
+            for n, a in zip(names, args):
+                body = re.sub(r"\(%s\)" % n, "(" + a + ")", body)
+            body = re.sub(r"\b[A-Za-z_]\w*(->\w+)*", "0", re.sub(r"0x[0-9a-fA-F]+", lambda h: str(int(h.group(0), 16)), body))
+            try:
+                return int(eval(body, {"__builtins__": {}}))
+            except Exception:
+                return None
+        return None
+
+    want = {}
+    for a in load_json("registers/mmio_accesses.json") or []:
+        addr = c1_address(a["reg"])
+        grp = "pbdma" if a["subsystem"] == "fifo" and addr is not None and 0x40000 <= addr < 0x60000 \
+            else a["subsystem"]
+        w = want.setdefault(grp, {}).setdefault(a["reg"], {"address": addr, "source": set(), "r": False, "w": False})
+        w["source"].add(f"{a['file']}:{a['line']}")
+        w["r"] |= a["op"] in ("rd32", "mask")
+        w["w"] |= a["op"] in ("wr32", "mask")
+    have = {os.path.basename(p)[:-5]: p for p in reg_files}
+    if sorted(have) != sorted(want):
+        fail(f"hardware/registers: the files must be {sorted(g + '.yaml' for g in want)}; missing "
+             f"{sorted(set(want) - set(have))}, extra {sorted(set(have) - set(want))}")
+    for grp, path in sorted(have.items()):
+        rel = os.path.relpath(path, ROOT)
+        try:
+            entries = yaml.safe_load(open(path)) or []
+        except yaml.YAMLError as e:
+            fail(f"{rel}: invalid YAML: {e}")
+            continue
+        if not isinstance(entries, list) or not all(isinstance(e, dict) for e in entries):
+            fail(f"{rel}: must be a list of entries")
+            continue
+        got = {str(e.get("reg")): e for e in entries}
+        exp = want.get(grp, {})
+        if sorted(got) != sorted(exp) or len(entries) != len(exp):
+            fail(f"{rel}: {len(entries)} entries, B3 has {len(exp)} distinct 'reg' texts for this file; "
+                 f"missing {sorted(set(exp) - set(got))[:5]}, extra {sorted(set(got) - set(exp))[:5]}")
+        bad = {}
+        for reg, e in got.items():
+            w = exp.get(reg)
+            if w is None:
+                continue
+            addr = w["address"]
+            look = rnndb.lookup(addr) if addr is not None else None
+            checks = {
+                "address": e.get("address") == (None if addr is None else "0x%06x" % addr),
+                "name": e.get("name") == (look["name"] if look else None),
+                "name_source": e.get("name_source") == ("rnndb:" + look["file"] if look else "none"),
+                "fields": [(f.get("name"), f.get("shift"), f.get("width")) for f in e.get("fields") or []]
+                == [(f["name"], f["shift"], f["width"]) for f in (look["fields"] if look else [])],
+                "source": e.get("source") == sorted(w["source"]),
+                "readable": e.get("readable") is w["r"],
+                "writable": e.get("writable") is w["w"],
+                "status": e.get("status") == "SOURCE_ONLY",
+                "width": e.get("width") == 32,
+            }
+            for k, ok in checks.items():
+                if not ok:
+                    bad.setdefault(k, []).append(reg)
+        for k, regs in sorted(bad.items()):
+            fail(f"{rel}: '{k}' is wrong in {len(regs)} entries, for example reg {regs[0]!r} "
+                 f"(rules: docs/tasks/C1.md)")
+    readme = os.path.join(ROOT, "hardware/registers/README.md")
+    text = open(readme, errors="replace").read() if os.path.exists(readme) else ""
+    miss = [g for g in sorted(want) if g + ".yaml" not in text]
+    if miss:
+        fail(f"hardware/registers/README.md: missing, or no line for {miss}")
+    tool = os.path.join(ROOT, "tools", "build_regdb.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/build_regdb.py: missing, or no --check option (docs/tasks/C1.md)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/build_regdb.py --check (run {run}): hardware/registers is not what the tool generates")
+                break
 
 # C3 hardware model documents ----------------------------------------
 for path in sorted(glob.glob(os.path.join(ROOT, "docs/hardware-model/*.md"))):
