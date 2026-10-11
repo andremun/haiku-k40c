@@ -680,7 +680,7 @@ CLASSIFY = {
     "__set_bit": {
         "category": "C-replace", "haiku_api": ["atomic_or"],
         "header": "headers/os/support/SupportDefs.h",
-        "note": "__set_bit is the non-atomic bit-set used in user-space. Haiku atomic_or provides the same bitwise operation."
+        "note": "__set_bit is the non-atomic variant of set_bit (the caller holds a lock). Haiku atomic_or provides the same bitwise operation."
     },
     "__ffs": {
         "category": "A-reimplement", "haiku_api": [],
@@ -726,7 +726,7 @@ CLASSIFY = {
     # --- Print and debug ---
     "printk": {
         "category": "C-replace", "haiku_api": ["dprintf"],
-        "header": "headers/private/kernel/boot/platform.h",
+        "header": "headers/os/drivers/KernelExport.h",
         "note": "printk is the Linux kernel logging function with log levels. Haiku dprintf has the same format-string semantics; different log-level system."
     },
     "snprintf": {

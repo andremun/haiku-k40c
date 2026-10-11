@@ -67,3 +67,16 @@ Left to do:
    `--check` must also compare the document. Every one of the 139
    symbols is in one table.
 3. Run `make check`, then hand off.
+
+# Review of B4, attempt 3 (2026-10-11): ACCEPT
+
+All checks pass. The five remaining entries are fixed and the tool now
+writes the document, so its tables agree with the data. The scaffold
+changed two details: the header of `dprintf` (it named a boot loader
+header; the kernel declaration is in `headers/os/drivers/KernelExport.h`)
+and the note of `__set_bit`.
+
+Limits: the 60 `A-reimplement` entries say "no Haiku equivalent" without
+a search in every case. `alloc_page`, `vmap` and `dma_free_coherent`
+probably map to Haiku areas (`create_area`, `headers/os/kernel/OS.h`);
+phase D decides this when the memory code is written.

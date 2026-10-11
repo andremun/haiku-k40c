@@ -2,7 +2,7 @@
 
 Current phase: B (Nouveau analysis)
 Current task: B4
-Task state: DONE. Attempt 3 fixed 5 classification defects (set_bit/clear_bit/__set_bit → C-replace atomic_or/atomic_and, __mutex_init → C-replace mutex_init, printk → C-replace dprintf) and added write_md() function to tools/linux_deps.py that generates analysis/linux_deps.md from the JSON with all 139 symbols in table rows. `make check` passes with 0 failures.
+Task state: DONE. Accepted by the scaffold on 2026-10-11 after two reworks, see work/B4/REVIEW.md.
 Last updated: 2026-10-11
 
 ## Last result
