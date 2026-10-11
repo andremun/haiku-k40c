@@ -45,7 +45,8 @@
       ".opencode/*": "deny",
       ".opencode/**": "deny",
       "tools/haiku/*": "ask",
-      "LICENSE": "deny"
+      "LICENSE": "deny",
+      "tests/accept/*": "deny"
     },
     "webfetch": "ask",
     "task": "deny",

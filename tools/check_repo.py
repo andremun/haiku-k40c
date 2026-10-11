@@ -1239,6 +1239,51 @@ for path in sorted(glob.glob(os.path.join(ROOT, "docs/hardware-model/*.md"))):
         if src_lines(ref) is None:
             fail(f"{rel}: cites a file that does not exist: {ref}")
 
+# Phase D: scaffold acceptance tests ---------------------------------
+# name: (trigger file, recorded sha256 of the test, source files to compile with it)
+ACCEPT = {
+    "d1_accept": ("src/hw/RegisterIO.h",
+                  "afbe40a9bfc487e23210f17e0acf171bec6ec120c332027a79135a5cfefee2bf", "src/hw/*.cpp"),
+}
+for name, (trigger, sha, sources) in ACCEPT.items():
+    test = os.path.join(ROOT, "tests", "accept", name + ".cpp")
+    if os.path.exists(test):
+        import hashlib
+        if hashlib.sha256(open(test, "rb").read()).hexdigest() != sha:
+            fail(f"tests/accept/{name}.cpp was changed. It is the scaffold's test: restore it with "
+                 f"`git checkout main -- tests/accept/{name}.cpp`")
+    if not os.path.exists(os.path.join(ROOT, trigger)) or name.split("_")[0].upper() in SKIP:
+        continue
+    import subprocess
+    out = os.path.join(ROOT, "build", "accept")
+    os.makedirs(out, exist_ok=True)
+    srcs = sorted(glob.glob(os.path.join(ROOT, sources)))
+    r = subprocess.run(["g++", "-std=c++17", "-Wall", "-Wextra", "-Werror", "-I" + os.path.join(ROOT, "src"),
+                        test] + srcs + ["-o", os.path.join(out, name)], capture_output=True, text=True)
+    if r.returncode != 0:
+        first = [ln for ln in r.stderr.split("\n") if "error" in ln][:3]
+        fail(f"tests/accept/{name}.cpp does not compile with -Wall -Wextra -Werror: {first}")
+        continue
+    try:
+        r = subprocess.run([os.path.join(out, name)], capture_output=True, text=True, timeout=60)
+    except subprocess.TimeoutExpired:
+        fail(f"tests/accept/{name}: no result after 60 s")
+        continue
+    if r.returncode != 0:
+        lines = [ln for ln in r.stdout.split("\n") if ln.startswith("FAIL")]
+        fail(f"tests/accept/{name}: {len(lines)} checks fail, first: {lines[:3]}")
+    for src in srcs + sorted(glob.glob(os.path.join(ROOT, os.path.dirname(sources), "*.h"))):
+        text = open(src, errors="replace").read()
+        if re.search(r"#include\s*<(linux|drm|asm|sys)/", text) or "KernelExport.h" in text:
+            fail(f"{os.path.relpath(src, ROOT)}: phase D code is plain C++17 with standard headers only")
+    own = os.path.join(ROOT, "tests", "test_" + trigger.split("/")[-1].replace(".h", "").lower() + ".cpp")
+    n = len(re.findall(r"\bCHECK\(", open(own, errors="replace").read())) if os.path.exists(own) else 0
+    if n < 15:
+        fail(f"{os.path.relpath(own, ROOT)}: your own tests, 15 CHECK(...) lines or more; found {n}")
+    r = subprocess.run(["make", "-s", "-C", os.path.join(ROOT, "tests")], capture_output=True, text=True)
+    if r.returncode != 0:
+        fail(f"make -C tests fails: {(r.stdout + r.stderr).strip().splitlines()[-2:]}")
+
 for n in notes:
     print("note:", n)
 for f in fails:
