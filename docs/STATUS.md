@@ -2,7 +2,7 @@
 
 Current phase: D (host-side algorithms and tests)
 Current task: D2
-Task state: READY. This is the worktree of task D2 (branch task-d2). Another task runs in another worktree at the same time: work only on D2 and do not start another task.
+Task state: REWORK. Attempt 1 was reviewed on 2026-10-12. Read work/D2/REVIEW.md first: it names four defects with their fixes. This is the worktree of task D2: work only on D2.
 Last updated: 2026-10-11
 
 ## Last result
