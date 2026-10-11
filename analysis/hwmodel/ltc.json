@@ -38,10 +38,14 @@
           "reg": "0x17e8dc"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Reads hardware ID registers to count active L2 partitions and slice count then calls tag RAM initialization",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 211,
+        "quote": "const u32 parts = nvkm_rd32(device, 0x022438);"
+      }
     },
     {
       "member": "init",
@@ -82,10 +86,14 @@
           "reg": "0x17e8c0"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes the number of L2 cache units and tag base address to MMIO registers and configures the LP128 mask bit",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 32,
+        "quote": "nvkm_wr32(device, 0x17e8d8, ltc->ltc_nr);"
+      }
     },
     {
       "member": "intr",
@@ -102,10 +110,14 @@
           "reg": "0x00017c"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Reads the interrupt mask register then iterates over enabled L2 channels and slices calling the per-lane interrupt handler for each",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 116,
+        "quote": "mask = nvkm_rd32(device, 0x00017c);"
+      }
     },
     {
       "member": "cbc_clear",
@@ -134,10 +146,14 @@
           "reg": "0x17e8c8"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the start and limit addresses then sets the clear command bit to initiate a colour buffer clear operation",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 34,
+        "quote": "nvkm_wr32(device, 0x17e8cc, start);"
+      }
     },
     {
       "member": "cbc_wait",
@@ -154,10 +170,14 @@
           "reg": "addr"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Polls the CBC status register for every L2 channel and slice pair until the clear operation completes",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 46,
+        "quote": "const u32 addr = 0x1410c8 + (c * 0x2000) + (s * 0x400);"
+      }
     },
     {
       "member": "zbc_color",
@@ -167,10 +187,10 @@
       "line": null,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Static constant 16 representing the number of ZBC colour channels supported by the L2 cache",
+      "certainty": "INFERRED"
     },
     {
       "member": "zbc_depth",
@@ -180,10 +200,10 @@
       "line": null,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Static constant 16 representing the number of ZBC depth channels supported by the L2 cache",
+      "certainty": "INFERRED"
     },
     {
       "member": "zbc_clear_color",
@@ -224,10 +244,14 @@
           "reg": "0x17ea54"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Selects a ZBC colour channel and writes four colour component values to the L2 cache clear registers",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 59,
+        "quote": "nvkm_mask(device, 0x17ea44, 0x0000000f, i);"
+      }
     },
     {
       "member": "zbc_clear_depth",
@@ -250,10 +274,14 @@
           "reg": "0x17ea58"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Selects a ZBC depth channel and writes a single depth value to the L2 cache clear register for that channel",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 70,
+        "quote": "nvkm_mask(device, 0x17ea44, 0x0000000f, i);"
+      }
     },
     {
       "member": "invalidate",
@@ -270,10 +298,14 @@
           "reg": "0x70004"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Sets the invalidate bit in register 0x70004 and waits up to 2000 milliseconds for the operation to complete",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 131,
+        "quote": "nvkm_wr32(device, 0x70004, 0x00000001);"
+      }
     },
     {
       "member": "flush",
@@ -290,12 +322,16 @@
           "reg": "0x70010"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Sets the flush bit in register 0x70010 and waits up to 2000 milliseconds for the cache flush to complete",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 144,
+        "quote": "nvkm_wr32(device, 0x70010, 0x00000001);"
+      }
     }
   ],
   "depends_on": [],
-  "summary": ""
+  "summary": "The L2 cache (LTC) subsystem manages the L2 cache that sits in front of framebuffer memory on GK110. It counts active L2 partition instances during oneinit by reading hardware IDs, then configures tag RAM base and the number of LTC units during init by writing to MMIO registers 0x17e8d8, 0x17e000 and 0x17e8d4. It handles colour buffer clear (CBC) and depth buffer clear (ZBC) operations used during framebuffer initialization, and provides cache invalidate and flush operations that wait for completion. The Haiku driver must replicate the init sequence, support clear/flush operations and handle LTC interrupts."
 }
