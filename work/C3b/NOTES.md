@@ -4,3 +4,4 @@ Start: tools/hwmodel.py lists privring, ltc and timer; their JSON and Markdown f
 
 timer done: 6 members (init/intr/read/time/alarm_init/alarm_fini), all KNOWN, depends_on=[], no mmio accesses tracked for timer.
 privring done: 3 members (preinit/init/intr), all KNOWN, depends_on=[], preinit and init both call gk104_privring_init.
+ltc done: 11 members (oneinit/init/intr/cbc_clear/cbc_wait/zbc_color/zbc_depth/zbc_clear_color/zbc_clear_depth/invalidate/flush), depends_on=[]. two value members (zbc_color, zbc_depth) INFERRED with no evidence.
