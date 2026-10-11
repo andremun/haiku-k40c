@@ -1,7 +1,7 @@
 # Status
 
-Current phase: C (hardware database and firmware)
-Current task: C1
+Current phase: B (Nouveau analysis)
+Current task: B4
 Task state: REWORK. Attempt 1 was reviewed on 2026-10-11 and not accepted. Read work/B4/REVIEW.md and fix the 19 failures of `make check`. This is the worktree of task B4: work only on B4.
 Last updated: 2026-10-11
 
