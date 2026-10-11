@@ -1,0 +1,142 @@
+built_in:
+- name: gk110_grhub_data
+  engine: fecs
+  kind: data
+  first_line: 2
+  words: 193
+  last_line: 207
+  size_bytes: 772
+  sha256: 3d4dc9a6c009e844ce7d538496cb267ad78984f0256ccfc29c73412a446806a6
+  source: built-in
+  file: nvkm/engine/gr/fuc/hubgk110.fuc3.h
+  asm_source: nvkm/engine/gr/fuc/hubgk110.fuc3
+  asm_includes: &id001
+  - com.fuc
+  - hub.fuc
+  - macros.fuc
+  license: MIT
+- name: gk110_grhub_code
+  engine: fecs
+  kind: code
+  first_line: 209
+  words: 768
+  last_line: 1046
+  size_bytes: 3072
+  sha256: 9753829d8b15862b1f2db4bb1a08ec81738df1a8f10077ba873e2332d463b2f0
+  source: built-in
+  file: nvkm/engine/gr/fuc/hubgk110.fuc3.h
+  asm_source: nvkm/engine/gr/fuc/hubgk110.fuc3
+  asm_includes: *id001
+  license: MIT
+- name: gk110_grgpc_data
+  engine: gpccs
+  kind: data
+  first_line: 2
+  words: 27
+  last_line: 42
+  size_bytes: 108
+  sha256: 67859e7b5e6e4002910d5ae94d2668828c867a7d0ef1787624dd97cc8839b405
+  source: built-in
+  file: nvkm/engine/gr/fuc/gpcgk110.fuc3.h
+  asm_source: nvkm/engine/gr/fuc/gpcgk110.fuc3
+  asm_includes: &id002
+  - com.fuc
+  - gpc.fuc
+  - macros.fuc
+  license: MIT
+- name: gk110_grgpc_code
+  engine: gpccs
+  kind: code
+  first_line: 44
+  words: 448
+  last_line: 539
+  size_bytes: 1792
+  sha256: 048a905208468c55a0f5246a6a2eb8df9334abe43c2f8a53537e9e7b35a6507c
+  source: built-in
+  file: nvkm/engine/gr/fuc/gpcgk110.fuc3.h
+  asm_source: nvkm/engine/gr/fuc/gpcgk110.fuc3
+  asm_includes: *id002
+  license: MIT
+external:
+- filename: fuc409c
+  engine: fecs
+  kind: code
+  requested_at: nvkm/engine/gr/gf100.c:2602
+  source: external-file
+  distribution: do-not-distribute
+  needed: false
+- filename: fuc409d
+  engine: fecs
+  kind: data
+  requested_at: nvkm/engine/gr/gf100.c:2603
+  source: external-file
+  distribution: do-not-distribute
+  needed: false
+- filename: fuc41ac
+  engine: gpccs
+  kind: code
+  requested_at: nvkm/engine/gr/gf100.c:2604
+  source: external-file
+  distribution: do-not-distribute
+  needed: false
+- filename: fuc41ad
+  engine: gpccs
+  kind: data
+  requested_at: nvkm/engine/gr/gf100.c:2605
+  source: external-file
+  distribution: do-not-distribute
+  needed: false
+load_sequence:
+- line: 1842
+  call: nvkm_mc_unk260
+  what: Write 0 to master control register 0x000260 before the microcode upload (purpose
+    not known)
+- line: 1843
+  call: nvkm_falcon_load_dmem
+  what: Load FECS Falcon data memory from firmware blob at offset zero
+- line: 1846
+  call: nvkm_falcon_load_imem
+  what: Load FECS Falcon instruction memory from firmware blob
+- line: 1851
+  call: nvkm_falcon_load_dmem
+  what: Load GPCCS Falcon data memory from firmware blob at offset zero
+- line: 1854
+  call: nvkm_falcon_load_imem
+  what: Load GPCCS Falcon instruction memory from firmware blob
+- line: 1857
+  call: nvkm_mc_unk260
+  what: Write 1 to master control register 0x000260 after both microcode uploads (purpose
+    not known)
+- line: 1860
+  call: gf100_gr_init_csdata
+  what: Initialize HUB context register data with base address
+- line: 1861
+  call: gf100_gr_init_csdata
+  what: Initialize GPC 0 context register data with base address
+- line: 1862
+  call: gf100_gr_init_csdata
+  what: Initialize GPC 1 context register data with base address
+- line: 1863
+  call: gf100_gr_init_csdata
+  what: Initialize TPC context register data with base address
+- line: 1864
+  call: gf100_gr_init_csdata
+  what: Initialize PPC context register data with base address
+- line: 1867
+  call: nvkm_wr32
+  what: Write HUB control register to clear configuration bits
+- line: 1868
+  call: nvkm_wr32
+  what: Start HUB ucode execution by writing control register
+- line: 1869
+  call: nvkm_msec
+  what: Wait up to two seconds (2000 ms) for HUB ucode to become ready
+- line: 1870
+  call: nvkm_rd32
+  what: Read HUB status register to check execution progress
+- line: 1873
+  call: gf100_gr_ctxctl_debug
+  what: Debug context control registers on timeout failure path
+- line: 1877
+  call: nvkm_rd32
+  what: Read GR context size from hardware status register
