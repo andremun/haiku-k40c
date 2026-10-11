@@ -19,10 +19,10 @@
       "line": 142,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Channel instance block descriptor: 4 KB size with zero-fill and virtual-memory mapping flags",
+      "certainty": "INFERRED"
     },
     {
       "member": "size",
@@ -32,10 +32,10 @@
       "line": null,
       "parent": "inst",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Channel instance block is allocated as a 0x1000-byte (4 KB) region",
+      "certainty": "INFERRED"
     },
     {
       "member": "zero",
@@ -45,10 +45,10 @@
       "line": null,
       "parent": "inst",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "The instance block must be zero-filled when the channel is created",
+      "certainty": "INFERRED"
     },
     {
       "member": "vmm",
@@ -58,10 +58,10 @@
       "line": null,
       "parent": "inst",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "The instance block uses virtual memory mapping through the GPU VMM subsystem",
+      "certainty": "INFERRED"
     },
     {
       "member": "userd",
@@ -71,10 +71,10 @@
       "line": 115,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "USERD (user-visible) area descriptor: BAR 1, 0x200 bytes size, clear function for shadow registers",
+      "certainty": "INFERRED"
     },
     {
       "member": "bar",
@@ -84,10 +84,10 @@
       "line": null,
       "parent": "userd",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "The USERD area resides in BAR 1 (the device memory BAR used for channel command buffers)",
+      "certainty": "INFERRED"
     },
     {
       "member": "size",
@@ -97,10 +97,10 @@
       "line": null,
       "parent": "userd",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "The USERD area size is 0x200 bytes",
+      "certainty": "INFERRED"
     },
     {
       "member": "clear",
@@ -110,10 +110,14 @@
       "line": 118,
       "parent": "userd",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Maps the USERD memory and writes zero to ten shadow-register locations (0x040, 0x044, 0x048, 0x04c, 0x050, 0x058, 0x05c, 0x060, 0x088, 0x08c) then unmaps the memory",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 121,
+        "quote": "nvkm_wo32(chan->userd.mem, chan->userd.base + 0x040, 0x00000000);"
+      }
     },
     {
       "member": "ramfc",
@@ -123,10 +127,10 @@
       "line": 108,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "RAMFC (RAM Fetch) block descriptor: write function for PBDMA state, 0xfff device-memory mask, privileged execution flag",
+      "certainty": "INFERRED"
     },
     {
       "member": "write",
@@ -136,10 +140,14 @@
       "line": 82,
       "parent": "ramfc",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Maps the instance block and writes thirteen 32-bit values: USERD base address (0x08, 0x0c), magic 0x0000face (0x10), 0xfffff902 (0x30), command-buffer offset (0x48, 0x4c), 0x20400000 (0x84), devm mask (0x94), 0x00000100 (0x9c), 0x0000001f (0xac), privilege flag (0xe4), channel ID (0xe8), 0xf8000000 (0xb8), 0x10003080 (0xf8), 0x10000010 (0xfc) then calls nvkm_done",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 88,
+        "quote": "nvkm_wo32(chan->inst, 0x08, lower_32_bits(userd));"
+      }
     },
     {
       "member": "devm",
@@ -149,10 +157,10 @@
       "line": null,
       "parent": "ramfc",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "The PBDMA device-memory mask is 0xfff, written at instance-block offset 0x94",
+      "certainty": "INFERRED"
     },
     {
       "member": "priv",
@@ -162,10 +170,10 @@
       "line": null,
       "parent": "ramfc",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Channels run in privileged mode by default, setting bit 0x20 at instance-block offset 0xe4",
+      "certainty": "INFERRED"
     },
     {
       "member": "bind",
@@ -182,10 +190,14 @@
           "reg": "0x800004 + (chan->id * 8)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Sets the runlist ID in the channel control register at 0x800004 then calls gk104_chan_bind_inst to write the instance-block address to 0x800000",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 77,
+        "quote": "nvkm_mask(device, 0x800004 + (chan->id * 8), 0x000f0000, runl->id << 16);"
+      }
     },
     {
       "member": "unbind",
@@ -202,10 +214,14 @@
           "reg": "0x800000 + (chan->id * 8)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "teardown",
+      "needed_for_compute": true,
+      "what": "Writes zero to the channel instance-block register at 0x800000 + (chan->id * 8) to detach the channel from the PBDMA",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 60,
+        "quote": "nvkm_wr32(device, 0x800000 + (chan->id * 8), 0x00000000);"
+      }
     },
     {
       "member": "start",
@@ -222,10 +238,14 @@
           "reg": "0x800004 + (chan->id * 8)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Sets the channel-enable bit (0x00000400) in the channel control register at 0x800004 + (chan->id * 8)",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 52,
+        "quote": "nvkm_mask(device, 0x800004 + (chan->id * 8), 0x00000400, 0x00000400);"
+      }
     },
     {
       "member": "stop",
@@ -242,10 +262,14 @@
           "reg": "0x800004 + (chan->id * 8)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "teardown",
+      "needed_for_compute": true,
+      "what": "Clears the channel-enable bit (0x00000800) in the channel control register at 0x800004 + (chan->id * 8) to halt the PBDMA",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 44,
+        "quote": "nvkm_mask(device, 0x800004 + (chan->id * 8), 0x00000800, 0x00000800);"
+      }
     },
     {
       "member": "preempt",
@@ -255,12 +279,16 @@
       "line": 36,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Delegates to the compute-group preempt function if one is registered, otherwise calls gf100_chan_preempt which writes the channel ID to register 0x002634",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 45,
+        "quote": "gf100_chan_preempt(chan);"
+      }
     }
   ],
   "depends_on": [],
-  "summary": ""
+  "summary": "The channel function table (gk110_chan) describes per-channel resources: an instance block (inst) that holds PBDMA state, a USERD area (userd) containing the command-buffer put/get pointers visible to the GPU driver, and a RAMFC block (ramfc) that the PBDMA reads to fetch commands. The table provides bind/unbind to attach or detach a channel, start/stop to enable or disable it, and preempt for GPU preemption. On channel bind the driver writes the instance-block address and runlist ID to channel control registers (0x800000\u20130x800004), then writes a full set of RAMFC state values (command-buffer base address, size, USERD address, privilege flag, channel ID) into the instance block before calling nvkm_done to commit the changes."
 }

@@ -1,7 +1,7 @@
 # chan: Hardware Model
 
 ## Purpose
-
+The channel function table (gk110_chan) describes per-channel resources: an instance block (inst) that holds PBDMA state, a USERD area (userd) containing the command-buffer put/get pointers visible to the GPU driver, and a RAMFC block (ramfc) that the PBDMA reads to fetch commands. The table provides bind/unbind to attach or detach a channel, start/stop to enable or disable it, and preempt for GPU preemption. On channel bind the driver writes the instance-block address and runlist ID to channel control registers (0x800000–0x800004), then writes a full set of RAMFC state values (command-buffer base address, size, USERD address, privilege flag, channel ID) into the instance block before calling nvkm_done to commit the changes.
 
 ## Nouveau files
 
@@ -12,34 +12,49 @@
 
 | Member | Function | Role | Needed | Registers |
 |--------|----------|------|--------|-----------|
-| inst | gf100_chan_inst | None | None | 0 |
-| size | 0x1000 | None | None | 0 |
-| zero | true | None | None | 0 |
-| vmm | true | None | None | 0 |
-| userd | gk104_chan_userd | None | None | 0 |
-| bar | 1 | None | None | 0 |
-| size | 0x200 | None | None | 0 |
-| clear | gf100_chan_userd_clear | None | None | 0 |
-| ramfc | gk104_chan_ramfc | None | None | 0 |
-| write | gk104_chan_ramfc_write | None | None | 0 |
-| devm | 0xfff | None | None | 0 |
-| priv | true | None | None | 0 |
-| bind | gk104_chan_bind | None | None | 1 |
-| unbind | gk104_chan_unbind | None | None | 1 |
-| start | gk104_chan_start | None | None | 1 |
-| stop | gk104_chan_stop | None | None | 1 |
-| preempt | gk110_chan_preempt | None | None | 0 |
+| inst | gf100_chan_inst | data | True | 0 |
+| size | 0x1000 | data | True | 0 |
+| zero | true | data | True | 0 |
+| vmm | true | data | True | 0 |
+| userd | gk104_chan_userd | data | True | 0 |
+| bar | 1 | data | True | 0 |
+| size | 0x200 | data | True | 0 |
+| clear | gf100_chan_userd_clear | runtime | True | 0 |
+| ramfc | gk104_chan_ramfc | data | True | 0 |
+| write | gk104_chan_ramfc_write | runtime | True | 0 |
+| devm | 0xfff | data | True | 0 |
+| priv | true | data | True | 0 |
+| bind | gk104_chan_bind | runtime | True | 1 |
+| unbind | gk104_chan_unbind | teardown | True | 1 |
+| start | gk104_chan_start | runtime | True | 1 |
+| stop | gk104_chan_stop | teardown | True | 1 |
+| preempt | gk110_chan_preempt | runtime | True | 0 |
 
 ## Dependencies
 (none identified)
 
 ## KNOWN
 
-(none)
+- **clear**: Maps the USERD memory and writes zero to ten shadow-register locations (0x040, 0x044, 0x048, 0x04c, 0x050, 0x058, 0x05c, 0x060, 0x088, 0x08c) then unmaps the memory (`nvkm/engine/fifo/gf100.c:118`)
+- **write**: Maps the instance block and writes thirteen 32-bit values: USERD base address (0x08, 0x0c), magic 0x0000face (0x10), 0xfffff902 (0x30), command-buffer offset (0x48, 0x4c), 0x20400000 (0x84), devm mask (0x94), 0x00000100 (0x9c), 0x0000001f (0xac), privilege flag (0xe4), channel ID (0xe8), 0xf8000000 (0xb8), 0x10003080 (0xf8), 0x10000010 (0xfc) then calls nvkm_done (`nvkm/engine/fifo/gk104.c:82`)
+- **bind**: Sets the runlist ID in the channel control register at 0x800004 then calls gk104_chan_bind_inst to write the instance-block address to 0x800000 (`nvkm/engine/fifo/gk104.c:72`)
+- **unbind**: Writes zero to the channel instance-block register at 0x800000 + (chan->id * 8) to detach the channel from the PBDMA (`nvkm/engine/fifo/gk104.c:56`)
+- **start**: Sets the channel-enable bit (0x00000400) in the channel control register at 0x800004 + (chan->id * 8) (`nvkm/engine/fifo/gk104.c:48`)
+- **stop**: Clears the channel-enable bit (0x00000800) in the channel control register at 0x800004 + (chan->id * 8) to halt the PBDMA (`nvkm/engine/fifo/gk104.c:40`)
+- **preempt**: Delegates to the compute-group preempt function if one is registered, otherwise calls gf100_chan_preempt which writes the channel ID to register 0x002634 (`nvkm/engine/fifo/gk110.c:36`)
 
 ## INFERRED
 
-(none)
+- **inst**: Channel instance block descriptor: 4 KB size with zero-fill and virtual-memory mapping flags (`nvkm/engine/fifo/gf100.c:142`)
+- **size**: Channel instance block is allocated as a 0x1000-byte (4 KB) region
+- **zero**: The instance block must be zero-filled when the channel is created
+- **vmm**: The instance block uses virtual memory mapping through the GPU VMM subsystem
+- **userd**: USERD (user-visible) area descriptor: BAR 1, 0x200 bytes size, clear function for shadow registers (`nvkm/engine/fifo/gk104.c:115`)
+- **bar**: The USERD area resides in BAR 1 (the device memory BAR used for channel command buffers)
+- **size**: The USERD area size is 0x200 bytes
+- **ramfc**: RAMFC (RAM Fetch) block descriptor: write function for PBDMA state, 0xfff device-memory mask, privileged execution flag (`nvkm/engine/fifo/gk104.c:108`)
+- **devm**: The PBDMA device-memory mask is 0xfff, written at instance-block offset 0x94
+- **priv**: Channels run in privileged mode by default, setting bit 0x20 at instance-block offset 0xe4
 
 ## UNKNOWN
 
