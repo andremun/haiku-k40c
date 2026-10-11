@@ -61,6 +61,7 @@ is no reference for S3 and the project stops at S2.
 | C3e | Subsystem models, part 5 (the GR engine) | `docs/tasks/C3e.md` |
 | C4 | Design documents | `docs/tasks/C4.md` |
 | C4a | Source provenance of the driver constants | `docs/tasks/C4a.md` |
+| C4b | Design documents (MMU, FIFO, GR, firmware) | `docs/tasks/C4b.md` |
 | C5 | Reference run under Linux and the first shader binary | `docs/tasks/C5.md` |
 
 ## Phase D: host-side algorithms and tests
