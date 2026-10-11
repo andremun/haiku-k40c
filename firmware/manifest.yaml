@@ -89,7 +89,8 @@ external:
 load_sequence:
 - line: 1842
   call: nvkm_mc_unk260
-  what: Select HUB Falcon microcontroller unit for initialization
+  what: Write 0 to master control register 0x000260 before the microcode upload (purpose
+    not known)
 - line: 1843
   call: nvkm_falcon_load_dmem
   what: Load FECS Falcon data memory from firmware blob at offset zero
@@ -104,7 +105,8 @@ load_sequence:
   what: Load GPCCS Falcon instruction memory from firmware blob
 - line: 1857
   call: nvkm_mc_unk260
-  what: Select GPC Falcon microcontroller unit for initialization
+  what: Write 1 to master control register 0x000260 after both microcode uploads (purpose
+    not known)
 - line: 1860
   call: gf100_gr_init_csdata
   what: Initialize HUB context register data with base address
@@ -128,7 +130,7 @@ load_sequence:
   what: Start HUB ucode execution by writing control register
 - line: 1869
   call: nvkm_msec
-  what: Wait up to two milliseconds for HUB ucode to become ready
+  what: Wait up to two seconds (2000 ms) for HUB ucode to become ready
 - line: 1870
   call: nvkm_rd32
   what: Read HUB status register to check execution progress

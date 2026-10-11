@@ -145,12 +145,12 @@ def extract_load_sequence(gf100_lines):
 # ---------------------------------------------------------------------------
 
 WHAT_TEXTS = {
-    1842: "Select HUB Falcon microcontroller unit for initialization",
+    1842: "Write 0 to master control register 0x000260 before the microcode upload (purpose not known)",
     1843: "Load FECS Falcon data memory from firmware blob at offset zero",
     1846: "Load FECS Falcon instruction memory from firmware blob",
     1851: "Load GPCCS Falcon data memory from firmware blob at offset zero",
     1854: "Load GPCCS Falcon instruction memory from firmware blob",
-    1857: "Select GPC Falcon microcontroller unit for initialization",
+    1857: "Write 1 to master control register 0x000260 after both microcode uploads (purpose not known)",
     1860: "Initialize HUB context register data with base address",
     1861: "Initialize GPC 0 context register data with base address",
     1862: "Initialize GPC 1 context register data with base address",
@@ -158,7 +158,7 @@ WHAT_TEXTS = {
     1864: "Initialize PPC context register data with base address",
     1867: "Write HUB control register to clear configuration bits",
     1868: "Start HUB ucode execution by writing control register",
-    1869: "Wait up to two milliseconds for HUB ucode to become ready",
+    1869: "Wait up to two seconds (2000 ms) for HUB ucode to become ready",
     1870: "Read HUB status register to check execution progress",
     1873: "Debug context control registers on timeout failure path",
     1877: "Read GR context size from hardware status register",
