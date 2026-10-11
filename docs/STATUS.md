@@ -2,7 +2,7 @@
 
 Current phase: D (host-side algorithms and tests)
 Current task: D4
-Task state: READY. This is the worktree of task D4 (branch task-d4). Another task runs in another worktree at the same time: work only on D4 and do not start another task.
+Task state: DONE. `make check` 0 failures.
 Last updated: 2026-10-12
 
 ## Last result
@@ -68,3 +68,4 @@ the old layout. Details: `reference/pci/README.md`.
 | C3c | DONE | 2026-10-12 | Subsystem model for fifo: 48 members (15 main + 33 nested in six sub-tables), all KNOWN with evidence lines verified against source. `make check` 0 failures. |
 | C3d | DONE | 2026-10-12 | Subsystem model for chan: 17 members (8 top-level + 9 nested in inst/userd/ramfc). 6 functions KNOWN with evidence, 11 data/value INFERRED. `make check` 0 failures. |
 | D3 | DONE | 2026-10-12 | GPFIFO push-buffer encoding: `src/fifo/PushBuffer.h` + `.cpp` (header encode/decode for 4 types, PushBuffer builder, decodeBuffer, GpEntry encode/decode, GpFifo ring), `tests/test_pushbuffer.cpp` (98 checks), `docs/pushbuffer-encoding.md` (103 lines). `make check` 0 failures. |
+| D4 | DONE | 2026-10-12 | Register-trace comparison tool: `tools/compare_register_traces.py` (parse_trace, format_trace, convert_mmiotrace, compare, CLI with --writes-only/--ignore-read-values/--ignore/--mask/--names/--convert-mmiotrace), `tests/test_compare_traces.py` (17 checks), `docs/register-traces.md` (93 lines). `make check` 0 failures. |

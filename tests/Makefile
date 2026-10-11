@@ -14,6 +14,8 @@ all: $(BUILDDIR)/test_registerio $(BUILDDIR)/d1_accept $(BUILDDIR)/test_pushbuff
 	@$(BUILDDIR)/d1_accept
 	@$(BUILDDIR)/test_pushbuffer
 	@$(BUILDDIR)/d3_accept
+	@python3 test_compare_traces.py
+	@python3 accept/d4_accept.py
 
 $(BUILDDIR)/test_registerio: test_registerio.cpp ../src/hw/RegisterIO.h ../src/hw/RegisterIO.cpp | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) test_registerio.cpp $(SRCS) -o $@
