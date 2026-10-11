@@ -2,8 +2,8 @@
 
 Current phase: C (hardware database and firmware)
 Current task: C3c
-Task state: READY. This is the worktree of task C3c (branch task-c3c). Another task runs in another worktree at the same time: work only on C3c and do not start another task.
-Last updated: 2026-10-11
+Task state: DONE. This is the worktree of task C3c (branch task-c3c). Another task runs in another worktree at the same time: work only on C3c and do not start another task.
+Last updated: 2026-10-12
 
 ## Last result
 
@@ -65,3 +65,4 @@ the old layout. Details: `reference/pci/README.md`.
 | B4 | DONE | 2026-10-11 | Linux dependency map: 139 symbols called from 70 files, each with category and Haiku replacement; the tool writes the document. Two reworks, see `work/B4/REVIEW.md`. |
 | C3a | DONE | 2026-10-11 | Subsystem models for mc, bar, imem, mmu, fb, top: 46 function-table members, each with role, description and a quoted source line. Two sessions; scaffold corrections in `work/C3a/REVIEW.md`. |
 | C3b | DONE | 2026-10-11 | Subsystem models for timer (6 members), privring (3 members), ltc (11 members): 20 function members + 2 data values, each with role, needed_for_compute, what, certainty, evidence. `make check` 0 failures. |
+| C3c | DONE | 2026-10-12 | Subsystem model for fifo: 48 members (15 main + 33 nested in six sub-tables), all KNOWN with evidence lines verified against source. `make check` 0 failures. |
