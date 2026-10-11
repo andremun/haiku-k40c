@@ -64,8 +64,8 @@
       ],
       "role": "init",
       "needed_for_compute": true,
-      "what": "Writes five mask registers to set the PRI ring base and size for hubs, ROPs, and GPC units",
-      "certainty": "KNOWN",
+      "what": "Writes five mask values to PRI ring registers 0x122318 to 0x122358; the source does not say what the values mean",
+      "certainty": "INFERRED",
       "evidence": {
         "line": 103,
         "quote": "nvkm_mask(device, 0x122318, 0x0003ffff, 0x00001000);"
@@ -124,8 +124,8 @@
       ],
       "role": "init",
       "needed_for_compute": true,
-      "what": "Writes five mask registers to set the PRI ring base and size for hubs, ROPs, and GPC units",
-      "certainty": "KNOWN",
+      "what": "Writes five mask values to PRI ring registers 0x122318 to 0x122358; the source does not say what the values mean",
+      "certainty": "INFERRED",
       "evidence": {
         "line": 104,
         "quote": "nvkm_mask(device, 0x12231c, 0x0003ffff, 0x00000200);"
@@ -193,5 +193,5 @@
     }
   ],
   "depends_on": [],
-  "summary": "The PCI Express PRI (Processor Requested Invalidate) ring manages the register bus from the PCIe root complex to the GPC and ROP units on the GK110 hub. It configures ring base pointers and size registers for hubs, ROPs, and GPCs during initialization, and handles interrupts from each unit type when they need attention, with a final synchronization wait before returning. The Haiku driver must set up the same ring hardware and service the interrupts to maintain correct address translation."
+  "summary": "The PRI ring is the register bus inside the GPU that carries register accesses from the hub to the GPC and ROP units of the GR engine (PRI is a register-bus name in the source, not a PCI Express term). gk104_privring_init writes five mask values to registers 0x122318 to 0x122358 and is used both as preinit and as init; the source does not say what the values mean. gk104_privring_intr reads the status registers 0x120058 and 0x12005c and reports the failing address of each hub, ROP or GPC unit. The Haiku driver must repeat the five writes before it touches GR registers."
 }

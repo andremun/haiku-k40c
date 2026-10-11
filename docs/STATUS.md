@@ -2,7 +2,7 @@
 
 Current phase: C (hardware database and firmware)
 Current task: C3b
-Task state: DONE. This is the worktree of task C3b (branch task-c3b). Another task runs in another worktree at the same time: work only on C3b and do not start another task.
+Task state: DONE. Accepted by the scaffold on 2026-10-11, see work/C3b/REVIEW.md.
 Last updated: 2026-10-11
 
 ## Last result

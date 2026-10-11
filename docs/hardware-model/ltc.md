@@ -25,24 +25,24 @@ The L2 cache (LTC) subsystem manages the L2 cache that sits in front of framebuf
 | flush | gf100_ltc_flush | runtime | True | 1 |
 
 ## Dependencies
-(none identified)
+fb
 
 ## KNOWN
 
 - **oneinit**: Reads hardware ID registers to count active L2 partitions and slice count then calls tag RAM initialization (`nvkm/subdev/ltc/gf100.c:208`)
 - **init**: Writes the number of L2 cache units and tag base address to MMIO registers and configures the LP128 mask bit (`nvkm/subdev/ltc/gk104.c:27`)
 - **intr**: Reads the interrupt mask register then iterates over enabled L2 channels and slices calling the per-lane interrupt handler for each (`nvkm/subdev/ltc/gf100.c:111`)
-- **cbc_clear**: Writes the start and limit addresses then sets the clear command bit to initiate a colour buffer clear operation (`nvkm/subdev/ltc/gf100.c:31`)
-- **cbc_wait**: Polls the CBC status register for every L2 channel and slice pair until the clear operation completes (`nvkm/subdev/ltc/gf100.c:40`)
-- **zbc_clear_color**: Selects a ZBC colour channel and writes four colour component values to the L2 cache clear registers (`nvkm/subdev/ltc/gf100.c:56`)
-- **zbc_clear_depth**: Selects a ZBC depth channel and writes a single depth value to the L2 cache clear register for that channel (`nvkm/subdev/ltc/gf100.c:67`)
+- **cbc_wait**: Polls the clear status register of every L2 cache part and slice until the tag clear has finished (`nvkm/subdev/ltc/gf100.c:40`)
+- **zbc_clear_color**: Selects entry i of the colour clear-value table (0x17ea44) and writes its four colour words (`nvkm/subdev/ltc/gf100.c:56`)
+- **zbc_clear_depth**: Selects entry i of the depth clear-value table (0x17ea44) and writes its depth word (`nvkm/subdev/ltc/gf100.c:67`)
 - **invalidate**: Sets the invalidate bit in register 0x70004 and waits up to 2000 milliseconds for the operation to complete (`nvkm/subdev/ltc/gf100.c:126`)
 - **flush**: Sets the flush bit in register 0x70010 and waits up to 2000 milliseconds for the cache flush to complete (`nvkm/subdev/ltc/gf100.c:139`)
 
 ## INFERRED
 
-- **zbc_color**: Static constant 16 representing the number of ZBC colour channels supported by the L2 cache
-- **zbc_depth**: Static constant 16 representing the number of ZBC depth channels supported by the L2 cache
+- **cbc_clear**: Writes the start and limit of a range of compression tags (0x17e8cc, 0x17e8d0) and sets the clear command bit; CBC is not expanded in the source (`nvkm/subdev/ltc/gf100.c:31`)
+- **zbc_color**: Constant 16: the number of entries in the table of colour clear values (ZBC table)
+- **zbc_depth**: Constant 16: the number of entries in the table of depth clear values (ZBC table)
 
 ## UNKNOWN
 
