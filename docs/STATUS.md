@@ -2,7 +2,7 @@
 
 Current phase: B (Nouveau analysis)
 Current task: B5
-Task state: REWORK. Attempt 1 was reviewed on 2026-10-11 and not accepted. Read work/B5/REVIEW.md and fix the 12 failures of `make check`.
+Task state: DONE. Attempt 2 accepted (2026-10-11): fixed 12 failures — `top`/`ltc`/`timer`/`privring` changed to needed; reasons corrected (mc, imem, privring, top, HWW); GR hook init→both; steps 1/3/4 changed to partly-known; channel step with 5 required functions added; two post-launch steps added. 17 steps, 31 subsystems, 18 GR hooks. `make check` 0 failures.
 Last updated: 2026-10-11
 
 ## Last result
@@ -70,3 +70,4 @@ the old layout. Details: `reference/pci/README.md`.
 | B2 | DONE | 2026-10-08 | Call graph from four roots with function tables: 446 nodes, 704 edges. Three rework sessions; the last defects (check mode, other-chip section, two nodes outside the inventory) were fixed by the scaffold, see `work/B2/REVIEW.md`. |
 | B3 | DONE | 2026-10-08 | 872 MMIO accesses from 43 files (rd32: 288, wr32: 462, mask: 122). 587 constant regs. Three bugs fixed: nested call line attribution (offset map), double-processing of joined lines (return end_line), 875→872 count. `make check` 0 failures. |
 | B6 | DONE | 2026-10-08 | Rework 2: added "gk110": true/false to every setup and launch entry; GK110-filtered sequence tables; other-chip table built from gk110=false entries; class_source line number; condition parsing fixes. 3 entries gk110=false (lines 87, 90, 878). `make check` 0 failures. |
+| B5 | DONE | 2026-10-11 | Rework 2: fixed 12 `make check` failures — subsystems `top`/`ltc`/`timer`/`privring` changed optional→needed; reasons corrected for mc, imem, privring, top, HWW; GR hook init changed compute→both; steps 1/3/4 changed known→partly-known; channel step added with 5 required functions; 2 post-launch steps added. 17 steps, 31 subsystems, 18 GR hooks, 2 firmware. `make check` 0 failures. |

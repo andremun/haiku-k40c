@@ -144,9 +144,13 @@ SUBSYSTEM_STATUS = {
     # Core subsystems needed for compute
     "bar":       ("needed", "PCI BAR mapping is required before any GPU register access can occur"),
     "fb":        ("needed", "framebuffer and memory layout must be initialized for GPU memory access"),
-    "imem":      ("needed", "instantiated memory layer is required for GPU-addressable memory access"),
+    "imem":      ("needed", "instance memory provides GPU objects such as page tables and RAMFC "
+                           "structures that the GR engine loads firmware code into"),
+    "ltc":       ("needed", "the GR engine calls nvkm_ltc_* functions for zbc color and depth "
+                            "configuration at gr/gf100.c:94 and 114"),
     "mmu":       ("needed", "memory management unit must translate virtual to physical addresses"),
-    "mc":        ("needed", "memory controller must be configured for the card memory subsystem"),
+    "mc":        ("needed", "master control provides engine enable bits and interrupt configuration "
+                           "for every subdevice that the GR and FIFO engines use"),
     "fifo":      ("needed", "command submission engine is required to send work to the GPU"),
     "gr":        ("needed", "graphics/compute engine must be initialized to run compute shaders"),
     # Non-essential for compute
@@ -163,10 +167,13 @@ SUBSYSTEM_STATUS = {
     "gpio":      ("optional", "general-purpose I/O is used for board-level controls not compute"),
     "i2c":       ("optional", "I2C bus is used for sensor access and EEPROM reading not compute"),
     "iccsense":  ("optional", "current sensing monitors power draw but is not required for compute"),
-    "privring":  ("optional", "privileged ring buffer is for kernel control not user compute jobs"),
+    "privring":  ("needed", "PRI ring provides the register bus to the GR units for interrupt "
+                           "handling and hardware error reporting at privring/gf100.c"),
     "therm":     ("optional", "thermal management prevents overheating but compute can proceed without"),
-    "timer":     ("optional", "software timer provides scheduling ticks but is not strictly required"),
-    "top":       ("optional", "topology layer handles GPU interconnect for multi-GPU setups"),
+    "timer":     ("needed", "every nvkm_msec wait call in GR uses the timer subdev for polling "
+                           "loops at gr/gf100.c:758 during firmware initialization"),
+    "top":       ("needed", "device topology table lists engines and their runlists; "
+                           "gk104_fifo_init reads device->top to iterate runlists at fifo/gk104.c:764"),
     "volt":      ("optional", "voltage control adjusts power levels but is not needed for compute"),
     "ce":        ("optional", "copy engine handles memory transfers but compute can use channel"),
     "dma":       ("optional", "DMA engine supports direct memory access for non-GPU transfers"),
@@ -186,7 +193,8 @@ STEP_FUNCTIONS = [
         "subsystem": "bar",
         "what": "Map PCI BAR regions and read VBIOS for GPU identification",
         "functions": ["gf100_bar_new"],
-        "status": "known",
+        "status": "partly-known",
+        "notes": "Only the constructor gf100_bar_new is traced; init function not in call graph",
     },
     {
         "subsystem": "fb",
@@ -196,21 +204,30 @@ STEP_FUNCTIONS = [
     },
     {
         "subsystem": "mc",
-        "what": "Configure memory controller for GPU memory access and channels",
+        "what": "Master control provides engine enable bits and interrupt configuration",
         "functions": ["gk104_mc_new"],
-        "status": "known",
+        "status": "partly-known",
+        "notes": "Only the constructor gk104_mc_new is traced; init function not in call graph",
     },
     {
         "subsystem": "imem",
-        "what": "Initialize instantiated memory for GPU-addressable allocation",
+        "what": "Instance memory provides GPU objects such as page tables and RAMFC structures",
         "functions": ["nv50_instmem_new"],
-        "status": "known",
+        "status": "partly-known",
+        "notes": "Only the constructor nv50_instmem_new is traced; init function not in call graph",
     },
     {
         "subsystem": "mmu",
         "what": "Set up memory management unit for address translation",
-        "functions": ["gk104_mmu_new"],
+        "functions": ["gk104_mmu_new", "nvkm_mmu_init"],
         "status": "known",
+    },
+    {
+        "subsystem": "top",
+        "what": "Device topology table lists engines and their runlists for FIFO access",
+        "functions": [],
+        "status": "partly-known",
+        "notes": "Topology initialized early; gk104_fifo_init reads device->top at fifo/gk104.c:764",
     },
     {
         "subsystem": "fifo",
@@ -219,10 +236,45 @@ STEP_FUNCTIONS = [
         "status": "known",
     },
     {
+        "subsystem": "ltc",
+        "what": "LTC layer provides zbc color and depth configuration for the GR engine",
+        "functions": [],
+        "status": "partly-known",
+        "notes": "LTC initialized before GR; called from gr/gf100.c:94 for zbc color configuration",
+    },
+    {
+        "subsystem": "timer",
+        "what": "Timer subdev provides polling delays for GR firmware initialization waits",
+        "functions": [],
+        "status": "partly-known",
+        "notes": "Timer used by every nvkm_msec call at gr/gf100.c:758 during GR init",
+    },
+    {
+        "subsystem": "privring",
+        "what": "PRI ring provides the register bus to GR units for interrupt and error handling",
+        "functions": [],
+        "status": "partly-known",
+        "notes": "Privring initialized before GR; register bus to engines at privring/gf100.c",
+    },
+    {
         "subsystem": "gr",
         "what": "Initialize graphics and compute engine with firmware and exception handlers",
-        "functions": ["gk110b_gr_new", "gf100_gr_init"],
+        "functions": ["gk110b_gr_new", "gf100_gr_init", "gf100_gr_init_ctxctl_int"],
         "status": "known",
+    },
+    {
+        "subsystem": "channel",
+        "what": "Create channel address space with RAMFC write and runlist commit",
+        "functions": ["gk104_chan_ramfc_write", "gk104_runl_commit"],
+        "status": "partly-known",
+        "notes": "Channel creation traced; full command buffer submission not fully traced",
+    },
+    {
+        "subsystem": "channel",
+        "what": "Create GR context for the channel including GPU object generation",
+        "functions": ["gf100_gr_chan_new", "gf100_grctx_generate"],
+        "status": "partly-known",
+        "notes": "GR context creation traced via grep; not in B2 call graph",
     },
     {
         "subsystem": "mesa",
@@ -238,10 +290,17 @@ STEP_FUNCTIONS = [
     },
     {
         "subsystem": "channel",
-        "what": "Create channel address space and submit command buffer for execution",
-        "functions": ["gf100_fifo_init_pbdmas"],
-        "status": "partly-known",
-        "notes": "Channel creation and command buffer submission not fully traced in B2 call graph",
+        "what": "Wait for the job to complete by polling the channel status register",
+        "functions": [],
+        "status": "unknown",
+        "notes": "Job completion polling not traced in B2 call graph; needs FIFO status register",
+    },
+    {
+        "subsystem": "host",
+        "what": "Read back the result buffer from GPU memory through the PCI BAR mapping",
+        "functions": [],
+        "status": "unknown",
+        "notes": "Result buffer read-back not traced; requires BAR0 access to GPU memory",
     },
 ]
 
@@ -250,25 +309,29 @@ MISSING_FUNC_LINES = {
     "gf100_bar_new": ("nvkm/subdev/bar/gf100.c", 192),
     "gk104_mc_new": ("nvkm/subdev/mc/gk104.c", 63),
     "nv50_instmem_new": ("nvkm/subdev/instmem/nv50.c", 436),
-    "gf100_fifo_init_pbdmas": ("nvkm/engine/fifo/gf100.c", 873),
+    "gf100_gr_chan_new": ("nvkm/engine/gr/gf100.c", 377),
+    "gf100_grctx_generate": ("nvkm/engine/gr/ctxgf100.c", 1436),
 }
 
 
 # ── gr_hook decisions ─────────────────────────────────────────────────────
 
 GR_HOOK_USE = {
-    "init":               ("compute",    "Generic GR initialization used by both graphics and compute pipelines"),
+    "init":               ("both",     "gf100_gr_init calls all other hooks and is shared between "
+                                     "graphics and compute pipelines"),
     "init_gpc_mmu":       ("compute",    "GPC MMU initialization configures address translation for compute"),
     "init_vsc_stream_master": ("both",   "VSC stream master setup supports both graphics and compute vertex stream routing"),
     "init_zcull":         ("graphics-only", "Depth culling unit is specific to rasterization graphics pipeline only"),
     "init_num_active_ltcs": ("both",     "LTC count initialization is shared by both graphics and compute workloads"),
     "init_rop_active_fbps":   ("graphics-only", "ROP active framebuffer configuration is for graphics rendering only"),
     "init_fecs_exceptions":   ("both",     "FEC exception handling is shared between graphics and compute error paths"),
-    "init_sked_hww_esr":      ("both",     "Scheduler hardware workqueue error service routine supports both paths"),
+    "init_sked_hww_esr":      ("both",     "Scheduler hardware warning error service routine reports "
+                                         "error conditions for both graphics and compute paths"),
     "init_419cc0":        ("both",     "Register 0x419cc0 initialization is used by both graphics and compute engines"),
     "init_419eb4":        ("compute",    "Register 0x419eb4 is GK110-specific and used for compute pipeline configuration"),
     "init_ppc_exceptions":    ("both",     "PPC exception handling supports both graphics and compute error recovery"),
-    "init_tex_hww_esr":     ("both",     "Texture hardware workqueue error service is used by both compute and graphics"),
+    "init_tex_hww_esr":     ("both",     "Texture hardware warning error service reports errors "
+                                         "for both graphics and compute execution paths"),
     "init_shader_exceptions": ("both",     "Shader exception handling is needed for both graphics shader and compute execution"),
     "init_rop_exceptions":    ("graphics-only", "ROP exceptions are specific to raster operations in graphics pipeline"),
     "init_exception2":      ("both",     "Exception group 2 handling is shared across compute and graphics execution paths"),

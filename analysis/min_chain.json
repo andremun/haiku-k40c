@@ -126,15 +126,15 @@
       "file": "nvkm/engine/device/base.c",
       "line": 1782,
       "status": "needed",
-      "reason": "instantiated memory layer is required for GPU-addressable memory access"
+      "reason": "instance memory provides GPU objects such as page tables and RAMFC structures that the GR engine loads firmware code into"
     },
     {
       "name": "ltc",
       "constructor": "gk104_ltc_new",
       "file": "nvkm/engine/device/base.c",
       "line": 1783,
-      "status": "optional",
-      "reason": "Subsystem ltc is not required for a minimal compute workload"
+      "status": "needed",
+      "reason": "the GR engine calls nvkm_ltc_* functions for zbc color and depth configuration at gr/gf100.c:94 and 114"
     },
     {
       "name": "mc",
@@ -142,7 +142,7 @@
       "file": "nvkm/engine/device/base.c",
       "line": 1784,
       "status": "needed",
-      "reason": "memory controller must be configured for the card memory subsystem"
+      "reason": "master control provides engine enable bits and interrupt configuration for every subdevice that the GR and FIFO engines use"
     },
     {
       "name": "mmu",
@@ -205,8 +205,8 @@
       "constructor": "gk104_privring_new",
       "file": "nvkm/engine/device/base.c",
       "line": 1789,
-      "status": "optional",
-      "reason": "privileged ring buffer is for kernel control not user compute jobs"
+      "status": "needed",
+      "reason": "PRI ring provides the register bus to the GR units for interrupt handling and hardware error reporting at privring/gf100.c"
     },
     {
       "name": "sw",
@@ -229,16 +229,16 @@
       "constructor": "nv41_timer_new",
       "file": "nvkm/engine/device/base.c",
       "line": 1791,
-      "status": "optional",
-      "reason": "software timer provides scheduling ticks but is not strictly required"
+      "status": "needed",
+      "reason": "every nvkm_msec wait call in GR uses the timer subdev for polling loops at gr/gf100.c:758 during firmware initialization"
     },
     {
       "name": "top",
       "constructor": "gk104_top_new",
       "file": "nvkm/engine/device/base.c",
       "line": 1792,
-      "status": "optional",
-      "reason": "topology layer handles GPU interconnect for multi-GPU setups"
+      "status": "needed",
+      "reason": "device topology table lists engines and their runlists; gk104_fifo_init reads device->top to iterate runlists at fifo/gk104.c:764"
     },
     {
       "name": "volt",
@@ -263,8 +263,8 @@
         }
       ],
       "registers": [],
-      "status": "known",
-      "notes": ""
+      "status": "partly-known",
+      "notes": "Only the constructor gf100_bar_new is traced; init function not in call graph"
     },
     {
       "step": 2,
@@ -291,7 +291,7 @@
     {
       "step": 3,
       "subsystem": "mc",
-      "what": "Configure memory controller for GPU memory access and channels",
+      "what": "Master control provides engine enable bits and interrupt configuration",
       "functions": [
         {
           "name": "gk104_mc_new",
@@ -301,13 +301,13 @@
         }
       ],
       "registers": [],
-      "status": "known",
-      "notes": ""
+      "status": "partly-known",
+      "notes": "Only the constructor gk104_mc_new is traced; init function not in call graph"
     },
     {
       "step": 4,
       "subsystem": "imem",
-      "what": "Initialize instantiated memory for GPU-addressable allocation",
+      "what": "Instance memory provides GPU objects such as page tables and RAMFC structures",
       "functions": [
         {
           "name": "nv50_instmem_new",
@@ -317,8 +317,8 @@
         }
       ],
       "registers": [],
-      "status": "known",
-      "notes": ""
+      "status": "partly-known",
+      "notes": "Only the constructor nv50_instmem_new is traced; init function not in call graph"
     },
     {
       "step": 5,
@@ -330,6 +330,12 @@
           "tree": "nouveau",
           "file": "nvkm/subdev/mmu/gk104.c",
           "line": 38
+        },
+        {
+          "name": "nvkm_mmu_init",
+          "tree": "nouveau",
+          "file": "nvkm/subdev/mmu/base.c",
+          "line": 389
         }
       ],
       "registers": [],
@@ -338,6 +344,15 @@
     },
     {
       "step": 6,
+      "subsystem": "top",
+      "what": "Device topology table lists engines and their runlists for FIFO access",
+      "functions": [],
+      "registers": [],
+      "status": "partly-known",
+      "notes": "Topology initialized early; gk104_fifo_init reads device->top at fifo/gk104.c:764"
+    },
+    {
+      "step": 7,
       "subsystem": "fifo",
       "what": "Initialize FIFO engine for command submission and context switching",
       "functions": [
@@ -375,7 +390,34 @@
       "notes": ""
     },
     {
-      "step": 7,
+      "step": 8,
+      "subsystem": "ltc",
+      "what": "LTC layer provides zbc color and depth configuration for the GR engine",
+      "functions": [],
+      "registers": [],
+      "status": "partly-known",
+      "notes": "LTC initialized before GR; called from gr/gf100.c:94 for zbc color configuration"
+    },
+    {
+      "step": 9,
+      "subsystem": "timer",
+      "what": "Timer subdev provides polling delays for GR firmware initialization waits",
+      "functions": [],
+      "registers": [],
+      "status": "partly-known",
+      "notes": "Timer used by every nvkm_msec call at gr/gf100.c:758 during GR init"
+    },
+    {
+      "step": 10,
+      "subsystem": "privring",
+      "what": "PRI ring provides the register bus to GR units for interrupt and error handling",
+      "functions": [],
+      "registers": [],
+      "status": "partly-known",
+      "notes": "Privring initialized before GR; register bus to engines at privring/gf100.c"
+    },
+    {
+      "step": 11,
       "subsystem": "gr",
       "what": "Initialize graphics and compute engine with firmware and exception handlers",
       "functions": [
@@ -390,9 +432,35 @@
           "tree": "nouveau",
           "file": "nvkm/engine/gr/gf100.c",
           "line": 2342
+        },
+        {
+          "name": "gf100_gr_init_ctxctl_int",
+          "tree": "nouveau",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 1831
         }
       ],
       "registers": [
+        {
+          "reg": "0x40910c",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 1867
+        },
+        {
+          "reg": "0x409100",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 1868
+        },
+        {
+          "reg": "0x409800",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 1870
+        },
+        {
+          "reg": "0x409804",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 1877
+        },
         {
           "reg": "0x400500",
           "file": "nvkm/engine/gr/gf100.c",
@@ -523,7 +591,128 @@
       "notes": ""
     },
     {
-      "step": 8,
+      "step": 12,
+      "subsystem": "channel",
+      "what": "Create channel address space with RAMFC write and runlist commit",
+      "functions": [
+        {
+          "name": "gk104_chan_ramfc_write",
+          "tree": "nouveau",
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 82
+        },
+        {
+          "name": "gk104_runl_commit",
+          "tree": "nouveau",
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 430
+        }
+      ],
+      "registers": [
+        {
+          "reg": "0x002270",
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 446
+        },
+        {
+          "reg": "0x002274",
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 447
+        }
+      ],
+      "status": "partly-known",
+      "notes": "Channel creation traced; full command buffer submission not fully traced"
+    },
+    {
+      "step": 13,
+      "subsystem": "channel",
+      "what": "Create GR context for the channel including GPU object generation",
+      "functions": [
+        {
+          "name": "gf100_gr_chan_new",
+          "tree": "nouveau",
+          "file": "nvkm/engine/gr/gf100.c",
+          "line": 377
+        },
+        {
+          "name": "gf100_grctx_generate",
+          "tree": "nouveau",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1436
+        }
+      ],
+      "registers": [
+        {
+          "reg": "0x404170",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1447
+        },
+        {
+          "reg": "0x404170",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1449
+        },
+        {
+          "reg": "0x404170",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1463
+        },
+        {
+          "reg": "0x404170",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1465
+        },
+        {
+          "reg": "0x40802c",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1470
+        },
+        {
+          "reg": "0x409840",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1506
+        },
+        {
+          "reg": "0x409500",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1507
+        },
+        {
+          "reg": "0x409504",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1508
+        },
+        {
+          "reg": "0x409800",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1510
+        },
+        {
+          "reg": "0x409b04",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1521
+        },
+        {
+          "reg": "0x409000",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1522
+        },
+        {
+          "reg": "0x409b00",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1524
+        },
+        {
+          "reg": "0x409b00",
+          "file": "nvkm/engine/gr/ctxgf100.c",
+          "line": 1535
+        }
+      ],
+      "status": "partly-known",
+      "notes": "GR context creation traced via grep; not in B2 call graph"
+    },
+    {
+      "step": 14,
       "subsystem": "mesa",
       "what": "Set up compute context including TLS textures and command buffer preparation",
       "functions": [
@@ -539,7 +728,7 @@
       "notes": ""
     },
     {
-      "step": 9,
+      "step": 15,
       "subsystem": "mesa",
       "what": "Launch compute grid with QMD descriptor and GPU execution parameters",
       "functions": [
@@ -555,66 +744,22 @@
       "notes": ""
     },
     {
-      "step": 10,
+      "step": 16,
       "subsystem": "channel",
-      "what": "Create channel address space and submit command buffer for execution",
-      "functions": [
-        {
-          "name": "gf100_fifo_init_pbdmas",
-          "tree": "nouveau",
-          "file": "nvkm/engine/fifo/gf100.c",
-          "line": 873
-        }
-      ],
-      "registers": [
-        {
-          "reg": "0x000204",
-          "file": "nvkm/engine/fifo/gf100.c",
-          "line": 878
-        },
-        {
-          "reg": "0x002204",
-          "file": "nvkm/engine/fifo/gf100.c",
-          "line": 879
-        },
-        {
-          "reg": "0x002208",
-          "file": "nvkm/engine/fifo/gf100.c",
-          "line": 883
-        },
-        {
-          "reg": "0x00220c",
-          "file": "nvkm/engine/fifo/gf100.c",
-          "line": 884
-        },
-        {
-          "reg": "0x002210",
-          "file": "nvkm/engine/fifo/gf100.c",
-          "line": 885
-        },
-        {
-          "reg": "0x002214",
-          "file": "nvkm/engine/fifo/gf100.c",
-          "line": 886
-        },
-        {
-          "reg": "0x002218",
-          "file": "nvkm/engine/fifo/gf100.c",
-          "line": 887
-        },
-        {
-          "reg": "0x00221c",
-          "file": "nvkm/engine/fifo/gf100.c",
-          "line": 888
-        },
-        {
-          "reg": "0x002a04",
-          "file": "nvkm/engine/fifo/gf100.c",
-          "line": 891
-        }
-      ],
-      "status": "partly-known",
-      "notes": "Channel creation and command buffer submission not fully traced in B2 call graph"
+      "what": "Wait for the job to complete by polling the channel status register",
+      "functions": [],
+      "registers": [],
+      "status": "unknown",
+      "notes": "Job completion polling not traced in B2 call graph; needs FIFO status register"
+    },
+    {
+      "step": 17,
+      "subsystem": "host",
+      "what": "Read back the result buffer from GPU memory through the PCI BAR mapping",
+      "functions": [],
+      "registers": [],
+      "status": "unknown",
+      "notes": "Result buffer read-back not traced; requires BAR0 access to GPU memory"
     }
   ],
   "gr_hooks": [
@@ -623,8 +768,8 @@
       "function": "gf100_gr_init",
       "file": "nvkm/engine/gr/gf100.c",
       "line": 2342,
-      "use": "compute",
-      "reason": "Generic GR initialization used by both graphics and compute pipelines"
+      "use": "both",
+      "reason": "gf100_gr_init calls all other hooks and is shared between graphics and compute pipelines"
     },
     {
       "hook": "init_400054",
@@ -720,7 +865,7 @@
       "file": "nvkm/engine/gr/gk104.c",
       "line": 391,
       "use": "both",
-      "reason": "Scheduler hardware workqueue error service routine supports both paths"
+      "reason": "Scheduler hardware warning error service routine reports error conditions for both graphics and compute paths"
     },
     {
       "hook": "init_tex_hww_esr",
@@ -728,7 +873,7 @@
       "file": "nvkm/engine/gr/gf100.c",
       "line": 2223,
       "use": "both",
-      "reason": "Texture hardware workqueue error service is used by both compute and graphics"
+      "reason": "Texture hardware warning error service reports errors for both graphics and compute execution paths"
     },
     {
       "hook": "init_vsc_stream_master",
