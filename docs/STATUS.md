@@ -2,7 +2,7 @@
 
 Current phase: B and C (Nouveau analysis; hardware database and firmware)
 Current task: none
-Task state: WAITING. B5, C1 and C2 are done. Other tasks run in their own worktrees. Do not start a task here.
+Task state: WAITING. B4, B5, C1 and C2 are done. Other tasks run in their own worktrees. Do not start a task here.
 Last updated: 2026-10-11
 
 ## Last result
@@ -61,3 +61,4 @@ the old layout. Details: `reference/pci/README.md`.
 | B5 | DONE | 2026-10-11 | Rework 2: fixed 12 `make check` failures — subsystems `top`/`ltc`/`timer`/`privring` changed optional→needed; reasons corrected for mc, imem, privring, top, HWW; GR hook init changed compute→both; steps 1/3/4 changed known→partly-known; channel step added with 5 required functions; 2 post-launch steps added. 17 steps, 31 subsystems, 18 GR hooks, 2 firmware. `make check` 0 failures. |
 | C1 | DONE | 2026-10-11 | Register database: 462 distinct regs across 14 groups (bar, bus, ce, fb, fifo, gr, imem, ltc, mc, mmu, pbdma, pci, privring, top). `tools/build_regdb.py` generates all YAML + README.md; `--check` mode verified. `make check` 0 failures. |
 | C2 | DONE | 2026-10-11 | Firmware manifest: 4 built-in arrays (FECS data/code, GPCCS data/code), 4 external firmware files, 17 load-sequence calls. `tools/fw_manifest.py` generates manifest.yaml; `--check` and `--extract DIR` modes. `firmware/README.md` 139 lines with all required sections. `make check` 0 failures. |
+| B4 | DONE | 2026-10-11 | Linux dependency map: 139 symbols called from 70 files, each with category and Haiku replacement; the tool writes the document. Two reworks, see `work/B4/REVIEW.md`. |
