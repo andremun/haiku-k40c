@@ -56,7 +56,7 @@
       "role": "data",
       "needed_for_compute": true,
       "what": "Flags that the kind lookup table is used for system memory page allocation",
-      "certainty": "KNOWN",
+      "certainty": "INFERRED",
       "evidence": {
         "line": 69,
         "quote": ".kind_sys = true,"

@@ -1,7 +1,7 @@
 # mc: Hardware Model
 
 ## Purpose
-Master control: enables GPU interrupts via MMIO register 0x0200, manages interrupt routing and masking per-engine, tracks device engine enablement state, and writes to register 0x0260 for unknown engine control and configuration.
+Master control: register 0x000200 holds one enable bit for each engine and subdevice (nv50_mc_init writes 0xffffffff to it, with the source comment 'everything enabled'), registers 0x000100, 0x000140 and 0x000640 report, arm and mask the interrupt of each unit, and register 0x000260 is written 0 and then 1 around the microcode upload of the GR engine (purpose not known). The Haiku driver must enable the units it uses and route their interrupts.
 
 ## Nouveau files
 
@@ -21,36 +21,36 @@ Master control: enables GPU interrupts via MMIO register 0x0200, manages interru
 | allow | gt215_mc_intr_allow | interrupt | False | 1 |
 | intrs | gk104_mc_intrs | data | True | 0 |
 | intr_nonstall | true | data | True | 0 |
-| reset | gk104_mc_reset | teardown | False | 0 |
+| reset | gk104_mc_reset | data | False | 0 |
 | device | nv04_mc_device | data | False | 0 |
 | enabled | nv04_mc_device_enabled | runtime | False | 1 |
 | enable | nv04_mc_device_enable | init | True | 2 |
 | disable | nv04_mc_device_disable | teardown | False | 1 |
-| unk260 | gf100_mc_unk260 | runtime | False | 1 |
+| unk260 | gf100_mc_unk260 | runtime | True | 1 |
 
 ## Dependencies
 top
 
 ## KNOWN
 
-- **init**: Writes 0xffffffff to MMIO 0x0200 to enable all interrupt sources on the GPU (`nvkm/subdev/mc/nv50.c:41`)
+- **init**: Writes 0xffffffff to register 0x000200, the enable bits of all engines and subdevices (`nvkm/subdev/mc/nv50.c:41`)
 - **intr**: Reference to the gt215 interrupt handler table providing pending block allow unarm rearm (`nvkm/subdev/mc/gt215.c:73`)
 - **pending**: Reads per-engine interrupt status from MMIO 0x0100 and returns whether any interrupt is pending (`nvkm/subdev/mc/nv04.c:94`)
 - **unarm**: Writes 0 to MMIO 0x0140 per engine to disable interrupt auto-rearm then reads to clear (`nvkm/subdev/mc/nv04.c:82`)
 - **rearm**: Writes 0x00000001 to MMIO 0x0140 per engine to acknowledge and rearm interrupt status (`nvkm/subdev/mc/nv04.c:72`)
 - **block**: Writes zero mask to MMIO 0x0640 per engine leaf to block specified interrupt bits (`nvkm/subdev/mc/gt215.c:65`)
 - **allow**: Writes mask to MMIO 0x0640 per engine leaf to allow specified interrupt bits to pass (`nvkm/subdev/mc/gt215.c:57`)
-- **intrs**: Array of interrupt mapping data defining engine-to-interrupt routing configuration
-- **intr_nonstall**: Flags that non-stall interrupts are enabled for this GPU interrupt controller
-- **reset**: Data table of reset register mappings used to reinitialise GPU subsystem registers
 - **device**: Reference to the nv04 device management sub-table providing enable disable enabled checks (`nvkm/subdev/mc/nv04.c:55`)
-- **enabled**: Reads MMIO 0x0200 and checks if all bits in mask are set to verify engine enablement (`nvkm/subdev/mc/nv04.c:49`)
-- **enable**: Sets mask bits in MMIO 0x0200 to enable engine interrupts then reads back the register (`nvkm/subdev/mc/nv04.c:40`)
-- **disable**: Clears mask bits in MMIO 0x0200 to disable specified engine interrupt sources (`nvkm/subdev/mc/nv04.c:34`)
+- **enabled**: Reads register 0x000200 and checks that the enable bits of one engine or subdevice are set (`nvkm/subdev/mc/nv04.c:49`)
+- **enable**: Sets the mask bits in register 0x000200 to enable one engine or subdevice, then reads the register back (`nvkm/subdev/mc/nv04.c:40`)
+- **disable**: Clears the mask bits in register 0x000200 to disable one engine or subdevice (`nvkm/subdev/mc/nv04.c:34`)
 
 ## INFERRED
 
-- **unk260**: Writes data to MMIO register 0x0260 for unknown engine control purpose (`nvkm/subdev/mc/gf100.c:62`)
+- **intrs**: Array of interrupt mapping data defining engine-to-interrupt routing configuration
+- **intr_nonstall**: Flags that non-stall interrupts are enabled for this GPU interrupt controller
+- **reset**: Data table of reset register mappings used to reinitialise GPU subsystem registers
+- **unk260**: Writes data to register 0x000260; the GR engine calls it with 0 before and 1 after the microcode upload (purpose not known) (`nvkm/subdev/mc/gf100.c:62`)
 
 ## UNKNOWN
 

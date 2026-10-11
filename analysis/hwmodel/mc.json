@@ -28,7 +28,7 @@
       ],
       "role": "init",
       "needed_for_compute": true,
-      "what": "Writes 0xffffffff to MMIO 0x0200 to enable all interrupt sources on the GPU",
+      "what": "Writes 0xffffffff to register 0x000200, the enable bits of all engines and subdevices",
       "certainty": "KNOWN",
       "evidence": {
         "line": 44,
@@ -185,7 +185,7 @@
       "role": "data",
       "needed_for_compute": true,
       "what": "Array of interrupt mapping data defining engine-to-interrupt routing configuration",
-      "certainty": "KNOWN"
+      "certainty": "INFERRED"
     },
     {
       "member": "intr_nonstall",
@@ -198,7 +198,7 @@
       "role": "data",
       "needed_for_compute": true,
       "what": "Flags that non-stall interrupts are enabled for this GPU interrupt controller",
-      "certainty": "KNOWN"
+      "certainty": "INFERRED"
     },
     {
       "member": "reset",
@@ -208,10 +208,10 @@
       "line": null,
       "parent": null,
       "accesses": [],
-      "role": "teardown",
+      "role": "data",
       "needed_for_compute": false,
       "what": "Data table of reset register mappings used to reinitialise GPU subsystem registers",
-      "certainty": "KNOWN"
+      "certainty": "INFERRED"
     },
     {
       "member": "device",
@@ -243,7 +243,7 @@
       ],
       "role": "runtime",
       "needed_for_compute": false,
-      "what": "Reads MMIO 0x0200 and checks if all bits in mask are set to verify engine enablement",
+      "what": "Reads register 0x000200 and checks that the enable bits of one engine or subdevice are set",
       "certainty": "KNOWN",
       "evidence": {
         "line": 51,
@@ -273,7 +273,7 @@
       ],
       "role": "init",
       "needed_for_compute": true,
-      "what": "Sets mask bits in MMIO 0x0200 to enable engine interrupts then reads back the register",
+      "what": "Sets the mask bits in register 0x000200 to enable one engine or subdevice, then reads the register back",
       "certainty": "KNOWN",
       "evidence": {
         "line": 44,
@@ -297,7 +297,7 @@
       ],
       "role": "teardown",
       "needed_for_compute": false,
-      "what": "Clears mask bits in MMIO 0x0200 to disable specified engine interrupt sources",
+      "what": "Clears the mask bits in register 0x000200 to disable one engine or subdevice",
       "certainty": "KNOWN",
       "evidence": {
         "line": 36,
@@ -320,8 +320,8 @@
         }
       ],
       "role": "runtime",
-      "needed_for_compute": false,
-      "what": "Writes data to MMIO register 0x0260 for unknown engine control purpose",
+      "needed_for_compute": true,
+      "what": "Writes data to register 0x000260; the GR engine calls it with 0 before and 1 after the microcode upload (purpose not known)",
       "certainty": "INFERRED",
       "evidence": {
         "line": 64,
@@ -332,5 +332,5 @@
   "depends_on": [
     "top"
   ],
-  "summary": "Master control: enables GPU interrupts via MMIO register 0x0200, manages interrupt routing and masking per-engine, tracks device engine enablement state, and writes to register 0x0260 for unknown engine control and configuration."
+  "summary": "Master control: register 0x000200 holds one enable bit for each engine and subdevice (nv50_mc_init writes 0xffffffff to it, with the source comment 'everything enabled'), registers 0x000100, 0x000140 and 0x000640 report, arm and mask the interrupt of each unit, and register 0x000260 is written 0 and then 1 around the microcode upload of the GR engine (purpose not known). The Haiku driver must enable the units it uses and route their interrupts."
 }

@@ -2,7 +2,7 @@
 
 Current phase: C (hardware database and firmware)
 Current task: C3a
-Task state: DONE. `make check` 0 failures. All six subsystems (top, mmu, mc, imem, bar, fb) have decisions, generated JSON and Markdown pass validation.
+Task state: DONE. Accepted by the scaffold on 2026-10-11, see work/C3a/REVIEW.md.
 Last updated: 2026-10-11
 
 ## Last result

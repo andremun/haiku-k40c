@@ -23,11 +23,10 @@ Manages the GPU memory management unit: sets the DMA address width to 40 bits, p
 
 - **dma_bits**: Sets DMA address width to 40 bits for page table address encoding
 - **kind**: Returns 256-entry lookup table mapping PTE attributes to hardware page kind codes (`nvkm/subdev/mmu/gf100.c:33`)
-- **kind_sys**: Flags that the kind lookup table is used for system memory page allocation
 
 ## INFERRED
 
-(none)
+- **kind_sys**: Flags that the kind lookup table is used for system memory page allocation
 
 ## UNKNOWN
 

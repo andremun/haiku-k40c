@@ -21,7 +21,7 @@
       "accesses": [],
       "role": "teardown",
       "needed_for_compute": false,
-      "what": "Deallocates VMM partitions and instance memory references for BAR0 and BAR1 regions",
+      "what": "Releases the address spaces and the instance blocks of BAR1 (bar->bar[1]) and BAR2 (bar->bar[0])",
       "certainty": "KNOWN",
       "evidence": {
         "line": 153,
@@ -62,7 +62,7 @@
       ],
       "role": "init",
       "needed_for_compute": true,
-      "what": "Writes BAR1 instance base address shifted by 12 bits into MMIO 0x1704 with bit 31 set",
+      "what": "Writes the address of the BAR1 instance block (bar->bar[1], shifted right by 12) into register 0x001704 with bit 31 set",
       "certainty": "KNOWN",
       "evidence": {
         "line": 57,
@@ -120,7 +120,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "Returns the VMM pointer for BAR1 address space region from the bar structure",
+      "what": "Returns the address space of BAR1, which is bar->bar[1] in the code",
       "certainty": "KNOWN",
       "evidence": {
         "line": 34,
@@ -144,7 +144,7 @@
       ],
       "role": "init",
       "needed_for_compute": true,
-      "what": "Writes BAR0 instance base address shifted by 12 bits into MMIO 0x1714 with bit 31 set",
+      "what": "Writes the address of the BAR2 instance block (bar->bar[0], shifted right by 12) into register 0x001714 with bit 31 set",
       "certainty": "KNOWN",
       "evidence": {
         "line": 80,
@@ -202,7 +202,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "Returns the VMM pointer for BAR0 address space region from the bar structure",
+      "what": "Returns the address space of BAR2, which is bar->bar[0] in the code",
       "certainty": "KNOWN",
       "evidence": {
         "line": 63,
@@ -240,6 +240,9 @@
       }
     }
   ],
-  "depends_on": [],
+  "depends_on": [
+    "imem",
+    "mmu"
+  ],
   "summary": "BAR1 and BAR2 address-space setup: initialises both BAR regions by writing base addresses to MMIO 0x1704 (BAR1) and 0x1714 (BAR2), manages VMM partitions for each region, and flushes pending BAR writes via MMIO 0x070000."
 }
