@@ -1,8 +1,8 @@
 # Status
 
-Current phase: B and C (Nouveau analysis; hardware database and firmware)
-Current task: none
-Task state: WAITING. B5 and C1 are done. B4 runs in its own worktree (branch task-b4). Do not start a task here.
+Current phase: C (hardware database and firmware)
+Current task: C2
+Task state: READY. This is the worktree of task C2 (branch task-c2). Another task runs in another worktree at the same time: work only on C2 and do not start another task.
 Last updated: 2026-10-11
 
 ## Last result
