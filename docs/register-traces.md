@@ -16,19 +16,34 @@ Any line that is not a comment, blank line, or `R`/`W` access raises
 
 ## Linux mmiotrace format
 
-Linux kernel mmiotrace records MMIO accesses via the `mmiotrace` module.
-Enable it on Linux:
+mmiotrace is a tracer of the Linux kernel's ftrace framework (kernel
+documentation: `Documentation/trace/mmiotrace.rst`). It is not a module
+and has no file under `/proc`. The kernel must be built with
+`CONFIG_MMIOTRACE`. It records the accesses of a driver that maps its
+registers **after** the tracer is switched on, so the driver (Nouveau)
+must be loaded while tracing runs. While it is active the kernel uses one
+CPU only.
 
-1. Load the module: `sudo modprobe mmiotrace`
-2. Start tracing: `sudo bash -c 'echo 1 > /proc/driver/mmiotrace/enable'`
-3. Run the workload
-4. Stop tracing: `sudo bash -c 'echo 0 > /proc/driver/mmiotrace/enable'`
-5. Read the log: `cat /proc/driver/mmiotrace/log`
+Steps, all as root (in this project a user step, in the Linux reference
+guest of task C5, never on the host that runs the LLM server):
 
-(These steps follow the kernel documentation for mmiotrace; specific
-commands may vary with kernel version. If `mmiotrace` is unavailable
-on the target kernel, a custom kernel module or ftrace-based approach
-may be used instead.)
+```
+echo mmiotrace > /sys/kernel/tracing/current_tracer
+cat /sys/kernel/tracing/trace_pipe > trace.txt &
+modprobe nouveau
+echo "nouveau loaded" > /sys/kernel/tracing/trace_marker
+# run the workload, with more trace_marker lines between its phases
+echo nop > /sys/kernel/tracing/current_tracer
+```
+
+On older kernels the directory is `/sys/kernel/debug/tracing`. The file
+`buffer_size_kb` in the same directory sets the buffer size; when it is
+too small, events are lost and the trace says so. A `MARK` line in the
+trace is a `trace_marker` text. The BAR0 base for `--bar0` is in the
+`PCIDEV` line of the trace and in `lspci -v` (the first memory region).
+
+(This section was written by the scaffold. The first version described a
+`/proc/driver/mmiotrace` interface that does not exist.)
 
 The tool accepts mmiotrace text and filters it to 4-byte accesses within
 a given BAR region, converting addresses to BAR-relative offsets.
