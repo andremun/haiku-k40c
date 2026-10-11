@@ -1,0 +1,297 @@
+{
+  "subsystem": "chan",
+  "constructor": {
+    "name": "gk110_fifo_new",
+    "file": "nvkm/engine/fifo/gk110.c",
+    "line": 128
+  },
+  "table": {
+    "name": "gk110_chan",
+    "file": "nvkm/engine/fifo/gk110.c",
+    "line": 49
+  },
+  "members": [
+    {
+      "member": "inst",
+      "value": "gf100_chan_inst",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 142,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Channel instance block descriptor: 4 KB size with zero-fill and virtual-memory mapping flags",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "size",
+      "value": "0x1000",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "inst",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Channel instance block is allocated as a 0x1000-byte (4 KB) region",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "zero",
+      "value": "true",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "inst",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "The instance block must be zero-filled when the channel is created",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "vmm",
+      "value": "true",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "inst",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "The instance block uses virtual memory mapping through the GPU VMM subsystem",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "userd",
+      "value": "gk104_chan_userd",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 115,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "USERD (user-visible) area descriptor: BAR 1, 0x200 bytes size, clear function for shadow registers",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "bar",
+      "value": "1",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "userd",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "USERD is reached through BAR 1; gk104_fifo_init then writes the USERD base in BAR1 to 0x002254",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "size",
+      "value": "0x200",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "userd",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "The USERD area size is 0x200 bytes",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "clear",
+      "value": "gf100_chan_userd_clear",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 118,
+      "parent": "userd",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Maps the USERD memory and writes zero to ten shadow-register locations (0x040, 0x044, 0x048, 0x04c, 0x050, 0x058, 0x05c, 0x060, 0x088, 0x08c) then unmaps the memory",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 121,
+        "quote": "nvkm_wo32(chan->userd.mem, chan->userd.base + 0x040, 0x00000000);"
+      }
+    },
+    {
+      "member": "ramfc",
+      "value": "gk104_chan_ramfc",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 108,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "RAMFC descriptor (the block with the channel's PBDMA state; RAMFC is not expanded in the source): the write function, the devm mask 0xfff and the privileged flag",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "write",
+      "value": "gk104_chan_ramfc_write",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 82,
+      "parent": "ramfc",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes 15 words into the instance block: the USERD address (0x08, 0x0c), 0x0000face (0x10), 0xfffff902 (0x30), the command buffer address and log2 of its entry count (0x48, 0x4c), 0x20400000 (0x84), 0x30000000 with the devm mask (0x94), 0x100 (0x9c), 0x1f (0xac), the privilege bit (0xe4), the channel ID (0xe8), 0xf8000000 (0xb8), 0x10003080 (0xf8) and 0x10000010 (0xfc)",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 88,
+        "quote": "nvkm_wo32(chan->inst, 0x08, lower_32_bits(userd));"
+      }
+    },
+    {
+      "member": "devm",
+      "value": "0xfff",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "ramfc",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "The devm mask 0xfff; ramfc.write stores 0x30000000 or'ed with it at offset 0x94",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "priv",
+      "value": "true",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "ramfc",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Channels run in privileged mode by default, setting bit 0x20 at instance-block offset 0xe4",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "bind",
+      "value": "gk104_chan_bind",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 72,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 77,
+          "op": "mask",
+          "reg": "0x800004 + (chan->id * 8)"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Sets the runlist ID in the channel control register at 0x800004 then calls gk104_chan_bind_inst to write the instance-block address to 0x800000",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 77,
+        "quote": "nvkm_mask(device, 0x800004 + (chan->id * 8), 0x000f0000, runl->id << 16);"
+      }
+    },
+    {
+      "member": "unbind",
+      "value": "gk104_chan_unbind",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 56,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 60,
+          "op": "wr32",
+          "reg": "0x800000 + (chan->id * 8)"
+        }
+      ],
+      "role": "teardown",
+      "needed_for_compute": true,
+      "what": "Writes zero to the channel instance-block register at 0x800000 + (chan->id * 8) to detach the channel from the PBDMA",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 60,
+        "quote": "nvkm_wr32(device, 0x800000 + (chan->id * 8), 0x00000000);"
+      }
+    },
+    {
+      "member": "start",
+      "value": "gk104_chan_start",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 48,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 52,
+          "op": "mask",
+          "reg": "0x800004 + (chan->id * 8)"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Sets the channel-enable bit (0x00000400) in the channel control register at 0x800004 + (chan->id * 8)",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 52,
+        "quote": "nvkm_mask(device, 0x800004 + (chan->id * 8), 0x00000400, 0x00000400);"
+      }
+    },
+    {
+      "member": "stop",
+      "value": "gk104_chan_stop",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 40,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 44,
+          "op": "mask",
+          "reg": "0x800004 + (chan->id * 8)"
+        }
+      ],
+      "role": "teardown",
+      "needed_for_compute": true,
+      "what": "Clears the channel-enable bit (0x00000800) in the channel control register at 0x800004 + (chan->id * 8) to halt the PBDMA",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 44,
+        "quote": "nvkm_mask(device, 0x800004 + (chan->id * 8), 0x00000800, 0x00000800);"
+      }
+    },
+    {
+      "member": "preempt",
+      "value": "gk110_chan_preempt",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 36,
+      "parent": null,
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Calls the preempt function of the channel group (cgrp) when the channel is in one, otherwise gf100_chan_preempt, which writes the channel ID to register 0x002634",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 45,
+        "quote": "gf100_chan_preempt(chan);"
+      }
+    }
+  ],
+  "depends_on": [
+    "imem",
+    "mmu"
+  ],
+  "summary": "The channel function table (gk110_chan) describes per-channel resources: an instance block (inst) that holds PBDMA state, a USERD area (userd) containing the command-buffer put/get pointers visible to the GPU driver, and a RAMFC block (ramfc) that the PBDMA reads to fetch commands. The table provides bind/unbind to attach or detach a channel, start/stop to enable or disable it, and preempt to take the channel off the engine. On channel bind the driver writes the instance-block address and runlist ID to channel control registers (0x800000\u20130x800004), then writes a full set of RAMFC state values (command-buffer base address, size, USERD address, privilege flag, channel ID) into the instance block before calling nvkm_done to commit the changes. The RAMFC block is at the start of the instance block; gk104_chan_ramfc_write (fifo/gk104.c:82) writes 15 words: 0x08 and 0x0c the USERD address, 0x10 the value 0x0000face, 0x30 0xfffff902, 0x48 and 0x4c the address of the command buffer (GPFIFO) with log2 of its entry count in bits 16 and up of 0x4c, 0x84 0x20400000, 0x94 0x30000000 or'ed with the devm mask, 0x9c 0x00000100, 0xac 0x0000001f, 0xe4 the privilege bit 0x20, 0xe8 the channel ID, 0xb8 0xf8000000, 0xf8 0x10003080 and 0xfc 0x10000010. The source does not name most of these words."
+}
