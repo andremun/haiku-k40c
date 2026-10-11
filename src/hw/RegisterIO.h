@@ -33,7 +33,7 @@ class MockMMIO : public RegisterIO {
 public:
     explicit MockMMIO(uint32_t size);
     void poke(uint32_t offset, uint32_t value);
-    uint32_t peek(uint32_t offset);
+    uint32_t peek(uint32_t offset) const;
     std::vector<Access> log() const;
     void clearLog();
     void onRead(uint32_t offset, std::function<uint32_t(uint32_t)> hook);

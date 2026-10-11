@@ -97,9 +97,18 @@ static void test_non_multiple_size()
 	// Size must be multiple of 4 for uint32_t array
 	// Constructor should accept it (integer division), but only aligned offsets
 	// work
-	MockMMIO io(0x101);  // 0x101 / 4 = 64 uint32_t = 256 bytes capacity
-	io.poke(0x100, 0x12345678);
-	CHECK(io.peek(0x100) == 0x12345678);
+	MockMMIO io(0x101);  // 64 whole registers: 0x000 to 0x0fc
+	io.poke(0xfc, 0x12345678);
+	CHECK(io.peek(0xfc) == 0x12345678);
+	// 0x100 has no whole register behind it (corrected by the scaffold:
+	// this used to write past the end of the vector)
+	bool threw = false;
+	try {
+		io.poke(0x100, 1);
+	} catch (const std::out_of_range&) {
+		threw = true;
+	}
+	CHECK(threw);
 }
 
 // 6. Multiple hooks on same offset — last one wins (map behavior)

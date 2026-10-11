@@ -21,7 +21,7 @@ uint32_t RegisterIO::mask32(uint32_t offset, uint32_t mask, uint32_t value)
 // ---- MockMMIO ----
 
 MockMMIO::MockMMIO(uint32_t size)
-	: fSize(size),
+	: fSize(size & ~3u),	// whole registers only
 	  fMemory(size / 4, 0u)
 {
 }
@@ -38,7 +38,7 @@ void MockMMIO::poke(uint32_t offset, uint32_t value)
 	fMemory[offset / 4] = value;
 }
 
-uint32_t MockMMIO::peek(uint32_t offset)
+uint32_t MockMMIO::peek(uint32_t offset) const
 {
 	checkBounds(offset);
 	return fMemory[offset / 4];
@@ -163,8 +163,11 @@ std::vector<Access> parseTrace(std::istream& in)
 	std::string line;
 
 	while (std::getline(in, line)) {
-		// Skip empty lines and comment lines
-		if (line.empty() || line[0] == '#')
+		// Drop a comment, then skip lines with nothing left
+		std::string::size_type hash = line.find('#');
+		if (hash != std::string::npos)
+			line.erase(hash);
+		if (line.find_first_not_of(" \t\r") == std::string::npos)
 			continue;
 
 		std::istringstream ss(line);

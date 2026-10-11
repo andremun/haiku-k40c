@@ -2,7 +2,7 @@
 
 Current phase: D (host-side algorithms and tests)
 Current task: D1
-Task state: DONE. `make check` 0 failures.
+Task state: DONE. Accepted by the scaffold on 2026-10-11, see work/D1/REVIEW.md.
 Last updated: 2026-10-11
 
 ## Last result
