@@ -2,7 +2,7 @@
 
 Current phase: D (host-side algorithms and tests)
 Current task: D2
-Task state: COMPLETE. Code is done (74 acceptance checks, 31 own checks),
+Task state: DONE. Accepted by the scaffold on 2026-10-12 after two reworks, see work/D2/REVIEW.md.
 tests/Makefile updated, docs/mmu-encoding.md written, RESULT.md ready.
 Last updated: 2026-10-12
 

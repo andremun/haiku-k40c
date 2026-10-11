@@ -58,15 +58,16 @@ splitVa(0x10000): pde = 0, lpte = 0, spte = 16
 → pte at index 16 in the small-page table under PDE 0
 ```
 
-Map `phys = 0x80000000` in HOST with `readOnly=1, vol=1`, page shift 17, VA `0x61234`:
+Map `phys = 0x80000000` in HOST with `readOnly=1, vol=1`, page shift 17, at VA `0x40000`
+(the page that holds `0x41234`):
 
 ```
-phys >> 8 = 0x1000000
+phys >> 8 = 0x800000
 type = 1 | 4 (readOnly) | (1 << 32) (vol) | (2 << 33) (HOST)
      = 0x500000005
-pte = 0x1000000 | 0x500000005 = 0x500001005
+pte = 0x800000 | 0x500000005 = 0x500800005
 
-splitVa(0x61234): pde = 0, lpte = 2, spte = 48
+splitVa(0x41234): pde = 0, lpte = 2, spte = 65
 → pte at index 2 in the large-page table under PDE 0
 ```
 
@@ -101,10 +102,10 @@ Large-page table at `0x31000` (VRAM), small-page table at `0x20000` (VRAM):
 Large (lower): aper=1, addr>>8 = 0x31000>>8 = 0x310
   → lower 32 = 1 | 0x310 = 0x311
 
-Small (upper): aper=1, addr<<24 = 0x20000<<24 = 0x200000000
-  → upper 32 = 1<<32 | 0x200000000 = 0x201000000
+Small (upper): aper=1, addr<<24 = 0x20000<<24 = 0x20000000000
+  → upper part = 1<<32 | 0x20000000000 = 0x20100000000
 
-PDE = 0x201000000 | 0x311 = 0x201000000311
+PDE = 0x20100000000 | 0x311 = 0x20100000311
 ```
 
 ## Instance-block encoding
@@ -116,7 +117,7 @@ pdb = target_bits | page_directory_addr
 ```
 
 - vmmgf100.c:342-359
-- HOST target adds bits 0 and 2 (VOL)
+- HOST target adds the value 2 (bit 1) and bit 2 (VOL): `addr | 6`
 
 At offset `0x208`:
 

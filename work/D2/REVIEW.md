@@ -55,3 +55,24 @@ Left to do (nothing else):
 3. `docs/mmu-encoding.md` (50 lines or more), as `docs/tasks/D2.md`
    describes.
 4. `work/D2/RESULT.md` and the handoff.
+
+# Review of D2, attempt 3 (2026-10-12): ACCEPT
+
+The last session (41 minutes) wrote the tests, the Makefile rules and the
+document, and left `src/mmu/` alone as asked. Acceptance test 74 checks,
+own tests 31 checks, both also clean under the address and
+undefined-behaviour sanitizers.
+
+The scaffold corrected the worked examples of `docs/mmu-encoding.md`:
+three of the numbers did not follow from the formulas beside them (the
+second entry is `0x500800005`, the directory entry is `0x20100000311`),
+and the instance-block note named the wrong bits.
+
+Limits:
+
+- Of the six code defects in this task, the agent found none by itself;
+  the scaffold located all six. The model is correct against the
+  acceptance test, which covers the cases listed in it and no others.
+- The table "Not covered" names Nouveau functions for sparse mappings
+  and for the large-page entry above small pages. These attributions are
+  not verified.
