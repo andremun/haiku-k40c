@@ -1,7 +1,7 @@
 # fifo: Hardware Model
 
 ## Purpose
-The FIFO engine dispatches commands from per-channel command buffers to the requested engines (GR, NVDEC, NVENC, etc.) via runlists and run queues. It manages channel lifecycle, interrupt routing, runlist scheduling, engine context switching, MMU fault recovery, and nonstall interrupt handling. The Haiku driver must reproduce all fifteen main table members, six sub-tables, and thirty-three nested members to accept and dispatch commands from channels.
+The FIFO engine takes commands from the command buffers of channels and hands them to the engines of the card (for a compute job: GR, and the copy engine CE) through runlists and PBDMA units (runq). gk104_fifo_init sets the USERD base in BAR1 (0x002254), acknowledges all interrupts (0x002100) and enables them (0x002140). The tables named by the function table hold the runlist operations (build, commit, block, allow), the PBDMA setup, the engine status queries and the MMU fault handling. For milestone S1 the Haiku driver needs the init members, the runlist members update, insert_chan, commit, wait and pending, runq.init, and the engine context members; the fault and interrupt members can start as logging only. The per-channel table (channel control block, bind, start) is not part of this model.
 
 ## Nouveau files
 
@@ -62,13 +62,13 @@ The FIFO engine dispatches commands from per-channel command buffers to the requ
 | mmu_fault_triggered | gf100_engn_mmu_fault_triggered | runtime | True | 3 |
 
 ## Dependencies
-top, imem
+imem, mc, top
 
 ## KNOWN
 
 - **chid_ctor**: Creates the channel-ID allocator by calling nvkm_chid_new with the FIFO channel event type. (`nvkm/engine/fifo/gk110.c:95`)
 - **runl_ctor**: Iterates over top devices with valid runlists and constructs per-runlist structures. (`nvkm/engine/fifo/gk104.c:756`)
-- **init**: Writes interrupt masks and the user doorbell base address to enable the FIFO engine. (`nvkm/engine/fifo/gk104.c:744`)
+- **init**: Writes the USERD base in BAR1 to 0x002254 (when USERD is in BAR1), then 0xffffffff to 0x002100 and 0x7fffffff to 0x002140 (interrupt status and enable) (`nvkm/engine/fifo/gk104.c:744`)
 - **init_pbdmas**: Writes a mask to select which PBDMA units to enable and clears their interrupt-pending bits. (`nvkm/engine/fifo/gk104.c:735`)
 - **intr**: Reads interrupt status and mask registers, dispatches to handlers for bind, context-switch, dropped faults, and runlist interrupts. (`nvkm/engine/fifo/gk104.c:652`)
 - **intr_mmu_fault_unit**: Processes MMU faults reported by the MMU fault unit by reading fault registers and logging details. (`nvkm/engine/fifo/gf100.c:696`)
@@ -97,8 +97,7 @@ top, imem
 - **preempt_pending**: Reads register 0x002634 and tests bit 20 to determine whether a preemption is pending. (`nvkm/engine/fifo/gf100.c:370`)
 - **runq**: Run queue sub-table with init, interrupt, and idle functions for PBDMA command buffer execution. (`nvkm/engine/fifo/gk104.c:396`)
 - **init**: Initialises the run queue base and writes interrupt masks and interrupt-enable masks to the run queue hardware registers. (`nvkm/engine/fifo/gk104.c:379`)
-- **intr**: Checks both HCE interrupt sources and returns whether either has pending interrupts. (`nvkm/engine/fifo/gk104.c:370`)
-- **intr_0_names**: Bitfield table mapping HCE interrupt bit positions to human-readable interrupt reason strings.
+- **intr**: Calls the handlers of both interrupt registers of the PBDMA unit and returns whether either had a pending interrupt (`nvkm/engine/fifo/gk104.c:370`)
 - **idle**: Reads the run queue status register and tests bits 13 to 15 to determine whether the run queue is idle. (`nvkm/engine/fifo/gk104.c:289`)
 - **engn**: Engine sub-table with context-switch, context-ID, MMU fault, constructor, and bind functions for per-engine channel context management. (`nvkm/engine/fifo/gk104.c:271`)
 - **chsw**: Reads the engine status register and returns true when the engine is busy and awaiting context-switch acknowledgement. (`nvkm/engine/fifo/gk104.c:259`)
@@ -107,7 +106,7 @@ top, imem
 - **mmu_fault_triggered**: Reads the engine MMU-fault-triggered status bit from the MMU-fault register, clears it, and decrements the triggered-fault refcount. (`nvkm/engine/fifo/gf100.c:202`)
 - **ctor**: Gets a VMM mapping for the engine context and maps the instance memory into it. (`nvkm/engine/fifo/gk104.c:178`)
 - **bind**: Maps the virtual context address into the instance memory at per-engine pointers determined by the engine type. (`nvkm/engine/fifo/gk104.c:134`)
-- **engn_ce**: Compute engine sub-table with context-switch, context-ID, and MMU fault functions for CE channel context management. (`nvkm/engine/fifo/gk104.c:281`)
+- **engn_ce**: Engine table for the copy engine (CE): channel switch, context ID and MMU fault functions, without the context members of the GR table (`nvkm/engine/fifo/gk104.c:281`)
 - **chsw**: Reads the engine status register and returns true when the engine is busy and awaiting context-switch acknowledgement. (`nvkm/engine/fifo/gk104.c:259`)
 - **cxid**: Reads the engine status and returns the channel or channel-group ID of the channel currently loaded on the engine. (`nvkm/engine/fifo/gk104.c:245`)
 - **mmu_fault_trigger**: Increments the refcount of triggered MMU faults on this runlist, enables nonstall interrupts, and writes 0x100 to register 0x002100 to trigger an MMU fault on the engine. (`nvkm/engine/fifo/gf100.c:222`)
@@ -117,6 +116,7 @@ top, imem
 
 - **chid_nr**: Returns the maximum number of channels that this FIFO engine supports. (`nvkm/engine/fifo/gk104.c:802`)
 - **runq_nr**: Returns the number of run queue (PBDMA) units present on this chipset. (`nvkm/engine/fifo/gf100.c:927`)
+- **intr_0_names**: Table of names for the bits of the first PBDMA interrupt register (names such as HCE_RE_ILLEGAL_OP; HCE is not expanded in the source)
 
 ## UNKNOWN
 

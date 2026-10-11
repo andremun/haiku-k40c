@@ -121,7 +121,7 @@
       ],
       "role": "init",
       "needed_for_compute": true,
-      "what": "Writes interrupt masks and the user doorbell base address to enable the FIFO engine.",
+      "what": "Writes the USERD base in BAR1 to 0x002254 (when USERD is in BAR1), then 0xffffffff to 0x002100 and 0x7fffffff to 0x002140 (interrupt status and enable)",
       "certainty": "KNOWN",
       "evidence": {
         "line": 751,
@@ -807,7 +807,7 @@
       "accesses": [],
       "role": "interrupt",
       "needed_for_compute": true,
-      "what": "Checks both HCE interrupt sources and returns whether either has pending interrupts.",
+      "what": "Calls the handlers of both interrupt registers of the PBDMA unit and returns whether either had a pending interrupt",
       "certainty": "KNOWN",
       "evidence": {
         "line": 372,
@@ -824,8 +824,8 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": false,
-      "what": "Bitfield table mapping HCE interrupt bit positions to human-readable interrupt reason strings.",
-      "certainty": "KNOWN",
+      "what": "Table of names for the bits of the first PBDMA interrupt register (names such as HCE_RE_ILLEGAL_OP; HCE is not expanded in the source)",
+      "certainty": "INFERRED",
       "evidence": {
         "line": 370,
         "quote": "gk104_runq_intr(struct nvkm_runq *runq, struct nvkm_runl *null)"
@@ -1022,7 +1022,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": false,
-      "what": "Compute engine sub-table with context-switch, context-ID, and MMU fault functions for CE channel context management.",
+      "what": "Engine table for the copy engine (CE): channel switch, context ID and MMU fault functions, without the context members of the GR table",
       "certainty": "KNOWN",
       "evidence": {
         "line": 281,
@@ -1137,8 +1137,9 @@
     }
   ],
   "depends_on": [
-    "top",
-    "imem"
+    "imem",
+    "mc",
+    "top"
   ],
-  "summary": "The FIFO engine dispatches commands from per-channel command buffers to the requested engines (GR, NVDEC, NVENC, etc.) via runlists and run queues. It manages channel lifecycle, interrupt routing, runlist scheduling, engine context switching, MMU fault recovery, and nonstall interrupt handling. The Haiku driver must reproduce all fifteen main table members, six sub-tables, and thirty-three nested members to accept and dispatch commands from channels."
+  "summary": "The FIFO engine takes commands from the command buffers of channels and hands them to the engines of the card (for a compute job: GR, and the copy engine CE) through runlists and PBDMA units (runq). gk104_fifo_init sets the USERD base in BAR1 (0x002254), acknowledges all interrupts (0x002100) and enables them (0x002140). The tables named by the function table hold the runlist operations (build, commit, block, allow), the PBDMA setup, the engine status queries and the MMU fault handling. For milestone S1 the Haiku driver needs the init members, the runlist members update, insert_chan, commit, wait and pending, runq.init, and the engine context members; the fault and interrupt members can start as logging only. The per-channel table (channel control block, bind, start) is not part of this model."
 }
