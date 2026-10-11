@@ -2,10 +2,12 @@
 
 Current phase: C (hardware database and firmware)
 Current task: C3a
-Task state: READY. Second session. Read work/C3a/NOTES.md and the section "How to do it" of docs/tasks/C3a.md. This is the worktree of task C3a: work only on C3a.
+Task state: DONE. `make check` 0 failures. All six subsystems (top, mmu, mc, imem, bar, fb) have decisions, generated JSON and Markdown pass validation.
 Last updated: 2026-10-11
 
 ## Last result
+
+C3a complete (2026-10-11): Hardware model decisions for all six subsystems (top, mmu, mc, imem, bar, fb). Evidence lines verified against source code. `make check` 0 failures.
 
 B5 complete (2026-10-11): Rework 2 — fixed 12 make check failures across
 subsystems (top/ltc/timer/privring changed optional→needed), corrected
@@ -61,3 +63,4 @@ the old layout. Details: `reference/pci/README.md`.
 | B5 | DONE | 2026-10-11 | Rework 2: fixed 12 `make check` failures — subsystems `top`/`ltc`/`timer`/`privring` changed optional→needed; reasons corrected for mc, imem, privring, top, HWW; GR hook init changed compute→both; steps 1/3/4 changed known→partly-known; channel step added with 5 required functions; 2 post-launch steps added. 17 steps, 31 subsystems, 18 GR hooks, 2 firmware. `make check` 0 failures. |
 | C1 | DONE | 2026-10-11 | Register database: 462 distinct regs across 14 groups (bar, bus, ce, fb, fifo, gr, imem, ltc, mc, mmu, pbdma, pci, privring, top). `tools/build_regdb.py` generates all YAML + README.md; `--check` mode verified. `make check` 0 failures. |
 | C2 | DONE | 2026-10-11 | Firmware manifest: 4 built-in arrays (FECS data/code, GPCCS data/code), 4 external firmware files, 17 load-sequence calls. `tools/fw_manifest.py` generates manifest.yaml; `--check` and `--extract DIR` modes. `firmware/README.md` 139 lines with all required sections. `make check` 0 failures. |
+| C3a | DONE | 2026-10-11 | Hardware model: decisions for all six subsystems (top, mmu, mc, imem, bar, fb) in JSON, generated via `tools/hwmodel.py`. Evidence lines verified against source. `make check` 0 failures. |
