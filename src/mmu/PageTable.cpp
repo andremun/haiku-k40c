@@ -91,7 +91,7 @@ k40::mmu::VaSplit k40::mmu::splitVa(uint64_t va)
     // vmmgk104.c:48 — LPT: 10 bits [17..26] → 1024 entries (128 KiB each)
     uint32_t lpte = static_cast<uint32_t>((va >> kLargeShift) & 0x3ff);
     // vmmgk104.c:41 — SPT: 15 bits [0..14] → 32768 entries (4 KiB each)
-    uint32_t spte = static_cast<uint32_t>(va & 0x7fff);
+    uint32_t spte = static_cast<uint32_t>((va >> kSmallShift) & 0x7fff);
     return { pde, lpte, spte };
 }
 
@@ -105,7 +105,7 @@ uint64_t k40::mmu::encodeInstPdb(const PageTableRef& pd)
     uint64_t base = 0;
     switch (pd.target) {
     case Target::VRAM:  base |= 0ULL << 0; break;     // vmmgf100.c:347
-    case Target::HOST:  base |= 2ULL << 0; break;      // vmmgf100.c:348
+    case Target::HOST:  base |= 2ULL << 0;             // vmmgf100.c:348
         base |= 1ULL << 2;                              // vmmgf100.c:349 — VOL
         break;
     case Target::NCOH:  base |= 3ULL << 0; break;      // vmmgf100.c:351
@@ -178,6 +178,7 @@ void k40::mmu::AddressSpace::map(uint64_t va, uint64_t phys, uint64_t size,
 
     validatePageShift(pageShift);
     validateAlign(va, pageSize);
+    validateAlign(phys, pageSize);
     validateSize(size, pageSize);
     if (beyond40bits(va, size))
         throw std::invalid_argument("Address beyond 40-bit range");
@@ -214,6 +215,10 @@ void k40::mmu::AddressSpace::map(uint64_t va, uint64_t phys, uint64_t size,
 
             // Update the PDE: if there's already another table (large or small),
             // combine them using encodePde
+            // Copies, not pointers into fTableRefs: the push_back below may
+            // move the vector's storage (corrected by the scaffold).
+            PageTableRef largeCopy = {0, Target::VRAM};
+            PageTableRef smallCopy = {0, Target::VRAM};
             PageTableRef* largeRef = nullptr;
             PageTableRef* smallRef = nullptr;
 
@@ -221,16 +226,18 @@ void k40::mmu::AddressSpace::map(uint64_t va, uint64_t phys, uint64_t size,
             for (const auto& info : fTableInfos) {
                 if (info.pdeIndex == pdeIdx && info.isLarge != (pageShift == 17)) {
                     if (info.isLarge) {
-                        largeRef = &fTableRefs[info.tableIndex];
+                        largeCopy = fTableRefs[info.tableIndex];
+                        largeRef = &largeCopy;
                     } else {
-                        smallRef = &fTableRefs[info.tableIndex];
+                        smallCopy = fTableRefs[info.tableIndex];
+                        smallRef = &smallCopy;
                     }
                 }
             }
 
             PageTableRef newRef;
             newRef.addr = tblAddr;
-            newRef.target = target;
+            newRef.target = Target::VRAM;  // page tables always in VRAM
             fTableRefs.push_back(newRef);
             uint32_t newRefIdx = static_cast<uint32_t>(fTableRefs.size()) - 1;
 
@@ -342,28 +349,19 @@ std::optional<uint64_t> k40::mmu::AddressSpace::translate(uint64_t va) const
             // Read the PTE
             const auto& table = fTableData[i];
             if (table.size() < (pteIdx + 1) * 8)
-                return std::nullopt;
+                continue;
 
             const uint64_t* ptePtr = reinterpret_cast<const uint64_t*>(table.data());
             uint64_t pte = ptePtr[pteIdx];
 
             if (pte == kPteUnmapped)
-                return std::nullopt;
+                continue;
 
-            // Decode the physical address
-            // vmmgf100.c:35 — base = (addr >> 8) | map->type
-            // phys = (pte & ~0xff) << 8  (clear type bits, shift back)
-            // The type field is in the lower bits and bits 32-43
-            // phys = (pte >> 8) << 8 = (pte & ~0xffULL) << 8 is wrong
-            // Correct: phys = (pte & ~0xfffULL) << 8 | (pte & 0xffULL) — no
-            // From the formula: pte = (phys >> 8) | type
-            // type occupies bits 0-2, 32-43
-            // So: phys = ((pte & ~typeMask) << 8) | (type & typeMask) ... no
-            // phys >> 8 = pte & ~typeMask
-            // phys = ((pte & ~typeMask) << 8)
-            // typeMask = 0x7ULL (bits 0-2) | 0x7000000000000ULL (bits 32-43)
-            uint64_t typeMask = 0x7ULL | 0x7000000000000ULL;
-            uint64_t phys = ((pte & ~typeMask) << 8);
+            // Decode the physical address — vmmgf100.c:35
+            // pte = (phys >> 8) | type; phys is a multiple of 4096
+            // (pte & 0xfffffff0ULL) clears bits 0-3 (type occupies 0-2),
+            // giving (phys >> 8) with bit 3 always 0.
+            uint64_t phys = (pte & 0xfffffff0ULL) << 8;
 
             // Add the page offset
             uint64_t pageOffset = va & (pageSize - 1);

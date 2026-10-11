@@ -30,3 +30,28 @@ Then the rest of the task, which is not started: `tests/test_pagetable.cpp`
 (15 checks or more), `tests/Makefile` (build and run all test programs),
 `docs/mmu-encoding.md`, and the handoff. Read `docs/tasks/D2.md` again
 for these.
+
+# Review of D2, attempt 2 (2026-10-12): the code is fixed, the rest is open
+
+The rework session applied the four fixes and then stopped without
+output again. The scaffold found and fixed the last two defects:
+
+5. `map` did not check that `phys` is a multiple of the page size, so a
+   call that must throw mapped a page, and a later valid call then failed
+   with "overlaps". Added `validateAlign(phys, pageSize)`.
+6. `map` kept pointers into `fTableRefs` and then called `push_back` on
+   it, which can move the storage: the directory entry lost its
+   large-page half. It now copies the two references.
+
+The acceptance test passes: 74 checks, also with the address and
+undefined-behaviour sanitizers. **Do not change `src/mmu/` any more.**
+
+Left to do (nothing else):
+
+1. `tests/test_pagetable.cpp`: 15 checks or more of your own, in the
+   style of `tests/test_registerio.cpp` (see `docs/tasks/D2.md`).
+2. `tests/Makefile`: add the two page-table test programs, as the file
+   does for the register tests. `make -s -C tests` must exit 0.
+3. `docs/mmu-encoding.md` (50 lines or more), as `docs/tasks/D2.md`
+   describes.
+4. `work/D2/RESULT.md` and the handoff.

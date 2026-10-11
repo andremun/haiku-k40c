@@ -2,7 +2,7 @@
 
 Current phase: D (host-side algorithms and tests)
 Current task: D2
-Task state: REWORK. Attempt 1 was reviewed on 2026-10-12. Read work/D2/REVIEW.md first: it names four defects with their fixes. This is the worktree of task D2: work only on D2.
+Task state: REWORK. Read the last section of work/D2/REVIEW.md ("attempt 2"): the code is done, four items are left. This is the worktree of task D2: work only on D2.
 Last updated: 2026-10-11
 
 ## Last result
