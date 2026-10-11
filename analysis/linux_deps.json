@@ -284,10 +284,12 @@
       "file": "nvkm/subdev/mmu/vmm.c",
       "line": 1107
     },
-    "category": "X-not-linux",
-    "haiku_api": [],
-    "header": null,
-    "note": "This symbol is not standard Linux kernel infrastructure. It may be a Nouveau-local macro or function."
+    "category": "C-replace",
+    "haiku_api": [
+      "mutex_init"
+    ],
+    "header": "headers/private/kernel/lock.h",
+    "note": "__mutex_init is the internal mutex initialiser used by Nouveau. Haiku mutex_init provides the same functionality."
   },
   {
     "symbol": "__set_bit",
@@ -296,10 +298,12 @@
       "file": "nvkm/engine/fifo/chid.c",
       "line": 106
     },
-    "category": "X-not-linux",
-    "haiku_api": [],
-    "header": null,
-    "note": "This symbol is not standard Linux kernel infrastructure. It may be a Nouveau-local macro or function."
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_or"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "__set_bit is the non-atomic bit-set used in user-space. Haiku atomic_or provides the same bitwise operation."
   },
   {
     "symbol": "agp_backend_acquire",
@@ -516,10 +520,12 @@
       "file": "nvkm/engine/fifo/chid.c",
       "line": 32
     },
-    "category": "X-not-linux",
-    "haiku_api": [],
-    "header": null,
-    "note": "This symbol is not standard Linux kernel infrastructure. It may be a Nouveau-local macro or function."
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_and"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "clear_bit clears a single bit in a word. Haiku atomic_and with inverted mask (~ (1 << bit)) has the same effect."
   },
   {
     "symbol": "container_of",
@@ -1311,10 +1317,12 @@
       "file": "nvkm/subdev/mmu/vmm.c",
       "line": 1005
     },
-    "category": "A-reimplement",
-    "haiku_api": [],
-    "header": null,
-    "note": "printk is the Linux kernel logging function with log levels. Haiku has no printk; use kernel logging API."
+    "category": "C-replace",
+    "haiku_api": [
+      "dprintf"
+    ],
+    "header": "headers/private/kernel/boot/platform.h",
+    "note": "printk is the Linux kernel logging function with log levels. Haiku dprintf has the same format-string semantics; different log-level system."
   },
   {
     "symbol": "rb_entry",
@@ -1499,10 +1507,12 @@
       "file": "nvkm/engine/fifo/chid.c",
       "line": 45
     },
-    "category": "X-not-linux",
-    "haiku_api": [],
-    "header": null,
-    "note": "This symbol is not standard Linux kernel infrastructure. It may be a Nouveau-local macro or function."
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_or"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "set_bit sets a single bit in a word. Haiku atomic_or with a mask (1 << bit) has the same effect."
   },
   {
     "symbol": "sg_dma_len",

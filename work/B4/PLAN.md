@@ -1,29 +1,21 @@
-# Plan: B4 Rework (fix 19 make check failures)
+# Plan: B4 Rework attempt 3 (fix 6 remaining failures)
 
-All 19 failures are classification/haiku_api errors in `tools/linux_deps.py`.
-The JSON tool output is correct (counts, examples match the rule).
+The tool output and JSON are correct (139 symbols, counts right).
+6 failures remain: 5 classification errors + 1 markdown table count.
 
 ## Fixes
 
-1. **List functions** (4): `INIT_LIST_HEAD` → `list_init`, `list_del` /
-   `list_del_init` → `list_remove_link`, `list_empty` → `list_is_empty`.
-   Verified in `reference/haiku/headers/private/kernel/util/list.h`.
+1. **`printk`** in CLASSIFY: change from A-reimplement→C-replace,
+   haiku_api=["dprintf"], header=KernelExport.h (via boot/platform.h).
+2. **`set_bit`/`clear_bit`/`__set_bit`**: add to CLASSIFY as C-replace,
+   haiku_api=["atomic_or"] / ["atomic_and"], header=SupportDefs.h.
+3. **`__mutex_init`**: add to CLASSIFY as C-replace with mutex_init.
+4. **Markdown generation**: add `write_md()` function to the tool that
+   writes `analysis/linux_deps.md` from the JSON entries. Update `--check`
+   to also verify the markdown file.
+5. **Missing groups in markdown**: add X-not-linux group and the 4 missing
+   symbols (memcmp, memcpy, memset, __mutex_init) to their groups.
 
-2. **Atomic/references** (4): `atomic_dec_and_test`, `atomic_inc_return`,
-   `kref_get`, `refcount_dec_and_test` → `atomic_add` (returns old value,
-   not new). Verified in `SupportDefs.h:285`.
+## Verification
 
-3. **Spinlock init** (1): `spin_lock_init` → `B_INITIALIZE_SPINLOCK` /
-   `B_SPINLOCK_INITIALIZER`. Verified in `KernelExport.h:30-31`.
-
-4. **DMA** (2): `dma_map_page` → A-reimplement with `get_memory_map`,
-   `dma_unmap_page` → A-reimplement with no haiku_api.
-
-5. **Firmware** (2): `request_firmware` / `release_firmware` → D-ignore.
-
-6. **Bit/mutex** (4): `set_bit`/`__set_bit` → C-replace `atomic_or`,
-   `clear_bit` → C-replace `atomic_and`, `__mutex_init` → C-replace `mutex_init`.
-
-7. **printk** (1): → C-replace `dprintf` (`KernelExport.h`).
-
-8. Regenerate `analysis/linux_deps.json` and rewrite `analysis/linux_deps.md`.
+Run `make check` (expect 0 failures).

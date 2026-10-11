@@ -185,6 +185,11 @@ CLASSIFY = {
         "header": "headers/private/kernel/lock.h",
         "note": "mutex_init initializes an unlocked mutex with a name. Haiku mutex_init takes a name parameter for debugging."
     },
+    "__mutex_init": {
+        "category": "C-replace", "haiku_api": ["mutex_init"],
+        "header": "headers/private/kernel/lock.h",
+        "note": "__mutex_init is the internal mutex initialiser used by Nouveau. Haiku mutex_init provides the same functionality."
+    },
     "mutex_destroy": {
         "category": "C-replace", "haiku_api": ["mutex_destroy"],
         "header": "headers/private/kernel/lock.h",
@@ -661,7 +666,22 @@ CLASSIFY = {
         "note": "BUG() triggers a kernel panic unconditionally. Haiku driver should handle errors gracefully instead of panicking."
     },
 
-    # --- Bit manipulation (A-reimplement) ---
+    # --- Bit manipulation (C-replace / A-reimplement) ---
+    "set_bit": {
+        "category": "C-replace", "haiku_api": ["atomic_or"],
+        "header": "headers/os/support/SupportDefs.h",
+        "note": "set_bit sets a single bit in a word. Haiku atomic_or with a mask (1 << bit) has the same effect."
+    },
+    "clear_bit": {
+        "category": "C-replace", "haiku_api": ["atomic_and"],
+        "header": "headers/os/support/SupportDefs.h",
+        "note": "clear_bit clears a single bit in a word. Haiku atomic_and with inverted mask (~ (1 << bit)) has the same effect."
+    },
+    "__set_bit": {
+        "category": "C-replace", "haiku_api": ["atomic_or"],
+        "header": "headers/os/support/SupportDefs.h",
+        "note": "__set_bit is the non-atomic bit-set used in user-space. Haiku atomic_or provides the same bitwise operation."
+    },
     "__ffs": {
         "category": "A-reimplement", "haiku_api": [],
         "header": None,
@@ -705,9 +725,9 @@ CLASSIFY = {
 
     # --- Print and debug ---
     "printk": {
-        "category": "A-reimplement", "haiku_api": [],
-        "header": None,
-        "note": "printk is the Linux kernel logging function with log levels. Haiku has no printk; use kernel logging API."
+        "category": "C-replace", "haiku_api": ["dprintf"],
+        "header": "headers/private/kernel/boot/platform.h",
+        "note": "printk is the Linux kernel logging function with log levels. Haiku dprintf has the same format-string semantics; different log-level system."
     },
     "snprintf": {
         "category": "C-replace", "haiku_api": ["snprintf"],
@@ -770,6 +790,239 @@ def classify_unknown(name):
             "note": "This symbol is not standard Linux kernel infrastructure. It may be a Nouveau-local macro or function."}
 
 
+def write_md(entries, quiet=False):
+    """Write analysis/linux_deps.md from the JSON entries."""
+    groups = {
+        "Memory Allocation": [
+            "alloc_page", "__free_page", "kfree", "kmemdup", "kmalloc",
+            "kvmalloc", "kvmalloc_array", "kvcalloc", "kvfree", "kvzalloc",
+            "kzalloc", "struct_size", "vfree", "vmap", "vunmap",
+            "memcpy", "memcpy_fromio", "memcpy_toio", "memset", "memset_io",
+            "memcmp",
+        ],
+        "Locking": [
+            "__mutex_init", "mutex_init", "mutex_lock", "mutex_unlock", "mutex_destroy",
+            "mutex_is_locked", "spin_lock", "spin_unlock", "spin_lock_irqsave",
+            "spin_unlock_irqrestore", "spin_lock_irq", "spin_unlock_irq",
+            "spin_lock_init",
+        ],
+        "List Operations": [
+            "INIT_LIST_HEAD", "list_add", "list_add_tail", "list_del",
+            "list_del_init", "list_empty", "list_for_each_entry",
+            "list_for_each_entry_safe", "list_first_entry",
+            "list_first_entry_or_null", "list_last_entry", "list_move_tail",
+            "list_entry",
+        ],
+        "Red-Black Tree": [
+            "rb_entry", "rb_erase", "rb_first", "rb_insert_color",
+            "rb_link_node", "rb_next",
+        ],
+        "Atomics": [
+            "atomic_set", "atomic_read", "atomic_inc", "atomic_dec",
+            "atomic_inc_return", "atomic_dec_and_test", "atomic_xchg",
+            "atomic_cmpxchg",
+        ],
+        "Reference Counts": [
+            "refcount_set", "refcount_inc", "refcount_dec_and_test",
+            "refcount_inc_not_zero", "refcount_dec_and_mutex_lock",
+            "kref_init", "kref_get", "kref_put",
+        ],
+        "Time and Scheduling": [
+            "msleep", "usleep_range", "msecs_to_jiffies", "time_before",
+            "timeout", "schedule_work", "INIT_WORK", "flush_work",
+        ],
+        "Firmware Loading": [
+            "request_firmware", "release_firmware",
+        ],
+        "DMA Operations": [
+            "dma_map_page", "dma_unmap_page", "dma_mapping_error",
+            "dma_free_coherent", "sg_next", "sg_dma_len",
+        ],
+        "AGP / PCI": [
+            "agp_enable", "agp_backend_acquire", "agp_backend_release",
+            "agp_copy_info", "arch_phys_wc_add", "arch_phys_wc_del",
+            "pci_enable_msi", "pci_disable_msi", "pci_is_pcie",
+        ],
+        "Arithmetic and Bit Macros": [
+            "BIT", "BIT_ULL", "upper_32_bits", "lower_32_bits", "ALIGN",
+            "ALIGN_DOWN", "min", "min_t", "max", "max_t", "DIV_ROUND_UP",
+            "order_base_2", "ARRAY_SIZE", "unlikely", "likely", "IS_ERR",
+            "PTR_ERR", "ERR_PTR", "IS_ALIGNED", "WARN_ON", "BUG_ON", "BUG",
+            "do_div", "container_of", "set_bit", "clear_bit", "__set_bit",
+            "__ffs", "for_each_set_bit", "find_first_zero_bit", "ilog2",
+            "hweight32", "hweight8",
+        ],
+        "Print and Debug": [
+            "printk", "snprintf", "sprintf", "strscpy",
+        ],
+        "X-not-linux": [
+            "CLR_PTES", "FBP", "LTC", "MAP_PTES", "PTE", "REF_PTES", "bool", "d",
+        ],
+    }
+    # Build lookup
+    lookup = {e["symbol"]: e for e in entries}
+
+    # Category summary
+    cat_counts = {}
+    for e in entries:
+        cat_counts[e["category"]] = cat_counts.get(e["category"], 0) + 1
+
+    lines = []
+    lines.append("# Linux Dependency Map")
+    lines.append("")
+    lines.append("This document lists all Linux kernel symbols called by the 70 Nouveau source")
+    lines.append("files relevant to the GK110 (Tesla K40c) GPU driver, with their replacement")
+    lines.append("strategy for the Haiku driver.")
+    lines.append("")
+    lines.append("## Summary")
+    lines.append("")
+    lines.append("| Category | Count | Description |")
+    lines.append("|---|---|---|")
+    cat_desc = {
+        "C-replace": "Direct Haiku equivalent exists",
+        "A-reimplement": "Must be reimplemented in the driver",
+        "X-not-linux": "Nouveau internals or hardware constants",
+        "D-ignore": "AGP/write-combining; not used by Haiku driver",
+    }
+    for cat in ["C-replace", "A-reimplement", "X-not-linux", "D-ignore"]:
+        lines.append(f"| {cat} | {cat_counts.get(cat, 0)} | {cat_desc.get(cat, '')} |")
+    lines.append("")
+
+    # Group tables
+    group_headers = {
+        "Memory Allocation": (
+            "Linux kernel allocators provide zeroing, overflow checks, and virtual mapping "
+            "that Haiku's standard C functions do not replicate in the same call."
+        ),
+        "Locking": (
+            "Linux spinlocks and mutexes map to Haiku's spinlock and mutex APIs. "
+            "The irqsave/irqrestore variants additionally manipulate interrupt state."
+        ),
+        "List Operations": (
+            "Linux `struct list_head` is a doubly-linked list with embedded pointers. "
+            "Haiku's `BList` / `list` type is similar but the entry macros use `container_of` "
+            "which must be reimplemented."
+        ),
+        "Red-Black Tree": (
+            "Linux `struct rb_tree` has no Haiku equivalent. All RB-tree operations must be "
+            "reimplemented or replaced with a hash table / sorted array."
+        ),
+        "Atomics": (
+            "Haiku provides `int32` atomic functions in `SupportDefs.h`: "
+            "`atomic_set`, `atomic_get`, `atomic_get_and_set`, `atomic_add`, "
+            "`atomic_test_and_set`. Linux's `atomic_inc`/`atomic_dec` map to "
+            "`atomic_add` with +1/-1."
+        ),
+        "Reference Counts": (
+            "Linux `refcount_t` and `kref` use the same atomic primitives as the general "
+            "atomic API but add overflow protection. Haiku atomics lack overflow checks."
+        ),
+        "Time and Scheduling": (
+            "Linux jiffies-based timing has no direct Haiku equivalent; Haiku uses "
+            "`bigtime_t` (microseconds) which avoids wraparound issues."
+        ),
+        "Firmware Loading": (
+            "Linux firmware loading is filesystem-based. The Haiku driver uses "
+            "built-in firmware arrays and does not need external file loading."
+        ),
+        "DMA Operations": (
+            "Linux DMA mapping is platform-specific. The Haiku driver needs custom DMA "
+            "descriptor handling for the GPU."
+        ),
+        "AGP / PCI": (
+            "These symbols relate to AGP and MSI interrupt handling, which the Haiku driver "
+            "does not use. The K40c uses direct BAR access and a different interrupt model."
+        ),
+        "Arithmetic and Bit Macros": (
+            "These are compile-time C macros, not runtime functions. In Haiku, use "
+            "direct expressions or standard C equivalents."
+        ),
+        "Print and Debug": (
+            "Linux printk provides log levels; Haiku dprintf has the same format-string semantics."
+        ),
+        "X-not-linux": (
+            "These symbols are not Linux kernel infrastructure. They are hardware constants or "
+            "Nouveau-internal definitions that were caught by the call-matching rule."
+        ),
+    }
+
+    for group_name, symbols in groups.items():
+        group_entries = [lookup[s] for s in symbols if s in lookup]
+        if not group_entries:
+            continue
+        count_str = f"{len(group_entries)} entries"
+        desc = group_headers.get(group_name, "")
+        lines.append(f"## {group_name} ({count_str})")
+        lines.append("")
+        if desc:
+            lines.append(desc)
+            lines.append("")
+        lines.append("| Symbol | Count | Haiku Replacement |")
+        lines.append("|---|---|---|")
+        for e in group_entries:
+            sym = e["symbol"]
+            cnt = e["count"]
+            cat = e["category"]
+            api = e.get("haiku_api", [])
+            if cat == "C-replace":
+                replacement = " ".join(f"`{a}`" for a in api) or "C-replace"
+            elif cat == "A-reimplement":
+                replacement = f"A-reimplement ({e['note'][:60]})"
+            elif cat == "X-not-linux":
+                replacement = f"X-not-linux ({e['note'][:60]})"
+            else:  # D-ignore
+                replacement = f"D-ignore ({e['note'][:60]})"
+            lines.append(f"| `{sym}` | {cnt} | {replacement} |")
+        lines.append("")
+
+    # Differences section
+    lines.append("## Differences That Matter")
+    lines.append("")
+    diffs = [
+        ("Interrupt state preservation",
+         "`spin_lock_irqsave` saves the current interrupt state and disables interrupts, "
+         "then acquires the lock. On unlock, `spin_unlock_irqrestore` restores the exact "
+         "previous state. Haiku's `disable_interrupts` returns a `cpu_status` token; "
+         "`restore_interrupts(token)` restores it."),
+        ("Zeroed memory",
+         "`kzalloc` and `kvmalloc_array` zero the allocated memory. Haiku `malloc` does "
+         "not zero; use `calloc` when zeroing is needed."),
+        ("Firmware loading",
+         "Linux `request_firmware` searches a standard path and loads the file atomically. "
+         "The driver uses built-in firmware arrays and never takes this path: "
+         "these symbols are D-ignore."),
+        ("Reference count overflow protection",
+         "Linux `refcount_t` saturates at `INT_MAX` instead of wrapping. Haiku atomic "
+         "functions do not check for overflow; the driver must add explicit checks."),
+        ("Bit manipulation",
+         "`set_bit` and `clear_bit` manipulate single bits in a word. Haiku "
+         "`atomic_or` and `atomic_and` with the appropriate mask provide the same operation."),
+        ("Print and debug",
+         "`printk` is the Linux kernel logging function with log levels. Haiku `dprintf` "
+         "has the same format-string semantics but no log-level system."),
+        ("Mutex initialization",
+         "`__mutex_init` is the internal mutex initialiser used by Nouveau. "
+         "Haiku `mutex_init` provides the same functionality."),
+        ("Atomic increment/decrement",
+         "Linux `atomic_inc` / `atomic_dec` are single instructions on x86. Haiku "
+         "`atomic_add` is also a single instruction but must be called with explicit "
+         "`+1` or `-1` parameters."),
+    ]
+    for title, text in diffs:
+        lines.append(f"### {title}")
+        lines.append("")
+        lines.append(text)
+        lines.append("")
+
+    md_path = os.path.join(ROOT, "analysis", "linux_deps.md")
+    content = "\n".join(lines)
+    with open(md_path, "w") as f:
+        f.write(content)
+    if not quiet:
+        print(f"Generated {len(entries)} symbols in {md_path}")
+    return content
+
+
 def build_entries(counts, locations):
     """Build the sorted list of dependency entries."""
     entries = []
@@ -808,6 +1061,18 @@ def main():
             print(f"{OUTPUT}: content differs from what the tool generates", file=sys.stderr)
             sys.exit(1)
         print("OK: analysis/linux_deps.json matches tool output")
+
+        # Also check the markdown file
+        md_path = os.path.join(ROOT, "analysis", "linux_deps.md")
+        if not os.path.exists(md_path):
+            print(f"{md_path}: missing (need to generate first)", file=sys.stderr)
+            sys.exit(1)
+        existing_md = open(md_path).read()
+        generated_md = write_md(generated, quiet=True)
+        if existing_md != generated_md:
+            print(f"{md_path}: content differs from what the tool generates", file=sys.stderr)
+            sys.exit(1)
+        print("OK: analysis/linux_deps.md matches tool output")
         sys.exit(0)
 
     # Generate output
@@ -816,6 +1081,9 @@ def main():
         json.dump(entries, f, indent=2)
         f.write("\n")
     print(f"Generated {len(entries)} symbols in {OUTPUT}")
+
+    # Generate markdown from the JSON
+    write_md(entries)
 
 
 if __name__ == "__main__":

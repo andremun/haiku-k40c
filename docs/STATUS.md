@@ -2,7 +2,7 @@
 
 Current phase: B (Nouveau analysis)
 Current task: B4
-Task state: REWORK. Attempt 2 was reviewed on 2026-10-11. Read the last section of work/B4/REVIEW.md ("attempt 2") and do the three points. This is the worktree of task B4: work only on B4.
+Task state: DONE. Attempt 3 fixed 5 classification defects (set_bit/clear_bit/__set_bit → C-replace atomic_or/atomic_and, __mutex_init → C-replace mutex_init, printk → C-replace dprintf) and added write_md() function to tools/linux_deps.py that generates analysis/linux_deps.md from the JSON with all 139 symbols in table rows. `make check` passes with 0 failures.
 Last updated: 2026-10-11
 
 ## Last result

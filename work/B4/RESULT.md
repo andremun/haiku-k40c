@@ -42,8 +42,8 @@ because they are standard C library functions, not Haiku kernel APIs.
 use `restore_interrupts(token)` which was returned by `disable_interrupts()`.
 
 ### Firmware loading
-`request_firmware` maps to `fopen` + `fread` from
-`headers/private/kernel/boot/stdio.h`. `release_firmware` maps to `free`.
+`request_firmware` and `release_firmware` are D-ignore: only called in
+`gf100_gr_load_fw` for external firmware files that the GK110 driver does not use.
 
 ### List operations
 Linux `list_entry`/`list_for_each_entry` require `container_of`, which must be
