@@ -1244,6 +1244,7 @@ for path in sorted(glob.glob(os.path.join(ROOT, "docs/hardware-model/*.md"))):
 ACCEPT = {
     "d1_accept": ("src/hw/RegisterIO.h",
                   "afbe40a9bfc487e23210f17e0acf171bec6ec120c332027a79135a5cfefee2bf", "src/hw/*.cpp"),
+    "d2_accept": ("src/mmu/PageTable.h", "dd82a560200b061908c8e37964a67941cb855b8b872a5bb444618dfc3448ed03", "src/mmu/*.cpp"),
 }
 for name, (trigger, sha, sources) in ACCEPT.items():
     test = os.path.join(ROOT, "tests", "accept", name + ".cpp")
