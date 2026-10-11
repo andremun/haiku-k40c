@@ -1081,7 +1081,9 @@ if os.path.exists(fw_path) and yaml is not None and "C2" not in SKIP:
 # C3 subsystem models (analysis/hwmodel/<subsystem>.json) ---------------
 C3_TASKS = {"C3a": ["mc", "bar", "imem", "mmu", "fb", "top"],
             "C3b": ["privring", "ltc", "timer"],
-            "C3c": ["fifo"]}
+            "C3c": ["fifo"], "C3d": ["chan"]}
+# Models of a table that is not a chipset member: name -> (owning subsystem, table).
+C3_EXTRA = {"chan": ("fifo", "gk110_chan")}
 hw_files = sorted(glob.glob(os.path.join(ROOT, "analysis/hwmodel/*.json")))
 for task, names in C3_TASKS.items():
     if re.search(r"^\|\s*%s\s*\|\s*DONE\b" % task, status, re.M):
@@ -1158,13 +1160,15 @@ if hw_files and "C3" not in SKIP:
         if not isinstance(hw, dict):
             fail(f"{rel}: must be an object")
             continue
-        ctor = c3_chip.get(name)
+        ctor = c3_chip.get(C3_EXTRA[name][0] if name in C3_EXTRA else name)
         if ctor is None or ("F", ctor) not in c3_defs:
             fail(f"{rel}: '{name}' is not a member of nvf1_chipset")
             continue
         cf, cl = c3_defs[("F", ctor)]
         L, a, b = c3_body(cf, cl)
         tabs = [t for t in re.findall(r"&(\w+)", "\n".join(L[a - 1:b])) if ("T", t) in c3_defs]
+        if name in C3_EXTRA:
+            tabs = [C3_EXTRA[name][1]]
         if not tabs:
             fail(f"{rel}: the checker finds no function table in {ctor}; ask the scaffold")
             continue
