@@ -626,6 +626,45 @@ if mc is not None and "B5" not in SKIP:
             where["gf100_gr_init"] >= where["nve4_screen_compute_setup"] or \
             where["nve4_screen_compute_setup"] >= where["nve4_launch_grid"]:
         fail(f"{rel}: the steps must have these functions in this order: {chain}")
+    # First review of B5 (work/B5/REVIEW.md).
+    for n, why in (("top", "gk104_fifo_init reads device->top (fifo/gk104.c:764)"),
+                   ("ltc", "the GR engine calls nvkm_ltc_* (gr/gf100.c:94)"),
+                   ("timer", "every nvkm_msec wait uses it (gr/gf100.c:758)"),
+                   ("privring", "it is the register bus to the GR units")):
+        if n in got_sub and got_sub[n].get("status") != "needed":
+            fail(f"{rel}: subsystem '{n}' must be \"needed\": {why}")
+    mid = ["gf100_gr_init_ctxctl_int", "gk104_chan_ramfc_write", "gk104_runl_commit",
+           "gf100_gr_chan_new", "gf100_grctx_generate"]
+    miss = [f for f in mid if f not in where]
+    if miss:
+        fail(f"{rel}: no step has the function {miss} (firmware start, channel, GR context)")
+    elif not miss and all(f in where for f in chain):
+        late = [f for f in mid[1:] if not where["gf100_gr_init"] < where[f] < where["nve4_screen_compute_setup"]]
+        if late:
+            fail(f"{rel}: {late} must be in steps after gf100_gr_init and before "
+                 f"nve4_screen_compute_setup: the channel and its GR context exist before Mesa "
+                 f"sends methods")
+        if steps and where["nve4_launch_grid"] == len(steps):
+            fail(f"{rel}: the chain ends at the launch; add the steps after it (wait for the job, "
+                 f"read the result buffer)")
+    shallow = [r.get("step") for r in steps if r.get("status") == "known" and r.get("subsystem") in want_sub
+               and all(str(f.get("name", "")).endswith("_new") for f in r.get("functions") or [{}]
+                       if isinstance(f, dict))]
+    if shallow:
+        fail(f"{rel}: steps {shallow} have status known but only a constructor (*_new allocates, it "
+             f"does not start hardware): add the init function or use partly-known")
+    wrong = {"memory controller": "mc is the master control: engine enable bits and interrupts",
+             "ring buffer": "privring is the PRI ring, the register bus to the engines",
+             "multi-gpu": "top is the device topology table that lists engines and runlists",
+             "workqueue": "HWW is a hardware warning (error report)",
+             "instantiated": "imem is instance memory: GPU objects such as page tables and RAMFC"}
+    texts = " ".join(str(r.get(k, "")) for rows in (subs, steps, [h for h in mc.get("gr_hooks") or [] if isinstance(h, dict)])
+                     for r in rows
+                     for k in ("reason", "what", "notes")).lower()
+    for w, right in wrong.items():
+        if w in texts:
+            fail(f"{rel}: the text says \"{w}\". {right}. Read the source before you write a reason")
+
     used = {r.get("subsystem") for r in steps}
     idle = sorted(n for n, r in got_sub.items() if r.get("status") == "needed" and n not in used)
     if idle:
@@ -662,6 +701,8 @@ if mc is not None and "B5" not in SKIP:
              f"file and line of the function definition: {bad}")
     if "init_zcull" in got_hook and got_hook["init_zcull"].get("use") != "graphics-only":
         fail(f"{rel}: gr_hooks init_zcull sets up depth culling: it is \"graphics-only\"")
+    if "init" in got_hook and got_hook["init"].get("use") != "both":
+        fail(f"{rel}: gr_hooks init is gf100_gr_init, which calls all the other hooks: \"both\"")
     if hooks and not any(r.get("use") in ("compute", "both") for r in hooks):
         fail(f"{rel}: no gr_hooks entry has use compute or both")
 
