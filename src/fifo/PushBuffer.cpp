@@ -29,20 +29,23 @@ uint32_t encodeHeader(HeaderType type, unsigned subc, uint32_t method,
         throw std::invalid_argument("subc must be 0-7");
 
     // Validate method: must be multiple of 4, fits in 13 bits after shift
+    // — no source: 0x7ffc is max 13-bit value aligned to 4; nvc0_winsys.h shifts mthd >> 2
     if (method & 3 || method > 0x7ffc)
         throw std::invalid_argument("method must be multiple of 4, <= 0x7ffc");
 
     // Validate count: max 13 bits (0x1fff)
+    // — no source: 0x1fff is max 13-bit value for the count field;
+    //   nvc0_winsys.h uses (size << 16) with 13-bit field
     if (count > 0x1fff)
         throw std::invalid_argument("count must be <= 0x1fff");
 
     // Base depending on type (nvc0_winsys.h:68, 74, 81, 87)
     uint32_t base = 0;
     switch (type) {
-        case HeaderType::INCREASING:     base = 0x20000000u; break;
-        case HeaderType::NON_INCREASING: base = 0x60000000u; break;
-        case HeaderType::IMMEDIATE:      base = 0x80000000u; break;
-        case HeaderType::INCREASE_ONCE:  base = 0xa0000000u; break;
+        case HeaderType::INCREASING:     base = 0x20000000u; break;   // nvc0_winsys.h:68
+        case HeaderType::NON_INCREASING: base = 0x60000000u; break;   // nvc0_winsys.h:74
+        case HeaderType::IMMEDIATE:      base = 0x80000000u; break;   // nvc0_winsys.h:81
+        case HeaderType::INCREASE_ONCE:  base = 0xa0000000u; break;   // nvc0_winsys.h:87
     }
 
     // All types: (count/data << 16) | (subc << 13) | (method >> 2)
@@ -68,8 +71,8 @@ Header decodeHeader(uint32_t word)
     }
 
     h.subc = (word >> 13) & 7;
-    h.method = (word & 0x1fff) << 2;
-    h.count = (word >> 16) & 0x1fff;
+    h.method = (word & 0x1fff) << 2;  // nvc0_winsys.h:68 — 13-bit method mask
+    h.count = (word >> 16) & 0x1fff;   // nvc0_winsys.h:68 — 13-bit count mask
 
     return h;
 }
@@ -237,7 +240,9 @@ GpEntry encodeGpEntry(uint64_t addr, uint32_t lengthBytes, bool noPrefetch)
         throw std::invalid_argument("address must fit in 40 bits");
 
     GpEntry e;
+    // nouveau_dma.c:82 — lower_32_bits(offset)
     e.word0 = static_cast<uint32_t>(addr & 0xffffffffULL);
+    // nouveau_dma.c:83 — upper_32_bits(offset)
     e.word1 = static_cast<uint32_t>((addr >> 32) & 0xffffffffULL) |
               (lengthBytes << 8) |
               (noPrefetch ? (1u << 31) : 0);
@@ -248,8 +253,9 @@ GpInfo decodeGpEntry(const GpEntry& e)
 {
     GpInfo info;
     // 40-bit address: upper 8 bits in word1[7:0], lower 32 in word0
+    // — no source: 0xff is just 8-bit mask for address upper bits
     info.addr = static_cast<uint64_t>(e.word1 & 0xff) << 32 | e.word0;
-    // Length: 23 bits in word1[30:8]
+    // Length: 23 bits in word1[30:8] — nouveau_dma.h:50 (NV50_DMA_PUSH_MAX_LENGTH)
     info.lengthBytes = (e.word1 >> 8) & 0x7fffff;
     // Bit 31: noPrefetch
     info.noPrefetch = (e.word1 >> 31) & 1;

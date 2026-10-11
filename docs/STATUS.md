@@ -2,10 +2,17 @@
 
 Current phase: C and D (hardware database; host-side algorithms and tests)
 Current task: none
-Task state: WAITING. Phase B, C1, C2, C3 (parts a to e) and D1 to D4 are done. Other tasks run in their own worktrees. Do not start a task here.
+Task state: WAITING. Phase B, C1, C2, C3, C4a and D1 to D4 are done. Other tasks run in their own worktrees. Do not start a task here.
 Last updated: 2026-10-12
 
 ## Last result
+
+C4a complete (2026-10-12): Source provenance of driver constants. 24 constant
+lines in `src/mmu/PageTable.h`, `src/mmu/PageTable.cpp`,
+`src/fifo/PushBuffer.h`, `src/fifo/PushBuffer.cpp` — 20 cited (Nouveau/Mesa
+sources), 4 `no source:` (plain arithmetic/conventions).
+`tools/provenance.py` generates `docs/register-provenance.md`; `--check` mode
+verifies determinism. `make check` 0 failures.
 
 C3e complete (2026-10-12): GR engine subsystem model — 70 function-table
 members across 5 parts (zbc/fecs/gpccs/mmio, 18 hooks, init/ppc_nr/grctx,
@@ -76,3 +83,4 @@ the old layout. Details: `reference/pci/README.md`.
 | D2 | DONE | 2026-10-12 | Page-table encoding and address-space model. Acceptance test 74 checks, own tests 31. Two reworks; the scaffold located all six code defects, see `work/D2/REVIEW.md`. |
 | D4 | DONE | 2026-10-12 | Register-trace comparison tool: mmiotrace conversion, comparison with ignore, mask and writes-only options, register names. Acceptance test 38 checks, own tests 17. One session; the scaffold rewrote the mmiotrace instructions. |
 | C3e | DONE | 2026-10-12 | GR engine subsystem model: 70 members across 5 parts (zbc/fecs/gpccs/mmio, 18 hooks, init/ppc_nr/grctx, grctx functions, grctx values). 9 evidence reworks during dev. `make check` 0 failures. |
+| C4a | DONE | 2026-10-12 | Source provenance: 24 constant lines in 4 files (mmu/fifo); 20 cited from Nouveau/Mesa, 4 `no source:` (arithmetic/conventions). `tools/provenance.py` generates `docs/register-provenance.md` with `--check` mode. `make check` 0 failures. |
