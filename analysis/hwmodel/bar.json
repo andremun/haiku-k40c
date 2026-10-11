@@ -19,10 +19,14 @@
       "line": 149,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Deallocates VMM partitions and instance memory references for BAR0 and BAR1 regions",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 153,
+        "quote": "nvkm_vmm_part(bar->bar[1].vmm, bar->bar[1].inst);"
+      }
     },
     {
       "member": "oneinit",
@@ -32,10 +36,14 @@
       "line": 123,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Initialises BAR2 address space then calls bar2.init and sets up BAR1 with lock classification",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 137,
+        "quote": "nvkm_bar_bar2_init(bar->base.subdev.device);"
+      }
     },
     {
       "member": "bar1.init",
@@ -52,10 +60,14 @@
           "reg": "0x001704"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes BAR1 instance base address shifted by 12 bits into MMIO 0x1704 with bit 31 set",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 57,
+        "quote": "nvkm_wr32(device, 0x001704, 0x80000000 | addr);"
+      }
     },
     {
       "member": "bar1.fini",
@@ -72,10 +84,14 @@
           "reg": "0x001704"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Clears bit 31 in MMIO 0x1704 to disable BAR1 address space mapping",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 48,
+        "quote": "nvkm_mask(bar->subdev.device, 0x001704, 0x80000000, 0x00000000);"
+      }
     },
     {
       "member": "bar1.wait",
@@ -85,10 +101,14 @@
       "line": 38,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Calls bar flush twice to wait for pending BAR write operations to complete",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 41,
+        "quote": "nvkm_bar_flush(base);"
+      }
     },
     {
       "member": "bar1.vmm",
@@ -98,10 +118,14 @@
       "line": 32,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Returns the VMM pointer for BAR1 address space region from the bar structure",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 34,
+        "quote": "return gf100_bar(base)->bar[1].vmm;"
+      }
     },
     {
       "member": "bar2.init",
@@ -118,10 +142,14 @@
           "reg": "0x001714"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes BAR0 instance base address shifted by 12 bits into MMIO 0x1714 with bit 31 set",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 80,
+        "quote": "nvkm_wr32(device, 0x001714, 0x80000000 | addr);"
+      }
     },
     {
       "member": "bar2.fini",
@@ -138,10 +166,14 @@
           "reg": "0x001714"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Clears bit 31 in MMIO 0x1714 to disable BAR2 address space mapping",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 69,
+        "quote": "nvkm_mask(bar->subdev.device, 0x001714, 0x80000000, 0x00000000);"
+      }
     },
     {
       "member": "bar2.wait",
@@ -151,10 +183,14 @@
       "line": 38,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Calls bar flush twice to wait for pending BAR write operations to complete",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 41,
+        "quote": "nvkm_bar_flush(base);"
+      }
     },
     {
       "member": "bar2.vmm",
@@ -164,10 +200,14 @@
       "line": 61,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Returns the VMM pointer for BAR0 address space region from the bar structure",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 63,
+        "quote": "return gf100_bar(base)->bar[0].vmm;"
+      }
     },
     {
       "member": "flush",
@@ -190,12 +230,16 @@
           "reg": "0x070000"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Sets MMIO 0x070000 bit 0 then waits up to 2ms for bit 1 to confirm flush completed",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 34,
+        "quote": "nvkm_wr32(device, 0x070000, 0x00000001);"
+      }
     }
   ],
   "depends_on": [],
-  "summary": ""
+  "summary": "BAR1 and BAR2 address-space setup: initialises both BAR regions by writing base addresses to MMIO 0x1704 (BAR1) and 0x1714 (BAR2), manages VMM partitions for each region, and flushes pending BAR writes via MMIO 0x070000."
 }

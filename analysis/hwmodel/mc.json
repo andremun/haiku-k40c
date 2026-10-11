@@ -26,10 +26,14 @@
           "reg": "0x000200"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0xffffffff to MMIO 0x0200 to enable all interrupt sources on the GPU",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 44,
+        "quote": "nvkm_wr32(device, 0x000200, 0xffffffff); /* everything on */"
+      }
     },
     {
       "member": "intr",
@@ -39,10 +43,10 @@
       "line": 73,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Reference to the gt215 interrupt handler table providing pending block allow unarm rearm",
+      "certainty": "KNOWN"
     },
     {
       "member": "pending",
@@ -59,10 +63,14 @@
           "reg": "0x000100 + (leaf * 4)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "interrupt",
+      "needed_for_compute": true,
+      "what": "Reads per-engine interrupt status from MMIO 0x0100 and returns whether any interrupt is pending",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 101,
+        "quote": "intr->stat[leaf] = nvkm_rd32(mc->subdev.device, 0x000100 + (leaf * 4));"
+      }
     },
     {
       "member": "unarm",
@@ -85,10 +93,14 @@
           "reg": "0x000140"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Writes 0 to MMIO 0x0140 per engine to disable interrupt auto-rearm then reads to clear",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 88,
+        "quote": "nvkm_wr32(mc->subdev.device, 0x000140 + (leaf * 4), 0x00000000);"
+      }
     },
     {
       "member": "rearm",
@@ -105,10 +117,14 @@
           "reg": "0x000140 + (leaf * 4)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "interrupt",
+      "needed_for_compute": true,
+      "what": "Writes 0x00000001 to MMIO 0x0140 per engine to acknowledge and rearm interrupt status",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 78,
+        "quote": "nvkm_wr32(mc->subdev.device, 0x000140 + (leaf * 4), 0x00000001);"
+      }
     },
     {
       "member": "block",
@@ -125,10 +141,14 @@
           "reg": "0x000640 + (leaf * 4)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Writes zero mask to MMIO 0x0640 per engine leaf to block specified interrupt bits",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 69,
+        "quote": "nvkm_mask(mc->subdev.device, 0x000640 + (leaf * 4), mask, 0);"
+      }
     },
     {
       "member": "allow",
@@ -145,10 +165,14 @@
           "reg": "0x000640 + (leaf * 4)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Writes mask to MMIO 0x0640 per engine leaf to allow specified interrupt bits to pass",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 61,
+        "quote": "nvkm_mask(mc->subdev.device, 0x000640 + (leaf * 4), mask, mask);"
+      }
     },
     {
       "member": "intrs",
@@ -158,10 +182,10 @@
       "line": null,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Array of interrupt mapping data defining engine-to-interrupt routing configuration",
+      "certainty": "KNOWN"
     },
     {
       "member": "intr_nonstall",
@@ -171,10 +195,10 @@
       "line": null,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Flags that non-stall interrupts are enabled for this GPU interrupt controller",
+      "certainty": "KNOWN"
     },
     {
       "member": "reset",
@@ -184,10 +208,10 @@
       "line": null,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Data table of reset register mappings used to reinitialise GPU subsystem registers",
+      "certainty": "KNOWN"
     },
     {
       "member": "device",
@@ -197,10 +221,10 @@
       "line": 55,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Reference to the nv04 device management sub-table providing enable disable enabled checks",
+      "certainty": "KNOWN"
     },
     {
       "member": "enabled",
@@ -217,10 +241,14 @@
           "reg": "0x000200"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Reads MMIO 0x0200 and checks if all bits in mask are set to verify engine enablement",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 51,
+        "quote": "return (nvkm_rd32(mc->subdev.device, 0x000200) & mask) == mask;"
+      }
     },
     {
       "member": "enable",
@@ -243,10 +271,14 @@
           "reg": "0x000200"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Sets mask bits in MMIO 0x0200 to enable engine interrupts then reads back the register",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 44,
+        "quote": "nvkm_mask(device, 0x000200, mask, mask);"
+      }
     },
     {
       "member": "disable",
@@ -263,10 +295,14 @@
           "reg": "0x000200"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Clears mask bits in MMIO 0x0200 to disable specified engine interrupt sources",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 36,
+        "quote": "nvkm_mask(mc->subdev.device, 0x000200, mask, 0x00000000);"
+      }
     },
     {
       "member": "unk260",
@@ -283,12 +319,18 @@
           "reg": "0x000260"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Writes data to MMIO register 0x0260 for unknown engine control purpose",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 64,
+        "quote": "nvkm_wr32(mc->subdev.device, 0x000260, data);"
+      }
     }
   ],
-  "depends_on": [],
-  "summary": ""
+  "depends_on": [
+    "top"
+  ],
+  "summary": "Master control: enables GPU interrupts via MMIO register 0x0200, manages interrupt routing and masking per-engine, tracks device engine enablement state, and writes to register 0x0260 for unknown engine control and configuration."
 }

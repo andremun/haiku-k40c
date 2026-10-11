@@ -26,12 +26,16 @@
           "reg": "0x022700 + (i * 0x04)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Reads 64-entry topology table from MMIO to enumerate GPU engines and build per-engine info structs",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 45,
+        "quote": "data = nvkm_rd32(device, 0x022700 + (i * 0x04));"
+      }
     }
   ],
   "depends_on": [],
-  "summary": ""
+  "summary": "Parses the device topology table at MMIO offset 0x022700 to build a list of all engines and their instances, identifying each engine type, instance number, address, fault channel, IRQ, runlist, and reset source for the GPU."
 }

@@ -1,7 +1,7 @@
 # mmu: Hardware Model
 
 ## Purpose
-
+Manages the GPU memory management unit: sets the DMA address width to 40 bits, provides PTE page kind lookups via a 256-entry table mapping page attributes to hardware kind codes, and configures VMM and memory structures for address translation.
 
 ## Nouveau files
 
@@ -12,16 +12,18 @@
 
 | Member | Function | Role | Needed | Registers |
 |--------|----------|------|--------|-----------|
-| dma_bits | 40 | None | None | 0 |
-| kind | gf100_mmu_kind | None | None | 0 |
-| kind_sys | true | None | None | 0 |
+| dma_bits | 40 | data | True | 0 |
+| kind | gf100_mmu_kind | data | True | 0 |
+| kind_sys | true | data | True | 0 |
 
 ## Dependencies
 (none identified)
 
 ## KNOWN
 
-(none)
+- **dma_bits**: Sets DMA address width to 40 bits for page table address encoding
+- **kind**: Returns 256-entry lookup table mapping PTE attributes to hardware page kind codes (`nvkm/subdev/mmu/gf100.c:33`)
+- **kind_sys**: Flags that the kind lookup table is used for system memory page allocation
 
 ## INFERRED
 
