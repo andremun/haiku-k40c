@@ -2,7 +2,7 @@
 
 Current phase: C (hardware database and firmware)
 Current task: C3a
-Task state: READY. This is the worktree of task C3a (branch task-c3a). Another task runs in another worktree at the same time: work only on C3a and do not start another task.
+Task state: READY. Second session. Read work/C3a/NOTES.md and the section "How to do it" of docs/tasks/C3a.md. This is the worktree of task C3a: work only on C3a.
 Last updated: 2026-10-11
 
 ## Last result

@@ -1,0 +1,37 @@
+{
+  "subsystem": "top",
+  "constructor": {
+    "name": "gk104_top_new",
+    "file": "nvkm/subdev/top/gk104.c",
+    "line": 117
+  },
+  "table": {
+    "name": "gk104_top",
+    "file": "nvkm/subdev/top/gk104.c",
+    "line": 112
+  },
+  "members": [
+    {
+      "member": "parse",
+      "value": "gk104_top_parse",
+      "kind": "function",
+      "file": "nvkm/subdev/top/gk104.c",
+      "line": 29,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/top/gk104.c",
+          "line": 45,
+          "op": "rd32",
+          "reg": "0x022700 + (i * 0x04)"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    }
+  ],
+  "depends_on": [],
+  "summary": ""
+}

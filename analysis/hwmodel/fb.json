@@ -1,0 +1,161 @@
+{
+  "subsystem": "fb",
+  "constructor": {
+    "name": "gk110_fb_new",
+    "file": "nvkm/subdev/fb/gk110.c",
+    "line": 69
+  },
+  "table": {
+    "name": "gk110_fb",
+    "file": "nvkm/subdev/fb/gk110.c",
+    "line": 56
+  },
+  "members": [
+    {
+      "member": "dtor",
+      "value": "gf100_fb_dtor",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 99,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "oneinit",
+      "value": "gf100_fb_oneinit",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 45,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "init",
+      "value": "gf100_fb_init",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 87,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "init_page",
+      "value": "gf100_fb_init_page",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 68,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/fb/gf100.c",
+          "line": 72,
+          "op": "mask",
+          "reg": "0x100c80"
+        },
+        {
+          "file": "nvkm/subdev/fb/gf100.c",
+          "line": 73,
+          "op": "mask",
+          "reg": "0x100c80"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "intr",
+      "value": "gf100_fb_intr",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 32,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/fb/gf100.c",
+          "line": 37,
+          "op": "rd32",
+          "reg": "0x000100"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "sysmem.flush_page_init",
+      "value": "gf100_fb_sysmem_flush_page_init",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 81,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/fb/gf100.c",
+          "line": 83,
+          "op": "wr32",
+          "reg": "0x100c10"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "ram_new",
+      "value": "gk104_ram_new",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1713,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "default_bigpage",
+      "value": "17",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "clkgate_pack",
+      "value": "gk110_fb_clkgate_pack",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    }
+  ],
+  "depends_on": [],
+  "summary": ""
+}

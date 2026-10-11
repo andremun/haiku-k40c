@@ -1,0 +1,108 @@
+{
+  "subsystem": "imem",
+  "constructor": {
+    "name": "nv50_instmem_new",
+    "file": "nvkm/subdev/instmem/nv50.c",
+    "line": 436
+  },
+  "table": {
+    "name": "nv50_instmem",
+    "file": "nvkm/subdev/instmem/nv50.c",
+    "line": 410
+  },
+  "members": [
+    {
+      "member": "dtor",
+      "value": "nv50_instmem_dtor",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv50.c",
+      "line": 404,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "fini",
+      "value": "nv50_instmem_fini",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv50.c",
+      "line": 398,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "suspend",
+      "value": "nv04_instmem_suspend",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv04.c",
+      "line": 177,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "resume",
+      "value": "nv04_instmem_resume",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv04.c",
+      "line": 159,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "memory_new",
+      "value": "nv50_instobj_new",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv50.c",
+      "line": 377,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "memory_wrap",
+      "value": "nv50_instobj_wrap",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv50.c",
+      "line": 357,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "zero",
+      "value": "false",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    }
+  ],
+  "depends_on": [],
+  "summary": ""
+}

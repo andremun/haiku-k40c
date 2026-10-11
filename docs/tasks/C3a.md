@@ -78,14 +78,48 @@ any output are relative to `reference/nouveau/`; line numbers are 1-based.
   function, role, needed, registers), `Dependencies`, `KNOWN`,
   `INFERRED`, `UNKNOWN` (the `what` texts by certainty, each with its
   `file:line`).
-- How to do it:
-  - Write `work/C3a/PLAN.md` (10 lines), then the tool with empty
-    decisions and run `make check`: the member lists must be right
-    before you write any text. Then do one subsystem at a time, `top`
-    and `mmu` first (small), and run `make check` after each.
+- How to do it (a first session filled its context three times and lost
+  its work each time: it wrote decisions into the generated JSON files,
+  which the tool then overwrote, and it read whole source files):
+  - `tools/hwmodel.py` exists and its structure is right. Do not rewrite
+    it. Do not read it whole.
+  - Your decisions go in `analysis/hwmodel/decisions/<subsystem>.json`,
+    one file for each subsystem. You write these files; the tool reads
+    them and never writes them:
+
+    ```json
+    {"summary": "...", "depends_on": ["top"],
+     "members": {
+       "init": {"role": "init", "needed_for_compute": true, "what": "...",
+                "certainty": "KNOWN",
+                "evidence": {"line": 0, "quote": "..."}},
+       "intr.pending": {"role": "interrupt", "needed_for_compute": false,
+                        "what": "...", "certainty": "INFERRED",
+                        "evidence": {"line": 0, "quote": "..."}}}}
+    ```
+
+    The key of a nested member is `parent.member`. Never edit
+    `analysis/hwmodel/<subsystem>.json` or a `.md` file by hand: run
+    `python3 tools/hwmodel.py` to write them.
+  - Work on one subsystem at a time, in this order: `top`, `mmu`, `mc`,
+    `imem`, `bar`, `fb`. For each one:
+    1. `python3 -c "import json; [print(m['parent'], m['member'],
+       m['value'], m['kind'], m['file'], m['line']) for m in
+       json.load(open('analysis/hwmodel/NAME.json'))['members']]"`
+       lists the members. Do not open the JSON file.
+    2. For each function: `sed -n 'LINE,+25p' reference/nouveau/FILE`.
+       Never read a source file whole. A member of kind `value` or
+       `table` needs no evidence.
+    3. Write `analysis/hwmodel/decisions/NAME.json`.
+    4. `python3 tools/hwmodel.py && make check 2>&1 | grep NAME`.
+    5. When no failure names this subsystem: `git add -A && git commit
+       -m "C3a: NAME"` and add one line to `work/C3a/NOTES.md`
+       ("NAME done"). Read `work/C3a/NOTES.md` first when you start or
+       when you are not sure what is done.
+  - Do not read `tools/check_repo.py`: the failure messages say what is
+    wrong.
   - `tools/hwmodel.py --check` writes nothing and exits 0 when all JSON
-    and Markdown files are what the tool generates. The same output on
-    every run.
+    and Markdown files are what the tool generates.
   - The work directory is `work/C3a`. In `docs/STATUS.md` the task ID in
     the task log is `C3a`.
 - Check: constructor, table, members, kinds, definitions and accesses

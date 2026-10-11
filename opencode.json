@@ -60,7 +60,8 @@
       "*": "allow",
       "*analysis/callgraph.json": "deny",
       "*analysis/callgraph.md": "deny",
-      "*registers/mmio_accesses.json": "deny"
+      "*registers/mmio_accesses.json": "deny",
+      "*tools/check_repo.py": "deny"
     }
   }
 }

@@ -1,0 +1,201 @@
+{
+  "subsystem": "bar",
+  "constructor": {
+    "name": "gf100_bar_new",
+    "file": "nvkm/subdev/bar/gf100.c",
+    "line": 192
+  },
+  "table": {
+    "name": "gf100_bar_func",
+    "file": "nvkm/subdev/bar/gf100.c",
+    "line": 177
+  },
+  "members": [
+    {
+      "member": "dtor",
+      "value": "gf100_bar_dtor",
+      "kind": "function",
+      "file": "nvkm/subdev/bar/gf100.c",
+      "line": 149,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "oneinit",
+      "value": "gf100_bar_oneinit",
+      "kind": "function",
+      "file": "nvkm/subdev/bar/gf100.c",
+      "line": 123,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "bar1.init",
+      "value": "gf100_bar_bar1_init",
+      "kind": "function",
+      "file": "nvkm/subdev/bar/gf100.c",
+      "line": 52,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/bar/gf100.c",
+          "line": 57,
+          "op": "wr32",
+          "reg": "0x001704"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "bar1.fini",
+      "value": "gf100_bar_bar1_fini",
+      "kind": "function",
+      "file": "nvkm/subdev/bar/gf100.c",
+      "line": 46,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/bar/gf100.c",
+          "line": 48,
+          "op": "mask",
+          "reg": "0x001704"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "bar1.wait",
+      "value": "gf100_bar_bar1_wait",
+      "kind": "function",
+      "file": "nvkm/subdev/bar/gf100.c",
+      "line": 38,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "bar1.vmm",
+      "value": "gf100_bar_bar1_vmm",
+      "kind": "function",
+      "file": "nvkm/subdev/bar/gf100.c",
+      "line": 32,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "bar2.init",
+      "value": "gf100_bar_bar2_init",
+      "kind": "function",
+      "file": "nvkm/subdev/bar/gf100.c",
+      "line": 73,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/bar/gf100.c",
+          "line": 80,
+          "op": "wr32",
+          "reg": "0x001714"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "bar2.fini",
+      "value": "gf100_bar_bar2_fini",
+      "kind": "function",
+      "file": "nvkm/subdev/bar/gf100.c",
+      "line": 67,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/bar/gf100.c",
+          "line": 69,
+          "op": "mask",
+          "reg": "0x001714"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "bar2.wait",
+      "value": "gf100_bar_bar1_wait",
+      "kind": "function",
+      "file": "nvkm/subdev/bar/gf100.c",
+      "line": 38,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "bar2.vmm",
+      "value": "gf100_bar_bar2_vmm",
+      "kind": "function",
+      "file": "nvkm/subdev/bar/gf100.c",
+      "line": 61,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "flush",
+      "value": "g84_bar_flush",
+      "kind": "function",
+      "file": "nvkm/subdev/bar/g84.c",
+      "line": 29,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/bar/g84.c",
+          "line": 34,
+          "op": "wr32",
+          "reg": "0x070000"
+        },
+        {
+          "file": "nvkm/subdev/bar/g84.c",
+          "line": 36,
+          "op": "rd32",
+          "reg": "0x070000"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    }
+  ],
+  "depends_on": [],
+  "summary": ""
+}

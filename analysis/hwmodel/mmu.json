@@ -1,0 +1,56 @@
+{
+  "subsystem": "mmu",
+  "constructor": {
+    "name": "gk104_mmu_new",
+    "file": "nvkm/subdev/mmu/gk104.c",
+    "line": 38
+  },
+  "table": {
+    "name": "gk104_mmu",
+    "file": "nvkm/subdev/mmu/gk104.c",
+    "line": 28
+  },
+  "members": [
+    {
+      "member": "dma_bits",
+      "value": "40",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "kind",
+      "value": "gf100_mmu_kind",
+      "kind": "function",
+      "file": "nvkm/subdev/mmu/gf100.c",
+      "line": 33,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "kind_sys",
+      "value": "true",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    }
+  ],
+  "depends_on": [],
+  "summary": ""
+}
