@@ -1081,9 +1081,11 @@ if os.path.exists(fw_path) and yaml is not None and "C2" not in SKIP:
 # C3 subsystem models (analysis/hwmodel/<subsystem>.json) ---------------
 C3_TASKS = {"C3a": ["mc", "bar", "imem", "mmu", "fb", "top"],
             "C3b": ["privring", "ltc", "timer"],
-            "C3c": ["fifo"], "C3d": ["chan"]}
+            "C3c": ["fifo"], "C3d": ["chan"], "C3e": ["gr"]}
 # Models of a table that is not a chipset member: name -> (owning subsystem, table).
-C3_EXTRA = {"chan": ("fifo", "gk110_chan")}
+C3_EXTRA = {"chan": ("fifo", "gk110_chan"),
+            # gk110b_gr_new passes a firmware-interface list, not the table
+            "gr": ("gr", "gk110b_gr")}
 hw_files = sorted(glob.glob(os.path.join(ROOT, "analysis/hwmodel/*.json")))
 for task, names in C3_TASKS.items():
     if re.search(r"^\|\s*%s\s*\|\s*DONE\b" % task, status, re.M):

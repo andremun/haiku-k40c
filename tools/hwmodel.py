@@ -24,11 +24,13 @@ DOCS_DIR = os.path.join(ROOT, "docs", "hardware-model")
 C3A_SUBSYSTEMS = ["mc", "bar", "imem", "mmu", "fb", "top",
                   "privring", "ltc", "timer",  # C3b
                   "fifo",  # C3c
-                  "chan"]  # C3d
+                  "chan",  # C3d
+                  "gr"]  # C3e
 
 # A model of a table that is not a chipset member: name -> (owning
 # subsystem, table). Added by the scaffold for task C3d.
-EXTRA = {"chan": ("fifo", "gk110_chan")}
+EXTRA = {"chan": ("fifo", "gk110_chan"),
+         "gr": ("gr", "gk110b_gr")}
 
 # Constructor function names and their table names (from nvf1_chipset in base.c)
 # These are looked up dynamically from the chipset table.
