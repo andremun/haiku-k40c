@@ -1080,7 +1080,8 @@ if os.path.exists(fw_path) and yaml is not None and "C2" not in SKIP:
 
 # C3 subsystem models (analysis/hwmodel/<subsystem>.json) ---------------
 C3_TASKS = {"C3a": ["mc", "bar", "imem", "mmu", "fb", "top"],
-            "C3b": ["privring", "ltc", "timer"]}
+            "C3b": ["privring", "ltc", "timer"],
+            "C3c": ["fifo"]}
 hw_files = sorted(glob.glob(os.path.join(ROOT, "analysis/hwmodel/*.json")))
 for task, names in C3_TASKS.items():
     if re.search(r"^\|\s*%s\s*\|\s*DONE\b" % task, status, re.M):
