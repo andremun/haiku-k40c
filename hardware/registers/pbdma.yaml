@@ -1,0 +1,280 @@
+- reg: 0x0400c0 + (runq->id * 0x2000)
+  address: '0x0400c0'
+  name: PSUBFIFO.CACHE.ADDR
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: INCR
+    shift: 0
+    width: 1
+  - name: IB_UNK40
+    shift: 1
+    width: 1
+  - name: MTHD
+    shift: 2
+    width: 12
+  - name: SUBCH
+    shift: 16
+    width: 3
+  - name: UNK22
+    shift: 22
+    width: 2
+  - name: VALID
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:316
+  - nvkm/engine/fifo/gf100.c:347
+  status: SOURCE_ONLY
+- reg: 0x0400c4 + (runq->id * 0x2000)
+  address: '0x0400c4'
+  name: PSUBFIFO.CACHE.DATA
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:317
+  status: SOURCE_ONLY
+- reg: 0x040108 + (runq->id * 0x2000)
+  address: '0x040108'
+  name: PSUBFIFO.INTR
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: ENGINE_PULL_TIMEOUT
+    shift: 8
+    width: 1
+  - name: IB_PUT_OVERFLOW
+    shift: 14
+    width: 1
+  - name: IB_ENTRY_INVALID
+    shift: 15
+    width: 1
+  - name: ILLEGAL_CMD
+    shift: 18
+    width: 1
+  - name: ILLEGAL_MTHD
+    shift: 21
+    width: 1
+  - name: MTHD_UNK7C_NONZERO
+    shift: 22
+    width: 1
+  - name: SW_MTHD
+    shift: 23
+    width: 1
+  - name: ILLEGAL_SEM
+    shift: 25
+    width: 1
+  - name: SEM_TIMEOUT
+    shift: 26
+    width: 1
+  - name: MMIO_WRITE_WHILE_BUSY
+    shift: 27
+    width: 1
+  - name: SEM_ACQUIRE_WITH_IB_UNK1
+    shift: 29
+    width: 1
+  - name: SIG_MISMATCH
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:315
+  - nvkm/engine/fifo/gf100.c:348
+  - nvkm/engine/fifo/gf100.c:358
+  status: SOURCE_ONLY
+- reg: 0x04010c + (runq->id * 0x2000)
+  address: '0x04010c'
+  name: PSUBFIFO.INTR_EN
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: ENGINE_PULL_TIMEOUT
+    shift: 8
+    width: 1
+  - name: IB_PUT_OVERFLOW
+    shift: 14
+    width: 1
+  - name: IB_ENTRY_INVALID
+    shift: 15
+    width: 1
+  - name: ILLEGAL_CMD
+    shift: 18
+    width: 1
+  - name: ILLEGAL_MTHD
+    shift: 21
+    width: 1
+  - name: MTHD_UNK7C_NONZERO
+    shift: 22
+    width: 1
+  - name: SW_MTHD
+    shift: 23
+    width: 1
+  - name: ILLEGAL_SEM
+    shift: 25
+    width: 1
+  - name: SEM_TIMEOUT
+    shift: 26
+    width: 1
+  - name: MMIO_WRITE_WHILE_BUSY
+    shift: 27
+    width: 1
+  - name: SEM_ACQUIRE_WITH_IB_UNK1
+    shift: 29
+    width: 1
+  - name: SIG_MISMATCH
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:314
+  - nvkm/engine/fifo/gf100.c:359
+  status: SOURCE_ONLY
+- reg: 0x040120 + (runq->id * 0x2000)
+  address: '0x040120'
+  name: PSUBFIFO.CH
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: CHID
+    shift: 0
+    width: 12
+  - name: ACTIVE
+    shift: 13
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:318
+  - nvkm/engine/fifo/gk104.c:313
+  status: SOURCE_ONLY
+- reg: 0x04013c + (runq->id * 0x2000)
+  address: '0x04013c'
+  name: PSUBFIFO.INTR_HALT_MASK
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: ENGINE_PULL_TIMEOUT
+    shift: 8
+    width: 1
+  - name: IB_PUT_OVERFLOW
+    shift: 14
+    width: 1
+  - name: IB_ENTRY_INVALID
+    shift: 15
+    width: 1
+  - name: ILLEGAL_CMD
+    shift: 18
+    width: 1
+  - name: ILLEGAL_MTHD
+    shift: 21
+    width: 1
+  - name: MTHD_UNK7C_NONZERO
+    shift: 22
+    width: 1
+  - name: SW_MTHD
+    shift: 23
+    width: 1
+  - name: ILLEGAL_SEM
+    shift: 25
+    width: 1
+  - name: SEM_TIMEOUT
+    shift: 26
+    width: 1
+  - name: MMIO_WRITE_WHILE_BUSY
+    shift: 27
+    width: 1
+  - name: SEM_ACQUIRE_WITH_IB_UNK1
+    shift: 29
+    width: 1
+  - name: SIG_MISMATCH
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:357
+  status: SOURCE_ONLY
+- reg: 0x040148 + (runq->id * 0x2000)
+  address: '0x040148'
+  name: PSUBFIFO.COPY_INTR
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: ILLEGAL_ENUM
+    shift: 0
+    width: 1
+  - name: ILLEGAL_STATE
+    shift: 1
+    width: 1
+  - name: ILLEGAL_VALUE
+    shift: 2
+    width: 1
+  - name: ILLEGAL_MTHD
+    shift: 3
+    width: 1
+  - name: ILLEGAL_CLASS
+    shift: 4
+    width: 1
+  source:
+  - nvkm/engine/fifo/gk104.c:312
+  - nvkm/engine/fifo/gk104.c:330
+  - nvkm/engine/fifo/gk104.c:385
+  status: SOURCE_ONLY
+- reg: 0x04014c + (runq->id * 0x2000)
+  address: '0x04014c'
+  name: PSUBFIFO.COPY_INTR_EN
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: ILLEGAL_ENUM
+    shift: 0
+    width: 1
+  - name: ILLEGAL_STATE
+    shift: 1
+    width: 1
+  - name: ILLEGAL_VALUE
+    shift: 2
+    width: 1
+  - name: ILLEGAL_MTHD
+    shift: 3
+    width: 1
+  - name: ILLEGAL_CLASS
+    shift: 4
+    width: 1
+  source:
+  - nvkm/engine/fifo/gk104.c:311
+  - nvkm/engine/fifo/gk104.c:386
+  status: SOURCE_ONLY
+- reg: 0x040150 + (runq->id * 0x2000)
+  address: '0x040150'
+  name: PSUBFIFO.COPY_MTHD
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gk104.c:326
+  status: SOURCE_ONLY
+- reg: 0x040154 + (runq->id * 0x2000)
+  address: '0x040154'
+  name: PSUBFIFO.COPY_DATA
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gk104.c:327
+  status: SOURCE_ONLY

@@ -1,0 +1,100 @@
+- reg: '0x001100'
+  address: '0x001100'
+  name: PBUS.INTR
+  name_source: rnndb:bus/pbus.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: MMIO_DISABLED_ENG
+    shift: 1
+    width: 1
+  - name: MMIO_IBUS_ERR
+    shift: 2
+    width: 1
+  - name: MMIO_FAULT
+    shift: 3
+    width: 1
+  - name: HOST_MEM_TIMEOUT
+    shift: 7
+    width: 1
+  - name: HOST_MEM_ZOMBIE
+    shift: 8
+    width: 1
+  - name: USER
+    shift: 26
+    width: 1
+  - name: USER2
+    shift: 28
+    width: 1
+  source:
+  - nvkm/subdev/bus/gf100.c:34
+  - nvkm/subdev/bus/gf100.c:49
+  - nvkm/subdev/bus/gf100.c:63
+  status: SOURCE_ONLY
+- reg: '0x001140'
+  address: '0x001140'
+  name: PBUS.INTR_EN
+  name_source: rnndb:bus/pbus.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: MMIO_DISABLED_ENG
+    shift: 1
+    width: 1
+  - name: MMIO_IBUS_ERR
+    shift: 2
+    width: 1
+  - name: MMIO_FAULT
+    shift: 3
+    width: 1
+  - name: HOST_MEM_TIMEOUT
+    shift: 7
+    width: 1
+  - name: HOST_MEM_ZOMBIE
+    shift: 8
+    width: 1
+  - name: USER
+    shift: 26
+    width: 1
+  - name: USER2
+    shift: 28
+    width: 1
+  source:
+  - nvkm/subdev/bus/gf100.c:34
+  - nvkm/subdev/bus/gf100.c:55
+  - nvkm/subdev/bus/gf100.c:64
+  status: SOURCE_ONLY
+- reg: '0x009084'
+  address: '0x009084'
+  name: PTIMER.MMIO_FAULT_ADDRESS
+  name_source: rnndb:bus/ptimer.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: UNK0
+    shift: 0
+    width: 1
+  - name: ACCESS
+    shift: 1
+    width: 1
+  - name: ADDRESS
+    shift: 2
+    width: 30
+  source:
+  - nvkm/subdev/bus/gf100.c:37
+  - nvkm/subdev/bus/gf100.c:48
+  status: SOURCE_ONLY
+- reg: '0x009088'
+  address: '0x009088'
+  name: PTIMER.MMIO_FAULT_DATA
+  name_source: rnndb:bus/ptimer.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/bus/gf100.c:38
+  status: SOURCE_ONLY

@@ -7,29 +7,17 @@ Last updated: 2026-10-11
 
 ## Last result
 
+B5 complete (2026-10-11): Rework 2 — fixed 12 make check failures across
+subsystems (top/ltc/timer/privring changed optional→needed), corrected
+reasons for mc, imem, privring, top, HWW; GR hook init changed
+compute→both; steps 1/3/4 changed known→partly-known; channel step added
+with 5 required functions; 2 post-launch steps added. 17 steps, 31
+subsystems, 18 GR hooks, 2 firmware. `make check` 0 failures.
+
+## Older notes:
+
 B3 (branch `task-b3`, merged 2026-10-08, reviewed and accepted by the
 scaffold):
-
-B2 complete (2026-10-07): call graph from four chipset constructors through
-init paths. `tools/callgraph.py` extracts 447 nodes and 708 edges from four
-subsystems (fb, mmu, fifo, gr). Three bugs fixed during dev: array table
-definitions, struct field value extraction, and function call argument
-extraction. All three required init functions reachable: `gf100_gr_init`
-(GR path via `gk110b_gr_fwif → gk110b_gr`), `gf100_fb_init` (FB path via
-`gk110_fb`), `gk104_fifo_init` (FIFO path via `gk110_fifo`). `make check`
-passes with 0 failures.
-
-B1 rework 2 complete (2026-10-07): fixed three defects — non-deterministic
-tool output, incorrect role format (6+ words, "chipset constructor" / "used
-by" format), and wrong class classification (added `other-chip` category
-matching `check_repo.py`'s `b1_class()`). Two errors in `RESULT.md` also
-corrected (0x0f1 is PMC_BOOT_0 chipset field, not a PCI ID; selection at
-`base.c:3218`, not `base.c:1770`). `tools/nouveau_files.py` includes
-`--check` mode. 88 entries: 6 GK110-specific, 13 GK104-inherited, 23
-GF100-inherited, 28 generic-NVKM, 18 other-chip. `make check` passes with
-0 failures.
-
-Older notes:
 
 B2 complete (2026-10-07): call graph from four chipset constructors through
 init paths. `tools/callgraph.py` extracts 447 nodes and 708 edges from four
@@ -71,3 +59,4 @@ the old layout. Details: `reference/pci/README.md`.
 | B3 | DONE | 2026-10-08 | 872 MMIO accesses from 43 files (rd32: 288, wr32: 462, mask: 122). 587 constant regs. Three bugs fixed: nested call line attribution (offset map), double-processing of joined lines (return end_line), 875→872 count. `make check` 0 failures. |
 | B6 | DONE | 2026-10-08 | Rework 2: added "gk110": true/false to every setup and launch entry; GK110-filtered sequence tables; other-chip table built from gk110=false entries; class_source line number; condition parsing fixes. 3 entries gk110=false (lines 87, 90, 878). `make check` 0 failures. |
 | B5 | DONE | 2026-10-11 | Rework 2: fixed 12 `make check` failures — subsystems `top`/`ltc`/`timer`/`privring` changed optional→needed; reasons corrected for mc, imem, privring, top, HWW; GR hook init changed compute→both; steps 1/3/4 changed known→partly-known; channel step added with 5 required functions; 2 post-launch steps added. 17 steps, 31 subsystems, 18 GR hooks, 2 firmware. `make check` 0 failures. |
+| C1 | DONE | 2026-10-11 | Register database: 462 distinct regs across 14 groups (bar, bus, ce, fb, fifo, gr, imem, ltc, mc, mmu, pbdma, pci, privring, top). `tools/build_regdb.py` generates all YAML + README.md; `--check` mode verified. `make check` 0 failures. |
