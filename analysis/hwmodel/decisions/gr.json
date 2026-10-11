@@ -1,6 +1,9 @@
 {
   "summary": "The GR (Graphics) engine runs compute workloads on GK110. It loads two microcode programs (FECS for the hub, GPCCS for the GPC), initialises its sub-blocks through a chain of hooks, generates channel context images (grctx) that bundle register writes for all units, and manages ZBC (clear colour and depth) values. The Haiku driver must replicate this initialisation sequence, load the firmware, generate the context image, and trigger compute kernels.",
-  "depends_on": ["top", "ltc"],
+  "depends_on": [
+    "top",
+    "ltc"
+  ],
   "members": {
     "zbc": {
       "role": "data",
@@ -141,6 +144,494 @@
         "line": 66,
         "quote": "gk110b_gr_pack_mmio[] = {\n\t{ gk104_gr_init_main_0 },"
       }
+    },
+    "init_400054": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes the constant value 0x34ce3464 to register 0x400054 to configure a GR hardware setting",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2188,
+        "quote": "nvkm_wr32(gr->base.engine.subdev.device, 0x400054, 0x34ce3464);"
+      }
+    },
+    "init_exception2": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0xffffffff to registers 0x40011c and 0x400134 to enable all exception reporting in GR",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2196,
+        "quote": "nvkm_wr32(device, 0x40011c, 0xffffffff);"
+      }
+    },
+    "init_rop_exceptions": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Loops over all ROP units and writes to registers 0x144, 0x070, 0x204 and 0x208 to configure ROP exception handling",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2207,
+        "quote": "nvkm_wr32(device, ROP_UNIT(rop, 0x144), 0x40000000);"
+      }
+    },
+    "init_shader_exceptions": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes to TPC registers 0x644 and 0x64c to configure shader exception masks for a GPC/TPC pair",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2218,
+        "quote": "nvkm_wr32(device, TPC_UNIT(gpc, tpc, 0x644), 0x001ffffe);"
+      }
+    },
+    "init_tex_hww_esr": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0xc0000000 to TPC register 0x224 to configure the TEX hardware warning error status register",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2226,
+        "quote": "nvkm_wr32(device, TPC_UNIT(gpc, tpc, 0x224), 0xc0000000);"
+      }
+    },
+    "init_419eb4": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Applies nvkm_mask on register 0x419eb4 to set bits 0x1000-0x8000 then clears them for a bit-toggle sequence",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 342,
+        "quote": "nvkm_mask(device, 0x419eb4, 0x00001000, 0x00001000);"
+      }
+    },
+    "init_419cc0": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Masks bit 3 of register 0x419cc0 then loops over all GPC/TPC pairs to write 0xc0000000 to TPC register 0x48c",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2242,
+        "quote": "nvkm_mask(device, 0x419cc0, 0x00000008, 0x00000008);"
+      }
+    },
+    "init_fecs_exceptions": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0x000e0000 or 0x000e0001 to register 0x409c24 based on firmware presence to configure FECS exceptions",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2259,
+        "quote": "const u32 data = gr->firmware ? 0x000e0000 : 0x000e0001;"
+      }
+    },
+    "init_gpc_mmu": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Reads FB MMU page-table addresses and writes them to GR MMU registers 0x418880-0x4188b8 to set up MMU forwarding",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2269,
+        "quote": "nvkm_wr32(device, 0x418880, nvkm_rd32(device, 0x100c80) & 0x00000001);"
+      }
+    },
+    "init_num_active_ltcs": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Reads register 0x100800 for the number of active LTCs and broadcasts it to GPC register 0x08ac",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2283,
+        "quote": "nvkm_wr32(device, GPC_BCAST(0x08ac), nvkm_rd32(device, 0x100800));"
+      }
+    },
+    "init_zcull": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Computes ZCULL tile configuration from tpc_total and writes bank/tile data to GPC registers 0x0980-0x3fd4 for depth compression",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 136,
+        "quote": "data |= bank[gr->tile[i + j]] << (j * 4);"
+      }
+    },
+    "init_rop_active_fbps": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Reads FBP count from register 0x120074 then writes it to registers 0x408850 (zrop) and 0x408958 (crop) via mask",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 409,
+        "quote": "const u32 fbp_count = nvkm_rd32(device, 0x120074);"
+      }
+    },
+    "init_ppc_exceptions": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Loops over enabled GPC/PPC pairs and writes 0xc0000000 to PPC register 0x038 to configure PPC exception handling",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 424,
+        "quote": "nvkm_wr32(device, PPC_UNIT(gpc, ppc, 0x038), 0xc0000000);"
+      }
+    },
+    "init_vsc_stream_master": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0x00000001 to GPC register 0x3018 to enable the VSC stream master for pipeline vertex shading",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 433,
+        "quote": "nvkm_wr32(device, GPC_UNIT(0, 0x3018), 0x00000001);"
+      }
+    },
+    "init_sked_hww_esr": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0x40000000 to register 0x407020 to configure the scheduler hardware warning error status register",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 393,
+        "quote": "nvkm_wr32(gr->base.engine.subdev.device, 0x407020, 0x40000000);"
+      }
+    },
+    "trap_mp": {
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Reads TPC error registers 0x648 (warp) and 0x650 (global), decodes them with enum tables, logs the error, then clears 0x648 and updates 0x650",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1299,
+        "quote": "u32 werr = nvkm_rd32(device, TPC_UNIT(gpc, tpc, 0x648));"
+      }
+    },
+    "fecs.reset": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0x00000070 to register 0x409614 to assert FECS reset, delays 10us, sets bits 0x700 of 0x409614, then reads back",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2470,
+        "quote": "nvkm_wr32(device, 0x409614, 0x00000070);"
+      }
+    },
+    "rops": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads register 0x409604 and extracts bits 16:20 to return the number of active ROP units on the GPU",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1001,
+        "quote": "return (nvkm_rd32(device, 0x409604) & 0x001f0000) >> 16;"
+      }
+    },
+    "oneinit_tiles": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Computes tile-to-GPC mapping using a prime-factor distribution algorithm and sorts GPCs by TPC count",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1946,
+        "quote": "gpc_map[i] = i;"
+      }
+    },
+    "oneinit_sm_id": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Enumerates all valid GPC-TPC pairs into the SM array and returns the total SM count",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1900,
+        "quote": "for (gpc = 0; gpc < gr->gpc_nr; gpc++) {"
+      }
+    },
+    "init": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Main GR engine init: calls init_gpc_mmu, mmio setup, all sub-init hooks, then writes idle and exception registers",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 2347,
+        "quote": "nvkm_mask(device, 0x400500, 0x00010001, 0x00000000);"
+      }
+    },
+    "ppc_nr": {
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Hardcoded count of PPC (pixel pipeline combiner) units set to 2 for GK110",
+      "certainty": "INFERRED"
+    },
+    "grctx": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "GR context function table defining all grctx sub-functions and their configuration values",
+      "certainty": "INFERRED"
+    },
+    "grctx.main": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates the GR context image by calling hub, gpc_0, zcull, gpc_1, tpc, ppc mmio, then pagepool, bundle, attrib, and unkn",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1352,
+        "quote": "gf100_gr_mmio(gr, grctx->hub);"
+      }
+    },
+    "grctx.unkn": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes mask operations on registers 0x418c6c, 0x41980c, 0x41be08, 0x4064c0, 0x405800 and 0x419c00 for unknown GR context setup",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 897,
+        "quote": "nvkm_mask(device, 0x418c6c, 0x00000001, 0x00000001);"
+      }
+    },
+    "grctx.bundle": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates a bundle CB with state_limit and token_limit patches based on bundle_min_gpm_fifo_depth and bundle_token_limit",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 882,
+        "quote": "gf100_grctx_generate_bundle(chan, addr, size);"
+      }
+    },
+    "grctx.pagepool": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates a pagepool at the given address with a 0x80000000 patch to register 0x4064cc",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 889,
+        "quote": "gf100_grctx_generate_pagepool(chan, addr);"
+      }
+    },
+    "grctx.attrib_cb_size": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Returns the attrib CB size by computing 0x20 times the sum of attrib and alpha counts times TPC total",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1064,
+        "quote": "return 0x20 * (grctx->attrib_nr_max + grctx->alpha_nr_max) * gr->tpc_total;"
+      }
+    },
+    "grctx.attrib_cb": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the attrib CB to the given address containing method data for all registered attrib methods",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1055,
+        "quote": "gf100_grctx_patch_wr32(chan, 0x418810, 0x80000000 | addr >> 12);"
+      }
+    },
+    "grctx.attrib": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates attrib method entries by reading the attrib CB and populating the attrib data structures",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 256,
+        "quote": "gf100_grctx_patch_wr32(chan, 0x405830, (beta << 16) | alpha);"
+      }
+    },
+    "grctx.patch_ltc": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates LTC patch entries for the channel context to configure LTC cache behavior",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 871,
+        "quote": "gf100_grctx_patch_wr32(chan, 0x17e91c, data0);"
+      }
+    },
+    "grctx.sm_id": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the SM ID array entries to the context image for each valid GPC-TPC pairing",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1296,
+        "quote": "nvkm_wr32(device, TPC_UNIT(gpc, tpc, 0x698), sm);"
+      }
+    },
+    "grctx.tpc_nr": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the TPC count per GPC to the context image for each GPC in the device configuration",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1288,
+        "quote": "nvkm_wr32(device, GPC_UNIT(gpc, 0x0c08), gr->tpc_nr[gpc]);"
+      }
+    },
+    "grctx.rop_mapping": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates the ROP mapping table for the context by iterating over ROP units and encoding their configuration",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 207,
+        "quote": "data[i / 6] |= (gr->tile[i] & 0x07) << ((i % 6) * 5);"
+      }
+    },
+    "grctx.alpha_beta_tables": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates alpha and beta lookup tables for the context by writing the configured table entries",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 928,
+        "quote": "u32 atarget = max_t(u32, gr->tpc_total * i / 32, 1);"
+      }
+    },
+    "grctx.dist_skip_table": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Generates a distance skip table for the context based on the GPC and TPC count configuration",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 193,
+        "quote": "for (i = 0; i < 8; i++)"
+      }
+    },
+    "grctx.gpc_tpc_nr": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the GPC-TPC count configuration to the context image for each GPC in the system",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 918,
+        "quote": "nvkm_wr32(device, 0x405b00, (gr->tpc_total << 8) | gr->gpc_nr);"
+      }
+    },
+    "grctx.r418800": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes to register 0x418800 for GR context initialization with specific bit configuration",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 858,
+        "quote": "nvkm_mask(device, 0x418800, 0x00200000, 0x00200000);"
+      }
+    },
+    "grctx.r419eb0": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes to register 0x419eb0 for GR context setup configuring bit fields for the GK110 engine",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 820,
+        "quote": "nvkm_mask(device, 0x419eb0, 0x00001000, 0x00001000);"
+      }
+    },
+    "grctx.r419f78": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes to register 0x419f78 with FP helper invocation configuration for GR context setup",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 829,
+        "quote": "nvkm_mask(device, 0x419f78, 0x00000008, 0x00000000);"
+      }
+    },
+    "grctx.hub": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "GR context hub register pack function pointer for GK110 context initialization",
+      "certainty": "INFERRED"
+    },
+    "grctx.gpc_0": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "GR context GPC-0 register pack function pointer for GK110 context initialization",
+      "certainty": "INFERRED"
+    },
+    "grctx.gpc_1": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "GR context GPC-1 register pack function pointer for GK110 context initialization",
+      "certainty": "INFERRED"
+    },
+    "grctx.zcull": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "GR context ZCULL pack function pointer for GF100 depth compression setup",
+      "certainty": "INFERRED"
+    },
+    "grctx.tpc": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "GR context TPC register pack function pointer for GK110B context initialization",
+      "certainty": "INFERRED"
+    },
+    "grctx.ppc": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "GR context PPC register pack function pointer for GK110 context initialization",
+      "certainty": "INFERRED"
+    },
+    "grctx.icmd": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "GR context icmd register pack function pointer for GK110 command initialization",
+      "certainty": "INFERRED"
+    },
+    "grctx.mthd": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "GR context mthd register pack function pointer for GK110 method configuration",
+      "certainty": "INFERRED"
+    },
+    "grctx.bundle_size": {
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context bundle size constant set to 0x3000 bytes for GK110B channel context",
+      "certainty": "INFERRED"
+    },
+    "grctx.bundle_min_gpm_fifo_depth": {
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context bundle minimum GPM FIFO depth constant set to 0x180 for GK110B",
+      "certainty": "INFERRED"
+    },
+    "grctx.bundle_token_limit": {
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context bundle token limit constant set to 0x600 for GK110B channel context",
+      "certainty": "INFERRED"
+    },
+    "grctx.pagepool_size": {
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context pagepool size constant set to 0x8000 bytes for GK110B channel context",
+      "certainty": "INFERRED"
+    },
+    "grctx.attrib_nr_max": {
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context attrib method count maximum constant set to 0x324 for GK110",
+      "certainty": "INFERRED"
+    },
+    "grctx.attrib_nr": {
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context attrib method count value set to 0x218 for GK110 channel context",
+      "certainty": "INFERRED"
+    },
+    "grctx.alpha_nr_max": {
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context alpha method count maximum constant set to 0x7ff for GK110",
+      "certainty": "INFERRED"
+    },
+    "grctx.alpha_nr": {
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "GR context alpha method count value set to 0x648 for GK110 channel context",
+      "certainty": "INFERRED"
     }
   }
 }
