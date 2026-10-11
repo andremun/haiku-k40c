@@ -847,6 +847,15 @@ if ld is not None and "B4" not in SKIP:
     md = os.path.join(ROOT, "analysis", "linux_deps.md")
     if not os.path.exists(md) or len(open(md, errors="replace").read().split("\n")) < 30:
         fail("analysis/linux_deps.md: missing or under 30 lines")
+    else:
+        # Second review of B4: the tables of the document come from the JSON.
+        mdt = open(md, errors="replace").read()
+        rows = {m.group(1): int(m.group(2))
+                for m in re.finditer(r"^\|\s*`(\w+)`\s*\|\s*(\d+)\s*\|", mdt, re.M)}
+        wrong = sorted(n for n in b4_count if rows.get(n) != b4_count[n])
+        if wrong:
+            fail(f"analysis/linux_deps.md: {len(wrong)} symbols have no table row `| \`symbol\` | count | ...` "
+                 f"with the count of the JSON file, for example {wrong[:5]}. Let the tool write the tables")
     tool = os.path.join(ROOT, "tools", "linux_deps.py")
     if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
         fail("tools/linux_deps.py: missing, or no --check option (docs/tasks/B4.md)")
