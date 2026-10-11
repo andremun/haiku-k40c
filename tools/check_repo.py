@@ -940,6 +940,112 @@ elif reg_files and "C1" not in SKIP:
                 fail(f"tools/build_regdb.py --check (run {run}): hardware/registers is not what the tool generates")
                 break
 
+# C2 firmware ---------------------------------------------------------
+fw_path = os.path.join(ROOT, "firmware", "manifest.yaml")
+if os.path.exists(fw_path) and yaml is not None and "C2" not in SKIP:
+    import hashlib
+    import struct
+    rel = "firmware/manifest.yaml"
+    try:
+        man = yaml.safe_load(open(fw_path)) or {}
+    except yaml.YAMLError as e:
+        fail(f"{rel}: invalid YAML: {e}")
+        man = {}
+    if not isinstance(man, dict):
+        fail(f"{rel}: must be a mapping with built_in, external and load_sequence")
+        man = {}
+    FUC = "nvkm/engine/gr/fuc/"
+    want_bi = {}
+    for hdr, asm, engine in ((FUC + "hubgk110.fuc3.h", FUC + "hubgk110.fuc3", "fecs"),
+                             (FUC + "gpcgk110.fuc3.h", FUC + "gpcgk110.fuc3", "gpccs")):
+        L = src_lines(hdr) or []
+        inc = sorted(set(re.findall(r'#include "([\w.]+)"', "\n".join(src_lines(asm) or []))))
+        cur = None
+        for i, text in enumerate(L, 1):
+            m = re.match(r"static uint32_t (\w+)\[\] = \{", text)
+            if m:
+                cur = {"name": m.group(1), "engine": engine, "kind": m.group(1).rsplit("_", 1)[1],
+                       "file": hdr, "first_line": i, "words": [], "asm_source": asm, "asm_includes": inc,
+                       "license": "MIT" if "SPDX-License-Identifier: MIT" in L[0] else None}
+            elif cur and text.startswith("};"):
+                cur["last_line"] = i
+                blob = struct.pack("<%dI" % len(cur["words"]), *cur["words"])
+                cur.update(words=len(cur["words"]), size_bytes=len(blob), sha256=hashlib.sha256(blob).hexdigest())
+                want_bi[cur["name"]] = cur
+                cur = None
+            elif cur:
+                cur["words"] += [int(w, 16) for w in re.findall(r"\b0x[0-9a-fA-F]{8}\b", text.split("/*")[0])]
+    got_bi = {str(e.get("name")): e for e in man.get("built_in") or [] if isinstance(e, dict)}
+    if sorted(got_bi) != sorted(want_bi):
+        fail(f"{rel}: 'built_in' must have the arrays {sorted(want_bi)}")
+    bad = {}
+    for n, w in want_bi.items():
+        for k, v in w.items():
+            if n in got_bi and got_bi[n].get(k) != v:
+                bad.setdefault(k, []).append(n)
+        if n in got_bi and got_bi[n].get("source") != "built-in":
+            bad.setdefault("source", []).append(n)
+    for k, names in sorted(bad.items()):
+        fail(f"{rel}: built_in '{k}' is wrong for {names} (rules: docs/tasks/C2.md)")
+    gf = src_lines("nvkm/engine/gr/gf100.c") or []
+    want_ex = {}
+    for i, text in enumerate(gf, 1):
+        m = re.search(r'gf100_gr_load_fw\(gr, "(\w+)", &gr->(\w+)\.(\w+)\)', text)
+        if m:
+            want_ex[m.group(1)] = {"filename": m.group(1), "engine": m.group(2),
+                                   "kind": "code" if m.group(3) == "inst" else "data",
+                                   "requested_at": f"nvkm/engine/gr/gf100.c:{i}"}
+    got_ex = {str(e.get("filename")): e for e in man.get("external") or [] if isinstance(e, dict)}
+    if sorted(got_ex) != sorted(want_ex):
+        fail(f"{rel}: 'external' must have the files {sorted(want_ex)}")
+    for n, w in want_ex.items():
+        e = got_ex.get(n, {})
+        if any(e.get(k) != v for k, v in w.items()) or e.get("source") != "external-file" \
+                or e.get("distribution") != "do-not-distribute" or e.get("needed") is not False:
+            fail(f"{rel}: external '{n}': engine, kind and requested_at come from the gf100_gr_load_fw "
+                 f"line; source external-file, distribution do-not-distribute, needed false")
+    want_seq, inside = [], False
+    for i, text in enumerate(gf, 1):
+        if text.startswith("gf100_gr_init_ctxctl_int("):
+            inside = True
+        elif inside and text.startswith("}"):
+            break
+        elif inside:
+            for m in re.finditer(r"\b(nvkm_\w+|gf100_gr_\w+)\(", text):
+                want_seq.append((i, m.group(1)))
+    got_seq = [(e.get("line"), e.get("call")) for e in man.get("load_sequence") or [] if isinstance(e, dict)]
+    if got_seq != want_seq:
+        fail(f"{rel}: 'load_sequence' must have the {len(want_seq)} calls of gf100_gr_init_ctxctl_int in "
+             f"order (line, call); first difference at entry "
+             f"{next((k for k, (a, b) in enumerate(zip(got_seq, want_seq)) if a != b), min(len(got_seq), len(want_seq))) + 1}")
+    if any(not isinstance(e.get("what"), str) or len(e["what"].split()) < 4
+           for e in man.get("load_sequence") or [] if isinstance(e, dict)):
+        fail(f"{rel}: every load_sequence entry needs a 'what' of 4 words or more")
+    readme = os.path.join(ROOT, "firmware", "README.md")
+    text = open(readme, errors="replace").read() if os.path.exists(readme) else ""
+    if len(text.split("\n")) < 50:
+        fail("firmware/README.md: missing or under 50 lines")
+    for word in ("NvGrUseFW", "gf100_gr_load", "gf100_gr_nofw", "gf100_gr_init_ctxctl_int", "MIT",
+                 "Not known"):
+        if word not in text:
+            fail(f"firmware/README.md: does not mention {word}")
+    for f, ln in set(re.findall(r"(nvkm/[\w/.]+\.[ch]):(\d+)", text)):
+        L = src_lines(f)
+        if L is None or int(ln) > len(L):
+            fail(f"firmware/README.md: cites {f}:{ln}, which does not exist")
+    if glob.glob(os.path.join(ROOT, "firmware", "*.bin")):
+        fail("firmware/: no binary files in the repository (write them under build/)")
+    tool = os.path.join(ROOT, "tools", "fw_manifest.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/fw_manifest.py: missing, or no --check option (docs/tasks/C2.md)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/fw_manifest.py --check (run {run}): {rel} is not what the tool generates")
+                break
+
 # C3 hardware model documents ----------------------------------------
 for path in sorted(glob.glob(os.path.join(ROOT, "docs/hardware-model/*.md"))):
     rel = os.path.relpath(path, ROOT)
