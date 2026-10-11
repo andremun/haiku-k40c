@@ -1046,6 +1046,156 @@ if os.path.exists(fw_path) and yaml is not None and "C2" not in SKIP:
                 fail(f"tools/fw_manifest.py --check (run {run}): {rel} is not what the tool generates")
                 break
 
+# C3 subsystem models (analysis/hwmodel/<subsystem>.json) ---------------
+C3_TASKS = {"C3a": ["mc", "bar", "imem", "mmu", "fb", "top"],
+            "C3b": ["privring", "ltc", "timer"]}
+hw_files = sorted(glob.glob(os.path.join(ROOT, "analysis/hwmodel/*.json")))
+for task, names in C3_TASKS.items():
+    if re.search(r"^\|\s*%s\s*\|\s*DONE\b" % task, status, re.M):
+        for n in names:
+            for rel in (f"analysis/hwmodel/{n}.json", f"docs/hardware-model/{n}.md"):
+                if not os.path.exists(os.path.join(ROOT, rel)):
+                    fail(f"{rel}: missing, and docs/STATUS.md marks {task} DONE")
+if hw_files and "C3" not in SKIP:
+    c3_defs = {}
+    for d, _, fs in os.walk(os.path.join(NV, "nvkm"), followlinks=True):
+        for f in fs:
+            if f.endswith(".c"):
+                path = os.path.join(d, f)
+                relp = os.path.relpath(path, NV)
+                for i, text in enumerate(open(path, errors="replace").read().split("\n"), 1):
+                    m = re.match(r"^(\w+)\(", text)
+                    if m:
+                        c3_defs.setdefault(("F", m.group(1)), (relp, i))
+                    m = re.match(r"^(\w+) = \{", text)
+                    if m:
+                        c3_defs.setdefault(("T", m.group(1)), (relp, i))
+    c3_chip, inside = {}, False
+    for i, text in enumerate(src_lines("nvkm/engine/device/base.c") or [], 1):
+        if text.startswith("nvf1_chipset"):
+            inside = True
+        elif inside and text.startswith("};"):
+            break
+        elif inside:
+            m = re.match(r"\s*\.(\w+)\s*=\s*\{\s*0x[0-9a-f]+,\s*(\w+)\s*\}", text)
+            if m:
+                c3_chip[m.group(1)] = m.group(2)
+    c3_acc = {}
+    for a in load_json("registers/mmio_accesses.json") or []:
+        c3_acc.setdefault((a["function"], a["file"]), []).append(
+            {"file": a["file"], "line": a["line"], "op": a["op"], "reg": a["reg"]})
+
+    def c3_body(f, ln):
+        L = src_lines(f) or []
+        j = ln
+        while j <= len(L) and not L[j - 1].startswith("}"):
+            j += 1
+        return L, ln, j
+
+    def c3_table(name, parent):
+        f, ln = c3_defs[("T", name)]
+        L, a, b = c3_body(f, ln)
+        out = []
+        for text in L[a:b - 1]:
+            m = re.match(r"\s*\.([\w.]+)\s*=\s*&?(\w+)", text)
+            if not m:
+                continue
+            member, value = m.group(1), m.group(2)
+            if ("F", value) in c3_defs:
+                kind, (vf, vl) = "function", c3_defs[("F", value)]
+            elif ("T", value) in c3_defs:
+                kind, (vf, vl) = "table", c3_defs[("T", value)]
+            else:
+                kind, vf, vl = "value", None, None
+            out.append({"member": member, "value": value, "kind": kind, "file": vf, "line": vl,
+                        "parent": parent,
+                        "accesses": sorted(c3_acc.get((value, vf), []), key=lambda x: x["line"])
+                        if kind == "function" else []})
+            if kind == "table" and parent is None:
+                out += c3_table(value, member)
+        return out
+
+    C3_ROLE = {"init", "interrupt", "teardown", "runtime", "data"}
+    C3_BAD = {"memory controller": "mc is the master control", "instantiated": "imem is instance memory",
+              "multi-gpu": "top is the device topology table", "workqueue": "HWW is a hardware warning"}
+    for path in hw_files:
+        rel = os.path.relpath(path, ROOT)
+        name = os.path.basename(path)[:-5]
+        hw = load_json(rel)
+        if not isinstance(hw, dict):
+            fail(f"{rel}: must be an object")
+            continue
+        ctor = c3_chip.get(name)
+        if ctor is None or ("F", ctor) not in c3_defs:
+            fail(f"{rel}: '{name}' is not a member of nvf1_chipset")
+            continue
+        cf, cl = c3_defs[("F", ctor)]
+        L, a, b = c3_body(cf, cl)
+        tabs = [t for t in re.findall(r"&(\w+)", "\n".join(L[a - 1:b])) if ("T", t) in c3_defs]
+        if not tabs:
+            fail(f"{rel}: the checker finds no function table in {ctor}; ask the scaffold")
+            continue
+        tf, tl = c3_defs[("T", tabs[0])]
+        if hw.get("subsystem") != name or hw.get("constructor") != {"name": ctor, "file": cf, "line": cl} \
+                or hw.get("table") != {"name": tabs[0], "file": tf, "line": tl}:
+            fail(f"{rel}: 'subsystem', 'constructor' or 'table' is wrong; the constructor is {ctor} "
+                 f"({cf}:{cl}) and its function table is {tabs[0]} ({tf}:{tl})")
+        want = c3_table(tabs[0], None)
+        got = hw.get("members") if isinstance(hw.get("members"), list) else []
+        key = lambda e: (e.get("parent"), e.get("member"), e.get("value"))
+        if [key(e) for e in got if isinstance(e, dict)] != [key(e) for e in want]:
+            fail(f"{rel}: 'members' must be the {len(want)} members of {tabs[0]} in source order, each "
+                 f"nested table followed by its own members (parent = the member name); got {len(got)}")
+            continue
+        bad = {}
+        for e, w in zip(got, want):
+            tag = (w["parent"] + "." if w["parent"] else "") + w["member"]
+            for k in ("kind", "file", "line", "accesses"):
+                if e.get(k) != w[k]:
+                    bad.setdefault(k, []).append(tag)
+            if e.get("role") not in C3_ROLE or not isinstance(e.get("needed_for_compute"), bool):
+                bad.setdefault("role or needed_for_compute", []).append(tag)
+            if not isinstance(e.get("what"), str) or len(e["what"].split()) < 6:
+                bad.setdefault("what (6 words or more)", []).append(tag)
+            if e.get("certainty") not in ("KNOWN", "INFERRED", "UNKNOWN"):
+                bad.setdefault("certainty", []).append(tag)
+            elif w["kind"] == "function" and e["certainty"] != "UNKNOWN":
+                ev = e.get("evidence") if isinstance(e.get("evidence"), dict) else {}
+                FL, fa, fb = c3_body(w["file"], w["line"])
+                ln, quote = ev.get("line"), str(ev.get("quote", "")).strip()
+                if not (isinstance(ln, int) and fa <= ln <= fb and len(quote) >= 10 and quote in FL[ln - 1]):
+                    bad.setdefault("evidence (a line inside the function and a quote of 10 characters or "
+                                   "more from that line)", []).append(tag)
+            m = w["member"].split(".")[-1]
+            if w["kind"] == "function" and m.startswith("intr") and e.get("role") != "interrupt":
+                bad.setdefault("role (a member named intr... is interrupt)", []).append(tag)
+            if w["kind"] == "function" and m in ("dtor", "fini") and e.get("role") != "teardown":
+                bad.setdefault("role (dtor and fini are teardown)", []).append(tag)
+        for k, tags in sorted(bad.items()):
+            fail(f"{rel}: wrong {k} in {len(tags)} members: {tags[:6]}")
+        deps = hw.get("depends_on")
+        if not isinstance(deps, list) or any(d not in c3_chip or d == name for d in deps):
+            fail(f"{rel}: 'depends_on' must be a list of other nvf1_chipset member names")
+        if not isinstance(hw.get("summary"), str) or len(hw["summary"].split()) < 30:
+            fail(f"{rel}: 'summary' needs 30 words or more")
+        texts = " ".join([str(hw.get("summary", ""))] + [str(e.get("what", "")) for e in got]).lower()
+        for w_, right in C3_BAD.items():
+            if w_ in texts:
+                fail(f"{rel}: the text says \"{w_}\". {right}")
+        if not os.path.exists(os.path.join(ROOT, "docs/hardware-model", name + ".md")):
+            fail(f"docs/hardware-model/{name}.md: missing (the tool writes it from {rel})")
+    tool = os.path.join(ROOT, "tools", "hwmodel.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/hwmodel.py: missing, or no --check option (docs/tasks/C3a.md)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/hwmodel.py --check (run {run}): analysis/hwmodel or docs/hardware-model is "
+                     f"not what the tool generates")
+                break
+
 # C3 hardware model documents ----------------------------------------
 for path in sorted(glob.glob(os.path.join(ROOT, "docs/hardware-model/*.md"))):
     rel = os.path.relpath(path, ROOT)
