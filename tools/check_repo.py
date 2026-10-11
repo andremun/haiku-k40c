@@ -811,13 +811,36 @@ if ld is not None and "B4" not in SKIP:
     # Decisions that the check knows.
     for n in ("kzalloc", "kfree", "kmalloc", "mutex_lock", "mutex_unlock", "mutex_init", "spin_lock",
               "spin_unlock", "spin_lock_irqsave", "spin_unlock_irqrestore", "list_add_tail", "list_del",
-              "request_firmware", "dma_map_page", "msleep", "usleep_range"):
+              "dma_map_page", "msleep", "usleep_range"):
         if n in got and got[n].get("category") != "C-replace":
             fail(f"{rel}: '{n}' is Linux infrastructure with a Haiku equivalent: C-replace")
     for n, apis in (("mutex_lock", ["mutex_lock"]), ("spin_lock_irqsave", ["acquire_spinlock", "disable_interrupts"]),
                     ("msleep", ["snooze"]), ("usleep_range", ["snooze"])):
         if n in got and not set(apis) <= set(got[n].get("haiku_api") or []):
             fail(f"{rel}: haiku_api of '{n}' must have {apis}")
+    # First review of B4 (work/B4/REVIEW.md).
+    for n, any_of in (("list_del", ["list_remove_item", "list_remove_link"]),
+                      ("list_del_init", ["list_remove_item", "list_remove_link"]),
+                      ("list_empty", ["list_is_empty"]), ("INIT_LIST_HEAD", ["list_init"]),
+                      ("atomic_inc", ["atomic_add"]), ("atomic_dec", ["atomic_add"]),
+                      ("atomic_dec_and_test", ["atomic_add"]), ("atomic_inc_return", ["atomic_add"]),
+                      ("kref_get", ["atomic_add"]), ("refcount_inc", ["atomic_add"]),
+                      ("refcount_dec_and_test", ["atomic_add"]),
+                      ("spin_lock_init", ["B_INITIALIZE_SPINLOCK", "B_SPINLOCK_INITIALIZER"]),
+                      ("dma_map_page", ["get_memory_map"]), ("printk", ["dprintf"])):
+        if n in got and (got[n].get("category") != "C-replace"
+                         or not set(any_of) & set(got[n].get("haiku_api") or [])):
+            fail(f"{rel}: '{n}' is C-replace and its haiku_api has one of {any_of}")
+    for n in ("request_firmware", "release_firmware"):
+        if n in got and got[n].get("category") != "D-ignore":
+            fail(f"{rel}: '{n}' is D-ignore: only gf100_gr_load_fw calls it, for the external firmware "
+                 f"files that the driver does not use (firmware/README.md)")
+    for n in ("set_bit", "clear_bit", "__set_bit", "__mutex_init"):
+        if n in got and got[n].get("category") == "X-not-linux":
+            fail(f"{rel}: '{n}' is a Linux kernel symbol, not X-not-linux")
+    for n, e in got.items():
+        if n.startswith("dma_") and set(e.get("haiku_api") or []) & {"malloc", "free", "calloc"}:
+            fail(f"{rel}: '{n}' is about physical addresses for the device; malloc and free do not replace it")
     for n in ("agp_enable", "agp_backend_acquire", "pci_enable_msi"):
         if n in got and got[n].get("category") in ("A-reimplement", "B-extract"):
             fail(f"{rel}: '{n}' is not a hardware algorithm or hardware data of the GPU")
@@ -938,6 +961,262 @@ elif reg_files and "C1" not in SKIP:
             r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
             if r.returncode != 0:
                 fail(f"tools/build_regdb.py --check (run {run}): hardware/registers is not what the tool generates")
+                break
+
+# C2 firmware ---------------------------------------------------------
+fw_path = os.path.join(ROOT, "firmware", "manifest.yaml")
+if os.path.exists(fw_path) and yaml is not None and "C2" not in SKIP:
+    import hashlib
+    import struct
+    rel = "firmware/manifest.yaml"
+    try:
+        man = yaml.safe_load(open(fw_path)) or {}
+    except yaml.YAMLError as e:
+        fail(f"{rel}: invalid YAML: {e}")
+        man = {}
+    if not isinstance(man, dict):
+        fail(f"{rel}: must be a mapping with built_in, external and load_sequence")
+        man = {}
+    FUC = "nvkm/engine/gr/fuc/"
+    want_bi = {}
+    for hdr, asm, engine in ((FUC + "hubgk110.fuc3.h", FUC + "hubgk110.fuc3", "fecs"),
+                             (FUC + "gpcgk110.fuc3.h", FUC + "gpcgk110.fuc3", "gpccs")):
+        L = src_lines(hdr) or []
+        inc = sorted(set(re.findall(r'#include "([\w.]+)"', "\n".join(src_lines(asm) or []))))
+        cur = None
+        for i, text in enumerate(L, 1):
+            m = re.match(r"static uint32_t (\w+)\[\] = \{", text)
+            if m:
+                cur = {"name": m.group(1), "engine": engine, "kind": m.group(1).rsplit("_", 1)[1],
+                       "file": hdr, "first_line": i, "words": [], "asm_source": asm, "asm_includes": inc,
+                       "license": "MIT" if "SPDX-License-Identifier: MIT" in L[0] else None}
+            elif cur and text.startswith("};"):
+                cur["last_line"] = i
+                blob = struct.pack("<%dI" % len(cur["words"]), *cur["words"])
+                cur.update(words=len(cur["words"]), size_bytes=len(blob), sha256=hashlib.sha256(blob).hexdigest())
+                want_bi[cur["name"]] = cur
+                cur = None
+            elif cur:
+                cur["words"] += [int(w, 16) for w in re.findall(r"\b0x[0-9a-fA-F]{8}\b", text.split("/*")[0])]
+    got_bi = {str(e.get("name")): e for e in man.get("built_in") or [] if isinstance(e, dict)}
+    if sorted(got_bi) != sorted(want_bi):
+        fail(f"{rel}: 'built_in' must have the arrays {sorted(want_bi)}")
+    bad = {}
+    for n, w in want_bi.items():
+        for k, v in w.items():
+            if n in got_bi and got_bi[n].get(k) != v:
+                bad.setdefault(k, []).append(n)
+        if n in got_bi and got_bi[n].get("source") != "built-in":
+            bad.setdefault("source", []).append(n)
+    for k, names in sorted(bad.items()):
+        fail(f"{rel}: built_in '{k}' is wrong for {names} (rules: docs/tasks/C2.md)")
+    gf = src_lines("nvkm/engine/gr/gf100.c") or []
+    want_ex = {}
+    for i, text in enumerate(gf, 1):
+        m = re.search(r'gf100_gr_load_fw\(gr, "(\w+)", &gr->(\w+)\.(\w+)\)', text)
+        if m:
+            want_ex[m.group(1)] = {"filename": m.group(1), "engine": m.group(2),
+                                   "kind": "code" if m.group(3) == "inst" else "data",
+                                   "requested_at": f"nvkm/engine/gr/gf100.c:{i}"}
+    got_ex = {str(e.get("filename")): e for e in man.get("external") or [] if isinstance(e, dict)}
+    if sorted(got_ex) != sorted(want_ex):
+        fail(f"{rel}: 'external' must have the files {sorted(want_ex)}")
+    for n, w in want_ex.items():
+        e = got_ex.get(n, {})
+        if any(e.get(k) != v for k, v in w.items()) or e.get("source") != "external-file" \
+                or e.get("distribution") != "do-not-distribute" or e.get("needed") is not False:
+            fail(f"{rel}: external '{n}': engine, kind and requested_at come from the gf100_gr_load_fw "
+                 f"line; source external-file, distribution do-not-distribute, needed false")
+    want_seq, inside = [], False
+    for i, text in enumerate(gf, 1):
+        if text.startswith("gf100_gr_init_ctxctl_int("):
+            inside = True
+        elif inside and text.startswith("}"):
+            break
+        elif inside:
+            for m in re.finditer(r"\b(nvkm_\w+|gf100_gr_\w+)\(", text):
+                want_seq.append((i, m.group(1)))
+    got_seq = [(e.get("line"), e.get("call")) for e in man.get("load_sequence") or [] if isinstance(e, dict)]
+    if got_seq != want_seq:
+        fail(f"{rel}: 'load_sequence' must have the {len(want_seq)} calls of gf100_gr_init_ctxctl_int in "
+             f"order (line, call); first difference at entry "
+             f"{next((k for k, (a, b) in enumerate(zip(got_seq, want_seq)) if a != b), min(len(got_seq), len(want_seq))) + 1}")
+    if any(not isinstance(e.get("what"), str) or len(e["what"].split()) < 4
+           for e in man.get("load_sequence") or [] if isinstance(e, dict)):
+        fail(f"{rel}: every load_sequence entry needs a 'what' of 4 words or more")
+    readme = os.path.join(ROOT, "firmware", "README.md")
+    text = open(readme, errors="replace").read() if os.path.exists(readme) else ""
+    if len(text.split("\n")) < 50:
+        fail("firmware/README.md: missing or under 50 lines")
+    for word in ("NvGrUseFW", "gf100_gr_load", "gf100_gr_nofw", "gf100_gr_init_ctxctl_int", "MIT",
+                 "Not known"):
+        if word not in text:
+            fail(f"firmware/README.md: does not mention {word}")
+    for f, ln in set(re.findall(r"(nvkm/[\w/.]+\.[ch]):(\d+)", text)):
+        L = src_lines(f)
+        if L is None or int(ln) > len(L):
+            fail(f"firmware/README.md: cites {f}:{ln}, which does not exist")
+    if glob.glob(os.path.join(ROOT, "firmware", "*.bin")):
+        fail("firmware/: no binary files in the repository (write them under build/)")
+    tool = os.path.join(ROOT, "tools", "fw_manifest.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/fw_manifest.py: missing, or no --check option (docs/tasks/C2.md)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/fw_manifest.py --check (run {run}): {rel} is not what the tool generates")
+                break
+
+# C3 subsystem models (analysis/hwmodel/<subsystem>.json) ---------------
+C3_TASKS = {"C3a": ["mc", "bar", "imem", "mmu", "fb", "top"],
+            "C3b": ["privring", "ltc", "timer"]}
+hw_files = sorted(glob.glob(os.path.join(ROOT, "analysis/hwmodel/*.json")))
+for task, names in C3_TASKS.items():
+    if re.search(r"^\|\s*%s\s*\|\s*DONE\b" % task, status, re.M):
+        for n in names:
+            for rel in (f"analysis/hwmodel/{n}.json", f"docs/hardware-model/{n}.md"):
+                if not os.path.exists(os.path.join(ROOT, rel)):
+                    fail(f"{rel}: missing, and docs/STATUS.md marks {task} DONE")
+if hw_files and "C3" not in SKIP:
+    c3_defs = {}
+    for d, _, fs in os.walk(os.path.join(NV, "nvkm"), followlinks=True):
+        for f in fs:
+            if f.endswith(".c"):
+                path = os.path.join(d, f)
+                relp = os.path.relpath(path, NV)
+                for i, text in enumerate(open(path, errors="replace").read().split("\n"), 1):
+                    m = re.match(r"^(\w+)\(", text)
+                    if m:
+                        c3_defs.setdefault(("F", m.group(1)), (relp, i))
+                    m = re.match(r"^(\w+) = \{", text)
+                    if m:
+                        c3_defs.setdefault(("T", m.group(1)), (relp, i))
+    c3_chip, inside = {}, False
+    for i, text in enumerate(src_lines("nvkm/engine/device/base.c") or [], 1):
+        if text.startswith("nvf1_chipset"):
+            inside = True
+        elif inside and text.startswith("};"):
+            break
+        elif inside:
+            m = re.match(r"\s*\.(\w+)\s*=\s*\{\s*0x[0-9a-f]+,\s*(\w+)\s*\}", text)
+            if m:
+                c3_chip[m.group(1)] = m.group(2)
+    c3_acc = {}
+    for a in load_json("registers/mmio_accesses.json") or []:
+        c3_acc.setdefault((a["function"], a["file"]), []).append(
+            {"file": a["file"], "line": a["line"], "op": a["op"], "reg": a["reg"]})
+
+    def c3_body(f, ln):
+        L = src_lines(f) or []
+        j = ln
+        while j <= len(L) and not L[j - 1].startswith("}"):
+            j += 1
+        return L, ln, j
+
+    def c3_table(name, parent):
+        f, ln = c3_defs[("T", name)]
+        L, a, b = c3_body(f, ln)
+        out = []
+        for text in L[a:b - 1]:
+            m = re.match(r"\s*\.([\w.]+)\s*=\s*&?(\w+)", text)
+            if not m:
+                continue
+            member, value = m.group(1), m.group(2)
+            if ("F", value) in c3_defs:
+                kind, (vf, vl) = "function", c3_defs[("F", value)]
+            elif ("T", value) in c3_defs:
+                kind, (vf, vl) = "table", c3_defs[("T", value)]
+            else:
+                kind, vf, vl = "value", None, None
+            out.append({"member": member, "value": value, "kind": kind, "file": vf, "line": vl,
+                        "parent": parent,
+                        "accesses": sorted(c3_acc.get((value, vf), []), key=lambda x: x["line"])
+                        if kind == "function" else []})
+            if kind == "table" and parent is None:
+                out += c3_table(value, member)
+        return out
+
+    C3_ROLE = {"init", "interrupt", "teardown", "runtime", "data"}
+    C3_BAD = {"memory controller": "mc is the master control", "instantiated": "imem is instance memory",
+              "multi-gpu": "top is the device topology table", "workqueue": "HWW is a hardware warning"}
+    for path in hw_files:
+        rel = os.path.relpath(path, ROOT)
+        name = os.path.basename(path)[:-5]
+        hw = load_json(rel)
+        if not isinstance(hw, dict):
+            fail(f"{rel}: must be an object")
+            continue
+        ctor = c3_chip.get(name)
+        if ctor is None or ("F", ctor) not in c3_defs:
+            fail(f"{rel}: '{name}' is not a member of nvf1_chipset")
+            continue
+        cf, cl = c3_defs[("F", ctor)]
+        L, a, b = c3_body(cf, cl)
+        tabs = [t for t in re.findall(r"&(\w+)", "\n".join(L[a - 1:b])) if ("T", t) in c3_defs]
+        if not tabs:
+            fail(f"{rel}: the checker finds no function table in {ctor}; ask the scaffold")
+            continue
+        tf, tl = c3_defs[("T", tabs[0])]
+        if hw.get("subsystem") != name or hw.get("constructor") != {"name": ctor, "file": cf, "line": cl} \
+                or hw.get("table") != {"name": tabs[0], "file": tf, "line": tl}:
+            fail(f"{rel}: 'subsystem', 'constructor' or 'table' is wrong; the constructor is {ctor} "
+                 f"({cf}:{cl}) and its function table is {tabs[0]} ({tf}:{tl})")
+        want = c3_table(tabs[0], None)
+        got = hw.get("members") if isinstance(hw.get("members"), list) else []
+        key = lambda e: (e.get("parent"), e.get("member"), e.get("value"))
+        if [key(e) for e in got if isinstance(e, dict)] != [key(e) for e in want]:
+            fail(f"{rel}: 'members' must be the {len(want)} members of {tabs[0]} in source order, each "
+                 f"nested table followed by its own members (parent = the member name); got {len(got)}")
+            continue
+        bad = {}
+        for e, w in zip(got, want):
+            tag = (w["parent"] + "." if w["parent"] else "") + w["member"]
+            for k in ("kind", "file", "line", "accesses"):
+                if e.get(k) != w[k]:
+                    bad.setdefault(k, []).append(tag)
+            if e.get("role") not in C3_ROLE or not isinstance(e.get("needed_for_compute"), bool):
+                bad.setdefault("role or needed_for_compute", []).append(tag)
+            if not isinstance(e.get("what"), str) or len(e["what"].split()) < 6:
+                bad.setdefault("what (6 words or more)", []).append(tag)
+            if e.get("certainty") not in ("KNOWN", "INFERRED", "UNKNOWN"):
+                bad.setdefault("certainty", []).append(tag)
+            elif w["kind"] == "function" and e["certainty"] != "UNKNOWN":
+                ev = e.get("evidence") if isinstance(e.get("evidence"), dict) else {}
+                FL, fa, fb = c3_body(w["file"], w["line"])
+                ln, quote = ev.get("line"), str(ev.get("quote", "")).strip()
+                if not (isinstance(ln, int) and fa <= ln <= fb and len(quote) >= 10 and quote in FL[ln - 1]):
+                    bad.setdefault("evidence (a line inside the function and a quote of 10 characters or "
+                                   "more from that line)", []).append(tag)
+            m = w["member"].split(".")[-1]
+            if w["kind"] == "function" and m.startswith("intr") and e.get("role") != "interrupt":
+                bad.setdefault("role (a member named intr... is interrupt)", []).append(tag)
+            if w["kind"] == "function" and m in ("dtor", "fini") and e.get("role") != "teardown":
+                bad.setdefault("role (dtor and fini are teardown)", []).append(tag)
+        for k, tags in sorted(bad.items()):
+            fail(f"{rel}: wrong {k} in {len(tags)} members: {tags[:6]}")
+        deps = hw.get("depends_on")
+        if not isinstance(deps, list) or any(d not in c3_chip or d == name for d in deps):
+            fail(f"{rel}: 'depends_on' must be a list of other nvf1_chipset member names")
+        if not isinstance(hw.get("summary"), str) or len(hw["summary"].split()) < 30:
+            fail(f"{rel}: 'summary' needs 30 words or more")
+        texts = " ".join([str(hw.get("summary", ""))] + [str(e.get("what", "")) for e in got]).lower()
+        for w_, right in C3_BAD.items():
+            if w_ in texts:
+                fail(f"{rel}: the text says \"{w_}\". {right}")
+        if not os.path.exists(os.path.join(ROOT, "docs/hardware-model", name + ".md")):
+            fail(f"docs/hardware-model/{name}.md: missing (the tool writes it from {rel})")
+    tool = os.path.join(ROOT, "tools", "hwmodel.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/hwmodel.py: missing, or no --check option (docs/tasks/C3a.md)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/hwmodel.py --check (run {run}): analysis/hwmodel or docs/hardware-model is "
+                     f"not what the tool generates")
                 break
 
 # C3 hardware model documents ----------------------------------------
