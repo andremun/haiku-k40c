@@ -19,10 +19,14 @@
       "line": 802,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Returns the maximum number of channels that this FIFO engine supports.",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 802,
+        "quote": "gk104_fifo_chid_nr(struct nvkm_fifo *fifo)"
+      }
     },
     {
       "member": "chid_ctor",
@@ -32,10 +36,14 @@
       "line": 95,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Creates the channel-ID allocator by calling nvkm_chid_new with the FIFO channel event type.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 99,
+        "quote": "ret = nvkm_chid_new(&nvkm_chan_event, &fifo->engine.subdev, nr, 0, nr, &fifo->cgid);"
+      }
     },
     {
       "member": "runq_nr",
@@ -58,10 +66,14 @@
           "reg": "0x000204"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Returns the number of run queue (PBDMA) units present on this chipset.",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 927,
+        "quote": "gf100_fifo_runq_nr(struct nvkm_fifo *fifo)"
+      }
     },
     {
       "member": "runl_ctor",
@@ -71,10 +83,14 @@
       "line": 756,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Iterates over top devices with valid runlists and constructs per-runlist structures.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 765,
+        "quote": "runl = nvkm_runl_get(fifo, tdev->runlist, tdev->runlist);"
+      }
     },
     {
       "member": "init",
@@ -103,10 +119,14 @@
           "reg": "0x002140"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes interrupt masks and the user doorbell base address to enable the FIFO engine.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 751,
+        "quote": "nvkm_wr32(device, 0x002100, 0xffffffff);"
+      }
     },
     {
       "member": "init_pbdmas",
@@ -129,10 +149,14 @@
           "reg": "0x002a04"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes a mask to select which PBDMA units to enable and clears their interrupt-pending bits.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 739,
+        "quote": "nvkm_wr32(device, 0x000204, mask);"
+      }
     },
     {
       "member": "intr",
@@ -215,10 +239,14 @@
           "reg": "0x002100"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "interrupt",
+      "needed_for_compute": true,
+      "what": "Reads interrupt status and mask registers, dispatches to handlers for bind, context-switch, dropped faults, and runlist interrupts.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 657,
+        "quote": "u32 mask = nvkm_rd32(device, 0x002140);"
+      }
     },
     {
       "member": "intr_mmu_fault_unit",
@@ -253,10 +281,14 @@
           "reg": "0x00280c + (unit * 0x10)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Processes MMU faults reported by the MMU fault unit by reading fault registers and logging details.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 699,
+        "quote": "u32 inst = nvkm_rd32(device, 0x002800 + (unit * 0x10));"
+      }
     },
     {
       "member": "intr_ctxsw_timeout",
@@ -266,10 +298,14 @@
       "line": 618,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Blocks runlists and triggers MMU faults on engines whose context switch timed out.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 627,
+        "quote": "nvkm_runl_block(runl);"
+      }
     },
     {
       "member": "mmu_fault",
@@ -279,10 +315,14 @@
       "line": 588,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "MMU fault sub-table defining recover, access, engine, reason, hubclient, and gpcclient members.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 588,
+        "quote": "gk104_fifo_mmu_fault = {"
+      }
     },
     {
       "member": "recover",
@@ -299,10 +339,14 @@
           "reg": "0x001718"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Looks up the engine that caused the MMU fault and invokes its mmu_fault_triggered callback for context-switch timeout recovery.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 552,
+        "quote": "engn->func->mmu_fault_triggered(engn)"
+      }
     },
     {
       "member": "access",
@@ -312,10 +356,14 @@
       "line": null,
       "parent": "mmu_fault",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Enum table mapping MMU fault access type codes to human-readable strings.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 525,
+        "quote": "gk104_fifo_mmu_fault_hubclient[] = {"
+      }
     },
     {
       "member": "engine",
@@ -325,10 +373,14 @@
       "line": null,
       "parent": "mmu_fault",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Enum table mapping MMU fault engine codes to engine names and associated engine types.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 481,
+        "quote": "gk104_fifo_mmu_fault_engine[] = {"
+      }
     },
     {
       "member": "reason",
@@ -338,10 +390,14 @@
       "line": null,
       "parent": "mmu_fault",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Enum table mapping MMU fault reason codes to human-readable fault reason strings.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 504,
+        "quote": "gk104_fifo_mmu_fault_reason[] = {"
+      }
     },
     {
       "member": "hubclient",
@@ -351,10 +407,14 @@
       "line": null,
       "parent": "mmu_fault",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Enum table mapping MMU fault hub client codes to human-readable client identification strings.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 525,
+        "quote": "gk104_fifo_mmu_fault_hubclient[] = {"
+      }
     },
     {
       "member": "gpcclient",
@@ -364,10 +424,14 @@
       "line": null,
       "parent": "mmu_fault",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Enum table mapping MMU fault GPC client codes to human-readable client identification strings.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 562,
+        "quote": "gk104_fifo_mmu_fault_gpcclient[] = {"
+      }
     },
     {
       "member": "nonstall",
@@ -377,10 +441,14 @@
       "line": 462,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Nonstall interrupt event table with init and fini functions for enabling and disabling the nonstall interrupt.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 462,
+        "quote": "gf100_fifo_nonstall = {"
+      }
     },
     {
       "member": "init",
@@ -397,10 +465,14 @@
           "reg": "0x002140"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Enables nonstall interrupts by setting bit 31 of register 0x002140.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 446,
+        "quote": "nvkm_mask(fifo->engine.subdev.device, 0x002140, 0x80000000, 0x80000000);"
+      }
     },
     {
       "member": "fini",
@@ -417,10 +489,14 @@
           "reg": "0x002140"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "teardown",
+      "needed_for_compute": true,
+      "what": "Disables nonstall interrupts by clearing bit 31 of register 0x002140.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 457,
+        "quote": "nvkm_mask(fifo->engine.subdev.device, 0x002140, 0x80000000, 0x00000000);"
+      }
     },
     {
       "member": "runl",
@@ -430,10 +506,14 @@
       "line": 80,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Runlist sub-table with size, update, insert, commit, wait, and management functions for hardware scheduling.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 80,
+        "quote": "gk110_runl = {"
+      }
     },
     {
       "member": "size",
@@ -443,10 +523,14 @@
       "line": null,
       "parent": "runl",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "The size in bytes of one entry in the runlist descriptor table.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 80,
+        "quote": "gk110_runl = {"
+      }
     },
     {
       "member": "update",
@@ -456,10 +540,14 @@
       "line": 285,
       "parent": "runl",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Allocates a RAMDT buffer, maps it, and calls insert_cgrp and insert_chan to populate entries for each channel group and channel.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 306,
+        "quote": "runl->func->insert_cgrp(cgrp, memory, offset);"
+      }
     },
     {
       "member": "insert_cgrp",
@@ -469,10 +557,14 @@
       "line": 72,
       "parent": "runl",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes a channel-group descriptor into the runlist buffer at the given offset using hardware-defined bit fields.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 76,
+        "quote": "nvkm_wo32(memory, offset + 4, 0x00000000);"
+      }
     },
     {
       "member": "insert_chan",
@@ -482,10 +574,14 @@
       "line": 452,
       "parent": "runl",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the channel ID into the runlist buffer at the given offset.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 454,
+        "quote": "nvkm_wo32(memory, offset + 0, chan->id);"
+      }
     },
     {
       "member": "commit",
@@ -508,10 +604,14 @@
           "reg": "0x002274"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Programs the hardware with the runlist base address and entry count via MMIO registers.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 434,
+        "quote": "u64 addr = nvkm_memory_addr(memory) + start;"
+      }
     },
     {
       "member": "wait",
@@ -521,10 +621,14 @@
       "line": 224,
       "parent": "runl",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Polls the runlist update-pending bit with a timeout and returns success or -ETIMEDOUT.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 229,
+        "quote": "if (!nvkm_runl_update_pending(runl))"
+      }
     },
     {
       "member": "pending",
@@ -541,10 +645,14 @@
           "reg": "0x002284 + (runl->id * 0x08)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads a runlist status register and tests bit 20 to determine whether an update is pending.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 426,
+        "quote": "return nvkm_rd32(device, 0x002284 + (runl->id * 0x08)) & 0x00100000;"
+      }
     },
     {
       "member": "block",
@@ -561,10 +669,14 @@
           "reg": "0x002630"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Sets bit 0 of register 0x002630 for the runlist to block its scheduled channels.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 418,
+        "quote": "nvkm_mask(runl->fifo->engine.subdev.device, 0x002630, BIT(runl->id), BIT(runl->id));"
+      }
     },
     {
       "member": "allow",
@@ -581,10 +693,14 @@
           "reg": "0x002630"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Clears bit 0 of register 0x002630 for the runlist to allow its scheduled channels to run.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 412,
+        "quote": "nvkm_mask(runl->fifo->engine.subdev.device, 0x002630, BIT(runl->id), 0x00000000);"
+      }
     },
     {
       "member": "fault_clear",
@@ -601,10 +717,14 @@
           "reg": "0x00262c"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the runlist ID bit to register 0x00262c to clear pending faults for that runlist.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 406,
+        "quote": "nvkm_wr32(runl->fifo->engine.subdev.device, 0x00262c, BIT(runl->id));"
+      }
     },
     {
       "member": "preempt_pending",
@@ -621,10 +741,14 @@
           "reg": "0x002634"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads register 0x002634 and tests bit 20 to determine whether a preemption is pending.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 372,
+        "quote": "return nvkm_rd32(runl->fifo->engine.subdev.device, 0x002634) & 0x00100000;"
+      }
     },
     {
       "member": "runq",
@@ -634,10 +758,14 @@
       "line": 396,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Run queue sub-table with init, interrupt, and idle functions for PBDMA command buffer execution.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 396,
+        "quote": "gk104_runq = {"
+      }
     },
     {
       "member": "init",
@@ -660,10 +788,14 @@
           "reg": "0x04014c + (runq->id * 0x2000)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Initialises the run queue base and writes interrupt masks and interrupt-enable masks to the run queue hardware registers.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 385,
+        "quote": "nvkm_wr32(device, 0x040148 + (runq->id * 0x2000), 0xffffffff);"
+      }
     },
     {
       "member": "intr",
@@ -673,10 +805,14 @@
       "line": 370,
       "parent": "runq",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "interrupt",
+      "needed_for_compute": true,
+      "what": "Checks both HCE interrupt sources and returns whether either has pending interrupts.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 372,
+        "quote": "bool intr0 = gf100_runq_intr(runq, NULL);"
+      }
     },
     {
       "member": "intr_0_names",
@@ -686,10 +822,14 @@
       "line": null,
       "parent": "runq",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Bitfield table mapping HCE interrupt bit positions to human-readable interrupt reason strings.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 370,
+        "quote": "gk104_runq_intr(struct nvkm_runq *runq, struct nvkm_runl *null)"
+      }
     },
     {
       "member": "idle",
@@ -706,10 +846,14 @@
           "reg": "0x003080 + (runq->id * 4)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the run queue status register and tests bits 13 to 15 to determine whether the run queue is idle.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 293,
+        "quote": "return !(nvkm_rd32(device, 0x003080 + (runq->id * 4)) & 0x0000e000);"
+      }
     },
     {
       "member": "engn",
@@ -719,10 +863,14 @@
       "line": 271,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Engine sub-table with context-switch, context-ID, MMU fault, constructor, and bind functions for per-engine channel context management.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 271,
+        "quote": "gk104_engn = {"
+      }
     },
     {
       "member": "chsw",
@@ -732,10 +880,14 @@
       "line": 259,
       "parent": "engn",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine status register and returns true when the engine is busy and awaiting context-switch acknowledgement.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 264,
+        "quote": "if (status.busy && status.chsw)"
+      }
     },
     {
       "member": "cxid",
@@ -745,10 +897,14 @@
       "line": 245,
       "parent": "engn",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine status and returns the channel or channel-group ID of the channel currently loaded on the engine.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 252,
+        "quote": "return status.chan->id;"
+      }
     },
     {
       "member": "mmu_fault_trigger",
@@ -777,10 +933,14 @@
           "reg": "0x002a30 + (engn->id * 4)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Increments the refcount of triggered MMU faults on this runlist, enables nonstall interrupts, and writes 0x100 to register 0x002100 to trigger an MMU fault on the engine.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 232,
+        "quote": "nvkm_wr32(device, 0x002100, 0x00000100);"
+      }
     },
     {
       "member": "mmu_fault_triggered",
@@ -809,10 +969,14 @@
           "reg": "0x002140"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine MMU-fault-triggered status bit from the MMU-fault register, clears it, and decrements the triggered-fault refcount.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 207,
+        "quote": "u32 data = nvkm_rd32(device, 0x002a30 + (engn->id * 4));"
+      }
     },
     {
       "member": "ctor",
@@ -822,10 +986,14 @@
       "line": 178,
       "parent": "engn",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Gets a VMM mapping for the engine context and maps the instance memory into it.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 183,
+        "quote": "ret = nvkm_vmm_get(vctx->vmm, 12, vctx->inst->size, &vctx->vma);"
+      }
     },
     {
       "member": "bind",
@@ -835,10 +1003,14 @@
       "line": 134,
       "parent": "engn",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Maps the virtual context address into the instance memory at per-engine pointers determined by the engine type.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 168,
+        "quote": "nvkm_wo32(chan->inst, ptr0 + 0, lower_32_bits(addr));"
+      }
     },
     {
       "member": "engn_ce",
@@ -848,10 +1020,14 @@
       "line": 281,
       "parent": null,
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Compute engine sub-table with context-switch, context-ID, and MMU fault functions for CE channel context management.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 281,
+        "quote": "gk104_engn_ce = {"
+      }
     },
     {
       "member": "chsw",
@@ -861,10 +1037,14 @@
       "line": 259,
       "parent": "engn_ce",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine status register and returns true when the engine is busy and awaiting context-switch acknowledgement.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 264,
+        "quote": "if (status.busy && status.chsw)"
+      }
     },
     {
       "member": "cxid",
@@ -874,10 +1054,14 @@
       "line": 245,
       "parent": "engn_ce",
       "accesses": [],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine status and returns the channel or channel-group ID of the channel currently loaded on the engine.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 252,
+        "quote": "return status.chan->id;"
+      }
     },
     {
       "member": "mmu_fault_trigger",
@@ -906,10 +1090,14 @@
           "reg": "0x002a30 + (engn->id * 4)"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Increments the refcount of triggered MMU faults on this runlist, enables nonstall interrupts, and writes 0x100 to register 0x002100 to trigger an MMU fault on the engine.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 232,
+        "quote": "nvkm_wr32(device, 0x002100, 0x00000100);"
+      }
     },
     {
       "member": "mmu_fault_triggered",
@@ -938,12 +1126,19 @@
           "reg": "0x002140"
         }
       ],
-      "role": null,
-      "needed_for_compute": null,
-      "what": null,
-      "certainty": null
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine MMU-fault-triggered status bit from the MMU-fault register, clears it, and decrements the triggered-fault refcount.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 207,
+        "quote": "u32 data = nvkm_rd32(device, 0x002a30 + (engn->id * 4));"
+      }
     }
   ],
-  "depends_on": [],
-  "summary": ""
+  "depends_on": [
+    "top",
+    "imem"
+  ],
+  "summary": "The FIFO engine dispatches commands from per-channel command buffers to the requested engines (GR, NVDEC, NVENC, etc.) via runlists and run queues. It manages channel lifecycle, interrupt routing, runlist scheduling, engine context switching, MMU fault recovery, and nonstall interrupt handling. The Haiku driver must reproduce all fifteen main table members, six sub-tables, and thirty-three nested members to accept and dispatch commands from channels."
 }
