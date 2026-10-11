@@ -1,0 +1,301 @@
+{
+  "subsystem": "ltc",
+  "constructor": {
+    "name": "gk104_ltc_new",
+    "file": "nvkm/subdev/ltc/gk104.c",
+    "line": 54
+  },
+  "table": {
+    "name": "gk104_ltc",
+    "file": "nvkm/subdev/ltc/gk104.c",
+    "line": 39
+  },
+  "members": [
+    {
+      "member": "oneinit",
+      "value": "gf100_ltc_oneinit",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 208,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 211,
+          "op": "rd32",
+          "reg": "0x022438"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 212,
+          "op": "rd32",
+          "reg": "0x022554"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 213,
+          "op": "rd32",
+          "reg": "0x17e8dc"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "init",
+      "value": "gk104_ltc_init",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gk104.c",
+      "line": 27,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gk104.c",
+          "line": 30,
+          "op": "rd32",
+          "reg": "0x100c80"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gk104.c",
+          "line": 32,
+          "op": "wr32",
+          "reg": "0x17e8d8"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gk104.c",
+          "line": 33,
+          "op": "wr32",
+          "reg": "0x17e000"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gk104.c",
+          "line": 34,
+          "op": "wr32",
+          "reg": "0x17e8d4"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gk104.c",
+          "line": 35,
+          "op": "mask",
+          "reg": "0x17e8c0"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "intr",
+      "value": "gf100_ltc_intr",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 111,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 116,
+          "op": "rd32",
+          "reg": "0x00017c"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "cbc_clear",
+      "value": "gf100_ltc_cbc_clear",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 31,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 34,
+          "op": "wr32",
+          "reg": "0x17e8cc"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 35,
+          "op": "wr32",
+          "reg": "0x17e8d0"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 36,
+          "op": "wr32",
+          "reg": "0x17e8c8"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "cbc_wait",
+      "value": "gf100_ltc_cbc_wait",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 40,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 48,
+          "op": "rd32",
+          "reg": "addr"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "zbc_color",
+      "value": "16",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "zbc_depth",
+      "value": "16",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "zbc_clear_color",
+      "value": "gf100_ltc_zbc_clear_color",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 56,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 59,
+          "op": "mask",
+          "reg": "0x17ea44"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 60,
+          "op": "wr32",
+          "reg": "0x17ea48"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 61,
+          "op": "wr32",
+          "reg": "0x17ea4c"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 62,
+          "op": "wr32",
+          "reg": "0x17ea50"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 63,
+          "op": "wr32",
+          "reg": "0x17ea54"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "zbc_clear_depth",
+      "value": "gf100_ltc_zbc_clear_depth",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 67,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 70,
+          "op": "mask",
+          "reg": "0x17ea44"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 71,
+          "op": "wr32",
+          "reg": "0x17ea58"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "invalidate",
+      "value": "gf100_ltc_invalidate",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 126,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 131,
+          "op": "wr32",
+          "reg": "0x70004"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "flush",
+      "value": "gf100_ltc_flush",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 139,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 144,
+          "op": "wr32",
+          "reg": "0x70010"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    }
+  ],
+  "depends_on": [],
+  "summary": ""
+}

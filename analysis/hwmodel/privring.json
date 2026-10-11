@@ -1,0 +1,185 @@
+{
+  "subsystem": "privring",
+  "constructor": {
+    "name": "gk104_privring_new",
+    "file": "nvkm/subdev/privring/gk104.c",
+    "line": 121
+  },
+  "table": {
+    "name": "gk104_privring",
+    "file": "nvkm/subdev/privring/gk104.c",
+    "line": 114
+  },
+  "members": [
+    {
+      "member": "preinit",
+      "value": "gk104_privring_init",
+      "kind": "function",
+      "file": "nvkm/subdev/privring/gk104.c",
+      "line": 100,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 103,
+          "op": "mask",
+          "reg": "0x122318"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 104,
+          "op": "mask",
+          "reg": "0x12231c"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 105,
+          "op": "mask",
+          "reg": "0x122310"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 106,
+          "op": "mask",
+          "reg": "0x122348"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 107,
+          "op": "mask",
+          "reg": "0x1223b0"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 108,
+          "op": "mask",
+          "reg": "0x122348"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 109,
+          "op": "mask",
+          "reg": "0x122358"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "init",
+      "value": "gk104_privring_init",
+      "kind": "function",
+      "file": "nvkm/subdev/privring/gk104.c",
+      "line": 100,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 103,
+          "op": "mask",
+          "reg": "0x122318"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 104,
+          "op": "mask",
+          "reg": "0x12231c"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 105,
+          "op": "mask",
+          "reg": "0x122310"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 106,
+          "op": "mask",
+          "reg": "0x122348"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 107,
+          "op": "mask",
+          "reg": "0x1223b0"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 108,
+          "op": "mask",
+          "reg": "0x122348"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 109,
+          "op": "mask",
+          "reg": "0x122358"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "intr",
+      "value": "gk104_privring_intr",
+      "kind": "function",
+      "file": "nvkm/subdev/privring/gk104.c",
+      "line": 58,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 61,
+          "op": "rd32",
+          "reg": "0x120058"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 62,
+          "op": "rd32",
+          "reg": "0x12005c"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 63,
+          "op": "rd32",
+          "reg": "0x120070"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 64,
+          "op": "rd32",
+          "reg": "0x120074"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 65,
+          "op": "rd32",
+          "reg": "0x120078"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 92,
+          "op": "mask",
+          "reg": "0x12004c"
+        },
+        {
+          "file": "nvkm/subdev/privring/gk104.c",
+          "line": 94,
+          "op": "rd32",
+          "reg": "0x12004c"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    }
+  ],
+  "depends_on": [],
+  "summary": ""
+}

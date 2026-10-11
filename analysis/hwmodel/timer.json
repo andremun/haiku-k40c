@@ -1,0 +1,95 @@
+{
+  "subsystem": "timer",
+  "constructor": {
+    "name": "nv41_timer_new",
+    "file": "nvkm/subdev/timer/nv41.c",
+    "line": 82
+  },
+  "table": {
+    "name": "nv41_timer",
+    "file": "nvkm/subdev/timer/nv41.c",
+    "line": 72
+  },
+  "members": [
+    {
+      "member": "init",
+      "value": "nv41_timer_init",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv41.c",
+      "line": 28,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "intr",
+      "value": "nv04_timer_intr",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv04.c",
+      "line": 72,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "read",
+      "value": "nv04_timer_read",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv04.c",
+      "line": 43,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "time",
+      "value": "nv04_timer_time",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv04.c",
+      "line": 28,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "alarm_init",
+      "value": "nv04_timer_alarm_init",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv04.c",
+      "line": 64,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "alarm_fini",
+      "value": "nv04_timer_alarm_fini",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv04.c",
+      "line": 57,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    }
+  ],
+  "depends_on": [],
+  "summary": ""
+}
