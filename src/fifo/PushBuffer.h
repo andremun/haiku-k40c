@@ -24,7 +24,7 @@ constexpr uint32_t kPushMaxLength = 0x7fffff;
 
 // USERD offsets (nouveau_dma.c:92, 104)
 constexpr unsigned kUserdGpGet = 0x88;
-constexpr unsigned kUserdGpPut = 0x8c;  // nouveau_dma.c:104
+constexpr unsigned kUserdGpPut = 0x8c;  // nouveau_dma.c:92
 
 // GPFIFO entry size: two 32-bit words — no source: derived from two wr32 in nouveau_dma.c:82-83
 constexpr unsigned kGpEntryBytes = 8;

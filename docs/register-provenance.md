@@ -28,7 +28,7 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 |------|------|--------|--------|
 | `src/fifo/PushBuffer.h:23` | `constexpr uint32_t kPushMaxLength = 0x7fffff;` | nouveau_dma.h:50 | SOURCE_ONLY |
 | `src/fifo/PushBuffer.h:26` | `constexpr unsigned kUserdGpGet = 0x88;` | nouveau_dma.c:92 | SOURCE_ONLY |
-| `src/fifo/PushBuffer.h:27` | `constexpr unsigned kUserdGpPut = 0x8c;` | nouveau_dma.c:104 | SOURCE_ONLY |
+| `src/fifo/PushBuffer.h:27` | `constexpr unsigned kUserdGpPut = 0x8c;` | nouveau_dma.c:92 | SOURCE_ONLY |
 | `src/fifo/PushBuffer.h:30` | `constexpr unsigned kGpEntryBytes = 8;` | nouveau_dma.c:82 | SOURCE_ONLY |
 
 ## src/mmu/PageTable.cpp
@@ -51,7 +51,7 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/mmu/PageTable.h:35` | `static constexpr uint32_t kPdEntries = 1u << 13;` | nvkm/subdev/mmu/vmmgk104.c:41 | SOURCE_ONLY |
 | `src/mmu/PageTable.h:36` | `static constexpr uint32_t kSptEntries = 1u << 15;` | nvkm/subdev/mmu/vmmgk104.c:41 | SOURCE_ONLY |
 | `src/mmu/PageTable.h:37` | `static constexpr uint32_t kLptEntries = 1u << 10;` | nvkm/subdev/mmu/vmmgk104.c:48 | SOURCE_ONLY |
-| `src/mmu/PageTable.h:40` | `static constexpr uint64_t kPteUnmapped = 0;` | no source: all-zero is a zero-initialisation convention | SOURCE_ONLY |
+| `src/mmu/PageTable.h:40` | `static constexpr uint64_t kPteUnmapped = 0;` | nvkm/subdev/mmu/vmmgf100.c:94 | SOURCE_ONLY |
 | `src/mmu/PageTable.h:43` | `static constexpr uint64_t kLptInvalid = 2;` | nvkm/subdev/mmu/vmmgk104.c:29 | SOURCE_ONLY |
 
 ## Open
@@ -61,6 +61,5 @@ The following constant lines have no source citation:
 - src/fifo/PushBuffer.cpp:33 (no source: 0x7ffc is max 13-bit value aligned to 4; nvc0_winsys.h shifts mthd >> 2)
 - src/fifo/PushBuffer.cpp:39 (no source: 0x1fff is max 13-bit value for the count field;    nvc0_winsys.h uses (size << 16) with 13-bit field)
 - src/fifo/PushBuffer.cpp:257 (no source: 0xff is just 8-bit mask for address upper bits)
-- src/mmu/PageTable.h:40 (no source: all-zero is a zero-initialisation convention)
 
 These constants may be verified by a mmiotrace in task C5.

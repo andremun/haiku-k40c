@@ -36,7 +36,7 @@ static constexpr uint32_t kPdEntries = 1u << 13;   // 8192 — vmmgk104.c:42 PGD
 static constexpr uint32_t kSptEntries = 1u << 15;  // 32768 — vmmgk104.c:41 SPT level
 static constexpr uint32_t kLptEntries = 1u << 10;  // 1024 — vmmgk104.c:48 LPT level
 
-// Unmapped PTE value — no source: all-zero is a zero-initialisation convention
+// Unmapped PTE value — vmmgf100.c:94 (gf100_vmm_pgt_unmap writes 0ULL)
 static constexpr uint64_t kPteUnmapped = 0;
 
 // Invalid LPT-entry value — vmmgk104.c:29 (BIT_ULL(1))

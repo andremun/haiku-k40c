@@ -2,7 +2,7 @@
 
 Current phase: C (hardware database and firmware)
 Current task: C4a (DONE — next: D1)
-Task state: READY. This is the worktree of task C4a (branch task-c4a). Another task runs in another worktree at the same time: work only on C4a and do not start another task.
+Task state: DONE. Accepted by the scaffold on 2026-10-12, see work/C4a/REVIEW.md.
 Last updated: 2026-10-12
 
 ## Last result
