@@ -1,0 +1,949 @@
+{
+  "subsystem": "fifo",
+  "constructor": {
+    "name": "gk110_fifo_new",
+    "file": "nvkm/engine/fifo/gk110.c",
+    "line": 128
+  },
+  "table": {
+    "name": "gk110_fifo",
+    "file": "nvkm/engine/fifo/gk110.c",
+    "line": 107
+  },
+  "members": [
+    {
+      "member": "chid_nr",
+      "value": "gk104_fifo_chid_nr",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 802,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "chid_ctor",
+      "value": "gk110_fifo_chid_ctor",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 95,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "runq_nr",
+      "value": "gf100_fifo_runq_nr",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 927,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 933,
+          "op": "mask",
+          "reg": "0x000204"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 934,
+          "op": "mask",
+          "reg": "0x000204"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "runl_ctor",
+      "value": "gk104_fifo_runl_ctor",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 756,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "init",
+      "value": "gk104_fifo_init",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 744,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 749,
+          "op": "wr32",
+          "reg": "0x002254"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 751,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 752,
+          "op": "wr32",
+          "reg": "0x002140"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "init_pbdmas",
+      "value": "gk104_fifo_init_pbdmas",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 735,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 739,
+          "op": "wr32",
+          "reg": "0x000204"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 740,
+          "op": "mask",
+          "reg": "0x002a04"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "intr",
+      "value": "gk104_fifo_intr",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 652,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 657,
+          "op": "rd32",
+          "reg": "0x002140"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 658,
+          "op": "rd32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 662,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 668,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 674,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 680,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 686,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 692,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 698,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 718,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 726,
+          "op": "mask",
+          "reg": "0x002140"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 728,
+          "op": "wr32",
+          "reg": "0x002100"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "intr_mmu_fault_unit",
+      "value": "gf100_fifo_intr_mmu_fault_unit",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 696,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 699,
+          "op": "rd32",
+          "reg": "0x002800 + (unit * 0x10)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 700,
+          "op": "rd32",
+          "reg": "0x002804 + (unit * 0x10)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 701,
+          "op": "rd32",
+          "reg": "0x002808 + (unit * 0x10)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 702,
+          "op": "rd32",
+          "reg": "0x00280c + (unit * 0x10)"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "intr_ctxsw_timeout",
+      "value": "gf100_fifo_intr_ctxsw_timeout",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 618,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "mmu_fault",
+      "value": "gk104_fifo_mmu_fault",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 588,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "recover",
+      "value": "gf100_fifo_mmu_fault_recover",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 534,
+      "parent": "mmu_fault",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 582,
+          "op": "mask",
+          "reg": "0x001718"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "access",
+      "value": "gf100_fifo_mmu_fault_access",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "mmu_fault",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "engine",
+      "value": "gk104_fifo_mmu_fault_engine",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "mmu_fault",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "reason",
+      "value": "gk104_fifo_mmu_fault_reason",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "mmu_fault",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "hubclient",
+      "value": "gk104_fifo_mmu_fault_hubclient",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "mmu_fault",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "gpcclient",
+      "value": "gk104_fifo_mmu_fault_gpcclient",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "mmu_fault",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "nonstall",
+      "value": "gf100_fifo_nonstall",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 462,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "init",
+      "value": "gf100_fifo_nonstall_allow",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 440,
+      "parent": "nonstall",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 446,
+          "op": "mask",
+          "reg": "0x002140"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "fini",
+      "value": "gf100_fifo_nonstall_block",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 451,
+      "parent": "nonstall",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 457,
+          "op": "mask",
+          "reg": "0x002140"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "runl",
+      "value": "gk110_runl",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 80,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "size",
+      "value": "8",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "runl",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "update",
+      "value": "nv50_runl_update",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/nv50.c",
+      "line": 285,
+      "parent": "runl",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "insert_cgrp",
+      "value": "gk110_runl_insert_cgrp",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 72,
+      "parent": "runl",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "insert_chan",
+      "value": "gk104_runl_insert_chan",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 452,
+      "parent": "runl",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "commit",
+      "value": "gk104_runl_commit",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 430,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 446,
+          "op": "wr32",
+          "reg": "0x002270"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 447,
+          "op": "wr32",
+          "reg": "0x002274"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "wait",
+      "value": "nv50_runl_wait",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/nv50.c",
+      "line": 224,
+      "parent": "runl",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "pending",
+      "value": "gk104_runl_pending",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 422,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 426,
+          "op": "rd32",
+          "reg": "0x002284 + (runl->id * 0x08)"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "block",
+      "value": "gk104_runl_block",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 416,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 418,
+          "op": "mask",
+          "reg": "0x002630"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "allow",
+      "value": "gk104_runl_allow",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 410,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 412,
+          "op": "mask",
+          "reg": "0x002630"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "fault_clear",
+      "value": "gk104_runl_fault_clear",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 404,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 406,
+          "op": "wr32",
+          "reg": "0x00262c"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "preempt_pending",
+      "value": "gf100_runl_preempt_pending",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 370,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 372,
+          "op": "rd32",
+          "reg": "0x002634"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "runq",
+      "value": "gk104_runq",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 396,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "init",
+      "value": "gk104_runq_init",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 379,
+      "parent": "runq",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 385,
+          "op": "wr32",
+          "reg": "0x040148 + (runq->id * 0x2000)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 386,
+          "op": "wr32",
+          "reg": "0x04014c + (runq->id * 0x2000)"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "intr",
+      "value": "gk104_runq_intr",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 370,
+      "parent": "runq",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "intr_0_names",
+      "value": "gk104_runq_intr_0_names",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "runq",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "idle",
+      "value": "gk104_runq_idle",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 289,
+      "parent": "runq",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 293,
+          "op": "rd32",
+          "reg": "0x003080 + (runq->id * 4)"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "engn",
+      "value": "gk104_engn",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 271,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "chsw",
+      "value": "gk104_engn_chsw",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 259,
+      "parent": "engn",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "cxid",
+      "value": "gk104_engn_cxid",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 245,
+      "parent": "engn",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "mmu_fault_trigger",
+      "value": "gf100_engn_mmu_fault_trigger",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 222,
+      "parent": "engn",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 231,
+          "op": "mask",
+          "reg": "0x002140"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 232,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 233,
+          "op": "wr32",
+          "reg": "0x002a30 + (engn->id * 4)"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "mmu_fault_triggered",
+      "value": "gf100_engn_mmu_fault_triggered",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 202,
+      "parent": "engn",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 207,
+          "op": "rd32",
+          "reg": "0x002a30 + (engn->id * 4)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 214,
+          "op": "mask",
+          "reg": "0x002a30 + (engn->id * 4)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 216,
+          "op": "mask",
+          "reg": "0x002140"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "ctor",
+      "value": "gk104_ectx_ctor",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 178,
+      "parent": "engn",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "bind",
+      "value": "gk104_ectx_bind",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 134,
+      "parent": "engn",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "engn_ce",
+      "value": "gk104_engn_ce",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 281,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "chsw",
+      "value": "gk104_engn_chsw",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 259,
+      "parent": "engn_ce",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "cxid",
+      "value": "gk104_engn_cxid",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 245,
+      "parent": "engn_ce",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "mmu_fault_trigger",
+      "value": "gf100_engn_mmu_fault_trigger",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 222,
+      "parent": "engn_ce",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 231,
+          "op": "mask",
+          "reg": "0x002140"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 232,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 233,
+          "op": "wr32",
+          "reg": "0x002a30 + (engn->id * 4)"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "mmu_fault_triggered",
+      "value": "gf100_engn_mmu_fault_triggered",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 202,
+      "parent": "engn_ce",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 207,
+          "op": "rd32",
+          "reg": "0x002a30 + (engn->id * 4)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 214,
+          "op": "mask",
+          "reg": "0x002a30 + (engn->id * 4)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 216,
+          "op": "mask",
+          "reg": "0x002140"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    }
+  ],
+  "depends_on": [],
+  "summary": ""
+}
