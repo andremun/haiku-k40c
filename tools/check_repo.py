@@ -1291,6 +1291,35 @@ for name, (trigger, sha, sources) in ACCEPT.items():
     if r.returncode != 0:
         fail(f"make -C tests fails: {(r.stdout + r.stderr).strip().splitlines()[-2:]}")
 
+# D4 trace comparison tool (Python acceptance test) -----------------------
+d4_test = os.path.join(ROOT, "tests", "accept", "d4_accept.py")
+if os.path.exists(d4_test):
+    import hashlib
+    if hashlib.sha256(open(d4_test, "rb").read()).hexdigest() != "b3d3fa90e1437d05f79866749e0da8ca0b86f7edaaa8d20a50aeba4827091729":
+        fail("tests/accept/d4_accept.py was changed. It is the scaffold's test: restore it with "
+             "`git checkout main -- tests/accept/d4_accept.py`")
+d4_tool = os.path.join(ROOT, "tools", "compare_register_traces.py")
+if os.path.exists(d4_tool) and "D4" not in SKIP:
+    import subprocess
+    try:
+        r = subprocess.run([sys.executable, d4_test], cwd=ROOT, capture_output=True, text=True, timeout=120)
+        if r.returncode != 0:
+            lines = [ln for ln in r.stdout.split("\n") if ln.startswith("FAIL")]
+            last = (r.stderr.strip().splitlines() or [""])[-1]
+            fail(f"tests/accept/d4_accept.py: {len(lines)} checks fail, first: {lines[:3]} {last[:160]}")
+    except subprocess.TimeoutExpired:
+        fail("tests/accept/d4_accept.py: no result after 120 s")
+    own = os.path.join(ROOT, "tests", "test_compare_traces.py")
+    n = len(re.findall(r"\bcheck\(", open(own, errors="replace").read())) if os.path.exists(own) else 0
+    if n < 15:
+        fail(f"tests/test_compare_traces.py: your own tests, 15 check(...) lines or more; found {n}")
+    else:
+        r = subprocess.run([sys.executable, own], cwd=ROOT, capture_output=True, text=True)
+        if r.returncode != 0:
+            fail(f"tests/test_compare_traces.py fails: {(r.stdout + r.stderr).strip().splitlines()[-1:]}")
+    if not os.path.exists(os.path.join(ROOT, "docs", "register-traces.md")):
+        fail("docs/register-traces.md: missing (docs/tasks/D4.md)")
+
 for n in notes:
     print("note:", n)
 for f in fails:
