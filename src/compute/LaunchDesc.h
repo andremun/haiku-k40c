@@ -12,6 +12,10 @@
 #include <array>
 #include <cstdint>
 #include <stdexcept>
+#include <vector>
+
+namespace k40 {
+namespace compute {
 
 // ---- Constants (task D5) ----
 constexpr unsigned kComputeClass        = 0xa1c0;
@@ -25,10 +29,10 @@ public:
 
     // Set bits [lo:hi] (inclusive, lo ≤ hi) to value.
     // value must fit in (hi - lo + 1) bits; hi < 2048.
-    void set(unsigned hi, unsigned lo, uint32_t value);
+    void set(unsigned hi, unsigned lo, uint64_t value);
 
     // Read bits [lo:hi].
-    uint32_t get(unsigned hi, unsigned lo) const;
+    uint64_t get(unsigned hi, unsigned lo) const;
 
 private:
     std::array<uint32_t, 64> data_{};
@@ -105,3 +109,6 @@ void setConstantBuffer(Qmd& q, unsigned index, uint64_t address, uint32_t size);
  * or does not fit in 40 bits.
  */
 std::vector<uint32_t> encodeLaunch(uint64_t descGpuAddr);
+
+}  // namespace compute
+}  // namespace k40

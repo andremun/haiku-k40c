@@ -1081,9 +1081,11 @@ if os.path.exists(fw_path) and yaml is not None and "C2" not in SKIP:
 # C3 subsystem models (analysis/hwmodel/<subsystem>.json) ---------------
 C3_TASKS = {"C3a": ["mc", "bar", "imem", "mmu", "fb", "top"],
             "C3b": ["privring", "ltc", "timer"],
-            "C3c": ["fifo"], "C3d": ["chan"]}
+            "C3c": ["fifo"], "C3d": ["chan"], "C3e": ["gr"]}
 # Models of a table that is not a chipset member: name -> (owning subsystem, table).
-C3_EXTRA = {"chan": ("fifo", "gk110_chan")}
+C3_EXTRA = {"chan": ("fifo", "gk110_chan"),
+            # gk110b_gr_new passes a firmware-interface list, not the table
+            "gr": ("gr", "gk110b_gr")}
 hw_files = sorted(glob.glob(os.path.join(ROOT, "analysis/hwmodel/*.json")))
 for task, names in C3_TASKS.items():
     if re.search(r"^\|\s*%s\s*\|\s*DONE\b" % task, status, re.M):
@@ -1320,6 +1322,145 @@ if os.path.exists(d4_tool) and "D4" not in SKIP:
             fail(f"tests/test_compare_traces.py fails: {(r.stdout + r.stderr).strip().splitlines()[-1:]}")
     if not os.path.exists(os.path.join(ROOT, "docs", "register-traces.md")):
         fail("docs/register-traces.md: missing (docs/tasks/D4.md)")
+
+# C4a source provenance of the constants in src/ --------------------------
+prov_md = os.path.join(ROOT, "docs", "register-provenance.md")
+if os.path.exists(prov_md) and "C4a" not in SKIP:
+    C4_CIT = re.compile(r"([\w./-]*\w\.(?:c|h)):(\d+)")
+    c4_index = {}
+    for base, tree in ((NV, "nouveau"), (os.path.join(ROOT, "reference", "mesa"), "mesa")):
+        for d, _, fs in os.walk(base, followlinks=True):
+            for f in fs:
+                if f.endswith((".c", ".h")):
+                    c4_index.setdefault(f, []).append((tree, os.path.relpath(os.path.join(d, f), base)))
+    uncited, unresolved, n_const = [], [], 0
+    for path in sorted(glob.glob(os.path.join(ROOT, "src", "*", "*.h")) +
+                       glob.glob(os.path.join(ROOT, "src", "*", "*.cpp"))):
+        rel = os.path.relpath(path, ROOT)
+        if rel.startswith("src/hw/"):
+            continue  # the register access layer has no hardware constants
+        L = open(path, errors="replace").read().split("\n")
+        for i, line in enumerate(L):
+            code = re.sub(r'"[^"]*"', '""', line.split("//")[0])
+            if not re.search(r"0x[0-9a-fA-F]{2,}|\bconstexpr\b", code):
+                continue
+            n_const += 1
+            com = line.split("//", 1)[1] if "//" in line else ""
+            j = i - 1
+            while j >= 0 and L[j].strip().startswith("//"):
+                com += " " + L[j]
+                j -= 1
+            cits = C4_CIT.findall(com)
+            if not cits and "no source:" not in com:
+                uncited.append(f"{rel}:{i + 1}")
+            for f, ln in cits:
+                cand = [c for c in c4_index.get(os.path.basename(f), []) if c[1].endswith(f)]
+                ok = False
+                if len(cand) == 1:
+                    base = NV if cand[0][0] == "nouveau" else os.path.join(ROOT, "reference", "mesa")
+                    n_lines = len(open(os.path.join(base, cand[0][1]), errors="replace").read().split("\n"))
+                    ok = 0 < int(ln) <= n_lines
+                if not ok:
+                    unresolved.append(f"{rel}:{i + 1} ({f}:{ln})")
+    if uncited:
+        fail(f"src/: {len(uncited)} of {n_const} lines with a hardware constant have no source: add "
+             f"`// path/file.c:LINE` on the line or in the comment above it, or `// no source: reason` "
+             f"for plain arithmetic. First: {uncited[:6]}")
+    if unresolved:
+        fail(f"src/: {len(unresolved)} citations do not name exactly one file under reference/nouveau or "
+             f"reference/mesa with that line (write enough of the path to be unique): {unresolved[:6]}")
+    tool = os.path.join(ROOT, "tools", "provenance.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/provenance.py: missing, or no --check option (docs/tasks/C4a.md)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/provenance.py --check (run {run}): docs/register-provenance.md is not what the "
+                     f"tool generates")
+                break
+    text = open(prov_md, errors="replace").read()
+    rows = len(re.findall(r"^\|\s*`src/", text, re.M))
+    if rows < n_const - len(uncited):
+        fail(f"docs/register-provenance.md: {rows} table rows that start with `src/...`; src/ has {n_const} "
+             f"constant lines")
+    if "SOURCE_ONLY" not in text:
+        fail("docs/register-provenance.md: no status column with SOURCE_ONLY")
+
+# C4b design documents ---------------------------------------------------
+C4B_DOCS = ["04-mmu-design.md", "05-fifo-design.md", "06-gr-design.md", "07-firmware-analysis.md"]
+C4B_SECTIONS = ["Goal", "What Nouveau does", "Haiku driver design", "Haiku interfaces", "Host tests",
+                "Not known"]
+c4b_present = [d for d in C4B_DOCS if os.path.exists(os.path.join(ROOT, "docs", d))]
+if re.search(r"^\|\s*C4b\s*\|\s*DONE\b", status, re.M):
+    for d in C4B_DOCS:
+        if d not in c4b_present:
+            fail(f"docs/{d}: missing, and docs/STATUS.md marks C4b DONE")
+if c4b_present and "C4b" not in SKIP:
+    c4b_regs = set()
+    for path in glob.glob(os.path.join(ROOT, "hardware/registers/*.yaml")):
+        for m in re.finditer(r"^\s*address: '(0x[0-9a-f]{6})'", open(path).read(), re.M):
+            c4b_regs.add(m.group(1))
+    c4b_words = set()
+    for sub in ("os", "private/kernel", "private/drivers"):
+        for d, _, fs in os.walk(os.path.join(ROOT, "reference", "haiku", "headers", sub), followlinks=True):
+            for f in fs:
+                if f.endswith(".h"):
+                    c4b_words |= set(re.findall(r"[A-Za-z_]\w+", open(os.path.join(d, f), errors="replace").read()))
+    MESA4 = os.path.join(ROOT, "reference", "mesa")
+    for doc in c4b_present:
+        rel = "docs/" + doc
+        text = open(os.path.join(ROOT, rel), errors="replace").read()
+        if len(text.split("\n")) < 70:
+            fail(f"{rel}: under 70 lines")
+        heads = re.findall(r"^## (.+?)\s*$", text, re.M)
+        if [h for h in heads if h in C4B_SECTIONS] != C4B_SECTIONS:
+            fail(f"{rel}: needs the sections {C4B_SECTIONS} as `## ` headings, in this order")
+            continue
+        sec = {h: text.split("## " + h, 1)[1].split("\n## ", 1)[0] for h in C4B_SECTIONS}
+        cites, bad = set(), []
+        for f, ln in re.findall(r"((?:nvkm|src/gallium)/[\w/.-]+\.[ch]):(\d+)", text):
+            base = MESA4 if f.startswith("src/gallium") else NV
+            cites.add((f, ln))
+            try:
+                n = len(open(os.path.join(base, f), errors="replace").read().split("\n"))
+            except OSError:
+                n = 0
+            if int(ln) > n or int(ln) < 1:
+                bad.append(f"{f}:{ln}")
+        if bad:
+            fail(f"{rel}: cites lines that do not exist: {sorted(set(bad))[:5]}")
+        n_nv = len(set(re.findall(r"((?:nvkm|src/gallium)/[\w/.-]+\.[ch]):(\d+)", sec["What Nouveau does"])))
+        if n_nv < 8:
+            fail(f"{rel}: 'What Nouveau does' has {n_nv} source citations (file:line); 8 or more")
+        unknown = sorted(set(re.findall(r"\b0x[0-9a-f]{6}\b", text)) - c4b_regs)
+        if unknown:
+            fail(f"{rel}: register addresses that are not in hardware/registers/*.yaml: {unknown[:6]}. "
+                 f"Use only registers of the database (6 hex digits), or write the value another way "
+                 f"if it is not a register")
+        apis = re.findall(r"`([A-Za-z_]\w+)\(\)`", sec["Haiku interfaces"])
+        missing = sorted(a for a in set(apis) if a not in c4b_words)
+        if len(set(apis)) < 3:
+            fail(f"{rel}: 'Haiku interfaces' names {len(set(apis))} functions as `name()`; 3 or more")
+        if missing:
+            fail(f"{rel}: 'Haiku interfaces' names functions that are not in reference/haiku/headers: "
+                 f"{missing[:6]}")
+        paths = re.findall(r"`((?:src|tests|tools|analysis|hardware|docs|firmware)/[\w./-]+)`", text)
+        gone = sorted(p for p in set(paths) if not os.path.exists(os.path.join(ROOT, p)))
+        if gone:
+            fail(f"{rel}: names files that do not exist: {gone[:6]}")
+        if not re.search(r"`tests/[\w./-]+`", sec["Host tests"]):
+            fail(f"{rel}: 'Host tests' names no file under tests/ (write \"none yet\" items in 'Not known')"
+                 if doc != "07-firmware-analysis.md" and doc != "06-gr-design.md" else
+                 f"{rel}: 'Host tests' must name the test files that exist, or `tests/` and what is missing")
+        if len(re.findall(r"^\s*[-*] ", sec["Not known"], re.M)) < 3:
+            fail(f"{rel}: 'Not known' needs 3 list items or more")
+        for w_, right in {"memory controller": "mc is the master control",
+                          "front end command scheduler": "FECS is not expanded in the source",
+                          "pixel pipeline": "PPC is not expanded in the source"}.items():
+            if w_ in text.lower():
+                fail(f"{rel}: the text says \"{w_}\". {right}")
 
 for n in notes:
     print("note:", n)

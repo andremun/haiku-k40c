@@ -2,7 +2,7 @@
 
 Current phase: D (host-side algorithms and tests)
 Current task: D5
-Task state: READY. Second session: read work/D5/NOTES.md first. This is the worktree of task D5: work only on D5.
+Task state: READY. Third session: read work/D5/NOTES.md first; the code is done, five items are left. This is the worktree of task D5: work only on D5.
 Last updated: 2026-10-12
 
 ## Last result
