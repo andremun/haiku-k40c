@@ -1,0 +1,1145 @@
+{
+  "subsystem": "fifo",
+  "constructor": {
+    "name": "gk110_fifo_new",
+    "file": "nvkm/engine/fifo/gk110.c",
+    "line": 128
+  },
+  "table": {
+    "name": "gk110_fifo",
+    "file": "nvkm/engine/fifo/gk110.c",
+    "line": 107
+  },
+  "members": [
+    {
+      "member": "chid_nr",
+      "value": "gk104_fifo_chid_nr",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 802,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Returns the maximum number of channels that this FIFO engine supports.",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 802,
+        "quote": "gk104_fifo_chid_nr(struct nvkm_fifo *fifo)"
+      }
+    },
+    {
+      "member": "chid_ctor",
+      "value": "gk110_fifo_chid_ctor",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 95,
+      "parent": null,
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Creates the channel-ID allocator by calling nvkm_chid_new with the FIFO channel event type.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 99,
+        "quote": "ret = nvkm_chid_new(&nvkm_chan_event, &fifo->engine.subdev, nr, 0, nr, &fifo->cgid);"
+      }
+    },
+    {
+      "member": "runq_nr",
+      "value": "gf100_fifo_runq_nr",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 927,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 933,
+          "op": "mask",
+          "reg": "0x000204"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 934,
+          "op": "mask",
+          "reg": "0x000204"
+        }
+      ],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Returns the number of run queue (PBDMA) units present on this chipset.",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 927,
+        "quote": "gf100_fifo_runq_nr(struct nvkm_fifo *fifo)"
+      }
+    },
+    {
+      "member": "runl_ctor",
+      "value": "gk104_fifo_runl_ctor",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 756,
+      "parent": null,
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Iterates over top devices with valid runlists and constructs per-runlist structures.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 765,
+        "quote": "runl = nvkm_runl_get(fifo, tdev->runlist, tdev->runlist);"
+      }
+    },
+    {
+      "member": "init",
+      "value": "gk104_fifo_init",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 744,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 749,
+          "op": "wr32",
+          "reg": "0x002254"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 751,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 752,
+          "op": "wr32",
+          "reg": "0x002140"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes the USERD base in BAR1 to 0x002254 (when USERD is in BAR1), then 0xffffffff to 0x002100 and 0x7fffffff to 0x002140 (interrupt status and enable)",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 751,
+        "quote": "nvkm_wr32(device, 0x002100, 0xffffffff);"
+      }
+    },
+    {
+      "member": "init_pbdmas",
+      "value": "gk104_fifo_init_pbdmas",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 735,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 739,
+          "op": "wr32",
+          "reg": "0x000204"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 740,
+          "op": "mask",
+          "reg": "0x002a04"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes a mask to select which PBDMA units to enable and clears their interrupt-pending bits.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 739,
+        "quote": "nvkm_wr32(device, 0x000204, mask);"
+      }
+    },
+    {
+      "member": "intr",
+      "value": "gk104_fifo_intr",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 652,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 657,
+          "op": "rd32",
+          "reg": "0x002140"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 658,
+          "op": "rd32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 662,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 668,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 674,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 680,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 686,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 692,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 698,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 718,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 726,
+          "op": "mask",
+          "reg": "0x002140"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 728,
+          "op": "wr32",
+          "reg": "0x002100"
+        }
+      ],
+      "role": "interrupt",
+      "needed_for_compute": true,
+      "what": "Reads interrupt status and mask registers, dispatches to handlers for bind, context-switch, dropped faults, and runlist interrupts.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 657,
+        "quote": "u32 mask = nvkm_rd32(device, 0x002140);"
+      }
+    },
+    {
+      "member": "intr_mmu_fault_unit",
+      "value": "gf100_fifo_intr_mmu_fault_unit",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 696,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 699,
+          "op": "rd32",
+          "reg": "0x002800 + (unit * 0x10)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 700,
+          "op": "rd32",
+          "reg": "0x002804 + (unit * 0x10)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 701,
+          "op": "rd32",
+          "reg": "0x002808 + (unit * 0x10)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 702,
+          "op": "rd32",
+          "reg": "0x00280c + (unit * 0x10)"
+        }
+      ],
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Processes MMU faults reported by the MMU fault unit by reading fault registers and logging details.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 699,
+        "quote": "u32 inst = nvkm_rd32(device, 0x002800 + (unit * 0x10));"
+      }
+    },
+    {
+      "member": "intr_ctxsw_timeout",
+      "value": "gf100_fifo_intr_ctxsw_timeout",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 618,
+      "parent": null,
+      "accesses": [],
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Blocks runlists and triggers MMU faults on engines whose context switch timed out.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 627,
+        "quote": "nvkm_runl_block(runl);"
+      }
+    },
+    {
+      "member": "mmu_fault",
+      "value": "gk104_fifo_mmu_fault",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 588,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "MMU fault sub-table defining recover, access, engine, reason, hubclient, and gpcclient members.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 588,
+        "quote": "gk104_fifo_mmu_fault = {"
+      }
+    },
+    {
+      "member": "recover",
+      "value": "gf100_fifo_mmu_fault_recover",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 534,
+      "parent": "mmu_fault",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 582,
+          "op": "mask",
+          "reg": "0x001718"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Looks up the engine that caused the MMU fault and invokes its mmu_fault_triggered callback for context-switch timeout recovery.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 552,
+        "quote": "engn->func->mmu_fault_triggered(engn)"
+      }
+    },
+    {
+      "member": "access",
+      "value": "gf100_fifo_mmu_fault_access",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "mmu_fault",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Enum table mapping MMU fault access type codes to human-readable strings.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 525,
+        "quote": "gk104_fifo_mmu_fault_hubclient[] = {"
+      }
+    },
+    {
+      "member": "engine",
+      "value": "gk104_fifo_mmu_fault_engine",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "mmu_fault",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Enum table mapping MMU fault engine codes to engine names and associated engine types.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 481,
+        "quote": "gk104_fifo_mmu_fault_engine[] = {"
+      }
+    },
+    {
+      "member": "reason",
+      "value": "gk104_fifo_mmu_fault_reason",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "mmu_fault",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Enum table mapping MMU fault reason codes to human-readable fault reason strings.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 504,
+        "quote": "gk104_fifo_mmu_fault_reason[] = {"
+      }
+    },
+    {
+      "member": "hubclient",
+      "value": "gk104_fifo_mmu_fault_hubclient",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "mmu_fault",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Enum table mapping MMU fault hub client codes to human-readable client identification strings.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 525,
+        "quote": "gk104_fifo_mmu_fault_hubclient[] = {"
+      }
+    },
+    {
+      "member": "gpcclient",
+      "value": "gk104_fifo_mmu_fault_gpcclient",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "mmu_fault",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Enum table mapping MMU fault GPC client codes to human-readable client identification strings.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 562,
+        "quote": "gk104_fifo_mmu_fault_gpcclient[] = {"
+      }
+    },
+    {
+      "member": "nonstall",
+      "value": "gf100_fifo_nonstall",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 462,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Nonstall interrupt event table with init and fini functions for enabling and disabling the nonstall interrupt.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 462,
+        "quote": "gf100_fifo_nonstall = {"
+      }
+    },
+    {
+      "member": "init",
+      "value": "gf100_fifo_nonstall_allow",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 440,
+      "parent": "nonstall",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 446,
+          "op": "mask",
+          "reg": "0x002140"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Enables nonstall interrupts by setting bit 31 of register 0x002140.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 446,
+        "quote": "nvkm_mask(fifo->engine.subdev.device, 0x002140, 0x80000000, 0x80000000);"
+      }
+    },
+    {
+      "member": "fini",
+      "value": "gf100_fifo_nonstall_block",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 451,
+      "parent": "nonstall",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 457,
+          "op": "mask",
+          "reg": "0x002140"
+        }
+      ],
+      "role": "teardown",
+      "needed_for_compute": true,
+      "what": "Disables nonstall interrupts by clearing bit 31 of register 0x002140.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 457,
+        "quote": "nvkm_mask(fifo->engine.subdev.device, 0x002140, 0x80000000, 0x00000000);"
+      }
+    },
+    {
+      "member": "runl",
+      "value": "gk110_runl",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 80,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Runlist sub-table with size, update, insert, commit, wait, and management functions for hardware scheduling.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 80,
+        "quote": "gk110_runl = {"
+      }
+    },
+    {
+      "member": "size",
+      "value": "8",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "runl",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "The size in bytes of one entry in the runlist descriptor table.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 80,
+        "quote": "gk110_runl = {"
+      }
+    },
+    {
+      "member": "update",
+      "value": "nv50_runl_update",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/nv50.c",
+      "line": 285,
+      "parent": "runl",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Allocates a RAMDT buffer, maps it, and calls insert_cgrp and insert_chan to populate entries for each channel group and channel.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 306,
+        "quote": "runl->func->insert_cgrp(cgrp, memory, offset);"
+      }
+    },
+    {
+      "member": "insert_cgrp",
+      "value": "gk110_runl_insert_cgrp",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 72,
+      "parent": "runl",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes a channel-group descriptor into the runlist buffer at the given offset using hardware-defined bit fields.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 76,
+        "quote": "nvkm_wo32(memory, offset + 4, 0x00000000);"
+      }
+    },
+    {
+      "member": "insert_chan",
+      "value": "gk104_runl_insert_chan",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 452,
+      "parent": "runl",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the channel ID into the runlist buffer at the given offset.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 454,
+        "quote": "nvkm_wo32(memory, offset + 0, chan->id);"
+      }
+    },
+    {
+      "member": "commit",
+      "value": "gk104_runl_commit",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 430,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 446,
+          "op": "wr32",
+          "reg": "0x002270"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 447,
+          "op": "wr32",
+          "reg": "0x002274"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Programs the hardware with the runlist base address and entry count via MMIO registers.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 434,
+        "quote": "u64 addr = nvkm_memory_addr(memory) + start;"
+      }
+    },
+    {
+      "member": "wait",
+      "value": "nv50_runl_wait",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/nv50.c",
+      "line": 224,
+      "parent": "runl",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Polls the runlist update-pending bit with a timeout and returns success or -ETIMEDOUT.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 229,
+        "quote": "if (!nvkm_runl_update_pending(runl))"
+      }
+    },
+    {
+      "member": "pending",
+      "value": "gk104_runl_pending",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 422,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 426,
+          "op": "rd32",
+          "reg": "0x002284 + (runl->id * 0x08)"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads a runlist status register and tests bit 20 to determine whether an update is pending.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 426,
+        "quote": "return nvkm_rd32(device, 0x002284 + (runl->id * 0x08)) & 0x00100000;"
+      }
+    },
+    {
+      "member": "block",
+      "value": "gk104_runl_block",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 416,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 418,
+          "op": "mask",
+          "reg": "0x002630"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Sets bit 0 of register 0x002630 for the runlist to block its scheduled channels.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 418,
+        "quote": "nvkm_mask(runl->fifo->engine.subdev.device, 0x002630, BIT(runl->id), BIT(runl->id));"
+      }
+    },
+    {
+      "member": "allow",
+      "value": "gk104_runl_allow",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 410,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 412,
+          "op": "mask",
+          "reg": "0x002630"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Clears bit 0 of register 0x002630 for the runlist to allow its scheduled channels to run.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 412,
+        "quote": "nvkm_mask(runl->fifo->engine.subdev.device, 0x002630, BIT(runl->id), 0x00000000);"
+      }
+    },
+    {
+      "member": "fault_clear",
+      "value": "gk104_runl_fault_clear",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 404,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 406,
+          "op": "wr32",
+          "reg": "0x00262c"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the runlist ID bit to register 0x00262c to clear pending faults for that runlist.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 406,
+        "quote": "nvkm_wr32(runl->fifo->engine.subdev.device, 0x00262c, BIT(runl->id));"
+      }
+    },
+    {
+      "member": "preempt_pending",
+      "value": "gf100_runl_preempt_pending",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 370,
+      "parent": "runl",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 372,
+          "op": "rd32",
+          "reg": "0x002634"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads register 0x002634 and tests bit 20 to determine whether a preemption is pending.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 372,
+        "quote": "return nvkm_rd32(runl->fifo->engine.subdev.device, 0x002634) & 0x00100000;"
+      }
+    },
+    {
+      "member": "runq",
+      "value": "gk104_runq",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 396,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Run queue sub-table with init, interrupt, and idle functions for PBDMA command buffer execution.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 396,
+        "quote": "gk104_runq = {"
+      }
+    },
+    {
+      "member": "init",
+      "value": "gk104_runq_init",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 379,
+      "parent": "runq",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 385,
+          "op": "wr32",
+          "reg": "0x040148 + (runq->id * 0x2000)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 386,
+          "op": "wr32",
+          "reg": "0x04014c + (runq->id * 0x2000)"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Initialises the run queue base and writes interrupt masks and interrupt-enable masks to the run queue hardware registers.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 385,
+        "quote": "nvkm_wr32(device, 0x040148 + (runq->id * 0x2000), 0xffffffff);"
+      }
+    },
+    {
+      "member": "intr",
+      "value": "gk104_runq_intr",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 370,
+      "parent": "runq",
+      "accesses": [],
+      "role": "interrupt",
+      "needed_for_compute": true,
+      "what": "Calls the handlers of both interrupt registers of the PBDMA unit and returns whether either had a pending interrupt",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 372,
+        "quote": "bool intr0 = gf100_runq_intr(runq, NULL);"
+      }
+    },
+    {
+      "member": "intr_0_names",
+      "value": "gk104_runq_intr_0_names",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "runq",
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Table of names for the bits of the first PBDMA interrupt register (names such as HCE_RE_ILLEGAL_OP; HCE is not expanded in the source)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 370,
+        "quote": "gk104_runq_intr(struct nvkm_runq *runq, struct nvkm_runl *null)"
+      }
+    },
+    {
+      "member": "idle",
+      "value": "gk104_runq_idle",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 289,
+      "parent": "runq",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 293,
+          "op": "rd32",
+          "reg": "0x003080 + (runq->id * 4)"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the run queue status register and tests bits 13 to 15 to determine whether the run queue is idle.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 293,
+        "quote": "return !(nvkm_rd32(device, 0x003080 + (runq->id * 4)) & 0x0000e000);"
+      }
+    },
+    {
+      "member": "engn",
+      "value": "gk104_engn",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 271,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Engine sub-table with context-switch, context-ID, MMU fault, constructor, and bind functions for per-engine channel context management.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 271,
+        "quote": "gk104_engn = {"
+      }
+    },
+    {
+      "member": "chsw",
+      "value": "gk104_engn_chsw",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 259,
+      "parent": "engn",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine status register and returns true when the engine is busy and awaiting context-switch acknowledgement.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 264,
+        "quote": "if (status.busy && status.chsw)"
+      }
+    },
+    {
+      "member": "cxid",
+      "value": "gk104_engn_cxid",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 245,
+      "parent": "engn",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine status and returns the channel or channel-group ID of the channel currently loaded on the engine.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 252,
+        "quote": "return status.chan->id;"
+      }
+    },
+    {
+      "member": "mmu_fault_trigger",
+      "value": "gf100_engn_mmu_fault_trigger",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 222,
+      "parent": "engn",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 231,
+          "op": "mask",
+          "reg": "0x002140"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 232,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 233,
+          "op": "wr32",
+          "reg": "0x002a30 + (engn->id * 4)"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Increments the refcount of triggered MMU faults on this runlist, enables nonstall interrupts, and writes 0x100 to register 0x002100 to trigger an MMU fault on the engine.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 232,
+        "quote": "nvkm_wr32(device, 0x002100, 0x00000100);"
+      }
+    },
+    {
+      "member": "mmu_fault_triggered",
+      "value": "gf100_engn_mmu_fault_triggered",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 202,
+      "parent": "engn",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 207,
+          "op": "rd32",
+          "reg": "0x002a30 + (engn->id * 4)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 214,
+          "op": "mask",
+          "reg": "0x002a30 + (engn->id * 4)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 216,
+          "op": "mask",
+          "reg": "0x002140"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine MMU-fault-triggered status bit from the MMU-fault register, clears it, and decrements the triggered-fault refcount.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 207,
+        "quote": "u32 data = nvkm_rd32(device, 0x002a30 + (engn->id * 4));"
+      }
+    },
+    {
+      "member": "ctor",
+      "value": "gk104_ectx_ctor",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 178,
+      "parent": "engn",
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Gets a VMM mapping for the engine context and maps the instance memory into it.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 183,
+        "quote": "ret = nvkm_vmm_get(vctx->vmm, 12, vctx->inst->size, &vctx->vma);"
+      }
+    },
+    {
+      "member": "bind",
+      "value": "gk104_ectx_bind",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 134,
+      "parent": "engn",
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Maps the virtual context address into the instance memory at per-engine pointers determined by the engine type.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 168,
+        "quote": "nvkm_wo32(chan->inst, ptr0 + 0, lower_32_bits(addr));"
+      }
+    },
+    {
+      "member": "engn_ce",
+      "value": "gk104_engn_ce",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 281,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Engine table for the copy engine (CE): channel switch, context ID and MMU fault functions, without the context members of the GR table",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 281,
+        "quote": "gk104_engn_ce = {"
+      }
+    },
+    {
+      "member": "chsw",
+      "value": "gk104_engn_chsw",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 259,
+      "parent": "engn_ce",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine status register and returns true when the engine is busy and awaiting context-switch acknowledgement.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 264,
+        "quote": "if (status.busy && status.chsw)"
+      }
+    },
+    {
+      "member": "cxid",
+      "value": "gk104_engn_cxid",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 245,
+      "parent": "engn_ce",
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine status and returns the channel or channel-group ID of the channel currently loaded on the engine.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 252,
+        "quote": "return status.chan->id;"
+      }
+    },
+    {
+      "member": "mmu_fault_trigger",
+      "value": "gf100_engn_mmu_fault_trigger",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 222,
+      "parent": "engn_ce",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 231,
+          "op": "mask",
+          "reg": "0x002140"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 232,
+          "op": "wr32",
+          "reg": "0x002100"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 233,
+          "op": "wr32",
+          "reg": "0x002a30 + (engn->id * 4)"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Increments the refcount of triggered MMU faults on this runlist, enables nonstall interrupts, and writes 0x100 to register 0x002100 to trigger an MMU fault on the engine.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 232,
+        "quote": "nvkm_wr32(device, 0x002100, 0x00000100);"
+      }
+    },
+    {
+      "member": "mmu_fault_triggered",
+      "value": "gf100_engn_mmu_fault_triggered",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 202,
+      "parent": "engn_ce",
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 207,
+          "op": "rd32",
+          "reg": "0x002a30 + (engn->id * 4)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 214,
+          "op": "mask",
+          "reg": "0x002a30 + (engn->id * 4)"
+        },
+        {
+          "file": "nvkm/engine/fifo/gf100.c",
+          "line": 216,
+          "op": "mask",
+          "reg": "0x002140"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the engine MMU-fault-triggered status bit from the MMU-fault register, clears it, and decrements the triggered-fault refcount.",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 207,
+        "quote": "u32 data = nvkm_rd32(device, 0x002a30 + (engn->id * 4));"
+      }
+    }
+  ],
+  "depends_on": [
+    "imem",
+    "mc",
+    "top"
+  ],
+  "summary": "The FIFO engine takes commands from the command buffers of channels and hands them to the engines of the card (for a compute job: GR, and the copy engine CE) through runlists and PBDMA units (runq). gk104_fifo_init sets the USERD base in BAR1 (0x002254), acknowledges all interrupts (0x002100) and enables them (0x002140). The tables named by the function table hold the runlist operations (build, commit, block, allow), the PBDMA setup, the engine status queries and the MMU fault handling. For milestone S1 the Haiku driver needs the init members, the runlist members update, insert_chan, commit, wait and pending, runq.init, and the engine context members; the fault and interrupt members can start as logging only. The per-channel table (channel control block, bind, start) is not part of this model."
+}

@@ -22,7 +22,8 @@ DOCS_DIR = os.path.join(ROOT, "docs", "hardware-model")
 
 # The six subsystems for task C3a
 C3A_SUBSYSTEMS = ["mc", "bar", "imem", "mmu", "fb", "top",
-                  "privring", "ltc", "timer"]  # the last three: task C3b
+                  "privring", "ltc", "timer",  # C3b
+                  "fifo"]  # C3c
 
 # Constructor function names and their table names (from nvf1_chipset in base.c)
 # These are looked up dynamically from the chipset table.
