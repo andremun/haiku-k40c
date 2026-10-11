@@ -1,8 +1,8 @@
 # Status
 
 Current phase: B (Nouveau analysis)
-Current task: B5
-Task state: DONE. Attempt 2 accepted (2026-10-11): fixed 12 failures — `top`/`ltc`/`timer`/`privring` changed to needed; reasons corrected (mc, imem, privring, top, HWW); GR hook init→both; steps 1/3/4 changed to partly-known; channel step with 5 required functions added; two post-launch steps added. 17 steps, 31 subsystems, 18 GR hooks. `make check` 0 failures.
+Current task: none
+Task state: WAITING. B5 is done. B4 and C1 run in their own worktrees (branches task-b4 and task-c1). Do not start a task here.
 Last updated: 2026-10-11
 
 ## Last result

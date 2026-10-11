@@ -178,7 +178,8 @@ SUBSYSTEM_STATUS = {
     "ce":        ("optional", "copy engine handles memory transfers but compute can use channel"),
     "dma":       ("optional", "DMA engine supports direct memory access for non-GPU transfers"),
     "mxm":       ("optional", "Modular MXM interface handles laptop-specific connector detection"),
-    "pmu":       ("optional", "power management unit handles GPU power states and transitions"),
+    "pmu":       ("optional", "the GR engine calls nvkm_pmu_pgob at gr/gf100.c:2006 to switch power "
+                           "gating off; needed if the video BIOS leaves power gating on (not known)"),
     "sw":        ("optional", "software subsystem provides generic kernel infrastructure support"),
 }
 

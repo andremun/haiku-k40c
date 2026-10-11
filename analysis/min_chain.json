@@ -198,7 +198,7 @@
       "file": "nvkm/engine/device/base.c",
       "line": 1788,
       "status": "optional",
-      "reason": "power management unit handles GPU power states and transitions"
+      "reason": "the GR engine calls nvkm_pmu_pgob at gr/gf100.c:2006 to switch power gating off; needed if the video BIOS leaves power gating on (not known)"
     },
     {
       "name": "privring",

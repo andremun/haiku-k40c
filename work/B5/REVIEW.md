@@ -45,3 +45,31 @@ Keep `tools/min_chain.py` and change its tables. Do not start again.
 
 One session, no context compaction, the tool derives lines and registers
 itself, and the firmware entries are right.
+
+# Review of B5, attempt 2 (2026-10-11): ACCEPT
+
+All 12 failures are fixed. The chain now has 17 steps in the right order
+(engines, firmware start, channel, GR context, Mesa setup, launch, wait,
+read back), 11 needed subsystems, and the steps that the analysis does
+not cover are marked `partly-known` or `unknown` with a reason.
+
+Limits of this result, for the tasks that use it:
+
+- The attempt fixed what the check named and nothing more. The reasons of
+  the 16 `optional` subsystems are still written from the names. The
+  scaffold checked them with grep against the GR, FIFO, FB, MC and core
+  code: `bus`, `ce`, `devinit`, `dma`, `fuse`, `i2c`, `iccsense`, `mxm`,
+  `sw` and `volt` are not used there; `bios`, `clk` and `gpio` are used
+  only by the memory reclocking code in `fb/ram*.c`; `pci` only to
+  rearm MSI (`core/intr.c:179`); `therm` only for clock gating
+  (`gr/gf100.c:2369`). So `optional` holds for these, but do not quote
+  their `reason` texts.
+- `pmu`: `gf100_gr_oneinit` calls `nvkm_pmu_pgob(device->pmu, false)`
+  (`gr/gf100.c:2006`), which switches power gating off. Whether the K40c
+  needs this after the video BIOS has run is not known. The scaffold
+  changed the `pmu` reason in `tools/min_chain.py` to say this (status
+  stays `optional`) and regenerated the JSON. Phase C should settle it.
+- The `use` values of the GR hooks other than `init`, `init_zcull` and
+  the two ROP hooks are not verified.
+- Steps 6, 8, 9 and 10 (`top`, `ltc`, `timer`, `privring`) name no
+  function. Their init functions are work for C3.
