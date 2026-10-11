@@ -1,0 +1,76 @@
+{
+  "summary": "Instance memory management: allocates and wraps instance memory objects from physical RAM, suspends and saves object contents to host memory, restores them on resume via BAR2, and manages the instance address space lifetime.",
+  "depends_on": ["bar"],
+  "members": {
+    "dtor": {
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Returns the internal nv50_instmem struct pointer for cleanup of instance memory resources",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 406,
+        "quote": "return nv50_instmem(base);"
+      }
+    },
+    "fini": {
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Sets the instance memory base address to ~0ULL to invalidate the address space",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 400,
+        "quote": "nv50_instmem(base)->addr = ~0ULL;"
+      }
+    },
+    "suspend": {
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Saves instance object contents to host memory for objects marked as preserve",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 183,
+        "quote": "int ret = nvkm_instobj_save(iobj);"
+      }
+    },
+    "resume": {
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Restores instance objects from host memory then reinitialises BAR2 address space",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 168,
+        "quote": "nvkm_bar_bar2_init(imem->subdev.device);"
+      }
+    },
+    "memory_new": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Allocates physical RAM from device then wraps it into an instance memory object",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 384,
+        "quote": "ret = nvkm_ram_get(imem->subdev.device, 0, 1, page, size, true, true, &ram);"
+      }
+    },
+    "memory_wrap": {
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Allocates nv50_instobj struct then wraps given RAM into it as an instance memory object",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 367,
+        "quote": "nvkm_instobj_ctor(&nv50_instobj_func, &imem->base, &iobj->base);"
+      }
+    },
+    "zero": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Flags whether new instance memory objects should be zeroed on allocation",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 415,
+        "quote": ".zero = false,"
+      }
+    }
+  }
+}

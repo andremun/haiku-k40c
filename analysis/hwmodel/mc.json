@@ -1,0 +1,336 @@
+{
+  "subsystem": "mc",
+  "constructor": {
+    "name": "gk104_mc_new",
+    "file": "nvkm/subdev/mc/gk104.c",
+    "line": 63
+  },
+  "table": {
+    "name": "gk104_mc",
+    "file": "nvkm/subdev/mc/gk104.c",
+    "line": 52
+  },
+  "members": [
+    {
+      "member": "init",
+      "value": "nv50_mc_init",
+      "kind": "function",
+      "file": "nvkm/subdev/mc/nv50.c",
+      "line": 41,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/mc/nv50.c",
+          "line": 44,
+          "op": "wr32",
+          "reg": "0x000200"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes 0xffffffff to register 0x000200, the enable bits of all engines and subdevices",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 44,
+        "quote": "nvkm_wr32(device, 0x000200, 0xffffffff); /* everything on */"
+      }
+    },
+    {
+      "member": "intr",
+      "value": "gt215_mc_intr",
+      "kind": "table",
+      "file": "nvkm/subdev/mc/gt215.c",
+      "line": 73,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Reference to the gt215 interrupt handler table providing pending block allow unarm rearm",
+      "certainty": "KNOWN"
+    },
+    {
+      "member": "pending",
+      "value": "nv04_mc_intr_pending",
+      "kind": "function",
+      "file": "nvkm/subdev/mc/nv04.c",
+      "line": 94,
+      "parent": "intr",
+      "accesses": [
+        {
+          "file": "nvkm/subdev/mc/nv04.c",
+          "line": 101,
+          "op": "rd32",
+          "reg": "0x000100 + (leaf * 4)"
+        }
+      ],
+      "role": "interrupt",
+      "needed_for_compute": true,
+      "what": "Reads per-engine interrupt status from MMIO 0x0100 and returns whether any interrupt is pending",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 101,
+        "quote": "intr->stat[leaf] = nvkm_rd32(mc->subdev.device, 0x000100 + (leaf * 4));"
+      }
+    },
+    {
+      "member": "unarm",
+      "value": "nv04_mc_intr_unarm",
+      "kind": "function",
+      "file": "nvkm/subdev/mc/nv04.c",
+      "line": 82,
+      "parent": "intr",
+      "accesses": [
+        {
+          "file": "nvkm/subdev/mc/nv04.c",
+          "line": 88,
+          "op": "wr32",
+          "reg": "0x000140 + (leaf * 4)"
+        },
+        {
+          "file": "nvkm/subdev/mc/nv04.c",
+          "line": 90,
+          "op": "rd32",
+          "reg": "0x000140"
+        }
+      ],
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Writes 0 to MMIO 0x0140 per engine to disable interrupt auto-rearm then reads to clear",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 88,
+        "quote": "nvkm_wr32(mc->subdev.device, 0x000140 + (leaf * 4), 0x00000000);"
+      }
+    },
+    {
+      "member": "rearm",
+      "value": "nv04_mc_intr_rearm",
+      "kind": "function",
+      "file": "nvkm/subdev/mc/nv04.c",
+      "line": 72,
+      "parent": "intr",
+      "accesses": [
+        {
+          "file": "nvkm/subdev/mc/nv04.c",
+          "line": 78,
+          "op": "wr32",
+          "reg": "0x000140 + (leaf * 4)"
+        }
+      ],
+      "role": "interrupt",
+      "needed_for_compute": true,
+      "what": "Writes 0x00000001 to MMIO 0x0140 per engine to acknowledge and rearm interrupt status",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 78,
+        "quote": "nvkm_wr32(mc->subdev.device, 0x000140 + (leaf * 4), 0x00000001);"
+      }
+    },
+    {
+      "member": "block",
+      "value": "gt215_mc_intr_block",
+      "kind": "function",
+      "file": "nvkm/subdev/mc/gt215.c",
+      "line": 65,
+      "parent": "intr",
+      "accesses": [
+        {
+          "file": "nvkm/subdev/mc/gt215.c",
+          "line": 69,
+          "op": "mask",
+          "reg": "0x000640 + (leaf * 4)"
+        }
+      ],
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Writes zero mask to MMIO 0x0640 per engine leaf to block specified interrupt bits",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 69,
+        "quote": "nvkm_mask(mc->subdev.device, 0x000640 + (leaf * 4), mask, 0);"
+      }
+    },
+    {
+      "member": "allow",
+      "value": "gt215_mc_intr_allow",
+      "kind": "function",
+      "file": "nvkm/subdev/mc/gt215.c",
+      "line": 57,
+      "parent": "intr",
+      "accesses": [
+        {
+          "file": "nvkm/subdev/mc/gt215.c",
+          "line": 61,
+          "op": "mask",
+          "reg": "0x000640 + (leaf * 4)"
+        }
+      ],
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Writes mask to MMIO 0x0640 per engine leaf to allow specified interrupt bits to pass",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 61,
+        "quote": "nvkm_mask(mc->subdev.device, 0x000640 + (leaf * 4), mask, mask);"
+      }
+    },
+    {
+      "member": "intrs",
+      "value": "gk104_mc_intrs",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Array of interrupt mapping data defining engine-to-interrupt routing configuration",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "intr_nonstall",
+      "value": "true",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Flags that non-stall interrupts are enabled for this GPU interrupt controller",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "reset",
+      "value": "gk104_mc_reset",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Data table of reset register mappings used to reinitialise GPU subsystem registers",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "device",
+      "value": "nv04_mc_device",
+      "kind": "table",
+      "file": "nvkm/subdev/mc/nv04.c",
+      "line": 55,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Reference to the nv04 device management sub-table providing enable disable enabled checks",
+      "certainty": "KNOWN"
+    },
+    {
+      "member": "enabled",
+      "value": "nv04_mc_device_enabled",
+      "kind": "function",
+      "file": "nvkm/subdev/mc/nv04.c",
+      "line": 49,
+      "parent": "device",
+      "accesses": [
+        {
+          "file": "nvkm/subdev/mc/nv04.c",
+          "line": 51,
+          "op": "rd32",
+          "reg": "0x000200"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Reads register 0x000200 and checks that the enable bits of one engine or subdevice are set",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 51,
+        "quote": "return (nvkm_rd32(mc->subdev.device, 0x000200) & mask) == mask;"
+      }
+    },
+    {
+      "member": "enable",
+      "value": "nv04_mc_device_enable",
+      "kind": "function",
+      "file": "nvkm/subdev/mc/nv04.c",
+      "line": 40,
+      "parent": "device",
+      "accesses": [
+        {
+          "file": "nvkm/subdev/mc/nv04.c",
+          "line": 44,
+          "op": "mask",
+          "reg": "0x000200"
+        },
+        {
+          "file": "nvkm/subdev/mc/nv04.c",
+          "line": 45,
+          "op": "rd32",
+          "reg": "0x000200"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Sets the mask bits in register 0x000200 to enable one engine or subdevice, then reads the register back",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 44,
+        "quote": "nvkm_mask(device, 0x000200, mask, mask);"
+      }
+    },
+    {
+      "member": "disable",
+      "value": "nv04_mc_device_disable",
+      "kind": "function",
+      "file": "nvkm/subdev/mc/nv04.c",
+      "line": 34,
+      "parent": "device",
+      "accesses": [
+        {
+          "file": "nvkm/subdev/mc/nv04.c",
+          "line": 36,
+          "op": "mask",
+          "reg": "0x000200"
+        }
+      ],
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Clears the mask bits in register 0x000200 to disable one engine or subdevice",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 36,
+        "quote": "nvkm_mask(mc->subdev.device, 0x000200, mask, 0x00000000);"
+      }
+    },
+    {
+      "member": "unk260",
+      "value": "gf100_mc_unk260",
+      "kind": "function",
+      "file": "nvkm/subdev/mc/gf100.c",
+      "line": 62,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/mc/gf100.c",
+          "line": 64,
+          "op": "wr32",
+          "reg": "0x000260"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes data to register 0x000260; the GR engine calls it with 0 before and 1 after the microcode upload (purpose not known)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 64,
+        "quote": "nvkm_wr32(mc->subdev.device, 0x000260, data);"
+      }
+    }
+  ],
+  "depends_on": [
+    "top"
+  ],
+  "summary": "Master control: register 0x000200 holds one enable bit for each engine and subdevice (nv50_mc_init writes 0xffffffff to it, with the source comment 'everything enabled'), registers 0x000100, 0x000140 and 0x000640 report, arm and mask the interrupt of each unit, and register 0x000260 is written 0 and then 1 around the microcode upload of the GR engine (purpose not known). The Haiku driver must enable the units it uses and route their interrupts."
+}

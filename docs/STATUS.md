@@ -2,7 +2,7 @@
 
 Current phase: C and D (hardware database; host-side algorithms and tests)
 Current task: none
-Task state: WAITING. Phase B, C1, C2 and D1 are done. Other tasks run in their own worktrees. Do not start a task here.
+Task state: WAITING. Phase B, C1, C2, C3a and D1 are done. Other tasks run in their own worktrees. Do not start a task here.
 Last updated: 2026-10-11
 
 ## Last result
@@ -63,3 +63,4 @@ the old layout. Details: `reference/pci/README.md`.
 | C2 | DONE | 2026-10-11 | Firmware manifest: 4 built-in arrays (FECS data/code, GPCCS data/code), 4 external firmware files, 17 load-sequence calls. `tools/fw_manifest.py` generates manifest.yaml; `--check` and `--extract DIR` modes. `firmware/README.md` 139 lines with all required sections. `make check` 0 failures. |
 | D1 | DONE | 2026-10-11 | Register I/O abstraction: `src/hw/RegisterIO.h` + `.cpp` (RegisterIO, MockMMIO, TraceMMIO, TraceMismatch, parseTrace/formatTrace), `tests/test_registerio.cpp` (43 CHECKs), `tests/Makefile`, `docs/register-io.md` (109 lines). `make check` 0 failures. |
 | B4 | DONE | 2026-10-11 | Linux dependency map: 139 symbols called from 70 files, each with category and Haiku replacement; the tool writes the document. Two reworks, see `work/B4/REVIEW.md`. |
+| C3a | DONE | 2026-10-11 | Subsystem models for mc, bar, imem, mmu, fb, top: 46 function-table members, each with role, description and a quoted source line. Two sessions; scaffold corrections in `work/C3a/REVIEW.md`. |

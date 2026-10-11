@@ -1,0 +1,138 @@
+{
+  "subsystem": "imem",
+  "constructor": {
+    "name": "nv50_instmem_new",
+    "file": "nvkm/subdev/instmem/nv50.c",
+    "line": 436
+  },
+  "table": {
+    "name": "nv50_instmem",
+    "file": "nvkm/subdev/instmem/nv50.c",
+    "line": 410
+  },
+  "members": [
+    {
+      "member": "dtor",
+      "value": "nv50_instmem_dtor",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv50.c",
+      "line": 404,
+      "parent": null,
+      "accesses": [],
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Returns the internal nv50_instmem struct pointer for cleanup of instance memory resources",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 406,
+        "quote": "return nv50_instmem(base);"
+      }
+    },
+    {
+      "member": "fini",
+      "value": "nv50_instmem_fini",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv50.c",
+      "line": 398,
+      "parent": null,
+      "accesses": [],
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Sets the instance memory base address to ~0ULL to invalidate the address space",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 400,
+        "quote": "nv50_instmem(base)->addr = ~0ULL;"
+      }
+    },
+    {
+      "member": "suspend",
+      "value": "nv04_instmem_suspend",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv04.c",
+      "line": 177,
+      "parent": null,
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Saves instance object contents to host memory for objects marked as preserve",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 183,
+        "quote": "int ret = nvkm_instobj_save(iobj);"
+      }
+    },
+    {
+      "member": "resume",
+      "value": "nv04_instmem_resume",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv04.c",
+      "line": 159,
+      "parent": null,
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Restores instance objects from host memory then reinitialises BAR2 address space",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 168,
+        "quote": "nvkm_bar_bar2_init(imem->subdev.device);"
+      }
+    },
+    {
+      "member": "memory_new",
+      "value": "nv50_instobj_new",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv50.c",
+      "line": 377,
+      "parent": null,
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Allocates physical RAM from device then wraps it into an instance memory object",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 384,
+        "quote": "ret = nvkm_ram_get(imem->subdev.device, 0, 1, page, size, true, true, &ram);"
+      }
+    },
+    {
+      "member": "memory_wrap",
+      "value": "nv50_instobj_wrap",
+      "kind": "function",
+      "file": "nvkm/subdev/instmem/nv50.c",
+      "line": 357,
+      "parent": null,
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Allocates nv50_instobj struct then wraps given RAM into it as an instance memory object",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 367,
+        "quote": "nvkm_instobj_ctor(&nv50_instobj_func, &imem->base, &iobj->base);"
+      }
+    },
+    {
+      "member": "zero",
+      "value": "false",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Flags whether new instance memory objects should be zeroed on allocation",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 415,
+        "quote": ".zero = false,"
+      }
+    }
+  ],
+  "depends_on": [
+    "bar"
+  ],
+  "summary": "Instance memory management: allocates and wraps instance memory objects from physical RAM, suspends and saves object contents to host memory, restores them on resume via BAR2, and manages the instance address space lifetime."
+}

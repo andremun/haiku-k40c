@@ -1,0 +1,41 @@
+{
+  "subsystem": "top",
+  "constructor": {
+    "name": "gk104_top_new",
+    "file": "nvkm/subdev/top/gk104.c",
+    "line": 117
+  },
+  "table": {
+    "name": "gk104_top",
+    "file": "nvkm/subdev/top/gk104.c",
+    "line": 112
+  },
+  "members": [
+    {
+      "member": "parse",
+      "value": "gk104_top_parse",
+      "kind": "function",
+      "file": "nvkm/subdev/top/gk104.c",
+      "line": 29,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/top/gk104.c",
+          "line": 45,
+          "op": "rd32",
+          "reg": "0x022700 + (i * 0x04)"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Reads 64-entry topology table from MMIO to enumerate GPU engines and build per-engine info structs",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 45,
+        "quote": "data = nvkm_rd32(device, 0x022700 + (i * 0x04));"
+      }
+    }
+  ],
+  "depends_on": [],
+  "summary": "Parses the device topology table at MMIO offset 0x022700 to build a list of all engines and their instances, identifying each engine type, instance number, address, fault channel, IRQ, runlist, and reset source for the GPU."
+}

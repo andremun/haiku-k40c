@@ -1,0 +1,199 @@
+{
+  "subsystem": "fb",
+  "constructor": {
+    "name": "gk110_fb_new",
+    "file": "nvkm/subdev/fb/gk110.c",
+    "line": 69
+  },
+  "table": {
+    "name": "gk110_fb",
+    "file": "nvkm/subdev/fb/gk110.c",
+    "line": 56
+  },
+  "members": [
+    {
+      "member": "dtor",
+      "value": "gf100_fb_dtor",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 99,
+      "parent": null,
+      "accesses": [],
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Returns the internal gf100_fb struct pointer for cleanup of framebuffer resources",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 103,
+        "quote": "return fb;"
+      }
+    },
+    {
+      "member": "oneinit",
+      "value": "gf100_fb_oneinit",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 45,
+      "parent": null,
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Allocates MMU read and write scratch memory from instance memory with configurable size",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 54,
+        "quote": "ret = nvkm_memory_new(device, NVKM_MEM_TARGET_INST, size, 0x1000,"
+      }
+    },
+    {
+      "member": "init",
+      "value": "gf100_fb_init",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 87,
+      "parent": null,
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Initialises clock gating by calling therm clkgate init with the clkgate_pack data table",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 93,
+        "quote": "nvkm_therm_clkgate_init(device->therm,"
+      }
+    },
+    {
+      "member": "init_page",
+      "value": "gf100_fb_init_page",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 68,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/fb/gf100.c",
+          "line": 72,
+          "op": "mask",
+          "reg": "0x100c80"
+        },
+        {
+          "file": "nvkm/subdev/fb/gf100.c",
+          "line": 73,
+          "op": "mask",
+          "reg": "0x100c80"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Configures framebuffer page size by setting or clearing bit 0 of MMIO 0x100c80 for 16 or 17 bit page config",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 72,
+        "quote": "case 16: nvkm_mask(device, 0x100c80, 0x00000001, 0x00000001); break;"
+      }
+    },
+    {
+      "member": "intr",
+      "value": "gf100_fb_intr",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 32,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/fb/gf100.c",
+          "line": 37,
+          "op": "rd32",
+          "reg": "0x000100"
+        }
+      ],
+      "role": "interrupt",
+      "needed_for_compute": true,
+      "what": "Reads MMIO 0x0100 to check framebuffer interrupt flags PFFB and PBFB then logs if set",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 37,
+        "quote": "u32 intr = nvkm_rd32(device, 0x000100);"
+      }
+    },
+    {
+      "member": "sysmem.flush_page_init",
+      "value": "gf100_fb_sysmem_flush_page_init",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/gf100.c",
+      "line": 81,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/fb/gf100.c",
+          "line": 83,
+          "op": "wr32",
+          "reg": "0x100c10"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Writes the sysmem flush page address shifted by 8 bits to MMIO 0x100c10 to flush page init",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 83,
+        "quote": "nvkm_wr32(fb->subdev.device, 0x100c10, fb->sysmem.flush_page_addr >> 8);"
+      }
+    },
+    {
+      "member": "ram_new",
+      "value": "gk104_ram_new",
+      "kind": "function",
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1713,
+      "parent": null,
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Initialises RAM sub-functions via gk104_ram_new_ to create framebuffer RAM objects",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 1715,
+        "quote": "return gk104_ram_new_(&gk104_ram, fb, pram);"
+      }
+    },
+    {
+      "member": "default_bigpage",
+      "value": "17",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Sets the default big page size exponent to 17 for framebuffer page allocation",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 65,
+        "quote": ".default_bigpage = 17,"
+      }
+    },
+    {
+      "member": "clkgate_pack",
+      "value": "gk110_fb_clkgate_pack",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Data table of clock gating parameters packed for therm clkgate init function",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 47,
+        "quote": "gk110_fb_clkgate_pack[] = {"
+      }
+    }
+  ],
+  "depends_on": [
+    "imem"
+  ],
+  "summary": "Framebuffer subsystem: initialises clock gating via therm, allocates MMU read/write scratch memory, configures page size via MMIO 0x100c80, manages framebuffer interrupts from MMIO 0x0100, flushes page initialisation to MMIO 0x100c10, and creates RAM objects for framebuffer memory."
+}

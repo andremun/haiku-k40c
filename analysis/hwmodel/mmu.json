@@ -1,0 +1,68 @@
+{
+  "subsystem": "mmu",
+  "constructor": {
+    "name": "gk104_mmu_new",
+    "file": "nvkm/subdev/mmu/gk104.c",
+    "line": 38
+  },
+  "table": {
+    "name": "gk104_mmu",
+    "file": "nvkm/subdev/mmu/gk104.c",
+    "line": 28
+  },
+  "members": [
+    {
+      "member": "dma_bits",
+      "value": "40",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Sets DMA address width to 40 bits for page table address encoding",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 68,
+        "quote": ".dma_bits = 40,"
+      }
+    },
+    {
+      "member": "kind",
+      "value": "gf100_mmu_kind",
+      "kind": "function",
+      "file": "nvkm/subdev/mmu/gf100.c",
+      "line": 33,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Returns 256-entry lookup table mapping PTE attributes to hardware page kind codes",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 36,
+        "quote": "kind[256] = {"
+      }
+    },
+    {
+      "member": "kind_sys",
+      "value": "true",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Flags that the kind lookup table is used for system memory page allocation",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 69,
+        "quote": ".kind_sys = true,"
+      }
+    }
+  ],
+  "depends_on": [],
+  "summary": "Manages the GPU memory management unit: sets the DMA address width to 40 bits, provides PTE page kind lookups via a 256-entry table mapping page attributes to hardware kind codes, and configures VMM and memory structures for address translation."
+}
