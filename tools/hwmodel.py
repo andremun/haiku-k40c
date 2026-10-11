@@ -23,7 +23,12 @@ DOCS_DIR = os.path.join(ROOT, "docs", "hardware-model")
 # The six subsystems for task C3a
 C3A_SUBSYSTEMS = ["mc", "bar", "imem", "mmu", "fb", "top",
                   "privring", "ltc", "timer",  # C3b
-                  "fifo"]  # C3c
+                  "fifo",  # C3c
+                  "chan"]  # C3d
+
+# A model of a table that is not a chipset member: name -> (owning
+# subsystem, table). Added by the scaffold for task C3d.
+EXTRA = {"chan": ("fifo", "gk110_chan")}
 
 # Constructor function names and their table names (from nvf1_chipset in base.c)
 # These are looked up dynamically from the chipset table.
@@ -304,7 +309,8 @@ def generate_all():
     results = {}
 
     for sub in C3A_SUBSYSTEMS:
-        ctor = chip_map.get(sub)
+        owner = EXTRA[sub][0] if sub in EXTRA else sub
+        ctor = chip_map.get(owner)
         if not ctor:
             print(f"warning: no chipset entry for '{sub}'", file=sys.stderr)
             continue
@@ -315,7 +321,9 @@ def generate_all():
         cf, cl = info
 
         # Find the table reference in the constructor
-        table_ref_info = find_table_ref(ctor_bodies.get(sub, (cf, cl, cl + 1)))
+        table_ref_info = find_table_ref(ctor_bodies.get(owner, (cf, cl, cl + 1)))
+        if sub in EXTRA:
+            table_ref_info = (EXTRA[sub][1],) + tuple(defs[("T", EXTRA[sub][1])])
         if not table_ref_info:
             print(f"warning: no function table found in {ctor}", file=sys.stderr)
             continue

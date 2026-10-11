@@ -1,0 +1,266 @@
+{
+  "subsystem": "chan",
+  "constructor": {
+    "name": "gk110_fifo_new",
+    "file": "nvkm/engine/fifo/gk110.c",
+    "line": 128
+  },
+  "table": {
+    "name": "gk110_chan",
+    "file": "nvkm/engine/fifo/gk110.c",
+    "line": 49
+  },
+  "members": [
+    {
+      "member": "inst",
+      "value": "gf100_chan_inst",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 142,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "size",
+      "value": "0x1000",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "inst",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "zero",
+      "value": "true",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "inst",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "vmm",
+      "value": "true",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "inst",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "userd",
+      "value": "gk104_chan_userd",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 115,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "bar",
+      "value": "1",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "userd",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "size",
+      "value": "0x200",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "userd",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "clear",
+      "value": "gf100_chan_userd_clear",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 118,
+      "parent": "userd",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "ramfc",
+      "value": "gk104_chan_ramfc",
+      "kind": "table",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 108,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "write",
+      "value": "gk104_chan_ramfc_write",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 82,
+      "parent": "ramfc",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "devm",
+      "value": "0xfff",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "ramfc",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "priv",
+      "value": "true",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": "ramfc",
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "bind",
+      "value": "gk104_chan_bind",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 72,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 77,
+          "op": "mask",
+          "reg": "0x800004 + (chan->id * 8)"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "unbind",
+      "value": "gk104_chan_unbind",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 56,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 60,
+          "op": "wr32",
+          "reg": "0x800000 + (chan->id * 8)"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "start",
+      "value": "gk104_chan_start",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 48,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 52,
+          "op": "mask",
+          "reg": "0x800004 + (chan->id * 8)"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "stop",
+      "value": "gk104_chan_stop",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 40,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/engine/fifo/gk104.c",
+          "line": 44,
+          "op": "mask",
+          "reg": "0x800004 + (chan->id * 8)"
+        }
+      ],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    },
+    {
+      "member": "preempt",
+      "value": "gk110_chan_preempt",
+      "kind": "function",
+      "file": "nvkm/engine/fifo/gk110.c",
+      "line": 36,
+      "parent": null,
+      "accesses": [],
+      "role": null,
+      "needed_for_compute": null,
+      "what": null,
+      "certainty": null
+    }
+  ],
+  "depends_on": [],
+  "summary": ""
+}

@@ -57,6 +57,7 @@ is no reference for S3 and the project stops at S2.
 | C3a | Subsystem models, part 1 (mc, bar, imem, mmu, fb, top) | `docs/tasks/C3a.md` |
 | C3b | Subsystem models, part 2 (privring, ltc, timer) | `docs/tasks/C3b.md` |
 | C3c | Subsystem models, part 3 (fifo) | `docs/tasks/C3c.md` |
+| C3d | Subsystem models, part 4 (the channel table) | `docs/tasks/C3d.md` |
 | C4 | Design documents | `docs/tasks/C4.md` |
 | C5 | Reference run under Linux and the first shader binary | `docs/tasks/C5.md` |
 
