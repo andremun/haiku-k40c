@@ -2,7 +2,7 @@
 
 Current phase: C and D (hardware database; host-side algorithms and tests)
 Current task: none
-Task state: WAITING. Phase B, C1, C2, C3a to C3d, D1 and D3 are done. Other tasks run in their own worktrees. Do not start a task here.
+Task state: WAITING. Phase B, C1, C2, C3a to C3d, D1, D2 and D3 are done. Other tasks run in their own worktrees. Do not start a task here.
 Last updated: 2026-10-12
 
 ## Last result
@@ -68,3 +68,4 @@ the old layout. Details: `reference/pci/README.md`.
 | C3c | DONE | 2026-10-12 | Subsystem model for fifo: 48 members (15 main + 33 nested in six sub-tables), all KNOWN with evidence lines verified against source. `make check` 0 failures. |
 | C3d | DONE | 2026-10-12 | Subsystem model for chan: 17 members (8 top-level + 9 nested in inst/userd/ramfc). 6 functions KNOWN with evidence, 11 data/value INFERRED. `make check` 0 failures. |
 | D3 | DONE | 2026-10-12 | GPFIFO push-buffer encoding: `src/fifo/PushBuffer.h` + `.cpp` (header encode/decode for 4 types, PushBuffer builder, decodeBuffer, GpEntry encode/decode, GpFifo ring), `tests/test_pushbuffer.cpp` (98 checks), `docs/pushbuffer-encoding.md` (103 lines). `make check` 0 failures. |
+| D2 | DONE | 2026-10-12 | Page-table encoding and address-space model. Acceptance test 74 checks, own tests 31. Two reworks; the scaffold located all six code defects, see `work/D2/REVIEW.md`. |
