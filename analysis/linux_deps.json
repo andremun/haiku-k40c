@@ -1,0 +1,1795 @@
+[
+  {
+    "symbol": "ALIGN",
+    "count": 8,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2291
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "ALIGN(x, a) rounds x up to the next multiple of a. Haiku can use ((x + a - 1) & ~(a - 1)) directly."
+  },
+  {
+    "symbol": "ALIGN_DOWN",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1786
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "ALIGN_DOWN(x, a) rounds x down to the previous multiple of a. Haiku can use (x & ~(a - 1)) directly."
+  },
+  {
+    "symbol": "ARRAY_SIZE",
+    "count": 7,
+    "example": {
+      "file": "nvkm/engine/fifo/gk104.c",
+      "line": 772
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "ARRAY_SIZE(x) is a compile-time array size macro. Haiku can use sizeof(x) / sizeof(x[0])."
+  },
+  {
+    "symbol": "BIT",
+    "count": 24,
+    "example": {
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 148
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "BIT(x) is a compile-time shift macro, not a function call. Haiku can use 1 << x directly."
+  },
+  {
+    "symbol": "BIT_ULL",
+    "count": 5,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmmgf100.c",
+      "line": 42
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "BIT_ULL(x) is a compile-time 64-bit shift macro. Haiku can use 1ULL << x directly."
+  },
+  {
+    "symbol": "BUG",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 870
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "BUG() triggers a kernel panic unconditionally. Haiku driver should handle errors gracefully instead of panicking."
+  },
+  {
+    "symbol": "BUG_ON",
+    "count": 6,
+    "example": {
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 69
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "BUG_ON(condition) triggers a kernel panic. Haiku driver should handle errors gracefully instead of panicking."
+  },
+  {
+    "symbol": "CLR_PTES",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 569
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This is a hardware constant or macro, not a Linux function. No replacement needed."
+  },
+  {
+    "symbol": "DIV_ROUND_UP",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1081
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "DIV_ROUND_UP(n, d) computes (n + d - 1) / d at compile time. Haiku can use inline formula."
+  },
+  {
+    "symbol": "ERR_PTR",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 402
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "ERR_PTR() encodes an errno as an error pointer. Haiku needs matching error pointer scheme."
+  },
+  {
+    "symbol": "FBP",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 504
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This is a hardware constant or macro, not a Linux function. No replacement needed."
+  },
+  {
+    "symbol": "INIT_LIST_HEAD",
+    "count": 20,
+    "example": {
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 384
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "list_add_link_to_tail",
+      "list_add_item"
+    ],
+    "header": "headers/private/kernel/util/list.h",
+    "note": "INIT_LIST_HEAD initializes a doubly-linked list head. Haiku list is initialized with {0} or B_OK."
+  },
+  {
+    "symbol": "INIT_WORK",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 412
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "INIT_WORK initializes a work item with a handler function. Haiku has no workqueue; use thread functions instead."
+  },
+  {
+    "symbol": "IS_ALIGNED",
+    "count": 9,
+    "example": {
+      "file": "nvkm/subdev/mmu/mem.c",
+      "line": 181
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "IS_ALIGNED(x, a) checks if x is aligned to a. Haiku can use (x & (a - 1)) == 0 directly."
+  },
+  {
+    "symbol": "IS_ERR",
+    "count": 12,
+    "example": {
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 913
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "IS_ERR() checks if a pointer is an error value (encoded errno). Haiku needs its own error pointer scheme."
+  },
+  {
+    "symbol": "LTC",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/fb/ramgf100.c",
+      "line": 508
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This is a hardware constant or macro, not a Linux function. No replacement needed."
+  },
+  {
+    "symbol": "MAP_PTES",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 567
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This is a hardware constant or macro, not a Linux function. No replacement needed."
+  },
+  {
+    "symbol": "PTE",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmmgf100.c",
+      "line": 69
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This is a hardware constant or macro, not a Linux function. No replacement needed."
+  },
+  {
+    "symbol": "PTR_ERR",
+    "count": 11,
+    "example": {
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 914
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "PTR_ERR() extracts the errno from an error pointer. Haiku needs matching error pointer scheme."
+  },
+  {
+    "symbol": "REF_PTES",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 563
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This is a hardware constant or macro, not a Linux function. No replacement needed."
+  },
+  {
+    "symbol": "WARN_ON",
+    "count": 40,
+    "example": {
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 84
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "WARN_ON(condition) logs a warning if condition is true. Haiku has no equivalent; use a debug logging macro."
+  },
+  {
+    "symbol": "__ffs",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 799
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "__ffs finds the first set bit in a 64-bit value. Haiku has no __ffs; use built-in bit scanning or a loop."
+  },
+  {
+    "symbol": "__free_page",
+    "count": 3,
+    "example": {
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 253
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "__free_page releases a single kernel page. Haiku has no page allocator in this driver context."
+  },
+  {
+    "symbol": "__mutex_init",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1107
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This symbol is not standard Linux kernel infrastructure. It may be a Nouveau-local macro or function."
+  },
+  {
+    "symbol": "__set_bit",
+    "count": 2,
+    "example": {
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 106
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This symbol is not standard Linux kernel infrastructure. It may be a Nouveau-local macro or function."
+  },
+  {
+    "symbol": "agp_backend_acquire",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/pci/agp.c",
+      "line": 87
+    },
+    "category": "D-ignore",
+    "haiku_api": [],
+    "header": null,
+    "note": "agp_backend_acquire acquires the AGP backend. Haiku driver does not use AGP."
+  },
+  {
+    "symbol": "agp_backend_release",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/pci/agp.c",
+      "line": 47
+    },
+    "category": "D-ignore",
+    "haiku_api": [],
+    "header": null,
+    "note": "agp_backend_release releases the AGP backend. Haiku driver does not use AGP."
+  },
+  {
+    "symbol": "agp_copy_info",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/pci/agp.c",
+      "line": 129
+    },
+    "category": "D-ignore",
+    "haiku_api": [],
+    "header": null,
+    "note": "agp_copy_info copies AGP GATT table info. Haiku driver does not use AGP."
+  },
+  {
+    "symbol": "agp_enable",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/pci/agp.c",
+      "line": 68
+    },
+    "category": "D-ignore",
+    "haiku_api": [],
+    "header": null,
+    "note": "agp_enable enables AGP mode. Haiku driver does not use AGP; it uses direct BAR access."
+  },
+  {
+    "symbol": "alloc_page",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 282
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "alloc_page allocates a single kernel page. Haiku needs a page-level allocator, no direct equivalent."
+  },
+  {
+    "symbol": "arch_phys_wc_add",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/pci/agp.c",
+      "line": 173
+    },
+    "category": "D-ignore",
+    "haiku_api": [],
+    "header": null,
+    "note": "arch_phys_wc_add adds a write-combining memory region. Haiku driver uses direct BAR access without WC."
+  },
+  {
+    "symbol": "arch_phys_wc_del",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/pci/agp.c",
+      "line": 100
+    },
+    "category": "D-ignore",
+    "haiku_api": [],
+    "header": null,
+    "note": "arch_phys_wc_del removes a write-combining region. Haiku driver does not use write-combining."
+  },
+  {
+    "symbol": "atomic_cmpxchg",
+    "count": 2,
+    "example": {
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 76
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_test_and_set"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "atomic_cmpxchg atomically compares and swaps. Haiku atomic_test_and_set provides compare-and-swap semantics."
+  },
+  {
+    "symbol": "atomic_dec",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 107
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_add"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "atomic_dec atomically decrements by one. Haiku has no atomic_dec; use atomic_add with -1."
+  },
+  {
+    "symbol": "atomic_dec_and_test",
+    "count": 2,
+    "example": {
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 255
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_get_and_set"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "atomic_dec_and_test decrements and returns true if result is zero. Haiku needs atomic_get_and_set with zero check."
+  },
+  {
+    "symbol": "atomic_inc",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 156
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_add"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "atomic_inc atomically increments by one. Haiku has no atomic_inc; use atomic_add with +1."
+  },
+  {
+    "symbol": "atomic_inc_return",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 222
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_get_and_set"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "atomic_inc_return atomically increments and returns the new value. Haiku needs atomic_get_and_set in a loop."
+  },
+  {
+    "symbol": "atomic_read",
+    "count": 5,
+    "example": {
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 221
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_get"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "atomic_read returns the value of an atomic variable. Haiku atomic_get provides the same semantics."
+  },
+  {
+    "symbol": "atomic_set",
+    "count": 8,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 243
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_set"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "atomic_set assigns a value to an atomic variable. Haiku atomic_set uses inline functions."
+  },
+  {
+    "symbol": "atomic_xchg",
+    "count": 2,
+    "example": {
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 70
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_get_and_set"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "atomic_xchg atomically exchanges a value and returns the old one. Haiku atomic_get_and_set provides the same functionality."
+  },
+  {
+    "symbol": "bool",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 503
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This symbol is not standard Linux kernel infrastructure. It may be a Nouveau-local macro or function."
+  },
+  {
+    "symbol": "clear_bit",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 32
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This symbol is not standard Linux kernel infrastructure. It may be a Nouveau-local macro or function."
+  },
+  {
+    "symbol": "container_of",
+    "count": 25,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 177
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "container_of computes struct pointer from member address. Haiku can use pointer arithmetic with offset."
+  },
+  {
+    "symbol": "d",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/top/gk104.c",
+      "line": 99
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This is a Nouveau-internal function, not a Linux kernel function. No Haiku replacement needed."
+  },
+  {
+    "symbol": "dma_free_coherent",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1065
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "dma_free_coherent releases coherent DMA memory. Haiku has no coherent DMA API; needs custom implementation."
+  },
+  {
+    "symbol": "dma_map_page",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 286
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "malloc"
+    ],
+    "header": null,
+    "note": "dma_map_page maps a page for device DMA access. Haiku has no DMA mapping API; needs custom implementation for GPU DMA."
+  },
+  {
+    "symbol": "dma_mapping_error",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 288
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "dma_mapping_error checks if a DMA mapping failed. Haiku DMA implementation needs its own error checking."
+  },
+  {
+    "symbol": "dma_unmap_page",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/fb/base.c",
+      "line": 251
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "free"
+    ],
+    "header": null,
+    "note": "dma_unmap_page unmaps a page previously mapped for DMA. Haiku free handles standard allocation release."
+  },
+  {
+    "symbol": "do_div",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 197
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "do_div divides a 64-bit value by a 32-bit divisor, modifying it in place. Haiku can use standard 64-bit division."
+  },
+  {
+    "symbol": "find_first_zero_bit",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 43
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "find_first_zero_bit finds the first unset bit in a bitmap. Haiku has no equivalent; needs custom bit search."
+  },
+  {
+    "symbol": "flush_work",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 314
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "flush_work waits for a work item to complete. Haiku has no workqueue; use thread join instead."
+  },
+  {
+    "symbol": "for_each_set_bit",
+    "count": 2,
+    "example": {
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 726
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "for_each_set_bit iterates over set bits in a bitmap. Haiku has no equivalent; needs custom bit iteration."
+  },
+  {
+    "symbol": "hweight32",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 935
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "hweight32 counts set bits in a 32-bit value. Haiku has no hweight; implement with bit-counting algorithm."
+  },
+  {
+    "symbol": "hweight8",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2023
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "hweight8 counts set bits in a byte. Haiku has no hweight; implement with bit-counting algorithm."
+  },
+  {
+    "symbol": "ilog2",
+    "count": 2,
+    "example": {
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 88
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "ilog2 computes the integer log2 of a value. Haiku has no ilog2; use a loop or built-in __builtin_clz."
+  },
+  {
+    "symbol": "kfree",
+    "count": 32,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 43
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "free"
+    ],
+    "header": null,
+    "note": "kfree releases memory previously allocated by kmalloc or kzalloc. Haiku free handles both."
+  },
+  {
+    "symbol": "kmalloc",
+    "count": 7,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 227
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "malloc"
+    ],
+    "header": null,
+    "note": "kmalloc allocates kernel memory without zeroing. Haiku malloc has the same semantics."
+  },
+  {
+    "symbol": "kmemdup",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2589
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "malloc",
+      "memcpy"
+    ],
+    "header": null,
+    "note": "kmemdup allocates and copies a memory region in one call. Haiku needs malloc then memcpy separately."
+  },
+  {
+    "symbol": "kref_get",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 204
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_get_and_set"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "kref_get atomically increments a kref reference count. Haiku atomic_get_and_set works but lacks overflow check."
+  },
+  {
+    "symbol": "kref_init",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 236
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_set"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "kref_init initializes a kref with count one. Haiku atomic_set works the same."
+  },
+  {
+    "symbol": "kref_put",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 196
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "kref_put decrements a kref and calls the release callback when it reaches zero. Haiku needs manual refcount + callback pattern."
+  },
+  {
+    "symbol": "kvcalloc",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 62
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "calloc"
+    ],
+    "header": null,
+    "note": "kvcalloc allocates zeroed virtually contiguous memory for arrays. Haiku calloc does not zero page-sized blocks."
+  },
+  {
+    "symbol": "kvfree",
+    "count": 5,
+    "example": {
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 60
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "free"
+    ],
+    "header": null,
+    "note": "kvfree releases memory from kmalloc or kvmalloc. Haiku free handles both but cannot distinguish allocation type."
+  },
+  {
+    "symbol": "kvmalloc",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/instmem/base.c",
+      "line": 59
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "malloc"
+    ],
+    "header": null,
+    "note": "kvmalloc allocates virtually contiguous memory, falling back to page allocations. Haiku has no direct equivalent."
+  },
+  {
+    "symbol": "kvmalloc_array",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/mmu/mem.c",
+      "line": 194
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "malloc"
+    ],
+    "header": null,
+    "note": "kvmalloc_array allocates an array with overflow check. Haiku malloc needs manual overflow check."
+  },
+  {
+    "symbol": "kvzalloc",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 100
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "calloc"
+    ],
+    "header": null,
+    "note": "kvzalloc allocates zeroed virtually contiguous memory. Haiku has no direct equivalent for zeroed virtual allocation."
+  },
+  {
+    "symbol": "kzalloc",
+    "count": 39,
+    "example": {
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 380
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "calloc"
+    ],
+    "header": null,
+    "note": "kzalloc allocates kernel memory zeroed. Haiku calloc allocates and zeroes; kmalloc does not zero."
+  },
+  {
+    "symbol": "likely",
+    "count": 7,
+    "example": {
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 193
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "likely(x) is a branch prediction hint macro. Haiku has no branch prediction attribute; the compiler optimizes independently."
+  },
+  {
+    "symbol": "list_add",
+    "count": 6,
+    "example": {
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 51
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "list_add_link_to_head"
+    ],
+    "header": "headers/private/kernel/util/list.h",
+    "note": "list_add adds an element to the head of a list. Haiku list_add_link_to_head adds to head of struct list."
+  },
+  {
+    "symbol": "list_add_tail",
+    "count": 14,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 78
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "list_add_link_to_tail"
+    ],
+    "header": "headers/private/kernel/util/list.h",
+    "note": "list_add_tail adds an element to the tail of a list. Haiku list_add_link_to_tail adds to tail of struct list."
+  },
+  {
+    "symbol": "list_del",
+    "count": 17,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 42
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "list_add_link_to_tail",
+      "list_add_item"
+    ],
+    "header": "headers/private/kernel/util/list.h",
+    "note": "list_del removes an element from a list and re-initializes it. Haiku lists do not have a remove operation; the caller must unlink."
+  },
+  {
+    "symbol": "list_del_init",
+    "count": 2,
+    "example": {
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 177
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "list_add_link_to_tail",
+      "list_add_item"
+    ],
+    "header": "headers/private/kernel/util/list.h",
+    "note": "list_del_init removes and reinitializes a list entry. Haiku lists lack a remove operation; manual unlink needed."
+  },
+  {
+    "symbol": "list_empty",
+    "count": 5,
+    "example": {
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 168
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "list_add_link_to_head"
+    ],
+    "header": "headers/private/kernel/util/list.h",
+    "note": "list_empty checks if a list has no entries. Haiku lists track count; check if first link is NULL."
+  },
+  {
+    "symbol": "list_entry",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 931
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "list_entry is a container_of macro to get struct from list member. Haiku needs manual offset computation."
+  },
+  {
+    "symbol": "list_first_entry",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1059
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "list_first_entry returns the first entry of a list. Haiku needs manual iteration for first element."
+  },
+  {
+    "symbol": "list_first_entry_or_null",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 74
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "list_first_entry_or_null returns the first entry or NULL. Haiku needs manual empty check then first element."
+  },
+  {
+    "symbol": "list_for_each_entry",
+    "count": 11,
+    "example": {
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 968
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "list_for_each_entry is a container_of-based loop macro. Haiku needs manual iteration with list traversal."
+  },
+  {
+    "symbol": "list_for_each_entry_safe",
+    "count": 8,
+    "example": {
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 344
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "list_for_each_entry_safe allows deleting entries during iteration. Haiku needs manual temp pointer."
+  },
+  {
+    "symbol": "list_last_entry",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/fb/ramgk104.c",
+      "line": 1451
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "list_last_entry returns the last entry of a list. Haiku struct list has no tail pointer; linear scan needed."
+  },
+  {
+    "symbol": "list_move_tail",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/instmem/base.c",
+      "line": 173
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "list_move_to_list"
+    ],
+    "header": "headers/private/kernel/util/list.h",
+    "note": "list_move_tail moves all entries from one list to another. Haiku list_move_to_list transfers items between lists."
+  },
+  {
+    "symbol": "lower_32_bits",
+    "count": 9,
+    "example": {
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 91
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "lower_32_bits extracts the lower 32 bits of a 64-bit value. Haiku can use (u64 & 0xFFFFFFFF) directly."
+  },
+  {
+    "symbol": "max",
+    "count": 5,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2012
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "max(x, y) is a compile-time comparison macro with type safety. Haiku can use standard max function or ternary operator."
+  },
+  {
+    "symbol": "max_t",
+    "count": 5,
+    "example": {
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 1261
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "max_t(type, x, y) is a typed comparison macro. Haiku can use standard max with explicit casting."
+  },
+  {
+    "symbol": "memcmp",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 74
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "memcmp"
+    ],
+    "header": null,
+    "note": "memcmp compares two memory blocks. Standard C function available in Haiku."
+  },
+  {
+    "symbol": "memcpy",
+    "count": 4,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 91
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "memcpy"
+    ],
+    "header": null,
+    "note": "memcpy copies a block of memory. Standard C function available in Haiku."
+  },
+  {
+    "symbol": "memcpy_fromio",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/instmem/base.c",
+      "line": 67
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "memcpy"
+    ],
+    "header": null,
+    "note": "memcpy_fromio copies from MMIO address space. Haiku memcpy works on both; IO memory access may need special barriers."
+  },
+  {
+    "symbol": "memcpy_toio",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/instmem/base.c",
+      "line": 43
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "memcpy"
+    ],
+    "header": null,
+    "note": "memcpy_toio copies to MMIO address space. Haiku memcpy works on both; IO memory access may need special barriers."
+  },
+  {
+    "symbol": "memset",
+    "count": 5,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2057
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "memset"
+    ],
+    "header": null,
+    "note": "memset sets a block of memory to a value. Standard C function available in Haiku."
+  },
+  {
+    "symbol": "memset_io",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/instmem/base.c",
+      "line": 134
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "memset"
+    ],
+    "header": null,
+    "note": "memset_io sets MMIO address space to a value. Haiku memset works on both but IO barriers may be needed."
+  },
+  {
+    "symbol": "min",
+    "count": 12,
+    "example": {
+      "file": "nvkm/engine/gr/ctxgk104.c",
+      "line": 879
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "min(x, y) is a compile-time comparison macro with type safety. Haiku can use standard min function or ternary operator."
+  },
+  {
+    "symbol": "min_t",
+    "count": 3,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 536
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "min_t(type, x, y) is a typed comparison macro. Haiku can use standard min with explicit casting."
+  },
+  {
+    "symbol": "msecs_to_jiffies",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1053
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "msecs_to_jiffies converts milliseconds to jiffies. Haiku time is in microseconds; conversion is direct division."
+  },
+  {
+    "symbol": "msleep",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2091
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "snooze"
+    ],
+    "header": "headers/os/kernel/OS.h",
+    "note": "msleep sleeps for a specified number of milliseconds with guaranteed resolution. Haiku snooze takes microseconds."
+  },
+  {
+    "symbol": "mutex_destroy",
+    "count": 9,
+    "example": {
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 352
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "mutex_destroy"
+    ],
+    "header": "headers/private/kernel/lock.h",
+    "note": "mutex_destroy releases resources held by a mutex after use. Haiku mutex_destroy has the same API."
+  },
+  {
+    "symbol": "mutex_init",
+    "count": 14,
+    "example": {
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 392
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "mutex_init"
+    ],
+    "header": "headers/private/kernel/lock.h",
+    "note": "mutex_init initializes an unlocked mutex with a name. Haiku mutex_init takes a name parameter for debugging."
+  },
+  {
+    "symbol": "mutex_is_locked",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 69
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "mutex_is_locked checks if a mutex is held. Haiku has no public mutex state query; this is a debug assertion."
+  },
+  {
+    "symbol": "mutex_lock",
+    "count": 36,
+    "example": {
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 101
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "mutex_lock"
+    ],
+    "header": "headers/private/kernel/lock.h",
+    "note": "mutex_lock acquires a mutex, sleeping if necessary. Haiku mutex_lock also sleeps and returns status code."
+  },
+  {
+    "symbol": "mutex_unlock",
+    "count": 44,
+    "example": {
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 84
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "mutex_unlock"
+    ],
+    "header": "headers/private/kernel/lock.h",
+    "note": "mutex_unlock releases a mutex. Haiku mutex_unlock has the same semantics."
+  },
+  {
+    "symbol": "order_base_2",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/base.c",
+      "line": 89
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "order_base_2(n) computes the log2 of the next power of two. Haiku can use ilog2 or a loop."
+  },
+  {
+    "symbol": "pci_disable_msi",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/pci/base.c",
+      "line": 145
+    },
+    "category": "D-ignore",
+    "haiku_api": [],
+    "header": null,
+    "note": "pci_disable_msi disables MSI interrupts. Haiku driver does not use MSI interrupts."
+  },
+  {
+    "symbol": "pci_enable_msi",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/pci/base.c",
+      "line": 198
+    },
+    "category": "D-ignore",
+    "haiku_api": [],
+    "header": null,
+    "note": "pci_enable_msi enables MSI interrupts. Haiku driver uses a different interrupt mechanism."
+  },
+  {
+    "symbol": "pci_is_pcie",
+    "count": 3,
+    "example": {
+      "file": "nvkm/subdev/pci/base.c",
+      "line": 102
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "pci_is_pcie checks if a device is PCIe. Haiku driver reads PCI config space directly for this check."
+  },
+  {
+    "symbol": "printk",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1005
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "printk is the Linux kernel logging function with log levels. Haiku has no printk; use kernel logging API."
+  },
+  {
+    "symbol": "rb_entry",
+    "count": 6,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 856
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "rb_entry is a container_of macro for rb_node embedded in a struct. Haiku needs manual offset computation."
+  },
+  {
+    "symbol": "rb_erase",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 838
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "rb_erase removes a node from a red-black tree. Haiku has no built-in RB-tree; must implement or use another structure."
+  },
+  {
+    "symbol": "rb_first",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1043
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "rb_first returns the leftmost (smallest) node. Haiku needs RB-tree implementation."
+  },
+  {
+    "symbol": "rb_insert_color",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 874
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "rb_insert_color rebalances the RB-tree after insertion. Haiku needs full RB-tree implementation."
+  },
+  {
+    "symbol": "rb_link_node",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 873
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "rb_link_node links a node into a parent tree. Haiku needs RB-tree implementation."
+  },
+  {
+    "symbol": "rb_next",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1793
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "rb_next returns the next node in in-order traversal. Haiku needs RB-tree implementation."
+  },
+  {
+    "symbol": "refcount_dec_and_mutex_lock",
+    "count": 2,
+    "example": {
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 79
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "refcount_dec_and_mutex_lock decrements and acquires a mutex when count reaches zero. Haiku needs manual implementation."
+  },
+  {
+    "symbol": "refcount_dec_and_test",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 39
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_get_and_set"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "refcount_dec_and_test decrements and tests zero with overflow check. Haiku atomic_get_and_set lacks overflow check."
+  },
+  {
+    "symbol": "refcount_inc",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 65
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_add"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "refcount_inc increments a reference count with overflow check. Haiku atomic_add does not overflow-check."
+  },
+  {
+    "symbol": "refcount_inc_not_zero",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/fifo/uchan.c",
+      "line": 110
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_test_and_set"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "refcount_inc_not_zero increments only if non-zero. Haiku needs atomic_test_and_set loop for this pattern."
+  },
+  {
+    "symbol": "refcount_set",
+    "count": 7,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 76
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "atomic_set"
+    ],
+    "header": "headers/os/support/SupportDefs.h",
+    "note": "refcount_set initializes a reference count. Haiku atomic_set works the same; refcount has no overflow check."
+  },
+  {
+    "symbol": "release_firmware",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2590
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "free"
+    ],
+    "header": null,
+    "note": "release_firmware frees a firmware blob previously obtained by request_firmware. Haiku free handles this."
+  },
+  {
+    "symbol": "request_firmware",
+    "count": 2,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2578
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "fopen",
+      "fread"
+    ],
+    "header": "headers/private/kernel/boot/stdio.h",
+    "note": "request_firmware loads a firmware blob from the filesystem. Haiku uses fopen/fread for file access."
+  },
+  {
+    "symbol": "schedule_work",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 141
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "schedule_work queues a work item on a workqueue for deferred execution. Haiku has no workqueue; use threads or timers."
+  },
+  {
+    "symbol": "set_bit",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 45
+    },
+    "category": "X-not-linux",
+    "haiku_api": [],
+    "header": null,
+    "note": "This symbol is not standard Linux kernel infrastructure. It may be a Nouveau-local macro or function."
+  },
+  {
+    "symbol": "sg_dma_len",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1543
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "sg_dma_len returns the DMA length of a scatterlist entry. Haiku has no scatterlist; driver manages its own descriptors."
+  },
+  {
+    "symbol": "sg_next",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 1542
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "sg_next returns the next scatterlist entry. Haiku has no scatterlist; driver uses its own descriptor format."
+  },
+  {
+    "symbol": "snprintf",
+    "count": 3,
+    "example": {
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 568
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "snprintf"
+    ],
+    "header": null,
+    "note": "snprintf formats into a buffer with size limit. Standard C function available in Haiku."
+  },
+  {
+    "symbol": "spin_lock",
+    "count": 14,
+    "example": {
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 29
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "acquire_spinlock"
+    ],
+    "header": "headers/os/drivers/KernelExport.h",
+    "note": "spin_lock acquires a spinlock, busy-waiting. Haiku acquire_spinlock has the same semantics without interrupt disable."
+  },
+  {
+    "symbol": "spin_lock_init",
+    "count": 6,
+    "example": {
+      "file": "nvkm/engine/fifo/base.c",
+      "line": 391
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "acquire_spinlock"
+    ],
+    "header": "headers/os/drivers/KernelExport.h",
+    "note": "spin_lock_init initializes a spinlock to unlocked state. Haiku spinlocks are stack-allocated and ready to use."
+  },
+  {
+    "symbol": "spin_lock_irq",
+    "count": 5,
+    "example": {
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 245
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "acquire_spinlock",
+      "disable_interrupts"
+    ],
+    "header": "headers/os/drivers/KernelExport.h",
+    "note": "spin_lock_irq acquires spinlock and disables interrupts. Haiku needs disable_interrupts then acquire_spinlock."
+  },
+  {
+    "symbol": "spin_lock_irqsave",
+    "count": 8,
+    "example": {
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 231
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "acquire_spinlock",
+      "disable_interrupts"
+    ],
+    "header": "headers/os/drivers/KernelExport.h",
+    "note": "spin_lock_irqsave acquires spinlock and disables interrupts. Haiku requires disable_interrupts then acquire_spinlock."
+  },
+  {
+    "symbol": "spin_unlock",
+    "count": 14,
+    "example": {
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 31
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "release_spinlock"
+    ],
+    "header": "headers/os/drivers/KernelExport.h",
+    "note": "spin_unlock releases a spinlock. Haiku release_spinlock has the same semantics."
+  },
+  {
+    "symbol": "spin_unlock_irq",
+    "count": 5,
+    "example": {
+      "file": "nvkm/engine/fifo/chan.c",
+      "line": 247
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "release_spinlock",
+      "restore_interrupts"
+    ],
+    "header": "headers/os/drivers/KernelExport.h",
+    "note": "spin_unlock_irq releases spinlock and enables interrupts. Haiku restore_interrupts replaces enable_interrupts."
+  },
+  {
+    "symbol": "spin_unlock_irqrestore",
+    "count": 10,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 218
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "release_spinlock",
+      "restore_interrupts"
+    ],
+    "header": "headers/os/drivers/KernelExport.h",
+    "note": "spin_unlock_irqrestore releases spinlock and restores interrupt state. Haiku restore_interrupts replaces enable_interrupts."
+  },
+  {
+    "symbol": "sprintf",
+    "count": 2,
+    "example": {
+      "file": "nvkm/subdev/mmu/vmm.c",
+      "line": 103
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "sprintf"
+    ],
+    "header": null,
+    "note": "sprintf formats into a buffer without size limit. Standard C function available in Haiku."
+  },
+  {
+    "symbol": "strscpy",
+    "count": 2,
+    "example": {
+      "file": "nvkm/engine/fifo/cgrp.c",
+      "line": 231
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "strlcpy"
+    ],
+    "header": null,
+    "note": "strscpy copies a string with size limit and NUL-termination. Haiku strlcpy has the same behavior."
+  },
+  {
+    "symbol": "struct_size",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/chid.c",
+      "line": 92
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "malloc"
+    ],
+    "header": null,
+    "note": "struct_size computes size of struct with flexible array member with overflow check."
+  },
+  {
+    "symbol": "time_before",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1069
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "time_before checks if one jiffy timestamp is before another with wraparound. Haiku uses bigtime_t without wraparound."
+  },
+  {
+    "symbol": "timeout",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 1072
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "timeout is a helper macro for timeout loops with jiffies. Haiku uses bigtime_t and direct comparison."
+  },
+  {
+    "symbol": "unlikely",
+    "count": 8,
+    "example": {
+      "file": "nvkm/engine/gr/ctxgf100.c",
+      "line": 997
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "unlikely(x) is a branch prediction hint macro. Haiku has no branch prediction attribute; the compiler optimizes independently."
+  },
+  {
+    "symbol": "upper_32_bits",
+    "count": 10,
+    "example": {
+      "file": "nvkm/engine/fifo/gf100.c",
+      "line": 92
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "upper_32_bits extracts the upper 32 bits of a 64-bit value. Haiku can use (u64 >> 32) directly."
+  },
+  {
+    "symbol": "usleep_range",
+    "count": 1,
+    "example": {
+      "file": "nvkm/engine/fifo/runl.c",
+      "line": 256
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "snooze"
+    ],
+    "header": "headers/os/kernel/OS.h",
+    "note": "usleep_range sleeps within a range to allow batching. Haiku snooze takes exact microseconds; range requires extra logic."
+  },
+  {
+    "symbol": "vfree",
+    "count": 10,
+    "example": {
+      "file": "nvkm/engine/gr/gf100.c",
+      "line": 2147
+    },
+    "category": "C-replace",
+    "haiku_api": [
+      "free"
+    ],
+    "header": null,
+    "note": "vfree releases memory allocated by kvmalloc or vmap. Haiku free handles standard allocations but not vmapped regions."
+  },
+  {
+    "symbol": "vmap",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/mem.c",
+      "line": 137
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "vmap maps page frames into contiguous virtual address space. Haiku has no equivalent; driver must design its own mapping."
+  },
+  {
+    "symbol": "vunmap",
+    "count": 1,
+    "example": {
+      "file": "nvkm/subdev/mmu/umem.c",
+      "line": 78
+    },
+    "category": "A-reimplement",
+    "haiku_api": [],
+    "header": null,
+    "note": "vunmap releases virtual mapping created by vmap. Haiku needs matching unmap for vmapped regions."
+  }
+]
