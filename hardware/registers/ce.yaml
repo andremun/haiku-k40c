@@ -1,0 +1,56 @@
+- reg: 0x104904 + base
+  address: '0x104904'
+  name: PCOPY.COPY.INTR_EN
+  name_source: rnndb:fifo/pcopy.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: COPY_BLOCK
+    shift: 0
+    width: 1
+  - name: COPY_NONBLOCK
+    shift: 1
+    width: 1
+  - name: CTRL
+    shift: 2
+    width: 1
+  source:
+  - nvkm/engine/ce/gk104.c:64
+  status: SOURCE_ONLY
+- reg: 0x104908 + base
+  address: '0x104908'
+  name: PCOPY.COPY.INTR
+  name_source: rnndb:fifo/pcopy.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: COPY_BLOCK
+    shift: 0
+    width: 1
+  - name: COPY_NONBLOCK
+    shift: 1
+    width: 1
+  - name: CTRL
+    shift: 2
+    width: 1
+  source:
+  - nvkm/engine/ce/gk104.c:65
+  - nvkm/engine/ce/gk104.c:68
+  - nvkm/engine/ce/gk104.c:73
+  - nvkm/engine/ce/gk104.c:78
+  - nvkm/engine/ce/gk104.c:83
+  status: SOURCE_ONLY
+- reg: 0x104f14 + base
+  address: '0x104f14'
+  name: PCOPY.CTRL.UNK14
+  name_source: rnndb:fifo/pcopy.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/ce/gk104.c:51
+  - nvkm/engine/ce/gk104.c:55
+  status: SOURCE_ONLY

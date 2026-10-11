@@ -1,0 +1,242 @@
+- reg: '0x12004c'
+  address: '0x12004c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:92
+  - nvkm/subdev/privring/gk104.c:94
+  status: SOURCE_ONLY
+- reg: '0x120058'
+  address: '0x120058'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:61
+  status: SOURCE_ONLY
+- reg: '0x12005c'
+  address: '0x12005c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:62
+  status: SOURCE_ONLY
+- reg: '0x120070'
+  address: '0x120070'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:63
+  status: SOURCE_ONLY
+- reg: '0x120074'
+  address: '0x120074'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:64
+  status: SOURCE_ONLY
+- reg: '0x120078'
+  address: '0x120078'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:65
+  status: SOURCE_ONLY
+- reg: 0x122120 + (i * 0x0800)
+  address: '0x122120'
+  name: PIBUS.MMIO_HUB.INTR_ADDR
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:31
+  status: SOURCE_ONLY
+- reg: 0x122124 + (i * 0x0800)
+  address: '0x122124'
+  name: PIBUS.MMIO_HUB.INTR_VALUE
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:32
+  status: SOURCE_ONLY
+- reg: 0x122128 + (i * 0x0800)
+  address: '0x122128'
+  name: PIBUS.MMIO_HUB.INTR
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: PENDING
+    shift: 9
+    width: 1
+  source:
+  - nvkm/subdev/privring/gk104.c:33
+  status: SOURCE_ONLY
+- reg: '0x122310'
+  address: '0x122310'
+  name: PIBUS.MMIO_HUB.CFG
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:105
+  status: SOURCE_ONLY
+- reg: '0x122318'
+  address: '0x122318'
+  name: PIBUS.MMIO_HUB.CFG
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:103
+  status: SOURCE_ONLY
+- reg: '0x12231c'
+  address: '0x12231c'
+  name: PIBUS.MMIO_HUB.CFG
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:104
+  status: SOURCE_ONLY
+- reg: '0x122348'
+  address: '0x122348'
+  name: PIBUS.MMIO_HUB.CFG
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:106
+  - nvkm/subdev/privring/gk104.c:108
+  status: SOURCE_ONLY
+- reg: '0x122358'
+  address: '0x122358'
+  name: PIBUS.MMIO_HUB.CFG
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:109
+  status: SOURCE_ONLY
+- reg: '0x1223b0'
+  address: '0x1223b0'
+  name: PIBUS.MMIO_HUB.CFG
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:107
+  status: SOURCE_ONLY
+- reg: 0x124120 + (i * 0x0800)
+  address: '0x124120'
+  name: PIBUS.MMIO_PART.INTR_ADDR
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:41
+  status: SOURCE_ONLY
+- reg: 0x124124 + (i * 0x0800)
+  address: '0x124124'
+  name: PIBUS.MMIO_PART.INTR_VALUE
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:42
+  status: SOURCE_ONLY
+- reg: 0x124128 + (i * 0x0800)
+  address: '0x124128'
+  name: PIBUS.MMIO_PART.INTR
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: PENDING
+    shift: 9
+    width: 1
+  source:
+  - nvkm/subdev/privring/gk104.c:43
+  status: SOURCE_ONLY
+- reg: 0x128120 + (i * 0x0800)
+  address: '0x128120'
+  name: PIBUS.MMIO_GPC.INTR_ADDR
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:51
+  status: SOURCE_ONLY
+- reg: 0x128124 + (i * 0x0800)
+  address: '0x128124'
+  name: PIBUS.MMIO_GPC.INTR_VALUE
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/privring/gk104.c:52
+  status: SOURCE_ONLY
+- reg: 0x128128 + (i * 0x0800)
+  address: '0x128128'
+  name: PIBUS.MMIO_GPC.INTR
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: PENDING
+    shift: 9
+    width: 1
+  source:
+  - nvkm/subdev/privring/gk104.c:53
+  status: SOURCE_ONLY

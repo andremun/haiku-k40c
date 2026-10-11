@@ -1,0 +1,109 @@
+- reg: '0x001704'
+  address: '0x001704'
+  name: PBUS.HOST_MEM.BAR1
+  name_source: rnndb:bus/pbus.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CHAN
+    shift: 0
+    width: 30
+  - name: UNK30
+    shift: 30
+    width: 1
+  - name: MODE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/subdev/bar/gf100.c:48
+  - nvkm/subdev/bar/gf100.c:57
+  - nvkm/subdev/bar/nv50.c:89
+  - nvkm/subdev/bar/nv50.c:90
+  status: SOURCE_ONLY
+- reg: '0x001708'
+  address: '0x001708'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/bar/nv50.c:61
+  - nvkm/subdev/bar/nv50.c:69
+  status: SOURCE_ONLY
+- reg: '0x00170c'
+  address: '0x00170c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/bar/nv50.c:81
+  - nvkm/subdev/bar/nv50.c:91
+  status: SOURCE_ONLY
+- reg: '0x001714'
+  address: '0x001714'
+  name: PBUS.HOST_MEM.BAR3
+  name_source: rnndb:bus/pbus.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CHAN
+    shift: 0
+    width: 30
+  - name: UNK30
+    shift: 30
+    width: 1
+  - name: MODE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/subdev/bar/gf100.c:69
+  - nvkm/subdev/bar/gf100.c:80
+  status: SOURCE_ONLY
+- reg: 0x001900 + (i * 4)
+  address: '0x001900'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/bar/nv50.c:102
+  status: SOURCE_ONLY
+- reg: '0x00330c'
+  address: '0x00330c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/bar/nv50.c:38
+  - nvkm/subdev/bar/nv50.c:40
+  status: SOURCE_ONLY
+- reg: '0x070000'
+  address: '0x070000'
+  name: PFIFO_FLUSH.FLUSH_CTRL
+  name_source: rnndb:fifo/g80_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: TRIGGER
+    shift: 0
+    width: 1
+  - name: BUSY
+    shift: 1
+    width: 1
+  source:
+  - nvkm/subdev/bar/g84.c:34
+  - nvkm/subdev/bar/g84.c:36
+  status: SOURCE_ONLY

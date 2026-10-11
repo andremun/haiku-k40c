@@ -1,0 +1,293 @@
+- reg: '0x00017c'
+  address: '0x00017c'
+  name: PMC.INTR_PMFB
+  name_source: rnndb:bus/pmc.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:116
+  status: SOURCE_ONLY
+- reg: '0x022438'
+  address: '0x022438'
+  name: PUNITS.DESIGN_PART_COUNT
+  name_source: rnndb:bus/punits.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:211
+  status: SOURCE_ONLY
+- reg: '0x022554'
+  address: '0x022554'
+  name: PUNITS.HW_MC_DISABLE_MASK
+  name_source: rnndb:bus/punits.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:212
+  status: SOURCE_ONLY
+- reg: '0x100c80'
+  address: '0x100c80'
+  name: PFFB.VM.CFG
+  name_source: rnndb:memory/gf100_pffb.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: LARGE_PAGE_SIZE
+    shift: 0
+    width: 1
+  - name: BYPASS_TARGET
+    shift: 28
+    width: 2
+  - name: BYPASS_ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/subdev/ltc/gf100.c:159
+  - nvkm/subdev/ltc/gf100.c:229
+  - nvkm/subdev/ltc/gk104.c:30
+  status: SOURCE_ONLY
+- reg: '0x17e000'
+  address: '0x17e000'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gk104.c:33
+  status: SOURCE_ONLY
+- reg: '0x17e820'
+  address: '0x17e820'
+  name: PMFB_BROADCAST.SUBP_BROADCAST.INTR
+  name_source: rnndb:memory/gf100_pmfb.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: STATUS
+    shift: 0
+    width: 16
+  - name: ENABLE
+    shift: 16
+    width: 16
+  source:
+  - nvkm/subdev/ltc/gf100.c:231
+  status: SOURCE_ONLY
+- reg: '0x17e8c0'
+  address: '0x17e8c0'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:234
+  - nvkm/subdev/ltc/gk104.c:35
+  status: SOURCE_ONLY
+- reg: '0x17e8c8'
+  address: '0x17e8c8'
+  name: PMFB_BROADCAST.SUBP_BROADCAST.COMP.TRIGGER
+  name_source: rnndb:memory/gf100_pmfb.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: FLUSH
+    shift: 0
+    width: 1
+  - name: CLEAR
+    shift: 2
+    width: 1
+  source:
+  - nvkm/subdev/ltc/gf100.c:36
+  status: SOURCE_ONLY
+- reg: '0x17e8cc'
+  address: '0x17e8cc'
+  name: PMFB_BROADCAST.SUBP_BROADCAST.COMP.CLEAR_TAG_START
+  name_source: rnndb:memory/gf100_pmfb.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:34
+  status: SOURCE_ONLY
+- reg: '0x17e8d0'
+  address: '0x17e8d0'
+  name: PMFB_BROADCAST.SUBP_BROADCAST.COMP.CLEAR_TAG_END
+  name_source: rnndb:memory/gf100_pmfb.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:35
+  status: SOURCE_ONLY
+- reg: '0x17e8d4'
+  address: '0x17e8d4'
+  name: PMFB_BROADCAST.SUBP_BROADCAST.COMP.TAGMEM_BASE
+  name_source: rnndb:memory/gf100_pmfb.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:233
+  - nvkm/subdev/ltc/gk104.c:34
+  status: SOURCE_ONLY
+- reg: '0x17e8d8'
+  address: '0x17e8d8'
+  name: PMFB_BROADCAST.SUBP_BROADCAST.COMP.PART_COUNT
+  name_source: rnndb:memory/gf100_pmfb.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:232
+  - nvkm/subdev/ltc/gk104.c:32
+  status: SOURCE_ONLY
+- reg: '0x17e8dc'
+  address: '0x17e8dc'
+  name: PMFB_BROADCAST.SUBP_BROADCAST.CONFIG
+  name_source: rnndb:memory/gf100_pmfb.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: COMPTAGS_PER_CACHE_LINE
+    shift: 0
+    width: 16
+  - name: CACHE_LINES
+    shift: 16
+    width: 8
+  - name: CACHE_LINE_SIZE
+    shift: 24
+    width: 4
+  - name: SLICES_PER_FBP
+    shift: 28
+    width: 4
+  source:
+  - nvkm/subdev/ltc/gf100.c:213
+  status: SOURCE_ONLY
+- reg: '0x17ea44'
+  address: '0x17ea44'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:59
+  - nvkm/subdev/ltc/gf100.c:70
+  status: SOURCE_ONLY
+- reg: '0x17ea48'
+  address: '0x17ea48'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:60
+  status: SOURCE_ONLY
+- reg: '0x17ea4c'
+  address: '0x17ea4c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:61
+  status: SOURCE_ONLY
+- reg: '0x17ea50'
+  address: '0x17ea50'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:62
+  status: SOURCE_ONLY
+- reg: '0x17ea54'
+  address: '0x17ea54'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:63
+  status: SOURCE_ONLY
+- reg: '0x17ea58'
+  address: '0x17ea58'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:71
+  status: SOURCE_ONLY
+- reg: '0x70004'
+  address: '0x070004'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:131
+  status: SOURCE_ONLY
+- reg: '0x70010'
+  address: '0x070010'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:144
+  status: SOURCE_ONLY
+- reg: addr
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:48
+  status: SOURCE_ONLY
+- reg: base + 0x020
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/ltc/gf100.c:107
+  - nvkm/subdev/ltc/gf100.c:98
+  status: SOURCE_ONLY

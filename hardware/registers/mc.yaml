@@ -1,0 +1,315 @@
+- reg: 0x000100 + (leaf * 4)
+  address: '0x000100'
+  name: PMC.INTR_HOST
+  name_source: rnndb:bus/pmc.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: PPPP
+    shift: 0
+    width: 1
+  - name: PMEDIA
+    shift: 4
+    width: 1
+  - name: PCOPY0
+    shift: 5
+    width: 1
+  - name: PCOPY1
+    shift: 6
+    width: 1
+  - name: PCOPY2
+    shift: 7
+    width: 1
+  - name: PFIFO
+    shift: 8
+    width: 1
+  - name: UNK9
+    shift: 9
+    width: 1
+  - name: PGRAPH
+    shift: 12
+    width: 1
+  - name: PBFB
+    shift: 13
+    width: 1
+  - name: PVLD
+    shift: 15
+    width: 1
+  - name: PVENC
+    shift: 16
+    width: 1
+  - name: PPDEC
+    shift: 17
+    width: 1
+  - name: PTHERM
+    shift: 18
+    width: 1
+  - name: UNK19
+    shift: 19
+    width: 1
+  - name: PTIMER
+    shift: 20
+    width: 1
+  - name: PNVIO
+    shift: 21
+    width: 1
+  - name: UNK23
+    shift: 23
+    width: 1
+  - name: PDAEMON
+    shift: 24
+    width: 1
+  - name: PMFB
+    shift: 25
+    width: 1
+  - name: PDISPLAY
+    shift: 26
+    width: 1
+  - name: PFFB
+    shift: 27
+    width: 1
+  - name: PBUS
+    shift: 28
+    width: 1
+  - name: PPCI
+    shift: 29
+    width: 1
+  - name: PIBUS
+    shift: 30
+    width: 1
+  - name: SOFTWARE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/subdev/mc/nv04.c:101
+  status: SOURCE_ONLY
+- reg: '0x000140'
+  address: '0x000140'
+  name: PMC.INTR_EN_HOST
+  name_source: rnndb:bus/pmc.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: HARDWARE
+    shift: 0
+    width: 1
+  - name: SOFTWARE
+    shift: 1
+    width: 1
+  source:
+  - nvkm/subdev/mc/nv04.c:90
+  status: SOURCE_ONLY
+- reg: 0x000140 + (leaf * 4)
+  address: '0x000140'
+  name: PMC.INTR_EN_HOST
+  name_source: rnndb:bus/pmc.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: HARDWARE
+    shift: 0
+    width: 1
+  - name: SOFTWARE
+    shift: 1
+    width: 1
+  source:
+  - nvkm/subdev/mc/nv04.c:78
+  - nvkm/subdev/mc/nv04.c:88
+  status: SOURCE_ONLY
+- reg: '0x000200'
+  address: '0x000200'
+  name: PMC.ENABLE
+  name_source: rnndb:bus/pmc.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: UNK0
+    shift: 0
+    width: 1
+  - name: PPPP
+    shift: 1
+    width: 1
+  - name: PXBAR
+    shift: 2
+    width: 1
+  - name: PMFB
+    shift: 3
+    width: 1
+  - name: PMEDIA
+    shift: 4
+    width: 1
+  - name: PIBUS
+    shift: 5
+    width: 1
+  - name: PCOPY0
+    shift: 6
+    width: 1
+  - name: PCOPY1
+    shift: 7
+    width: 1
+  - name: PFIFO
+    shift: 8
+    width: 1
+  - name: PGRAPH
+    shift: 12
+    width: 1
+  - name: PDAEMON
+    shift: 13
+    width: 1
+  - name: PVLD
+    shift: 15
+    width: 1
+  - name: PTIMER
+    shift: 16
+    width: 1
+  - name: PPDEC
+    shift: 17
+    width: 1
+  - name: PVENC
+    shift: 18
+    width: 1
+  - name: PBFB
+    shift: 20
+    width: 1
+  - name: PCOPY2
+    shift: 21
+    width: 1
+  - name: UNK26
+    shift: 26
+    width: 1
+  - name: BLG
+    shift: 27
+    width: 1
+  - name: PCOUNTER
+    shift: 28
+    width: 1
+  - name: PFFB
+    shift: 29
+    width: 1
+  - name: PDISPLAY
+    shift: 30
+    width: 1
+  - name: UNK31
+    shift: 31
+    width: 1
+  source:
+  - nvkm/subdev/mc/nv04.c:120
+  - nvkm/subdev/mc/nv04.c:36
+  - nvkm/subdev/mc/nv04.c:44
+  - nvkm/subdev/mc/nv04.c:45
+  - nvkm/subdev/mc/nv04.c:51
+  - nvkm/subdev/mc/nv50.c:44
+  status: SOURCE_ONLY
+- reg: '0x000260'
+  address: '0x000260'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/mc/gf100.c:64
+  status: SOURCE_ONLY
+- reg: 0x000640 + (leaf * 4)
+  address: '0x000640'
+  name: PMC.INTR_MASK_HOST
+  name_source: rnndb:bus/pmc.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: PPPP
+    shift: 0
+    width: 1
+  - name: PMEDIA
+    shift: 4
+    width: 1
+  - name: PCOPY0
+    shift: 5
+    width: 1
+  - name: PCOPY1
+    shift: 6
+    width: 1
+  - name: PCOPY2
+    shift: 7
+    width: 1
+  - name: PFIFO
+    shift: 8
+    width: 1
+  - name: UNK9
+    shift: 9
+    width: 1
+  - name: PGRAPH
+    shift: 12
+    width: 1
+  - name: PBFB
+    shift: 13
+    width: 1
+  - name: PVLD
+    shift: 15
+    width: 1
+  - name: PVENC
+    shift: 16
+    width: 1
+  - name: PPDEC
+    shift: 17
+    width: 1
+  - name: PTHERM
+    shift: 18
+    width: 1
+  - name: UNK19
+    shift: 19
+    width: 1
+  - name: PTIMER
+    shift: 20
+    width: 1
+  - name: PNVIO
+    shift: 21
+    width: 1
+  - name: UNK23
+    shift: 23
+    width: 1
+  - name: PDAEMON
+    shift: 24
+    width: 1
+  - name: PMFB
+    shift: 25
+    width: 1
+  - name: PDISPLAY
+    shift: 26
+    width: 1
+  - name: PFFB
+    shift: 27
+    width: 1
+  - name: PBUS
+    shift: 28
+    width: 1
+  - name: PPCI
+    shift: 29
+    width: 1
+  - name: PIBUS
+    shift: 30
+    width: 1
+  - name: SOFTWARE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/subdev/mc/gt215.c:61
+  - nvkm/subdev/mc/gt215.c:69
+  status: SOURCE_ONLY
+- reg: '0x001850'
+  address: '0x001850'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/mc/nv04.c:121
+  status: SOURCE_ONLY

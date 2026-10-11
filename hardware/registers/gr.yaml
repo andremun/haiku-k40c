@@ -1,0 +1,4253 @@
+- reg: '0x000200'
+  address: '0x000200'
+  name: PMC.ENABLE
+  name_source: rnndb:bus/pmc.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: UNK0
+    shift: 0
+    width: 1
+  - name: PPPP
+    shift: 1
+    width: 1
+  - name: PXBAR
+    shift: 2
+    width: 1
+  - name: PMFB
+    shift: 3
+    width: 1
+  - name: PMEDIA
+    shift: 4
+    width: 1
+  - name: PIBUS
+    shift: 5
+    width: 1
+  - name: PCOPY0
+    shift: 6
+    width: 1
+  - name: PCOPY1
+    shift: 7
+    width: 1
+  - name: PFIFO
+    shift: 8
+    width: 1
+  - name: PGRAPH
+    shift: 12
+    width: 1
+  - name: PDAEMON
+    shift: 13
+    width: 1
+  - name: PVLD
+    shift: 15
+    width: 1
+  - name: PTIMER
+    shift: 16
+    width: 1
+  - name: PPDEC
+    shift: 17
+    width: 1
+  - name: PVENC
+    shift: 18
+    width: 1
+  - name: PBFB
+    shift: 20
+    width: 1
+  - name: PCOPY2
+    shift: 21
+    width: 1
+  - name: UNK26
+    shift: 26
+    width: 1
+  - name: BLG
+    shift: 27
+    width: 1
+  - name: PCOUNTER
+    shift: 28
+    width: 1
+  - name: PFFB
+    shift: 29
+    width: 1
+  - name: PDISPLAY
+    shift: 30
+    width: 1
+  - name: UNK31
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2089
+  - nvkm/engine/gr/gf100.c:2090
+  - nvkm/engine/gr/gf100.c:2092
+  - nvkm/engine/gr/gf100.c:2093
+  status: SOURCE_ONLY
+- reg: '0x001540'
+  address: '0x001540'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:696
+  status: SOURCE_ONLY
+- reg: '0x022430'
+  address: '0x022430'
+  name: PUNITS.DESIGN_GPC_COUNT
+  name_source: rnndb:bus/punits.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1076
+  status: SOURCE_ONLY
+- reg: '0x022434'
+  address: '0x022434'
+  name: PUNITS.DESIGN_TPC_PER_GPC_COUNT
+  name_source: rnndb:bus/punits.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1077
+  status: SOURCE_ONLY
+- reg: '0x100800'
+  address: '0x100800'
+  name: PFFB.PART_CONFIG
+  name_source: rnndb:memory/gf100_pffb.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: PART_COUNT
+    shift: 0
+    width: 4
+  - name: MEM_SPLIT_ENABLE
+    shift: 4
+    width: 1
+  - name: MEM_SPLIT_PART
+    shift: 5
+    width: 3
+  source:
+  - nvkm/engine/gr/gf100.c:2283
+  status: SOURCE_ONLY
+- reg: '0x100c80'
+  address: '0x100c80'
+  name: PFFB.VM.CFG
+  name_source: rnndb:memory/gf100_pffb.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: LARGE_PAGE_SIZE
+    shift: 0
+    width: 1
+  - name: BYPASS_TARGET
+    shift: 28
+    width: 2
+  - name: BYPASS_ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2269
+  status: SOURCE_ONLY
+- reg: '0x120074'
+  address: '0x120074'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gk104.c:409
+  status: SOURCE_ONLY
+- reg: '0x121c74'
+  address: '0x121c74'
+  name: PIBUS.MAIN.PART_COUNT
+  name_source: rnndb:bus/pibus.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1142
+  status: SOURCE_ONLY
+- reg: '0x1540'
+  address: '0x001540'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxnv50.c:1195
+  - nvkm/engine/gr/ctxnv50.c:302
+  - nvkm/engine/gr/ctxnv50.c:3278
+  - nvkm/engine/gr/nv50.c:286
+  - nvkm/engine/gr/nv50.c:330
+  - nvkm/engine/gr/nv50.c:35
+  status: SOURCE_ONLY
+- reg: '0x17e91c'
+  address: '0x17e91c'
+  name: PMFB_BROADCAST.SUBP_BROADCAST.UNK11C
+  name_source: rnndb:memory/gf100_pmfb.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1144
+  - nvkm/engine/gr/ctxgk104.c:867
+  status: SOURCE_ONLY
+- reg: '0x17e920'
+  address: '0x17e920'
+  name: PMFB_BROADCAST.SUBP_BROADCAST.UNK120
+  name_source: rnndb:memory/gf100_pmfb.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgk104.c:868
+  status: SOURCE_ONLY
+- reg: '0x200'
+  address: '0x000200'
+  name: PMC.ENABLE
+  name_source: rnndb:bus/pmc.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: UNK0
+    shift: 0
+    width: 1
+  - name: PPPP
+    shift: 1
+    width: 1
+  - name: PXBAR
+    shift: 2
+    width: 1
+  - name: PMFB
+    shift: 3
+    width: 1
+  - name: PMEDIA
+    shift: 4
+    width: 1
+  - name: PIBUS
+    shift: 5
+    width: 1
+  - name: PCOPY0
+    shift: 6
+    width: 1
+  - name: PCOPY1
+    shift: 7
+    width: 1
+  - name: PFIFO
+    shift: 8
+    width: 1
+  - name: PGRAPH
+    shift: 12
+    width: 1
+  - name: PDAEMON
+    shift: 13
+    width: 1
+  - name: PVLD
+    shift: 15
+    width: 1
+  - name: PTIMER
+    shift: 16
+    width: 1
+  - name: PPDEC
+    shift: 17
+    width: 1
+  - name: PVENC
+    shift: 18
+    width: 1
+  - name: PBFB
+    shift: 20
+    width: 1
+  - name: PCOPY2
+    shift: 21
+    width: 1
+  - name: UNK26
+    shift: 26
+    width: 1
+  - name: BLG
+    shift: 27
+    width: 1
+  - name: PCOUNTER
+    shift: 28
+    width: 1
+  - name: PFFB
+    shift: 29
+    width: 1
+  - name: PDISPLAY
+    shift: 30
+    width: 1
+  - name: UNK31
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1063
+  status: SOURCE_ONLY
+- reg: '0x400040'
+  address: '0x400040'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:500
+  - nvkm/engine/gr/nv50.c:501
+  - nvkm/engine/gr/nv50.c:543
+  - nvkm/engine/gr/nv50.c:544
+  status: SOURCE_ONLY
+- reg: '0x400054'
+  address: '0x400054'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2188
+  status: SOURCE_ONLY
+- reg: '0x40008c'
+  address: '0x40008c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:686
+  status: SOURCE_ONLY
+- reg: '0x400100'
+  address: '0x400100'
+  name: PGRAPH.INTR
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: NOTIFY
+    shift: 0
+    width: 1
+  - name: QUERY
+    shift: 1
+    width: 1
+  - name: SYNC
+    shift: 2
+    width: 1
+  - name: ILLEGAL_MTHD
+    shift: 4
+    width: 1
+  - name: ILLEGAL_CLASS
+    shift: 5
+    width: 1
+  - name: DOUBLE_NOTIFY
+    shift: 6
+    width: 1
+  - name: UNK7
+    shift: 7
+    width: 1
+  - name: FIRMWARE_MTHD
+    shift: 8
+    width: 1
+  - name: BUFFER_NOTIFY
+    shift: 16
+    width: 1
+  - name: CTXCTL_UP
+    shift: 19
+    width: 1
+  - name: DATA_ERROR
+    shift: 20
+    width: 1
+  - name: TRAP
+    shift: 21
+    width: 1
+  - name: SINGLE_STEP
+    shift: 24
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1614
+  - nvkm/engine/gr/gf100.c:1640
+  - nvkm/engine/gr/gf100.c:1651
+  - nvkm/engine/gr/gf100.c:1659
+  - nvkm/engine/gr/gf100.c:1670
+  - nvkm/engine/gr/gf100.c:1678
+  - nvkm/engine/gr/gf100.c:1684
+  - nvkm/engine/gr/gf100.c:1690
+  - nvkm/engine/gr/gf100.c:2388
+  - nvkm/engine/gr/nv50.c:626
+  - nvkm/engine/gr/nv50.c:660
+  - nvkm/engine/gr/nv50.c:714
+  status: SOURCE_ONLY
+- reg: '0x400108'
+  address: '0x400108'
+  name: PGRAPH.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: DISPATCH
+    shift: 0
+    width: 1
+  - name: M2MF
+    shift: 1
+    width: 1
+  - name: UNK2
+    shift: 2
+    width: 1
+  - name: CCACHE
+    shift: 3
+    width: 1
+  - name: UNK4
+    shift: 4
+    width: 1
+  - name: UNK5
+    shift: 5
+    width: 1
+  - name: UNK6
+    shift: 6
+    width: 1
+  - name: MACRO
+    shift: 7
+    width: 1
+  - name: SKED
+    shift: 8
+    width: 1
+  - name: GPC
+    shift: 24
+    width: 1
+  - name: ROP
+    shift: 25
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1414
+  - nvkm/engine/gr/gf100.c:1424
+  - nvkm/engine/gr/gf100.c:1436
+  - nvkm/engine/gr/gf100.c:1447
+  - nvkm/engine/gr/gf100.c:1456
+  - nvkm/engine/gr/gf100.c:1468
+  - nvkm/engine/gr/gf100.c:1485
+  - nvkm/engine/gr/gf100.c:1497
+  - nvkm/engine/gr/gf100.c:1511
+  - nvkm/engine/gr/gf100.c:1524
+  - nvkm/engine/gr/gf100.c:1530
+  - nvkm/engine/gr/gf100.c:2447
+  - nvkm/engine/gr/nv50.c:400
+  - nvkm/engine/gr/nv50.c:478
+  - nvkm/engine/gr/nv50.c:503
+  - nvkm/engine/gr/nv50.c:523
+  - nvkm/engine/gr/nv50.c:546
+  - nvkm/engine/gr/nv50.c:570
+  - nvkm/engine/gr/nv50.c:589
+  - nvkm/engine/gr/nv50.c:597
+  - nvkm/engine/gr/nv50.c:606
+  - nvkm/engine/gr/nv50.c:613
+  - nvkm/engine/gr/nv50.c:712
+  status: SOURCE_ONLY
+- reg: '0x400110'
+  address: '0x400110'
+  name: PGRAPH.DATA_ERROR
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1619
+  - nvkm/engine/gr/nv50.c:647
+  status: SOURCE_ONLY
+- reg: '0x400118'
+  address: '0x400118'
+  name: PGRAPH.TRAP_GPCS
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1502
+  - nvkm/engine/gr/gf100.c:1507
+  - nvkm/engine/gr/gf100.c:2449
+  status: SOURCE_ONLY
+- reg: '0x40011c'
+  address: '0x40011c'
+  name: PGRAPH.TRAP_ROPS
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2196
+  status: SOURCE_ONLY
+- reg: '0x400124'
+  address: '0x400124'
+  name: PGRAPH.INTR_EN_NRHOST
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: QUERY
+    shift: 1
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2390
+  status: SOURCE_ONLY
+- reg: '0x400130'
+  address: '0x400130'
+  name: PGRAPH.TRAP_GPCS_EN
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2450
+  status: SOURCE_ONLY
+- reg: '0x400134'
+  address: '0x400134'
+  name: PGRAPH.TRAP_ROPS_EN
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2197
+  status: SOURCE_ONLY
+- reg: '0x400138'
+  address: '0x400138'
+  name: PGRAPH.TRAP_EN
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: DISPATCH
+    shift: 0
+    width: 1
+  - name: M2MF
+    shift: 1
+    width: 1
+  - name: UNK2
+    shift: 2
+    width: 1
+  - name: CCACHE
+    shift: 3
+    width: 1
+  - name: UNK4
+    shift: 4
+    width: 1
+  - name: UNK5
+    shift: 5
+    width: 1
+  - name: UNK6
+    shift: 6
+    width: 1
+  - name: MACRO
+    shift: 7
+    width: 1
+  - name: SKED
+    shift: 8
+    width: 1
+  - name: GPC
+    shift: 24
+    width: 1
+  - name: ROP
+    shift: 25
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2448
+  - nvkm/engine/gr/nv50.c:713
+  status: SOURCE_ONLY
+- reg: '0x40013c'
+  address: '0x40013c'
+  name: PGRAPH.INTR_EN
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: NOTIFY
+    shift: 0
+    width: 1
+  - name: QUERY
+    shift: 1
+    width: 1
+  - name: SYNC
+    shift: 2
+    width: 1
+  - name: ILLEGAL_MTHD
+    shift: 4
+    width: 1
+  - name: ILLEGAL_CLASS
+    shift: 5
+    width: 1
+  - name: DOUBLE_NOTIFY
+    shift: 6
+    width: 1
+  - name: UNK7
+    shift: 7
+    width: 1
+  - name: FIRMWARE_MTHD
+    shift: 8
+    width: 1
+  - name: BUFFER_NOTIFY
+    shift: 16
+    width: 1
+  - name: CTXCTL_UP
+    shift: 19
+    width: 1
+  - name: DATA_ERROR
+    shift: 20
+    width: 1
+  - name: TRAP
+    shift: 21
+    width: 1
+  - name: SINGLE_STEP
+    shift: 24
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2389
+  - nvkm/engine/gr/nv50.c:715
+  status: SOURCE_ONLY
+- reg: '0x400200'
+  address: '0x400200'
+  name: PGRAPH.ICMD_CMD
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1116
+  status: SOURCE_ONLY
+- reg: '0x400204'
+  address: '0x400204'
+  name: PGRAPH.ICMD_DATA
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1109
+  status: SOURCE_ONLY
+- reg: '0x400208'
+  address: '0x400208'
+  name: PGRAPH.ICMD_UNK0208
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1102
+  - nvkm/engine/gr/gf100.c:1131
+  status: SOURCE_ONLY
+- reg: '0x40020c'
+  address: '0x40020c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1111
+  status: SOURCE_ONLY
+- reg: '0x400324'
+  address: '0x400324'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxnv50.c:280
+  status: SOURCE_ONLY
+- reg: '0x400328'
+  address: '0x400328'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxnv50.c:282
+  status: SOURCE_ONLY
+- reg: '0x40032c'
+  address: '0x40032c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:627
+  - nvkm/engine/gr/nv50.c:727
+  status: SOURCE_ONLY
+- reg: '0x400330'
+  address: '0x400330'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:728
+  status: SOURCE_ONLY
+- reg: '0x400500'
+  address: '0x400500'
+  name: PGRAPH.FIFO.CONTROL
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: PULL
+    shift: 0
+    width: 1
+  - name: UNK8
+    shift: 8
+    width: 1
+  - name: UNK16
+    shift: 16
+    width: 1
+  - name: LIMIT
+    shift: 20
+    width: 9
+  source:
+  - nvkm/engine/gr/gf100.c:1693
+  - nvkm/engine/gr/gf100.c:2328
+  - nvkm/engine/gr/gf100.c:2347
+  - nvkm/engine/gr/gf100.c:2386
+  - nvkm/engine/gr/nv50.c:418
+  - nvkm/engine/gr/nv50.c:661
+  - nvkm/engine/gr/nv50.c:716
+  status: SOURCE_ONLY
+- reg: '0x40060c'
+  address: '0x40060c'
+  name: PGRAPH.FE_STATUS
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1065
+  status: SOURCE_ONLY
+- reg: '0x400700'
+  address: '0x400700'
+  name: PGRAPH.STATUS
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: ALL
+    shift: 0
+    width: 1
+  - name: UNK3_PAUSABLE
+    shift: 3
+    width: 1
+  - name: UNK5_PAUSABLE
+    shift: 5
+    width: 1
+  - name: M2MF
+    shift: 6
+    width: 1
+  - name: CTXCTL
+    shift: 7
+    width: 1
+  - name: UNK8_PAUSABLE
+    shift: 8
+    width: 1
+  - name: UNK9_PAUSABLE
+    shift: 9
+    width: 1
+  - name: UNK11_PAUSABLE
+    shift: 11
+    width: 1
+  - name: UNK12_PAUSABLE
+    shift: 12
+    width: 1
+  - name: UNK13_PAUSABLE
+    shift: 13
+    width: 1
+  - name: UNK14_PAUSABLE
+    shift: 14
+    width: 1
+  - name: PCOUNTER_MAIN
+    shift: 15
+    width: 1
+  - name: PCOUNTER
+    shift: 16
+    width: 1
+  - name: UNK17_PAUSABLE
+    shift: 17
+    width: 1
+  - name: GPC
+    shift: 24
+    width: 1
+  - name: ROP
+    shift: 25
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1061
+  - nvkm/engine/gr/gf100.c:1124
+  status: SOURCE_ONLY
+- reg: '0x400704'
+  address: '0x400704'
+  name: PGRAPH.TRAPPED_ADDR
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: MTHD
+    shift: 2
+    width: 12
+  - name: SUBCH
+    shift: 16
+    width: 3
+  - name: IB_UNK40
+    shift: 28
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1615
+  - nvkm/engine/gr/nv50.c:628
+  status: SOURCE_ONLY
+- reg: '0x400708'
+  address: '0x400708'
+  name: PGRAPH.TRAPPED_DATA_LOW
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1618
+  - nvkm/engine/gr/nv50.c:631
+  status: SOURCE_ONLY
+- reg: '0x400804'
+  address: '0x400804'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:413
+  - nvkm/engine/gr/nv50.c:477
+  - nvkm/engine/gr/nv50.c:689
+  status: SOURCE_ONLY
+- reg: '0x400808'
+  address: '0x400808'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:422
+  - nvkm/engine/gr/nv50.c:443
+  status: SOURCE_ONLY
+- reg: '0x40080c'
+  address: '0x40080c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:425
+  status: SOURCE_ONLY
+- reg: '0x400810'
+  address: '0x400810'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:426
+  status: SOURCE_ONLY
+- reg: '0x400814'
+  address: '0x400814'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:427
+  - nvkm/engine/gr/nv50.c:454
+  - nvkm/engine/gr/nv50.c:632
+  status: SOURCE_ONLY
+- reg: '0x400824'
+  address: '0x400824'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:672
+  - nvkm/engine/gr/nv50.c:673
+  - nvkm/engine/gr/nv50.c:723
+  status: SOURCE_ONLY
+- reg: '0x400828'
+  address: '0x400828'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:724
+  status: SOURCE_ONLY
+- reg: '0x40082c'
+  address: '0x40082c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:725
+  status: SOURCE_ONLY
+- reg: '0x400830'
+  address: '0x400830'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:726
+  status: SOURCE_ONLY
+- reg: '0x400848'
+  address: '0x400848'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:428
+  - nvkm/engine/gr/nv50.c:445
+  status: SOURCE_ONLY
+- reg: '0x40084c'
+  address: '0x40084c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:450
+  - nvkm/engine/gr/nv50.c:468
+  status: SOURCE_ONLY
+- reg: '0x40085c'
+  address: '0x40085c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:453
+  status: SOURCE_ONLY
+- reg: '0x4008e8'
+  address: '0x4008e8'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:444
+  status: SOURCE_ONLY
+- reg: '0x400c00'
+  address: '0x400c00'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:516
+  status: SOURCE_ONLY
+- reg: '0x400c04'
+  address: '0x400c04'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:509
+  - nvkm/engine/gr/nv50.c:522
+  - nvkm/engine/gr/nv50.c:691
+  status: SOURCE_ONLY
+- reg: '0x400c08'
+  address: '0x400c08'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:517
+  status: SOURCE_ONLY
+- reg: '0x400c0c'
+  address: '0x400c0c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:518
+  status: SOURCE_ONLY
+- reg: '0x400c10'
+  address: '0x400c10'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:519
+  status: SOURCE_ONLY
+- reg: '0x401800'
+  address: '0x401800'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:529
+  - nvkm/engine/gr/nv50.c:545
+  - nvkm/engine/gr/nv50.c:692
+  status: SOURCE_ONLY
+- reg: '0x401804'
+  address: '0x401804'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:536
+  status: SOURCE_ONLY
+- reg: '0x401808'
+  address: '0x401808'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:537
+  status: SOURCE_ONLY
+- reg: '0x40180c'
+  address: '0x40180c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:538
+  status: SOURCE_ONLY
+- reg: '0x401810'
+  address: '0x401810'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:539
+  status: SOURCE_ONLY
+- reg: '0x402000'
+  address: '0x402000'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:578
+  - nvkm/engine/gr/nv50.c:581
+  - nvkm/engine/gr/nv50.c:694
+  status: SOURCE_ONLY
+- reg: 0x402c20 + (i * 0x10)
+  address: '0x402c20'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:753
+  status: SOURCE_ONLY
+- reg: 0x402c24 + (i * 0x10)
+  address: '0x402c24'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:754
+  status: SOURCE_ONLY
+- reg: 0x402c28 + (i * 0x10)
+  address: '0x402c28'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:755
+  status: SOURCE_ONLY
+- reg: 0x402c2c + (i * 0x10)
+  address: '0x402c2c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:756
+  status: SOURCE_ONLY
+- reg: '0x402ca8'
+  address: '0x402ca8'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:735
+  - nvkm/engine/gr/nv50.c:742
+  - nvkm/engine/gr/nv50.c:745
+  status: SOURCE_ONLY
+- reg: '0x402cc0'
+  address: '0x402cc0'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:744
+  status: SOURCE_ONLY
+- reg: '0x404000'
+  address: '0x404000'
+  name: PGRAPH.DISPATCH.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: INJECTED_BUNDLE_ERROR
+    shift: 0
+    width: 1
+  - name: CLASS_SUBCH_MISMATCH
+    shift: 1
+    width: 1
+  - name: SUBCHSW_DURING_NOTIFY
+    shift: 2
+    width: 1
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1418
+  - nvkm/engine/gr/gf100.c:1423
+  - nvkm/engine/gr/gf100.c:2400
+  status: SOURCE_ONLY
+- reg: '0x404154'
+  address: '0x404154'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1369
+  - nvkm/engine/gr/ctxgf100.c:1405
+  status: SOURCE_ONLY
+- reg: '0x404170'
+  address: '0x404170'
+  name: PGRAPH.DISPATCH.PWR_MODE
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: MODE
+    shift: 0
+    width: 2
+  - name: TRIGGER
+    shift: 4
+    width: 1
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1447
+  - nvkm/engine/gr/ctxgf100.c:1449
+  - nvkm/engine/gr/ctxgf100.c:1463
+  - nvkm/engine/gr/ctxgf100.c:1465
+  status: SOURCE_ONLY
+- reg: 0x404200 + (subc * 4)
+  address: '0x404200'
+  name: PGRAPH.DISPATCH.CTX_CACHE
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1631
+  status: SOURCE_ONLY
+- reg: '0x404488'
+  address: '0x404488'
+  name: PGRAPH.MACRO.MCACHE_CTRL
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: CLASS
+    shift: 0
+    width: 16
+  - name: MTHD
+    shift: 16
+    width: 12
+  - name: READ_TRIGGER
+    shift: 30
+    width: 1
+  - name: WRITE_TRIGGER
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1153
+  status: SOURCE_ONLY
+- reg: '0x40448c'
+  address: '0x40448c'
+  name: PGRAPH.MACRO.MCACHE_DATA
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1148
+  status: SOURCE_ONLY
+- reg: '0x404490'
+  address: '0x404490'
+  name: PGRAPH.MACRO.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: TOO_FEW_PARAMS
+    shift: 0
+    width: 1
+  - name: TOO_MANY_PARAMS
+    shift: 1
+    width: 1
+  - name: ILLEGAL_OPCODE
+    shift: 2
+    width: 1
+  - name: DOUBLE_BRANCH
+    shift: 3
+    width: 1
+  - name: WATCHDOG
+    shift: 4
+    width: 1
+  - name: BLOCK
+    shift: 29
+    width: 1
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1473
+  - nvkm/engine/gr/gf100.c:1484
+  - nvkm/engine/gr/gf100.c:2408
+  status: SOURCE_ONLY
+- reg: '0x404494'
+  address: '0x404494'
+  name: PGRAPH.MACRO.TRAP_LOCATION
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: PC
+    shift: 0
+    width: 11
+  - name: VALID
+    shift: 28
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1474
+  status: SOURCE_ONLY
+- reg: '0x40449c'
+  address: '0x40449c'
+  name: PGRAPH.MACRO.TRAP_OPCODE
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1475
+  status: SOURCE_ONLY
+- reg: '0x404600'
+  address: '0x404600'
+  name: PGRAPH.M2MF.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: PUSH_TOO_MUCH_DATA
+    shift: 0
+    width: 1
+  - name: PUSH_NOT_ENOUGH_DATA
+    shift: 1
+    width: 1
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1429
+  - nvkm/engine/gr/gf100.c:1435
+  - nvkm/engine/gr/gf100.c:2401
+  status: SOURCE_ONLY
+- reg: '0x405000'
+  address: '0x405000'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:560
+  status: SOURCE_ONLY
+- reg: '0x405004'
+  address: '0x405004'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:561
+  status: SOURCE_ONLY
+- reg: '0x405008'
+  address: '0x405008'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:562
+  status: SOURCE_ONLY
+- reg: '0x40500c'
+  address: '0x40500c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:563
+  status: SOURCE_ONLY
+- reg: '0x405010'
+  address: '0x405010'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:564
+  status: SOURCE_ONLY
+- reg: '0x405014'
+  address: '0x405014'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:565
+  status: SOURCE_ONLY
+- reg: '0x405018'
+  address: '0x405018'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:552
+  - nvkm/engine/gr/nv50.c:569
+  - nvkm/engine/gr/nv50.c:693
+  status: SOURCE_ONLY
+- reg: '0x40501c'
+  address: '0x40501c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:566
+  status: SOURCE_ONLY
+- reg: '0x405800'
+  address: '0x405800'
+  name: PGRAPH.UNK5800.CTX_UNK00
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf108.c:774
+  - nvkm/engine/gr/ctxgk104.c:901
+  status: SOURCE_ONLY
+- reg: '0x405804'
+  address: '0x405804'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:53
+  status: SOURCE_ONLY
+- reg: '0x405808'
+  address: '0x405808'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:54
+  status: SOURCE_ONLY
+- reg: '0x40580c'
+  address: '0x40580c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:55
+  status: SOURCE_ONLY
+- reg: '0x405810'
+  address: '0x405810'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:56
+  status: SOURCE_ONLY
+- reg: '0x405814'
+  address: '0x405814'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:58
+  status: SOURCE_ONLY
+- reg: '0x405818'
+  address: '0x405818'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:104
+  status: SOURCE_ONLY
+- reg: '0x40581c'
+  address: '0x40581c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:105
+  status: SOURCE_ONLY
+- reg: '0x405820'
+  address: '0x405820'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:106
+  - nvkm/engine/gr/gf100.c:59
+  status: SOURCE_ONLY
+- reg: '0x405824'
+  address: '0x405824'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:107
+  - nvkm/engine/gr/gf100.c:60
+  status: SOURCE_ONLY
+- reg: '0x405840'
+  address: '0x405840'
+  name: PGRAPH.UNK5800.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: SPH_ERR
+    shift: 0
+    width: 24
+  - name: PIPE_STAGE
+    shift: 24
+    width: 6
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1452
+  - nvkm/engine/gr/gf100.c:1455
+  - nvkm/engine/gr/gf100.c:2413
+  status: SOURCE_ONLY
+- reg: '0x405844'
+  address: '0x405844'
+  name: PGRAPH.UNK5800.TRAP_UNK44
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2414
+  status: SOURCE_ONLY
+- reg: 0x405870 + (i * 4)
+  address: '0x405870'
+  name: PGRAPH.UNK5800.GPC_TPCCNT
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: '0'
+    shift: 0
+    width: 4
+  - name: '1'
+    shift: 4
+    width: 4
+  - name: '2'
+    shift: 8
+    width: 4
+  - name: '3'
+    shift: 12
+    width: 4
+  - name: '4'
+    shift: 16
+    width: 4
+  - name: '5'
+    shift: 20
+    width: 4
+  - name: '6'
+    shift: 24
+    width: 4
+  - name: '7'
+    shift: 28
+    width: 4
+  source:
+  - nvkm/engine/gr/gf100.c:2181
+  status: SOURCE_ONLY
+- reg: '0x405a14'
+  address: '0x405a14'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf108.c:109
+  status: SOURCE_ONLY
+- reg: '0x405b00'
+  address: '0x405b00'
+  name: PGRAPH.UNK5B00.UNK00
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: GPCCNT
+    shift: 0
+    width: 8
+  - name: TPCCNT
+    shift: 8
+    width: 8
+  source:
+  - nvkm/engine/gr/ctxgk104.c:918
+  status: SOURCE_ONLY
+- reg: '0x406018'
+  address: '0x406018'
+  name: PGRAPH.UNK6000.TRAP_UNK0
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2407
+  status: SOURCE_ONLY
+- reg: '0x40601c'
+  address: '0x40601c'
+  name: PGRAPH.UNK6000.TRAP_UNK1
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: TEMP_TOO_SMALL
+    shift: 0
+    width: 1
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1461
+  - nvkm/engine/gr/gf100.c:1467
+  - nvkm/engine/gr/gf100.c:2253
+  status: SOURCE_ONLY
+- reg: 0x406028 + (i * 4)
+  address: '0x406028'
+  name: PGRAPH.UNK6000.GPC_TPCCNT
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: '0'
+    shift: 0
+    width: 4
+  - name: '1'
+    shift: 4
+    width: 4
+  - name: '2'
+    shift: 8
+    width: 4
+  - name: '3'
+    shift: 12
+    width: 4
+  - name: '4'
+    shift: 16
+    width: 4
+  - name: '5'
+    shift: 20
+    width: 4
+  - name: '6'
+    shift: 24
+    width: 4
+  - name: '7'
+    shift: 28
+    width: 4
+  source:
+  - nvkm/engine/gr/gf100.c:2179
+  status: SOURCE_ONLY
+- reg: 0x4060a8 + (i * 4)
+  address: '0x4060a8'
+  name: PGRAPH.UNK6000.TPC_GPCID
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: '0'
+    shift: 0
+    width: 5
+  - name: '1'
+    shift: 8
+    width: 5
+  - name: '2'
+    shift: 16
+    width: 5
+  - name: '3'
+    shift: 24
+    width: 5
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1088
+  status: SOURCE_ONLY
+- reg: '0x4064c0'
+  address: '0x4064c0'
+  name: PGRAPH.UNK6000.CTX_UNK4C0
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf108.c:773
+  - nvkm/engine/gr/ctxgk104.c:900
+  status: SOURCE_ONLY
+- reg: 0x4064d0 + (i * 0x04)
+  address: '0x4064d0'
+  name: PGRAPH.UNK6000.CTX_UNK4D0
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf117.c:194
+  status: SOURCE_ONLY
+- reg: '0x406800'
+  address: '0x406800'
+  name: PGRAPH.TPGRAD.MASK
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:486
+  - nvkm/engine/gr/nv50.c:502
+  - nvkm/engine/gr/nv50.c:690
+  status: SOURCE_ONLY
+- reg: 0x406800 + (i * 0x20)
+  address: '0x406800'
+  name: PGRAPH.TPGRAD.MASK
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1279
+  status: SOURCE_ONLY
+- reg: 0x406800 + (i * 0x20) + j
+  address: '0x406800'
+  name: PGRAPH.TPGRAD.MASK
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgk104.c:962
+  status: SOURCE_ONLY
+- reg: '0x406804'
+  address: '0x406804'
+  name: PGRAPH.TPGRAD.MASK
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:493
+  status: SOURCE_ONLY
+- reg: '0x406808'
+  address: '0x406808'
+  name: PGRAPH.TPGRAD.MASK
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:494
+  status: SOURCE_ONLY
+- reg: '0x40680c'
+  address: '0x40680c'
+  name: PGRAPH.TPGRAD.MASK
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:495
+  status: SOURCE_ONLY
+- reg: '0x406810'
+  address: '0x406810'
+  name: PGRAPH.TPGRAD.MASK
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:496
+  status: SOURCE_ONLY
+- reg: 0x406c00 + (i * 0x20)
+  address: '0x406c00'
+  name: PGRAPH.TPGRAD.MASK
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1280
+  status: SOURCE_ONLY
+- reg: 0x406c00 + (i * 0x20) + j
+  address: '0x406c00'
+  name: PGRAPH.TPGRAD.MASK
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgk104.c:963
+  status: SOURCE_ONLY
+- reg: '0x407020'
+  address: '0x407020'
+  name: PGRAPH.SKED.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CTA_RESUME
+    shift: 6
+    width: 1
+  - name: CONSTANT_BUFFER_SIZE
+    shift: 7
+    width: 1
+  - name: LOCAL_MEMORY_SIZE_POS
+    shift: 9
+    width: 1
+  - name: LOCAL_MEMORY_SIZE_NEG
+    shift: 10
+    width: 1
+  - name: WARP_CSTACK_SIZE
+    shift: 11
+    width: 1
+  - name: TOTAL_TEMP_SIZE
+    shift: 12
+    width: 1
+  - name: REGISTER_COUNT
+    shift: 13
+    width: 1
+  - name: TOTAL_THREADS
+    shift: 18
+    width: 1
+  - name: PROGRAM_OFFSET
+    shift: 20
+    width: 1
+  - name: SHARED_MEMORY_SIZE
+    shift: 21
+    width: 1
+  - name: CTA_THREAD_DIMENSION_ZERO
+    shift: 23
+    width: 1
+  - name: MEMORY_WINDOW_OVERLAP
+    shift: 24
+    width: 1
+  - name: SHARED_CONFIG_TOO_SMALL
+    shift: 25
+    width: 1
+  - name: TOTAL_REGISTER_COUNT
+    shift: 26
+    width: 1
+  - name: CLEAR
+    shift: 30
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1490
+  - nvkm/engine/gr/gf100.c:1496
+  - nvkm/engine/gr/gk104.c:393
+  status: SOURCE_ONLY
+- reg: 0x40780c + (i * 4)
+  address: '0x40780c'
+  name: PGRAPH.TPBUS.TPC_GPCID
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: '0'
+    shift: 0
+    width: 5
+  - name: '1'
+    shift: 5
+    width: 5
+  - name: '2'
+    shift: 10
+    width: 5
+  - name: '3'
+    shift: 15
+    width: 5
+  - name: '4'
+    shift: 20
+    width: 5
+  - name: '5'
+    shift: 25
+    width: 5
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1135
+  - nvkm/engine/gr/ctxgf117.c:240
+  status: SOURCE_ONLY
+- reg: '0x4078bc'
+  address: '0x4078bc'
+  name: PGRAPH.TPBUS.TOTAL
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: ROP_COUNT
+    shift: 0
+    width: 8
+  - name: GPC_COUNT
+    shift: 8
+    width: 8
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1132
+  - nvkm/engine/gr/ctxgf117.c:237
+  status: SOURCE_ONLY
+- reg: '0x40802c'
+  address: '0x40802c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1470
+  status: SOURCE_ONLY
+- reg: '0x408030'
+  address: '0x408030'
+  name: PGRAPH.CCACHE.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: INTR
+    shift: 0
+    width: 1
+  - name: LDCONST_OOB
+    shift: 1
+    width: 1
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1441
+  - nvkm/engine/gr/gf100.c:1446
+  - nvkm/engine/gr/gf100.c:2402
+  status: SOURCE_ONLY
+- reg: 0x408314 + (i << 12)
+  address: '0x408314'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:704
+  status: SOURCE_ONLY
+- reg: 0x40831c + (i << 11)
+  address: '0x40831c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:708
+  status: SOURCE_ONLY
+- reg: 0x408600 + (i << 11)
+  address: '0x408600'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:706
+  status: SOURCE_ONLY
+- reg: 0x408708 + (i << 11)
+  address: '0x408708'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:707
+  status: SOURCE_ONLY
+- reg: '0x408850'
+  address: '0x408850'
+  name: PGRAPH.ROP_BROADCAST.ZROP.SETTINGS
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: NUM_ACTIVE_FBPS
+    shift: 0
+    width: 4
+  source:
+  - nvkm/engine/gr/gk104.c:410
+  status: SOURCE_ONLY
+- reg: 0x408900 + (i << 12)
+  address: '0x408900'
+  name: PGRAPH.ROP_BROADCAST.CROP.CTX_UNK00
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:702
+  status: SOURCE_ONLY
+- reg: '0x408958'
+  address: '0x408958'
+  name: PGRAPH.ROP_BROADCAST.CROP.SETTINGS
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: NUM_ACTIVE_FBPS
+    shift: 0
+    width: 4
+  - name: BLENDER_LANA_OPT
+    shift: 4
+    width: 2
+  source:
+  - nvkm/engine/gr/gk104.c:411
+  status: SOURCE_ONLY
+- reg: 0x408e08 + (i << 12)
+  address: '0x408e08'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:703
+  status: SOURCE_ONLY
+- reg: '0x409000'
+  address: '0x409000'
+  name: PGRAPH.CTXCTL.INTR_TRIGGER
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: PERIODIC
+    shift: 0
+    width: 1
+  - name: WATCHDOG
+    shift: 1
+    width: 1
+  - name: FIFO_DATA
+    shift: 2
+    width: 1
+  - name: CHANNEL_SWITCH
+    shift: 3
+    width: 1
+  - name: EXIT
+    shift: 4
+    width: 1
+  - name: PAUSE
+    shift: 5
+    width: 1
+  - name: USER1
+    shift: 6
+    width: 1
+  - name: USER2
+    shift: 7
+    width: 1
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1522
+  status: SOURCE_ONLY
+- reg: '0x409100'
+  address: '0x409100'
+  name: PGRAPH.CTXCTL.UC_CTRL
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: RESET_TLB_TRIGGER
+    shift: 0
+    width: 1
+  - name: START_TRIGGER
+    shift: 1
+    width: 1
+  - name: RESET_UNK2_TRIGGER
+    shift: 2
+    width: 1
+  - name: RESET_UNK3_TRIGGER
+    shift: 3
+    width: 1
+  - name: STOPPED
+    shift: 4
+    width: 1
+  - name: SLEEPING
+    shift: 5
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1868
+  status: SOURCE_ONLY
+- reg: '0x40910c'
+  address: '0x40910c'
+  name: PGRAPH.CTXCTL.UC_BLOCK_ON_FIFO
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1787
+  - nvkm/engine/gr/gf100.c:1867
+  status: SOURCE_ONLY
+- reg: '0x409500'
+  address: '0x409500'
+  name: PGRAPH.CTXCTL.WRCMD_DATA
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1507
+  - nvkm/engine/gr/gf100.c:756
+  - nvkm/engine/gr/gf100.c:819
+  - nvkm/engine/gr/gf100.c:838
+  - nvkm/engine/gr/gf100.c:858
+  - nvkm/engine/gr/gf100.c:875
+  - nvkm/engine/gr/gf100.c:891
+  - nvkm/engine/gr/gf100.c:929
+  - nvkm/engine/gr/gf100.c:945
+  - nvkm/engine/gr/gf100.c:961
+  - nvkm/engine/gr/gf100.c:977
+  status: SOURCE_ONLY
+- reg: '0x409504'
+  address: '0x409504'
+  name: PGRAPH.CTXCTL.WRCMD_CMD
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: ADR
+    shift: 0
+    width: 13
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1508
+  - nvkm/engine/gr/gf100.c:757
+  - nvkm/engine/gr/gf100.c:820
+  - nvkm/engine/gr/gf100.c:839
+  - nvkm/engine/gr/gf100.c:859
+  - nvkm/engine/gr/gf100.c:876
+  - nvkm/engine/gr/gf100.c:892
+  - nvkm/engine/gr/gf100.c:930
+  - nvkm/engine/gr/gf100.c:946
+  - nvkm/engine/gr/gf100.c:962
+  - nvkm/engine/gr/gf100.c:978
+  status: SOURCE_ONLY
+- reg: '0x409604'
+  address: '0x409604'
+  name: PGRAPH.CTXCTL.UNITS
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: GPC_COUNT
+    shift: 0
+    width: 5
+  - name: ROP_COUNT
+    shift: 16
+    width: 5
+  source:
+  - nvkm/engine/gr/gf100.c:1001
+  - nvkm/engine/gr/gf100.c:1557
+  - nvkm/engine/gr/gf100.c:2009
+  status: SOURCE_ONLY
+- reg: '0x409614'
+  address: '0x409614'
+  name: PGRAPH.CTXCTL.RED_SWITCH
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: PAUSE_MAIN
+    shift: 0
+    width: 1
+  - name: PAUSE_GPC
+    shift: 1
+    width: 1
+  - name: POWER_MAIN
+    shift: 4
+    width: 1
+  - name: POWER_GPC
+    shift: 5
+    width: 1
+  - name: POWER_ROP
+    shift: 6
+    width: 1
+  - name: ENABLE_MAIN
+    shift: 8
+    width: 1
+  - name: ENABLE_GPC
+    shift: 9
+    width: 1
+  - name: ENABLE_ROP
+    shift: 10
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2470
+  - nvkm/engine/gr/gf100.c:2472
+  - nvkm/engine/gr/gf100.c:2474
+  status: SOURCE_ONLY
+- reg: '0x409800'
+  address: '0x409800'
+  name: PGRAPH.CTXCTL.CC_SCRATCH
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1510
+  - nvkm/engine/gr/gf100.c:1785
+  - nvkm/engine/gr/gf100.c:1793
+  - nvkm/engine/gr/gf100.c:1870
+  - nvkm/engine/gr/gf100.c:755
+  - nvkm/engine/gr/gf100.c:818
+  - nvkm/engine/gr/gf100.c:822
+  - nvkm/engine/gr/gf100.c:837
+  - nvkm/engine/gr/gf100.c:841
+  - nvkm/engine/gr/gf100.c:857
+  - nvkm/engine/gr/gf100.c:861
+  - nvkm/engine/gr/gf100.c:874
+  - nvkm/engine/gr/gf100.c:878
+  - nvkm/engine/gr/gf100.c:890
+  - nvkm/engine/gr/gf100.c:894
+  - nvkm/engine/gr/gf100.c:928
+  - nvkm/engine/gr/gf100.c:932
+  - nvkm/engine/gr/gf100.c:944
+  - nvkm/engine/gr/gf100.c:948
+  - nvkm/engine/gr/gf100.c:960
+  - nvkm/engine/gr/gf100.c:964
+  - nvkm/engine/gr/gf100.c:976
+  status: SOURCE_ONLY
+- reg: '0x409804'
+  address: '0x409804'
+  name: PGRAPH.CTXCTL.CC_SCRATCH
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1877
+  - nvkm/engine/gr/gf100.c:754
+  - nvkm/engine/gr/gf100.c:759
+  status: SOURCE_ONLY
+- reg: '0x409808'
+  address: '0x409808'
+  name: PGRAPH.CTXCTL.CC_SCRATCH
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1575
+  - nvkm/engine/gr/gf100.c:990
+  status: SOURCE_ONLY
+- reg: '0x40980c'
+  address: '0x40980c'
+  name: PGRAPH.CTXCTL.CC_SCRATCH
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1576
+  status: SOURCE_ONLY
+- reg: '0x409810'
+  address: '0x409810'
+  name: PGRAPH.CTXCTL.CC_SCRATCH
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1579
+  - nvkm/engine/gr/gf100.c:856
+  - nvkm/engine/gr/gf100.c:873
+  status: SOURCE_ONLY
+- reg: '0x409814'
+  address: '0x409814'
+  name: PGRAPH.CTXCTL.CC_SCRATCH
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1573
+  status: SOURCE_ONLY
+- reg: '0x40981c'
+  address: '0x40981c'
+  name: PGRAPH.CTXCTL.CC_SCRATCH
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:986
+  status: SOURCE_ONLY
+- reg: '0x409840'
+  address: '0x409840'
+  name: PGRAPH.CTXCTL.CC_SCRATCH_CLEAR
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1506
+  status: SOURCE_ONLY
+- reg: '0x409b00'
+  address: '0x409b00'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1524
+  - nvkm/engine/gr/ctxgf100.c:1535
+  - nvkm/engine/gr/gf100.c:1613
+  - nvkm/engine/gr/gf100.c:746
+  status: SOURCE_ONLY
+- reg: '0x409b04'
+  address: '0x409b04'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1521
+  status: SOURCE_ONLY
+- reg: '0x409c14'
+  address: '0x409c14'
+  name: PGRAPH.CTXCTL.INTR_UP_ROUTE
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: SRC0
+    shift: 0
+    width: 6
+  - name: SRC1
+    shift: 8
+    width: 6
+  - name: FUN
+    shift: 16
+    width: 1
+  - name: NOT
+    shift: 17
+    width: 1
+  - name: LEVEL
+    shift: 18
+    width: 1
+  source:
+  - nvkm/engine/gr/gk104.c:401
+  status: SOURCE_ONLY
+- reg: '0x409c18'
+  address: '0x409c18'
+  name: PGRAPH.CTXCTL.INTR_UP_STATUS
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1570
+  status: SOURCE_ONLY
+- reg: '0x409c20'
+  address: '0x409c20'
+  name: PGRAPH.CTXCTL.INTR_UP_CLEAR
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1587
+  - nvkm/engine/gr/gf100.c:1594
+  - nvkm/engine/gr/gf100.c:1601
+  status: SOURCE_ONLY
+- reg: '0x409c24'
+  address: '0x409c24'
+  name: PGRAPH.CTXCTL.INTR_UP_ENABLE
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2260
+  - nvkm/engine/gr/gk104.c:402
+  status: SOURCE_ONLY
+- reg: '0x409ffc'
+  address: '0x409ffc'
+  name: PGRAPH.CTXCTL.HOST_IO_INDEX
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gk104.c:400
+  status: SOURCE_ONLY
+- reg: '0x418800'
+  address: '0x418800'
+  name: PGRAPH.GPC_BROADCAST.ESETUP.CTX_UNK00
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgk104.c:858
+  status: SOURCE_ONLY
+- reg: '0x418880'
+  address: '0x418880'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2269
+  status: SOURCE_ONLY
+- reg: '0x418888'
+  address: '0x418888'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2271
+  status: SOURCE_ONLY
+- reg: '0x41888c'
+  address: '0x41888c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2272
+  status: SOURCE_ONLY
+- reg: '0x418890'
+  address: '0x418890'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2273
+  status: SOURCE_ONLY
+- reg: '0x418894'
+  address: '0x418894'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2274
+  status: SOURCE_ONLY
+- reg: '0x4188a4'
+  address: '0x4188a4'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2270
+  status: SOURCE_ONLY
+- reg: '0x4188b4'
+  address: '0x4188b4'
+  name: PGRAPH.GPC_BROADCAST.FFB.UNK34_ADDR
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2275
+  status: SOURCE_ONLY
+- reg: '0x4188b8'
+  address: '0x4188b8'
+  name: PGRAPH.GPC_BROADCAST.FFB.UNK38_ADDR
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2276
+  status: SOURCE_ONLY
+- reg: 0x418b08 + (i * 4)
+  address: '0x418b08'
+  name: PGRAPH.GPC_BROADCAST.TPBUS.TPC_GPCID
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: '0'
+    shift: 0
+    width: 5
+  - name: '1'
+    shift: 5
+    width: 5
+  - name: '2'
+    shift: 10
+    width: 5
+  - name: '3'
+    shift: 15
+    width: 5
+  - name: '4'
+    shift: 20
+    width: 5
+  - name: '5'
+    shift: 25
+    width: 5
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1122
+  - nvkm/engine/gr/ctxgf117.c:227
+  status: SOURCE_ONLY
+- reg: '0x418bb8'
+  address: '0x418bb8'
+  name: PGRAPH.GPC_BROADCAST.TPBUS.TOTAL
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: ROP_COUNT
+    shift: 0
+    width: 8
+  - name: GPC_COUNT
+    shift: 8
+    width: 8
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1119
+  - nvkm/engine/gr/ctxgf117.c:224
+  status: SOURCE_ONLY
+- reg: '0x418c6c'
+  address: '0x418c6c'
+  name: PGRAPH.GPC_BROADCAST.TPCONF.CTX_UNK6C
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf108.c:770
+  - nvkm/engine/gr/ctxgk104.c:897
+  status: SOURCE_ONLY
+- reg: '0x41980c'
+  address: '0x41980c'
+  name: PGRAPH.GPC_BROADCAST.TPC_ALL.POLY.PM_UNK00C
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: SEL
+    shift: 0
+    width: 6
+  source:
+  - nvkm/engine/gr/ctxgf108.c:771
+  - nvkm/engine/gr/ctxgk104.c:898
+  status: SOURCE_ONLY
+- reg: '0x419814'
+  address: '0x419814'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf108.c:772
+  status: SOURCE_ONLY
+- reg: 0x419b00 + (i * 4)
+  address: '0x419b00'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1129
+  status: SOURCE_ONLY
+- reg: '0x419bd0'
+  address: '0x419bd0'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1125
+  status: SOURCE_ONLY
+- reg: '0x419be4'
+  address: '0x419be4'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1127
+  status: SOURCE_ONLY
+- reg: '0x419c00'
+  address: '0x419c00'
+  name: PGRAPH.GPC_BROADCAST.TPC_ALL.UNK400.CTX_UNK00
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf108.c:775
+  - nvkm/engine/gr/ctxgk104.c:902
+  status: SOURCE_ONLY
+- reg: '0x419cb8'
+  address: '0x419cb8'
+  name: PGRAPH.GPC_BROADCAST.TPC_ALL.L1.CFG
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: PE_PRIORITY
+    shift: 0
+    width: 5
+  - name: PULL_TIMEOUT
+    shift: 5
+    width: 5
+  - name: MEMBAR_WINDOW
+    shift: 10
+    width: 5
+  - name: MEMBAR_WINDOW_PRESCALAR
+    shift: 15
+    width: 2
+  - name: PE_WR_PRIORITY
+    shift: 20
+    width: 5
+  - name: BLKACTIVITY_ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1010
+  status: SOURCE_ONLY
+- reg: '0x419cc0'
+  address: '0x419cc0'
+  name: PGRAPH.GPC_BROADCAST.TPC_ALL.L1.PM_UNK40
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2242
+  status: SOURCE_ONLY
+- reg: '0x419e44'
+  address: '0x419e44'
+  name: PGRAPH.GPC_BROADCAST.TPC_ALL.MP.TRAP_WARP_ERROR_EN
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: STACK_MISMATCH
+    shift: 1
+    width: 1
+  - name: API_STACK_ERROR
+    shift: 2
+    width: 1
+  - name: RET_EMPTY_STACK_ERROR
+    shift: 3
+    width: 1
+  - name: PC_WRAP
+    shift: 4
+    width: 1
+  - name: MISALIGNED_PC
+    shift: 5
+    width: 1
+  - name: PC_OVERFLOW
+    shift: 6
+    width: 1
+  - name: MISALIGNED_IMMC_ADDR
+    shift: 7
+    width: 1
+  - name: MISALIGNED_GPR
+    shift: 8
+    width: 1
+  - name: INVALID_OPCODE
+    shift: 9
+    width: 1
+  - name: ILLEGAL_SPH_INSTR_COMBO
+    shift: 10
+    width: 1
+  - name: ILLEGAL_INSTR_PARAM
+    shift: 11
+    width: 1
+  - name: INVALID_CONST_ADDR
+    shift: 12
+    width: 1
+  - name: GPR_OUT_OF_BOUNDS
+    shift: 13
+    width: 1
+  - name: MEM_OUT_OF_BOUNDS
+    shift: 14
+    width: 1
+  - name: UNALIGNED_MEM_ACCESS
+    shift: 15
+    width: 1
+  - name: INVALID_ADDR_SPACE
+    shift: 16
+    width: 1
+  - name: INVALID_PARAM
+    shift: 17
+    width: 1
+  - name: INVALID_CONST_ADDR_LDC
+    shift: 18
+    width: 1
+  - name: GEOMETRY_SM_ERROR
+    shift: 19
+    width: 1
+  - name: DIVERGENT
+    shift: 20
+    width: 1
+  - name: WARP_EXIT
+    shift: 21
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:253
+  status: SOURCE_ONLY
+- reg: '0x419e4c'
+  address: '0x419e4c'
+  name: PGRAPH.GPC_BROADCAST.TPC_ALL.MP.TRAP_GLOBAL_ERROR_EN
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: SM_TO_SM_FAULT
+    shift: 0
+    width: 1
+  - name: L1_ERROR
+    shift: 1
+    width: 1
+  - name: MULTIPLE_WARP_ERRORS
+    shift: 2
+    width: 1
+  - name: OUT_OF_STACK_SPACE
+    shift: 3
+    width: 1
+  - name: BPT_INT
+    shift: 4
+    width: 1
+  - name: BPT_PAUSE
+    shift: 5
+    width: 1
+  - name: SINGLE_STEP_COMPLETE
+    shift: 6
+    width: 1
+  - name: ECC_SEC_ERROR
+    shift: 29
+    width: 1
+  - name: ECC_DED_ERROR
+    shift: 30
+    width: 1
+  - name: TIMEOUT_ERROR
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:254
+  status: SOURCE_ONLY
+- reg: '0x419eb0'
+  address: '0x419eb0'
+  name: PGRAPH.GPC_BROADCAST.TPC_ALL.MP.CTX_UNK0B0
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgk110.c:820
+  status: SOURCE_ONLY
+- reg: '0x419eb4'
+  address: '0x419eb4'
+  name: PGRAPH.GPC_BROADCAST.TPC_ALL.MP.PM_UNK0B4
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2233
+  - nvkm/engine/gr/gk110.c:342
+  - nvkm/engine/gr/gk110.c:343
+  - nvkm/engine/gr/gk110.c:344
+  - nvkm/engine/gr/gk110.c:345
+  - nvkm/engine/gr/gk110.c:346
+  - nvkm/engine/gr/gk110.c:347
+  - nvkm/engine/gr/gk110.c:348
+  - nvkm/engine/gr/gk110.c:349
+  status: SOURCE_ONLY
+- reg: '0x419f78'
+  address: '0x419f78'
+  name: PGRAPH.GPC_BROADCAST.TPC_ALL.MP.CTX_UNK178
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgk104.c:911
+  - nvkm/engine/gr/ctxgk110.c:829
+  status: SOURCE_ONLY
+- reg: '0x41a10c'
+  address: '0x41a10c'
+  name: PGRAPH.GPC_BROADCAST.CTXCTL.UC_BLOCK_ON_FIFO
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1786
+  status: SOURCE_ONLY
+- reg: '0x41be08'
+  address: '0x41be08'
+  name: PGRAPH.GPC_BROADCAST.PPC_ALL.PM_UNK008
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgk104.c:899
+  status: SOURCE_ONLY
+- reg: '0x41be10'
+  address: '0x41be10'
+  name: PGRAPH.GPC_BROADCAST.PPC_ALL.PM_UNK010
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgk104.c:859
+  status: SOURCE_ONLY
+- reg: 0x41bf00 + (i * 4)
+  address: '0x41bf00'
+  name: PGRAPH.GPC_BROADCAST.PPC_ALL.TPC_GPCID
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: '0'
+    shift: 0
+    width: 5
+  - name: '1'
+    shift: 5
+    width: 5
+  - name: '2'
+    shift: 10
+    width: 5
+  - name: '3'
+    shift: 15
+    width: 5
+  - name: '4'
+    shift: 20
+    width: 5
+  - name: '5'
+    shift: 25
+    width: 5
+  source:
+  - nvkm/engine/gr/ctxgf117.c:234
+  status: SOURCE_ONLY
+- reg: '0x41bfd0'
+  address: '0x41bfd0'
+  name: PGRAPH.GPC_BROADCAST.PPC_ALL.UNK1D0
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: ROP_COUNT
+    shift: 0
+    width: 8
+  - name: GPC_COUNT
+    shift: 8
+    width: 8
+  - name: UNK16
+    shift: 16
+    width: 13
+  source:
+  - nvkm/engine/gr/ctxgf117.c:230
+  status: SOURCE_ONLY
+- reg: '0x41bfe4'
+  address: '0x41bfe4'
+  name: PGRAPH.GPC_BROADCAST.PPC_ALL.CTX_UNK1E4
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf117.c:232
+  status: SOURCE_ONLY
+- reg: GPC_BCAST(0x08ac)
+  address: '0x4188ac'
+  name: PGRAPH.GPC_BROADCAST.FFB.PART_CONFIG
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: PART_COUNT
+    shift: 0
+    width: 4
+  - name: MEM_SPLIT_ENABLE
+    shift: 4
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2283
+  status: SOURCE_ONLY
+- reg: GPC_BCAST(0x0980 + ((i / 8) * 4))
+  address: '0x418980'
+  name: PGRAPH.GPC_BROADCAST.ZCULL.MP_IN_GPC_NUMBER_MAP0
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: TILE0
+    shift: 0
+    width: 3
+  - name: TILE1
+    shift: 4
+    width: 3
+  - name: TILE2
+    shift: 8
+    width: 3
+  - name: TILE3
+    shift: 12
+    width: 3
+  - name: TILE4
+    shift: 16
+    width: 3
+  - name: TILE5
+    shift: 20
+    width: 3
+  - name: TILE6
+    shift: 24
+    width: 3
+  - name: TILE7
+    shift: 28
+    width: 3
+  source:
+  - nvkm/engine/gr/gf100.c:2300
+  - nvkm/engine/gr/gf117.c:139
+  status: SOURCE_ONLY
+- reg: GPC_BCAST(0x1bd4)
+  address: '0x419bd4'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2311
+  status: SOURCE_ONLY
+- reg: GPC_BCAST(0x3fd4)
+  address: '0x41bfd4'
+  name: PGRAPH.GPC_BROADCAST.PPC_ALL.PM_UNK1D4
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf117.c:150
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(0, 0x3018)
+  address: '0x503018'
+  name: PGRAPH.GPC.PPC.PM_UNK018
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gk104.c:433
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x0420)
+  address: '0x500420'
+  name: PGRAPH.GPC.PROP.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: RT_PITCH_OVERRUN
+    shift: 1
+    width: 1
+  - name: RT_WIDTH_OVERRUN
+    shift: 4
+    width: 1
+  - name: RT_HEIGHT_OVERRUN
+    shift: 5
+    width: 1
+  - name: ZETA_STORAGE_TYPE_MISMATCH
+    shift: 7
+    width: 1
+  - name: RT_STORAGE_TYPE_MISMATCH
+    shift: 8
+    width: 1
+  - name: RT_LAYOUT_MISMATCH
+    shift: 10
+    width: 1
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1241
+  - nvkm/engine/gr/gf100.c:1252
+  - nvkm/engine/gr/gf100.c:2427
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x0434)
+  address: '0x500434'
+  name: PGRAPH.GPC.PROP.TRAP_5
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: X
+    shift: 0
+    width: 16
+  - name: Y
+    shift: 16
+    width: 16
+  source:
+  - nvkm/engine/gr/gf100.c:1242
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x0438)
+  address: '0x500438'
+  name: PGRAPH.GPC.PROP.TRAP_6
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: FORMAT
+    shift: 8
+    width: 6
+  source:
+  - nvkm/engine/gr/gf100.c:1243
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x043c)
+  address: '0x50043c'
+  name: PGRAPH.GPC.PROP.TRAP_7
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: STORAGE_TYPE
+    shift: 0
+    width: 8
+  source:
+  - nvkm/engine/gr/gf100.c:1244
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x0824)
+  address: '0x500824'
+  name: PGRAPH.GPC.ESETUP.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1388
+  - nvkm/engine/gr/gf100.c:1390
+  - nvkm/engine/gr/gf100.c:2430
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x0900)
+  address: '0x500900'
+  name: PGRAPH.GPC.ZCULL.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1374
+  - nvkm/engine/gr/gf100.c:1376
+  - nvkm/engine/gr/gf100.c:2428
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x0910)
+  address: '0x500910'
+  name: PGRAPH.GPC.ZCULL.FS
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: NUM_MPS
+    shift: 0
+    width: 9
+  - name: NUM_ACTIVE_BANKS
+    shift: 16
+    width: 4
+  - name: NUM_BANKS
+    shift: 28
+    width: 4
+  source:
+  - nvkm/engine/gr/gf100.c:2306
+  - nvkm/engine/gr/gf117.c:145
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x0914)
+  address: '0x500914'
+  name: PGRAPH.GPC.ZCULL.RAM_ADDR
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: TILES_PER_HYPERTILE_ROW_PER_GPC
+    shift: 0
+    width: 4
+  - name: ROW_OFFSET
+    shift: 8
+    width: 4
+  source:
+  - nvkm/engine/gr/gf100.c:2304
+  - nvkm/engine/gr/gf117.c:143
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x0918)
+  address: '0x500918'
+  name: PGRAPH.GPC.ZCULL.MP_NUM_RPC
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: CONSERVATIVE
+    shift: 0
+    width: 24
+  source:
+  - nvkm/engine/gr/gf100.c:2308
+  - nvkm/engine/gr/gf117.c:147
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x0c08)
+  address: '0x500c08'
+  name: PGRAPH.GPC.TPCONF.TPCCNT
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1288
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x0c10 + tpc * 4)
+  address: '0x500c10'
+  name: PGRAPH.GPC.TPCONF.TPCID
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1298
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x0c8c)
+  address: '0x500c8c'
+  name: PGRAPH.GPC.UNKC80.TPCCNT
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1289
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x1028)
+  address: '0x501028'
+  name: PGRAPH.GPC.CCACHE.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1381
+  - nvkm/engine/gr/gf100.c:1383
+  - nvkm/engine/gr/gf100.c:2429
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x2c90)
+  address: '0x502c90'
+  name: PGRAPH.GPC.CTXCTL.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: PROP
+    shift: 0
+    width: 1
+  - name: ZCULL
+    shift: 1
+    width: 1
+  - name: CCACHE
+    shift: 2
+    width: 1
+  - name: ESETUP
+    shift: 3
+    width: 1
+  - name: PPC
+    shift: 4
+    width: 2
+  - name: TPC
+    shift: 16
+    width: 8
+  source:
+  - nvkm/engine/gr/gf100.c:1365
+  - nvkm/engine/gr/gf100.c:1398
+  - nvkm/engine/gr/gf100.c:2441
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(gpc, 0x2c94)
+  address: '0x502c94'
+  name: PGRAPH.GPC.CTXCTL.TRAP_EN
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: PROP
+    shift: 0
+    width: 1
+  - name: ZCULL
+    shift: 1
+    width: 1
+  - name: CCACHE
+    shift: 2
+    width: 1
+  - name: ESETUP
+    shift: 3
+    width: 1
+  - name: PPC
+    shift: 4
+    width: 2
+  - name: TPC
+    shift: 16
+    width: 8
+  source:
+  - nvkm/engine/gr/gf100.c:2442
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(i, 0x0c30 + (j * 4))
+  address: '0x500c30'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2016
+  status: SOURCE_ONLY
+- reg: GPC_UNIT(i, 0x2608)
+  address: '0x502608'
+  name: PGRAPH.GPC.CTXCTL.UNITS
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: TPC_COUNT
+    shift: 0
+    width: 5
+  - name: UNK_ZCULL_COUNT
+    shift: 16
+    width: 5
+  source:
+  - nvkm/engine/gr/gf100.c:2011
+  status: SOURCE_ONLY
+- reg: PPC_UNIT(gpc, ppc, 0x038)
+  address: '0x503038'
+  name: PGRAPH.GPC.PPC.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gk104.c:424
+  status: SOURCE_ONLY
+- reg: ROP_UNIT(rop, 0x070)
+  address: '0x410070'
+  name: PGRAPH.ROP.ZROP.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1517
+  - nvkm/engine/gr/gf100.c:1521
+  - nvkm/engine/gr/gf100.c:2208
+  status: SOURCE_ONLY
+- reg: ROP_UNIT(rop, 0x144)
+  address: '0x410144'
+  name: PGRAPH.ROP.CROP.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1518
+  - nvkm/engine/gr/gf100.c:1522
+  - nvkm/engine/gr/gf100.c:2207
+  status: SOURCE_ONLY
+- reg: ROP_UNIT(rop, 0x204)
+  address: '0x410204'
+  name: PGRAPH.ROP.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: CROP
+    shift: 0
+    width: 1
+  - name: ZROP
+    shift: 1
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2209
+  status: SOURCE_ONLY
+- reg: ROP_UNIT(rop, 0x208)
+  address: '0x410208'
+  name: PGRAPH.ROP.TRAP_EN
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: CROP
+    shift: 0
+    width: 1
+  - name: ZROP
+    shift: 1
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2210
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(0, 0, 0x05c)
+  address: '0x50405c'
+  name: PGRAPH.GPC.TPC.POLY.TFB_UNFUCKUP_OFFSET_QUERIES
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:2318
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x0084)
+  address: '0x504084'
+  name: PGRAPH.GPC.TPC.POLY.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1335
+  - nvkm/engine/gr/gf100.c:1337
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x0224)
+  address: '0x504224'
+  name: PGRAPH.GPC.TPC.TEX.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1323
+  - nvkm/engine/gr/gf100.c:1325
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x0430)
+  address: '0x504430'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1349
+  - nvkm/engine/gr/gf100.c:1351
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x048c)
+  address: '0x50448c'
+  name: PGRAPH.GPC.TPC.L1.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: GLOBAL_MAP_READ
+    shift: 1
+    width: 1
+  - name: GLOBAL_MAP_WRITE
+    shift: 2
+    width: 1
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1342
+  - nvkm/engine/gr/gf100.c:1344
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x0508)
+  address: '0x504508'
+  name: PGRAPH.GPC.TPC.MASTER.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: TEX
+    shift: 0
+    width: 1
+  - name: MP
+    shift: 1
+    width: 1
+  - name: POLY
+    shift: 2
+    width: 1
+  - name: L1C
+    shift: 3
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1320
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x084)
+  address: '0x504084'
+  name: PGRAPH.GPC.TPC.POLY.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2436
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x088)
+  address: '0x504088'
+  name: PGRAPH.GPC.TPC.POLY.TPCID
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1299
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x224)
+  address: '0x504224'
+  name: PGRAPH.GPC.TPC.TEX.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2226
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x48c)
+  address: '0x50448c'
+  name: PGRAPH.GPC.TPC.L1.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: GLOBAL_MAP_READ
+    shift: 1
+    width: 1
+  - name: GLOBAL_MAP_WRITE
+    shift: 2
+    width: 1
+  - name: CLEAR
+    shift: 30
+    width: 1
+  - name: ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2246
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x4e8)
+  address: '0x5044e8'
+  name: PGRAPH.GPC.TPC.L1.MPID
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: VALUE
+    shift: 0
+    width: 16
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1297
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x508)
+  address: '0x504508'
+  name: PGRAPH.GPC.TPC.MASTER.TRAP
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: TEX
+    shift: 0
+    width: 1
+  - name: MP
+    shift: 1
+    width: 1
+  - name: POLY
+    shift: 2
+    width: 1
+  - name: L1C
+    shift: 3
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2432
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x50c)
+  address: '0x50450c'
+  name: PGRAPH.GPC.TPC.MASTER.TRAP_EN
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: TEX
+    shift: 0
+    width: 1
+  - name: MP
+    shift: 1
+    width: 1
+  - name: POLY
+    shift: 2
+    width: 1
+  - name: L1C
+    shift: 3
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2433
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x644)
+  address: '0x504644'
+  name: PGRAPH.GPC.TPC.MP.TRAP_WARP_ERROR_EN
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: STACK_MISMATCH
+    shift: 1
+    width: 1
+  - name: API_STACK_ERROR
+    shift: 2
+    width: 1
+  - name: RET_EMPTY_STACK_ERROR
+    shift: 3
+    width: 1
+  - name: PC_WRAP
+    shift: 4
+    width: 1
+  - name: MISALIGNED_PC
+    shift: 5
+    width: 1
+  - name: PC_OVERFLOW
+    shift: 6
+    width: 1
+  - name: MISALIGNED_IMMC_ADDR
+    shift: 7
+    width: 1
+  - name: MISALIGNED_GPR
+    shift: 8
+    width: 1
+  - name: INVALID_OPCODE
+    shift: 9
+    width: 1
+  - name: ILLEGAL_SPH_INSTR_COMBO
+    shift: 10
+    width: 1
+  - name: ILLEGAL_INSTR_PARAM
+    shift: 11
+    width: 1
+  - name: INVALID_CONST_ADDR
+    shift: 12
+    width: 1
+  - name: GPR_OUT_OF_BOUNDS
+    shift: 13
+    width: 1
+  - name: MEM_OUT_OF_BOUNDS
+    shift: 14
+    width: 1
+  - name: UNALIGNED_MEM_ACCESS
+    shift: 15
+    width: 1
+  - name: INVALID_ADDR_SPACE
+    shift: 16
+    width: 1
+  - name: INVALID_PARAM
+    shift: 17
+    width: 1
+  - name: INVALID_CONST_ADDR_LDC
+    shift: 18
+    width: 1
+  - name: GEOMETRY_SM_ERROR
+    shift: 19
+    width: 1
+  - name: DIVERGENT
+    shift: 20
+    width: 1
+  - name: WARP_EXIT
+    shift: 21
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2218
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x648)
+  address: '0x504648'
+  name: PGRAPH.GPC.TPC.MP.TRAP_WARP_ERROR
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: ID
+    shift: 0
+    width: 16
+  source:
+  - nvkm/engine/gr/gf100.c:1299
+  - nvkm/engine/gr/gf100.c:1311
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x64c)
+  address: '0x50464c'
+  name: PGRAPH.GPC.TPC.MP.TRAP_GLOBAL_ERROR_EN
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: SM_TO_SM_FAULT
+    shift: 0
+    width: 1
+  - name: L1_ERROR
+    shift: 1
+    width: 1
+  - name: MULTIPLE_WARP_ERRORS
+    shift: 2
+    width: 1
+  - name: OUT_OF_STACK_SPACE
+    shift: 3
+    width: 1
+  - name: BPT_INT
+    shift: 4
+    width: 1
+  - name: BPT_PAUSE
+    shift: 5
+    width: 1
+  - name: SINGLE_STEP_COMPLETE
+    shift: 6
+    width: 1
+  - name: ECC_SEC_ERROR
+    shift: 29
+    width: 1
+  - name: ECC_DED_ERROR
+    shift: 30
+    width: 1
+  - name: TIMEOUT_ERROR
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:2219
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x650)
+  address: '0x504650'
+  name: PGRAPH.GPC.TPC.MP.TRAP_GLOBAL_ERROR
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: MULTIPLE_WARP_ERRORS
+    shift: 2
+    width: 1
+  - name: OUT_OF_STACK_SPACE
+    shift: 3
+    width: 1
+  source:
+  - nvkm/engine/gr/gf100.c:1300
+  - nvkm/engine/gr/gf100.c:1312
+  status: SOURCE_ONLY
+- reg: TPC_UNIT(gpc, tpc, 0x698)
+  address: '0x504698'
+  name: PGRAPH.GPC.TPC.MP.TPCID
+  name_source: rnndb:graph/gf100_pgraph/pgraph.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:1296
+  status: SOURCE_ONLY
+- reg: addr
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/ctxgf100.c:998
+  - nvkm/engine/gr/gf100.c:1088
+  status: SOURCE_ONLY
+- reg: addr + 0x10
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:298
+  - nvkm/engine/gr/nv50.c:315
+  status: SOURCE_ONLY
+- reg: addr + 0x14
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:299
+  - nvkm/engine/gr/nv50.c:316
+  status: SOURCE_ONLY
+- reg: addr + 0x20
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:303
+  status: SOURCE_ONLY
+- reg: addr + 0x24
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:304
+  status: SOURCE_ONLY
+- reg: addr + 0x70
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:305
+  status: SOURCE_ONLY
+- reg: addr + 0x74
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:306
+  status: SOURCE_ONLY
+- reg: base + 0x400
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1540
+  status: SOURCE_ONLY
+- reg: base + 0x800
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1542
+  status: SOURCE_ONLY
+- reg: base + 0x804
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1543
+  status: SOURCE_ONLY
+- reg: base + 0x808
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1544
+  status: SOURCE_ONLY
+- reg: base + 0x80c
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1545
+  status: SOURCE_ONLY
+- reg: base + 0x810
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1547
+  status: SOURCE_ONLY
+- reg: base + 0x814
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1548
+  status: SOURCE_ONLY
+- reg: base + 0x818
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1549
+  status: SOURCE_ONLY
+- reg: base + 0x81c
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1550
+  status: SOURCE_ONLY
+- reg: falcon + 0x01c0
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1717
+  - nvkm/engine/gr/gf100.c:1722
+  - nvkm/engine/gr/gf100.c:1744
+  status: SOURCE_ONLY
+- reg: falcon + 0x01c4
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/gf100.c:1718
+  - nvkm/engine/gr/gf100.c:1719
+  - nvkm/engine/gr/gf100.c:1731
+  - nvkm/engine/gr/gf100.c:1743
+  - nvkm/engine/gr/gf100.c:1745
+  status: SOURCE_ONLY
+- reg: r
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:352
+  status: SOURCE_ONLY
+- reg: ustatus_addr
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:342
+  - nvkm/engine/gr/nv50.c:387
+  status: SOURCE_ONLY
+- reg: ustatus_addr + 0x04
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:244
+  status: SOURCE_ONLY
+- reg: ustatus_addr + 0x08
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:245
+  status: SOURCE_ONLY
+- reg: ustatus_addr + 0x0c
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:246
+  status: SOURCE_ONLY
+- reg: ustatus_addr + 0x10
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:247
+  status: SOURCE_ONLY
+- reg: ustatus_addr + 0x14
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:248
+  status: SOURCE_ONLY
+- reg: ustatus_addr + 0x18
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:249
+  status: SOURCE_ONLY
+- reg: ustatus_addr + 0x1c
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/gr/nv50.c:250
+  status: SOURCE_ONLY

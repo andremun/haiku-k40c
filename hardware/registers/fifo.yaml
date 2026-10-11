@@ -1,0 +1,1385 @@
+- reg: '0x000200'
+  address: '0x000200'
+  name: PMC.ENABLE
+  name_source: rnndb:bus/pmc.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: UNK0
+    shift: 0
+    width: 1
+  - name: PPPP
+    shift: 1
+    width: 1
+  - name: PXBAR
+    shift: 2
+    width: 1
+  - name: PMFB
+    shift: 3
+    width: 1
+  - name: PMEDIA
+    shift: 4
+    width: 1
+  - name: PIBUS
+    shift: 5
+    width: 1
+  - name: PCOPY0
+    shift: 6
+    width: 1
+  - name: PCOPY1
+    shift: 7
+    width: 1
+  - name: PFIFO
+    shift: 8
+    width: 1
+  - name: PGRAPH
+    shift: 12
+    width: 1
+  - name: PDAEMON
+    shift: 13
+    width: 1
+  - name: PVLD
+    shift: 15
+    width: 1
+  - name: PTIMER
+    shift: 16
+    width: 1
+  - name: PPDEC
+    shift: 17
+    width: 1
+  - name: PVENC
+    shift: 18
+    width: 1
+  - name: PBFB
+    shift: 20
+    width: 1
+  - name: PCOPY2
+    shift: 21
+    width: 1
+  - name: UNK26
+    shift: 26
+    width: 1
+  - name: BLG
+    shift: 27
+    width: 1
+  - name: PCOUNTER
+    shift: 28
+    width: 1
+  - name: PFFB
+    shift: 29
+    width: 1
+  - name: PDISPLAY
+    shift: 30
+    width: 1
+  - name: UNK31
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/fifo/nv50.c:345
+  - nvkm/engine/fifo/nv50.c:346
+  status: SOURCE_ONLY
+- reg: '0x000204'
+  address: '0x000204'
+  name: PMC.SUBFIFO_ENABLE
+  name_source: rnndb:bus/pmc.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: '0'
+    shift: 0
+    width: 1
+  - name: '1'
+    shift: 1
+    width: 1
+  - name: '2'
+    shift: 2
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:878
+  - nvkm/engine/fifo/gf100.c:933
+  - nvkm/engine/fifo/gf100.c:934
+  - nvkm/engine/fifo/gk104.c:739
+  status: SOURCE_ONLY
+- reg: '0x001718'
+  address: '0x001718'
+  name: PBUS.HOST_MEM.PEEPHOLE
+  name_source: rnndb:bus/pbus.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CHAN
+    shift: 0
+    width: 30
+  - name: UNK30
+    shift: 30
+    width: 1
+  - name: MODE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:582
+  status: SOURCE_ONLY
+- reg: '0x002044'
+  address: '0x002044'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv50.c:348
+  status: SOURCE_ONLY
+- reg: '0x002100'
+  address: '0x002100'
+  name: PFIFO.INTR
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CHAN_TABLE_ERROR
+    shift: 0
+    width: 1
+  - name: BYPASS_ERROR
+    shift: 4
+    width: 1
+  - name: PLAYLIST
+    shift: 8
+    width: 1
+  - name: UNK16
+    shift: 16
+    width: 1
+  - name: UNK23
+    shift: 23
+    width: 1
+  - name: UNK24
+    shift: 24
+    width: 1
+  - name: UNK27
+    shift: 27
+    width: 1
+  - name: VM_FAULT
+    shift: 28
+    width: 1
+  - name: SUBFIFO_INTR
+    shift: 29
+    width: 1
+  - name: UNK30
+    shift: 30
+    width: 1
+  - name: ENGINE_INTR
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:232
+  - nvkm/engine/fifo/gf100.c:812
+  - nvkm/engine/fifo/gf100.c:817
+  - nvkm/engine/fifo/gf100.c:823
+  - nvkm/engine/fifo/gf100.c:830
+  - nvkm/engine/fifo/gf100.c:837
+  - nvkm/engine/fifo/gf100.c:866
+  - nvkm/engine/fifo/gf100.c:902
+  - nvkm/engine/fifo/gk104.c:658
+  - nvkm/engine/fifo/gk104.c:662
+  - nvkm/engine/fifo/gk104.c:668
+  - nvkm/engine/fifo/gk104.c:674
+  - nvkm/engine/fifo/gk104.c:680
+  - nvkm/engine/fifo/gk104.c:686
+  - nvkm/engine/fifo/gk104.c:692
+  - nvkm/engine/fifo/gk104.c:698
+  - nvkm/engine/fifo/gk104.c:718
+  - nvkm/engine/fifo/gk104.c:728
+  - nvkm/engine/fifo/gk104.c:751
+  - nvkm/engine/fifo/nv04.c:402
+  - nvkm/engine/fifo/nv04.c:445
+  - nvkm/engine/fifo/nv04.c:449
+  - nvkm/engine/fifo/nv50.c:350
+  status: SOURCE_ONLY
+- reg: '0x002140'
+  address: '0x002140'
+  name: PFIFO.INTR_EN
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: CHAN_TABLE_ERROR
+    shift: 0
+    width: 1
+  - name: BYPASS_ERROR
+    shift: 4
+    width: 1
+  - name: PLAYLIST
+    shift: 8
+    width: 1
+  - name: UNK16
+    shift: 16
+    width: 1
+  - name: UNK23
+    shift: 23
+    width: 1
+  - name: UNK24
+    shift: 24
+    width: 1
+  - name: UNK27
+    shift: 27
+    width: 1
+  - name: VM_FAULT
+    shift: 28
+    width: 1
+  - name: SUBFIFO_INTR
+    shift: 29
+    width: 1
+  - name: UNK30
+    shift: 30
+    width: 1
+  - name: ENGINE_INTR
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:216
+  - nvkm/engine/fifo/gf100.c:231
+  - nvkm/engine/fifo/gf100.c:446
+  - nvkm/engine/fifo/gf100.c:457
+  - nvkm/engine/fifo/gf100.c:811
+  - nvkm/engine/fifo/gf100.c:864
+  - nvkm/engine/fifo/gf100.c:903
+  - nvkm/engine/fifo/gk104.c:657
+  - nvkm/engine/fifo/gk104.c:726
+  - nvkm/engine/fifo/gk104.c:752
+  - nvkm/engine/fifo/nv50.c:351
+  status: SOURCE_ONLY
+- reg: '0x002200'
+  address: '0x002200'
+  name: PFIFO.CTRL
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: UNK8
+    shift: 8
+    width: 2
+  source:
+  - nvkm/engine/fifo/gf100.c:899
+  status: SOURCE_ONLY
+- reg: '0x002204'
+  address: '0x002204'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:879
+  status: SOURCE_ONLY
+- reg: '0x002208'
+  address: '0x002208'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:883
+  status: SOURCE_ONLY
+- reg: '0x00220c'
+  address: '0x00220c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:884
+  status: SOURCE_ONLY
+- reg: '0x002210'
+  address: '0x002210'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:885
+  status: SOURCE_ONLY
+- reg: '0x002214'
+  address: '0x002214'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:886
+  status: SOURCE_ONLY
+- reg: '0x002218'
+  address: '0x002218'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:887
+  status: SOURCE_ONLY
+- reg: '0x00221c'
+  address: '0x00221c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:888
+  status: SOURCE_ONLY
+- reg: '0x002254'
+  address: '0x002254'
+  name: PFIFO.BAR1_BASE
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: ADDR
+    shift: 0
+    width: 28
+  - name: UNK28
+    shift: 28
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:900
+  - nvkm/engine/fifo/gk104.c:749
+  status: SOURCE_ONLY
+- reg: '0x002270'
+  address: '0x002270'
+  name: PFIFO.PLAYLIST_WR
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: ADDRESS
+    shift: 0
+    width: 28
+  - name: TARGET
+    shift: 28
+    width: 2
+  source:
+  - nvkm/engine/fifo/gf100.c:414
+  - nvkm/engine/fifo/gk104.c:446
+  status: SOURCE_ONLY
+- reg: '0x002274'
+  address: '0x002274'
+  name: PFIFO.PLAYLIST_WR_LEN
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: LEN
+    shift: 0
+    width: 12
+  - name: ENG
+    shift: 20
+    width: 4
+  source:
+  - nvkm/engine/fifo/gf100.c:415
+  - nvkm/engine/fifo/gk104.c:447
+  status: SOURCE_ONLY
+- reg: '0x00227c'
+  address: '0x00227c'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:396
+  status: SOURCE_ONLY
+- reg: 0x002284 + (runl->id * 0x08)
+  address: '0x002284'
+  name: PFIFO.PLAYLIST_RD_LEN
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: LEN
+    shift: 0
+    width: 12
+  - name: UNK20
+    shift: 20
+    width: 1
+  source:
+  - nvkm/engine/fifo/gk104.c:426
+  status: SOURCE_ONLY
+- reg: 0x002390 + (runq->id * 0x04)
+  address: '0x002390'
+  name: PFIFO.SUBFIFO_ENG_MASK
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gk104.c:392
+  status: SOURCE_ONLY
+- reg: '0x002500'
+  address: '0x002500'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv50.c:361
+  status: SOURCE_ONLY
+- reg: '0x00250c'
+  address: '0x00250c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv50.c:347
+  status: SOURCE_ONLY
+- reg: '0x00252c'
+  address: '0x00252c'
+  name: PFIFO.CHAN_TABLE_ERROR
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:815
+  - nvkm/engine/fifo/gk104.c:612
+  status: SOURCE_ONLY
+- reg: '0x00254c'
+  address: '0x00254c'
+  name: PFIFO.PLAYLIST_INTR
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:678
+  status: SOURCE_ONLY
+- reg: '0x00256c'
+  address: '0x00256c'
+  name: PFIFO.INTR_CHSW_ERROR
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:828
+  - nvkm/engine/fifo/gk104.c:624
+  - nvkm/engine/fifo/gk104.c:627
+  status: SOURCE_ONLY
+- reg: '0x00258c'
+  address: '0x00258c'
+  name: PFIFO.INTR24_SOURCE
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:835
+  status: SOURCE_ONLY
+- reg: '0x00259c'
+  address: '0x00259c'
+  name: PFIFO.VM_FAULT_SOURCE
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:723
+  - nvkm/engine/fifo/gf100.c:728
+  - nvkm/engine/fifo/gk104.c:634
+  status: SOURCE_ONLY
+- reg: '0x0025a0'
+  address: '0x0025a0'
+  name: PFIFO.SUBFIFO_INTR_SOURCE
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:737
+  - nvkm/engine/fifo/gf100.c:744
+  status: SOURCE_ONLY
+- reg: '0x0025a4'
+  address: '0x0025a4'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:796
+  status: SOURCE_ONLY
+- reg: 0x0025a8 + (engn * 0x04)
+  address: '0x0025a8'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:773
+  - nvkm/engine/fifo/gf100.c:777
+  status: SOURCE_ONLY
+- reg: 0x002600 + (chan->id * 4)
+  address: '0x002600'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv50.c:52
+  - nvkm/engine/fifo/nv50.c:60
+  - nvkm/engine/fifo/nv50.c:68
+  - nvkm/engine/fifo/nv50.c:76
+  status: SOURCE_ONLY
+- reg: 0x002600 + (i * 4)
+  address: '0x002600'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv50.c:354
+  status: SOURCE_ONLY
+- reg: '0x002628'
+  address: '0x002628'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:774
+  - nvkm/engine/fifo/gf100.c:787
+  - nvkm/engine/fifo/gf100.c:904
+  status: SOURCE_ONLY
+- reg: '0x00262c'
+  address: '0x00262c'
+  name: PFIFO.ENG_FAULT
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: PGRAPH
+    shift: 0
+    width: 1
+  - name: PPDEC
+    shift: 1
+    width: 1
+  - name: PPPP
+    shift: 2
+    width: 1
+  - name: PVLD
+    shift: 3
+    width: 1
+  - name: PCOPY0
+    shift: 4
+    width: 1
+  - name: PCOPY1
+    shift: 5
+    width: 1
+  - name: PVENC
+    shift: 6
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:378
+  - nvkm/engine/fifo/gk104.c:406
+  status: SOURCE_ONLY
+- reg: '0x002630'
+  address: '0x002630'
+  name: PFIFO.ENG_FREEZE
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: PGRAPH
+    shift: 0
+    width: 1
+  - name: PPDEC
+    shift: 1
+    width: 1
+  - name: PPPP
+    shift: 2
+    width: 1
+  - name: PVLD
+    shift: 3
+    width: 1
+  - name: PCOPY0
+    shift: 4
+    width: 1
+  - name: PCOPY1
+    shift: 5
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:384
+  - nvkm/engine/fifo/gf100.c:390
+  - nvkm/engine/fifo/gk104.c:412
+  - nvkm/engine/fifo/gk104.c:418
+  status: SOURCE_ONLY
+- reg: '0x002634'
+  address: '0x002634'
+  name: PFIFO.KICK_CHID
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:372
+  - nvkm/engine/fifo/gf100.c:43
+  - nvkm/engine/fifo/gk110.c:63
+  status: SOURCE_ONLY
+- reg: 0x002640 + (engn->id * 0x08)
+  address: '0x002640'
+  name: PFIFO.ENG_STATE_0
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gk104.c:206
+  status: SOURCE_ONLY
+- reg: 0x002640 + (engn->id * 4)
+  address: '0x002640'
+  name: PFIFO.ENG_STATE_0
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:249
+  status: SOURCE_ONLY
+- reg: 0x002800 + (unit * 0x10)
+  address: '0x002800'
+  name: PFIFO.VM_FAULT.CHAN
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: ADDRESS
+    shift: 0
+    width: 28
+  - name: TARGET
+    shift: 28
+    width: 2
+  source:
+  - nvkm/engine/fifo/gf100.c:699
+  status: SOURCE_ONLY
+- reg: 0x002804 + (unit * 0x10)
+  address: '0x002804'
+  name: PFIFO.VM_FAULT.ADDR_LOW
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:700
+  status: SOURCE_ONLY
+- reg: 0x002808 + (unit * 0x10)
+  address: '0x002808'
+  name: PFIFO.VM_FAULT.ADDR_HIGH
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:701
+  status: SOURCE_ONLY
+- reg: 0x00280c + (unit * 0x10)
+  address: '0x00280c'
+  name: PFIFO.VM_FAULT.FLAGS
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: REASON
+    shift: 0
+    width: 4
+  - name: UNK4
+    shift: 4
+    width: 2
+  - name: SOURCE
+    shift: 6
+    width: 1
+  - name: WRITE
+    shift: 7
+    width: 1
+  - name: GPCCLIENT
+    shift: 8
+    width: 5
+  - name: HUBCLIENT
+    shift: 8
+    width: 5
+  - name: GPCID
+    shift: 24
+    width: 5
+  source:
+  - nvkm/engine/fifo/gf100.c:702
+  status: SOURCE_ONLY
+- reg: '0x002a00'
+  address: '0x002a00'
+  name: PFIFO.INTR_RUNLIST
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: EVENT_0
+    shift: 0
+    width: 1
+  - name: EVENT_GLBL
+    shift: 28
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:755
+  - nvkm/engine/fifo/gf100.c:758
+  - nvkm/engine/fifo/gf100.c:764
+  - nvkm/engine/fifo/gk104.c:644
+  - nvkm/engine/fifo/gk104.c:647
+  status: SOURCE_ONLY
+- reg: '0x002a04'
+  address: '0x002a04'
+  name: PFIFO.FB_TIMEOUT
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:891
+  - nvkm/engine/fifo/gk104.c:740
+  status: SOURCE_ONLY
+- reg: 0x002a30 + (engn->id * 4)
+  address: '0x002a30'
+  name: PFIFO.VM_FAULT_INJECT
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: ENGINE
+    shift: 0
+    width: 5
+  - name: VALID
+    shift: 8
+    width: 1
+  source:
+  - nvkm/engine/fifo/gf100.c:207
+  - nvkm/engine/fifo/gf100.c:214
+  - nvkm/engine/fifo/gf100.c:233
+  status: SOURCE_ONLY
+- reg: 0x003000 + (chan->id * 8)
+  address: '0x003000'
+  name: PFIFO.UNK1000
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:73
+  - nvkm/engine/fifo/gf100.c:81
+  status: SOURCE_ONLY
+- reg: 0x003004 + (chan->id * 8)
+  address: '0x003004'
+  name: PFIFO.UNK1000
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/gf100.c:51
+  - nvkm/engine/fifo/gf100.c:59
+  status: SOURCE_ONLY
+- reg: 0x003080 + (runq->id * 4)
+  address: '0x003080'
+  name: PFIFO.UNK1080
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/gk104.c:293
+  status: SOURCE_ONLY
+- reg: '0x003200'
+  address: '0x003200'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv50.c:359
+  status: SOURCE_ONLY
+- reg: '0x003220'
+  address: '0x003220'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:360
+  - nvkm/engine/fifo/nv04.c:401
+  status: SOURCE_ONLY
+- reg: '0x003228'
+  address: '0x003228'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:361
+  - nvkm/engine/fifo/nv04.c:400
+  status: SOURCE_ONLY
+- reg: '0x003240'
+  address: '0x003240'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:359
+  status: SOURCE_ONLY
+- reg: '0x003244'
+  address: '0x003244'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:358
+  - nvkm/engine/fifo/nv04.c:384
+  - nvkm/engine/fifo/nv04.c:396
+  status: SOURCE_ONLY
+- reg: '0x003250'
+  address: '0x003250'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:309
+  - nvkm/engine/fifo/nv50.c:360
+  status: SOURCE_ONLY
+- reg: '0x003258'
+  address: '0x003258'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:288
+  status: SOURCE_ONLY
+- reg: '0x003280'
+  address: '0x003280'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:280
+  - nvkm/engine/fifo/nv04.c:285
+  status: SOURCE_ONLY
+- reg: '0x0032ec'
+  address: '0x0032ec'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv50.c:220
+  - nvkm/engine/fifo/nv50.c:244
+  status: SOURCE_ONLY
+- reg: '0x0032f4'
+  address: '0x0032f4'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv50.c:243
+  status: SOURCE_ONLY
+- reg: '0x0032fc'
+  address: '0x0032fc'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv50.c:181
+  - nvkm/engine/fifo/nv50.c:183
+  status: SOURCE_ONLY
+- reg: '0x003320'
+  address: '0x003320'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:370
+  status: SOURCE_ONLY
+- reg: '0x003328'
+  address: '0x003328'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:369
+  - nvkm/engine/fifo/nv04.c:385
+  status: SOURCE_ONLY
+- reg: '0x003330'
+  address: '0x003330'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:372
+  status: SOURCE_ONLY
+- reg: '0x003334'
+  address: '0x003334'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:371
+  - nvkm/engine/fifo/nv04.c:388
+  status: SOURCE_ONLY
+- reg: '0x003364'
+  address: '0x003364'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:382
+  status: SOURCE_ONLY
+- reg: '0x00b860'
+  address: '0x00b860'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv50.c:178
+  - nvkm/engine/fifo/nv50.c:186
+  status: SOURCE_ONLY
+- reg: 0x800000 + (chan->id * 8)
+  address: '0x800000'
+  name: PFIFO_CHAN.CHAN
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: INST
+    shift: 0
+    width: 30
+  - name: UNK31
+    shift: 31
+    width: 1
+  source:
+  - nvkm/engine/fifo/gk104.c:60
+  - nvkm/engine/fifo/gk104.c:68
+  status: SOURCE_ONLY
+- reg: 0x800004 + (chan->id * 8)
+  address: '0x800004'
+  name: PFIFO_CHAN.STATE
+  name_source: rnndb:fifo/gf100_pfifo.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: ENABLED
+    shift: 0
+    width: 1
+  - name: UNK9_TRIGGER
+    shift: 9
+    width: 1
+  - name: ENABLE_TRIGGER
+    shift: 10
+    width: 1
+  - name: DISABLE_TRIGGER
+    shift: 11
+    width: 1
+  - name: ENGINE
+    shift: 16
+    width: 4
+  - name: UNK24_RO
+    shift: 24
+    width: 3
+  - name: UNK28_RO
+    shift: 28
+    width: 1
+  source:
+  - nvkm/engine/fifo/gk104.c:44
+  - nvkm/engine/fifo/gk104.c:52
+  - nvkm/engine/fifo/gk104.c:77
+  status: SOURCE_ONLY
+- reg: NV03_PFIFO_CACHE1_GET
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:343
+  - nvkm/engine/fifo/nv04.c:419
+  - nvkm/engine/fifo/nv04.c:438
+  - nvkm/engine/fifo/nv04.c:78
+  status: SOURCE_ONLY
+- reg: NV03_PFIFO_CACHE1_PUSH0
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:341
+  - nvkm/engine/fifo/nv04.c:342
+  - nvkm/engine/fifo/nv04.c:344
+  - nvkm/engine/fifo/nv04.c:345
+  - nvkm/engine/fifo/nv04.c:488
+  - nvkm/engine/fifo/nv04.c:59
+  - nvkm/engine/fifo/nv04.c:81
+  status: SOURCE_ONLY
+- reg: NV03_PFIFO_CACHE1_PUSH1
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:418
+  - nvkm/engine/fifo/nv04.c:483
+  - nvkm/engine/fifo/nv04.c:56
+  - nvkm/engine/fifo/nv04.c:80
+  status: SOURCE_ONLY
+- reg: NV03_PFIFO_CACHE1_PUT
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:79
+  status: SOURCE_ONLY
+- reg: NV03_PFIFO_CACHES
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:221
+  - nvkm/engine/fifo/nv04.c:254
+  - nvkm/engine/fifo/nv04.c:415
+  - nvkm/engine/fifo/nv04.c:416
+  - nvkm/engine/fifo/nv04.c:461
+  - nvkm/engine/fifo/nv04.c:490
+  - nvkm/engine/fifo/nv04.c:53
+  - nvkm/engine/fifo/nv04.c:87
+  status: SOURCE_ONLY
+- reg: NV03_PFIFO_INTR_0
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:241
+  - nvkm/engine/fifo/nv04.c:339
+  - nvkm/engine/fifo/nv04.c:412
+  - nvkm/engine/fifo/nv04.c:433
+  - nvkm/engine/fifo/nv04.c:458
+  - nvkm/engine/fifo/nv04.c:485
+  status: SOURCE_ONLY
+- reg: NV03_PFIFO_INTR_EN_0
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:411
+  - nvkm/engine/fifo/nv04.c:457
+  - nvkm/engine/fifo/nv04.c:486
+  status: SOURCE_ONLY
+- reg: NV03_PFIFO_RAMFC
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:481
+  status: SOURCE_ONLY
+- reg: NV03_PFIFO_RAMHT
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:477
+  status: SOURCE_ONLY
+- reg: NV03_PFIFO_RAMRO
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:480
+  status: SOURCE_ONLY
+- reg: NV04_PFIFO_CACHE1_DATA(ptr)
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:322
+  status: SOURCE_ONLY
+- reg: NV04_PFIFO_CACHE1_DMA_PUSH
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:338
+  - nvkm/engine/fifo/nv04.c:348
+  - nvkm/engine/fifo/nv04.c:349
+  - nvkm/engine/fifo/nv04.c:58
+  status: SOURCE_ONLY
+- reg: NV04_PFIFO_CACHE1_HASH
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:243
+  - nvkm/engine/fifo/nv04.c:346
+  status: SOURCE_ONLY
+- reg: NV04_PFIFO_CACHE1_METHOD(ptr)
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:321
+  status: SOURCE_ONLY
+- reg: NV04_PFIFO_CACHE1_PULL0
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:222
+  - nvkm/engine/fifo/nv04.c:234
+  - nvkm/engine/fifo/nv04.c:239
+  - nvkm/engine/fifo/nv04.c:253
+  - nvkm/engine/fifo/nv04.c:350
+  - nvkm/engine/fifo/nv04.c:439
+  - nvkm/engine/fifo/nv04.c:489
+  - nvkm/engine/fifo/nv04.c:60
+  - nvkm/engine/fifo/nv04.c:82
+  status: SOURCE_ONLY
+- reg: NV04_PFIFO_DELAY_0
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:474
+  status: SOURCE_ONLY
+- reg: NV04_PFIFO_DMA_TIMESLICE
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:475
+  status: SOURCE_ONLY
+- reg: NV04_PFIFO_MODE
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:86
+  - nvkm/engine/fifo/nv04.c:98
+  status: SOURCE_ONLY
+- reg: NV10_PFIFO_CACHE1_SEMAPHORE
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:435
+  - nvkm/engine/fifo/nv04.c:436
+  status: SOURCE_ONLY
+- reg: NV40_PFIFO_CACHE1_DATA(ptr)
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:325
+  status: SOURCE_ONLY
+- reg: NV40_PFIFO_CACHE1_METHOD(ptr)
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:324
+  status: SOURCE_ONLY
+- reg: c->regp
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/engine/fifo/nv04.c:67
+  - nvkm/engine/fifo/nv04.c:75
+  status: SOURCE_ONLY

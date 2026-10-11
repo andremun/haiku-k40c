@@ -1,0 +1,61 @@
+- reg: '0x100c80'
+  address: '0x100c80'
+  name: PFFB.VM.CFG
+  name_source: rnndb:memory/gf100_pffb.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: LARGE_PAGE_SIZE
+    shift: 0
+    width: 1
+  - name: BYPASS_TARGET
+    shift: 28
+    width: 2
+  - name: BYPASS_ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/subdev/mmu/vmmgf100.c:199
+  - nvkm/subdev/mmu/vmmgf100.c:221
+  status: SOURCE_ONLY
+- reg: '0x100cb8'
+  address: '0x100cb8'
+  name: PFFB.VM.TLB_FLUSH_VSPACE
+  name_source: rnndb:memory/gf100_pffb.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: TARGET
+    shift: 1
+    width: 1
+  - name: ADDR
+    shift: 4
+    width: 28
+  source:
+  - nvkm/subdev/mmu/vmmgf100.c:184
+  status: SOURCE_ONLY
+- reg: '0x100cbc'
+  address: '0x100cbc'
+  name: PFFB.VM.TLB_FLUSH_TRIGGER
+  name_source: rnndb:memory/gf100_pffb.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: PAGE
+    shift: 0
+    width: 1
+  - name: VSPACE
+    shift: 1
+    width: 1
+  - name: SET
+    shift: 2
+    width: 1
+  - name: TRIGGER
+    shift: 31
+    width: 1
+  source:
+  - nvkm/subdev/mmu/vmmgf100.c:217
+  status: SOURCE_ONLY

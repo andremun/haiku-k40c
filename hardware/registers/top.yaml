@@ -1,0 +1,11 @@
+- reg: 0x022700 + (i * 0x04)
+  address: '0x022700'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/top/gk104.c:45
+  status: SOURCE_ONLY

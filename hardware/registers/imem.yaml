@@ -1,0 +1,44 @@
+- reg: '0x001700'
+  address: '0x001700'
+  name: PBUS.HOST_MEM.PMEM
+  name_source: rnndb:bus/pbus.xml
+  width: 32
+  readable: false
+  writable: true
+  fields:
+  - name: OFFSET
+    shift: 0
+    width: 24
+  - name: TARGET
+    shift: 24
+    width: 2
+  source:
+  - nvkm/subdev/instmem/nv50.c:68
+  - nvkm/subdev/instmem/nv50.c:88
+  status: SOURCE_ONLY
+- reg: 0x700000 + addr
+  address: '0x700000'
+  name: PMEM
+  name_source: rnndb:nv_mmio.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/instmem/nv04.c:149
+  - nvkm/subdev/instmem/nv04.c:155
+  - nvkm/subdev/instmem/nv50.c:71
+  - nvkm/subdev/instmem/nv50.c:91
+  status: SOURCE_ONLY
+- reg: 0x700000 + iobj->node->offset + offset
+  address: '0x700000'
+  name: PMEM
+  name_source: rnndb:nv_mmio.xml
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/instmem/nv04.c:51
+  - nvkm/subdev/instmem/nv04.c:59
+  status: SOURCE_ONLY

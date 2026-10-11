@@ -1,0 +1,470 @@
+- reg: '0x000100'
+  address: '0x000100'
+  name: PMC.INTR_HOST
+  name_source: rnndb:bus/pmc.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: PPPP
+    shift: 0
+    width: 1
+  - name: PMEDIA
+    shift: 4
+    width: 1
+  - name: PCOPY0
+    shift: 5
+    width: 1
+  - name: PCOPY1
+    shift: 6
+    width: 1
+  - name: PCOPY2
+    shift: 7
+    width: 1
+  - name: PFIFO
+    shift: 8
+    width: 1
+  - name: UNK9
+    shift: 9
+    width: 1
+  - name: PGRAPH
+    shift: 12
+    width: 1
+  - name: PBFB
+    shift: 13
+    width: 1
+  - name: PVLD
+    shift: 15
+    width: 1
+  - name: PVENC
+    shift: 16
+    width: 1
+  - name: PPDEC
+    shift: 17
+    width: 1
+  - name: PTHERM
+    shift: 18
+    width: 1
+  - name: UNK19
+    shift: 19
+    width: 1
+  - name: PTIMER
+    shift: 20
+    width: 1
+  - name: PNVIO
+    shift: 21
+    width: 1
+  - name: UNK23
+    shift: 23
+    width: 1
+  - name: PDAEMON
+    shift: 24
+    width: 1
+  - name: PMFB
+    shift: 25
+    width: 1
+  - name: PDISPLAY
+    shift: 26
+    width: 1
+  - name: PFFB
+    shift: 27
+    width: 1
+  - name: PBUS
+    shift: 28
+    width: 1
+  - name: PPCI
+    shift: 29
+    width: 1
+  - name: PIBUS
+    shift: 30
+    width: 1
+  - name: SOFTWARE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/subdev/fb/gf100.c:37
+  status: SOURCE_ONLY
+- reg: '0x022438'
+  address: '0x022438'
+  name: PUNITS.DESIGN_PART_COUNT
+  name_source: rnndb:bus/punits.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgf100.c:112
+  - nvkm/subdev/fb/ramgf100.c:500
+  - nvkm/subdev/fb/ramgf108.c:30
+  - nvkm/subdev/fb/ramgk104.c:1548
+  status: SOURCE_ONLY
+- reg: '0x02243c'
+  address: '0x02243c'
+  name: PUNITS.DESIGN_MC_COUNT
+  name_source: rnndb:bus/punits.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgf108.c:31
+  status: SOURCE_ONLY
+- reg: '0x022554'
+  address: '0x022554'
+  name: PUNITS.HW_MC_DISABLE_MASK
+  name_source: rnndb:bus/punits.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgf100.c:113
+  - nvkm/subdev/fb/ramgf100.c:486
+  - nvkm/subdev/fb/ramgk104.c:1549
+  status: SOURCE_ONLY
+- reg: '0x100c10'
+  address: '0x100c10'
+  name: PFFB.UNKC00.UNK08_SYSRAM_ADDR
+  name_source: rnndb:memory/gf100_pffb.xml
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/gf100.c:83
+  status: SOURCE_ONLY
+- reg: '0x100c80'
+  address: '0x100c80'
+  name: PFFB.VM.CFG
+  name_source: rnndb:memory/gf100_pffb.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: LARGE_PAGE_SIZE
+    shift: 0
+    width: 1
+  - name: BYPASS_TARGET
+    shift: 28
+    width: 2
+  - name: BYPASS_ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/subdev/fb/gf100.c:72
+  - nvkm/subdev/fb/gf100.c:73
+  status: SOURCE_ONLY
+- reg: '0x101000'
+  address: '0x101000'
+  name: PSTRAPS.STRAPS0_PRIMARY
+  name_source: rnndb:io/pstraps.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: VALUE
+    shift: 0
+    width: 31
+  - name: OVERRIDE_ENABLE
+    shift: 31
+    width: 1
+  source:
+  - nvkm/subdev/fb/base.c:74
+  status: SOURCE_ONLY
+- reg: '0x10ecc0'
+  address: '0x10ecc0'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1432
+  status: SOURCE_ONLY
+- reg: '0x10f160'
+  address: '0x10f160'
+  name: PBFB_BROADCAST.PM_SEL
+  name_source: rnndb:memory/gf100_pbfb.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: SEL
+    shift: 0
+    width: 3
+  - name: ENABLE
+    shift: 4
+    width: 1
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1433
+  status: SOURCE_ONLY
+- reg: '0x10f400'
+  address: '0x10f400'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1197
+  status: SOURCE_ONLY
+- reg: '0x10f410'
+  address: '0x10f410'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1203
+  status: SOURCE_ONLY
+- reg: '0x10f420'
+  address: '0x10f420'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1185
+  status: SOURCE_ONLY
+- reg: '0x10f430'
+  address: '0x10f430'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1191
+  status: SOURCE_ONLY
+- reg: '0x10f440'
+  address: '0x10f440'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1213
+  status: SOURCE_ONLY
+- reg: '0x10f444'
+  address: '0x10f444'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1227
+  status: SOURCE_ONLY
+- reg: '0x10f468'
+  address: '0x10f468'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1179
+  status: SOURCE_ONLY
+- reg: '0x10f584'
+  address: '0x10f584'
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1431
+  status: SOURCE_ONLY
+- reg: '0x10f65c'
+  address: '0x10f65c'
+  name: PBFB_BROADCAST.FBIO_DELAY
+  name_source: rnndb:memory/gf100_pbfb.xml
+  width: 32
+  readable: true
+  writable: true
+  fields:
+  - name: SRC
+    shift: 0
+    width: 4
+  - name: PRIV
+    shift: 4
+    width: 4
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1423
+  - nvkm/subdev/fb/ramgk104.c:1426
+  - nvkm/subdev/fb/ramgk104.c:1430
+  status: SOURCE_ONLY
+- reg: 0x10f900 + j
+  address: '0x10f900'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1360
+  status: SOURCE_ONLY
+- reg: '0x10f918'
+  address: '0x10f918'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgf100.c:454
+  - nvkm/subdev/fb/ramgf100.c:458
+  status: SOURCE_ONLY
+- reg: 0x10f918 + j
+  address: '0x10f918'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1349
+  - nvkm/subdev/fb/ramgk104.c:1353
+  status: SOURCE_ONLY
+- reg: '0x10f91c'
+  address: '0x10f91c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgf100.c:455
+  - nvkm/subdev/fb/ramgf100.c:459
+  status: SOURCE_ONLY
+- reg: '0x10f920'
+  address: '0x10f920'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgf100.c:452
+  - nvkm/subdev/fb/ramgf100.c:456
+  status: SOURCE_ONLY
+- reg: 0x10f920 + j
+  address: '0x10f920'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1346
+  - nvkm/subdev/fb/ramgk104.c:1350
+  status: SOURCE_ONLY
+- reg: '0x10f924'
+  address: '0x10f924'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgf100.c:453
+  - nvkm/subdev/fb/ramgf100.c:457
+  status: SOURCE_ONLY
+- reg: '0x10f968'
+  address: '0x10f968'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgf100.c:450
+  status: SOURCE_ONLY
+- reg: 0x10f968 + j
+  address: '0x10f968'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1345
+  - nvkm/subdev/fb/ramgk104.c:1359
+  status: SOURCE_ONLY
+- reg: '0x10f96c'
+  address: '0x10f96c'
+  name: null
+  name_source: none
+  width: 32
+  readable: false
+  writable: true
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgf100.c:451
+  status: SOURCE_ONLY
+- reg: 0x110204 + (i * 0x1000)
+  address: '0x110204'
+  name: PBFB.CFG1
+  name_source: rnndb:memory/gf100_pbfb.xml
+  width: 32
+  readable: true
+  writable: false
+  fields:
+  - name: COLBITS
+    shift: 12
+    width: 4
+  - name: ROWBITSA
+    shift: 16
+    width: 4
+  - name: ROWBITSB
+    shift: 20
+    width: 4
+  - name: BANKBITS
+    shift: 24
+    width: 2
+  source:
+  - nvkm/subdev/fb/ramgk104.c:1553
+  status: SOURCE_ONLY
+- reg: 0x11020c + (fbpa * 0x1000)
+  address: '0x11020c'
+  name: PBFB.MEM_AMOUNT
+  name_source: rnndb:memory/gf100_pbfb.xml
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgf100.c:468
+  status: SOURCE_ONLY
+- reg: addr
+  address: null
+  name: null
+  name_source: none
+  width: 32
+  readable: true
+  writable: false
+  fields: []
+  source:
+  - nvkm/subdev/fb/ramgk104.c:242
+  status: SOURCE_ONLY
