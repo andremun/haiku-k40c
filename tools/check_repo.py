@@ -1251,6 +1251,7 @@ ACCEPT = {
                   "afbe40a9bfc487e23210f17e0acf171bec6ec120c332027a79135a5cfefee2bf", "src/hw/*.cpp"),
     "d2_accept": ("src/mmu/PageTable.h", "dd82a560200b061908c8e37964a67941cb855b8b872a5bb444618dfc3448ed03", "src/mmu/*.cpp"),
     "d3_accept": ("src/fifo/PushBuffer.h", "20a7e97b35b82552d6d3797aa8a87afd2a3f2ae60f9b2724e658dcea164a0344", "src/fifo/*.cpp"),
+    "d5_accept": ("src/compute/LaunchDesc.h", "1c87c1e7e58221aeaf545996263b07fadd8d92baea83d935b4714aa590635881", "src/compute/*.cpp src/fifo/*.cpp"),
 }
 for name, (trigger, sha, sources) in ACCEPT.items():
     test = os.path.join(ROOT, "tests", "accept", name + ".cpp")
@@ -1264,7 +1265,7 @@ for name, (trigger, sha, sources) in ACCEPT.items():
     import subprocess
     out = os.path.join(ROOT, "build", "accept")
     os.makedirs(out, exist_ok=True)
-    srcs = sorted(glob.glob(os.path.join(ROOT, sources)))
+    srcs = sorted(f for g in sources.split() for f in glob.glob(os.path.join(ROOT, g)))
     r = subprocess.run(["g++", "-std=c++17", "-Wall", "-Wextra", "-Werror", "-I" + os.path.join(ROOT, "src"),
                         test] + srcs + ["-o", os.path.join(out, name)], capture_output=True, text=True)
     if r.returncode != 0:
@@ -1279,7 +1280,7 @@ for name, (trigger, sha, sources) in ACCEPT.items():
     if r.returncode != 0:
         lines = [ln for ln in r.stdout.split("\n") if ln.startswith("FAIL")]
         fail(f"tests/accept/{name}: {len(lines)} checks fail, first: {lines[:3]}")
-    for src in srcs + sorted(glob.glob(os.path.join(ROOT, os.path.dirname(sources), "*.h"))):
+    for src in srcs + sorted(glob.glob(os.path.join(ROOT, os.path.dirname(sources.split()[0]), "*.h"))):
         text = open(src, errors="replace").read()
         if re.search(r"#include\s*<(linux|drm|asm|sys)/", text) or "KernelExport.h" in text:
             fail(f"{os.path.relpath(src, ROOT)}: phase D code is plain C++17 with standard headers only")

@@ -2,7 +2,8 @@
 # Distributed under the terms of the MIT License.
 #
 # To add a test: put NAME:DIR in CXX_TESTS (the program is built from
-# NAME.cpp, or accept/NAME.cpp, with all of ../src/DIR/*.cpp), or the
+# NAME.cpp, or accept/NAME.cpp, with all of ../src/DIR/*.cpp; DIR may be
+# several directories joined by +, for example compute+fifo), or the
 # script path in PY_TESTS. `make -s -C tests` exits 0 only when all pass.
 
 CXX      := g++
@@ -23,8 +24,8 @@ all: $(PROGRAMS)
 	@for t in $(PY_TESTS); do (cd .. && python3 tests/$$t) || exit 1; done
 
 define RULE
-$(BUILDDIR)/$(1): $(firstword $(wildcard $(1).cpp accept/$(1).cpp)) $(wildcard ../src/$(2)/*.cpp ../src/$(2)/*.h) | $(BUILDDIR)
-	$$(CXX) $$(CXXFLAGS) $$< $(wildcard ../src/$(2)/*.cpp) -o $$@
+$(BUILDDIR)/$(1): $(firstword $(wildcard $(1).cpp accept/$(1).cpp)) $(foreach d,$(subst +, ,$(2)),$(wildcard ../src/$(d)/*.cpp ../src/$(d)/*.h)) | $(BUILDDIR)
+	$$(CXX) $$(CXXFLAGS) $$< $(foreach d,$(subst +, ,$(2)),$(wildcard ../src/$(d)/*.cpp)) -o $$@
 endef
 $(foreach t,$(CXX_TESTS),$(eval $(call RULE,$(firstword $(subst :, ,$(t))),$(lastword $(subst :, ,$(t))))))
 
