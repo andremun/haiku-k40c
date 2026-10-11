@@ -9,15 +9,24 @@ SRCS     := ../src/hw/*.cpp
 
 .PHONY: all clean
 
-all: $(BUILDDIR)/test_registerio $(BUILDDIR)/d1_accept
+all: $(BUILDDIR)/test_registerio $(BUILDDIR)/d1_accept \
+	    $(BUILDDIR)/test_pagetable $(BUILDDIR)/d2_accept
 	@$(BUILDDIR)/test_registerio
 	@$(BUILDDIR)/d1_accept
+	@$(BUILDDIR)/test_pagetable
+	@$(BUILDDIR)/d2_accept
 
 $(BUILDDIR)/test_registerio: test_registerio.cpp ../src/hw/RegisterIO.h ../src/hw/RegisterIO.cpp | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) test_registerio.cpp $(SRCS) -o $@
 
 $(BUILDDIR)/d1_accept: accept/d1_accept.cpp ../src/hw/RegisterIO.h ../src/hw/RegisterIO.cpp | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) accept/d1_accept.cpp $(SRCS) -o $@
+
+$(BUILDDIR)/test_pagetable: test_pagetable.cpp ../src/mmu/PageTable.h ../src/mmu/PageTable.cpp | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) test_pagetable.cpp ../src/mmu/*.cpp -o $@
+
+$(BUILDDIR)/d2_accept: accept/d2_accept.cpp ../src/mmu/PageTable.h ../src/mmu/PageTable.cpp | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) accept/d2_accept.cpp ../src/mmu/*.cpp -o $@
 
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
