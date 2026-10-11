@@ -2,10 +2,15 @@
 
 Current phase: C (hardware database and firmware)
 Current task: C3e
-Task state: READY. This is the worktree of task C3e (branch task-c3e). Another task runs in another worktree at the same time: work only on C3e and do not start another task.
+Task state: COMPLETE
 Last updated: 2026-10-12
 
 ## Last result
+
+C3e complete (2026-10-12): GR engine subsystem model — 70 function-table
+members across 5 parts (zbc/fecs/gpccs/mmio, 18 hooks, init/ppc_nr/grctx,
+grctx functions, grctx values). `analysis/hwmodel/gr.json` + `docs/hardware-model/gr.md`
+generated. `make check` 0 failures.
 
 B5 complete (2026-10-11): Rework 2 — fixed 12 make check failures across
 subsystems (top/ltc/timer/privring changed optional→needed), corrected
@@ -70,3 +75,4 @@ the old layout. Details: `reference/pci/README.md`.
 | D3 | DONE | 2026-10-12 | GPFIFO push-buffer encoding: `src/fifo/PushBuffer.h` + `.cpp` (header encode/decode for 4 types, PushBuffer builder, decodeBuffer, GpEntry encode/decode, GpFifo ring), `tests/test_pushbuffer.cpp` (98 checks), `docs/pushbuffer-encoding.md` (103 lines). `make check` 0 failures. |
 | D2 | DONE | 2026-10-12 | Page-table encoding and address-space model. Acceptance test 74 checks, own tests 31. Two reworks; the scaffold located all six code defects, see `work/D2/REVIEW.md`. |
 | D4 | DONE | 2026-10-12 | Register-trace comparison tool: mmiotrace conversion, comparison with ignore, mask and writes-only options, register names. Acceptance test 38 checks, own tests 17. One session; the scaffold rewrote the mmiotrace instructions. |
+| C3e | DONE | 2026-10-12 | GR engine subsystem model: 70 members across 5 parts (zbc/fecs/gpccs/mmio, 18 hooks, init/ppc_nr/grctx, grctx functions, grctx values). 9 evidence reworks during dev. `make check` 0 failures. |
