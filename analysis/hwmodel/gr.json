@@ -350,7 +350,7 @@
       ],
       "role": "init",
       "needed_for_compute": true,
-      "what": "Computes ZCULL tile configuration from tpc_total and writes bank/tile data to GPC registers 0x0980-0x3fd4 for depth compression",
+      "what": "Computes the tile configuration from the total TPC count and writes bank and tile data to GPC registers 0x0980 to 0x3fd4 (zcull is the depth culling unit)",
       "certainty": "KNOWN",
       "evidence": {
         "line": 136,
@@ -793,7 +793,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "Table of init function pointers packed into the GR context image to configure GR registers during context setup",
+      "what": "List of register-write tables (gk110b_gr_pack_mmio) that gf100_gr_init applies to the GR registers with gf100_gr_mmio before it calls the init hooks",
       "certainty": "INFERRED",
       "evidence": {
         "line": 66,
@@ -810,7 +810,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "Table of FECS (Front End Command Scheduler) firmware arrays for the hub microcontroller",
+      "what": "Table with the code and data arrays of the FECS microcode (the controller of the hub; FECS is not expanded in the source)",
       "certainty": "INFERRED",
       "evidence": {
         "line": 105,
@@ -931,7 +931,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "Table of GPCCS (General Purpose Command Command Scheduler) firmware arrays for the GPC microcontroller",
+      "what": "Table with the code and data arrays of the GPCCS microcode (the controller of each GPC; GPCCS is not expanded in the source)",
       "certainty": "INFERRED",
       "evidence": {
         "line": 105,
@@ -1040,7 +1040,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": false,
-      "what": "Hardcoded count of PPC (pixel pipeline combiner) units set to 2 for GK110",
+      "what": "Constant 2: the number of PPC units in each GPC on this chip (PPC is not expanded in the source)",
       "certainty": "INFERRED"
     },
     {
@@ -1150,7 +1150,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "GR context hub register pack function pointer for GK110 context initialization",
+      "what": "Table of register writes (a pack) for the hub part, applied when the context image of a channel is generated",
       "certainty": "INFERRED"
     },
     {
@@ -1163,7 +1163,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "GR context GPC-0 register pack function pointer for GK110 context initialization",
+      "what": "Table of register writes (a pack) for the gpc_0 part, applied when the context image of a channel is generated",
       "certainty": "INFERRED"
     },
     {
@@ -1176,7 +1176,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "GR context GPC-1 register pack function pointer for GK110 context initialization",
+      "what": "Table of register writes (a pack) for the gpc_1 part, applied when the context image of a channel is generated",
       "certainty": "INFERRED"
     },
     {
@@ -1189,7 +1189,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "GR context ZCULL pack function pointer for GF100 depth compression setup",
+      "what": "Table of register writes (a pack) for the zcull part, applied when the context image of a channel is generated",
       "certainty": "INFERRED"
     },
     {
@@ -1202,7 +1202,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "GR context TPC register pack function pointer for GK110B context initialization",
+      "what": "Table of register writes (a pack) for the tpc part, applied when the context image of a channel is generated",
       "certainty": "INFERRED"
     },
     {
@@ -1215,7 +1215,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "GR context PPC register pack function pointer for GK110 context initialization",
+      "what": "Table of register writes (a pack) for the ppc part, applied when the context image of a channel is generated",
       "certainty": "INFERRED"
     },
     {
@@ -1228,7 +1228,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "GR context icmd register pack function pointer for GK110 command initialization",
+      "what": "Table of register writes (a pack) for the icmd part, applied when the context image of a channel is generated",
       "certainty": "INFERRED"
     },
     {
@@ -1241,7 +1241,7 @@
       "accesses": [],
       "role": "data",
       "needed_for_compute": true,
-      "what": "GR context mthd register pack function pointer for GK110 method configuration",
+      "what": "Table of register writes (a pack) for the mthd part, applied when the context image of a channel is generated",
       "certainty": "INFERRED"
     },
     {
@@ -1872,8 +1872,12 @@
     }
   ],
   "depends_on": [
-    "top",
-    "ltc"
+    "fb",
+    "ltc",
+    "mc",
+    "pmu",
+    "timer",
+    "top"
   ],
-  "summary": "The GR (Graphics) engine runs compute workloads on GK110. It loads two microcode programs (FECS for the hub, GPCCS for the GPC), initialises its sub-blocks through a chain of hooks, generates channel context images (grctx) that bundle register writes for all units, and manages ZBC (clear colour and depth) values. The Haiku driver must replicate this initialisation sequence, load the firmware, generate the context image, and trigger compute kernels."
+  "summary": "The GR engine runs the compute job on the GK110B (GR is the engine name in Nouveau; it also does 3D drawing). Two controllers inside it, FECS for the hub and GPCCS for each GPC, run the microcode of task C2. gf100_gr_init starts the engine: it sets up MMU forwarding, applies the register tables in mmio, calls the init hooks of the function table in order and enables exception reporting. For each channel a context image (grctx) is generated from tables of register writes and from the grctx functions. The zbc members keep the table of clear values. For milestone S3 the Haiku driver has to reproduce init with its hooks, the microcode load, and the generation of one context image; which hooks a compute-only driver may leave out (zcull and the two ROP hooks set up drawing units) is not established."
 }

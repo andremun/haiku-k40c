@@ -2,7 +2,7 @@
 
 Current phase: C (hardware database and firmware)
 Current task: C3e
-Task state: COMPLETE
+Task state: DONE. Accepted by the scaffold on 2026-10-12, see work/C3e/REVIEW.md.
 Last updated: 2026-10-12
 
 ## Last result

@@ -1,7 +1,7 @@
 # gr: Hardware Model
 
 ## Purpose
-The GR (Graphics) engine runs compute workloads on GK110. It loads two microcode programs (FECS for the hub, GPCCS for the GPC), initialises its sub-blocks through a chain of hooks, generates channel context images (grctx) that bundle register writes for all units, and manages ZBC (clear colour and depth) values. The Haiku driver must replicate this initialisation sequence, load the firmware, generate the context image, and trigger compute kernels.
+The GR engine runs the compute job on the GK110B (GR is the engine name in Nouveau; it also does 3D drawing). Two controllers inside it, FECS for the hub and GPCCS for each GPC, run the microcode of task C2. gf100_gr_init starts the engine: it sets up MMU forwarding, applies the register tables in mmio, calls the init hooks of the function table in order and enables exception reporting. For each channel a context image (grctx) is generated from tables of register writes and from the grctx functions. The zbc members keep the table of clear values. For milestone S3 the Haiku driver has to reproduce init with its hooks, the microcode load, and the generation of one context image; which hooks a compute-only driver may leave out (zcull and the two ROP hooks set up drawing units) is not established.
 
 ## Nouveau files
 
@@ -84,7 +84,7 @@ The GR (Graphics) engine runs compute workloads on GK110. It loads two microcode
 | clear_depth | gf100_gr_zbc_clear_depth | runtime | True | 4 |
 
 ## Dependencies
-top, ltc
+fb, ltc, mc, pmu, timer, top
 
 ## KNOWN
 
@@ -93,7 +93,7 @@ top, ltc
 - **init**: Main GR engine init: calls init_gpc_mmu, mmio setup, all sub-init hooks, then writes idle and exception registers (`nvkm/engine/gr/gf100.c:2342`)
 - **init_gpc_mmu**: Reads FB MMU page-table addresses and writes them to GR MMU registers 0x418880-0x4188b8 to set up MMU forwarding (`nvkm/engine/gr/gf100.c:2264`)
 - **init_vsc_stream_master**: Writes 0x00000001 to GPC register 0x3018 to enable the VSC stream master for pipeline vertex shading (`nvkm/engine/gr/gk104.c:430`)
-- **init_zcull**: Computes ZCULL tile configuration from tpc_total and writes bank/tile data to GPC registers 0x0980-0x3fd4 for depth compression (`nvkm/engine/gr/gf117.c:124`)
+- **init_zcull**: Computes the tile configuration from the total TPC count and writes bank and tile data to GPC registers 0x0980 to 0x3fd4 (zcull is the depth culling unit) (`nvkm/engine/gr/gf117.c:124`)
 - **init_num_active_ltcs**: Reads register 0x100800 for the number of active LTCs and broadcasts it to GPC register 0x08ac (`nvkm/engine/gr/gf100.c:2280`)
 - **init_rop_active_fbps**: Reads FBP count from register 0x120074 then writes it to registers 0x408850 (zrop) and 0x408958 (crop) via mask (`nvkm/engine/gr/gk104.c:406`)
 - **init_fecs_exceptions**: Writes 0x000e0000 or 0x000e0001 to register 0x409c24 based on firmware presence to configure FECS exceptions (`nvkm/engine/gr/gf100.c:2257`)
@@ -131,27 +131,27 @@ top, ltc
 
 ## INFERRED
 
-- **mmio**: Table of init function pointers packed into the GR context image to configure GR registers during context setup
-- **fecs.ucode**: Table of FECS (Front End Command Scheduler) firmware arrays for the hub microcontroller (`nvkm/engine/gr/gk110.c:321`)
+- **mmio**: List of register-write tables (gk110b_gr_pack_mmio) that gf100_gr_init applies to the GR registers with gf100_gr_mmio before it calls the init hooks
+- **fecs.ucode**: Table with the code and data arrays of the FECS microcode (the controller of the hub; FECS is not expanded in the source) (`nvkm/engine/gr/gk110.c:321`)
 - **code.data**: Pointer to the FECS hub code firmware array (gk110_grhub_code)
 - **code.size**: Size in bytes of the FECS hub code firmware array
 - **data.data**: Pointer to the FECS hub data firmware array (gk110_grhub_data)
 - **data.size**: Size in bytes of the FECS hub data firmware array
-- **gpccs.ucode**: Table of GPCCS (General Purpose Command Command Scheduler) firmware arrays for the GPC microcontroller (`nvkm/engine/gr/gk110.c:331`)
+- **gpccs.ucode**: Table with the code and data arrays of the GPCCS microcode (the controller of each GPC; GPCCS is not expanded in the source) (`nvkm/engine/gr/gk110.c:331`)
 - **code.data**: Pointer to the GPCCS GPC code firmware array (gk110_grgpc_code)
 - **code.size**: Size in bytes of the GPCCS GPC code firmware array
 - **data.data**: Pointer to the GPCCS GPC data firmware array (gk110_grgpc_data)
 - **data.size**: Size in bytes of the GPCCS GPC data firmware array
-- **ppc_nr**: Hardcoded count of PPC (pixel pipeline combiner) units set to 2 for GK110
+- **ppc_nr**: Constant 2: the number of PPC units in each GPC on this chip (PPC is not expanded in the source)
 - **grctx**: GR context function table defining all grctx sub-functions and their configuration values (`nvkm/engine/gr/ctxgk110b.c:73`)
-- **hub**: GR context hub register pack function pointer for GK110 context initialization
-- **gpc_0**: GR context GPC-0 register pack function pointer for GK110 context initialization
-- **gpc_1**: GR context GPC-1 register pack function pointer for GK110 context initialization
-- **zcull**: GR context ZCULL pack function pointer for GF100 depth compression setup
-- **tpc**: GR context TPC register pack function pointer for GK110B context initialization
-- **ppc**: GR context PPC register pack function pointer for GK110 context initialization
-- **icmd**: GR context icmd register pack function pointer for GK110 command initialization
-- **mthd**: GR context mthd register pack function pointer for GK110 method configuration
+- **hub**: Table of register writes (a pack) for the hub part, applied when the context image of a channel is generated
+- **gpc_0**: Table of register writes (a pack) for the gpc_0 part, applied when the context image of a channel is generated
+- **gpc_1**: Table of register writes (a pack) for the gpc_1 part, applied when the context image of a channel is generated
+- **zcull**: Table of register writes (a pack) for the zcull part, applied when the context image of a channel is generated
+- **tpc**: Table of register writes (a pack) for the tpc part, applied when the context image of a channel is generated
+- **ppc**: Table of register writes (a pack) for the ppc part, applied when the context image of a channel is generated
+- **icmd**: Table of register writes (a pack) for the icmd part, applied when the context image of a channel is generated
+- **mthd**: Table of register writes (a pack) for the mthd part, applied when the context image of a channel is generated
 - **bundle_size**: GR context bundle size constant set to 0x3000 bytes for GK110B channel context
 - **bundle_min_gpm_fifo_depth**: GR context bundle minimum GPM FIFO depth constant set to 0x180 for GK110B
 - **bundle_token_limit**: GR context bundle token limit constant set to 0x600 for GK110B channel context
