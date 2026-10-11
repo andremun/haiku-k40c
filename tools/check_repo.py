@@ -1323,6 +1323,71 @@ if os.path.exists(d4_tool) and "D4" not in SKIP:
     if not os.path.exists(os.path.join(ROOT, "docs", "register-traces.md")):
         fail("docs/register-traces.md: missing (docs/tasks/D4.md)")
 
+# C4a source provenance of the constants in src/ --------------------------
+prov_md = os.path.join(ROOT, "docs", "register-provenance.md")
+if os.path.exists(prov_md) and "C4a" not in SKIP:
+    C4_CIT = re.compile(r"([\w./-]*\w\.(?:c|h)):(\d+)")
+    c4_index = {}
+    for base, tree in ((NV, "nouveau"), (os.path.join(ROOT, "reference", "mesa"), "mesa")):
+        for d, _, fs in os.walk(base, followlinks=True):
+            for f in fs:
+                if f.endswith((".c", ".h")):
+                    c4_index.setdefault(f, []).append((tree, os.path.relpath(os.path.join(d, f), base)))
+    uncited, unresolved, n_const = [], [], 0
+    for path in sorted(glob.glob(os.path.join(ROOT, "src", "*", "*.h")) +
+                       glob.glob(os.path.join(ROOT, "src", "*", "*.cpp"))):
+        rel = os.path.relpath(path, ROOT)
+        if rel.startswith("src/hw/"):
+            continue  # the register access layer has no hardware constants
+        L = open(path, errors="replace").read().split("\n")
+        for i, line in enumerate(L):
+            code = re.sub(r'"[^"]*"', '""', line.split("//")[0])
+            if not re.search(r"0x[0-9a-fA-F]{2,}|\bconstexpr\b", code):
+                continue
+            n_const += 1
+            com = line.split("//", 1)[1] if "//" in line else ""
+            j = i - 1
+            while j >= 0 and L[j].strip().startswith("//"):
+                com += " " + L[j]
+                j -= 1
+            cits = C4_CIT.findall(com)
+            if not cits and "no source:" not in com:
+                uncited.append(f"{rel}:{i + 1}")
+            for f, ln in cits:
+                cand = [c for c in c4_index.get(os.path.basename(f), []) if c[1].endswith(f)]
+                ok = False
+                if len(cand) == 1:
+                    base = NV if cand[0][0] == "nouveau" else os.path.join(ROOT, "reference", "mesa")
+                    n_lines = len(open(os.path.join(base, cand[0][1]), errors="replace").read().split("\n"))
+                    ok = 0 < int(ln) <= n_lines
+                if not ok:
+                    unresolved.append(f"{rel}:{i + 1} ({f}:{ln})")
+    if uncited:
+        fail(f"src/: {len(uncited)} of {n_const} lines with a hardware constant have no source: add "
+             f"`// path/file.c:LINE` on the line or in the comment above it, or `// no source: reason` "
+             f"for plain arithmetic. First: {uncited[:6]}")
+    if unresolved:
+        fail(f"src/: {len(unresolved)} citations do not name exactly one file under reference/nouveau or "
+             f"reference/mesa with that line (write enough of the path to be unique): {unresolved[:6]}")
+    tool = os.path.join(ROOT, "tools", "provenance.py")
+    if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
+        fail("tools/provenance.py: missing, or no --check option (docs/tasks/C4a.md)")
+    else:
+        import subprocess
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/provenance.py --check (run {run}): docs/register-provenance.md is not what the "
+                     f"tool generates")
+                break
+    text = open(prov_md, errors="replace").read()
+    rows = len(re.findall(r"^\|\s*`src/", text, re.M))
+    if rows < n_const - len(uncited):
+        fail(f"docs/register-provenance.md: {rows} table rows that start with `src/...`; src/ has {n_const} "
+             f"constant lines")
+    if "SOURCE_ONLY" not in text:
+        fail("docs/register-provenance.md: no status column with SOURCE_ONLY")
+
 for n in notes:
     print("note:", n)
 for f in fails:
