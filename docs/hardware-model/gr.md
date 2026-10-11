@@ -1,7 +1,7 @@
 # gr: Hardware Model
 
 ## Purpose
-
+The GR (Graphics) engine runs compute workloads on GK110. It loads two microcode programs (FECS for the hub, GPCCS for the GPC), initialises its sub-blocks through a chain of hooks, generates channel context images (grctx) that bundle register writes for all units, and manages ZBC (clear colour and depth) values. The Haiku driver must replicate this initialisation sequence, load the firmware, generate the context image, and trigger compute kernels.
 
 ## Nouveau files
 
@@ -31,18 +31,18 @@
 | init_exception2 | gf100_gr_init_exception2 | None | None | 2 |
 | init_400054 | gf100_gr_init_400054 | None | None | 1 |
 | trap_mp | gf100_gr_trap_mp | None | None | 4 |
-| mmio | gk110b_gr_pack_mmio | None | None | 0 |
-| fecs.ucode | gk110_gr_fecs_ucode | None | None | 0 |
-| code.data | gk110_grhub_code | None | None | 0 |
-| code.size | sizeof | None | None | 0 |
-| data.data | gk110_grhub_data | None | None | 0 |
-| data.size | sizeof | None | None | 0 |
+| mmio | gk110b_gr_pack_mmio | data | True | 0 |
+| fecs.ucode | gk110_gr_fecs_ucode | data | True | 0 |
+| code.data | gk110_grhub_code | data | True | 0 |
+| code.size | sizeof | data | True | 0 |
+| data.data | gk110_grhub_data | data | True | 0 |
+| data.size | sizeof | data | True | 0 |
 | fecs.reset | gf100_gr_fecs_reset | None | None | 3 |
-| gpccs.ucode | gk110_gr_gpccs_ucode | None | None | 0 |
-| code.data | gk110_grgpc_code | None | None | 0 |
-| code.size | sizeof | None | None | 0 |
-| data.data | gk110_grgpc_data | None | None | 0 |
-| data.size | sizeof | None | None | 0 |
+| gpccs.ucode | gk110_gr_gpccs_ucode | data | True | 0 |
+| code.data | gk110_grgpc_code | data | True | 0 |
+| code.size | sizeof | data | True | 0 |
+| data.data | gk110_grgpc_data | data | True | 0 |
+| data.size | sizeof | data | True | 0 |
 | rops | gf100_gr_rops | None | None | 1 |
 | ppc_nr | 2 | None | None | 0 |
 | grctx | gk110b_grctx | None | None | 0 |
@@ -79,20 +79,32 @@
 | r418800 | gk104_grctx_generate_r418800 | None | None | 2 |
 | r419eb0 | gk110_grctx_generate_r419eb0 | None | None | 1 |
 | r419f78 | gk110_grctx_generate_r419f78 | None | None | 1 |
-| zbc | gf100_gr_zbc | None | None | 0 |
-| clear_color | gf100_gr_zbc_clear_color | None | None | 7 |
-| clear_depth | gf100_gr_zbc_clear_depth | None | None | 4 |
+| zbc | gf100_gr_zbc | data | True | 0 |
+| clear_color | gf100_gr_zbc_clear_color | runtime | True | 7 |
+| clear_depth | gf100_gr_zbc_clear_depth | runtime | True | 4 |
 
 ## Dependencies
-(none identified)
+top, ltc
 
 ## KNOWN
 
-(none)
+- **clear_color**: Writes four colour data registers (0x405804-0x405810), the format register (0x405814), selects the ZBC entry (0x405820), and triggers a colour write via 0x405824 set to TRIGGER | WRITE | COLOR (`nvkm/engine/gr/gf100.c:49`)
+- **clear_depth**: Writes the depth data register (0x405818), the format register (0x40581c), selects the ZBC entry (0x405820), and triggers a depth write via 0x405824 set to TRIGGER | WRITE | DEPTH (`nvkm/engine/gr/gf100.c:100`)
 
 ## INFERRED
 
-(none)
+- **mmio**: Table of init function pointers packed into the GR context image to configure GR registers during context setup
+- **fecs.ucode**: Table of FECS (Front End Command Scheduler) firmware arrays for the hub microcontroller (`nvkm/engine/gr/gk110.c:321`)
+- **code.data**: Pointer to the FECS hub code firmware array (gk110_grhub_code)
+- **code.size**: Size in bytes of the FECS hub code firmware array
+- **data.data**: Pointer to the FECS hub data firmware array (gk110_grhub_data)
+- **data.size**: Size in bytes of the FECS hub data firmware array
+- **gpccs.ucode**: Table of GPCCS (General Purpose Command Command Scheduler) firmware arrays for the GPC microcontroller (`nvkm/engine/gr/gk110.c:331`)
+- **code.data**: Pointer to the GPCCS GPC code firmware array (gk110_grgpc_code)
+- **code.size**: Size in bytes of the GPCCS GPC code firmware array
+- **data.data**: Pointer to the GPCCS GPC data firmware array (gk110_grgpc_data)
+- **data.size**: Size in bytes of the GPCCS GPC data firmware array
+- **zbc**: Table of ZBC (clear colour and depth) configuration functions (`nvkm/engine/gr/gf100.c:145`)
 
 ## UNKNOWN
 

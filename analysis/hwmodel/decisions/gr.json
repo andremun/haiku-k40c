@@ -1,0 +1,146 @@
+{
+  "summary": "The GR (Graphics) engine runs compute workloads on GK110. It loads two microcode programs (FECS for the hub, GPCCS for the GPC), initialises its sub-blocks through a chain of hooks, generates channel context images (grctx) that bundle register writes for all units, and manages ZBC (clear colour and depth) values. The Haiku driver must replicate this initialisation sequence, load the firmware, generate the context image, and trigger compute kernels.",
+  "depends_on": ["top", "ltc"],
+  "members": {
+    "zbc": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of ZBC (clear colour and depth) configuration functions",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 105,
+        "quote": ".zbc = gf100_gr_zbc,"
+      }
+    },
+    "zbc.clear_color": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes four colour data registers (0x405804-0x405810), the format register (0x405814), selects the ZBC entry (0x405820), and triggers a colour write via 0x405824 set to TRIGGER | WRITE | COLOR",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 60,
+        "quote": "nvkm_wr32(device, 0x405824, 0x00000004); /* TRIGGER | WRITE | COLOR */"
+      }
+    },
+    "zbc.clear_depth": {
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the depth data register (0x405818), the format register (0x40581c), selects the ZBC entry (0x405820), and triggers a depth write via 0x405824 set to TRIGGER | WRITE | DEPTH",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 107,
+        "quote": "nvkm_wr32(device, 0x405824, 0x00000005); /* TRIGGER | WRITE | DEPTH */"
+      }
+    },
+    "fecs.ucode": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of FECS (Front End Command Scheduler) firmware arrays for the hub microcontroller",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 105,
+        "quote": ".fecs.ucode = gk110_gr_fecs_ucode,"
+      }
+    },
+    "fecs.ucode.code.data": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Pointer to the FECS hub code firmware array (gk110_grhub_code)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 322,
+        "quote": ".code.data = gk110_grhub_code,"
+      }
+    },
+    "fecs.ucode.code.size": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Size in bytes of the FECS hub code firmware array",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 323,
+        "quote": ".code.size = sizeof(gk110_grhub_code),"
+      }
+    },
+    "fecs.ucode.data.data": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Pointer to the FECS hub data firmware array (gk110_grhub_data)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 324,
+        "quote": ".data.data = gk110_grhub_data,"
+      }
+    },
+    "fecs.ucode.data.size": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Size in bytes of the FECS hub data firmware array",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 325,
+        "quote": ".data.size = sizeof(gk110_grhub_data),"
+      }
+    },
+    "gpccs.ucode": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of GPCCS (General Purpose Command Command Scheduler) firmware arrays for the GPC microcontroller",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 105,
+        "quote": ".gpccs.ucode = gk110_gr_gpccs_ucode,"
+      }
+    },
+    "gpccs.ucode.code.data": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Pointer to the GPCCS GPC code firmware array (gk110_grgpc_code)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 332,
+        "quote": ".code.data = gk110_grgpc_code,"
+      }
+    },
+    "gpccs.ucode.code.size": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Size in bytes of the GPCCS GPC code firmware array",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 333,
+        "quote": ".code.size = sizeof(gk110_grgpc_code),"
+      }
+    },
+    "gpccs.ucode.data.data": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Pointer to the GPCCS GPC data firmware array (gk110_grgpc_data)",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 334,
+        "quote": ".data.data = gk110_grgpc_data,"
+      }
+    },
+    "gpccs.ucode.data.size": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Size in bytes of the GPCCS GPC data firmware array",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 335,
+        "quote": ".data.size = sizeof(gk110_grgpc_data),"
+      }
+    },
+    "mmio": {
+      "role": "data",
+      "needed_for_compute": true,
+      "what": "Table of init function pointers packed into the GR context image to configure GR registers during context setup",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 66,
+        "quote": "gk110b_gr_pack_mmio[] = {\n\t{ gk104_gr_init_main_0 },"
+      }
+    }
+  }
+}
