@@ -2,7 +2,7 @@
 
 Current phase: D (host-side algorithms and tests)
 Current task: D5
-Task state: READY. This is the worktree of task D5 (branch task-d5). Another task runs in another worktree at the same time: work only on D5 and do not start another task.
+Task state: READY. Second session: read work/D5/NOTES.md first. This is the worktree of task D5: work only on D5.
 Last updated: 2026-10-12
 
 ## Last result
