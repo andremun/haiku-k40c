@@ -1,0 +1,119 @@
+{
+  "subsystem": "timer",
+  "constructor": {
+    "name": "nv41_timer_new",
+    "file": "nvkm/subdev/timer/nv41.c",
+    "line": 82
+  },
+  "table": {
+    "name": "nv41_timer",
+    "file": "nvkm/subdev/timer/nv41.c",
+    "line": 72
+  },
+  "members": [
+    {
+      "member": "init",
+      "value": "nv41_timer_init",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv41.c",
+      "line": 28,
+      "parent": null,
+      "accesses": [],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Calculates frequency dividers from the crystal clock and writes the multiplier, numerator and denominator registers to configure the timer to 31.25 MHz",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 67,
+        "quote": "nvkm_wr32(device, NV04_PTIMER_NUMERATOR, n);"
+      }
+    },
+    {
+      "member": "intr",
+      "value": "nv04_timer_intr",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv04.c",
+      "line": 72,
+      "parent": null,
+      "accesses": [],
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Reads the interrupt status register and acknowledges the alarm interrupt bit then triggers the alarm handler if set",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 76,
+        "quote": "u32 stat = nvkm_rd32(device, NV04_PTIMER_INTR_0);"
+      }
+    },
+    {
+      "member": "read",
+      "value": "nv04_timer_read",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv04.c",
+      "line": 43,
+      "parent": null,
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Reads the 64-bit timer counter from two 32-bit registers in a retry loop to avoid torn reads and returns the combined value",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 49,
+        "quote": "hi = nvkm_rd32(device, NV04_PTIMER_TIME_1);"
+      }
+    },
+    {
+      "member": "time",
+      "value": "nv04_timer_time",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv04.c",
+      "line": 28,
+      "parent": null,
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Writes a 64-bit time value split into high and low 32-bit parts to two hardware registers to compare or set the timer",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 38,
+        "quote": "nvkm_wr32(device, NV04_PTIMER_TIME_1, hi);"
+      }
+    },
+    {
+      "member": "alarm_init",
+      "value": "nv04_timer_alarm_init",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv04.c",
+      "line": 64,
+      "parent": null,
+      "accesses": [],
+      "role": "runtime",
+      "needed_for_compute": false,
+      "what": "Writes a target time value to the alarm register and enables the alarm interrupt bit in the interrupt enable register",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 67,
+        "quote": "nvkm_wr32(device, NV04_PTIMER_ALARM_0, time);"
+      }
+    },
+    {
+      "member": "alarm_fini",
+      "value": "nv04_timer_alarm_fini",
+      "kind": "function",
+      "file": "nvkm/subdev/timer/nv04.c",
+      "line": 57,
+      "parent": null,
+      "accesses": [],
+      "role": "teardown",
+      "needed_for_compute": false,
+      "what": "Writes zero to the interrupt enable register to disable all timer alarm interrupts",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 60,
+        "quote": "nvkm_wr32(device, NV04_PTIMER_INTR_EN_0, 0x00000000);"
+      }
+    }
+  ],
+  "depends_on": [],
+  "summary": "PTIMER provides a hardware clock counter used by nvkm_msec for every wait and delay across all subsystems. It configures a frequency from the crystal clock via write registers, reads a 64-bit counter with a double-read loop to avoid torn values, and provides alarm interrupts when the counter matches a programmed value."
+}

@@ -1,0 +1,36 @@
+{
+ "summary": "The PRI ring is the register bus inside the GPU that carries register accesses from the hub to the GPC and ROP units of the GR engine (PRI is a register-bus name in the source, not a PCI Express term). gk104_privring_init writes five mask values to registers 0x122318 to 0x122358 and is used both as preinit and as init; the source does not say what the values mean. gk104_privring_intr reads the status registers 0x120058 and 0x12005c and reports the failing address of each hub, ROP or GPC unit. The Haiku driver must repeat the five writes before it touches GR registers.",
+ "depends_on": [],
+ "members": {
+  "preinit": {
+   "role": "init",
+   "needed_for_compute": true,
+   "what": "Writes five mask values to PRI ring registers 0x122318 to 0x122358; the source does not say what the values mean",
+   "certainty": "INFERRED",
+   "evidence": {
+    "line": 103,
+    "quote": "nvkm_mask(device, 0x122318, 0x0003ffff, 0x00001000);"
+   }
+  },
+  "init": {
+   "role": "init",
+   "needed_for_compute": true,
+   "what": "Writes five mask values to PRI ring registers 0x122318 to 0x122358; the source does not say what the values mean",
+   "certainty": "INFERRED",
+   "evidence": {
+    "line": 104,
+    "quote": "nvkm_mask(device, 0x12231c, 0x0003ffff, 0x00000200);"
+   }
+  },
+  "intr": {
+   "role": "interrupt",
+   "needed_for_compute": false,
+   "what": "Reads interrupt status from two registers, dispatches to per-unit handlers for hubs, ROPs and GPCs then waits for synchronization",
+   "certainty": "KNOWN",
+   "evidence": {
+    "line": 61,
+    "quote": "u32 intr0 = nvkm_rd32(device, 0x120058);"
+   }
+  }
+ }
+}

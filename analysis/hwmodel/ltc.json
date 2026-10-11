@@ -1,0 +1,339 @@
+{
+  "subsystem": "ltc",
+  "constructor": {
+    "name": "gk104_ltc_new",
+    "file": "nvkm/subdev/ltc/gk104.c",
+    "line": 54
+  },
+  "table": {
+    "name": "gk104_ltc",
+    "file": "nvkm/subdev/ltc/gk104.c",
+    "line": 39
+  },
+  "members": [
+    {
+      "member": "oneinit",
+      "value": "gf100_ltc_oneinit",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 208,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 211,
+          "op": "rd32",
+          "reg": "0x022438"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 212,
+          "op": "rd32",
+          "reg": "0x022554"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 213,
+          "op": "rd32",
+          "reg": "0x17e8dc"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Reads hardware ID registers to count active L2 partitions and slice count then calls tag RAM initialization",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 211,
+        "quote": "const u32 parts = nvkm_rd32(device, 0x022438);"
+      }
+    },
+    {
+      "member": "init",
+      "value": "gk104_ltc_init",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gk104.c",
+      "line": 27,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gk104.c",
+          "line": 30,
+          "op": "rd32",
+          "reg": "0x100c80"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gk104.c",
+          "line": 32,
+          "op": "wr32",
+          "reg": "0x17e8d8"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gk104.c",
+          "line": 33,
+          "op": "wr32",
+          "reg": "0x17e000"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gk104.c",
+          "line": 34,
+          "op": "wr32",
+          "reg": "0x17e8d4"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gk104.c",
+          "line": 35,
+          "op": "mask",
+          "reg": "0x17e8c0"
+        }
+      ],
+      "role": "init",
+      "needed_for_compute": true,
+      "what": "Writes the number of L2 cache units and tag base address to MMIO registers and configures the LP128 mask bit",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 32,
+        "quote": "nvkm_wr32(device, 0x17e8d8, ltc->ltc_nr);"
+      }
+    },
+    {
+      "member": "intr",
+      "value": "gf100_ltc_intr",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 111,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 116,
+          "op": "rd32",
+          "reg": "0x00017c"
+        }
+      ],
+      "role": "interrupt",
+      "needed_for_compute": false,
+      "what": "Reads the interrupt mask register then iterates over enabled L2 channels and slices calling the per-lane interrupt handler for each",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 116,
+        "quote": "mask = nvkm_rd32(device, 0x00017c);"
+      }
+    },
+    {
+      "member": "cbc_clear",
+      "value": "gf100_ltc_cbc_clear",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 31,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 34,
+          "op": "wr32",
+          "reg": "0x17e8cc"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 35,
+          "op": "wr32",
+          "reg": "0x17e8d0"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 36,
+          "op": "wr32",
+          "reg": "0x17e8c8"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Writes the start and limit of a range of compression tags (0x17e8cc, 0x17e8d0) and sets the clear command bit; CBC is not expanded in the source",
+      "certainty": "INFERRED",
+      "evidence": {
+        "line": 34,
+        "quote": "nvkm_wr32(device, 0x17e8cc, start);"
+      }
+    },
+    {
+      "member": "cbc_wait",
+      "value": "gf100_ltc_cbc_wait",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 40,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 48,
+          "op": "rd32",
+          "reg": "addr"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Polls the clear status register of every L2 cache part and slice until the tag clear has finished",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 46,
+        "quote": "const u32 addr = 0x1410c8 + (c * 0x2000) + (s * 0x400);"
+      }
+    },
+    {
+      "member": "zbc_color",
+      "value": "16",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Constant 16: the number of entries in the table of colour clear values (ZBC table)",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "zbc_depth",
+      "value": "16",
+      "kind": "value",
+      "file": null,
+      "line": null,
+      "parent": null,
+      "accesses": [],
+      "role": "data",
+      "needed_for_compute": false,
+      "what": "Constant 16: the number of entries in the table of depth clear values (ZBC table)",
+      "certainty": "INFERRED"
+    },
+    {
+      "member": "zbc_clear_color",
+      "value": "gf100_ltc_zbc_clear_color",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 56,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 59,
+          "op": "mask",
+          "reg": "0x17ea44"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 60,
+          "op": "wr32",
+          "reg": "0x17ea48"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 61,
+          "op": "wr32",
+          "reg": "0x17ea4c"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 62,
+          "op": "wr32",
+          "reg": "0x17ea50"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 63,
+          "op": "wr32",
+          "reg": "0x17ea54"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Selects entry i of the colour clear-value table (0x17ea44) and writes its four colour words",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 59,
+        "quote": "nvkm_mask(device, 0x17ea44, 0x0000000f, i);"
+      }
+    },
+    {
+      "member": "zbc_clear_depth",
+      "value": "gf100_ltc_zbc_clear_depth",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 67,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 70,
+          "op": "mask",
+          "reg": "0x17ea44"
+        },
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 71,
+          "op": "wr32",
+          "reg": "0x17ea58"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Selects entry i of the depth clear-value table (0x17ea44) and writes its depth word",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 70,
+        "quote": "nvkm_mask(device, 0x17ea44, 0x0000000f, i);"
+      }
+    },
+    {
+      "member": "invalidate",
+      "value": "gf100_ltc_invalidate",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 126,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 131,
+          "op": "wr32",
+          "reg": "0x70004"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Sets the invalidate bit in register 0x70004 and waits up to 2000 milliseconds for the operation to complete",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 131,
+        "quote": "nvkm_wr32(device, 0x70004, 0x00000001);"
+      }
+    },
+    {
+      "member": "flush",
+      "value": "gf100_ltc_flush",
+      "kind": "function",
+      "file": "nvkm/subdev/ltc/gf100.c",
+      "line": 139,
+      "parent": null,
+      "accesses": [
+        {
+          "file": "nvkm/subdev/ltc/gf100.c",
+          "line": 144,
+          "op": "wr32",
+          "reg": "0x70010"
+        }
+      ],
+      "role": "runtime",
+      "needed_for_compute": true,
+      "what": "Sets the flush bit in register 0x70010 and waits up to 2000 milliseconds for the cache flush to complete",
+      "certainty": "KNOWN",
+      "evidence": {
+        "line": 144,
+        "quote": "nvkm_wr32(device, 0x70010, 0x00000001);"
+      }
+    }
+  ],
+  "depends_on": [
+    "fb"
+  ],
+  "summary": "The L2 cache (LTC) subsystem manages the L2 cache that sits in front of framebuffer memory on GK110. It counts active L2 partition instances during oneinit by reading hardware IDs, then configures tag RAM base and the number of LTC units during init by writing to MMIO registers 0x17e8d8, 0x17e000 and 0x17e8d4. It handles colour buffer clear (CBC) and depth buffer clear (ZBC) operations used during framebuffer initialization, and provides cache invalidate and flush operations that wait for completion. The Haiku driver must replicate the init sequence, support clear/flush operations and handle LTC interrupts."
+}
