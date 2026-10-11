@@ -2,7 +2,7 @@
 
 Current phase: D (host-side algorithms and tests)
 Current task: D3
-Task state: COMPLETE. This is the worktree of task D3 (branch task-d3). Another task runs in another worktree at the same time: work only on D3 and do not start another task.
+Task state: DONE. Accepted by the scaffold on 2026-10-12, see work/D3/REVIEW.md.
 Last updated: 2026-10-12
 
 ## Last result
