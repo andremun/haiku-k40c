@@ -140,11 +140,10 @@
     },
     "category": "C-replace",
     "haiku_api": [
-      "list_add_link_to_tail",
-      "list_add_item"
+      "list_init"
     ],
     "header": "headers/private/kernel/util/list.h",
-    "note": "INIT_LIST_HEAD initializes a doubly-linked list head. Haiku list is initialized with {0} or B_OK."
+    "note": "INIT_LIST_HEAD initializes a doubly-linked list head. Haiku list_init has the same semantics."
   },
   {
     "symbol": "INIT_WORK",
@@ -423,10 +422,10 @@
     },
     "category": "C-replace",
     "haiku_api": [
-      "atomic_get_and_set"
+      "atomic_add"
     ],
     "header": "headers/os/support/SupportDefs.h",
-    "note": "atomic_dec_and_test decrements and returns true if result is zero. Haiku needs atomic_get_and_set with zero check."
+    "note": "atomic_dec_and_test decrements and tests for zero. Haiku atomic_add returns the old value; check if old was one."
   },
   {
     "symbol": "atomic_inc",
@@ -451,10 +450,10 @@
     },
     "category": "C-replace",
     "haiku_api": [
-      "atomic_get_and_set"
+      "atomic_add"
     ],
     "header": "headers/os/support/SupportDefs.h",
-    "note": "atomic_inc_return atomically increments and returns the new value. Haiku needs atomic_get_and_set in a loop."
+    "note": "atomic_inc_return increments and returns the new value. Haiku atomic_add returns the old value; compute new from old."
   },
   {
     "symbol": "atomic_read",
@@ -567,10 +566,11 @@
     },
     "category": "C-replace",
     "haiku_api": [
-      "malloc"
+      "get_memory_map",
+      "lock_memory"
     ],
-    "header": null,
-    "note": "dma_map_page maps a page for device DMA access. Haiku has no DMA mapping API; needs custom implementation for GPU DMA."
+    "header": "headers/os/drivers/KernelExport.h",
+    "note": "dma_map_page maps a page for device DMA access. Haiku get_memory_map and lock_memory provide bus address access."
   },
   {
     "symbol": "dma_mapping_error",
@@ -593,10 +593,10 @@
     },
     "category": "C-replace",
     "haiku_api": [
-      "free"
+      "unlock_memory"
     ],
-    "header": null,
-    "note": "dma_unmap_page unmaps a page previously mapped for DMA. Haiku free handles standard allocation release."
+    "header": "headers/os/drivers/KernelExport.h",
+    "note": "dma_unmap_page unmaps a page previously mapped for DMA. Haiku unlock_memory releases the locked memory."
   },
   {
     "symbol": "do_div",
@@ -734,10 +734,10 @@
     },
     "category": "C-replace",
     "haiku_api": [
-      "atomic_get_and_set"
+      "atomic_add"
     ],
     "header": "headers/os/support/SupportDefs.h",
-    "note": "kref_get atomically increments a kref reference count. Haiku atomic_get_and_set works but lacks overflow check."
+    "note": "kref_get atomically increments a kref reference count. Haiku atomic_add does the same increment."
   },
   {
     "symbol": "kref_init",
@@ -898,11 +898,10 @@
     },
     "category": "C-replace",
     "haiku_api": [
-      "list_add_link_to_tail",
-      "list_add_item"
+      "list_remove_link"
     ],
     "header": "headers/private/kernel/util/list.h",
-    "note": "list_del removes an element from a list and re-initializes it. Haiku lists do not have a remove operation; the caller must unlink."
+    "note": "list_del removes an element from a list. Haiku list_remove_link removes a link from a list."
   },
   {
     "symbol": "list_del_init",
@@ -913,11 +912,11 @@
     },
     "category": "C-replace",
     "haiku_api": [
-      "list_add_link_to_tail",
-      "list_add_item"
+      "list_remove_link",
+      "list_init"
     ],
     "header": "headers/private/kernel/util/list.h",
-    "note": "list_del_init removes and reinitializes a list entry. Haiku lists lack a remove operation; manual unlink needed."
+    "note": "list_del_init removes and reinitializes a list entry. Haiku uses list_remove_link then list_init."
   },
   {
     "symbol": "list_empty",
@@ -928,10 +927,10 @@
     },
     "category": "C-replace",
     "haiku_api": [
-      "list_add_link_to_head"
+      "list_is_empty"
     ],
     "header": "headers/private/kernel/util/list.h",
-    "note": "list_empty checks if a list has no entries. Haiku lists track count; check if first link is NULL."
+    "note": "list_empty checks if a list has no entries. Haiku list_is_empty has the same semantics."
   },
   {
     "symbol": "list_entry",
@@ -1410,10 +1409,10 @@
     },
     "category": "C-replace",
     "haiku_api": [
-      "atomic_get_and_set"
+      "atomic_add"
     ],
     "header": "headers/os/support/SupportDefs.h",
-    "note": "refcount_dec_and_test decrements and tests zero with overflow check. Haiku atomic_get_and_set lacks overflow check."
+    "note": "refcount_dec_and_test decrements and tests zero with overflow check. Haiku atomic_add does the decrement."
   },
   {
     "symbol": "refcount_inc",
@@ -1464,12 +1463,10 @@
       "file": "nvkm/engine/gr/gf100.c",
       "line": 2590
     },
-    "category": "C-replace",
-    "haiku_api": [
-      "free"
-    ],
+    "category": "D-ignore",
+    "haiku_api": [],
     "header": null,
-    "note": "release_firmware frees a firmware blob previously obtained by request_firmware. Haiku free handles this."
+    "note": "release_firmware frees a firmware blob from request_firmware. The driver uses built-in firmware arrays, not external files."
   },
   {
     "symbol": "request_firmware",
@@ -1478,13 +1475,10 @@
       "file": "nvkm/engine/gr/gf100.c",
       "line": 2578
     },
-    "category": "C-replace",
-    "haiku_api": [
-      "fopen",
-      "fread"
-    ],
-    "header": "headers/private/kernel/boot/stdio.h",
-    "note": "request_firmware loads a firmware blob from the filesystem. Haiku uses fopen/fread for file access."
+    "category": "D-ignore",
+    "haiku_api": [],
+    "header": null,
+    "note": "request_firmware loads firmware from filesystem. Only gf100_gr_load_fw calls this for external files the driver does not use."
   },
   {
     "symbol": "schedule_work",
@@ -1571,10 +1565,11 @@
     },
     "category": "C-replace",
     "haiku_api": [
-      "acquire_spinlock"
+      "B_INITIALIZE_SPINLOCK",
+      "B_SPINLOCK_INITIALIZER"
     ],
     "header": "headers/os/drivers/KernelExport.h",
-    "note": "spin_lock_init initializes a spinlock to unlocked state. Haiku spinlocks are stack-allocated and ready to use."
+    "note": "spin_lock_init initializes a spinlock to unlocked state. Haiku uses B_INITIALIZE_SPINLOCK or B_SPINLOCK_INITIALIZER."
   },
   {
     "symbol": "spin_lock_irq",

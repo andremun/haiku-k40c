@@ -226,16 +226,16 @@ CLASSIFY = {
         "note": "spin_unlock_irq releases spinlock and enables interrupts. Haiku restore_interrupts replaces enable_interrupts."
     },
     "spin_lock_init": {
-        "category": "C-replace", "haiku_api": ["acquire_spinlock"],
+        "category": "C-replace", "haiku_api": ["B_INITIALIZE_SPINLOCK", "B_SPINLOCK_INITIALIZER"],
         "header": "headers/os/drivers/KernelExport.h",
-        "note": "spin_lock_init initializes a spinlock to unlocked state. Haiku spinlocks are stack-allocated and ready to use."
+        "note": "spin_lock_init initializes a spinlock to unlocked state. Haiku uses B_INITIALIZE_SPINLOCK or B_SPINLOCK_INITIALIZER."
     },
 
     # --- List operations ---
     "INIT_LIST_HEAD": {
-        "category": "C-replace", "haiku_api": ["list_add_link_to_tail", "list_add_item"],
+        "category": "C-replace", "haiku_api": ["list_init"],
         "header": "headers/private/kernel/util/list.h",
-        "note": "INIT_LIST_HEAD initializes a doubly-linked list head. Haiku list is initialized with {0} or B_OK."
+        "note": "INIT_LIST_HEAD initializes a doubly-linked list head. Haiku list_init has the same semantics."
     },
     "list_add_tail": {
         "category": "C-replace", "haiku_api": ["list_add_link_to_tail"],
@@ -248,14 +248,14 @@ CLASSIFY = {
         "note": "list_add adds an element to the head of a list. Haiku list_add_link_to_head adds to head of struct list."
     },
     "list_del": {
-        "category": "C-replace", "haiku_api": ["list_add_link_to_tail", "list_add_item"],
+        "category": "C-replace", "haiku_api": ["list_remove_link"],
         "header": "headers/private/kernel/util/list.h",
-        "note": "list_del removes an element from a list and re-initializes it. Haiku lists do not have a remove operation; the caller must unlink."
+        "note": "list_del removes an element from a list. Haiku list_remove_link removes a link from a list."
     },
     "list_del_init": {
-        "category": "C-replace", "haiku_api": ["list_add_link_to_tail", "list_add_item"],
+        "category": "C-replace", "haiku_api": ["list_remove_link", "list_init"],
         "header": "headers/private/kernel/util/list.h",
-        "note": "list_del_init removes and reinitializes a list entry. Haiku lists lack a remove operation; manual unlink needed."
+        "note": "list_del_init removes and reinitializes a list entry. Haiku uses list_remove_link then list_init."
     },
     "list_for_each_entry": {
         "category": "A-reimplement", "haiku_api": [],
@@ -288,9 +288,9 @@ CLASSIFY = {
         "note": "list_move_tail moves all entries from one list to another. Haiku list_move_to_list transfers items between lists."
     },
     "list_empty": {
-        "category": "C-replace", "haiku_api": ["list_add_link_to_head"],
+        "category": "C-replace", "haiku_api": ["list_is_empty"],
         "header": "headers/private/kernel/util/list.h",
-        "note": "list_empty checks if a list has no entries. Haiku lists track count; check if first link is NULL."
+        "note": "list_empty checks if a list has no entries. Haiku list_is_empty has the same semantics."
     },
     "list_entry": {
         "category": "A-reimplement", "haiku_api": [],
@@ -352,14 +352,14 @@ CLASSIFY = {
         "note": "atomic_dec atomically decrements by one. Haiku has no atomic_dec; use atomic_add with -1."
     },
     "atomic_inc_return": {
-        "category": "C-replace", "haiku_api": ["atomic_get_and_set"],
+        "category": "C-replace", "haiku_api": ["atomic_add"],
         "header": "headers/os/support/SupportDefs.h",
-        "note": "atomic_inc_return atomically increments and returns the new value. Haiku needs atomic_get_and_set in a loop."
+        "note": "atomic_inc_return increments and returns the new value. Haiku atomic_add returns the old value; compute new from old."
     },
     "atomic_dec_and_test": {
-        "category": "C-replace", "haiku_api": ["atomic_get_and_set"],
+        "category": "C-replace", "haiku_api": ["atomic_add"],
         "header": "headers/os/support/SupportDefs.h",
-        "note": "atomic_dec_and_test decrements and returns true if result is zero. Haiku needs atomic_get_and_set with zero check."
+        "note": "atomic_dec_and_test decrements and tests for zero. Haiku atomic_add returns the old value; check if old was one."
     },
     "atomic_xchg": {
         "category": "C-replace", "haiku_api": ["atomic_get_and_set"],
@@ -384,9 +384,9 @@ CLASSIFY = {
         "note": "refcount_inc increments a reference count with overflow check. Haiku atomic_add does not overflow-check."
     },
     "refcount_dec_and_test": {
-        "category": "C-replace", "haiku_api": ["atomic_get_and_set"],
+        "category": "C-replace", "haiku_api": ["atomic_add"],
         "header": "headers/os/support/SupportDefs.h",
-        "note": "refcount_dec_and_test decrements and tests zero with overflow check. Haiku atomic_get_and_set lacks overflow check."
+        "note": "refcount_dec_and_test decrements and tests zero with overflow check. Haiku atomic_add does the decrement."
     },
     "refcount_inc_not_zero": {
         "category": "C-replace", "haiku_api": ["atomic_test_and_set"],
@@ -404,9 +404,9 @@ CLASSIFY = {
         "note": "kref_put decrements a kref and calls the release callback when it reaches zero. Haiku needs manual refcount + callback pattern."
     },
     "kref_get": {
-        "category": "C-replace", "haiku_api": ["atomic_get_and_set"],
+        "category": "C-replace", "haiku_api": ["atomic_add"],
         "header": "headers/os/support/SupportDefs.h",
-        "note": "kref_get atomically increments a kref reference count. Haiku atomic_get_and_set works but lacks overflow check."
+        "note": "kref_get atomically increments a kref reference count. Haiku atomic_add does the same increment."
     },
     "kref_init": {
         "category": "C-replace", "haiku_api": ["atomic_set"],
@@ -458,28 +458,28 @@ CLASSIFY = {
         "note": "flush_work waits for a work item to complete. Haiku has no workqueue; use thread join instead."
     },
 
-    # --- Firmware loading (C-replace) ---
+    # --- Firmware loading (D-ignore — not used by GK110 path) ---
     "request_firmware": {
-        "category": "C-replace", "haiku_api": ["fopen", "fread"],
-        "header": "headers/private/kernel/boot/stdio.h",
-        "note": "request_firmware loads a firmware blob from the filesystem. Haiku uses fopen/fread for file access."
+        "category": "D-ignore", "haiku_api": [],
+        "header": None,
+        "note": "request_firmware loads firmware from filesystem. Only gf100_gr_load_fw calls this for external files the driver does not use."
     },
     "release_firmware": {
-        "category": "C-replace", "haiku_api": ["free"],
+        "category": "D-ignore", "haiku_api": [],
         "header": None,
-        "note": "release_firmware frees a firmware blob previously obtained by request_firmware. Haiku free handles this."
+        "note": "release_firmware frees a firmware blob from request_firmware. The driver uses built-in firmware arrays, not external files."
     },
 
     # --- DMA operations ---
     "dma_map_page": {
-        "category": "C-replace", "haiku_api": ["malloc"],
-        "header": None,
-        "note": "dma_map_page maps a page for device DMA access. Haiku has no DMA mapping API; needs custom implementation for GPU DMA."
+        "category": "C-replace", "haiku_api": ["get_memory_map", "lock_memory"],
+        "header": "headers/os/drivers/KernelExport.h",
+        "note": "dma_map_page maps a page for device DMA access. Haiku get_memory_map and lock_memory provide bus address access."
     },
     "dma_unmap_page": {
-        "category": "C-replace", "haiku_api": ["free"],
-        "header": None,
-        "note": "dma_unmap_page unmaps a page previously mapped for DMA. Haiku free handles standard allocation release."
+        "category": "C-replace", "haiku_api": ["unlock_memory"],
+        "header": "headers/os/drivers/KernelExport.h",
+        "note": "dma_unmap_page unmaps a page previously mapped for DMA. Haiku unlock_memory releases the locked memory."
     },
     "dma_mapping_error": {
         "category": "A-reimplement", "haiku_api": [],

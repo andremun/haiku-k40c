@@ -2,7 +2,7 @@
 
 Current phase: B (Nouveau analysis)
 Current task: B4
-Task state: REWORK. Attempt 1 was reviewed on 2026-10-11 and not accepted. Read work/B4/REVIEW.md and fix the 19 failures of `make check`. This is the worktree of task B4: work only on B4.
+Task state: REWORK. Attempt 2 was reviewed on 2026-10-11. Read the last section of work/B4/REVIEW.md ("attempt 2") and do the three points. This is the worktree of task B4: work only on B4.
 Last updated: 2026-10-11
 
 ## Last result

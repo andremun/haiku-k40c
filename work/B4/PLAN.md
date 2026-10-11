@@ -1,19 +1,29 @@
-# Plan for Task B4: Linux dependency map
+# Plan: B4 Rework (fix 19 make check failures)
 
-## Steps
-1. Write `tools/linux_deps.py`:
-   a. Read `analysis/files.json`, filter non-other-chip (70 files).
-   b. For each file, strip comments, find calls matching `([A-Za-z_]\w*)\s*\(`.
-   c. Drop C keywords (B4_KW) and Nouveau-defined names (from all .c/.h).
-   d. Produce `linux_deps.json`: list of {symbol, count, example, category, haiku_api, header, note}.
-   e. `--check` mode: compare generated JSON with existing file.
-2. First run: get raw symbol counts, verify we get ~139 symbols.
-3. Fill the classification table: memory (C), locks (C), lists (C),
-   timing (C), firmware/DMA (C), atomic/macro (A), unnecessary (D),
-   non-Linux (X).
-4. Run `make check`, fix failures.
-5. Write `analysis/linux_deps.md` (30+ lines, grouped by category).
+All 19 failures are classification/haiku_api errors in `tools/linux_deps.py`.
+The JSON tool output is correct (counts, examples match the rule).
 
-## Checks
-- `make check` validates 139 symbols, categories, haiku_api, headers, notes.
-- Specific checks for kzalloc, mutex_lock, spin_lock_irqsave, msleep, etc.
+## Fixes
+
+1. **List functions** (4): `INIT_LIST_HEAD` → `list_init`, `list_del` /
+   `list_del_init` → `list_remove_link`, `list_empty` → `list_is_empty`.
+   Verified in `reference/haiku/headers/private/kernel/util/list.h`.
+
+2. **Atomic/references** (4): `atomic_dec_and_test`, `atomic_inc_return`,
+   `kref_get`, `refcount_dec_and_test` → `atomic_add` (returns old value,
+   not new). Verified in `SupportDefs.h:285`.
+
+3. **Spinlock init** (1): `spin_lock_init` → `B_INITIALIZE_SPINLOCK` /
+   `B_SPINLOCK_INITIALIZER`. Verified in `KernelExport.h:30-31`.
+
+4. **DMA** (2): `dma_map_page` → A-reimplement with `get_memory_map`,
+   `dma_unmap_page` → A-reimplement with no haiku_api.
+
+5. **Firmware** (2): `request_firmware` / `release_firmware` → D-ignore.
+
+6. **Bit/mutex** (4): `set_bit`/`__set_bit` → C-replace `atomic_or`,
+   `clear_bit` → C-replace `atomic_and`, `__mutex_init` → C-replace `mutex_init`.
+
+7. **printk** (1): → C-replace `dprintf` (`KernelExport.h`).
+
+8. Regenerate `analysis/linux_deps.json` and rewrite `analysis/linux_deps.md`.

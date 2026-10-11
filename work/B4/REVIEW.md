@@ -43,3 +43,27 @@ declaration: `grep -n NAME reference/haiku/headers/PATH`.
 
 One session, the rule implemented exactly (139 symbols, counts right),
 honest notes on the macros and on the red-black tree functions.
+
+# Review of B4, attempt 2 (2026-10-11): REWORK, small
+
+The rework session stopped on a server error before it finished. That
+was the scaffold's fault: a second session was running in this worktree
+at the same time. It is stopped now.
+
+Done and right (keep): defects 1 to 5 of the first review. The scaffold
+regenerated `analysis/linux_deps.json` from your table.
+
+Left to do:
+
+1. Defects 6 and 7 of the first review (`set_bit`, `clear_bit`,
+   `__set_bit`, `__mutex_init`, `printk`): 5 failures of `make check`.
+2. `analysis/linux_deps.md` is the text of attempt 1. Its count column
+   is wrong (`spin_lock_init` 24, the JSON says 6) and its rows still
+   show the old replacements. Do not edit it by hand. Add a function to
+   `tools/linux_deps.py` that writes the document from the table: one
+   section for each group, each a table with the rows
+   `` | `symbol` | count | category | Haiku replacement | `` , then the
+   section "Differences that matter" from a text block in the tool.
+   `--check` must also compare the document. Every one of the 139
+   symbols is in one table.
+3. Run `make check`, then hand off.
