@@ -1250,6 +1250,7 @@ ACCEPT = {
     "d1_accept": ("src/hw/RegisterIO.h",
                   "afbe40a9bfc487e23210f17e0acf171bec6ec120c332027a79135a5cfefee2bf", "src/hw/*.cpp"),
     "d2_accept": ("src/mmu/PageTable.h", "dd82a560200b061908c8e37964a67941cb855b8b872a5bb444618dfc3448ed03", "src/mmu/*.cpp"),
+    "d3_accept": ("src/fifo/PushBuffer.h", "20a7e97b35b82552d6d3797aa8a87afd2a3f2ae60f9b2724e658dcea164a0344", "src/fifo/*.cpp"),
 }
 for name, (trigger, sha, sources) in ACCEPT.items():
     test = os.path.join(ROOT, "tests", "accept", name + ".cpp")
