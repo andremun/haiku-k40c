@@ -27,7 +27,7 @@ fi
 DBG=/opt/mesa-debug   # debug build of Mesa, made by build_mesa_debug.sh
 env_dbg=()
 if [ -d "$DBG/lib/x86_64-linux-gnu" ]; then
-    env_dbg=(LD_LIBRARY_PATH="$DBG/lib/x86_64-linux-gnu" LIBGL_DRIVERS_PATH="$DBG/lib/x86_64-linux-gnu/dri"
+    env_dbg=(LD_LIBRARY_PATH="$DBG/lib/x86_64-linux-gnu"
              GBM_BACKENDS_PATH="$DBG/lib/x86_64-linux-gnu/gbm"
              __EGL_VENDOR_LIBRARY_DIRS="$DBG/share/glvnd/egl_vendor.d")
     echo "mesa: debug build in $DBG" > out/mesa-build.txt

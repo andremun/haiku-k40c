@@ -8,6 +8,10 @@
 set -euo pipefail
 ver=$(dpkg-query -W -f='${Version}' libegl-mesa0)
 [ -f /opt/mesa-debug/.done ] && { echo "already built: $(cat /opt/mesa-debug/.done)"; exit 0; }
+if [ -f /opt/mesa-debug/lib/x86_64-linux-gnu/libEGL_mesa.so.0 ]; then   # installed, only the mark is missing
+    n=$(strings -a /opt/mesa-debug/lib/x86_64-linux-gnu/libgallium*.so | grep -c NV50_PROG_DEBUG || true)
+    [ "$n" -gt 0 ] && { echo "mesa $ver debug, nouveau only, $(date -I)" | sudo tee /opt/mesa-debug/.done; exit 0; }
+fi
 sudo sed -i 's/^Types: deb$/Types: deb deb-src/' /etc/apt/sources.list.d/ubuntu.sources
 sudo apt-get -qq update
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -qq build-dep mesa
@@ -22,6 +26,8 @@ meson setup build-debug --prefix=/opt/mesa-debug --libdir=lib/x86_64-linux-gnu -
     -Dvalgrind=disabled -Dlibunwind=disabled -Dlmsensors=disabled -Dzstd=enabled
 ninja -C build-debug
 sudo ninja -C build-debug install
-strings -a /opt/mesa-debug/lib/x86_64-linux-gnu/libgallium*.so | grep -q NV50_PROG_DEBUG \
-    || { echo "the build has no NV50_PROG_DEBUG"; exit 1; }
+# grep -c, not grep -q: with pipefail, grep -q ends the pipe early and the
+# check fails although the string is there.
+n=$(strings -a /opt/mesa-debug/lib/x86_64-linux-gnu/libgallium*.so | grep -c NV50_PROG_DEBUG || true)
+[ "$n" -gt 0 ] || { echo "the build has no NV50_PROG_DEBUG"; exit 1; }
 echo "mesa $ver debug, nouveau only, $(date -I)" | sudo tee /opt/mesa-debug/.done
