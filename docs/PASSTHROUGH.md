@@ -46,6 +46,16 @@ are enough for driver 470. It is not tested. If the desktop does not
 start after it, run `sudo scripts/passthrough.sh revert-xorg` from a text
 console.
 
+**Side effect seen on the first use (2026-10-12):** the file had
+`Option "AutoAddGPU" "false"`, and with it X did not add the displays of
+the DisplayLink dock (Dell D6000, `evdi`): the monitors on the dock stayed
+dark. X did release both K40c cards (no X client on them), and the
+monitor on the K600 worked. `prepare-xorg` now writes that option only
+with `--strict`. Whether `ProbeAllGpus false` alone keeps X off the K40c
+is not tested: check with `status` after the login. To get the dock
+displays back at any time: `sudo scripts/passthrough.sh revert-xorg` and
+a new login.
+
 A second client is `nvidia-persistenced` (active). If `attach` still
 fails after the X change, stop it: `sudo systemctl stop nvidia-persistenced`.
 

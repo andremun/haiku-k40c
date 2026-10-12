@@ -5,7 +5,8 @@
 # 2026-10-12). Read docs/PASSTHROUGH.md.
 #
 #   scripts/passthrough.sh status              no root, changes nothing
-#   sudo scripts/passthrough.sh prepare-xorg   once: X uses only the K600
+#   sudo scripts/passthrough.sh prepare-xorg [--strict]   X uses only the K600 (--strict:
+#                                              also no USB display adapters, see below)
 #   sudo scripts/passthrough.sh revert-xorg    undo prepare-xorg
 #   sudo scripts/passthrough.sh attach         nvidia -> vfio-pci (card for a guest)
 #   sudo scripts/passthrough.sh detach         vfio-pci -> nvidia (card for the model)
@@ -58,13 +59,19 @@ prepare-xorg)
     [[ -n $k600 ]] || die "no NVIDIA VGA adapter found"
     IFS=':.' read -r _ bus slot fn <<< "$k600"
     mkdir -p "$(dirname "$XCONF")"
+    # "AutoAddGPU false" also stops X from adding USB display adapters:
+    # with it, the monitors on a DisplayLink dock (evdi) stay dark (seen on
+    # 2026-10-12). It is written only with --strict. Without it, check with
+    # "status" after the login that X is not on the K40c.
+    flags=""
+    [[ ${2:-} == --strict ]] && flags='Section "ServerFlags"
+    Option "AutoAddGPU" "false"
+EndSection'
     cat > "$XCONF" <<CONF
 # Written by haiku-k40c/scripts/passthrough.sh. X uses only the display
 # adapter at $k600 and does not open the Tesla K40c cards, so that a
 # K40c can be unbound from the nvidia driver while X runs.
-Section "ServerFlags"
-    Option "AutoAddGPU" "false"
-EndSection
+$flags
 Section "Device"
     Identifier "DisplayAdapter"
     Driver "nvidia"
