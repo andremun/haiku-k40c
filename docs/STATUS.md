@@ -1,8 +1,8 @@
 # Status
 
-Current phase: C and D (hardware database; host-side algorithms and tests)
+Current phase: gate (phases A to D are done except C5)
 Current task: none
-Task state: WAITING. Phases A, B and D are done, and C1, C2, C3 and C4a. C4b runs in its own worktree. Do not start a task here.
+Task state: WAITING for the user. All tasks of phases A to D are done except C5, which needs the K40c passed through to the test VM (user steps, docs/PASSTHROUGH.md). The user reviews phases A to D before any Haiku work. Do not start a task.
 Last updated: 2026-10-12
 
 ## Last result
@@ -85,3 +85,4 @@ the old layout. Details: `reference/pci/README.md`.
 | C3e | DONE | 2026-10-12 | GR engine subsystem model: 70 members across 5 parts (zbc/fecs/gpccs/mmio, 18 hooks, init/ppc_nr/grctx, grctx functions, grctx values). 9 evidence reworks during dev. `make check` 0 failures. |
 | C4a | DONE | 2026-10-12 | Source provenance: 24 constant lines in 4 files (mmu/fifo); 20 cited from Nouveau/Mesa, 4 `no source:` (arithmetic/conventions). `tools/provenance.py` generates `docs/register-provenance.md` with `--check` mode. `make check` 0 failures. |
 | D5 | DONE | 2026-10-12 | Launch descriptor (23 fields, constant buffers) and launch methods. Acceptance test 101 checks, own tests 56. Three sessions; two code defects fixed by the scaffold, see `work/D5/REVIEW.md`. Phase D is complete with this task. |
+| C4b | DONE | 2026-10-12 | Design documents `docs/04-mmu-design.md` to `docs/07-firmware-analysis.md`. One session; the design sections were corrected substantially by the scaffold, see `work/C4b/REVIEW.md`. |

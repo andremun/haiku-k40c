@@ -40,7 +40,7 @@ imem, mmu
 - **bind**: Sets the runlist ID in the channel control register at 0x800004 then calls gk104_chan_bind_inst to write the instance-block address to 0x800000 (`nvkm/engine/fifo/gk104.c:72`)
 - **unbind**: Writes zero to the channel instance-block register at 0x800000 + (chan->id * 8) to detach the channel from the PBDMA (`nvkm/engine/fifo/gk104.c:56`)
 - **start**: Sets the channel-enable bit (0x00000400) in the channel control register at 0x800004 + (chan->id * 8) (`nvkm/engine/fifo/gk104.c:48`)
-- **stop**: Clears the channel-enable bit (0x00000800) in the channel control register at 0x800004 + (chan->id * 8) to halt the PBDMA (`nvkm/engine/fifo/gk104.c:40`)
+- **stop**: Sets bit 0x00000800 in the channel control register at 0x800004 + (chan->id * 8): a disable request (the mask and the value are both 0x800) (`nvkm/engine/fifo/gk104.c:40`)
 - **preempt**: Calls the preempt function of the channel group (cgrp) when the channel is in one, otherwise gf100_chan_preempt, which writes the channel ID to register 0x002634 (`nvkm/engine/fifo/gk110.c:36`)
 
 ## INFERRED

@@ -56,7 +56,7 @@
   "stop": {
    "role": "teardown",
    "needed_for_compute": true,
-   "what": "Clears the channel-enable bit (0x00000800) in the channel control register at 0x800004 + (chan->id * 8) to halt the PBDMA",
+   "what": "Sets bit 0x00000800 in the channel control register at 0x800004 + (chan->id * 8): a disable request (the mask and the value are both 0x800)",
    "certainty": "KNOWN",
    "evidence": {
     "line": 44,
