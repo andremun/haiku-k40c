@@ -64,6 +64,7 @@ is no reference for S3 and the project stops at S2.
 | C4b | Design documents (MMU, FIFO, GR, firmware) | `docs/tasks/C4b.md` |
 | C5 | Reference run under Linux and the first shader binary | `docs/tasks/C5.md` |
 | C5a | Shader binary and launch descriptor of the reference run | `docs/tasks/C5a.md` |
+| C5b | Summary of the register trace of the reference run | `docs/tasks/C5b.md` |
 
 ## Phase D: host-side algorithms and tests
 

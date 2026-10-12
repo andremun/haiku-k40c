@@ -1557,6 +1557,104 @@ if (os.path.exists(c5a_tool) or c5a_done) and "C5a" not in SKIP:
                      f"generates")
                 break
 
+# C5b summary of the register trace of the reference run ------------------
+def c5b_build(T, rnndb):
+    bars={};maps=[];byid={};marks=[];n=0
+    ph={k:{'first_line':None,'last_line':None,'bar0':{'reads':0,'writes':0},'bar1':{'reads':0,'writes':0},'bar3':{'reads':0,'writes':0}} for k in('load','job','after')}
+    cur='load';regs={};runs=[];names={}
+    for l in lzma.open(os.path.join(ROOT, T),'rt'):
+        n+=1;p=l.split()
+        if not p: continue
+        if p[0]=='PCIDEV' and p[2]=='10de1024':
+            for i in range(7):
+                a=int(p[4+i],16);s=int(p[11+i],16)
+                if s: bars[i]=(a&~0xf,s)
+        elif p[0]=='MAP':
+            ph_=int(p[3],16);b=[i for i,(a,s) in bars.items() if a<=ph_<a+s][0]
+            m={'id':int(p[2]),'line':n,'phys':hex(ph_),'size':hex(int(p[5],16)),'bar':b,'offset':hex(ph_-bars[b][0]),'unmap_line':None}
+            maps.append(m);byid[p[2]]=m
+        elif p[0]=='UNMAP': byid[p[2]]['unmap_line']=n
+        elif p[0]=='MARK':
+            marks.append({'line':n,'text':' '.join(p[2:])})
+            cur={'load':'job','job':'after'}[cur]; continue
+        elif p[0] in('R','W'):
+            m=byid[p[3]];k='reads' if p[0]=='R' else 'writes'
+            ph[cur]['bar%d'%m['bar']][k]+=1
+            if ph[cur]['first_line'] is None: ph[cur]['first_line']=n
+            ph[cur]['last_line']=n
+            if cur=='job' and m['bar']==0:
+                off=int(p[4],16)-bars[0][0]
+                if off not in names:
+                    r=rnndb.lookup(off); names[off]=r['name'] if r else None
+                nm=names[off]
+                e=regs.setdefault(off,{'reg':'0x%06x'%off,'name':nm,'reads':0,'writes':0,'first_line':n})
+                e[k]+=1
+                d=nm.split('.')[0] if nm else 'unknown'
+                if runs and runs[-1]['domain']==d: runs[-1][k]+=1; runs[-1]['last_line']=n
+                else: runs.append({'domain':d,'first_line':n,'last_line':n,'reads':0,'writes':0}); runs[-1][k]+=1
+    return {'trace':'reference/linux-run/mmiotrace.txt.xz','lines':n,'bars':{str(i):{'base':hex(a),'size':hex(s)} for i,(a,s) in sorted(bars.items())},'maps':maps,'marks':marks,'phases':ph,'job_registers':[regs[k] for k in sorted(regs)],'job_runs':runs}
+
+c5b_tool = os.path.join(ROOT, "tools", "trace_summary.py")
+if (os.path.exists(c5b_tool) or re.search(r"^\| C5b \| DONE", open(os.path.join(ROOT, "docs", "STATUS.md")).read(), re.M)) \
+        and "C5b" not in SKIP:
+    import lzma, subprocess
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import rnndb as c5b_rnndb
+    want = c5b_build("reference/linux-run/mmiotrace.txt.xz", c5b_rnndb)
+    rel = "analysis/linux_run_trace.json"
+    j = load_json(rel) if os.path.exists(os.path.join(ROOT, rel)) else None
+    if not isinstance(j, dict):
+        fail(f"{rel}: missing or not an object (docs/tasks/C5b.md)")
+    else:
+        for key in ("lines", "bars", "marks"):
+            if j.get(key) != want[key]:
+                fail(f"{rel}: '{key}' is {json.dumps(j.get(key))[:120]}; expected {json.dumps(want[key])[:200]}")
+        for key in ("maps", "job_registers", "job_runs"):
+            got = j.get(key)
+            if not isinstance(got, list):
+                fail(f"{rel}: '{key}' must be a list"); continue
+            if got != want[key]:
+                d = next((n for n, (a, b) in enumerate(zip(got, want[key])) if a != b), min(len(got), len(want[key])))
+                fail(f"{rel}: '{key}' has {len(got)} entries, expected {len(want[key])}; first difference at "
+                     f"entry {d}: yours {json.dumps(got[d]) if d < len(got) else 'nothing'}, expected "
+                     f"{json.dumps(want[key][d]) if d < len(want[key]) else 'nothing'}")
+        for phn in ("load", "job", "after"):
+            got = (j.get("phases") or {}).get(phn)
+            if got != want["phases"][phn]:
+                fail(f"{rel}: phases.{phn} is {json.dumps(got)[:200]}; expected {json.dumps(want['phases'][phn])}")
+    rel = "analysis/linux_run_trace.md"
+    if not os.path.exists(os.path.join(ROOT, rel)):
+        fail(f"{rel}: missing (docs/tasks/C5b.md)")
+    else:
+        md = open(os.path.join(ROOT, rel)).read()
+        secs = dict((h.strip(), b) for h, b in re.findall(r"^## (.+?)\n(.*?)(?=^## |\Z)", md, re.M | re.S))
+        need = ["Mappings", "Phases", "Domains of the job", "Timeline of the job", "Registers without a name"]
+        if list(secs) != need:
+            fail(f"{rel}: the '## ' sections must be {need}, in this order")
+        else:
+            rows = lambda t: len([r for r in t.split("\n") if r.startswith("|")]) - 2
+            doms = len(set(r["domain"] for r in want["job_runs"]))
+            for sec, n in (("Mappings", len(want["maps"])), ("Phases", 3), ("Domains of the job", doms),
+                           ("Timeline of the job", len(want["job_runs"]))):
+                if rows(secs[sec]) != n:
+                    fail(f"{rel}: the table of '{sec}' has {rows(secs[sec])} rows; expected {n}")
+            noname = ["0x%s" % r["reg"][2:] for r in want["job_registers"] if r["name"] is None]
+            if re.findall(r"0x[0-9a-f]{6}\b", secs["Registers without a name"]) != noname:
+                fail(f"{rel}: 'Registers without a name' must list the {len(noname)} registers with name null, "
+                     f"in order (first: {noname[0]})")
+    if not os.path.exists(c5b_tool) or "--check" not in open(c5b_tool, errors="replace").read():
+        fail("tools/trace_summary.py: missing, or no --check option (docs/tasks/C5b.md)")
+    else:
+        for run in (1, 2):
+            try:
+                r = subprocess.run([sys.executable, c5b_tool, "--check"], cwd=ROOT, capture_output=True,
+                                   text=True, timeout=60)
+            except subprocess.TimeoutExpired:
+                fail("tools/trace_summary.py --check: no result in 60 s (read the trace one time)"); break
+            if r.returncode != 0:
+                fail(f"tools/trace_summary.py --check (run {run}): the output files are not what the tool generates")
+                break
+
 for n in notes:
     print("note:", n)
 for f in fails:

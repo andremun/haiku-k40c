@@ -1,0 +1,109 @@
+# Task C5b: Summary of the register trace of the reference run
+
+Phase C: hardware database and firmware. This file is the whole task text. `make check` verifies the
+checks named here. General rules: `AGENTS.md`.
+
+- Why: `reference/linux-run/mmiotrace.txt.xz` has every register access
+  that the Linux kernel driver (Nouveau) made on the K40c while it
+  started the card and while the reference compute job ran. It is the
+  only record of what the working driver really does, in order. It has
+  901,370 lines, too many to read. This task writes the tool that turns
+  it into a summary that the next task (the document about the launch)
+  and the Haiku driver tests can use.
+- Do not print the trace. Look at parts of it only like this:
+  `xz -dc reference/linux-run/mmiotrace.txt.xz | sed -n '1,45p'` (the
+  header and the first accesses) and
+  `xz -dc reference/linux-run/mmiotrace.txt.xz | grep -n -m5 MARK`.
+  In Python read it with `lzma.open(path, "rt")`, line by line.
+- The format of the trace (line numbers are 1-based, fields are
+  separated by spaces):
+  - `PCIDEV BDF VENDORDEVICE IRQ A0 A1 A2 A3 A4 A5 A6 S0 S1 S2 S3 S4 S5 S6 [DRIVER]`,
+    all hex without `0x`. The card is the line with VENDORDEVICE
+    `10de1024`. `A0`..`A6` are the addresses of the 7 PCI resources and
+    `S0`..`S6` their sizes. A resource with size 0 does not exist. The
+    low 4 bits of an address are flags: the base is the address with
+    the low 4 bits set to 0. The card has resources 0, 1 and 3; this
+    task calls them BAR 0, BAR 1 and BAR 3.
+  - `MAP TIME ID PHYS VIRT SIZE 0x0 0`: the kernel mapped SIZE bytes at
+    the physical address PHYS and gave the mapping the number ID.
+  - `UNMAP TIME ID 0x0 0`: the mapping ID was removed.
+  - `R WIDTH TIME ID PHYS VALUE PC PID` and `W WIDTH TIME ID PHYS VALUE PC PID`:
+    a read or a write through the mapping ID at the physical address
+    PHYS. This is an "access".
+  - `MARK TIME TEXT`: a marker. The test script wrote two:
+    `MARK compute_test start` and `MARK compute_test end` are the TEXT.
+  - Other lines (`VERSION`, other `PCIDEV`) are not used.
+- Definitions:
+  - The BAR of a mapping is the resource that contains its PHYS. Its
+    offset is PHYS minus the base of that resource. The BAR of an
+    access is the BAR of its mapping (use the ID of the access).
+  - Phases: `load` is every access before the first marker, `job` every
+    access between the two markers, `after` every access after the
+    second marker.
+  - A register is an offset in BAR 0 (PHYS minus the base of BAR 0).
+    Its name comes from `tools/rnndb.py`: `import rnndb;
+    rnndb.lookup(offset)` returns a dict with `"name"`, or `None` when
+    the database has no name (then the name is JSON `null`). Do not
+    invent names. Call `lookup` once for each different offset, not
+    once for each access (it is slow).
+  - The domain of a register is the part of its name before the first
+    `.` (`PGRAPH.CTXCTL.WRCMD_CMD` is in domain `PGRAPH`), or
+    `unknown` when it has no name.
+  - A run: take only the BAR 0 accesses of the `job` phase, in order.
+    A run is a longest sequence of them that follow each other and
+    have the same domain. (Accesses to other BARs between them do not
+    end a run.)
+- Outputs:
+  - `tools/trace_summary.py`. Standard library only, plus `rnndb`
+    (`sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))`).
+    It reads the trace and writes the two files below. The same output
+    on every run. `--check` writes nothing and exits 0 when the two
+    files are what the tool generates, 1 when not. It must finish in
+    less than 60 seconds: read the trace one time.
+  - `analysis/linux_run_trace.json`, an object with these keys:
+    - `"trace"`: the path of the trace; `"lines"`: its number of lines.
+    - `"bars"`: `{"0": {"base": "0xc1000000", "size": "0x1000000"}, "1": ..., "3": ...}`
+      (hex strings with `0x`, lower case, no leading zeros).
+    - `"maps"`: a list, one object for each MAP line, in order:
+      `{"id": 3, "line": N, "phys": "0x...", "size": "0x...", "bar": 3,
+      "offset": "0x...", "unmap_line": N or null}`.
+    - `"marks"`: `[{"line": N, "text": "MARK compute_test start"}, ...]`.
+    - `"phases"`: an object with `"load"`, `"job"`, `"after"`. Each is
+      `{"first_line": N, "last_line": N, "bar0": {"reads": N,
+      "writes": N}, "bar1": {...}, "bar3": {...}}`. `first_line` and
+      `last_line` are the lines of the first and the last access of
+      the phase.
+    - `"job_registers"`: one object for each different register that
+      the `job` phase accesses, sorted by offset: `{"reg": "0x409504"`
+      (6 hex digits)`, "name": "PGRAPH.CTXCTL.WRCMD_CMD" or null,
+      "reads": N, "writes": N, "first_line": N}`.
+    - `"job_runs"`: one object for each run, in order: `{"domain":
+      "PGRAPH", "first_line": N, "last_line": N, "reads": N,
+      "writes": N}`.
+  - `analysis/linux_run_trace.md`, generated by the tool from the same
+    data, with these `## ` sections in this order: "Mappings" (a table
+    of `maps`), "Phases" (a table: phase, lines, reads and writes of
+    each BAR), "Domains of the job" (a table: domain, number of
+    different registers, reads, writes; sorted by the number of
+    accesses, largest first), "Timeline of the job" (a table of the
+    runs: number, first line, last line, domain, reads, writes),
+    "Registers without a name" (the list of the `job_registers` with
+    name null, as `0x......`, 8 on a line).
+- How to do it:
+  - Write `work/C5b/PLAN.md` (10 lines). Write the tool in small
+    steps and run it after each step: first the bars and the maps,
+    then the marks and the phases, then the registers, then the runs,
+    then the document. Commit after each step that works.
+  - Write `work/C5b/NOTES.md` when a step is done (what is done, what
+    is next), so that the work can go on after an interruption.
+  - Do not write the numbers by hand anywhere. `work/C5b/RESULT.md`
+    gives the numbers (lines, mappings, accesses of each phase,
+    different registers of the job, registers without a name, runs):
+    take them from the JSON file with a command, for example
+    `python3 -c "import json; j=json.load(open('analysis/linux_run_trace.json')); print(len(j['job_runs']))"`.
+  - The work directory is `work/C5b`. In `docs/STATUS.md` the task ID in
+    the task log is `C5b`.
+- Check: the reviewer's own program computes the same summary from the
+  trace; every key of the JSON file must be equal to it. The document
+  has the sections and one table row for each mapping and each run.
+  `--check` passes twice.

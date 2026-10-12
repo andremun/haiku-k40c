@@ -1,8 +1,8 @@
 # Status
 
 Current phase: C (hardware database and firmware), last task group
-Current task: none
-Task state: WAITING. C5a is done and accepted (2026-10-13). The scaffold writes the next task (the register trace of the reference run). Do not start a task.
+Current task: C5b
+Task state: TODO. C5a is done. Read docs/tasks/C5b.md. The files analysis/linux_run_trace.json and the trace cannot be opened with the read tool (too large): use the commands that the task text gives.
 Last updated: 2026-10-13
 
 ## Last result
