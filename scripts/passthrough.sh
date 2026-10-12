@@ -86,15 +86,27 @@ revert-xorg)
 attach)
     need_root; check_card
     [[ $(driver) == vfio-pci ]] && { echo "already attached"; exit 0; }
-    [[ $(driver) == nvidia ]] || die "unexpected driver '$(driver)'"
-    nvidia-smi --query-compute-apps=gpu_uuid --format=csv,noheader | grep -q "$GPU_UUID" \
-        && die "a compute process uses the card. Run ~/llm-server/llm-mode.sh one-t1k first."
     modprobe vfio-pci
-    # Tell the driver to stop using the card, then unbind. The unbind waits
-    # for ever if X or another client still has the card open.
-    nvidia-smi drain -p "$GPU_BDF" -m 1 || die "nvidia-smi drain failed: a client (X?) holds the card. See prepare-xorg."
-    timeout 30 sh -c "echo $GPU_BDF > /sys/bus/pci/drivers/nvidia/unbind" \
-        || die "unbind did not finish in 30 s. A client still holds the card. Reboot to recover if nvidia-smi hangs."
+    if [[ -z $(driver) ]]; then
+        # No driver: an earlier attach got as far as the unbind. Go on.
+        echo "the card has no driver (an earlier attach unbound it): binding vfio-pci"
+    else
+        [[ $(driver) == nvidia ]] || die "unexpected driver '$(driver)'"
+        nvidia-smi --query-compute-apps=gpu_uuid --format=csv,noheader | grep -q "$GPU_UUID" \
+            && die "a compute process uses the card. Run ~/llm-server/llm-mode.sh one-t1k first."
+        # nvidia-persistenced keeps every NVIDIA card open, and the unbind
+        # below waits until all clients have closed the card (seen on
+        # 2026-10-12: it waited for minutes). Stop it; detach starts it again.
+        if systemctl is-active --quiet nvidia-persistenced; then
+            echo "stopping nvidia-persistenced (it holds the card open)"
+            systemctl stop nvidia-persistenced
+        fi
+        # Tell the driver to stop using the card, then unbind. The unbind
+        # waits, and cannot be interrupted, while a client has the card open.
+        nvidia-smi drain -p "$GPU_BDF" -m 1 || die "nvidia-smi drain failed: a client (X?) holds the card. See prepare-xorg."
+        echo "unbinding from nvidia (if this takes more than a minute, a client still holds the card)"
+        echo "$GPU_BDF" > /sys/bus/pci/drivers/nvidia/unbind
+    fi
     echo vfio-pci > "$DEV/driver_override"
     echo "$GPU_BDF" > /sys/bus/pci/drivers_probe
     [[ $(driver) == vfio-pci ]] || die "the card did not bind to vfio-pci (driver '$(driver)')"
@@ -110,6 +122,7 @@ detach)
     echo > "$DEV/driver_override"
     echo "$GPU_BDF" > /sys/bus/pci/drivers_probe
     nvidia-smi drain -p "$GPU_BDF" -m 0 >/dev/null 2>&1 || true
+    systemctl start nvidia-persistenced 2>/dev/null || true
     [[ $(driver) == nvidia ]] || die "the card did not return to nvidia (driver '$(driver)'). A reboot restores it."
     echo "Detached: $GPU_BDF is on nvidia again. Model: ~/llm-server/llm-mode.sh two-t1k (or dual-t1k)" ;;
 *) sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
