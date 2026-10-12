@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Give one K40c to a virtual machine (vfio-pci) and take it back.
 # USER STEP: the agent must not run this (AGENTS.md, hardware safety).
-# NOT TESTED YET (written 2026-10-07 without root). Read docs/PASSTHROUGH.md.
+# NOT TESTED YET (written 2026-10-07 without root, details checked
+# 2026-10-12). Read docs/PASSTHROUGH.md.
 #
 #   scripts/passthrough.sh status              no root, changes nothing
 #   sudo scripts/passthrough.sh prepare-xorg   once: X uses only the K600
@@ -80,7 +81,7 @@ attach)
     [[ $(driver) == vfio-pci ]] && { echo "already attached"; exit 0; }
     [[ $(driver) == nvidia ]] || die "unexpected driver '$(driver)'"
     nvidia-smi --query-compute-apps=gpu_uuid --format=csv,noheader | grep -q "$GPU_UUID" \
-        && die "a compute process uses the card. Run ~/llm-server/llm-mode.sh one first."
+        && die "a compute process uses the card. Run ~/llm-server/llm-mode.sh one-t1k first."
     modprobe vfio-pci
     # Tell the driver to stop using the card, then unbind. The unbind waits
     # for ever if X or another client still has the card open.
@@ -103,6 +104,6 @@ detach)
     echo "$GPU_BDF" > /sys/bus/pci/drivers_probe
     nvidia-smi drain -p "$GPU_BDF" -m 0 >/dev/null 2>&1 || true
     [[ $(driver) == nvidia ]] || die "the card did not return to nvidia (driver '$(driver)'). A reboot restores it."
-    echo "Detached: $GPU_BDF is on nvidia again. Model: ~/llm-server/llm-mode.sh dual" ;;
+    echo "Detached: $GPU_BDF is on nvidia again. Model: ~/llm-server/llm-mode.sh two-t1k (or dual-t1k)" ;;
 *) sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac
