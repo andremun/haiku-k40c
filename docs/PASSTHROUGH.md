@@ -69,13 +69,29 @@ card open (`/dev/nvidia1` for the card at 04:00.0), and so did
 of them close it, and it cannot be interrupted: it waited until the
 reboot.
 
-Use `sudo scripts/passthrough.sh attach-at-next-boot` and reboot. A
-one-time unit gives the card to `vfio-pci` before the display manager
-starts, so nothing has it open. No X configuration is needed (run
-`revert-xorg` if `prepare-xorg` was used). After that boot the router
-cannot load its two-card model: run `~/llm-server/llm-mode.sh one-t1k`.
-Steps 1 to 4 below are replaced by this; steps 5 to 7 are unchanged.
-`detach` works with the desktop running.
+A one-time boot unit that did the unbind before the display manager was
+tried on 2026-10-13. It did not work either: the nvidia driver is loaded
+from the initramfs with `nvidia_drm modeset=1`, the unbind never
+returned, and the display manager waited behind it (no screen, hard
+reset). The unit is removed.
+
+Use `sudo scripts/passthrough.sh attach-at-boot` and reboot. It installs
+`/etc/modprobe.d/k40c-vfio.conf` and rebuilds the initramfs (a copy of
+the old one is kept as `/boot/initrd.img-<kernel>.before-k40c`). The line
+in that file runs each time the nvidia module is loaded: it sets
+`driver_override` of the card to `vfio-pci` first, so the nvidia driver
+never gets the card and no unbind is needed. This holds at every boot
+until `sudo scripts/passthrough.sh detach`, which removes the file and
+rebuilds the initramfs again. After the boot run
+`sudo scripts/passthrough.sh attach` once (it gives `/dev/vfio/<group>`
+to the user) and `~/llm-server/llm-mode.sh one-t1k` (the router cannot
+load its two-card model). No X configuration is needed (run
+`revert-xorg` if `prepare-xorg` was used). Steps 1 to 4 below are
+replaced by this; steps 5 to 7 are unchanged.
+
+If the desktop does not start after that boot: switch to a text console
+(Ctrl+Alt+F3), log in, and run `sudo scripts/passthrough.sh detach`,
+then reboot. NOT TESTED on the real machine as of 2026-10-13.
 
 ## Procedure
 

@@ -10,8 +10,8 @@
 #   sudo scripts/passthrough.sh revert-xorg    undo prepare-xorg
 #   sudo scripts/passthrough.sh attach         nvidia -> vfio-pci (card for a guest); only works
 #                                              with no desktop session (text console)
-#   sudo scripts/passthrough.sh attach-at-next-boot   the same, once, early in the next boot
-#                                              (use this from a desktop session)
+#   sudo scripts/passthrough.sh attach-at-boot the nvidia driver never gets the card, from the
+#                                              next boot until "detach" (use this from a desktop)
 #   sudo scripts/passthrough.sh detach         vfio-pci -> nvidia (card for the model)
 #
 # The card is the development card of tools/guest/config.sh (0000:04:00.0).
@@ -21,6 +21,9 @@ HERE="$(cd "$(dirname "$0")/.." && pwd)"
 . "$HERE/tools/guest/config.sh"
 DEV=/sys/bus/pci/devices/$GPU_BDF
 XCONF=/etc/X11/xorg.conf.d/20-display-k600-only.conf
+MODCONF=/etc/modprobe.d/k40c-vfio.conf
+INITHOOK=/etc/initramfs-tools/hooks/k40c-vfio
+OWNERFILE=/etc/k40c-vfio-owner
 # Name of the bound driver, or nothing when the card has no driver.
 driver() { [[ -L $DEV/driver ]] && basename "$(readlink -f "$DEV/driver")" || true; }
 need_root() { [[ $EUID -eq 0 ]] || { echo "Run with sudo." >&2; exit 1; }; }
@@ -53,6 +56,7 @@ status() {
         nvidia-smi | awk -v i="$(nvidia-smi --query-gpu=index,uuid --format=csv,noheader | grep "$GPU_UUID" | cut -d, -f1)" \
             '/Processes/{p=1} p && $2==i && $6=="G"{print "  X client: " $0}'
     fi
+    [[ -f $MODCONF ]] && echo "boot-time reservation: installed (the card goes to vfio-pci at every boot until detach)"
     [[ -f $XCONF ]] && echo "X config: $XCONF is installed" || echo "X config: not installed (X opens every NVIDIA card)"
     echo "memlock limit: $(ulimit -l) kB (a guest with the card pins all of its memory)"
 }
@@ -127,62 +131,52 @@ attach)
     chown "${SUDO_USER:-root}" "/dev/vfio/$grp"
     echo "Attached: $GPU_BDF is on vfio-pci, /dev/vfio/$grp belongs to ${SUDO_USER:-root}."
     echo "Guest: tools/guest/linux-run.sh --gpu     Take it back: sudo $0 detach" ;;
-attach-at-next-boot)
-    # The live attach cannot work while a desktop session runs: Xorg,
-    # gnome-shell and gnome-remote-desktop each keep the device file of
-    # every NVIDIA card open (seen on 2026-10-12), and the unbind waits for
-    # them. This gives the card to vfio-pci once, early in the next boot,
-    # before the display manager and the nvidia services start. No X
-    # configuration is needed for it.
+attach-at-boot|attach-at-next-boot)
+    # The card cannot be taken from the nvidia driver once that driver has
+    # it: with a desktop session Xorg, gnome-shell and gnome-remote-desktop
+    # keep it open, and early in the boot nvidia_modeset does (2026-10-13:
+    # an unbind from a boot unit never returned and the display did not
+    # start). So the driver must never get the card. The nvidia module is
+    # loaded from the initramfs; the line below runs each time it is
+    # loaded and reserves the card for vfio-pci first. It stays in force
+    # at every boot until "detach" removes it.
     need_root; check_card
-    unit=/etc/systemd/system/k40c-vfio-once.service
-    cat > "$unit" <<UNIT
-[Unit]
-Description=Give the Tesla K40c at $GPU_BDF to vfio-pci once (haiku-k40c passthrough)
-ConditionPathExists=/etc/k40c-vfio-once
-DefaultDependencies=no
-After=systemd-modules-load.service local-fs.target
-Before=display-manager.service gdm.service nvidia-persistenced.service multi-user.target
-
-[Service]
-Type=oneshot
-ExecStart=$HERE/scripts/passthrough.sh boot-attach
-RemainAfterExit=no
-
-[Install]
-WantedBy=multi-user.target
-UNIT
-    echo "${SUDO_USER:-root}" > /etc/k40c-vfio-once
+    systemctl disable k40c-vfio-once.service >/dev/null 2>&1 || true
+    rm -f /etc/systemd/system/k40c-vfio-once.service /etc/k40c-vfio-once
     systemctl daemon-reload
-    systemctl enable k40c-vfio-once.service >/dev/null
-    echo "Installed $unit and the one-time mark /etc/k40c-vfio-once."
-    echo "Reboot. After the boot: scripts/passthrough.sh status must show driver 'vfio-pci'."
-    echo "The mark is removed at that boot, so the boot after it is normal again."
-    echo "To cancel before the reboot: sudo rm /etc/k40c-vfio-once" ;;
-boot-attach)
-    # Run by k40c-vfio-once.service, not by hand.
-    need_root; check_card
-    owner=$(cat /etc/k40c-vfio-once 2>/dev/null || echo root)
-    rm -f /etc/k40c-vfio-once
-    modprobe vfio-pci
-    echo vfio-pci > "$DEV/driver_override"
-    if [[ $(driver) == nvidia ]]; then
-        # no client can have the card open this early, so this returns at once
-        timeout 20 sh -c "echo $GPU_BDF > /sys/bus/pci/drivers/nvidia/unbind" || die "unbind from nvidia did not finish"
-    fi
-    echo "$GPU_BDF" > /sys/bus/pci/drivers_probe
-    [[ $(driver) == vfio-pci ]] || die "the card did not bind to vfio-pci (driver '$(driver)')"
-    grp=$(basename "$(readlink -f "$DEV/iommu_group")")
-    # A network account may not be known this early in the boot. Then the
-    # device stays with root, and "sudo scripts/passthrough.sh attach" after
-    # the login gives it to the user.
-    chown "$owner" "/dev/vfio/$grp" 2>/dev/null \
-        && echo "$GPU_BDF is on vfio-pci, /dev/vfio/$grp belongs to $owner" \
-        || echo "$GPU_BDF is on vfio-pci; /dev/vfio/$grp still belongs to root (run: sudo scripts/passthrough.sh attach)" ;;
+    cat > "$MODCONF" <<CONF
+# haiku-k40c passthrough (scripts/passthrough.sh attach-at-boot). Remove
+# with "sudo scripts/passthrough.sh detach".
+install nvidia grep -q 0x1024 $DEV/device && echo vfio-pci > $DEV/driver_override; /sbin/modprobe vfio-pci; echo $GPU_BDF > /sys/bus/pci/drivers_probe; /sbin/modprobe --ignore-install nvidia \$CMDLINE_OPTS
+CONF
+    cat > "$INITHOOK" <<'HOOK'
+#!/bin/sh
+# haiku-k40c passthrough: put vfio-pci into the initramfs.
+case "$1" in prereqs) echo ""; exit 0 ;; esac
+. /usr/share/initramfs-tools/hook-functions
+manual_add_modules vfio-pci
+HOOK
+    chmod 755 "$INITHOOK"
+    echo "${SUDO_USER:-root}" > "$OWNERFILE"
+    initrd=/boot/initrd.img-$(uname -r)
+    [[ -f $initrd.before-k40c ]] || cp -p "$initrd" "$initrd.before-k40c"
+    update-initramfs -u -k "$(uname -r)"
+    lsinitramfs "$initrd" | grep -q 'vfio-pci.ko' || die "vfio-pci is not in $initrd. Run: sudo $0 detach"
+    lsinitramfs "$initrd" | grep -q "etc/modprobe.d/$(basename "$MODCONF")" || die "$MODCONF is not in $initrd. Run: sudo $0 detach"
+    echo "Installed $MODCONF and rebuilt $initrd (copy of the old one: $initrd.before-k40c)."
+    echo "Reboot. After the boot: 'scripts/passthrough.sh status' must show driver 'vfio-pci';"
+    echo "then run 'sudo $0 attach' once to give the device to your account."
+    echo "The card stays with vfio-pci at every boot until: sudo $0 detach" ;;
 detach)
     need_root; check_card
-    [[ $(driver) == nvidia ]] && { echo "already on nvidia"; exit 0; }
     pgrep -f "vfio-pci,host=${GPU_BDF#0000:}" >/dev/null && die "a guest still uses the card. Shut it down first."
+    if [[ -f $MODCONF || -f $INITHOOK ]]; then
+        echo "removing the boot-time reservation and rebuilding the initramfs"
+        rm -f "$MODCONF" "$INITHOOK" "$OWNERFILE"
+        update-initramfs -u -k "$(uname -r)"
+        rm -f "/boot/initrd.img-$(uname -r).before-k40c"
+    fi
+    [[ $(driver) == nvidia ]] && { echo "already on nvidia"; exit 0; }
     [[ $(driver) == vfio-pci ]] && echo "$GPU_BDF" > /sys/bus/pci/drivers/vfio-pci/unbind
     echo > "$DEV/driver_override"
     echo "$GPU_BDF" > /sys/bus/pci/drivers_probe
