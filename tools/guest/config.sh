@@ -1,6 +1,6 @@
 # Shared settings for the GPU guest tools. Sourced, not run.
 # The guests live outside the repository, next to the Haiku test VM.
-: "${HAIKU_CROSS:=$HOME/haiku-cross}"
+: "${HAIKU_CROSS:=${HOME:-/root}/haiku-cross}"   # HOME is not set in a boot-time unit
 GUEST_DIR="$HAIKU_CROSS/linux-guest"
 GUEST_SSH_PORT=2222
 # The K40c that may go to a guest: the development card (assumption S1).
