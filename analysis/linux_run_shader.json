@@ -1,0 +1,682 @@
+{
+  "log": "reference/linux-run/compute_test.log",
+  "log_line": 120,
+  "size_bytes": 160,
+  "words": [
+    "0xa0a09c80",
+    "0x0810b0a0",
+    "0x129c0002",
+    "0x86400000",
+    "0x109c0006",
+    "0x86400000",
+    "0x031c0001",
+    "0xc2400400",
+    "0x009c0002",
+    "0xe0800000",
+    "0x011c0009",
+    "0xc2400400",
+    "0x541c0802",
+    "0x608400e0",
+    "0x549ffc06",
+    "0x608040e0",
+    "0xa080b0a0",
+    "0x0810b010",
+    "0x021c080d",
+    "0xc0800000",
+    "0x551c0c1e",
+    "0x5b401ce0",
+    "0x00200000",
+    "0xc4800000",
+    "0x0003c002",
+    "0x74000000",
+    "0x009c0011",
+    "0xc0800000",
+    "0x561c0802",
+    "0x608400e0",
+    "0x569ffc06",
+    "0x608040e0",
+    "0x00b810b0",
+    "0x08000000",
+    "0x571c0c1e",
+    "0x5b401ce0",
+    "0x00200010",
+    "0xe4800000",
+    "0x001c003c",
+    "0x18000000"
+  ],
+  "sha256": "02944d8f43830afad4f9d6538a1a26810085aea98a6520b09f7b5c9cce3ed417",
+  "renderer": "NVF1",
+  "version": "OpenGL ES 3.2 Mesa 25.2.8",
+  "source": [
+    "#version 310 es",
+    "layout(local_size_x = 64) in;",
+    "layout(std430, binding = 0) readonly buffer In { uint a[]; } inbuf;",
+    "layout(std430, binding = 1) writeonly buffer Out { uint a[]; } outbuf;",
+    "void main() {",
+    "\tuint i = gl_GlobalInvocationID.x;",
+    "\toutbuf.a[i] = inbuf.a[i] + 1u;",
+    "}"
+  ],
+  "qmd": [
+    {
+      "name": "QMD_RESERVED_V1_A",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_B",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_C",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_D",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_E",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_F",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_G",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_H",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_A_A",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_I",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_J",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_A",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_K",
+      "value": "FALSE"
+    },
+    {
+      "name": "QMD_RESERVED_V1_L",
+      "value": "FALSE"
+    },
+    {
+      "name": "SEMAPHORE_RELEASE_ENABLE0",
+      "value": "FALSE"
+    },
+    {
+      "name": "SEMAPHORE_RELEASE_ENABLE1",
+      "value": "FALSE"
+    },
+    {
+      "name": "QMD_RESERVED_B",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_M",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_N",
+      "value": "FALSE"
+    },
+    {
+      "name": "QMD_RESERVED_V1_O",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_C",
+      "value": "0x0"
+    },
+    {
+      "name": "INVALIDATE_TEXTURE_HEADER_CACHE",
+      "value": "TRUE"
+    },
+    {
+      "name": "INVALIDATE_TEXTURE_SAMPLER_CACHE",
+      "value": "TRUE"
+    },
+    {
+      "name": "INVALIDATE_TEXTURE_DATA_CACHE",
+      "value": "TRUE"
+    },
+    {
+      "name": "INVALIDATE_SHADER_DATA_CACHE",
+      "value": "TRUE"
+    },
+    {
+      "name": "INVALIDATE_INSTRUCTION_CACHE",
+      "value": "FALSE"
+    },
+    {
+      "name": "INVALIDATE_SHADER_CONSTANT_CACHE",
+      "value": "TRUE"
+    },
+    {
+      "name": "PROGRAM_OFFSET",
+      "value": "0x7f100"
+    },
+    {
+      "name": "QMD_RESERVED_V1_P",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_Q",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_D",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_R",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_S",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_E",
+      "value": "0x0"
+    },
+    {
+      "name": "RELEASE_MEMBAR_TYPE",
+      "value": "FE_SYSMEMBAR"
+    },
+    {
+      "name": "CWD_MEMBAR_TYPE",
+      "value": "L1_SYSMEMBAR"
+    },
+    {
+      "name": "QMD_RESERVED_V1_T",
+      "value": "FALSE"
+    },
+    {
+      "name": "QMD_RESERVED_V1_U",
+      "value": "FALSE"
+    },
+    {
+      "name": "THROTTLED",
+      "value": "FALSE"
+    },
+    {
+      "name": "QMD_RESERVED_E2_A",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_E2_B",
+      "value": "0x0"
+    },
+    {
+      "name": "API_VISIBLE_CALL_LIMIT",
+      "value": "NO_CHECK"
+    },
+    {
+      "name": "SHARED_MEMORY_BANK_MAPPING",
+      "value": "FOUR_BYTES_PER_BANK"
+    },
+    {
+      "name": "SAMPLER_INDEX",
+      "value": "INDEPENDENTLY"
+    },
+    {
+      "name": "QMD_RESERVED_E3_A",
+      "value": "0x0"
+    },
+    {
+      "name": "CTA_RASTER_WIDTH",
+      "value": "0x10"
+    },
+    {
+      "name": "CTA_RASTER_HEIGHT",
+      "value": "0x1"
+    },
+    {
+      "name": "CTA_RASTER_DEPTH",
+      "value": "0x1"
+    },
+    {
+      "name": "CTA_RASTER_WIDTH_RESUME",
+      "value": "0x0"
+    },
+    {
+      "name": "CTA_RASTER_HEIGHT_RESUME",
+      "value": "0x0"
+    },
+    {
+      "name": "CTA_RASTER_DEPTH_RESUME",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_V",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_F",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_W",
+      "value": "FALSE"
+    },
+    {
+      "name": "SHARED_MEMORY_SIZE",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_G",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_VERSION",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_MAJOR_VERSION",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_H",
+      "value": "0x0"
+    },
+    {
+      "name": "CTA_THREAD_DIMENSION0",
+      "value": "0x40"
+    },
+    {
+      "name": "CTA_THREAD_DIMENSION1",
+      "value": "0x1"
+    },
+    {
+      "name": "CTA_THREAD_DIMENSION2",
+      "value": "0x1"
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(0)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(1)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(2)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(3)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(4)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(5)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(6)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(7)",
+      "value": "TRUE"
+    },
+    {
+      "name": "QMD_RESERVED_I",
+      "value": "0x0"
+    },
+    {
+      "name": "L1_CONFIGURATION",
+      "value": "DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB"
+    },
+    {
+      "name": "QMD_RESERVED_V1_X",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_V1_Y",
+      "value": "0x0"
+    },
+    {
+      "name": "RELEASE0_ADDRESS_LOWER",
+      "value": "0x0"
+    },
+    {
+      "name": "RELEASE0_ADDRESS_UPPER",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_J",
+      "value": "0x0"
+    },
+    {
+      "name": "RELEASE0_REDUCTION_OP",
+      "value": "RED_ADD"
+    },
+    {
+      "name": "QMD_RESERVED_K",
+      "value": "0x0"
+    },
+    {
+      "name": "RELEASE0_REDUCTION_FORMAT",
+      "value": "UNSIGNED_32"
+    },
+    {
+      "name": "RELEASE0_REDUCTION_ENABLE",
+      "value": "FALSE"
+    },
+    {
+      "name": "RELEASE0_STRUCTURE_SIZE",
+      "value": "FOUR_WORDS"
+    },
+    {
+      "name": "RELEASE0_PAYLOAD",
+      "value": "0x0"
+    },
+    {
+      "name": "RELEASE1_ADDRESS_LOWER",
+      "value": "0x0"
+    },
+    {
+      "name": "RELEASE1_ADDRESS_UPPER",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_L",
+      "value": "0x0"
+    },
+    {
+      "name": "RELEASE1_REDUCTION_OP",
+      "value": "RED_ADD"
+    },
+    {
+      "name": "QMD_RESERVED_M",
+      "value": "0x0"
+    },
+    {
+      "name": "RELEASE1_REDUCTION_FORMAT",
+      "value": "UNSIGNED_32"
+    },
+    {
+      "name": "RELEASE1_REDUCTION_ENABLE",
+      "value": "FALSE"
+    },
+    {
+      "name": "RELEASE1_STRUCTURE_SIZE",
+      "value": "FOUR_WORDS"
+    },
+    {
+      "name": "RELEASE1_PAYLOAD",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(0)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(0)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(0)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(0)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(0)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(1)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(1)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(1)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(1)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(1)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(2)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(2)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(2)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(2)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(2)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(3)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(3)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(3)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(3)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(3)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(4)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(4)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(4)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(4)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(4)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(5)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(5)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(5)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(5)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(5)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(6)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(6)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(6)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(6)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(6)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(7)",
+      "value": "0x510000"
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(7)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(7)",
+      "value": "0x0"
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(7)",
+      "value": "FALSE"
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(7)",
+      "value": "0x800"
+    },
+    {
+      "name": "SHADER_LOCAL_MEMORY_LOW_SIZE",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_RESERVED_N",
+      "value": "0x0"
+    },
+    {
+      "name": "BARRIER_COUNT",
+      "value": "0x0"
+    },
+    {
+      "name": "SHADER_LOCAL_MEMORY_HIGH_SIZE",
+      "value": "0x0"
+    },
+    {
+      "name": "REGISTER_COUNT",
+      "value": "0x5"
+    },
+    {
+      "name": "SHADER_LOCAL_MEMORY_CRS_SIZE",
+      "value": "0x800"
+    },
+    {
+      "name": "SASS_VERSION",
+      "value": "0x30"
+    },
+    {
+      "name": "QMD_SPARE_A",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_B",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_C",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_D",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_E",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_F",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_G",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_H",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_I",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_J",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_K",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_L",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_M",
+      "value": "0x0"
+    },
+    {
+      "name": "QMD_SPARE_N",
+      "value": "0x0"
+    },
+    {
+      "name": "DEBUG_ID_UPPER",
+      "value": "0x0"
+    },
+    {
+      "name": "DEBUG_ID_LOWER",
+      "value": "0x0"
+    }
+  ]
+}
