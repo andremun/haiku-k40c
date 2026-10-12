@@ -2,18 +2,20 @@
 
 ## Goal
 
-Initialize the GK110 GR engine for compute — the S3 milestone (GR
-ready). Five steps: load the FECS and GPCCS firmware blobs, run the
-init hooks that set up MMU forwarding and exceptions, generate a GR
-context image for one channel, and write the launch descriptor to the
-FIFO ring. The compute-only driver may skip three graphics-only hooks
-(zcull, two ROP hooks).
+Start the GR engine of the GK110B and give one channel a GR context, so
+that a compute job can run: milestone S3. In Nouveau's order: prepare
+the engine once (`oneinit`), run `gf100_gr_init` (register tables, the
+init hooks, exception enables), load and start the two microcode
+programs at the end of it, and generate the context image for the
+channel. Whether a compute-only driver may leave out the hooks for
+drawing units is open; this design runs them all.
 
 ## What Nouveau does
 
 1. **GR constructor** — `gk110b_gr_new` (`nvkm/engine/gr/gk110b.c:150`)
-   calls `gf117_gr_new(&gk110b_gr, device, type, inst)` to create the GR
-   engine with the GK110B function table.
+   calls `gf100_gr_new_(gk110b_gr_fwif, device, type, inst, pgr)`. The
+   list `gk110b_gr_fwif` (`nvkm/engine/gr/gk110b.c:143`) leads to the
+   function table `gk110b_gr` (`docs/07-firmware-analysis.md`).
 2. **Function table** — `gk110b_gr` (`nvkm/engine/gr/gk110b.c:105`)
    defines `.oneinit_tiles`, `.oneinit_sm_id`, `.init`, `.init_gpc_mmu`,
    `.init_vsc_stream_master`, `.init_zcull`, `.init_num_active_ltcs`,
@@ -38,21 +40,23 @@ FIFO ring. The compute-only driver may skip three graphics-only hooks
    (`nvkm/engine/gr/gf100.c:2466`) writes 0x00000070 to register
    `0x409614` to assert FECS reset, delays 10 µs, sets bits 0x700 of
    `0x409614`, and reads back.
-7. **Main init** — `gf100_gr_init` (`nvkm/engine/gr/gf100.c:2342`)
-   calls `gf100_gr_init_exception2` (register `0x40011c`, `0x400134`),
-   `gf100_gr_init_400054` (register `0x400054`),
-   `gf100_gr_init_tex_hww_esr` (TPC register `0x224`),
-   `gf100_gr_init_shader_exceptions` (TPC registers `0x644`, `0x64c`),
-   `gf100_gr_init_rop_exceptions` (ROP registers `0x144`, `0x070`,
-   `0x204`, `0x208`), `gf100_gr_init_419cc0` (GPC/TPC register
-   `0x48c`), `gk104_gr_init_sked_hww_esr` (register `0x407020`),
-   `gf100_gr_init_fecs_exceptions` (register `0x409c24`),
-   `gk110_gr_init_419eb4` (register `0x419eb4`),
-   `gk104_gr_init_ppc_exceptions` (PPC register `0x038`),
-   `gf100_gr_init_num_active_ltcs` (registers `0x100800`, `0x08ac`),
-   `gf100_gr_init_gpc_mmu` (GR MMU registers `0x418880`–`0x4188b8`),
-   then applies the mmio tables and calls the per-chip init hooks in
-   table order.
+7. **Main init, in this order** — `gf100_gr_init`
+   (`nvkm/engine/gr/gf100.c:2342`): `init_gpc_mmu` (line 2349); the
+   register tables of `mmio` through `gf100_gr_mmio` (line 2360);
+   `init_vsc_stream_master` (2374); `init_zcull` (2375);
+   `init_num_active_ltcs` (2376); `init_rop_active_fbps` (2378); direct
+   writes that enable interrupts and exceptions; `init_fecs_exceptions`
+   (2392); `init_sked_hww_esr` (2411); `init_419cc0` (2417);
+   `init_419eb4` (2419); `init_ppc_exceptions` (2424); for each GPC and
+   TPC `init_tex_hww_esr` (2435) and `init_shader_exceptions` (2439);
+   `init_rop_exceptions` (2445); `init_exception2` (2452);
+   `init_400054` (2455); `gf100_gr_zbc_init` (2457); and last
+   `gf100_gr_init_ctxctl` (2462), which loads and starts the microcode
+   (`docs/07-firmware-analysis.md`). The hooks that the table of the
+   GK110B does not set (`init_r405a14`, `init_bios` and others) are
+   skipped by their `if`. Between the hooks the function writes about
+   twenty registers itself; they are in `hardware/registers/gr.yaml`
+   with function `gf100_gr_init`.
 8. **Init GPC MMU** — `gf100_gr_init_gpc_mmu`
    (`nvkm/engine/gr/gf100.c:2264`) reads the FB MMU page-directory
    address and writes it to GR MMU forwarding registers `0x418880`
@@ -100,78 +104,52 @@ FIFO ring. The compute-only driver may skip three graphics-only hooks
 
 ## Haiku driver design
 
-1. **Allocate the GR engine structure** — Create a `GrEngine` class
-   holding the function-table entries and firmware pointers. The
-   constructor stores the `gk110b_gr` function table layout.
-2. **Load FECS firmware** — Write the `gk110_grhub_code` and
-   `gk110_grhub_data` arrays (from `gk110_gr_fecs_ucode` at
-   line 321 of gk110.c) into the BAR-mapped MMIO region, replacing the
-   firmware load path. Use `RegisterIO::write32()` for the code section
-   and `RegisterIO::write32()` for the data section.
-3. **Load GPCCS firmware** — Write the `gk110_grgpc_code` and
-   `gk110_grgpc_data` arrays (from `gk110_gr_gpccs_ucode` at
-   line 331 of gk110.c) into the GPC MMIO region, replacing the
-   firmware load path.
-4. **Reset FECS** — Write 0x00000070 to register `0x409614`, delay 10 µs
-   using `snooze()`, set bits 0x700 of `0x409614`, and read back,
-   replacing `gf100_gr_fecs_reset` at line 2466 of gf100.c.
-5. **Run exception init** — Write 0xffffffff to registers `0x40011c` and
-   `0x400134` to enable all exception reporting, replacing
-   `gf100_gr_init_exception2` at line 2192 of gf100.c.
-6. **Write 400054 constant** — Write 0x34ce3464 to register `0x400054`,
-   replacing `gf100_gr_init_400054` at line 2186 of gf100.c.
-7. **Enable TEX HWW** — Write 0xc0000000 to TPC register `0x224`,
-   replacing `gf100_gr_init_tex_hww_esr` at line 2223 of gf100.c.
-8. **Enable shader exceptions** — Write to TPC registers `0x644` and
-   `0x64c`, replacing `gf100_gr_init_shader_exceptions` at line 2215 of
-   gf100.c.
-9. **Enable FECS exceptions** — Write 0x000e0000 or 0x000e0001 to
-   register `0x409c24`, replacing `gf100_gr_init_fecs_exceptions` at
-   line 2257 of gf100.c.
-10. **Enable scheduler HWW** — Write 0x40000000 to register `0x407020`,
-    replacing `gk104_gr_init_sked_hww_esr` at line 391 of gk104.c.
-11. **Bit-toggle 419eb4** — Apply the bit-toggle sequence on register
-    `0x419eb4` (set bits 0x1000–0x8000 then clear), replacing
-    `gk110_gr_init_419eb4` at line 339 of gk110.c.
-12. **Set PPC exceptions** — Loop over PPC pairs and write 0xc0000000
-    to PPC register `0x038`, replacing
-    `gk104_gr_init_ppc_exceptions` at line 415 of gk104.c.
-13. **Set active LTC count** — Read register `0x100800` for the number
-    of active LTCs and broadcast to GPC register `0x08ac`, replacing
-    `gf100_gr_init_num_active_ltcs` at line 2280 of gf100.c.
-14. **Set GPC MMU forwarding** — Read the FB MMU page-directory address
-    and write it to GR MMU registers `0x418880`–`0x4188b8`, replacing
-    `gf100_gr_init_gpc_mmu` at line 2264 of gf100.c.
-15. **Oneinit SM enumeration** — Compute the SM ID array from GPC–TPC
-    pairings, replacing `gf100_gr_oneinit_sm_id` at line 1895 of
-    gf100.c.
-16. **Oneinit tile mapping** — Compute the tile-to-GPC mapping using
-    prime-factor distribution, replacing
-    `gf100_gr_oneinit_tiles` at line 1913 of gf100.c.
-17. **Apply MMIO tables** — Apply the register-write tables from
-    `gk110b_gr_pack_mmio` at line 87 of gk110b.c through
-    `gf100_gr_mmio`, replacing the mmio step of `gf100_gr_init` at
-    line 2342 of gf100.c.
-18. **Skip graphics-only hooks** — Leave out `init_zcull`
-    (`gf117_gr_init_zcull` at line 124 of gf117.c),
-    `init_rop_active_fbps` (`gk104_gr_init_rop_active_fbps` at line
-    406 of gk104.c), and `init_rop_exceptions`
-    (`gf100_gr_init_rop_exceptions` at line 2201 of gf100.c), which
-    configure drawing units not needed for compute.
-19. **Generate GR context image** — Call the grctx functions in order:
-    `.hub` → `.gpc_0` → `.zcull` → `.gpc_1` → `.tpc` → `.ppc` →
-    `.pagepool` → `.bundle` → `.attrib` → `.unkn`, replacing
-    `gf100_grctx_generate_main` at line 1342 of ctxgf100.c. The context
-    image is a buffer of register writes applied by the GR engine during
-    channel switch.
-20. **ZBC clear values** — Write the colour clear registers via
-    `gf100_gr_zbc_clear_color` at line 49 of gf100.c (registers
-    `0x405804`–`0x405810`, `0x405814`, `0x405820`, `0x405824`) and the
-    depth clear registers via `gf100_gr_zbc_clear_depth` at line 100 of
-    gf100.c (registers `0x405818`, `0x40581c`, `0x405820`, `0x405824`).
-21. **Write LTC patch** — Generate LTC patch entries for the channel
-    context via `gk104_grctx_generate_patch_ltc` at line 864 of
-    ctxgk104.c, configuring LTC cache behavior.
+The first version of this section listed the steps in a different order
+from Nouveau, started the microcode before the engine was set up, and
+left out three hooks as "graphics-only". The scaffold rewrote it to
+follow `gf100_gr_init` line by line. Nothing here has run on the card.
+
+1. **Once, before the first start** — reproduce `gf100_gr_oneinit`
+   (`nvkm/engine/gr/gf100.c:1989`): read the unit
+   counts (`rops` reads register `0x409604`), compute the tile map
+   (`gf100_gr_oneinit_tiles`, line 1913) and the SM list
+   (`gf100_gr_oneinit_sm_id`, line 1895). Nouveau also calls
+   `nvkm_pmu_pgob(device->pmu, false)` here (line 2006): see "Not known".
+2. **Start of init** — clear bits `0x00010001` of register `0x400500`
+   and run `init_gpc_mmu` (step 8 of the section above).
+3. **Register tables** — apply the tables of `gk110b_gr_pack_mmio`
+   (`nvkm/engine/gr/gk110b.c:87`) as `gf100_gr_mmio` does. The tables
+   have to be extracted from the Nouveau source as data (design
+   category B, extract); this is not done yet.
+4. **Init hooks in Nouveau's order** — every hook of step 7 above, each
+   as a small function on `RegisterIO` with the register writes that
+   `docs/hardware-model/gr.md` lists for it, and the direct writes of
+   `gf100_gr_init` between them. All hooks are run, also `init_zcull`
+   and the two ROP hooks.
+5. **Clear-value table** — `gf100_gr_zbc_init` (line 2457), which uses
+   the two `zbc` members and the `ltc` subsystem
+   (`docs/hardware-model/ltc.md`).
+6. **Microcode** — load and start FECS and GPCCS exactly as
+   `docs/07-firmware-analysis.md` describes. In Nouveau this is the last
+   step of init (line 2462), after all the register setup.
+7. **Context image for a channel** — reproduce
+   `gf100_grctx_generate_main` (`nvkm/engine/gr/ctxgf100.c:1342`): the
+   register tables `hub`, `gpc_0`, `zcull`, `gpc_1`, `tpc`, `ppc`, then
+   `pagepool`, `bundle`, `attrib` and `unkn`, and the other `grctx`
+   functions of `docs/hardware-model/gr.md`. How the generated state
+   becomes the image that is stored for the channel (Nouveau asks the
+   FECS program to save it) was not analysed: see "Not known".
+8. **Bind the context to the channel** — the engine context members of
+   the FIFO (`engn.ctor`, `engn.bind` in `docs/hardware-model/fifo.md`)
+   write the address of the context into the channel's instance block.
+9. **Launch** — with the context bound, the compute class is bound on a
+   subchannel and the job is launched with the methods of
+   `analysis/compute_launch.md`; the descriptor and the launch methods
+   are built by `src/compute/LaunchDesc.h`.
+
+Left out on purpose: the interrupt and error handlers (`trap_mp` and the
+exception decoding). The first driver only logs the status registers.
+
 
 ## Haiku interfaces
 
@@ -181,26 +159,24 @@ FIFO ring. The compute-only driver may skip three graphics-only hooks
 2. `` `free()` `` — `os/SupportDefs.h` (via `<stdlib.h>`): frees GR
    engine structures, context image buffers, and ZBC data; replaces
    `kfree`.
-3. `` `snooze()` `` — `os/kernel/OS.h`: sleeps for a given number of
+3. `` `snooze()` `` — `headers/os/kernel/OS.h`: sleeps for a given number of
    microseconds; replaces `nvkm_msec(device, 2000, ...)` timeouts and
    the 10 µs delay after FECS reset.
 4. `` `memset()` `` — `os/SupportDefs.h` (via `<string.h>`): zeroes the
    GR context image buffer and ZBC clear tables; replaces `memset` from
    Nouveau.
-5. `` `memcpy()` `` — `os/SupportDefs.h` (via `<string.h>`): copies the
-   firmware blobs (`gk110_grhub_code`, `gk110_grhub_data`,
-   `gk110_grgpc_code`, `gk110_grgpc_data`) into the BAR-mapped MMIO
-   region.
+5. `` `spin()` `` — `headers/os/drivers/KernelExport.h`: short busy
+   waits in microseconds (the 10 µs of the controller reset). The
+   microcode is not copied with `memcpy()`: it is sent word by word
+   through registers (`docs/07-firmware-analysis.md`).
 
 ## Host tests
 
-`tests/test_pagetable.cpp` covers page-table encoding used by GR MMU
-setup (step 14 of the Haiku design): PTE/PDE encoding and the
-address-space geometry. `tests/test_pushbuffer.cpp` covers the push-buffer
-encoding used to build the command buffers that the GR engine executes
-(step 20). No `tests/` file covers the GR engine init sequence (steps
-2–17), the GR context generation (step 19), or the ZBC clear path
-(steps 20–21). A GR init test would need `MockMMIO` to capture the
+`tests/test_launchdesc.cpp` and `tests/accept/d5_accept.cpp` cover the
+launch descriptor and the launch methods of step 9.
+`tests/test_pushbuffer.cpp` covers the encoding of the methods. No file
+under `tests/` covers the engine start (steps 1 to 6) or the context
+image (steps 7 and 8). A GR init test would need `MockMMIO` to capture the
 register access log of the full init hook sequence. A GR context
 generation test would need `MockMMIO` with the register-write tables for
 the grctx pack functions.
@@ -217,6 +193,15 @@ the grctx pack functions.
   `ctxgk110b.c:73`) but the on-card meaning of each sub-buffer and the
   order of register writes within each sub-buffer are not established
   beyond the function names in `nvkm/engine/gr/ctxgf100.c:1342`.
+- Whether the card needs power gating switched off before GR starts.
+  `gf100_gr_oneinit` calls `nvkm_pmu_pgob(device->pmu, false)`
+  (`nvkm/engine/gr/gf100.c:2006`); B5 left this open
+  (`work/B5/REVIEW.md`) and only a run on the card (task C5) can answer.
+- How the context image is saved. The design generates the state; the
+  step in which the FECS program stores it as the image of a channel
+  (`gf100_gr_fecs_wfi_golden_save` and the functions near
+  `nvkm/engine/gr/gf100.c:814`) was not analysed.
+- Where `gf100_gr_fecs_reset` is called.
 - Whether the two graphics-only hooks
   (`init_zcull` at `nvkm/engine/gr/gf117.c:124` and
   `init_rop_active_fbps` at `nvkm/engine/gr/gk104.c:406`) are truly

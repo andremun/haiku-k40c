@@ -35,18 +35,20 @@ instance memory.
 7. **PTE encoding** — `gf100_vmm_pgt_pte` (`nvkm/subdev/mmu/vmmgf100.c:32`)
    computes `base = (addr >> 8) | map->type` where `addr` is the physical
    address. Each entry is written via `VMM_WO064`.
-8. **PTE type fields** — `gf100_vmm_map` (`nvkm/subdev/mmu/vmmgf100.c:314`)
+8. **PTE type fields** — `gf100_vmm_valid` (`nvkm/subdev/mmu/vmmgf100.c:314`)
    sets bit 0 to `BIT(0)` (valid), bit 1 to `(u64)priv << 1` (privileged),
    bit 2 to `(u64)ro << 2` (read-only), bit 32 to `(u64)vol << 32`
    (volatile, HOST only), bit 33 to `(u64)aper << 33` (address space
-   target), and bit 36 to `(u64)kind << 36` (compression tag).
+   target), and bits 36 and up to `(u64)kind << 36` (the storage kind of the memory).
 9. **Address-space target** — `gf100_vmm_aper` (`nvkm/subdev/mmu/vmmgf100.c:326`)
    maps `NVKM_MEM_TARGET_VRAM` to 0, `NVKM_MEM_TARGET_HOST` to 2,
    `NVKM_MEM_TARGET_NCOH` to 3.
 10. **PDE encoding** — `gf100_vmm_pgd_pde` (`nvkm/subdev/mmu/vmmgf100.c:113`)
-    writes the large-page table pointer (lower 32 bits: `aper` bits 0–2,
-    `addr >> 8` at bits 8+) and the small-page table pointer (upper 32
-    bits: `aper` bits 32–34, `addr << 24` at bits 56+) via `VMM_WO064`.
+    writes one 64-bit entry: for the large-page table a target code in
+    bits 0 and 1 (VRAM 1, HOST 2, NCOH 3) or'ed with `addr >> 8`, for the
+    small-page table the code shifted to bit 32 or'ed with `addr << 24`;
+    a HOST table also sets bit 35 or bit 34. Tested values are in
+    `tests/accept/d2_accept.cpp`.
 11. **Unmap PTE** — `gf100_vmm_pgt_unmap` (`nvkm/subdev/mmu/vmmgf100.c:94`)
     writes `0ULL` to clear an entry via `VMM_FO064`.
 12. **VMM join (instance block)** — `gf100_vmm_join_`
@@ -55,8 +57,9 @@ instance memory.
     `BIT_ULL(2)` for VOL), and writes `vmm->limit - 1` to offset `0x0208`
     at line 359.
 13. **VMM part (size)** — `gf100_vmm_part` (`nvkm/subdev/mmu/vmmgf100.c:362`)
-    writes 0 to instance offset `0x0200` with mask `0x3` (2 bits) to
-    indicate part size.
+    fills two 64-bit words at instance offset `0x0200` with zero
+    (`nvkm_fo64(inst, 0x0200, 0x00000000, 2)`): it removes the page
+    directory address and the limit again.
 14. **VMM scratch memory** — `gf100_fb_oneinit`
     (`nvkm/subdev/fb/gf100.c:45`) calls `nvkm_instmem_memory_new` to
     allocate MMU read and write scratch memory from instance memory.
@@ -91,11 +94,12 @@ instance memory.
    pageShift, target, flags)` to populate the page tables. For compute
    shader buffers, use target `VRAM` (aper=0) with no flags.
 6. **Write the instance block PDB** — Write the page-directory base
-   address with target bits to instance memory offset `0x200` using
-   `RegisterIO::write64()` (or two `write32()` calls), following
+   address with target bits (`encodeInstPdb`) to offset `0x200` of the
+   instance block. The instance block is GPU memory, not a register:
+   how the Haiku driver writes instance memory is in "Not known". Following
    `gf100_vmm_join_` at lines 342–359 of vmmgf100.c.
 7. **Write the instance block limit** — Write `vaLimit - 1` to instance
-   memory offset `0x208` via `RegisterIO::write64()`, following line 360
+   memory offset `0x208` (`encodeInstLimit`), following line 360
    of vmmgf100.c.
 8. **Unmap entries** — Use `AddressSpace::unmap(va, size, pageShift)` to
    clear PTEs by writing `0ULL`, following `gf100_vmm_pgt_unmap` at
@@ -115,16 +119,21 @@ instance memory.
 
 ## Haiku interfaces
 
-1. `` `malloc()` `` — `os/SupportDefs.h` (via `<stdlib.h>`): allocates
-   memory for the MMU subdevice structure and page-table entries;
-   replaces `kzalloc`/`kmalloc` from Nouveau.
-2. `` `free()` `` — `os/SupportDefs.h` (via `<stdlib.h>`): frees MMU
-   structures and unmapped page-table entries; replaces `kfree`/`kvfree`.
-3. `` `memset()` `` — `os/SupportDefs.h` (via `<string.h>`): zeroes page
-   directory memory and kind lookup table; replaces `memset` from Nouveau.
-4. `` `memcpy()` `` — `os/SupportDefs.h` (via `<string.h>`): copies the
-   kind lookup table into the MMU structure; used when building the
-   256-entry table from the constant array.
+1. `` `create_area()` `` — `headers/os/kernel/OS.h`: memory for the
+   driver's copies of page tables and other buffers that must be locked
+   and have a known physical address (see "Not known" for which memory
+   the tables live in).
+2. `` `get_memory_map()` `` — `headers/os/drivers/KernelExport.h`: the
+   physical address of locked memory, for a mapping with target HOST;
+   it replaces `dma_map_page` (`analysis/linux_deps.md`).
+3. `` `map_physical_memory()` `` — `headers/os/drivers/KernelExport.h`:
+   maps the PCI memory regions of the card (BAR0 for registers, BAR1 and
+   BAR2 for GPU memory).
+4. `` `malloc()` `` and `` `free()` `` — the kernel heap, for the driver's
+   own structures; they replace `kzalloc` and `kfree`.
+
+The functions were checked to exist in the headers. Their use here is a
+proposal: no Haiku code has been written or run.
 
 ## Host tests
 
@@ -146,10 +155,15 @@ the access log.
   `gf100_fb_oneinit` allocates from instance memory at
   `nvkm/subdev/fb/gf100.c:45` — their size, purpose, and how the GR
   engine accesses them are not established.
-- Which MMU flush register (if any) must be written after updating page
-  tables, beyond the BAR flush at MMIO `0x070000`. Nouveau code
-  (`gf100_vmm_pgd_pde`) writes PDEs via `VMM_WO064` but does not
-  appear to issue an explicit MMU TLB flush in the mapping path.
+- The MMU flush is not in this design. Nouveau has one:
+  `gf100_vmm_invalidate` (`nvkm/subdev/mmu/vmmgf100.c:188`) waits on
+  register `0x100c80` and writes `0x100cb8` and `0x100cbc`
+  (`hardware/registers/mmu.yaml`). When it must be called (after every
+  map and unmap, or only after a change of the directory) was not
+  analysed.
+- How the Haiku driver writes instance memory and page tables. They are
+  GPU memory. Nouveau reaches them through BAR2 or a window in BAR0
+  (`docs/hardware-model/imem.md`); the design above does not choose.
 - Whether the kind lookup table values (0x00–0xfe) have a fixed mapping
   to hardware compression formats documented in the GK110 PRM, or
   if they are driver-internal tags only. The 256-entry array is fully
