@@ -4,8 +4,17 @@ Current phase: C (hardware database and firmware)
 Current task: C4b
 Task state: READY. This is the worktree of task C4b (branch task-c4b). Another task runs in another worktree at the same time: work only on C4b and do not start another task.
 Last updated: 2026-10-12
+Last updated: 2026-10-12
 
 ## Last result
+
+C4b complete (2026-10-12): Four design documents — `docs/04-mmu-design.md`
+(157 lines, MMU init and page-table setup), `docs/05-fifo-design.md`
+(203 lines, FIFO init and channel setup), `docs/06-gr-design.md`
+(226 lines, GR engine init with firmware load and context generation),
+`docs/07-firmware-analysis.md` — each with six sections (Goal, What
+Nouveau does, Haiku driver design, Haiku interfaces, Host tests, Not
+known), `make check` 0 failures.
 
 C4a complete (2026-10-12): Source provenance of driver constants. 24 constant
 lines in `src/mmu/PageTable.h`, `src/mmu/PageTable.cpp`,
