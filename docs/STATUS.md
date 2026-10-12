@@ -1,8 +1,8 @@
 # Status
 
 Current phase: C (hardware database and firmware), last task group
-Current task: C5b (next)
-Task state: C5a complete. The user part of C5 is done (2026-10-13): the reference job ran on the K40c under Linux, result PASS, logs in reference/linux-run/. C5a extracted the shader binary and QMD; C5b will work on the trace tasks next.
+Current task: none
+Task state: WAITING. C5a is done and accepted (2026-10-13). The scaffold writes the next task (the register trace of the reference run). Do not start a task.
 Last updated: 2026-10-13
 
 ## Last result
@@ -86,4 +86,4 @@ the old layout. Details: `reference/pci/README.md`.
 | C4a | DONE | 2026-10-12 | Source provenance: 24 constant lines in 4 files (mmu/fifo); 20 cited from Nouveau/Mesa, 4 `no source:` (arithmetic/conventions). `tools/provenance.py` generates `docs/register-provenance.md` with `--check` mode. `make check` 0 failures. |
 | D5 | DONE | 2026-10-12 | Launch descriptor (23 fields, constant buffers) and launch methods. Acceptance test 101 checks, own tests 56. Three sessions; two code defects fixed by the scaffold, see `work/D5/REVIEW.md`. Phase D is complete with this task. |
 | C4b | DONE | 2026-10-12 | Design documents `docs/04-mmu-design.md` to `docs/07-firmware-analysis.md`. One session; the design sections were corrected substantially by the scaffold, see `work/C4b/REVIEW.md`. |
-| C5a | DONE | 2026-10-13 | Shader binary and launch descriptor. `tools/shader_extract.py` generates `firmware/compute_add1.bin` (160 B, 40 words), `analysis/linux_run_shader.json` (143 QMD fields), `firmware/compute_add1.md` (5 sections, 29 descriptor rows). `make check` 0 failures. |
+| C5a | DONE | 2026-10-13 | Shader binary and launch descriptor. `tools/shader_extract.py` generates `firmware/compute_add1.bin` (160 B, 40 words), `analysis/linux_run_shader.json` (155 QMD fields), `firmware/compute_add1.md` (5 sections, 29 descriptor rows). `make check` 0 failures. |

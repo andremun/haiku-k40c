@@ -4,7 +4,7 @@
 
 - `tools/shader_extract.py` — reads the log and shader source, writes three files. Supports `--check`.
 - `firmware/compute_add1.bin` — 160 bytes, the compute shader binary (40 words, little-endian).
-- `analysis/linux_run_shader.json` — JSON with log path, log line 120, size, words, SHA-256, renderer, version, source (7 lines), and 143 QMD fields.
+- `analysis/linux_run_shader.json` — JSON with log path, log line 120, size, words, SHA-256, renderer, version, source (8 lines), and 155 QMD fields.
 - `firmware/compute_add1.md` — document with 5 sections (Source, How it was made, Code, Launch descriptor, Not known).
 
 ## Numbers
@@ -12,9 +12,9 @@
 - Shader binary size: 160 bytes (0xa0)
 - Word count: 40
 - SHA-256: 02944d8f43830afad4f9d6538a1a26810085aea98a6520b09f7b5c9cce3ed417
-- QMD fields: 143
-- Launch descriptor table rows (non-zero/non-FALSE): 29
-- Shader source lines: 7
+- QMD fields: 155
+- Launch descriptor table rows (non-zero/non-FALSE): 30
+- Shader source lines: 8
 - Renderer: NVF1
 - Version: OpenGL ES 3.2 Mesa 25.2.8
 
