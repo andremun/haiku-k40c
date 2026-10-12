@@ -2,7 +2,7 @@
 
 Current phase: D (host-side algorithms and tests)
 Current task: DONE
-Task state: DONE. Two assertion fixes in test_launchdesc.cpp (bit-width and address-shift values). `make check` 0 failures across all 9 tests.
+Task state: DONE. Accepted by the scaffold on 2026-10-12, see work/D5/REVIEW.md.
 Last updated: 2026-10-12
 
 ## Last result

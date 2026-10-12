@@ -19,7 +19,7 @@ namespace compute {
 
 // ---- Constants (task D5) ----
 constexpr unsigned kComputeClass        = 0xa1c0;  // nv_object.xml.h:209
-constexpr unsigned kComputeSubchannel   = 1;       // SUBC_CP, nve4_compute.c:873
+constexpr unsigned kComputeSubchannel   = 1;       // SUBC_CP, nvc0_winsys.h:45
 constexpr unsigned kQmdBytes            = 256;     // 64 × 32 bits, no source: derived
 
 // ---- 64-word QMD bitfield class (2048 bits total) ----

@@ -65,7 +65,7 @@ uint64_t Qmd::get(unsigned hi, unsigned lo) const {
 
 static uint64_t fld_shared_mem(const ComputeJob& j) {
     // align(sharedMemSize, 0x100) = (x + 0xFF) & ~0xFF
-    uint64_t aligned = (j.sharedMemSize + 0xFF) & ~0xFFULL;  // no source: plain arithmetic
+    uint64_t aligned = (j.sharedMemSize + 0xFF) & ~0xFFULL;  // nve4_compute.c:600 align(shared_size, 0x100)
     if (aligned > 0x3FFFF)  // 18-bit field: cla0c0qmd.h:139
         throw std::invalid_argument("sharedMemSize too large for 18-bit field");
     return aligned;

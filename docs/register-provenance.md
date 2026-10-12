@@ -9,7 +9,7 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 
 | Line | Code | Source | Status |
 |------|------|--------|--------|
-| `src/compute/LaunchDesc.cpp:68` | `uint64_t aligned = (j.sharedMemSize + 0xFF) & ~0xFFULL;` | no source: plain arithmetic | SOURCE_ONLY |
+| `src/compute/LaunchDesc.cpp:68` | `uint64_t aligned = (j.sharedMemSize + 0xFF) & ~0xFFULL;` | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:600 | SOURCE_ONLY |
 | `src/compute/LaunchDesc.cpp:69` | `if (aligned > 0x3FFFF)` | src/gallium/drivers/nouveau/nvc0/cla0c0qmd.h:139 | SOURCE_ONLY |
 | `src/compute/LaunchDesc.cpp:96` | `{1535,1528, 0x30},` | src/gallium/drivers/nouveau/nvc0/cla0c0qmd.h:216 | SOURCE_ONLY |
 | `src/compute/LaunchDesc.cpp:105` | `{1463,1440, j.localMemLow & 0xfffff0ULL},` | src/gallium/drivers/nouveau/nvc0/cla0c0qmd.h:210 | SOURCE_ONLY |
@@ -27,7 +27,7 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | Line | Code | Source | Status |
 |------|------|--------|--------|
 | `src/compute/LaunchDesc.h:21` | `constexpr unsigned kComputeClass        = 0xa1c0;` | src/gallium/drivers/nouveau/nv_object.xml.h:209 | SOURCE_ONLY |
-| `src/compute/LaunchDesc.h:22` | `constexpr unsigned kComputeSubchannel   = 1;` | src/gallium/drivers/nouveau/nvc0/nve4_compute.c:873 | SOURCE_ONLY |
+| `src/compute/LaunchDesc.h:22` | `constexpr unsigned kComputeSubchannel   = 1;` | src/gallium/drivers/nouveau/nvc0/nvc0_winsys.h:45 | SOURCE_ONLY |
 | `src/compute/LaunchDesc.h:23` | `constexpr unsigned kQmdBytes            = 256;` | no source: derived | SOURCE_ONLY |
 | `src/compute/LaunchDesc.h:66` | `*   SASS_VERSION                      (1535:1528) = 0x30` | src/gallium/drivers/nouveau/nvc0/cla0c0qmd.h:216 | SOURCE_ONLY |
 | `src/compute/LaunchDesc.h:74` | `*   SHARED_MEMORY_SIZE                (561:544) = align(sharedMemSize, 0x100)` | src/gallium/drivers/nouveau/nvc0/cla0c0qmd.h:139 | SOURCE_ONLY |
@@ -89,7 +89,6 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 
 The following constant lines have no source citation:
 
-- src/compute/LaunchDesc.cpp:68 (no source: plain arithmetic)
 - src/compute/LaunchDesc.h:23 (no source: derived)
 - src/fifo/PushBuffer.cpp:33 (no source: 0x7ffc is max 13-bit value aligned to 4; nvc0_winsys.h shifts mthd >> 2)
 - src/fifo/PushBuffer.cpp:39 (no source: 0x1fff is max 13-bit value for the count field;    nvc0_winsys.h uses (size << 16) with 13-bit field)

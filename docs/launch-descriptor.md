@@ -99,8 +99,10 @@ The following are required for S3 but are out of scope for this task:
 
 1. **Descriptor upload** — The `UPLOAD_*` method sequence (`UPLOAD_DST_ADDRESS_HIGH`,
    `UPLOAD_LINE_LENGTH_IN`, `UPLOAD_EXEC`, `FLUSH`) that copies the QMD from
-   host memory to GPU-resident memory (`nve4_compute.c:843-856`).  These use
-   the upload engine, not the compute subchannel.
+   host memory to GPU memory (`nve4_compute.c:843-856`). In Mesa these lines
+   are in the branch for an indirect launch; they are compute-subchannel
+   methods (`NVE4_CP`). How the descriptor reaches GPU memory in the direct
+   case is not analysed here.
 2. **Setup methods** — `nve4_screen_compute_setup` (lines 51–174) which programs
    the compute channel state: TLS address, code address, TIC/TSC tables,
    constant-buffer address, etc.  These run once per context, not per dispatch.
