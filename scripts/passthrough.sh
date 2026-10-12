@@ -38,6 +38,11 @@ check_card() {
 status() {
     check_card
     echo "card $GPU_BDF: driver '$(driver)', IOMMU group $(basename "$(readlink -f "$DEV/iommu_group")"), reset $(cat "$DEV/reset_method" 2>/dev/null || echo '?')"
+    if [[ $(driver) == vfio-pci ]]; then
+        g=/dev/vfio/$(basename "$(readlink -f "$DEV/iommu_group")")
+        [[ -w $g ]] && echo "guest access: $g is writable by $(id -un): ready for tools/guest/linux-run.sh --gpu" \
+                    || echo "guest access: $g is NOT writable by $(id -un): run sudo scripts/passthrough.sh attach"
+    fi
     for d in /sys/bus/pci/devices/*; do
         [[ $(cat "$d/vendor") == 0x10de && $(cat "$d/class") == 0x03* ]] || continue
         echo "  $(basename "$d") $(cat "$d/device") driver=$(basename "$(readlink -f "$d/driver" 2>/dev/null)" 2>/dev/null)"
@@ -89,7 +94,11 @@ revert-xorg)
     need_root; rm -f "$XCONF"; echo "Removed $XCONF. Restart X." ;;
 attach)
     need_root; check_card
-    [[ $(driver) == vfio-pci ]] && { echo "already attached"; exit 0; }
+    if [[ $(driver) == vfio-pci ]]; then
+        grp=$(basename "$(readlink -f "$DEV/iommu_group")")
+        chown "${SUDO_USER:-root}" "/dev/vfio/$grp"
+        echo "already attached; /dev/vfio/$grp belongs to ${SUDO_USER:-root}"; exit 0
+    fi
     modprobe vfio-pci
     if [[ -z $(driver) ]]; then
         # No driver: an earlier attach got as far as the unbind. Go on.
@@ -164,8 +173,12 @@ boot-attach)
     echo "$GPU_BDF" > /sys/bus/pci/drivers_probe
     [[ $(driver) == vfio-pci ]] || die "the card did not bind to vfio-pci (driver '$(driver)')"
     grp=$(basename "$(readlink -f "$DEV/iommu_group")")
-    chown "$owner" "/dev/vfio/$grp"
-    echo "$GPU_BDF is on vfio-pci, /dev/vfio/$grp belongs to $owner" ;;
+    # A network account may not be known this early in the boot. Then the
+    # device stays with root, and "sudo scripts/passthrough.sh attach" after
+    # the login gives it to the user.
+    chown "$owner" "/dev/vfio/$grp" 2>/dev/null \
+        && echo "$GPU_BDF is on vfio-pci, /dev/vfio/$grp belongs to $owner" \
+        || echo "$GPU_BDF is on vfio-pci; /dev/vfio/$grp still belongs to root (run: sudo scripts/passthrough.sh attach)" ;;
 detach)
     need_root; check_card
     [[ $(driver) == nvidia ]] && { echo "already on nvidia"; exit 0; }
