@@ -161,8 +161,8 @@ HOOK
     initrd=/boot/initrd.img-$(uname -r)
     [[ -f $initrd.before-k40c ]] || cp -p "$initrd" "$initrd.before-k40c"
     update-initramfs -u -k "$(uname -r)"
-    lsinitramfs "$initrd" | grep -q 'vfio-pci.ko' || die "vfio-pci is not in $initrd. Run: sudo $0 detach"
-    lsinitramfs "$initrd" | grep -q "etc/modprobe.d/$(basename "$MODCONF")" || die "$MODCONF is not in $initrd. Run: sudo $0 detach"
+    grep -q 'vfio-pci.ko' <<<"$(lsinitramfs "$initrd")" || die "vfio-pci is not in $initrd. Run: sudo $0 detach"
+    grep -q "etc/modprobe.d/$(basename "$MODCONF")" <<<"$(lsinitramfs "$initrd")" || die "$MODCONF is not in $initrd. Run: sudo $0 detach"
     echo "Installed $MODCONF and rebuilt $initrd (copy of the old one: $initrd.before-k40c)."
     echo "Reboot. After the boot: 'scripts/passthrough.sh status' must show driver 'vfio-pci';"
     echo "then run 'sudo $0 attach' once to give the device to your account."
