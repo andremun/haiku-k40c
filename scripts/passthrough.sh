@@ -21,7 +21,8 @@ HERE="$(cd "$(dirname "$0")/.." && pwd)"
 . "$HERE/tools/guest/config.sh"
 DEV=/sys/bus/pci/devices/$GPU_BDF
 XCONF=/etc/X11/xorg.conf.d/20-display-k600-only.conf
-driver() { basename "$(readlink -f "$DEV/driver" 2>/dev/null)" 2>/dev/null || true; }
+# Name of the bound driver, or nothing when the card has no driver.
+driver() { [[ -L $DEV/driver ]] && basename "$(readlink -f "$DEV/driver")" || true; }
 need_root() { [[ $EUID -eq 0 ]] || { echo "Run with sudo." >&2; exit 1; }; }
 die() { echo "ERROR: $*" >&2; exit 1; }
 

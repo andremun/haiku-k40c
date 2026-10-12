@@ -59,6 +59,24 @@ a new login.
 A second client is `nvidia-persistenced` (active). If `attach` still
 fails after the X change, stop it: `sudo systemctl stop nvidia-persistenced`.
 
+## Result of the first attempt (2026-10-12): use the boot-time attach
+
+The live `attach` does not work from a desktop session. After
+`prepare-xorg`, X used no memory on the K40c cards, but Xorg, gnome-shell
+and gnome-remote-desktop each still kept the device file of every NVIDIA
+card open (`/dev/nvidia1` for the card at 04:00.0), and so did
+`nvidia-persistenced`. The unbind from the nvidia driver waits until all
+of them close it, and it cannot be interrupted: it waited until the
+reboot.
+
+Use `sudo scripts/passthrough.sh attach-at-next-boot` and reboot. A
+one-time unit gives the card to `vfio-pci` before the display manager
+starts, so nothing has it open. No X configuration is needed (run
+`revert-xorg` if `prepare-xorg` was used). After that boot the router
+cannot load its two-card model: run `~/llm-server/llm-mode.sh one-t1k`.
+Steps 1 to 4 below are replaced by this; steps 5 to 7 are unchanged.
+`detach` works with the desktop running.
+
 ## Procedure
 
 First use, in this order. Stop at the first step that fails.
