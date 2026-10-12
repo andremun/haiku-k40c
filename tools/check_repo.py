@@ -1065,7 +1065,10 @@ if os.path.exists(fw_path) and yaml is not None and "C2" not in SKIP:
         L = src_lines(f)
         if L is None or int(ln) > len(L):
             fail(f"firmware/README.md: cites {f}:{ln}, which does not exist")
-    if glob.glob(os.path.join(ROOT, "firmware", "*.bin")):
+    # The shader of the reference run (task C5a) is the one exception: it
+    # is 160 bytes that Mesa generated from this project's own source.
+    if [f for f in glob.glob(os.path.join(ROOT, "firmware", "*.bin"))
+            if os.path.basename(f) != "compute_add1.bin"]:
         fail("firmware/: no binary files in the repository (write them under build/)")
     tool = os.path.join(ROOT, "tools", "fw_manifest.py")
     if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():
@@ -1461,6 +1464,98 @@ if c4b_present and "C4b" not in SKIP:
                           "pixel pipeline": "PPC is not expanded in the source"}.items():
             if w_ in text.lower():
                 fail(f"{rel}: the text says \"{w_}\". {right}")
+
+# C5a shader binary and launch descriptor of the reference run ------------
+c5a_tool = os.path.join(ROOT, "tools", "shader_extract.py")
+c5a_log = os.path.join(ROOT, "reference", "linux-run", "compute_test.log")
+c5a_done = re.search(r"^\| C5a \| DONE", open(os.path.join(ROOT, "docs", "STATUS.md")).read(), re.M)
+if (os.path.exists(c5a_tool) or c5a_done) and "C5a" not in SKIP:
+    import hashlib, struct, subprocess
+    res_txt = open(os.path.join(ROOT, "reference", "linux-run", "RESULT.txt")).read().split("\n")
+    if "PASS" not in res_txt:
+        fail("reference/linux-run/RESULT.txt: no line PASS")
+    L = open(c5a_log).read().split("\n")
+    i = max(k for k, l in enumerate(L) if l.startswith("shader binary code"))
+    size = int(re.search(r"0x([0-9a-f]+) bytes", L[i]).group(1), 16)
+    words, k = [], i + 1
+    while len(words) < size // 4:
+        words += L[k].split(); k += 1
+    blob = struct.pack("<%dI" % len(words), *[int(w, 16) for w in words])
+    q = L.index("Queue Meta Data:")
+    qmd = []
+    for l in L[q + 1:]:
+        m = re.match(r"^   (\S+)\s*: (.*\S)\s*$", l)
+        if not m:
+            break
+        qmd.append((m.group(1), m.group(2)))
+    binp = os.path.join(ROOT, "firmware", "compute_add1.bin")
+    if not os.path.exists(binp):
+        fail("firmware/compute_add1.bin: missing (docs/tasks/C5a.md)")
+    elif open(binp, "rb").read() != blob:
+        got = open(binp, "rb").read()
+        fail(f"firmware/compute_add1.bin: {len(got)} bytes, first word {got[:4].hex()}; it must be the "
+             f"{size} bytes of the last code dump of the log (line {i + 1}), each word little-endian: "
+             f"the first 4 bytes are {blob[:4].hex()}")
+    rel = "analysis/linux_run_shader.json"
+    j = load_json(rel) if os.path.exists(os.path.join(ROOT, rel)) else None
+    if not isinstance(j, dict):
+        fail(f"{rel}: missing or not an object (docs/tasks/C5a.md)")
+    else:
+        if j.get("log_line") != i + 1 or j.get("size_bytes") != size:
+            fail(f"{rel}: log_line and size_bytes must be {i + 1} and {size} (the last code dump)")
+        if [str(w).lower() for w in j.get("words", [])] != ["0x" + w for w in words]:
+            fail(f"{rel}: 'words' must be the {len(words)} words of the log as \"0x........\", in order")
+        if j.get("sha256") != hashlib.sha256(blob).hexdigest():
+            fail(f"{rel}: 'sha256' is not the sha256 of the correct binary")
+        got = [(e.get("name"), e.get("value")) for e in j.get("qmd", []) if isinstance(e, dict)]
+        if got != qmd:
+            diff = next((n for n, (a, b) in enumerate(zip(got, qmd)) if a != b), min(len(got), len(qmd)))
+            fail(f"{rel}: 'qmd' has {len(got)} entries, the log has {len(qmd)} fields; first difference at "
+                 f"entry {diff}: expected {qmd[diff] if diff < len(qmd) else 'nothing'}")
+        if "NVF1" not in str(j.get("renderer")) or "25.2.8" not in str(j.get("version")):
+            fail(f"{rel}: 'renderer' and 'version' must be the text of the log")
+        csrc = open(os.path.join(ROOT, "tools", "guest", "files", "compute_test.c")).read()
+        want_src = re.findall(r'^\t"(.*)\\n"', csrc[csrc.index("kSource"):csrc.index("int\nmain")], re.M)
+        want_src = [x.replace("\\t", "\t") for x in want_src]
+        if j.get("source") != want_src:
+            fail(f"{rel}: 'source' must be the {len(want_src)} lines of kSource in "
+                 f"tools/guest/files/compute_test.c (first: {want_src[0]!r}; a tab is a real tab)")
+    rel = "firmware/compute_add1.md"
+    if not os.path.exists(os.path.join(ROOT, rel)):
+        fail(f"{rel}: missing (docs/tasks/C5a.md)")
+    else:
+        md = open(os.path.join(ROOT, rel)).read()
+        secs = dict((h, b) for h, b in re.findall(r"^## (.+?)\n(.*?)(?=^## |\Z)", md, re.M | re.S))
+        need = ["Source", "How it was made", "Code", "Launch descriptor", "Not known"]
+        if [h.strip() for h in secs] != need:
+            fail(f"{rel}: the '## ' sections must be {need}, in this order")
+        else:
+            if hashlib.sha256(blob).hexdigest() not in secs["Code"]:
+                fail(f"{rel}: 'Code' does not have the sha256 of the binary")
+            if [w.lower().replace("0x", "") for w in re.findall(r"\b(?:0x)?[0-9a-f]{8}\b", secs["Code"])
+                    if w.lower().replace("0x", "") in words][:len(words)] != words:
+                fail(f"{rel}: 'Code' must list the {len(words)} words in order")
+            rows = [tuple(c.strip().strip("`") for c in r.strip().strip("|").split("|"))
+                    for r in secs["Launch descriptor"].split("\n") if r.startswith("|")][2:]
+            want = [x for x in qmd if x[1] not in ("0x0", "FALSE")]
+            if rows != want:
+                fail(f"{rel}: the table of 'Launch descriptor' has {len(rows)} rows; it must have the "
+                     f"{len(want)} fields that are not 0x0 or FALSE, in the order of the log "
+                     f"(first: {want[0]})")
+            for word in ("NV50_PROG_DEBUG", "NV50_PROG_CHIPSET", "25.2.8", "compute_test.log"):
+                if word not in secs["How it was made"]:
+                    fail(f"{rel}: 'How it was made' does not name {word}")
+            if len(re.findall(r"^\s*[-*] ", secs["Not known"], re.M)) < 2:
+                fail(f"{rel}: 'Not known' needs 2 list items or more")
+    if not os.path.exists(c5a_tool) or "--check" not in open(c5a_tool, errors="replace").read():
+        fail("tools/shader_extract.py: missing, or no --check option (docs/tasks/C5a.md)")
+    else:
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, c5a_tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/shader_extract.py --check (run {run}): the output files are not what the tool "
+                     f"generates")
+                break
 
 for n in notes:
     print("note:", n)

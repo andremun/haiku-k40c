@@ -1,9 +1,9 @@
 # Status
 
-Current phase: gate (phases A to D are done except C5)
-Current task: none
-Task state: WAITING for the user. All tasks of phases A to D are done except C5, which needs the K40c passed through to the test VM (user steps, docs/PASSTHROUGH.md). The user reviews phases A to D before any Haiku work. Do not start a task.
-Last updated: 2026-10-12
+Current phase: C (hardware database and firmware), last task group
+Current task: C5a
+Task state: TODO. The user part of C5 is done (2026-10-13): the reference job ran on the K40c under Linux, result PASS, logs in reference/linux-run/. The agent part is split into C5a (this task), then the trace tasks. Read docs/tasks/C5a.md.
+Last updated: 2026-10-13
 
 ## Last result
 
