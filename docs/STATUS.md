@@ -1,8 +1,8 @@
 # Status
 
 Current phase: D (host-side algorithms and tests)
-Current task: D5
-Task state: READY. Third session: read work/D5/NOTES.md first; the code is done, five items are left. This is the worktree of task D5: work only on D5.
+Current task: DONE
+Task state: DONE. Two assertion fixes in test_launchdesc.cpp (bit-width and address-shift values). `make check` 0 failures across all 9 tests.
 Last updated: 2026-10-12
 
 ## Last result
@@ -69,3 +69,4 @@ the old layout. Details: `reference/pci/README.md`.
 | C3d | DONE | 2026-10-12 | Subsystem model for chan: 17 members (8 top-level + 9 nested in inst/userd/ramfc). 6 functions KNOWN with evidence, 11 data/value INFERRED. `make check` 0 failures. |
 | D3 | DONE | 2026-10-12 | GPFIFO push-buffer encoding: `src/fifo/PushBuffer.h` + `.cpp` (header encode/decode for 4 types, PushBuffer builder, decodeBuffer, GpEntry encode/decode, GpFifo ring), `tests/test_pushbuffer.cpp` (98 checks), `docs/pushbuffer-encoding.md` (103 lines). `make check` 0 failures. |
 | D2 | DONE | 2026-10-12 | Page-table encoding and address-space model. Acceptance test 74 checks, own tests 31. Two reworks; the scaffold located all six code defects, see `work/D2/REVIEW.md`. |
+| D5 | DONE | 2026-10-12 | Launch descriptor (QMD): 23-field buildQmd, 8 constant buffers, encodeLaunch. Own tests 56 checks, acceptance 101 checks. Two assertion fixes (bit-width 24-bit not 20-bit, address shift 0x0ABCDEF0 not 0xABCDEF). `make check` 0 failures. |

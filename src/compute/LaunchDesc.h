@@ -18,9 +18,9 @@ namespace k40 {
 namespace compute {
 
 // ---- Constants (task D5) ----
-constexpr unsigned kComputeClass        = 0xa1c0;
-constexpr unsigned kComputeSubchannel   = 1;
-constexpr unsigned kQmdBytes            = 256;   // 64 × 32 bits
+constexpr unsigned kComputeClass        = 0xa1c0;  // nv_object.xml.h:209
+constexpr unsigned kComputeSubchannel   = 1;       // SUBC_CP, nve4_compute.c:873
+constexpr unsigned kQmdBytes            = 256;     // 64 × 32 bits, no source: derived
 
 // ---- 64-word QMD bitfield class (2048 bits total) ----
 class Qmd {
@@ -63,7 +63,7 @@ struct ComputeJob {
  *   RELEASE_MEMBAR_TYPE               (366)  = FE_SYSMEMBAR (1)
  *   CWD_MEMBAR_TYPE                   (369:368) = L1_SYSMEMBAR (1)
  *   API_VISIBLE_CALL_LIMIT            (378)  = NO_CHECK (1)
- *   SASS_VERSION                      (1535:1528) = 0x30
+ *   SASS_VERSION                      (1535:1528) = 0x30  // cla0c0qmd.h:216; nve4_compute.c:589
  *   PROGRAM_OFFSET                    (287:256) = codeOffset
  *   CTA_RASTER_WIDTH                  (415:384) = grid[0]
  *   CTA_RASTER_HEIGHT                 (431:416) = grid[1]
@@ -71,10 +71,10 @@ struct ComputeJob {
  *   CTA_THREAD_DIMENSION0             (607:592) = block[0]
  *   CTA_THREAD_DIMENSION1             (623:608) = block[1]
  *   CTA_THREAD_DIMENSION2             (639:624) = block[2]
- *   SHARED_MEMORY_SIZE                (561:544) = align(sharedMemSize, 0x100)
+ *   SHARED_MEMORY_SIZE                (561:544) = align(sharedMemSize, 0x100)  // cla0c0qmd.h:139; nve4_compute.c:600
  *   SHADER_LOCAL_MEMORY_LOW_SIZE      (1463:1440) = localMemLow
  *   SHADER_LOCAL_MEMORY_HIGH_SIZE     (1495:1472) = 0
- *   SHADER_LOCAL_MEMORY_CRS_SIZE      (1527:1504) = 0x800
+ *   SHADER_LOCAL_MEMORY_CRS_SIZE      (1527:1504) = 0x800  // cla0c0qmd.h:215; nve4_compute.c:603
  *   L1_CONFIGURATION                  (671:669) = derived from sharedMemSize
  *   REGISTER_COUNT                    (1503:1496) = numGprs
  *   BARRIER_COUNT                     (1471:1467) = numBarriers
@@ -101,9 +101,9 @@ void setConstantBuffer(Qmd& q, unsigned index, uint64_t address, uint32_t size);
  * encodeLaunch — produce push-buffer words for launching the compute grid.
  *
  * Three method writes on compute subchannel 1:
- *   LAUNCH_DESC_ADDRESS (0x02b4): value = descGpuAddr >> 8
- *   LAUNCH              (0x02bc): value = 3
- *   NV50_GRAPH_SERIALIZE(0x0110): value = 0
+ *   LAUNCH_DESC_ADDRESS (0x02b4): value = descGpuAddr >> 8  // nve4_compute.xml.h:165
+ *   LAUNCH              (0x02bc): value = 3  // nve4_compute.xml.h:170
+ *   NV50_GRAPH_SERIALIZE(0x0110): value = 0  // nv_object.xml.h:284
  *
  * Throws std::invalid_argument if descGpuAddr is not 256-byte aligned
  * or does not fit in 40 bits.
