@@ -34,7 +34,9 @@ if [ -d "$DBG/lib/x86_64-linux-gnu" ]; then
 else
     echo "mesa: Ubuntu package (release build: NV50_PROG_DEBUG prints nothing)" > out/mesa-build.txt
 fi
-sudo env "${env_dbg[@]}" NV50_PROG_DEBUG=1 ./compute_test > out/compute_test.log 2>&1; rc=$?
+# NV50_PROG_CHIPSET must be set (to the real chipset, 0xf1 = GK110B) or
+# Mesa does not print the code words (nvc0_program.c, nvc0_program_dump).
+sudo env "${env_dbg[@]}" NV50_PROG_DEBUG=1 NV50_PROG_CHIPSET=0xf1 NV50_PROG_DEBUG_NO_COLORS=1 ./compute_test > out/compute_test.log 2>&1; rc=$?
 if [ "${1:-}" = "--k40c" ] && ! grep -qiE '^renderer:.*(NV|nouveau)' out/compute_test.log; then
     echo "FAIL: the job did not run on the K40c (renderer: $(grep '^renderer' out/compute_test.log))" >> out/compute_test.log
     rc=3
@@ -46,6 +48,7 @@ if [ -n "${tp:-}" ]; then
     sudo cp /tmp/mmiotrace.txt out/mmiotrace.txt; sudo chown "$USER" out/mmiotrace.txt
     xz -f -T0 out/mmiotrace.txt
 fi
-{ grep -E '^(device|renderer|version|elements|PASS|FAIL)' out/compute_test.log; cat out/mesa-build.txt; uname -r
+{ grep -E '^(device|renderer|version|elements|PASS|FAIL)' out/compute_test.log
+  grep -c '^shader binary code' out/compute_test.log | sed 's/^/code dumps: /'; cat out/mesa-build.txt; uname -r
   dpkg-query -W -f='mesa ${Version}\n' libegl-mesa0 2>/dev/null; } | tee out/RESULT.txt
 exit $rc
