@@ -12,7 +12,8 @@ BUILDDIR := ../build/tests
 
 CXX_TESTS := test_registerio:hw d1_accept:hw \
              test_pagetable:mmu d2_accept:mmu \
-             test_pushbuffer:fifo d3_accept:fifo
+             test_pushbuffer:fifo d3_accept:fifo \
+             test_launchdesc:compute+fifo d5_accept:compute+fifo
 # The Python tests run once the tool of task D4 exists.
 PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard test_compare_traces.py accept/d4_accept.py))
 
