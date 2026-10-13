@@ -1819,6 +1819,13 @@ if (os.path.exists(d6_tool) or re.search(r"^\| D6 \| DONE", open(os.path.join(RO
     mk = open(os.path.join(ROOT, "tests", "Makefile")).read()
     if "ref_qmd:compute+fifo" not in mk or not os.path.exists(os.path.join(ROOT, "tests", "ref_qmd.cpp")):
         fail("tests/ref_qmd.cpp or its entry ref_qmd:compute+fifo in CXX_TESTS of tests/Makefile is missing")
+    if os.path.exists(d6_tool):
+        d6_src = open(d6_tool, errors="replace").read()
+        typed = len(re.findall(r"[\"'](?:QMD_RESERVED|CONSTANT_BUFFER|RELEASE[01]|CTA_|INVALIDATE_|SHADER_LOCAL)\w*[\"']\s*[,:]\s*\(?\s*\d", d6_src))
+        if typed > 2 or "QMDV00_06" not in d6_src:
+            fail(f"tools/qmd_compare.py: has a typed table of fields ({typed} entries with bit numbers) or does "
+                 f"not read the lines '#define NVA0C0_QMDV00_06_' of the header. The tool must take every bit "
+                 f"position from cla0c0qmd.h when it runs (docs/tasks/D6.md)")
     if not os.path.exists(d6_tool) or "--check" not in open(d6_tool, errors="replace").read():
         fail("tools/qmd_compare.py: missing, or no --check option (docs/tasks/D6.md)")
     else:
