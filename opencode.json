@@ -81,6 +81,9 @@
       "*docs/STATUS-archive.md": "deny",
       "*linux-run/mmiotrace*": "deny",
       "*tools/check_repo.py": "deny"
+    },
+    "skill": {
+      "*": "deny"
     }
   }
 }
