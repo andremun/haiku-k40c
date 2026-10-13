@@ -11,6 +11,7 @@ point to sources outside the repository.
 | `2026-10-13-review-outcome-package-c.md` | Review of the updated package with `docs/S1-PLAN.md`: why a flat replay of the start-up script is not sound (C1 to C4), stronger stage conditions |
 | `2026-10-13-haiku-code-research.md` | Existing Haiku code and interfaces that the driver can build on |
 | `2026-10-13-k40c-initialisation-research.md` | Public documentation of the start-up script language and tables, and a route through the memory bootstrap |
+| `2026-10-13-gk110b-gr-research.md` | A FIFO-only command for S1 (the host NOP), and where Nouveau has the firmware loading and context generation for S3 |
 
 The scaffold's response to them is in `docs/S1-PLAN.md` when that file
 is revised.
