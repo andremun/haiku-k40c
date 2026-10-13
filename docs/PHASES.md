@@ -65,6 +65,7 @@ is no reference for S3 and the project stops at S2.
 | C5 | Reference run under Linux and the first shader binary | `docs/tasks/C5.md` |
 | C5a | Shader binary and launch descriptor of the reference run | `docs/tasks/C5a.md` |
 | C5b | Summary of the register trace of the reference run | `docs/tasks/C5b.md` |
+| C5c | What the trace shows from channel creation to the end of the job | `docs/tasks/C5c.md` |
 
 ## Phase D: host-side algorithms and tests
 

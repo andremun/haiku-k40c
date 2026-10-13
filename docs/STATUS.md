@@ -1,8 +1,8 @@
 # Status
 
 Current phase: C (hardware database and firmware), last task group
-Current task: none
-Task state: WAITING. C5b is done and accepted (2026-10-13). The scaffold writes the next task (the document about the launch). Do not start a task.
+Current task: C5c
+Task state: TODO. C5a and C5b are done. Read docs/tasks/C5c.md. Do not read tools/check_repo.py by any means (AGENTS.md).
 Last updated: 2026-10-13
 
 ## Last result

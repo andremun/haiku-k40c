@@ -1558,6 +1558,7 @@ if (os.path.exists(c5a_tool) or c5a_done) and "C5a" not in SKIP:
                 break
 
 # C5b summary of the register trace of the reference run ------------------
+C5_JOB = {}
 def c5b_build(T, rnndb):
     bars={};maps=[];byid={};marks=[];n=0
     ph={k:{'first_line':None,'last_line':None,'bar0':{'reads':0,'writes':0},'bar1':{'reads':0,'writes':0},'bar3':{'reads':0,'writes':0}} for k in('load','job','after')}
@@ -1587,6 +1588,7 @@ def c5b_build(T, rnndb):
                 if off not in names:
                     r=rnndb.lookup(off); names[off]=r['name'] if r else None
                 nm=names[off]
+                C5_JOB[n]=(p[0],off,int(p[5],16),nm)
                 e=regs.setdefault(off,{'reg':'0x%06x'%off,'name':nm,'reads':0,'writes':0,'first_line':n})
                 e[k]+=1
                 d=nm.split('.')[0] if nm else 'unknown'
@@ -1654,6 +1656,126 @@ if (os.path.exists(c5b_tool) or re.search(r"^\| C5b \| DONE", open(os.path.join(
             if r.returncode != 0:
                 fail(f"tools/trace_summary.py --check (run {run}): the output files are not what the tool generates")
                 break
+
+# C5c document about the job in the trace ---------------------------------
+c5c_doc = os.path.join(ROOT, "docs", "08-compute-launch.md")
+if (os.path.exists(c5c_doc) or re.search(r"^\| C5c \| DONE", open(os.path.join(ROOT, "docs", "STATUS.md")).read(), re.M)) \
+        and "C5c" not in SKIP:
+    rel = "docs/08-compute-launch.md"
+    if not os.path.exists(c5c_doc):
+        fail(f"{rel}: missing (docs/tasks/C5c.md)")
+    else:
+        if not C5_JOB:
+            import lzma
+            sys.path.insert(0, os.path.join(ROOT, "tools"))
+            import rnndb as c5c_rnndb
+            c5b_build("reference/linux-run/mmiotrace.txt.xz", c5c_rnndb)
+        j0, j1 = min(C5_JOB), max(C5_JOB)
+        md = open(c5c_doc).read()
+        secs = dict((h.strip(), b) for h, b in re.findall(r"^## (.+?)\n(.*?)(?=^## |\Z)", md, re.M | re.S))
+        need = ["What ran", "Phases of the trace", "Steps of the job", "Verified values",
+                "What the trace does not show", "Consequences for the Haiku driver", "Not known"]
+        if list(secs) != need:
+            fail(f"{rel}: the '## ' sections must be {need}, in this order")
+        else:
+            cells = lambda t: [[c.strip().strip("`") for c in r.strip().strip("|").split("|")]
+                               for r in t.split("\n") if r.startswith("|")][2:]
+            steps = cells(secs["Steps of the job"])
+            if len(steps) < 8 or any(len(r) != 5 for r in steps):
+                fail(f"{rel}: 'Steps of the job' needs 8 rows or more with 5 cells (it has {len(steps)} rows)")
+            else:
+                prev, covered = 0, {}
+                for r in steps:
+                    m = re.fullmatch(r"(\d+)\s*[-–]\s*(\d+)", r[1])
+                    if not m:
+                        fail(f"{rel}: step {r[0]}: 'Lines' must be FIRST-LAST, not '{r[1]}'"); continue
+                    a, b = int(m.group(1)), int(m.group(2))
+                    if not (j0 <= a <= b <= j1 + 4):
+                        fail(f"{rel}: step {r[0]}: lines {a}-{b} are not inside the job phase ({j0}-{j1})")
+                    if a <= prev:
+                        fail(f"{rel}: step {r[0]}: lines {a}-{b} start before the end of the step before ({prev})")
+                    prev = b
+                    inrange = set(v[1] for k, v in C5_JOB.items() if a <= k <= b)
+                    regs = [int(x, 16) for x in re.findall(r"0x[0-9a-fA-F]{6}\b", r[3])]
+                    if not regs and "instance memory only" not in r[3]:
+                        fail(f"{rel}: step {r[0]}: 'Registers' needs 0x...... (6 hex digits) or 'instance memory only'")
+                    if not regs and inrange:
+                        fail(f"{rel}: step {r[0]}: says 'instance memory only' but lines {a}-{b} have "
+                             f"{len(inrange)} different BAR 0 registers")
+                    bad = [f"0x{x:06x}" for x in regs if x not in inrange]
+                    if bad:
+                        fail(f"{rel}: step {r[0]}: registers {bad[:5]} are not accessed in lines {a}-{b}")
+                    for x in regs:
+                        covered.setdefault(x, []).append((a, b))
+                    if len(r[2].split()) < 6:
+                        fail(f"{rel}: step {r[0]}: 'What' must be a sentence")
+                for x, why in ((0x800010, "the channel is bound"), (0x800014, "the channel is enabled"),
+                               (0x002270, "the runlist is written"), (0x409500, "the first FECS command"),
+                               (0x409504, "the first FECS command")):
+                    if x not in covered:
+                        fail(f"{rel}: 'Steps of the job': no step lists 0x{x:06x} ({why})")
+                if not any(a <= 900552 <= b for a, b in covered.get(0x800010, [])):
+                    fail(f"{rel}: 'Steps of the job': no step for the removal of the channel (the second "
+                         f"write to 0x800010, near the end of the job)")
+                pg = sum(1 for r in steps if re.search(r"0x4[01][0-9a-f]{4}", r[3]))
+                if pg < 2:
+                    fail(f"{rel}: 'Steps of the job': the graphics context (PGRAPH registers 0x40....) needs "
+                         f"its own steps")
+            vals = cells(secs["Verified values"])
+            if len(vals) < 12 or any(len(r) != 6 for r in vals):
+                fail(f"{rel}: 'Verified values' needs 12 rows or more with 6 cells (it has {len(vals)} rows)")
+            else:
+                seen = set()
+                for r in vals:
+                    try:
+                        ln, reg, val = int(r[0]), int(r[2], 16), int(r[4], 16)
+                    except ValueError:
+                        fail(f"{rel}: 'Verified values': row '{' | '.join(r[:5])}' is not LINE, R/W, 0x......, "
+                             f"name, 0x value"); continue
+                    t = C5_JOB.get(ln)
+                    if t is None:
+                        fail(f"{rel}: 'Verified values': line {ln} is not a BAR 0 access of the job phase"); continue
+                    want_row = (t[0], t[1], t[2], t[3] or "-")
+                    if (r[1], reg, val, r[3]) != want_row:
+                        fail(f"{rel}: 'Verified values': line {ln} is '{t[0]} 0x{t[1]:06x} {t[3] or '-'} "
+                             f"0x{t[2]:x}' in the trace, the row says '{r[1]} {r[2]} {r[3]} {r[4]}'")
+                    seen.add(reg)
+                    if len(r[5].split()) < 2:
+                        fail(f"{rel}: 'Verified values': line {ln}: 'Meaning' is empty (write 'not known')")
+                miss = [f"0x{x:06x}" for x in (0x800010, 0x800014, 0x002270, 0x002274, 0x409500, 0x409504)
+                        if x not in seen]
+                if miss:
+                    fail(f"{rel}: 'Verified values' has no row for {miss}")
+            bad = []
+            for f, ln in set(re.findall(r"((?:nvkm|nvif|dispnv50)?/?[\w/.-]*\w\.[ch]):(\d+)", md)):
+                hits = [d for d in glob.glob(os.path.join(NV, "**", os.path.basename(f)), recursive=True)
+                        if d.endswith(f)]
+                hits += [d for d in glob.glob(os.path.join(ROOT, "reference", "mesa", "**", os.path.basename(f)),
+                                              recursive=True) if d.endswith(f)]
+                if len(hits) != 1 or int(ln) > sum(1 for _ in open(hits[0], errors="replace")):
+                    bad.append(f"{f}:{ln}")
+            if bad:
+                fail(f"{rel}: source citations that do not name exactly one file and an existing line "
+                     f"(write enough of the path): {sorted(bad)[:6]}")
+            if len(set(re.findall(r"[\w/.-]+\.[ch]:\d+", secs["Steps of the job"] + secs["Verified values"]))) < 6:
+                fail(f"{rel}: 'Steps of the job' and 'Verified values' need 6 different source citations "
+                     f"(file.c:LINE) or more")
+            low = secs["What the trace does not show"].lower()
+            for word in ("pushbuffer", "launch", "user space"):
+                if word not in low:
+                    fail(f"{rel}: 'What the trace does not show' does not mention \"{word}\"")
+            cons = [l for l in re.split(r"\n(?=\s*[-*] )", secs["Consequences for the Haiku driver"]) if re.match(r"\s*[-*] ", l)]
+            if len(cons) < 4:
+                fail(f"{rel}: 'Consequences for the Haiku driver' needs 4 list items or more")
+            for it in cons:
+                if not re.search(r"`(?:src|docs|tests|tools|firmware|hardware|analysis)/[\w./-]+`", it):
+                    fail(f"{rel}: a consequence names no file of the repository: '{it.strip()[:70]}'")
+            paths = re.findall(r"`((?:src|tests|tools|analysis|hardware|docs|firmware|reference)/[\w./-]+)`", md)
+            gone = sorted(p_ for p_ in set(paths) if not os.path.exists(os.path.join(ROOT, p_)))
+            if gone:
+                fail(f"{rel}: names files that do not exist: {gone[:6]}")
+            if len(re.findall(r"^\s*[-*] ", secs["Not known"], re.M)) < 3:
+                fail(f"{rel}: 'Not known' needs 3 list items or more")
 
 for n in notes:
     print("note:", n)
