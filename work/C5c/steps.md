@@ -46,3 +46,42 @@ Source: engine/fifo/gk104.c:652
 615187 39.820448 R 0:0x002a00 0x1 PFIFO.INTR_RUNLIST
 615188 39.820456 W 0:0x002a00 0x1 PFIFO.INTR_RUNLIST
 ```
+
+# Step 5: Wait loop with timer and temperature polling
+**Lines 615191-616553**
+Registers: 0x070000, 0x100c80, 0x100cb8, 0x100cbc, 0x009400, 0x009410, 0x000200, 0x10a78c, 0x409604
+What: The driver enters a wait loop, repeatedly reading PTIMER (0x009400/0x009410), polling PMC.ENABLE (0x000200), reading PDAEMON registers for temperature, and checking PGRAPH unit status, with periodic TLB flushes.
+Source: not found
+
+# Step 6: PGRAPH context setup (part 1)
+**Lines 616554-618713**
+Registers: 0x40912c, 0x409108, 0x400500, 0x40013c, 0x4091c4, 0x409184, 0x409188, 0x41a1c0, 0x41a1c4, 0x41a184
+What: The driver configures PGRAPH context: reads CAPS registers, sets up FIFO control, writes CODE and DATA to ctxctl registers (0x409184, 0x4091c4) and GPC-broadcast variants (0x41a184, 0x41a1c4), writing virtual addresses to CODE_VIRT_ADDR.
+Source: engine/gr/ctxgf100.c:1436
+
+```
+616554 39.958634 R 0:0x40912c 0x40300000 PGRAPH.CTXCTL.CAPS2
+616555 39.958643 R 0:0x409108 0x10000000 PGRAPH.CTXCTL.CAPS
+617101 40.006676 W 0:0x4091c4 0x00000000 PGRAPH.CTXCTL.DATA
+617296 40.026018 W 0:0x409184 0x00000000 PGRAPH.CTXCTL.CODE
+618105 40.088731 W 0:41a184 0x00000000 PGRAPH.GPC_BROADCAST.CTXCTL.CODE
+```
+
+# Step 7: Instance memory writes + periodic work
+**Lines 618714-726184**
+Registers: 0x070000, 0x100c80, 0x100cb8, 0x100cbc, 0x009400, 0x009410, 0x404170, 0x40802c, 0x000140, 0x022400, 0x0212a8, 0x020400
+What: 107,314 writes to instance memory with periodic work: TLB flushes (every ~200ms), timer reads, temperature polling (PFUSE, PTHERM), and interrupt re-enable. 156 BAR 0 accesses, 107,314 BAR 3 accesses.
+Source: not found (periodic scheduler work)
+
+# Step 8: FECS context-switch command
+**Lines 726185-726188**
+Registers: 0x409500, 0x409504, 0x409800, 0x409840
+What: The driver clears CC_SCRATCH (0x409840), writes the channel instance pointer (0x802cf302) to WRCMD_DATA (0x409500), sends command 0x1 to WRCMD_CMD (0x409504), and reads back CC_SCRATCH (0x409800) to confirm completion.
+Source: engine/gr/gf100.c:833
+
+```
+726185 40.940310 W 0:0x409840 0x80000000 PGRAPH.CTXCTL.CC_SCRATCH_CLEAR
+726186 40.940323 W 0:0x409500 0x802cf302 PGRAPH.CTXCTL.WRCMD_DATA
+726187 40.940331 W 0:0x409504 0x1 PGRAPH.CTXCTL.WRCMD_CMD
+726188 40.940340 R 0:0x409800 0x80000000 PGRAPH.CTXCTL.CC_SCRATCH
+```
