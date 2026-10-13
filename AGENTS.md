@@ -26,6 +26,11 @@ the truth.
 2. Read only the files that the task needs.
 3. Do one task. Write `work/<task-id>/PLAN.md` before large work.
 4. Run `make check`. Fix what fails.
+   `make check` runs `tools/check_repo.py`. Do not read that file, with
+   any tool or command (`sed`, `grep`, `cat`, Python). It has the
+   reviewer's own solution of some tasks, and work that copies it is
+   rejected. The messages of `make check` say what is wrong; the task
+   text says what is wanted.
 5. Run the handoff (`/handoff`): update `docs/STATUS.md`, write
    `work/<task-id>/RESULT.md`, record open questions, commit.
 6. Stop. The next task starts in a new session.

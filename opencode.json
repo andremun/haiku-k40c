@@ -33,7 +33,21 @@
       "pip install*": "ask",
       "opencode*": "ask",
       "qemu*": "ask",
-      "*vfio*": "ask"
+      "*vfio*": "ask",
+      "*sed*check_repo*": "deny",
+      "*cat*check_repo*": "deny",
+      "*grep*check_repo*": "deny",
+      "*head*check_repo*": "deny",
+      "*less*check_repo*": "deny",
+      "*more*check_repo*": "deny",
+      "*awk*check_repo*": "deny",
+      "*open(*check_repo*": "deny",
+      "*cp*check_repo*": "deny",
+      "*vi*check_repo*": "deny",
+      "*nl*check_repo*": "deny",
+      "*tac*check_repo*": "deny",
+      "*strings*check_repo*": "deny",
+      "*diff*check_repo*": "deny"
     },
     "edit": {
       "*": "allow",

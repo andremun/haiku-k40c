@@ -1,7 +1,7 @@
 # Status
 
 Current phase: C (hardware database and firmware), last task group
-Current task: none. C5b is done.
+Current task: none
 Last updated: 2026-10-13
 
 ## Last result
