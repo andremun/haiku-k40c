@@ -2,7 +2,7 @@
 
 Current phase: after the gate (the user decided on 2026-10-13: go, milestone S1 first)
 Current task: none
-Task state: WAITING. D6 is done and accepted (2026-10-13). The scaffold writes the next task. Do not start a task.
+Task state: WAITING for the user. The host tasks after the gate are done (D6, the FIFO design update, the S1 plan in docs/S1-PLAN.md). The user gets a third opinion before any Haiku work. Do not start a task.
 Last updated: 2026-10-13
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
