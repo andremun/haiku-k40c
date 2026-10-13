@@ -1,18 +1,22 @@
-# Plan: D6 — Launch descriptor against the reference run
+# Plan D6 (second start): qmd_compare.py tool
 
-## Step 1: `tests/ref_qmd.cpp` + Makefile
-- Build a `ComputeJob` matching the reference run (codeOffset=0x7f100, grid={16,1,1}, block={64,1,1}, sharedMemSize=0, localMemLow=0, numGprs=5, numBarriers=0).
-- Call `buildQmd`, then `setConstantBuffer(q, 7, 0x510000, 0x800)`.
-- With `--words`: print 64 words, 8 hex digits each.
-- Without `--words`: check `words()[8] == 0x7f100`, print `ref_qmd: N checks, 0 failures`.
-- Add `ref_qmd:compute+fifo` to `CXX_TESTS` in `tests/Makefile`.
+## Steps
 
-## Step 2: `tools/qmd_compare.py`
-- Run `make -s -C tests` if `build/tests/ref_qmd` missing.
-- Run `build/tests/ref_qmd --words`, read header for field bit positions.
-- Parse `analysis/linux_run_shader.json` `"qmd"` array.
-- For each field: extract bits from our words, compare with reference.
-- Write `analysis/qmd_compare.json` and `analysis/qmd_compare.md`.
-- `--check` mode: compare generated files, exit 0/1.
+1. **Parse the header**: Open `cla0c0qmd.h`, extract lines starting with `#define NVA0C0_QMDV00_06_`.
+   - MW lines → field dict: `name -> "HI:LO" text`
+   - Non-MW lines → named values dict: `name -> int value`
+   - Print counts for verification.
 
-## Step 3: `make check`, fix failures, handoff.
+2. **Read words + reference**: Run `build/tests/ref_qmd --words`, read the 64 hex words.
+   Read `analysis/linux_run_shader.json` "qmd" array.
+   For each reference entry: resolve name→HI:LO, substitute index `(i)` in the text,
+   evaluate HI and LO, extract bits from our words, compare with reference value.
+   Handle named values (TRUE/FALSE, hex, etc.).
+
+3. **Write output files**: `analysis/qmd_compare.json` and `analysis/qmd_compare.md`.
+   Support `--check` mode (write nothing, exit 0 if files match).
+
+## Checks
+- Step 1 prints ~113 fields, ~76 named values.
+- Step 2 computes all 155 reference fields.
+- Step 3 writes both files; `--check` passes twice.

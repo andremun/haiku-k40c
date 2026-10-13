@@ -1,0 +1,1467 @@
+{
+  "words": [
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0xbc000000",
+    "0x0007f100",
+    "0x00000000",
+    "0x00000000",
+    "0x04014000",
+    "0x00000010",
+    "0x00010001",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00400000",
+    "0x00010001",
+    "0x20000080",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00510000",
+    "0x04000000",
+    "0x00000000",
+    "0x05000000",
+    "0x30000800",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000",
+    "0x00000000"
+  ],
+  "fields": [
+    {
+      "name": "QMD_RESERVED_V1_A",
+      "hi": 30,
+      "lo": 0,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_B",
+      "hi": 31,
+      "lo": 31,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_C",
+      "hi": 62,
+      "lo": 32,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_D",
+      "hi": 63,
+      "lo": 63,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_E",
+      "hi": 94,
+      "lo": 64,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_F",
+      "hi": 95,
+      "lo": 95,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_G",
+      "hi": 126,
+      "lo": 96,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_H",
+      "hi": 127,
+      "lo": 127,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_A_A",
+      "hi": 159,
+      "lo": 128,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_I",
+      "hi": 191,
+      "lo": 160,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_J",
+      "hi": 196,
+      "lo": 192,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_A",
+      "hi": 199,
+      "lo": 197,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_K",
+      "hi": 200,
+      "lo": 200,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_L",
+      "hi": 201,
+      "lo": 201,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "SEMAPHORE_RELEASE_ENABLE0",
+      "hi": 202,
+      "lo": 202,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "SEMAPHORE_RELEASE_ENABLE1",
+      "hi": 203,
+      "lo": 203,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_B",
+      "hi": 207,
+      "lo": 204,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_M",
+      "hi": 222,
+      "lo": 208,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_N",
+      "hi": 223,
+      "lo": 223,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_O",
+      "hi": 248,
+      "lo": 224,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_C",
+      "hi": 249,
+      "lo": 249,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "INVALIDATE_TEXTURE_HEADER_CACHE",
+      "hi": 250,
+      "lo": 250,
+      "reference": "TRUE",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "INVALIDATE_TEXTURE_SAMPLER_CACHE",
+      "hi": 251,
+      "lo": 251,
+      "reference": "TRUE",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "INVALIDATE_TEXTURE_DATA_CACHE",
+      "hi": 252,
+      "lo": 252,
+      "reference": "TRUE",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "INVALIDATE_SHADER_DATA_CACHE",
+      "hi": 253,
+      "lo": 253,
+      "reference": "TRUE",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "INVALIDATE_INSTRUCTION_CACHE",
+      "hi": 254,
+      "lo": 254,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "INVALIDATE_SHADER_CONSTANT_CACHE",
+      "hi": 255,
+      "lo": 255,
+      "reference": "TRUE",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "PROGRAM_OFFSET",
+      "hi": 287,
+      "lo": 256,
+      "reference": "0x7f100",
+      "reference_value": 520448,
+      "ours": 520448,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_P",
+      "hi": 319,
+      "lo": 288,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_Q",
+      "hi": 327,
+      "lo": 320,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_D",
+      "hi": 335,
+      "lo": 328,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_R",
+      "hi": 351,
+      "lo": 336,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_S",
+      "hi": 357,
+      "lo": 352,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_E",
+      "hi": 365,
+      "lo": 358,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE_MEMBAR_TYPE",
+      "hi": 366,
+      "lo": 366,
+      "reference": "FE_SYSMEMBAR",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "CWD_MEMBAR_TYPE",
+      "hi": 369,
+      "lo": 368,
+      "reference": "L1_SYSMEMBAR",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_T",
+      "hi": 370,
+      "lo": 370,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_U",
+      "hi": 371,
+      "lo": 371,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "THROTTLED",
+      "hi": 372,
+      "lo": 372,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_E2_A",
+      "hi": 376,
+      "lo": 376,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_E2_B",
+      "hi": 377,
+      "lo": 377,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "API_VISIBLE_CALL_LIMIT",
+      "hi": 378,
+      "lo": 378,
+      "reference": "NO_CHECK",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "SHARED_MEMORY_BANK_MAPPING",
+      "hi": 379,
+      "lo": 379,
+      "reference": "FOUR_BYTES_PER_BANK",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "SAMPLER_INDEX",
+      "hi": 382,
+      "lo": 382,
+      "reference": "INDEPENDENTLY",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_E3_A",
+      "hi": 383,
+      "lo": 383,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CTA_RASTER_WIDTH",
+      "hi": 415,
+      "lo": 384,
+      "reference": "0x10",
+      "reference_value": 16,
+      "ours": 16,
+      "equal": true
+    },
+    {
+      "name": "CTA_RASTER_HEIGHT",
+      "hi": 431,
+      "lo": 416,
+      "reference": "0x1",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "CTA_RASTER_DEPTH",
+      "hi": 447,
+      "lo": 432,
+      "reference": "0x1",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "CTA_RASTER_WIDTH_RESUME",
+      "hi": 479,
+      "lo": 448,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CTA_RASTER_HEIGHT_RESUME",
+      "hi": 495,
+      "lo": 480,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CTA_RASTER_DEPTH_RESUME",
+      "hi": 511,
+      "lo": 496,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_V",
+      "hi": 535,
+      "lo": 512,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_F",
+      "hi": 542,
+      "lo": 536,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_W",
+      "hi": 543,
+      "lo": 543,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "SHARED_MEMORY_SIZE",
+      "hi": 561,
+      "lo": 544,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_G",
+      "hi": 575,
+      "lo": 562,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_VERSION",
+      "hi": 579,
+      "lo": 576,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_MAJOR_VERSION",
+      "hi": 583,
+      "lo": 580,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_H",
+      "hi": 591,
+      "lo": 584,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CTA_THREAD_DIMENSION0",
+      "hi": 607,
+      "lo": 592,
+      "reference": "0x40",
+      "reference_value": 64,
+      "ours": 64,
+      "equal": true
+    },
+    {
+      "name": "CTA_THREAD_DIMENSION1",
+      "hi": 623,
+      "lo": 608,
+      "reference": "0x1",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "CTA_THREAD_DIMENSION2",
+      "hi": 639,
+      "lo": 624,
+      "reference": "0x1",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(0)",
+      "hi": 640,
+      "lo": 640,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(1)",
+      "hi": 641,
+      "lo": 641,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(2)",
+      "hi": 642,
+      "lo": 642,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(3)",
+      "hi": 643,
+      "lo": 643,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(4)",
+      "hi": 644,
+      "lo": 644,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(5)",
+      "hi": 645,
+      "lo": 645,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(6)",
+      "hi": 646,
+      "lo": 646,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_VALID(7)",
+      "hi": 647,
+      "lo": 647,
+      "reference": "TRUE",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_I",
+      "hi": 668,
+      "lo": 648,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "L1_CONFIGURATION",
+      "hi": 671,
+      "lo": 669,
+      "reference": "DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB",
+      "reference_value": 1,
+      "ours": 1,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_X",
+      "hi": 703,
+      "lo": 672,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_V1_Y",
+      "hi": 735,
+      "lo": 704,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE0_ADDRESS_LOWER",
+      "hi": 767,
+      "lo": 736,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE0_ADDRESS_UPPER",
+      "hi": 775,
+      "lo": 768,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_J",
+      "hi": 783,
+      "lo": 776,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE0_REDUCTION_OP",
+      "hi": 790,
+      "lo": 788,
+      "reference": "RED_ADD",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_K",
+      "hi": 791,
+      "lo": 791,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE0_REDUCTION_FORMAT",
+      "hi": 793,
+      "lo": 792,
+      "reference": "UNSIGNED_32",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE0_REDUCTION_ENABLE",
+      "hi": 794,
+      "lo": 794,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE0_STRUCTURE_SIZE",
+      "hi": 799,
+      "lo": 799,
+      "reference": "FOUR_WORDS",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE0_PAYLOAD",
+      "hi": 831,
+      "lo": 800,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE1_ADDRESS_LOWER",
+      "hi": 863,
+      "lo": 832,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE1_ADDRESS_UPPER",
+      "hi": 871,
+      "lo": 864,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_L",
+      "hi": 879,
+      "lo": 872,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE1_REDUCTION_OP",
+      "hi": 886,
+      "lo": 884,
+      "reference": "RED_ADD",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_M",
+      "hi": 887,
+      "lo": 887,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE1_REDUCTION_FORMAT",
+      "hi": 889,
+      "lo": 888,
+      "reference": "UNSIGNED_32",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE1_REDUCTION_ENABLE",
+      "hi": 890,
+      "lo": 890,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE1_STRUCTURE_SIZE",
+      "hi": 895,
+      "lo": 895,
+      "reference": "FOUR_WORDS",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "RELEASE1_PAYLOAD",
+      "hi": 927,
+      "lo": 896,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(0)",
+      "hi": 959,
+      "lo": 928,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(0)",
+      "hi": 967,
+      "lo": 960,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(0)",
+      "hi": 973,
+      "lo": 968,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(0)",
+      "hi": 974,
+      "lo": 974,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(0)",
+      "hi": 991,
+      "lo": 975,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(1)",
+      "hi": 1023,
+      "lo": 992,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(1)",
+      "hi": 1031,
+      "lo": 1024,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(1)",
+      "hi": 1037,
+      "lo": 1032,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(1)",
+      "hi": 1038,
+      "lo": 1038,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(1)",
+      "hi": 1055,
+      "lo": 1039,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(2)",
+      "hi": 1087,
+      "lo": 1056,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(2)",
+      "hi": 1095,
+      "lo": 1088,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(2)",
+      "hi": 1101,
+      "lo": 1096,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(2)",
+      "hi": 1102,
+      "lo": 1102,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(2)",
+      "hi": 1119,
+      "lo": 1103,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(3)",
+      "hi": 1151,
+      "lo": 1120,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(3)",
+      "hi": 1159,
+      "lo": 1152,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(3)",
+      "hi": 1165,
+      "lo": 1160,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(3)",
+      "hi": 1166,
+      "lo": 1166,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(3)",
+      "hi": 1183,
+      "lo": 1167,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(4)",
+      "hi": 1215,
+      "lo": 1184,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(4)",
+      "hi": 1223,
+      "lo": 1216,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(4)",
+      "hi": 1229,
+      "lo": 1224,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(4)",
+      "hi": 1230,
+      "lo": 1230,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(4)",
+      "hi": 1247,
+      "lo": 1231,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(5)",
+      "hi": 1279,
+      "lo": 1248,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(5)",
+      "hi": 1287,
+      "lo": 1280,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(5)",
+      "hi": 1293,
+      "lo": 1288,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(5)",
+      "hi": 1294,
+      "lo": 1294,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(5)",
+      "hi": 1311,
+      "lo": 1295,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(6)",
+      "hi": 1343,
+      "lo": 1312,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(6)",
+      "hi": 1351,
+      "lo": 1344,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(6)",
+      "hi": 1357,
+      "lo": 1352,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(6)",
+      "hi": 1358,
+      "lo": 1358,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(6)",
+      "hi": 1375,
+      "lo": 1359,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_LOWER(7)",
+      "hi": 1407,
+      "lo": 1376,
+      "reference": "0x510000",
+      "reference_value": 5308416,
+      "ours": 5308416,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_ADDR_UPPER(7)",
+      "hi": 1415,
+      "lo": 1408,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_RESERVED_ADDR(7)",
+      "hi": 1421,
+      "lo": 1416,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_INVALIDATE(7)",
+      "hi": 1422,
+      "lo": 1422,
+      "reference": "FALSE",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "CONSTANT_BUFFER_SIZE(7)",
+      "hi": 1439,
+      "lo": 1423,
+      "reference": "0x800",
+      "reference_value": 2048,
+      "ours": 2048,
+      "equal": true
+    },
+    {
+      "name": "SHADER_LOCAL_MEMORY_LOW_SIZE",
+      "hi": 1463,
+      "lo": 1440,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_RESERVED_N",
+      "hi": 1466,
+      "lo": 1464,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "BARRIER_COUNT",
+      "hi": 1471,
+      "lo": 1467,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "SHADER_LOCAL_MEMORY_HIGH_SIZE",
+      "hi": 1495,
+      "lo": 1472,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "REGISTER_COUNT",
+      "hi": 1503,
+      "lo": 1496,
+      "reference": "0x5",
+      "reference_value": 5,
+      "ours": 5,
+      "equal": true
+    },
+    {
+      "name": "SHADER_LOCAL_MEMORY_CRS_SIZE",
+      "hi": 1527,
+      "lo": 1504,
+      "reference": "0x800",
+      "reference_value": 2048,
+      "ours": 2048,
+      "equal": true
+    },
+    {
+      "name": "SASS_VERSION",
+      "hi": 1535,
+      "lo": 1528,
+      "reference": "0x30",
+      "reference_value": 48,
+      "ours": 48,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_A",
+      "hi": 1567,
+      "lo": 1536,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_B",
+      "hi": 1599,
+      "lo": 1568,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_C",
+      "hi": 1631,
+      "lo": 1600,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_D",
+      "hi": 1663,
+      "lo": 1632,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_E",
+      "hi": 1695,
+      "lo": 1664,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_F",
+      "hi": 1727,
+      "lo": 1696,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_G",
+      "hi": 1759,
+      "lo": 1728,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_H",
+      "hi": 1791,
+      "lo": 1760,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_I",
+      "hi": 1823,
+      "lo": 1792,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_J",
+      "hi": 1855,
+      "lo": 1824,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_K",
+      "hi": 1887,
+      "lo": 1856,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_L",
+      "hi": 1919,
+      "lo": 1888,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_M",
+      "hi": 1951,
+      "lo": 1920,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "QMD_SPARE_N",
+      "hi": 1983,
+      "lo": 1952,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "DEBUG_ID_UPPER",
+      "hi": 2015,
+      "lo": 1984,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    },
+    {
+      "name": "DEBUG_ID_LOWER",
+      "hi": 2047,
+      "lo": 2016,
+      "reference": "0x0",
+      "reference_value": 0,
+      "ours": 0,
+      "equal": true
+    }
+  ],
+  "equal": 155,
+  "different": 0
+}

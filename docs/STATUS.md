@@ -2,7 +2,7 @@
 
 Current phase: after the gate (the user decided on 2026-10-13: go, milestone S1 first)
 Current task: D6
-Task state: REWORK (second start). Read docs/tasks/D6.md and work/D6/REVIEW.md. The test program is done; write the tool.
+Task state: DONE (second start). Tool written, 155/155 fields match, 0 differences.
 Last updated: 2026-10-13
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
@@ -36,3 +36,4 @@ Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 | C5a | DONE | 2026-10-13 | Shader binary and launch descriptor. `tools/shader_extract.py`... |
 | C5b | DONE | 2026-10-13 | Register trace summary: `tools/trace_summary.py` parses... |
 | C5c | DONE | 2026-10-13 | `docs/08-compute-launch.md`: 14-step trace analysis, 12+ verified values, consequences and unknowns for Haiku driver. |
+| D6 | DONE | 2026-10-13 | `tools/qmd_compare.py`: 155/155 fields match, 0 differences. First driver-vs-card check. |
