@@ -1681,46 +1681,36 @@ if (os.path.exists(c5c_doc) or re.search(r"^\| C5c \| DONE", open(os.path.join(R
             cells = lambda t: [[c.strip().strip("`") for c in r.strip().strip("|").split("|")]
                                for r in t.split("\n") if r.startswith("|")][2:]
             steps = cells(secs["Steps of the job"])
-            if len(steps) < 8 or any(len(r) != 5 for r in steps):
-                fail(f"{rel}: 'Steps of the job' needs 8 rows or more with 5 cells (it has {len(steps)} rows)")
+            C5C_PARTS = [(573421, 615162), (615163, 615167), (615168, 615176), (615177, 615190),
+                         (615191, 616553), (616554, 618713), (618714, 726184), (726185, 726188),
+                         (726189, 730273), (730274, 892358), (892359, 892368), (892369, 900526),
+                         (900527, 900552), (900553, 901167)]
+            got_ranges = []
+            for r in steps:
+                m = re.fullmatch(r"(\d+)\s*[-–]\s*(\d+)", r[1]) if len(r) == 5 else None
+                got_ranges.append((int(m.group(1)), int(m.group(2))) if m else None)
+            if got_ranges != C5C_PARTS:
+                fail(f"{rel}: 'Steps of the job' must have the 14 rows of the task text (5 cells, the same "
+                     f"'Lines' as FIRST-LAST); it has {len(steps)} rows")
             else:
-                prev, covered = 0, {}
-                for r in steps:
-                    m = re.fullmatch(r"(\d+)\s*[-–]\s*(\d+)", r[1])
-                    if not m:
-                        fail(f"{rel}: step {r[0]}: 'Lines' must be FIRST-LAST, not '{r[1]}'"); continue
-                    a, b = int(m.group(1)), int(m.group(2))
-                    if not (j0 <= a <= b <= j1 + 4):
-                        fail(f"{rel}: step {r[0]}: lines {a}-{b} are not inside the job phase ({j0}-{j1})")
-                    if a <= prev:
-                        fail(f"{rel}: step {r[0]}: lines {a}-{b} start before the end of the step before ({prev})")
-                    prev = b
+                covered = {}
+                for r, (a, b) in zip(steps, C5C_PARTS):
                     inrange = set(v[1] for k, v in C5_JOB.items() if a <= k <= b)
                     regs = [int(x, 16) for x in re.findall(r"0x[0-9a-fA-F]{6}\b", r[3])]
-                    if not regs and "instance memory only" not in r[3]:
-                        fail(f"{rel}: step {r[0]}: 'Registers' needs 0x...... (6 hex digits) or 'instance memory only'")
-                    if not regs and inrange:
-                        fail(f"{rel}: step {r[0]}: says 'instance memory only' but lines {a}-{b} have "
-                             f"{len(inrange)} different BAR 0 registers")
+                    if not 1 <= len(regs) <= 6:
+                        fail(f"{rel}: step {r[0]}: 'Registers' needs 1 to 6 registers as 0x...... (6 hex digits)")
                     bad = [f"0x{x:06x}" for x in regs if x not in inrange]
                     if bad:
-                        fail(f"{rel}: step {r[0]}: registers {bad[:5]} are not accessed in lines {a}-{b}")
+                        fail(f"{rel}: step {r[0]}: registers {bad[:6]} are not accessed in lines {a}-{b} "
+                             f"(run tools/trace_lines.py --regs {a} {b})")
                     for x in regs:
-                        covered.setdefault(x, []).append((a, b))
+                        covered.setdefault(x, []).append(int(r[0]) if r[0].isdigit() else 0)
                     if len(r[2].split()) < 6:
                         fail(f"{rel}: step {r[0]}: 'What' must be a sentence")
-                for x, why in ((0x800010, "the channel is bound"), (0x800014, "the channel is enabled"),
-                               (0x002270, "the runlist is written"), (0x409500, "the first FECS command"),
-                               (0x409504, "the first FECS command")):
-                    if x not in covered:
-                        fail(f"{rel}: 'Steps of the job': no step lists 0x{x:06x} ({why})")
-                if not any(a <= 900552 <= b for a, b in covered.get(0x800010, [])):
-                    fail(f"{rel}: 'Steps of the job': no step for the removal of the channel (the second "
-                         f"write to 0x800010, near the end of the job)")
-                pg = sum(1 for r in steps if re.search(r"0x4[01][0-9a-f]{4}", r[3]))
-                if pg < 2:
-                    fail(f"{rel}: 'Steps of the job': the graphics context (PGRAPH registers 0x40....) needs "
-                         f"its own steps")
+                for x, st in ((0x800010, 2), (0x800014, 2), (0x002270, 3), (0x409500, 8), (0x409504, 8),
+                              (0x800014, 11), (0x800010, 13)):
+                    if st not in covered.get(x, []):
+                        fail(f"{rel}: 'Steps of the job': step {st} must list 0x{x:06x}")
             vals = cells(secs["Verified values"])
             if len(vals) < 12 or any(len(r) != 6 for r in vals):
                 fail(f"{rel}: 'Verified values' needs 12 rows or more with 6 cells (it has {len(vals)} rows)")
@@ -1734,7 +1724,7 @@ if (os.path.exists(c5c_doc) or re.search(r"^\| C5c \| DONE", open(os.path.join(R
                              f"name, 0x value"); continue
                     t = C5_JOB.get(ln)
                     if t is None:
-                        fail(f"{rel}: 'Verified values': line {ln} is not a BAR 0 access of the job phase"); continue
+                        fail(f"{rel}: 'Verified values': line {ln} is not a BAR 0 access of the job phase (copy the line number from tools/trace_lines.py)"); continue
                     want_row = (t[0], t[1], t[2], t[3] or "-")
                     if (r[1], reg, val, r[3]) != want_row:
                         fail(f"{rel}: 'Verified values': line {ln} is '{t[0]} 0x{t[1]:06x} {t[3] or '-'} "

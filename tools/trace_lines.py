@@ -6,14 +6,18 @@
     tools/trace_lines.py --reg 0x409504      the job-phase accesses of one register
     tools/trace_lines.py --runs FIRST LAST   the runs (docs/tasks/C5b.md) that
                                              have a line in FIRST..LAST
+    tools/trace_lines.py --regs FIRST LAST   the different BAR 0 registers of
+                                             lines FIRST..LAST: reads, writes,
+                                             first line, name (short output:
+                                             use this first)
 
 Output, one line for each access:
     LINE TIME R|W BAR:OFFSET VALUE NAME
 NAME is the name of tools/rnndb.py for BAR 0, "-" when the database has
 none, and "bar3"/"bar1" for the other BARs (instance memory and the
 channel control area: the trace does not say what the offset means).
-At most 120 lines are printed; a longer range prints the first 60 and the
-last 60 and says how many were left out. Runs of the same BAR 3 mapping
+At most 60 lines are printed; a longer range prints the first 30 and the
+last 30 and says how many were left out. Runs of the same BAR 3 mapping
 are shortened to one line with a count.
 
 Written by the scaffold (2026-10-13). The trace is
@@ -82,6 +86,32 @@ def main(argv):
                 print("run %d lines %d-%d %s reads %d writes %d" % (
                     i, r["first_line"], r["last_line"], r["domain"], r["reads"], r["writes"]))
         return 0
+    if len(argv) == 3 and argv[0] == "--regs":
+        regs, other = {}, 0
+        for n, key, text in accesses(int(argv[1]), int(argv[2])):
+            if key is None:
+                continue
+            if key[0] != 0:
+                other += 1
+                continue
+            f = text.split()
+            e = regs.setdefault(f[3][2:], [0, 0, n, f[5]])
+            e[0 if f[2] == "R" else 1] += 1
+        print("lines %s-%s: %d different BAR 0 registers, %d accesses to BAR 0, %d to other BARs "
+              "(instance memory)" % (argv[1], argv[2], len(regs), sum(e[0] + e[1] for e in regs.values()), other))
+        doms = {}
+        for r, e in regs.items():
+            d = e[3].split(".")[0] if e[3] != "-" else "unknown"
+            doms[d] = doms.get(d, 0) + e[0] + e[1]
+        print("domains: " + ", ".join("%s %d" % kv for kv in sorted(doms.items(), key=lambda kv: -kv[1])))
+        rows = sorted(regs.items(), key=lambda kv: kv[1][2])
+        if len(rows) > 40:
+            print("the first 20 and the 20 with the most accesses of the rest (%d not shown):" % (len(rows) - 40))
+            rest = sorted(rows[20:], key=lambda kv: -(kv[1][0] + kv[1][1]))[:20]
+            rows = rows[:20] + sorted(rest, key=lambda kv: kv[1][2])
+        for r, e in rows:
+            print("%s reads %d writes %d first line %d %s" % (r, e[0], e[1], e[2], e[3]))
+        return 0
     bar0_only = "--bar0" in argv
     argv = [x for x in argv if x != "--bar0"]
     if len(argv) == 2 and argv[0] == "--reg":
@@ -106,9 +136,9 @@ def main(argv):
     else:
         print(__doc__)
         return 2
-    if len(rows) > 120:
-        left = len(rows) - 120
-        rows = rows[:60] + ["... %d lines left out ..." % left] + rows[-60:]
+    if len(rows) > 60:
+        left = len(rows) - 60
+        rows = rows[:30] + ["... %d lines left out ..." % left] + rows[-30:]
     print("\n".join(rows))
     return 0
 
