@@ -1,0 +1,6 @@
+device: /dev/dri/renderD128
+renderer: NVF1
+version: OpenGL ES 3.2 Mesa 25.2.8
+elements: 1024, wrong: 0
+PASS
+exit status 0

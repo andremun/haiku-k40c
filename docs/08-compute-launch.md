@@ -82,8 +82,28 @@ The job phase contains 14 parts, each corresponding to a distinct driver action:
 
 ## Not known
 
-- **The status bits of `0x800014`.** The values read back (0x11000000 at line 615166, 0x1 at lines 892359 and 900527) have bits that Nouveau does not write. What they mean is not in the cited source.
-- **Why the channel is stopped and started again at lines 892359-892368**, and why twice in the removal. The trace shows the register sequence, not the caller.
-- **What the driver waits for in step 5.** The polled registers (0x020000 block) have no name in the register database.
+Answered on 2026-10-13 (after the first version of this document):
+
+- **The bits of `0x800014`.** The register database has them
+  (`tools/rnndb.py 0x800014`): bit 0 ENABLED (a state), bit 10
+  ENABLE_TRIGGER, bit 11 DISABLE_TRIGGER, bits 19:16 ENGINE, bits 26:24
+  and 28 read-only status without a name. So `0x801` is "enabled, and
+  disable requested", and `0x11000000` is read-only status.
+- **Why the channel is stopped and started again (step 11).**
+  `nvkm_chan_cctx_bind` (`engine/fifo/chan.c:41`) does this when an
+  engine context is attached to or removed from a channel: block,
+  preempt (the kick through `0x002634`), change the pointer, allow.
+- **What step 5 waits for.** The registers `0x020520` to `0x020530` and
+  `0x10a78c` are written by the power-management code
+  (`subdev/pmu/gk110.c:39`, `subdev/pmu/gk104.c:69`): power gating of
+  the graphics engine is switched off before the engine is used. The
+  timer reads are the delays of that sequence. A driver that uses the
+  graphics engine (milestone S3) probably needs this sequence.
+- **Which function does what, in order.** `reference/linux-run-debug/`
+  has a second run with the driver's own log next to the trace.
+
+Still not known:
+
+- **The read-only status bits of `0x800014`** (bits 26:24 and 28).
 - **What the 142 registers without a name do** (`analysis/linux_run_trace.md`, last section). Most are in the PGRAPH parts.
 - **The content of instance memory.** About 320,000 writes to BAR 3 in the job: page tables, the instance block, the graphics context image. The trace gives offset and value only.
