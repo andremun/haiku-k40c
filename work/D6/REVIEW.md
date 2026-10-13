@@ -13,3 +13,12 @@ What to do: the task text now says it. The tool opens
 `reference/mesa/src/gallium/drivers/nouveau/nvc0/cla0c0qmd.h` when it
 runs and takes the bits from the `#define NVA0C0_QMDV00_06_` lines. No
 table in the tool. `make check` reports a typed table as a failure.
+
+## Second session (2026-10-13): ACCEPT
+
+26 minutes. The tool reads the header when it runs, has no table, and
+its 155 rows are equal to the reviewer's computation. Result: with the
+parameters of the reference job, `src/compute/LaunchDesc.cpp` builds the
+same descriptor, field by field, that Mesa sent to the K40c. This is the
+first driver code verified against the card. The session did not read
+the checker.

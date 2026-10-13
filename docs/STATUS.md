@@ -1,8 +1,8 @@
 # Status
 
 Current phase: after the gate (the user decided on 2026-10-13: go, milestone S1 first)
-Current task: D6
-Task state: DONE (second start). Tool written, 155/155 fields match, 0 differences.
+Current task: none
+Task state: WAITING. D6 is done and accepted (2026-10-13). The scaffold writes the next task. Do not start a task.
 Last updated: 2026-10-13
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
