@@ -191,27 +191,39 @@ would need to use `MockMMIO` to capture the register access log. A test
 for the RAMFC write sequence (15 words to offsets 0x08–0xfc) would
 require a `MockMMIO` with the instance-block memory region.
 
+## Verified by the reference run
+
+Added by the scaffold on 2026-10-13 from the register trace
+(`reference/linux-run/`, line numbers of that trace), the second run
+with the driver's log (`reference/linux-run-debug/`) and the source.
+The details of the job are in `docs/08-compute-launch.md`.
+
+| Fact | Evidence |
+|---|---|
+| The card has 3 PBDMA units. The driver writes `0xffffffff` to `0x000204`, reads back `0x7`, and writes `0x7`. | Trace lines 230523 to 230526 and 560981; `gf100_fifo_runq_nr` at `nvkm/engine/fifo/gf100.c:927`, `gk104_fifo_init_pbdmas` at `nvkm/engine/fifo/gk104.c:735` |
+| After the PBDMA mask, `0x002a04` is set to `0xbfffffff` (it read `0x800003ff` before). | Trace lines 560982 and 560983; `nvkm/engine/fifo/gk104.c:735` |
+| Bind: `0x800000 + 8 × id` gets `0x80000000 OR (instance address >> 12)`. For channel 2 the write is `0x802cf302` to the register at `0x800000` + 16. | Trace line 615165; `nvkm/engine/fifo/gk104.c:68` |
+| Start: bit 10 of `0x800004 + 8 × id` (ENABLE_TRIGGER). Stop: bit 11 (DISABLE_TRIGGER). Bit 0 reads as 1 while the channel is enabled. | Trace lines 615167, 892360; `nvkm/engine/fifo/gk104.c:44`, `nvkm/engine/fifo/gk104.c:52`; the names PFIFO_CHAN.STATE of the register database |
+| After every stop the channel is kicked off the hardware: the channel ID is written to `0x002634`, and the register is read until bit 20 is clear. This step was missing from this document. | Trace lines 892361 and 892362, 900529 to 900534; `gf100_chan_preempt` at `nvkm/engine/fifo/gf100.c:43`, the wait at `nvkm/engine/fifo/gf100.c:372` |
+| Runlist commit: `0x002270` gets `(target << 28) OR (address >> 12)`, `0x002274` gets `(runlist ID << 20) OR count`, then `0x002284` is read until bit 20 is clear. In the job: `0x002cf325` and `2`. | Trace lines 615174 to 615176; `nvkm/engine/fifo/gk104.c:446`, `nvkm/engine/fifo/gk104.c:447`, `nvkm/engine/fifo/gk104.c:426` |
+| A runlist entry is 8 bytes. For a channel without a hardware group it is the channel ID and then 0. No group entry is written for such a channel: the driver's log shows two entries for two channels, at `RAMRL+00001000` and `RAMRL+00001008`. | `reference/linux-run-debug/dmesg.txt.xz` lines 4934 to 4937; `gk104_runl_insert_chan` in `nvkm/engine/fifo/gk104.c`; entry size at `nvkm/engine/fifo/gk110.c:81` |
+| The card needs no doorbell. After the entry is written, the driver writes the new put index to USERD offset `0x8c` and calls a doorbell only when the device has a "usermode" class, which exists for Volta and later chips. | `nouveau_dma.c:92` to `nouveau_dma.c:94`; the list of classes at `nvif/user.c:43` |
+| The kernel driver itself opens two channels at load, on runlist 0 and on runlist 4, before any user program. | `reference/linux-run-debug/dmesg.txt.xz` lines 4271 to 4366 |
+
+Consequences for the design above: add the kick after each stop; the
+order for removal is stop, kick, runlist commit without the channel,
+then write 0 to the bind register (`gk104_chan_unbind`,
+`nvkm/engine/fifo/gk104.c:60`).
+
 ## Not known
 
-- How the GPU is told that the put pointer moved. `nv50_dma_push`
-  writes USERD offset 0x8c and then calls a doorbell function when the
-  device has one (`docs/pushbuffer-encoding.md`); whether the K40c
-  needs it is not established.
-- The exact meaning and purpose of the 15 RAMFC words written at
-  `nvkm/engine/fifo/gk104.c:82` — most offsets (0x10, 0x30, 0x84,
-  0x9c, 0xac, 0xb8, 0xf8, 0xfc) have no documented purpose in the
-  source beyond the value they store. Only the USERD address (0x08,
-  0x0c), command buffer address (0x48, 0x4c), and channel ID (0xe8)
-  are clearly identifiable.
-- The layout of the PBDMA run queue status register whose bits 13–15
-  are polled by `gk104_runq_idle` at `nvkm/engine/fifo/gk104.c:289`
-  — whether they represent queue depth, error state, or completion
-  status is not established from the source.
-- Which PBDMA units exist on GK110B and what the PBDMA enable mask
-  should contain — `gk104_fifo_init_pbdmas` at
-  `nvkm/engine/fifo/gk104.c:735` writes a mask but does not document
-  which bits correspond to which PBDMA units.
-- The exact format and size of the channel-group entry of a runlist,
-  written by `gk110_runl_insert_cgrp` at
-  `nvkm/engine/fifo/gk110.c:72` — the hardware bit-field layout is
-  not traced beyond the function call.
+- The exact meaning and purpose of most of the 15 RAMFC words written
+  at `nvkm/engine/fifo/gk104.c:82` (offsets 0x10, 0x30, 0x84, 0x9c,
+  0xac, 0xb8, 0xf8, 0xfc). The driver can write the same words as
+  Nouveau; the meaning is not needed for milestone S1.
+- The layout of the PBDMA status register whose bits 13 to 15 are
+  polled by `gk104_runq_idle` at `nvkm/engine/fifo/gk104.c:289`.
+- The format of the entry of a hardware channel group
+  (`gk110_runl_insert_cgrp` at `nvkm/engine/fifo/gk110.c:72`). The
+  reference run did not use one, and milestone S1 does not need one.
+- The read-only status bits 26:24 and 28 of the channel state register.
