@@ -1,8 +1,8 @@
 # Status
 
-Current phase: C (hardware database and firmware), last task group
-Current task: C5c
-Task state: DONE (2026-10-13). Wrote `docs/08-compute-launch.md` with 14-step analysis of the reference trace. All 14 steps verified against Nouveau source and trace data. `make check` passes.
+Current phase: gate (phases A to D are done)
+Current task: none
+Task state: WAITING for the user. All tasks of phases A to D are done and accepted, C5 (a, b, c) on 2026-10-13. The user reviews phases A to D before any Haiku work. Do not start a task.
 Last updated: 2026-10-13
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
