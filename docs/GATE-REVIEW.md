@@ -153,3 +153,13 @@ hardware, in an operating system where a fault can hang the machine.
    run while you decide the rest.
 5. **Publishing.** Nothing is pushed. The repository has 178 commits on
    the local main branch.
+
+## Decisions of the user (2026-10-13)
+
+1. Go: the Haiku work starts.
+2. Milestone S1 first. S2 and S3 are decided when S1 is shown.
+3. The agent may start the Haiku guest with the development card.
+   The limits are written with the plan of the Haiku phases.
+4. The two small tasks start now: D6 (launch descriptor against the
+   reference run) and the correction of `docs/05-fifo-design.md`.
+5. Push the repositories.

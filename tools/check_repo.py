@@ -1767,6 +1767,67 @@ if (os.path.exists(c5c_doc) or re.search(r"^\| C5c \| DONE", open(os.path.join(R
             if len(re.findall(r"^\s*[-*] ", secs["Not known"], re.M)) < 3:
                 fail(f"{rel}: 'Not known' needs 3 list items or more")
 
+# D6 launch descriptor against the reference run ---------------------------
+D6_WORDS = "2e98b7c2dce9c380e787f6cc3c1f1e33b3e1302a866eaab7a28051d0bb3aa331"
+D6_ROWS = ["18977836c4", "4d31bb04e6", "3395ac23fa", "aff4b739b3", "c331136fd1", "b23bee6f71", "1a07f9e434", "89075d34b0", "7f7c327ef8", "615eeff9e2", "dbc9472b14", "e3ce1cc1c7", "46245d6e5c", "1db11ac449", "ca8bf2ec1f", "44fcabb331", "7c4fc5542d", "66ac241b08", "fa8634758e", "a108ff9e24", "9c5ba9798b", "0c24a10a4b", "53c1db2d20", "20aa2633f2", "7e2c330cfe", "72f5a0e1cc", "2b20d958ec", "cb548fd308", "fc987b6f5d", "7ad8f1e88c", "e6bbcfdd49", "45370e45f0", "f2cebf122d", "a0afa8bf22", "ab0cd87cd9", "9deb625da6", "b6b17c32ce", "25a193e95d", "9ad41915c6", "bbe9ff45ff", "f93967b93f", "b3540633aa", "b09ec2370d", "16f789899d", "004ac1849f", "905add2760", "1e40b49b36", "23c0deee8f", "51572486de", "805d9c43c4", "0ce498bd15", "3ab5153aca", "1a7c6902b2", "acbc2bd180", "b1981dd8ee", "335d3acabb", "df59acdc3b", "aa366dbcb5", "d8878aeebf", "32d6e22a97", "94a734cdf6", "d68db94499", "3370ae78ae", "c8d02100a8", "0591a7d861", "05391a1c9d", "19dd509a17", "84dc707c90", "19e8e50fa5", "0d2384e16a", "0303f1dd25", "6dd676ddca", "da187dda6b", "9fd5d10aa6", "48d5bd1185", "ceb424080e", "9fbc10cecb", "84fd17491b", "341e6ce601", "707112c889", "ce222b313f", "bac603e03a", "0f9ae92ecd", "1f8f08c96d", "1997040dcc", "709a66b8da", "af94e34b32", "5ef4344699", "6c07758740", "dcbb049db2", "5d7157d8db", "7974f1668e", "7a21f70b4a", "0023ebe4e6", "ae80ef12c0", "739c68a271", "531fa0dc15", "931dcf5749", "bd4acf007c", "4bc6713c45", "b6a0811056", "4bed36ebec", "e21bdf4304", "04943b288e", "638b13fc50", "2411d42e02", "4e4b98a6c8", "2219a1704a", "3c96e5c47f", "788ffd5f13", "2648b081e4", "9de4ed93df", "9fd0087dc7", "b0c03f7898", "84dacb2446", "aaa91ae028", "02b2b701b2", "abd9e6886c", "91a0c93dbd", "2741e798c2", "ede583e40f", "029e2a5010", "dadba237e2", "77aeabebb0", "c5170d2dee", "331fd1452e", "684af846b1", "2be52fce75", "e3c3b6c552", "a92ac0c86f", "fe68ac8287", "43293a6ad7", "6deb4361d1", "b6fcce354f", "76b6c82518", "6b76584e00", "ae95ee24b2", "967972c99f", "57f51d1ecb", "fd43b32064", "715d644dbc", "4f1ec8382f", "75268ee69d", "c0edd1b43f", "1fbb06532a", "b41c4e68ca", "3fa4cafe44", "0ea635f14a", "3fa80e2105", "f2b5d959db", "95f278fe91", "ba6c641e91", "a608e0f4a3", "43f562a816", "2076a2d3bc"]
+d6_tool = os.path.join(ROOT, "tools", "qmd_compare.py")
+if (os.path.exists(d6_tool) or re.search(r"^\| D6 \| DONE", open(os.path.join(ROOT, "docs", "STATUS.md")).read(), re.M)) \
+        and "D6" not in SKIP:
+    import hashlib, subprocess
+    rel = "analysis/qmd_compare.json"
+    j = load_json(rel) if os.path.exists(os.path.join(ROOT, rel)) else None
+    if not isinstance(j, dict) or not isinstance(j.get("fields"), list) or not isinstance(j.get("words"), list):
+        fail(f"{rel}: missing, or no 'words' and 'fields' lists (docs/tasks/D6.md)")
+    else:
+        ws = " ".join(str(x).lower().replace("0x", "") for x in j["words"])
+        if hashlib.sha256(ws.encode()).hexdigest() != D6_WORDS:
+            fail(f"{rel}: 'words' are not the 64 words that src/compute builds for the job of the task text "
+                 f"(8 hex digits each; word 8 is 0007f100)")
+        rows = j["fields"]
+        if len(rows) != len(D6_ROWS):
+            fail(f"{rel}: 'fields' has {len(rows)} entries; the reference has {len(D6_ROWS)}")
+        else:
+            for n, (r_, h) in enumerate(zip(rows, D6_ROWS)):
+                keys = {"name", "hi", "lo", "reference", "reference_value", "ours", "equal"}
+                if not isinstance(r_, dict) or set(r_) != keys:
+                    fail(f"{rel}: fields[{n}] must have exactly the keys {sorted(keys)}"); break
+                if hashlib.sha256(json.dumps(r_, sort_keys=True, separators=(",", ":")).encode()).hexdigest()[:10] != h:
+                    fail(f"{rel}: fields[{n}] ({r_.get('name')}) is not what the reviewer's program computes: "
+                         f"yours has hi {r_.get('hi')}, lo {r_.get('lo')}, reference_value "
+                         f"{r_.get('reference_value')}, ours {r_.get('ours')}, equal {r_.get('equal')}. Check the "
+                         f"bits in cla0c0qmd.h, the index, and the number of a named value"); break
+            eq = sum(1 for r_ in rows if isinstance(r_, dict) and r_.get("equal") is True)
+            if j.get("equal") != eq or j.get("different") != len(rows) - eq:
+                fail(f"{rel}: 'equal' and 'different' must be the counts of the rows ({eq} and {len(rows) - eq})")
+            rel2 = "analysis/qmd_compare.md"
+            if not os.path.exists(os.path.join(ROOT, rel2)):
+                fail(f"{rel2}: missing (docs/tasks/D6.md)")
+            else:
+                md = open(os.path.join(ROOT, rel2)).read()
+                secs = dict((h_.strip(), b) for h_, b in re.findall(r"^## (.+?)\n(.*?)(?=^## |\Z)", md, re.M | re.S))
+                if list(secs) != ["Result", "Fields that are not zero", "Differences"]:
+                    fail(f"{rel2}: the '## ' sections must be Result, Fields that are not zero, Differences")
+                else:
+                    nz = sum(1 for r_ in rows if isinstance(r_, dict) and (r_.get("reference_value") or r_.get("ours")))
+                    got = len([l for l in secs["Fields that are not zero"].split("\n") if l.startswith("|")]) - 2
+                    if got != nz:
+                        fail(f"{rel2}: the table of 'Fields that are not zero' has {got} rows; expected {nz}")
+                    nd = len(rows) - eq
+                    gd = max(0, len([l for l in secs["Differences"].split("\n") if l.startswith("|")]) - 2)
+                    if gd != nd or (nd == 0 and "None." not in secs["Differences"]):
+                        fail(f"{rel2}: 'Differences' must have {nd} table rows (or the sentence 'None.')")
+    mk = open(os.path.join(ROOT, "tests", "Makefile")).read()
+    if "ref_qmd:compute+fifo" not in mk or not os.path.exists(os.path.join(ROOT, "tests", "ref_qmd.cpp")):
+        fail("tests/ref_qmd.cpp or its entry ref_qmd:compute+fifo in CXX_TESTS of tests/Makefile is missing")
+    if not os.path.exists(d6_tool) or "--check" not in open(d6_tool, errors="replace").read():
+        fail("tools/qmd_compare.py: missing, or no --check option (docs/tasks/D6.md)")
+    else:
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, d6_tool, "--check"], cwd=ROOT, capture_output=True, text=True)
+            if r.returncode != 0:
+                fail(f"tools/qmd_compare.py --check (run {run}): the output files are not what the tool generates")
+                break
+
 for n in notes:
     print("note:", n)
 for f in fails:

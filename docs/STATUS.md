@@ -1,8 +1,8 @@
 # Status
 
-Current phase: gate (phases A to D are done)
-Current task: none
-Task state: WAITING for the user. All tasks of phases A to D are done and accepted, C5 (a, b, c) on 2026-10-13. The user reviews phases A to D before any Haiku work. Do not start a task.
+Current phase: after the gate (the user decided on 2026-10-13: go, milestone S1 first)
+Current task: D6
+Task state: TODO. Read docs/tasks/D6.md. Do not read tools/check_repo.py by any means (AGENTS.md).
 Last updated: 2026-10-13
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).

@@ -79,6 +79,7 @@ the tests. `make check` runs them.
 | D3 | GPFIFO and push-buffer encoding | `docs/tasks/D3.md` |
 | D4 | Register-trace comparison tool | `docs/tasks/D4.md` |
 | D5 | Launch descriptor and compute method encoding | `docs/tasks/D5.md` |
+| D6 | The launch descriptor against the reference run | `docs/tasks/D6.md` |
 
 ## Gate: end of phase D
 
