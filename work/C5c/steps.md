@@ -117,3 +117,42 @@ Source: engine/fifo/gk104.c:40
 892361 42.537193 W 0:0x002634 0x2 PFIFO.KICK_CHID
 892368 42.537313 W 0:0x800014 0x400 PFIFO_CHAN.STATE
 ```
+
+# Step 12: Cleanup — TLB flushes and subfifo interrupt
+**Lines 892369-900526**
+Registers: 0x070000, 0x100c80, 0x100cb8, 0x100cbc, 0x000140, 0x002100, 0x002140, 0x040108, 0x04010c, 0x0400c0, 0x040120
+What: The driver performs many TLB flushes (152 PFFB accesses, 112 PFIFO_FLUSH), reads and clears the subfifo interrupt (0x040108, 0x04010c, 0x040148, 0x04014c), and clears PFIFO interrupt (0x002100=0x40000000).
+Source: engine/fifo/gk104.c:652
+
+```
+892373 42.538000 W 0:0x070000 0x1 PFIFO_FLUSH.FLUSH_CTRL
+895452 42.611800 R 0:0x002100 0x40000000 PFIFO.INTR
+895456 42.611840 W 0:0x0400c0 0x2cf3000 PSUBFIFO.CACHE.ADDR
+895462 42.611920 W 0:0x040148 0x1 PSUBFIFO.COPY_INTR
+```
+
+# Step 13: Channel unbind/removal
+**Lines 900527-900552**
+Registers: 0x800010, 0x800014, 0x002270, 0x002274, 0x002284, 0x002634, 0x070000
+What: The driver stops the channel (0x800014=0x801), kicks channel ID 2, flushes PFIFO, clears state (0x400), updates the runlist (0x002270=0x2cf326, 0x002274=0x1), waits for it to drain, then writes 0 to PFIFO_CHAN.CHAN (0x800010) to fully unbind.
+Source: engine/fifo/gk104.c:56
+
+```
+900528 42.688964 W 0:0x800014 0x801 PFIFO_CHAN.STATE
+900549 42.689195 W 0:0x002270 0x2cf326 PFIFO.PLAYLIST_WR
+900550 42.689203 W 0:0x002274 0x1 PFIFO.PLAYLIST_WR_LEN
+900552 42.689226 W 0:0x800010 0x0 PFIFO_CHAN.CHAN
+```
+
+# Step 14: Final flushes and interrupt
+**Lines 900553-901167**
+Registers: 0x000140, 0x000144, 0x000100, 0x002100, 0x002a00, 0x070000, 0x100c80, 0x100cb8, 0x100cbc, 0x000200
+What: The driver disables interrupts (0x000140=0x0, 0x000144=0x0), reads and clears the runlist interrupt (0x002a00=0x1), re-enables interrupts, performs many TLB flushes (40 PFFB, 22 PFIFO_FLUSH), and polls PMC.ENABLE (0x000200).
+Source: engine/fifo/gk104.c:652
+
+```
+900553 42.689235 R 0:0x000200 0x7 PMC.ENABLE
+900559 42.689330 W 0:0x000140 0x0 PMC.INTR_EN_HOST
+900568 42.689470 W 0:0x002a00 0x1 PFIFO.INTR_RUNLIST
+900650 42.690300 W 0:0x070000 0x1 PFIFO_FLUSH.FLUSH_CTRL
+```
