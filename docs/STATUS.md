@@ -2,6 +2,7 @@
 
 Current phase: C (hardware database and firmware), last task group
 Current task: none
+Task state: WAITING. C5b is done and accepted (2026-10-13). The scaffold writes the next task (the document about the launch). Do not start a task.
 Last updated: 2026-10-13
 
 ## Last result
