@@ -125,7 +125,7 @@ as a link error or a load failure.
 Compiler options used by `kcc`: `-D_KERNEL_MODE -ffreestanding
 -fno-builtin -mno-red-zone -fno-omit-frame-pointer -Wall
 -Wno-multichar`, and for C++ also `-fno-exceptions -fno-rtti`. The
-include paths are 25 directories under `haiku/headers` (public,
+include paths are `haiku/headers` and 23 directories under it (public,
 `private/kernel`, architecture-specific) plus
 `haiku/build/config_headers`. `build-driver.sh` adds `-O2`.
 
