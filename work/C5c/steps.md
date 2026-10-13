@@ -85,3 +85,35 @@ Source: engine/gr/gf100.c:833
 726187 40.940331 W 0:0x409504 0x1 PGRAPH.CTXCTL.WRCMD_CMD
 726188 40.940340 R 0:0x409800 0x80000000 PGRAPH.CTXCTL.CC_SCRATCH
 ```
+
+# Step 9: PGRAPH context setup (part 2)
+**Lines 726189-730273**
+Registers: 0x400200, 0x400204, 0x404004, 0x404010, 0x404020, 0x404028, 0x405800, 0x4064c0, 0x404488, 0x40448c, 0x400700, 0x40060c
+What: The driver continues PGRAPH context setup: sends icmd commands (0x400200/0x400204), dispatches context switch (0x404010), sets SUBCH and MISC (0x404020/0x404028), writes mcache data (0x404488/0x40448c), and polls PGRAPH.STATUS (0x400700) and FE_STATUS (0x40060c) for readiness.
+Source: engine/gr/ctxgf100.c:1436
+
+```
+726190 40.941235 W 0:0x400204 0x00000000 PGRAPH.ICMD_DATA
+726192 40.941260 W 0:0x404004 0x00000000 PGRAPH.DISPATCH.CMD_ADDR
+726200 40.941370 W 0:0x404020 0x00000002 PGRAPH.DISPATCH.SUBCH
+726583 40.945880 R 0:0x400700 0x00000001 PGRAPH.STATUS
+```
+
+# Step 10: Instance memory + periodic work
+**Lines 730274-892358**
+Registers: 0x000140, 0x000144, 0x009100, 0x009400, 0x009410, 0x009420, 0x009140, 0x022400, 0x0212a8, 0x020400, 0x070000, 0x100c80, 0x100cb8, 0x100cbc
+What: 161,834 writes to instance memory with periodic work: interrupt re-enable, timer/alarm polling every ~1s, temperature/fuse reading, TLB flushes every ~2s. 248 BAR 0 accesses.
+Source: not found (periodic scheduler work)
+
+# Step 11: Channel stop
+**Lines 892359-892368**
+Registers: 0x800014, 0x002634, 0x070000
+What: The driver reads PFIFO_CHAN.STATE (0x800014=0x1), writes 0x801 to stop the channel, kicks channel ID 2 via PFIFO.KICK_CHID (0x002634), flushes PFIFO (0x070000), waits for state 0x0, then writes 0x400 to fully disable it.
+Source: engine/fifo/gk104.c:40
+
+```
+892359 42.537150 R 0:0x800014 0x1 PFIFO_CHAN.STATE
+892360 42.537159 W 0:0x800014 0x801 PFIFO_CHAN.STATE
+892361 42.537193 W 0:0x002634 0x2 PFIFO.KICK_CHID
+892368 42.537313 W 0:0x800014 0x400 PFIFO_CHAN.STATE
+```
