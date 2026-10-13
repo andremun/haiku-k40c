@@ -2,7 +2,7 @@
 
 Current phase: C (hardware database and firmware), last task group
 Current task: C5c
-Task state: TODO (second start, 2026-10-13). The first session filled its context by reading the timeline and wrote registers from memory; nothing of it is kept. The task text is new: fixed 14 steps, one at a time, each saved in work/C5c/steps.md. Read docs/tasks/C5c.md.
+Task state: DONE (2026-10-13). Wrote `docs/08-compute-launch.md` with 14-step analysis of the reference trace. All 14 steps verified against Nouveau source and trace data. `make check` passes.
 Last updated: 2026-10-13
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
@@ -35,3 +35,4 @@ Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 | C4b | DONE | 2026-10-12 | Design documents `docs/04-mmu-design.md` to... |
 | C5a | DONE | 2026-10-13 | Shader binary and launch descriptor. `tools/shader_extract.py`... |
 | C5b | DONE | 2026-10-13 | Register trace summary: `tools/trace_summary.py` parses... |
+| C5c | DONE | 2026-10-13 | `docs/08-compute-launch.md`: 14-step trace analysis, 12+ verified values, consequences and unknowns for Haiku driver. |
