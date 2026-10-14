@@ -1,8 +1,8 @@
 # Status
 
 Current phase: after the gate: rework of phase D code (external review), then S1 preparation
-Current task: R1
-Task state: DONE. All 7 defects fixed (F1–F7). `make check` passes.
+Current task: none
+Task state: WAITING. R1 is done and accepted (2026-10-14). The scaffold writes the next task. Do not start a task.
 Last updated: 2026-10-14
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
