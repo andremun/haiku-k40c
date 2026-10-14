@@ -81,6 +81,10 @@ Header decodeHeader(uint32_t word)
 
 void PushBuffer::bindObject(unsigned subc, uint32_t classId)
 {
+    // F6: refuse binding while a packet is pending (like other begin... functions)
+    if (hasPending_)
+        throw std::logic_error("data still pending");
+
     // Method 0 with the class ID (like Mesa does first on each subchannel)
     uint32_t header = encodeHeader(HeaderType::INCREASING, subc, 0, 1);
     buffer_.push_back(header);
@@ -156,6 +160,14 @@ void PushBuffer::data(uint32_t value)
 
 std::vector<uint32_t> PushBuffer::words() const
 {
+    return buffer_;
+}
+
+std::vector<uint32_t> PushBuffer::finishedWords() const
+{
+    // F6: throw if there are still pending data words
+    if (hasPending_)
+        throw std::logic_error("packet not finished");
     return buffer_;
 }
 

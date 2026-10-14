@@ -164,7 +164,14 @@ static void validateSize(uint64_t size, uint64_t pageSize)
 
 static bool beyond40bits(uint64_t va, uint64_t size)
 {
-    return va >= (1ULL << kVaBits) || (va + size) > (1ULL << kVaBits);
+    uint64_t limit = 1ULL << kVaBits;
+    return va >= limit || size > UINT64_MAX - va || (va + size) > limit;
+}
+
+static bool physBeyond40bits(uint64_t phys, uint64_t size)
+{
+    uint64_t limit = 1ULL << kVaBits;
+    return phys >= limit || size > UINT64_MAX - phys || (phys + size) > limit;
 }
 
 // ---------------------------------------------------------------------------
@@ -174,19 +181,34 @@ static bool beyond40bits(uint64_t va, uint64_t size)
 void k40::mmu::AddressSpace::map(uint64_t va, uint64_t phys, uint64_t size,
                                   uint32_t pageShift, Target target, const MapFlags& flags)
 {
+    validatePageShift(pageShift);
+
     uint64_t pageSize = 1ULL << pageShift;
 
-    validatePageShift(pageShift);
     validateAlign(va, pageSize);
     validateAlign(phys, pageSize);
     validateSize(size, pageSize);
     if (beyond40bits(va, size))
         throw std::invalid_argument("Address beyond 40-bit range");
+    if (physBeyond40bits(phys, size))
+        throw std::invalid_argument("Physical address beyond 40-bit range");
 
-    // Check for overlap with existing mappings
-    for (uint64_t pva = va; pva < va + size; pva += pageSize) {
-        if (translate(pva).has_value())
-            throw std::invalid_argument("Mapping overlaps existing mapping");
+    // Check for overlap with existing mappings across both page sizes.
+    // Check each individual PTE, not entire table ranges (F1: mixed-page-size overlap).
+    for (uint32_t i = 0; i < static_cast<uint32_t>(fTableInfos.size()); i++) {
+        const auto& info = fTableInfos[i];
+        uint64_t tblPageSize = info.isLarge ? (1ULL << kLargeShift) : (1ULL << kSmallShift);
+        auto& table = fTableData[i];
+        const uint64_t* ptePtr = reinterpret_cast<const uint64_t*>(table.data());
+        uint64_t tableBaseVA = static_cast<uint64_t>(info.pdeIndex) << kPdeShift;
+        for (uint32_t e = 0; e < info.entries; e++) {
+            if (ptePtr[e] == kPteUnmapped)
+                continue;
+            uint64_t pteVA = tableBaseVA + static_cast<uint64_t>(e) * tblPageSize;
+            if ((pteVA >= va && pteVA < va + size) ||
+                (va >= pteVA && va < pteVA + tblPageSize))
+                throw std::invalid_argument("Mapping overlaps existing mapping");
+        }
     }
 
     for (uint64_t pva = va; pva < va + size; pva += pageSize) {
@@ -273,18 +295,57 @@ void k40::mmu::AddressSpace::map(uint64_t va, uint64_t phys, uint64_t size,
 
 void k40::mmu::AddressSpace::unmap(uint64_t va, uint64_t size, uint32_t pageShift)
 {
+    validatePageShift(pageShift);
+
     uint64_t pageSize = 1ULL << pageShift;
 
-    validatePageShift(pageShift);
     validateAlign(va, pageSize);
     validateSize(size, pageSize);
     if (beyond40bits(va, size))
         throw std::invalid_argument("Address beyond 40-bit range");
 
-    // Check all pages are mapped
+    // Check all pages are mapped and the page size matches
     for (uint64_t pva = va; pva < va + size; pva += pageSize) {
-        if (!translate(pva).has_value())
+        auto opt = translate(pva);
+        if (!opt.has_value())
             throw std::invalid_argument("Unmapping unmapped page");
+        // The mapping must cover this VA with the same page size
+        // Check by seeing if translate finds a mapping at the next page boundary
+        // If the mapping is smaller than pageSize, translate at pva+pageSize would
+        // find a different mapping or no mapping
+        uint64_t nextVa = pva + pageSize;
+        if (nextVa < va) // overflow check
+            throw std::invalid_argument("Unmapping unmapped page");
+        // If translate(nextVa) finds a mapping that doesn't cover from pva,
+        // the page size doesn't match. We check by verifying the found mapping
+        // covers the full pageSize from pva.
+        // Simpler: try to find a table entry for this exact pva and pageShift.
+        // If the mapping was done with a different page size, no matching table
+        // entry exists for this (pva, pageShift) combination.
+    }
+
+    // Verify each page can be found with the requested page size
+    for (uint64_t pva = va; pva < va + size; pva += pageSize) {
+        VaSplit split = splitVa(pva);
+        uint32_t pdeIdx = split.pde;
+        uint32_t pteIdx = (pageShift == 12) ? split.spte : split.lpte;
+
+        bool found = false;
+        for (uint32_t i = 0; i < static_cast<uint32_t>(fTableInfos.size()); i++) {
+            if (fTableInfos[i].pdeIndex == pdeIdx &&
+                fTableInfos[i].isLarge == (pageShift == 17)) {
+                auto& table = fTableData[i];
+                if (pteIdx < table.size() / 8) {
+                    const uint64_t* ptePtr = reinterpret_cast<const uint64_t*>(table.data());
+                    if (ptePtr[pteIdx] != kPteUnmapped) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (!found)
+            throw std::invalid_argument("Unmapping unmapped page or wrong page size");
     }
 
     for (uint64_t pva = va; pva < va + size; pva += pageSize) {

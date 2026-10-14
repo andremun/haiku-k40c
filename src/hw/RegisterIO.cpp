@@ -179,10 +179,38 @@ std::vector<Access> parseTrace(std::istream& in)
 		if (type != 'R' && type != 'W')
 			throw std::invalid_argument("parseTrace: bad type");
 
+		// F7: parse with stoull and pos; reject out-of-range, partial tokens
+		std::size_t pos = 0;
+		uint64_t offsetVal = std::stoull(offsetStr, &pos, 16);
+		if (pos != offsetStr.size())
+			throw std::invalid_argument("parseTrace: partial offset token");
+		if (offsetVal > 0xffffffffULL)
+			throw std::invalid_argument("parseTrace: offset exceeds 32 bits");
+		// Reject negative: stoull does not accept leading minus for hex,
+		// but a '-' would cause stoull to throw or stop at '-'.
+		// If pos == 0 and the first char is '-', stoull throws std::out_of_range.
+		// If the token starts with '-', stoull stops at '-' and pos==0,
+		// which means pos != offsetStr.size() catches it.
+
+		pos = 0;
+		uint64_t valueVal = std::stoull(valueStr, &pos, 16);
+		if (pos != valueStr.size())
+			throw std::invalid_argument("parseTrace: partial value token");
+		if (valueVal > 0xffffffffULL)
+			throw std::invalid_argument("parseTrace: value exceeds 32 bits");
+
+		// Check for trailing tokens after the value
+		std::string trailing;
+		if (ss >> trailing) {
+			// Allowed if the trailing token starts with '#'
+			if (trailing[0] != '#')
+				throw std::invalid_argument("parseTrace: trailing token after value");
+		}
+
 		Access a;
 		a.op = type == 'R' ? Access::READ : Access::WRITE;
-		a.offset = static_cast<uint32_t>(std::stoul(offsetStr, nullptr, 16));
-		a.value = static_cast<uint32_t>(std::stoul(valueStr, nullptr, 16));
+		a.offset = static_cast<uint32_t>(offsetVal);
+		a.value = static_cast<uint32_t>(valueVal);
 
 		result.push_back(a);
 	}

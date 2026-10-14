@@ -50,6 +50,8 @@ uint64_t Qmd::get(unsigned hi, unsigned lo) const {
         throw std::invalid_argument("hi >= 2048 in Qmd::get");
     if (hi < lo)
         throw std::invalid_argument("hi < lo in Qmd::get");
+    if (hi - lo + 1 > 64)
+        throw std::invalid_argument("field width > 64 in Qmd::get");
 
     uint64_t result = 0;
     for (unsigned bit = lo; bit <= hi; bit++) {
@@ -64,11 +66,19 @@ uint64_t Qmd::get(unsigned hi, unsigned lo) const {
 // ---- buildQmd (23 fields from nve4_compute_setup_launch_desc) ----
 
 static uint64_t fld_shared_mem(const ComputeJob& j) {
-    // align(sharedMemSize, 0x100) = (x + 0xFF) & ~0xFF
-    uint64_t aligned = (j.sharedMemSize + 0xFF) & ~0xFFULL;  // nve4_compute.c:600 align(shared_size, 0x100)
+    // Promote to 64-bit before adding 0xFF to avoid overflow (F5)
+    uint64_t aligned = ((uint64_t)j.sharedMemSize + 0xFF) & ~0xFFULL;  // nve4_compute.c:600 align(shared_size, 0x100)
     if (aligned > 0x3FFFF)  // 18-bit field: cla0c0qmd.h:139
         throw std::invalid_argument("sharedMemSize too large for 18-bit field");
     return aligned;
+}
+
+static uint64_t fld_local_mem_low(const ComputeJob& j) {
+    // 24-bit field: bits [1463:1440] — cla0c0qmd.h:210
+    // Must not be masked silently; reject values that don't fit (F5)
+    if (j.localMemLow > 0xfffff0ULL)  // 24-bit max with low 4 bits zero
+        throw std::invalid_argument("localMemLow does not fit 24-bit field");
+    return j.localMemLow & 0xfffff0ULL; // 24-bit mask, 4-bit aligned — cla0c0qmd.h:210
 }
 
 static uint64_t fld_l1_config(const ComputeJob& j) {
@@ -102,7 +112,7 @@ Qmd buildQmd(const ComputeJob& j) {
         {623, 608,  j.block[1]},                    // CTA_THREAD_DIMENSION1                // cla0c0qmd.h:145; nve4_compute.c:597
         {639, 624,  j.block[2]},                    // CTA_THREAD_DIMENSION2                // cla0c0qmd.h:146; nve4_compute.c:598
         {561, 544,  fld_shared_mem(j)},             // SHARED_MEMORY_SIZE                   // cla0c0qmd.h:139; nve4_compute.c:600
-        {1463,1440, j.localMemLow & 0xfffff0ULL},   // SHADER_LOCAL_MEMORY_LOW_SIZE         // cla0c0qmd.h:210; nve4_compute.c:601
+        {1463,1440, fld_local_mem_low(j)},          // SHADER_LOCAL_MEMORY_LOW_SIZE         // cla0c0qmd.h:210; nve4_compute.c:601
         {1495,1472, 0ULL},                          // SHADER_LOCAL_MEMORY_HIGH_SIZE        // cla0c0qmd.h:213; nve4_compute.c:602
         {1527,1504, 0x800ULL},                      // SHADER_LOCAL_MEMORY_CRS_SIZE         // cla0c0qmd.h:215; nve4_compute.c:603
         {671, 669,  fld_l1_config(j)},              // L1_CONFIGURATION                     // cla0c0qmd.h:151; nve4_compute.c:606,610,613

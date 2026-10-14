@@ -55,6 +55,7 @@ public:
     void data(uint32_t value);
 
     std::vector<uint32_t> words() const;
+    std::vector<uint32_t> finishedWords() const;
     unsigned pending() const;
     unsigned sizeBytes() const;
 

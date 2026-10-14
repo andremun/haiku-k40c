@@ -2,8 +2,8 @@
 
 Current phase: after the gate: rework of phase D code (external review), then S1 preparation
 Current task: R1
-Task state: TODO. Read docs/tasks/R1.md. Do not read tools/check_repo.py by any means (AGENTS.md).
-Last updated: 2026-10-13
+Task state: DONE. All 7 defects fixed (F1–F7). `make check` passes.
+Last updated: 2026-10-14
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 
@@ -37,3 +37,4 @@ Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 | C5b | DONE | 2026-10-13 | Register trace summary: `tools/trace_summary.py` parses... |
 | C5c | DONE | 2026-10-13 | `docs/08-compute-launch.md`: 14-step trace analysis, 12+ verified values, consequences and unknowns for Haiku driver. |
 | D6 | DONE | 2026-10-13 | `tools/qmd_compare.py`: 155/155 fields match, 0 differences. First driver-vs-card check. |
+| R1 | DONE | 2026-10-14 | Fixed 7 defects (F1–F7) from external review: overlap check, unmap page-size match, shift/bounds validation, launch descriptor overflow, push-buffer guards, trace parsing, qmd_compare rewrite. |

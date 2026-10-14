@@ -5,6 +5,7 @@
 # Reads the Nouveau header at runtime, runs ref_qmd --words,
 # reads the reference JSON, and writes comparison files.
 
+import argparse
 import json
 import os
 import re
@@ -73,17 +74,54 @@ def parse_header(path):
     return fields, named
 
 
-def eval_expr(expr):
-    """Evaluate an arithmetic expression that may contain (i)*n style terms.
+def compute_expr(expr):
+    """Compute an arithmetic expression containing only digits, +, *, (, ).
 
-    The expression uses only digits, parentheses, +, *, and whitespace.
+    Replaces (i) with the substituted index value first.
+    Uses a simple recursive descent parser, no eval.
     """
-    # Replace any remaining (i) with nothing — by the time this is called,
-    # indices should already be substituted.
-    expr = expr.replace("(", " (").replace(")", ") ")
-    # Clean up multiple spaces
-    expr = " ".join(expr.split())
-    return eval(expr)
+    expr = expr.replace(" ", "")
+    pos = [0]
+
+    def parse_expr():
+        """expr -> term (('+' | '-') term)*"""
+        left = parse_term()
+        while pos[0] < len(expr) and expr[pos[0]] in ('+', '-'):
+            op = expr[pos[0]]
+            pos[0] += 1
+            right = parse_term()
+            if op == '+':
+                left = left + right
+            else:
+                left = left - right
+        return left
+
+    def parse_term():
+        """term -> factor ('*' factor)*"""
+        left = parse_factor()
+        while pos[0] < len(expr) and expr[pos[0]] == '*':
+            pos[0] += 1
+            right = parse_factor()
+            left = left * right
+        return left
+
+    def parse_factor():
+        """factor -> '(' expr ')' | number"""
+        if pos[0] < len(expr) and expr[pos[0]] == '(':
+            pos[0] += 1
+            val = parse_expr()
+            if pos[0] < len(expr) and expr[pos[0]] == ')':
+                pos[0] += 1
+            return val
+        # number
+        start = pos[0]
+        while pos[0] < len(expr) and expr[pos[0]].isdigit():
+            pos[0] += 1
+        if start == pos[0]:
+            raise ValueError(f"unexpected character in expression: {expr[pos[0]]}")
+        return int(expr[start:pos[0]])
+
+    return parse_expr()
 
 
 def substitute_index(hi_lo_text, index):
@@ -111,6 +149,7 @@ def parse_value(value_str, field_name, named):
     """Parse a reference value string into an integer.
 
     Handles: hex (0x...), TRUE, FALSE, and named values from the header.
+    Rejects unknown named values (F4).
     """
     if value_str.startswith("0x") or value_str.startswith("0X"):
         return int(value_str, 16)
@@ -119,20 +158,14 @@ def parse_value(value_str, field_name, named):
     if value_str == "FALSE":
         return 0
     # Named value: look it up in the header defines
-    # The value might be like "DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB"
-    # which corresponds to NVA0C0_QMDV00_06_<FIELD_NAME>_<VALUE>
-    # Try exact match first
     if value_str in named:
         return named[value_str]
     # Try matching as a suffix of a named value
     for name, val in named.items():
         if name.endswith("_" + value_str) or name == value_str:
             return val
-    # Fallback: try to parse as hex without prefix
-    try:
-        return int(value_str, 16)
-    except ValueError:
-        return 0
+    # F4: unknown named value — refuse instead of zeroing
+    raise ValueError(f"Unknown named value '{value_str}' for field '{field_name}'")
 
 
 def resolve_field_name(ref_name):
@@ -152,90 +185,8 @@ def get_index(ref_name):
     return None
 
 
-def main():
-    check_mode = "--check" in sys.argv
-
-    # Step 1: Parse the header
-    fields, named = parse_header(HEADER_PATH)
-    print(f"Parsed {len(fields)} fields, {len(named)} named values", file=sys.stderr)
-
-    # Step 2: Run ref_qmd --words
-    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    test_bin = os.path.join(repo_root, "build", "tests", "ref_qmd")
-
-    if not os.path.exists(test_bin):
-        subprocess.run(["make", "-s", "-C", "tests"], cwd=repo_root, check=True)
-
-    result = subprocess.run(
-        [test_bin, "--words"], capture_output=True, text=True, cwd=repo_root
-    )
-    if result.returncode != 0:
-        print(f"ref_qmd failed: {result.stderr}", file=sys.stderr)
-        sys.exit(1)
-
-    words = []
-    for line in result.stdout.strip().split("\n"):
-        words.append(int(line.strip(), 16))
-
-    # Step 3: Read the reference JSON
-    with open(REFERENCE_JSON, "r") as f:
-        ref_data = json.load(f)
-
-    qmd_entries = ref_data.get("qmd", [])
-
-    # Step 4: Compute comparison rows
-    rows = []
-    equal_count = 0
-    diff_count = 0
-
-    for entry in qmd_entries:
-        ref_name = entry["name"]
-        ref_value_str = entry["value"]
-        ref_value = parse_value(ref_value_str, ref_name, named)
-
-        # Resolve field name and index
-        header_name = resolve_field_name(ref_name)
-        index = get_index(ref_name)
-
-        if header_name not in fields:
-            # Skip fields not found in header (shouldn't happen for V00_06)
-            continue
-
-        hi_lo_text = fields[header_name]
-
-        # Substitute index if present
-        if index is not None:
-            hi_lo_text = substitute_index(hi_lo_text, index)
-
-        # Parse HI:LO
-        parts = hi_lo_text.split(":")
-        if len(parts) != 2:
-            continue
-        hi = eval_expr(parts[0])
-        lo = eval_expr(parts[1])
-
-        # Extract our value
-        ours = extract_bits(words, hi, lo)
-
-        is_equal = (ours == ref_value)
-        if is_equal:
-            equal_count += 1
-        else:
-            diff_count += 1
-
-        rows.append(
-            {
-                "name": ref_name,
-                "hi": hi,
-                "lo": lo,
-                "reference": ref_value_str,
-                "reference_value": ref_value,
-                "ours": ours,
-                "equal": is_equal,
-            }
-        )
-
-    # Step 5: Write JSON output
+def generate_outputs(words, rows, equal_count, diff_count):
+    """Generate JSON and markdown output strings."""
     json_output = {
         "words": [f"0x{w:08x}" for w in words],
         "fields": rows,
@@ -243,30 +194,6 @@ def main():
         "different": diff_count,
     }
 
-    json_path = os.path.join(ANALYSIS_DIR, "qmd_compare.json")
-    md_path = os.path.join(ANALYSIS_DIR, "qmd_compare.md")
-
-    if check_mode:
-        # Read existing files and compare
-        try:
-            with open(json_path, "r") as f:
-                existing_json = json.load(f)
-            with open(md_path, "r") as f:
-                existing_md = f.read()
-            if json.dumps(json_output, sort_keys=True) == json.dumps(
-                existing_json, sort_keys=True
-            ):
-                sys.exit(0)
-            else:
-                sys.exit(1)
-        except (FileNotFoundError, json.JSONDecodeError):
-            sys.exit(1)
-
-    with open(json_path, "w") as f:
-        json.dump(json_output, f, indent=2)
-        f.write("\n")
-
-    # Step 6: Write markdown output
     md_lines = []
     md_lines.append("# QMD Comparison: Our words vs Reference run\n")
     md_lines.append("## Result\n")
@@ -303,8 +230,206 @@ def main():
 
     md_lines.append("")
 
-    with open(md_path, "w") as f:
-        f.write("\n".join(md_lines))
+    return json_output, "\n".join(md_lines)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Compare QMD words")
+    parser.add_argument("--reference", default=REFERENCE_JSON,
+                        help="Reference JSON file")
+    parser.add_argument("--words", help="Words file (default: run ref_qmd --words)")
+    parser.add_argument("--header", default=HEADER_PATH,
+                        help="Header file path")
+    parser.add_argument("--out-json", default=os.path.join(ANALYSIS_DIR, "qmd_compare.json"),
+                        help="JSON output path")
+    parser.add_argument("--out-md", default=os.path.join(ANALYSIS_DIR, "qmd_compare.md"),
+                        help="Markdown output path")
+    parser.add_argument("--verify", action="store_true",
+                        help="Verify mode: exit 0 only if inputs valid and files match")
+    parser.add_argument("--check", action="store_true",
+                        help="Check mode: same as --verify with default paths")
+
+    args = parser.parse_args()
+
+    verify_mode = args.verify or args.check
+
+    # Step 1: Parse the header
+    fields, named = parse_header(args.header)
+    print(f"Parsed {len(fields)} fields, {len(named)} named values", file=sys.stderr)
+
+    # Step 2: Read words
+    if args.words:
+        try:
+            with open(args.words, "r") as f:
+                word_lines = f.read().strip().split("\n")
+        except FileNotFoundError:
+            print(f"Words file not found: {args.words}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        # Run ref_qmd --words
+        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        test_bin = os.path.join(repo_root, "build", "tests", "ref_qmd")
+
+        if not os.path.exists(test_bin):
+            subprocess.run(["make", "-s", "-C", "tests"], cwd=repo_root, check=True)
+
+        result = subprocess.run(
+            [test_bin, "--words"], capture_output=True, text=True, cwd=repo_root
+        )
+        if result.returncode != 0:
+            print(f"ref_qmd failed: {result.stderr}", file=sys.stderr)
+            sys.exit(1)
+
+        word_lines = result.stdout.strip().split("\n")
+
+    # Validate word count and format (F4)
+    words = []
+    for wline in word_lines:
+        wline = wline.strip()
+        if not wline:
+            continue
+        try:
+            w = int(wline, 16)
+        except ValueError:
+            print(f"Invalid hex word: {wline}", file=sys.stderr)
+            sys.exit(1)
+        if w > 0xffffffff:
+            print(f"Word exceeds 32 bits: {wline}", file=sys.stderr)
+            sys.exit(1)
+        words.append(w)
+
+    if len(words) != 64:
+        print(f"Expected 64 words, got {len(words)}", file=sys.stderr)
+        sys.exit(1)
+
+    # Step 3: Read the reference JSON
+    try:
+        with open(args.reference, "r") as f:
+            ref_data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Cannot read reference JSON: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    qmd_entries = ref_data.get("qmd", [])
+
+    # Check for duplicate field names (F4)
+    seen_names = set()
+    for entry in qmd_entries:
+        ref_name = entry["name"]
+        if ref_name in seen_names:
+            print(f"Duplicate field name: {ref_name}", file=sys.stderr)
+            sys.exit(1)
+        seen_names.add(ref_name)
+
+    # Step 4: Compute comparison rows
+    rows = []
+    equal_count = 0
+    diff_count = 0
+
+    for entry in qmd_entries:
+        ref_name = entry["name"]
+        ref_value_str = entry["value"]
+
+        # Resolve field name and index
+        header_name = resolve_field_name(ref_name)
+        index = get_index(ref_name)
+
+        # F4: refuse unknown field names
+        if header_name not in fields:
+            print(f"Unknown field name: {header_name}", file=sys.stderr)
+            sys.exit(1)
+
+        hi_lo_text = fields[header_name]
+
+        # Substitute index if present
+        if index is not None:
+            hi_lo_text = substitute_index(hi_lo_text, index)
+
+        # Parse HI:LO
+        parts = hi_lo_text.split(":")
+        if len(parts) != 2:
+            print(f"Invalid HI:LO format: {hi_lo_text}", file=sys.stderr)
+            sys.exit(1)
+
+        try:
+            hi = compute_expr(parts[0])
+            lo = compute_expr(parts[1])
+        except (ValueError, IndexError) as e:
+            print(f"Error evaluating HI:LO: {e}", file=sys.stderr)
+            sys.exit(1)
+
+        # Parse reference value (F4: refuse unknown named values)
+        try:
+            ref_value = parse_value(ref_value_str, ref_name, named)
+        except ValueError as e:
+            print(f"{e}", file=sys.stderr)
+            sys.exit(1)
+
+        # Extract our value
+        ours = extract_bits(words, hi, lo)
+
+        is_equal = (ours == ref_value)
+        if is_equal:
+            equal_count += 1
+        else:
+            diff_count += 1
+
+        rows.append(
+            {
+                "name": ref_name,
+                "hi": hi,
+                "lo": lo,
+                "reference": ref_value_str,
+                "reference_value": ref_value,
+                "ours": ours,
+                "equal": is_equal,
+            }
+        )
+
+    # Generate outputs
+    json_output, md_output = generate_outputs(words, rows, equal_count, diff_count)
+
+    # Step 5: Handle verify vs generate mode
+    if verify_mode:
+        # Read existing files and compare
+        try:
+            with open(args.out_json, "r") as f:
+                existing_json = json.load(f)
+            with open(args.out_md, "r") as f:
+                existing_md = f.read()
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"Cannot read output files for verification: {e}", file=sys.stderr)
+            sys.exit(1)
+
+        # Verify all fields match and output files are correct
+        if diff_count != 0:
+            print(f"Verification failed: {diff_count} fields differ", file=sys.stderr)
+            sys.exit(1)
+
+        # Compare JSON
+        if json.dumps(json_output, sort_keys=True) != json.dumps(
+            existing_json, sort_keys=True
+        ):
+            print("Verification failed: JSON output differs", file=sys.stderr)
+            sys.exit(1)
+
+        # Compare Markdown
+        if md_output != existing_md:
+            print("Verification failed: Markdown output differs", file=sys.stderr)
+            sys.exit(1)
+
+        print(f"Verification passed: {equal_count} fields match", file=sys.stderr)
+        sys.exit(0)
+
+    # Generate mode: write files
+    os.makedirs(os.path.dirname(args.out_json), exist_ok=True)
+    with open(args.out_json, "w") as f:
+        json.dump(json_output, f, indent=2)
+        f.write("\n")
+
+    os.makedirs(os.path.dirname(args.out_md), exist_ok=True)
+    with open(args.out_md, "w") as f:
+        f.write(md_output)
 
     print(f"qmd_compare: {equal_count} match, {diff_count} differ", file=sys.stderr)
 
