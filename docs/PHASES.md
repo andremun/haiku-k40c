@@ -80,6 +80,7 @@ the tests. `make check` runs them.
 | D4 | Register-trace comparison tool | `docs/tasks/D4.md` |
 | D5 | Launch descriptor and compute method encoding | `docs/tasks/D5.md` |
 | D6 | The launch descriptor against the reference run | `docs/tasks/D6.md` |
+| R1 | Fix the defects that the external review found in the host code | `docs/tasks/R1.md` |
 
 ## Gate: end of phase D
 

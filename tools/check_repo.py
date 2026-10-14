@@ -1835,6 +1835,25 @@ if (os.path.exists(d6_tool) or re.search(r"^\| D6 \| DONE", open(os.path.join(RO
                 fail(f"tools/qmd_compare.py --check (run {run}): the output files are not what the tool generates")
                 break
 
+# R1 fixes for the defects of the external review ---------------------------
+R1_HASHES = {"tests/accept/r1_accept.cpp": "93e7e1645cf8ccb95de09ae0f8a0f5828a188f95239caab23b3b2c89cca09a4c",
+             "tests/accept/r1_accept.py": "cf070f1b98caff184feb6481268079e917d1ae136e57d2649e588f51ce0802eb"}
+if "R1" not in SKIP:
+    import hashlib, subprocess
+    for rel_, sha_ in R1_HASHES.items():
+        p_ = os.path.join(ROOT, rel_)
+        if not os.path.exists(p_) or hashlib.sha256(open(p_, "rb").read()).hexdigest() != sha_:
+            fail(f"{rel_} is missing or was changed. It is the scaffold's test: restore it with "
+                 f"`git checkout main -- {rel_}`")
+    mk_ = open(os.path.join(ROOT, "tests", "Makefile")).read()
+    if "r1_accept:compute+fifo+hw+mmu" not in mk_ or "accept/r1_accept.py" not in mk_ or "-fsanitize=undefined" not in mk_:
+        fail("tests/Makefile: the R1 tests or the sanitizer flags were removed (restore them from main)")
+    r = subprocess.run(["make", "-s", "-C", os.path.join(ROOT, "tests")], capture_output=True, text=True)
+    if r.returncode != 0:
+        out_ = (r.stdout + r.stderr).strip().splitlines()
+        bad_ = [l for l in out_ if l.startswith("FAIL") or "runtime error" in l or "error:" in l][:4]
+        fail(f"make -s -C tests fails: {bad_ or out_[-3:]}")
+
 for n in notes:
     print("note:", n)
 for f in fails:

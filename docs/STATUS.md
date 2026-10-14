@@ -1,8 +1,8 @@
 # Status
 
-Current phase: after the gate (the user decided on 2026-10-13: go, milestone S1 first)
-Current task: none
-Task state: WAITING for the user. The host tasks after the gate are done (D6, the FIFO design update, the S1 plan in docs/S1-PLAN.md). The user gets a third opinion before any Haiku work. Do not start a task.
+Current phase: after the gate: rework of phase D code (external review), then S1 preparation
+Current task: R1
+Task state: TODO. Read docs/tasks/R1.md. Do not read tools/check_repo.py by any means (AGENTS.md).
 Last updated: 2026-10-13
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
