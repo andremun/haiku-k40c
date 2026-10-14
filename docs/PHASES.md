@@ -91,3 +91,10 @@ interrupts, user-space API) are planned at the gate. They need a Haiku
 boot and GPU access. `docs/PASSTHROUGH.md` describes how a test VM can
 get one K40c, so that these phases do not need a reboot into Haiku. It
 is prepared and not enabled.
+
+## S1 preparation (after the gate, docs/S1-PLAN.md)
+
+| Task | Title | Text |
+|---|---|---|
+| R1 | Fix the defects that the external review found in the host code | `docs/tasks/R1.md` |
+| A3 | Inventory of the card's start-up script as it ran | `docs/tasks/A3.md` |

@@ -1,8 +1,8 @@
 # Status
 
-Current phase: after the gate: rework of phase D code (external review), then S1 preparation
-Current task: none
-Task state: WAITING. R1 is done and accepted (2026-10-14). The scaffold writes the next task. Do not start a task.
+Current phase: S1 preparation, track A (bring-up): A3
+Current task: A3
+Task state: TODO. Read docs/tasks/A3.md. Do not read tools/check_repo.py by any means (AGENTS.md).
 Last updated: 2026-10-14
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).

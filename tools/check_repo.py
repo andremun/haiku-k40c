@@ -1854,6 +1854,69 @@ if "R1" not in SKIP:
         bad_ = [l for l in out_ if l.startswith("FAIL") or "runtime error" in l or "error:" in l][:4]
         fail(f"make -s -C tests fails: {bad_ or out_[-3:]}")
 
+# A3 inventory of the start-up script ---------------------------------------
+A3_EXPECT = {"keys": {"scripts": "7897ce0c864a6db8", "log_instructions": "bf7db3a1fea244ba", "executed": "6bcaea9882504292", "skipped": "aea92132c4cbeb26", "opcodes": "36a0c564e797a7c3", "static_instructions": "9e088cddb90e91e1", "log_offsets_not_in_listing": "b558f8588ef2e99f", "listing_offsets_not_in_log": "ee9c43424bb4c242", "board_operations": "b0528345ec6d272a"}, "board": ["085d9b7bfbcd", "0dc9b9da171d", "80b0ea580b04", "2e91a7bab25a", "d40e47d6f5c3", "36a618c67774", "03fa188555fc", "714ab43e6002", "f9701a324d48", "c4ca44e1da0d", "47747e37fb73", "8cd814778722", "a3cae716a4af", "a6638430df47", "139efe5d1d84", "fff1c04f7107", "2058a65f4c7a", "8474e5ca66b7", "2847cb4f0ce2", "d41685402f93", "cc166114da48", "08ff2bbd6047", "aca428d078cf", "819ab9aa9122"], "opcodes": ["9d4ba8dc1d64", "95e62821eb2f", "b1ef1459d26b", "d47fec2fc8de", "e3bec5267395", "984d2719438d", "0b6287eff1ac", "0b0084a54659", "9e29e9e38e28", "ce03bb2d9095", "ab70bb1f3270", "cd0d8dc56ea8", "09f9ef8cb4bf", "dcba85f99522", "c027bef5f597", "6a93a1a78c04", "fd02d8afb977", "07904f3a9315", "c63560eaf3a8", "7d95b9a7b077", "ea4afdaa2199", "655b12a731de", "e8dfac740929", "70c8d98277f9"], "counts": {"log_instructions": 598, "executed": 560, "skipped": 38, "static_instructions": 2041, "listing_offsets_not_in_log": 1519}, "names": ["CONDITION", "CONDITION_TIME", "COPY_NV_REG", "COPY_ZM_REG", "DONE", "END_REPEAT", "GPIO", "GPIO_NE", "IO", "MACRO", "NOT", "NV_REG", "RAM_RESTRICT_ZM_REG_GROUP", "REPEAT", "RESET_BEGUN", "RESET_END", "RESUME", "SUB_DIRECT", "TIME", "ZM_CR", "ZM_I2C_BYTE", "ZM_MASK_ADD", "ZM_REG", "ZM_REG_SEQUENCE"], "board_lines": [1027, 1028, 1036, 1055, 1131, 1145, 1187, 1236, 1245, 1248, 1304, 1307, 1345, 1349, 2381, 2392, 2885, 2890, 2956, 3057, 3087, 3118, 3135, 3184]}
+a3_tool = os.path.join(ROOT, "tools", "devinit_inventory.py")
+if (os.path.exists(a3_tool) or re.search(r"^\| A3 \| DONE", open(os.path.join(ROOT, "docs", "STATUS.md")).read(), re.M)) \
+        and "A3" not in SKIP:
+    import hashlib, subprocess
+    hs_ = lambda v: hashlib.sha256(json.dumps(v, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    rel = "analysis/devinit_inventory.json"
+    j = load_json(rel) if os.path.exists(os.path.join(ROOT, rel)) else None
+    if not isinstance(j, dict):
+        fail(f"{rel}: missing or not an object (docs/tasks/A3.md)")
+    else:
+        for k_, want_ in A3_EXPECT["counts"].items():
+            if j.get(k_) != want_:
+                fail(f"{rel}: '{k_}' is {j.get(k_)!r}; the reviewer counts {want_}")
+        for k_, h_ in A3_EXPECT["keys"].items():
+            if k_ in A3_EXPECT["counts"] or k_ in ("opcodes", "board_operations"):
+                continue
+            if k_ not in j or hs_(j[k_])[:16] != h_:
+                fail(f"{rel}: '{k_}' is not what the reviewer computes from the same files")
+        ops_ = j.get("opcodes") if isinstance(j.get("opcodes"), list) else []
+        names_ = [o.get("name") for o in ops_ if isinstance(o, dict)]
+        if names_ != A3_EXPECT["names"]:
+            fail(f"{rel}: 'opcodes' names {names_[:5]}... are not the {len(A3_EXPECT['names'])} names of the log, "
+                 f"sorted (first expected: {A3_EXPECT['names'][:3]})")
+        else:
+            for o_, h_ in zip(ops_, A3_EXPECT["opcodes"]):
+                if hs_(o_)[:12] != h_:
+                    fail(f"{rel}: opcodes entry {o_.get('name')}: the executed or skipped count differs from the "
+                         f"reviewer's count"); break
+        bo_ = j.get("board_operations") if isinstance(j.get("board_operations"), list) else []
+        lines_ = [b.get("line") for b in bo_ if isinstance(b, dict)]
+        if lines_ != A3_EXPECT["board_lines"]:
+            fail(f"{rel}: 'board_operations' has lines {lines_[:6]}...; expected {A3_EXPECT['board_lines'][:6]}... "
+                 f"({len(A3_EXPECT['board_lines'])} operations)")
+        else:
+            for b_, h_ in zip(bo_, A3_EXPECT["board"]):
+                if hs_(b_)[:12] != h_:
+                    fail(f"{rel}: board operation at line {b_.get('line')} ({b_.get('name')}): offset, marker, "
+                         f"text or details differ from the definition in the task text"); break
+    rel = "analysis/devinit_inventory.md"
+    if not os.path.exists(os.path.join(ROOT, rel)):
+        fail(f"{rel}: missing (docs/tasks/A3.md)")
+    else:
+        md = open(os.path.join(ROOT, rel)).read()
+        secs = dict((h.strip(), b) for h, b in re.findall(r"^## (.+?)\n(.*?)(?=^## |\Z)", md, re.M | re.S))
+        if list(secs) != ["Summary", "Instructions", "Not in the listing", "Board operations"]:
+            fail(f"{rel}: the '## ' sections must be Summary, Instructions, Not in the listing, Board operations")
+        else:
+            rows = lambda t: len([r for r in t.split("\n") if r.startswith("|")]) - 2
+            if rows(secs["Instructions"]) != len(A3_EXPECT["names"]):
+                fail(f"{rel}: 'Instructions' needs one row for each of the {len(A3_EXPECT['names'])} names")
+            if rows(secs["Board operations"]) != len(A3_EXPECT["board_lines"]):
+                fail(f"{rel}: 'Board operations' needs one row for each of the {len(A3_EXPECT['board_lines'])} operations")
+    if not os.path.exists(a3_tool) or "--check" not in open(a3_tool, errors="replace").read():
+        fail("tools/devinit_inventory.py: missing, or no --check option (docs/tasks/A3.md)")
+    else:
+        for run in (1, 2):
+            r = subprocess.run([sys.executable, a3_tool, "--check"], cwd=ROOT, capture_output=True, text=True, timeout=120)
+            if r.returncode != 0:
+                fail(f"tools/devinit_inventory.py --check (run {run}): the output files are not what the tool writes")
+                break
+
 for n in notes:
     print("note:", n)
 for f in fails:
