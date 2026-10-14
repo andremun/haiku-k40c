@@ -304,24 +304,11 @@ void k40::mmu::AddressSpace::unmap(uint64_t va, uint64_t size, uint32_t pageShif
     if (beyond40bits(va, size))
         throw std::invalid_argument("Address beyond 40-bit range");
 
-    // Check all pages are mapped and the page size matches
+    // Check that all pages are mapped
     for (uint64_t pva = va; pva < va + size; pva += pageSize) {
         auto opt = translate(pva);
         if (!opt.has_value())
             throw std::invalid_argument("Unmapping unmapped page");
-        // The mapping must cover this VA with the same page size
-        // Check by seeing if translate finds a mapping at the next page boundary
-        // If the mapping is smaller than pageSize, translate at pva+pageSize would
-        // find a different mapping or no mapping
-        uint64_t nextVa = pva + pageSize;
-        if (nextVa < va) // overflow check
-            throw std::invalid_argument("Unmapping unmapped page");
-        // If translate(nextVa) finds a mapping that doesn't cover from pva,
-        // the page size doesn't match. We check by verifying the found mapping
-        // covers the full pageSize from pva.
-        // Simpler: try to find a table entry for this exact pva and pageShift.
-        // If the mapping was done with a different page size, no matching table
-        // entry exists for this (pva, pageShift) combination.
     }
 
     // Verify each page can be found with the requested page size
