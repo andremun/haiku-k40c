@@ -1,9 +1,9 @@
 # Status
 
-Current phase: S1 preparation, track A (bring-up): A3
-Current task: A3
-Task state: TODO. Read docs/tasks/A3.md. Do not read tools/check_repo.py by any means (AGENTS.md).
-Last updated: 2026-10-14
+Current phase: S1 preparation (plan: docs/S1-PLAN.md)
+Current task: none. Waiting for the scaffold.
+Task state: WAITING. Do not start any task.
+Last updated: 2026-10-16
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 
@@ -38,3 +38,4 @@ Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 | C5c | DONE | 2026-10-13 | `docs/08-compute-launch.md`: 14-step trace analysis, 12+ verified values, consequences and unknowns for Haiku driver. |
 | D6 | DONE | 2026-10-13 | `tools/qmd_compare.py`: 155/155 fields match, 0 differences. First driver-vs-card check. |
 | R1 | DONE | 2026-10-14 | Fixed 7 defects (F1–F7) from external review: overlap check, unmap page-size match, shift/bounds validation, launch descriptor overflow, push-buffer guards, trace parsing, qmd_compare rewrite. |
+| A3 | STOPPED | 2026-10-15 | Stopped by the scaffold after 17 h, not accepted: the agent read `tools/check_repo.py`, and its explanation of offsets missing from the listing was wrong. Partial work kept on branch `task-a3` only. To rework. |

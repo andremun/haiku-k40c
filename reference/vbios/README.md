@@ -26,3 +26,18 @@ not read.
 Use: offline decoding of the BIT table, the start-up scripts, and the GPIO
 and I²C tables (track A of `docs/S1-PLAN.md`). Reading the file never
 touches the card.
+
+## Decoder
+
+The tables and scripts were decoded with `nvbios` from envytools, commit
+`f102b82381f3f11cee113d16374c87091db039d9` (the same pin as
+`agent-refs/envytools` in llm-server). The project's full build needs
+`pkg-config` and libraries that are not installed, so only `nvbios` was
+built, by hand and without root, in
+`~/haiku-cross/src/envytools/build-manual/` (the flex and bison sources
+generated into `gen/`). Output of `nvbios` on the image:
+`~/haiku-cross/vbios/decoded/all.txt`, outside the repository because it
+reproduces the firmware's content. It warns that no strap is given and
+that it cannot parse BIT table `B`; the tables used so far (scripts, GPIO,
+I²C, external devices) decode. The board operations found with it are in
+`docs/BOARD-OPERATIONS.md`.
