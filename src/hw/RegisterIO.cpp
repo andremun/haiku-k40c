@@ -179,6 +179,10 @@ std::vector<Access> parseTrace(std::istream& in)
 		if (type != 'R' && type != 'W')
 			throw std::invalid_argument("parseTrace: bad type");
 
+		// Reject negative tokens explicitly: stoull accepts a minus and wraps modulo 2^64.
+		if (offsetStr[0] == '-' || valueStr[0] == '-')
+			throw std::invalid_argument("parseTrace: negative hexadecimal token");
+
 		// F7: parse with stoull and pos; reject out-of-range, partial tokens
 		std::size_t pos = 0;
 		uint64_t offsetVal = std::stoull(offsetStr, &pos, 16);
@@ -186,11 +190,6 @@ std::vector<Access> parseTrace(std::istream& in)
 			throw std::invalid_argument("parseTrace: partial offset token");
 		if (offsetVal > 0xffffffffULL)
 			throw std::invalid_argument("parseTrace: offset exceeds 32 bits");
-		// Reject negative: stoull does not accept leading minus for hex,
-		// but a '-' would cause stoull to throw or stop at '-'.
-		// If pos == 0 and the first char is '-', stoull throws std::out_of_range.
-		// If the token starts with '-', stoull stops at '-' and pos==0,
-		// which means pos != offsetStr.size() catches it.
 
 		pos = 0;
 		uint64_t valueVal = std::stoull(valueStr, &pos, 16);

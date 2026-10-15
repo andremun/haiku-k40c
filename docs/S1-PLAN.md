@@ -18,8 +18,10 @@ Nouveau uses for this chip. Our encoder produces the two words
 `0x20010002 0x00000000`, which match NVIDIA's class header and the
 research (`docs/external/`, S1 unknowns).
 
-S1 needs no graphics engine and no firmware. It needs the card awake, its
-memory manager working, and its command scheduler running.
+S1 aims to omit graphics-engine initialization and GR context-switch
+microcode; scheduling in that state remains unverified (unknown 1 below).
+It still depends on the card's VBIOS initialization program, working memory
+management and command scheduling. Do not describe this as "no firmware".
 
 ## What changed since the first draft
 
@@ -55,6 +57,15 @@ for the guest tooling, but with KVM (it ran under software emulation);
 compile GPU kernels on Linux through Mesa and ship the binaries, as we did
 once for the first shader, instead of porting the compiler into Haiku;
 and a timed matrix product as the decision point after S3 (see the end).
+
+## Verification follow-up (2026-10-16)
+
+[The verification gates](S1-VERIFICATION.md) record a new pass to revise
+possible mistakes made by "Local" and get closer to machine-dependent
+implementation. V1 adds independent host regressions and a freestanding S1
+controller/backend contract; it does not complete B2/B3 or C2/C3. The ROM
+is deferred by the user. Source and native toolchain inputs are also absent
+in this checkout; full checks and actual S1 remain pending.
 
 ## The work, in three tracks
 

@@ -17,7 +17,7 @@ own, and the work may stop at any of them.
 
 | ID | Milestone | Needs | Proof |
 |---|---|---|---|
-| S1 | The GPU accepts a command. A channel exists, a GPFIFO entry is submitted, and the GPU consumes it. | PCI, MMIO, MC, FB/VRAM, instance memory, MMU, FIFO/PBDMA, runlist. No GR, no firmware. | The GPFIFO GET pointer of the channel advances to PUT, read from the host, with no fault interrupt pending. |
+| S1 | The GPU accepts a command. A channel exists, a GPFIFO entry is submitted, and the GPU consumes it. | PCI, MMIO, MC, FB/VRAM, instance memory, MMU, FIFO/PBDMA, runlist and VBIOS bring-up. Omission of GR setup/microcode remains unverified. | The GPFIFO GET pointer of the channel advances to PUT, read from the host, with no relevant fault pending and clean teardown. |
 | S2 | The GPU copies a buffer. The copy engine (class `KEPLER_DMA_COPY_A`) copies N bytes between two buffers in VRAM. | S1 and the copy engine (`nvkm/engine/ce/gk104.c`). INFERRED: no firmware and no GR context are needed (the file has no falcon or firmware code). Task C3 must confirm it. | The host reads the destination buffer and it equals the source. |
 | S3 | The GPU computes. A compute shader does `output[i] = input[i] + 1`. | S1, the GR engine with FECS/GPCCS firmware and a GR context, the compute class `0xa1c0`, a launch descriptor, and a shader binary in GK110 machine code. The last two are user-space work that Nouveau's kernel driver does not contain: they are in Mesa (`reference/mesa`). Tasks B6, C5 and D5 cover them. | The host reads the output buffer and checks every element. |
 
@@ -98,3 +98,11 @@ is prepared and not enabled.
 |---|---|---|
 | R1 | Fix the defects that the external review found in the host code | `docs/tasks/R1.md` |
 | A3 | Inventory of the card's start-up script as it ran | `docs/tasks/A3.md` |
+
+## User-directed verification follow-up
+
+| Task | Title | Text |
+|---|---|---|
+| V1 | Cardless S1 verification and backend boundary | `docs/tasks/V1.md` |
+
+See `docs/S1-VERIFICATION.md` for results, remaining gates and external-input blockers.

@@ -1,0 +1,71 @@
+{
+  "captures": [
+    {
+      "exists": true,
+      "path": "reference/linux-run/mmiotrace.txt.xz",
+      "sha256": "facecb05d746f5af8ff66c9a868454ad1646d2ba13d1859480c96cc94fe27b9b"
+    },
+    {
+      "exists": true,
+      "path": "reference/linux-run-debug/mmiotrace.txt.xz",
+      "sha256": "3cee0731faadb7f4aacb53ba1d0d3ce7d5954430c31fc764a731ad029bd2f67b"
+    },
+    {
+      "exists": true,
+      "path": "reference/linux-run-debug/dmesg.txt.xz",
+      "sha256": "e15e44ac82d6172587fea176327e074e192e5c0138519e9a9716f312c7a9672b"
+    }
+  ],
+  "external_inputs_complete": false,
+  "hardware_verified": false,
+  "rom": {
+    "expected_sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
+    "expected_size": 181760,
+    "matches": false,
+    "supplied": false
+  },
+  "scope": "OFFLINE_INPUT_INVENTORY_ONLY",
+  "sources": [
+    {
+      "actual_revision": null,
+      "exists": false,
+      "expected_revision": "adc218676eef25575469234709c2d87185ca223a",
+      "name": "nouveau",
+      "revision_matches": false
+    },
+    {
+      "actual_revision": null,
+      "exists": false,
+      "expected_revision": "f102b82381f3f11cee113d16374c87091db039d9",
+      "name": "envytools",
+      "revision_matches": false
+    },
+    {
+      "actual_revision": null,
+      "exists": false,
+      "expected_revision": "9fdf5c4062007929d9f4e6cbad9c9771fe61b880",
+      "name": "open-gpu-doc",
+      "revision_matches": false
+    },
+    {
+      "actual_revision": null,
+      "exists": false,
+      "expected_revision": "49a0af9585d80e42240af63ab66e31e9873f59b8",
+      "name": "haiku",
+      "revision_matches": false
+    },
+    {
+      "actual_revision": null,
+      "exists": false,
+      "expected_revision": "f97d7dcca0e51d7e20ed4342bb5ea8afea7db7fa",
+      "name": "mesa",
+      "revision_matches": false
+    }
+  ],
+  "toolchain": {
+    "compiler": false,
+    "headers": false,
+    "kernel": false,
+    "root": "/home/unimelb.edu.au/mariom1/haiku-cross"
+  }
+}

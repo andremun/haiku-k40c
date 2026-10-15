@@ -12,7 +12,8 @@ CXX      := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -Werror -I../src -fsanitize=undefined -fno-sanitize-recover=all
 BUILDDIR := ../build/tests
 
-CXX_TESTS := test_registerio:hw d1_accept:hw \
+CXX_TESTS := test_s1_boundaries:fifo+hw+mmu test_s1_experiment:runtime \
+             test_registerio:hw d1_accept:hw \
              test_pagetable:mmu d2_accept:mmu \
              test_pushbuffer:fifo d3_accept:fifo \
              test_launchdesc:compute+fifo d5_accept:compute+fifo \

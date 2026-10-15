@@ -441,6 +441,7 @@ uint64_t k40::mmu::AddressSpace::pde(uint32_t index) const
 uint64_t k40::mmu::AddressSpace::pte(uint32_t pdeIndex, uint32_t pageShift,
                                       uint32_t index) const
 {
+    validatePageShift(pageShift);
     bool isLarge = (pageShift == 17);
 
     for (uint32_t i = 0; i < static_cast<uint32_t>(fTableInfos.size()); i++) {

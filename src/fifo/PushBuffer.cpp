@@ -248,8 +248,8 @@ GpEntry encodeGpEntry(uint64_t addr, uint32_t lengthBytes, bool noPrefetch)
         throw std::invalid_argument("length must be 1..NV50_DMA_PUSH_MAX_LENGTH");
 
     // Validate address fits in 40 bits
-    if (addr >= (1ULL << 40))
-        throw std::invalid_argument("address must fit in 40 bits");
+    if (addr >= (1ULL << 40) || lengthBytes > (1ULL << 40) - addr)
+        throw std::invalid_argument("push-buffer range must fit in 40 bits");
 
     GpEntry e;
     // nouveau_dma.c:82 — lower_32_bits(offset)

@@ -67,7 +67,7 @@ uint64_t encodePde(const PageTableRef* large, const PageTableRef* small);
 // Split a virtual address into its three index components.
 // pde = bits [27..39] of the address — vmmgk104.c:42
 // lpte = bits [17..26] — vmmgk104.c:48
-// spte = bits [0..11] — vmmgk104.c:41
+// spte = bits [12..26] — vmmgk104.c:41
 struct VaSplit {
     uint32_t pde;    // page-directory index
     uint32_t lpte;   // large-page-table index
@@ -80,7 +80,7 @@ VaSplit splitVa(uint64_t va);
 uint64_t encodeInstPdb(const PageTableRef& pd);
 
 // Encode the instance-block limit at offset 0x208.
-// vmmgf100.c:360 — limit = vaLimit - 1 (wraps to 0xffffffffffff for 40-bit)
+// vmmgf100.c:360 — limit = vaLimit - 1 (caller supplies the exclusive limit)
 uint64_t encodeInstLimit(uint64_t vaLimit);
 
 // Address-space model: page directory + page tables in simulated memory.
