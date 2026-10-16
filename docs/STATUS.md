@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: none. V2 complete; awaiting the next assigned task.
-Task state: WAITING. V2 host verification passes; native Haiku and hardware stages remain pending.
+Current task: ABC1 (user-directed cardless A/B/C continuation).
+Task state: IN PROGRESS. Complete feasible host/cardless steps; hardware remains out of scope.
 Last updated: 2026-10-16
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
