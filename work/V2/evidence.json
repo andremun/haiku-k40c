@@ -1,0 +1,188 @@
+{
+  "artifacts": {
+    "build/nvbios/all.txt": {
+      "bytes": 254919,
+      "sha256": "dce802b40173ececd2df0217e9e3adbb816614a64d7c0b0f1d00ad26646df0bf"
+    },
+    "build/nvbios/board.stderr": {
+      "bytes": 760,
+      "sha256": "2c41f2ed6f019857f70b05d19134de240934fab4f04ddfeef215c1960289c2f0"
+    },
+    "build/nvbios/board.txt": {
+      "bytes": 1843,
+      "sha256": "6814130b3dbcf099bb31e5c24555536f33533a6caf5191414e4050f8b269df49"
+    },
+    "build/nvbios/nvbios": {
+      "bytes": 8240440,
+      "sha256": "28a3948cc8763d62df18f1d36f6943a5f9c97043d0f11ab88ad6fd3beabf32f0"
+    },
+    "build/nvbios/scripts.stderr": {
+      "bytes": 760,
+      "sha256": "2c41f2ed6f019857f70b05d19134de240934fab4f04ddfeef215c1960289c2f0"
+    },
+    "build/nvbios/scripts.txt": {
+      "bytes": 201416,
+      "sha256": "8aaae975726344e032dd23e16190dfff4762838de8dd2d57296009c4815bd2d6"
+    },
+    "build/tests/v2-final-check.log": {
+      "bytes": 936,
+      "sha256": "3102f4738a3f9828a09ed81f04f29a62d7a2081f9713438567c51e877137c9c9"
+    },
+    "build/tests/v2-make-check-fixed.log": {
+      "bytes": 936,
+      "sha256": "3102f4738a3f9828a09ed81f04f29a62d7a2081f9713438567c51e877137c9c9"
+    }
+  },
+  "corrected_pytest_probe_exit": 1,
+  "decoder_build": {
+    "binary_sha256": "28a3948cc8763d62df18f1d36f6943a5f9c97043d0f11ab88ad6fd3beabf32f0",
+    "commands": [
+      [
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/decoder-tools/root/usr/bin/bison",
+        "-d",
+        "-o",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/nvbios/gen/easm_parse.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/easm/easm_parse.y"
+      ],
+      [
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/decoder-tools/root/usr/bin/flex",
+        "--header-file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/nvbios/gen/easm_lex.h",
+        "-o",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/nvbios/gen/easm_lex.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/easm/easm_lex.l"
+      ],
+      [
+        "gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wno-missing-braces",
+        "-I/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/include",
+        "-I/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/nvbios/gen",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/path.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/mask.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/hash.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/symtab.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/colors.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/yy.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/astr.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/aprintf.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/vardata.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/varinfo.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/varselect.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/util/file.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/easm/easm.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/easm/easm_print.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/easm/easm_xfrm.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/core.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/core-as.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/core-dis.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/g80.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/gf100.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/gk110.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/gm107.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/ctx.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/falcon.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/hwsq.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/xtensa.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/vuc.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/macro.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/vp1.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/envydis/vcomp.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/bios.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/print.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/bit.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/info.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/dacload.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/iunk.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/i2cscript.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/dcb.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/dunk.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/i2c.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/gpio.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/extdev.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/conn.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/mem.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/mux.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/power.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/D.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/L.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/T.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/d.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/p.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/reference/envytools/nvbios/nvbios.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/nvbios/gen/easm_parse.c",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/nvbios/gen/easm_lex.c",
+        "-lm",
+        "-o",
+        "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/nvbios/nvbios"
+      ]
+    ],
+    "compiler": "gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+    "source_revision": "f102b82381f3f11cee113d16374c87091db039d9",
+    "tool_sha256": {
+      "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/decoder-tools/root/usr/bin/bison": "7791b07ce4e24d56c80f3df47c9a193b039392afc1eb02af726ff93591b1c6e7",
+      "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/decoder-tools/root/usr/bin/flex": "4cabd101467c6b428e3fd9b5a7dee0785b3108657ae0a5d85947956329d7047b",
+      "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/decoder-tools/root/usr/bin/m4": "bef5254af5957f1c03696ca871b75848e288fba8f92d7a8fe13516f59a685ccf"
+    }
+  },
+  "final_make_check_exit": 0,
+  "full_decode_matches_saved_copy": true,
+  "initial_pytest_probe_exit": 0,
+  "project_tool_sha256": {
+    "Makefile": "a572a91a93ca0280707f2360a13af6017a11f4256453b917d78d7af7ee8b0dee",
+    "tools/build_nvbios.py": "4f1c20a9cf22517068e10a4f888264c4ef7a6c438ac9483d0260f8be3f9bcd5c",
+    "tools/restore_verification_refs.py": "3a8fdd7e71a79de97d5483e192f84f001755ced8856e18196374634e79a8658d",
+    "tools/verification-requirements.txt": "10858cbd2f4225666f878175a4b8d211d2c896f6f01886b9ad451f30b36c7389"
+  },
+  "python_packages": [
+    "iniconfig==2.3.1",
+    "packaging==26.3",
+    "pluggy==1.7.0",
+    "pytest==8.3.5",
+    "PyYAML==6.0.2"
+  ],
+  "scope": "OFFLINE_ONLY; no hardware or native Haiku result",
+  "source_state": [
+    {
+      "actual_revision": "adc218676eef25575469234709c2d87185ca223a",
+      "exists": true,
+      "expected_revision": "adc218676eef25575469234709c2d87185ca223a",
+      "name": "nouveau",
+      "revision_matches": true
+    },
+    {
+      "actual_revision": "f102b82381f3f11cee113d16374c87091db039d9",
+      "exists": true,
+      "expected_revision": "f102b82381f3f11cee113d16374c87091db039d9",
+      "name": "envytools",
+      "revision_matches": true
+    },
+    {
+      "actual_revision": "9fdf5c4062007929d9f4e6cbad9c9771fe61b880",
+      "exists": true,
+      "expected_revision": "9fdf5c4062007929d9f4e6cbad9c9771fe61b880",
+      "name": "open-gpu-doc",
+      "revision_matches": true
+    },
+    {
+      "actual_revision": "49a0af9585d80e42240af63ab66e31e9873f59b8",
+      "exists": true,
+      "expected_revision": "49a0af9585d80e42240af63ab66e31e9873f59b8",
+      "name": "haiku",
+      "revision_matches": true
+    },
+    {
+      "actual_revision": "f97d7dcca0e51d7e20ed4342bb5ea8afea7db7fa",
+      "exists": true,
+      "expected_revision": "f97d7dcca0e51d7e20ed4342bb5ea8afea7db7fa",
+      "name": "mesa",
+      "revision_matches": true
+    }
+  ],
+  "standalone_check_exit": 0,
+  "tool_packages": {
+    "build/decoder-tools/bison_2%3a3.8.2+dfsg-1ubuntu0.22.04.1_amd64.deb": "40ba998a24ce53a420fc3f8188b833fde276564df1a7e90acaf875f4f9b76c4e",
+    "build/decoder-tools/flex_2.6.4-8build2_amd64.deb": "980674f410fa6cb5e41d1bdf434a9391dcec0ac8fae5194cd90f9598ae074d8d",
+    "build/decoder-tools/m4_1.4.18-5ubuntu2_amd64.deb": "572a544d2c18bf49d25c465720c570cd8e6e38731386ac9c0a7f29bed2486f3e"
+  }
+}

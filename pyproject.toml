@@ -1,7 +1,0 @@
-[tool.pytest.ini_options]
-# This project does not use pytest; standalone test scripts are run
-# via tests/Makefile. Tell pytest to ignore the tests/ directory
-# so that `make check` does not fail when pytest is installed.
-testpaths = []
-norecursedirs = [".*", "*.egg*", "build", "dist", "tests"]
-addopts = "-q"

@@ -31,39 +31,39 @@
   "scope": "OFFLINE_INPUT_INVENTORY_ONLY",
   "sources": [
     {
-      "actual_revision": null,
-      "exists": false,
+      "actual_revision": "adc218676eef25575469234709c2d87185ca223a",
+      "exists": true,
       "expected_revision": "adc218676eef25575469234709c2d87185ca223a",
       "name": "nouveau",
-      "revision_matches": false
+      "revision_matches": true
     },
     {
-      "actual_revision": null,
-      "exists": false,
+      "actual_revision": "f102b82381f3f11cee113d16374c87091db039d9",
+      "exists": true,
       "expected_revision": "f102b82381f3f11cee113d16374c87091db039d9",
       "name": "envytools",
-      "revision_matches": false
+      "revision_matches": true
     },
     {
-      "actual_revision": null,
-      "exists": false,
+      "actual_revision": "9fdf5c4062007929d9f4e6cbad9c9771fe61b880",
+      "exists": true,
       "expected_revision": "9fdf5c4062007929d9f4e6cbad9c9771fe61b880",
       "name": "open-gpu-doc",
-      "revision_matches": false
+      "revision_matches": true
     },
     {
-      "actual_revision": null,
-      "exists": false,
+      "actual_revision": "49a0af9585d80e42240af63ab66e31e9873f59b8",
+      "exists": true,
       "expected_revision": "49a0af9585d80e42240af63ab66e31e9873f59b8",
       "name": "haiku",
-      "revision_matches": false
+      "revision_matches": true
     },
     {
-      "actual_revision": null,
-      "exists": false,
+      "actual_revision": "f97d7dcca0e51d7e20ed4342bb5ea8afea7db7fa",
+      "exists": true,
       "expected_revision": "f97d7dcca0e51d7e20ed4342bb5ea8afea7db7fa",
       "name": "mesa",
-      "revision_matches": false
+      "revision_matches": true
     }
   ],
   "toolchain": {

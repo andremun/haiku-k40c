@@ -22,3 +22,15 @@ block keeps its original notice and is listed in the last column below.
 
 | Source file consulted | License (from header) | Used for | Copied material |
 |---|---|---|---|
+
+## V2 decoder build/reproduction (2026-10-16)
+
+| Source file consulted | License | Used for | Copied material |
+|---|---|---|---|
+| `reference/envytools/nvbios/nvbios.c` | MIT notice in file | Decoder flags, separate initialization-pointer/script paths | None; compiled unchanged outside Git |
+| `reference/envytools/envydis/core.c` | MIT notice in file | Decoder library linkage | None; compiled unchanged outside Git |
+| `reference/envytools/easm/easm_lex.l`, `easm_parse.y` | Upstream license notices retained in external sources/generated build files | Lexer/parser generation | None in project source |
+| envytools root and util/easm/envydis/nvbios `CMakeLists.txt` | Build metadata; upstream project licenses retained | Source-list extraction for an isolated decoder build | Filenames/build dependencies only |
+
+No Nouveau or NVIDIA implementation was ported during V2. Firmware-derived
+decoder text stays under ignored build/ or the user's external mediaflux mount.

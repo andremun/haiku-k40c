@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: none. V1 partial handoff; external verification inputs needed.
-Task state: BLOCKED for V1 acceptance. Full make check fails; do not report V1 or S1 complete.
+Current task: none. V2 complete; awaiting the next assigned task.
+Task state: WAITING. V2 host verification passes; native Haiku and hardware stages remain pending.
 Last updated: 2026-10-16
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
@@ -39,9 +39,11 @@ Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 | D6 | DONE | 2026-10-13 | `tools/qmd_compare.py`: 155/155 fields match, 0 differences. First driver-vs-card check. |
 | R1 | DONE | 2026-10-14 | Fixed 7 defects (F1–F7) from external review: overlap check, unmap page-size match, shift/bounds validation, launch descriptor overflow, push-buffer guards, trace parsing, qmd_compare rewrite. |
 | A3 | STOPPED | 2026-10-15 | Stopped by the scaffold after 17 h, not accepted: the agent read `tools/check_repo.py`, and its explanation of offsets missing from the listing was wrong. Partial work kept on branch `task-a3` only. To rework. |
-| V1 | PARTIAL / BLOCKED | 2026-10-16 | User-directed recheck of possible mistakes by "Local": 3 helper corrections, freestanding S1 controller (58 host checks), verification gates. Full make check: 220 failures with absent reference trees; pytest/PyYAML and recorded cross-toolchain unavailable. ROM deferred by user. See work/V1/RESULT.md. |
+| V1 | HOST CHECKS PASS (V2) | 2026-10-16 | User-directed recheck of possible mistakes by "Local": 3 helper corrections, freestanding S1 controller (58 host checks), verification gates. Full make check: 220 failures with absent reference trees; pytest/PyYAML and recorded cross-toolchain unavailable. ROM deferred by user. See work/V1/RESULT.md. |
 
-## V1 handoff
+| V2 | DONE (offline scope) | 2026-10-16 | Restored all 5 exact clean source pins; full make check passes (0 failures). Removed pytest success suppression after a failing probe exited 0. Rebuilt pinned nvbios without sudo; fresh decode matches saved output byte for byte. A3 and native backend not implemented. See work/V2/RESULT.md. |
+
+## V1 handoff (historical; input blockers resolved by V2)
 
 Purpose: revise possible mistakes made by "Local" and approach the
 machine-dependent implementation. `docs/S1-VERIFICATION.md` records the
@@ -59,3 +61,18 @@ capture exactly. Updated the generated input inventory with the explicit ROM
 path and documented the saved decoder output hash/warnings in
 `reference/vbios/README.md`. No decoder rerun, source validation or card
 access occurred. Source/toolchain/dependency blockers from V1 remain.
+
+## V2 current handoff
+
+The missing reference-source and verification-environment blockers are resolved.
+Use `tools/restore_verification_refs.py --check` and the isolated PyYAML
+environment documented in `work/V2/RESULT.md`. `make check` now passes, including
+all positive-input trace/QMD tests. No pytest exit override remains. V1's code
+now has repository-wide host-check evidence; its original failed attempt is
+retained as history. No native Haiku or GPU result follows from these checks.
+
+The ROM is verified and the independent pinned decoder was rebuilt and run.
+Fresh full output equals the saved output, including warnings. A3 inventory
+rework is now a feasible next bounded task, but has not started or been accepted.
+The native cross-compiler/header/matching-kernel bundle remains absent here.
+No GPU, VM, sudo, host driver/service or push operation occurred in V2.

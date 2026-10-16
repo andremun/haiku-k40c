@@ -1,0 +1,2 @@
+# Runtime dependency of the repository checker; install in a local venv.
+PyYAML==6.0.2

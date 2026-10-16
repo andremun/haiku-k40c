@@ -53,8 +53,8 @@ Track labels below are S1-plan steps, not historical task IDs (some collide).
 
 | Gate | Required check/output | Current evidence / next action |
 |---|---|---|
-| Reproducible source review | All five pinned reference trees resolve at their recorded revisions; review outputs regenerate | BLOCKED here: all five links are broken. Restore the exact pins; do not regenerate source-derived reports against empty trees |
-| ROM identity / A1–A2 | Explicit offline ROM path, recorded size/hash, independently reproducible decoder output | ROM verified 2026-10-16 at `~/mediaflux/vbios/`, exact recorded size/hash. Saved decoder output is present; fresh decoding remains pending. See `reference/vbios/README.md` |
+| Reproducible source review | All five pinned reference trees resolve at their recorded revisions; review outputs regenerate | PASS in V2: all five exact pins restored, clean; full make check now passes. See work/V2/RESULT.md |
+| ROM identity / A1–A2 | Explicit offline ROM path, recorded size/hash, independently reproducible decoder output | PASS in V2: exact ROM identity; freshly rebuilt pinned decoder reproduces saved full output byte for byte. Warnings and A3 coverage remain separate |
 | Script inventory / A3 | Reachable bytecode, executed/skipped distinction, decoder/log/trace agreement, helper effects | Earlier attempt rejected, not accepted. Rework only with the genuine ROM and pinned sources; log counts do not prove reachability |
 | Executor / A4–A6 | Source differences, pre-POST prerequisites, changing conditions, forced/skip states, wait/failure semantics; injected tests | NOT IMPLEMENTED. Do not substitute a generic replay or a made-up instruction set |
 | Board controls / A5 | Resolve targets and helper side effects; user decision on GPIO, thermal and unknown I2C operations | Existing BOARD-OPERATIONS document is a recorded analysis, not permission. Unknown device remains unresolved |
@@ -82,7 +82,8 @@ Keep physical-device access outside the host test backend.
 
 ## Reproduction and blockers
 
-See `work/V1/RESULT.md` for commands, test counts and failed checks.
+See `work/V1/RESULT.md` for the initial failed checks and `work/V2/RESULT.md`
+for restored source inputs, corrected test harness and passing full checks.
 `python3 tools/s1_verification_inputs.py` generates the offline input report;
 `--check` compares it without writing, and `--require-ready` exits 2 for missing
 external inputs. Supply `--rom` with the mounted image path from `reference/vbios/README.md`

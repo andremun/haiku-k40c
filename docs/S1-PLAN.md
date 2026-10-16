@@ -65,8 +65,10 @@ possible mistakes made by "Local" and get closer to machine-dependent
 implementation. V1 adds independent host regressions and a freestanding S1
 controller/backend contract; it does not complete B2/B3 or C2/C3. The ROM
 was subsequently located in `~/mediaflux/vbios/` and verified against its
-recorded hash (see `reference/vbios/README.md`). Source and native toolchain
-inputs remain absent in this checkout; full checks and actual S1 remain pending.
+recorded hash (see `reference/vbios/README.md`). V2 restored all five pinned
+source inputs and rebuilt the independent decoder;
+full repository checks now pass. The recorded native cross-toolchain and actual
+S1 remain pending. See `work/V2/RESULT.md`.
 
 ## The work, in three tracks
 

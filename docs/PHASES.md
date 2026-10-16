@@ -104,5 +104,6 @@ is prepared and not enabled.
 | Task | Title | Text |
 |---|---|---|
 | V1 | Cardless S1 verification and backend boundary | `docs/tasks/V1.md` |
+| V2 | Restore verification inputs and reproduce ROM decoding | `docs/tasks/V2.md` |
 
 See `docs/S1-VERIFICATION.md` for results, remaining gates and external-input blockers.

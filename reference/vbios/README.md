@@ -69,3 +69,17 @@ Both commands succeed; the report records ROM match and still marks the
 other external verification inputs incomplete. `--check` must use the same
 explicit ROM argument to reproduce this report. Mounted content may be
 unavailable on another host; retain the expected hash as the identity gate.
+
+## Pinned decoder reproduced in V2 (2026-10-16)
+
+The reference source is now restored and clean at the recorded envytools pin.
+`tools/build_nvbios.py` builds a decoder using locally extracted tools, without
+system installation or source changes. A fresh full decode matches
+`~/mediaflux/vbios/decoded/all.txt` byte for byte, including all diagnostics.
+Script-only and board-table decoding also complete. Commands, package hashes
+and limitations are in `work/V2/RESULT.md` and `work/V2/evidence.json`.
+
+The BIT-I parser warning does not prevent the separate front-end code from
+reading initialization pointers and printing scripts (nvbios.c:1100-1123 and
+1282-1318). This explains the output, not its completeness. A3 reachability,
+log agreement and helper semantics still require their own verification.
