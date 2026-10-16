@@ -44,7 +44,7 @@ def log_summary(instructions):
                          for name in sorted(executed.keys() | skipped.keys())])
 
 
-LISTING = re.compile(r"^0x([0-9a-fA-F]{8}):\s+((?:[0-9a-f]{2}\s+)+)(.*?)\s*$")
+LISTING = re.compile(r"^0x([0-9a-fA-F]{8}):((?: [0-9a-f]{2})+)\s{2,}(\S.*?)\s*$")
 SCRIPT = re.compile(r"^Init script (\d+) at (0x[0-9a-fA-F]+):$")
 
 
@@ -63,9 +63,10 @@ def parse_listing(text):
         if not match:
             continue
         payload = match[3]
-        # A multi-write instruction's byte-bearing continuation is data,
-        # not a second instruction. Preserve only named instruction records.
-        if not re.match(r"^[A-Z][A-Z0-9_]*(?:\s|$)", payload):
+        # Match the task's listing-row definition: exclude empty first
+        # lines and explicit R[...] continuations. Numeric table rows stay
+        # in this presentation inventory; this is NOT a bytecode decoder.
+        if not payload or payload.startswith("R["):
             continue
         offset = int(match[1], 16)
         item = dict(offset=f"0x{offset:08x}", line=number,
@@ -95,7 +96,49 @@ def inventory(decoded, log_text):
                                   for i in instructions if i["name"] in BOARD])
 
 
+
+def markdown(report):
+    def escape(value):
+        return str(value).replace("|", "&#124;").replace("\t", " ")
+    lines = ["# Observed devinit inventory", "", "## Summary", "",
+             "This is observed execution/listing agreement, not a reachability proof.", "",
+             f"Log instructions: {report['log_instructions']}; executed: {report['executed']}; skipped: {report['skipped']}.",
+             f"Listing rows (task definition): {report['static_instructions']}; listing offsets absent from log: {report['listing_offsets_not_in_log']}.",
+             "", "| Script | Offset |", "|---|---|"]
+    lines += [f"| {item['index']} | {item['offset']} |" for item in report["scripts"]]
+    lines += ["", "## Instructions", "", "| Name | Executed | Skipped |", "|---|---|---|"]
+    lines += [f"| {item['name']} | {item['executed']} | {item['skipped']} |" for item in report["opcodes"]]
+    lines += ["", "## Not in the listing", ""]
+    lines += [f"- `{offset}`" for offset in report["log_offsets_not_in_listing"]]
+    lines += ["", "Offset zero is a synthetic REPEAT trace after END_REPEAT sets the interpreter offset to zero; it is not a ROM instruction at zero (Nouveau bios/init.c:658-677,724-733).",
+              "The seven COPY_NV_REG starts are present as byte-only lines; nvbios prints their names at start+16 on the second line of each 22-byte instruction (nvbios/nvbios.c:469-476). They follow RESUME or the preceding register/copy instruction in the log, not a hidden branch or missing script.",
+              "The listing-offset count follows the task definition, including numeric table rows and a repeated DONE at 0x657f. It is not a count of reachable bytecode instructions.",
+              "", "## Board operations", "", "| Log line | Offset | Marker | Name | Text | Detail lines |", "|---|---|---|---|---|---|"]
+    lines += [f"| {i['line']} | {i['offset']} | `{i['marker']}` | {i['name']} | {escape(i['text'])} | {len(i['details'])} |" for i in report["board_operations"]]
+    lines += ["", "Board-operation occurrence or script origin is not authorization to execute it. See docs/BOARD-OPERATIONS.md.", ""]
+    return "\n".join(lines)
+
+
+def default_decoded():
+    original = Path.home() / "haiku-cross/vbios/decoded/all.txt"
+    return original if original.is_file() else Path.home() / "mediaflux/vbios/decoded/all.txt"
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--decoded", type=lambda s: Path(s).expanduser(), default=default_decoded())
+    parser.add_argument("--check", action="store_true")
+    args = parser.parse_args()
+    report = inventory(args.decoded.read_text(), lzma.open(LOG, "rt").read())
+    outputs = {ROOT / "analysis/devinit_inventory.json": json.dumps(report, indent=2) + "\n",
+               ROOT / "analysis/devinit_inventory.md": markdown(report)}
+    if args.check:
+        return 0 if all(path.is_file() and path.read_text() == text for path, text in outputs.items()) else 1
+    for path, text in outputs.items():
+        path.write_text(text)
+    print(f"devinit inventory: {report['log_instructions']} observed, {report['static_instructions']} listing rows")
+    return 0
+
+
 if __name__ == "__main__":
-    decoded = (Path.home() / "mediaflux/vbios/decoded/all.txt").read_text()
-    report = inventory(decoded, lzma.open(LOG, "rt").read())
-    print(json.dumps(report, indent=2))
+    raise SystemExit(main())

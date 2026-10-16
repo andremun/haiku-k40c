@@ -1,0 +1,79 @@
+{
+  "rom_sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
+  "decoded_sha256": "dce802b40173ececd2df0217e9e3adbb816614a64d7c0b0f1d00ad26646df0bf",
+  "source_sha256": {
+    "reference/nouveau/nvkm/subdev/bios/init.c": "7af9d95f2fc4b61bb6320c7198505b19b2e7f88cbf3952f1770518f863c1811b",
+    "reference/envytools/nvbios/nvbios.c": "7e9f739bf8e4b45f168e90b4d6b07c0c0d039a2bdb76f753b38069714f36907f"
+  },
+  "missing_offset_explanations": [
+    {
+      "offset": "0x00000000",
+      "kind": "synthetic_repeat_trace",
+      "source": "reference/nouveau/nvkm/subdev/bios/init.c:658-677,724-733"
+    },
+    {
+      "offset": "0x0000858c",
+      "kind": "split_copy_nv_reg",
+      "opcode": "0x5f",
+      "instruction_bytes": 22,
+      "named_listing_line_offset": "0x0000859c",
+      "source": "reference/envytools/nvbios/nvbios.c:469-476",
+      "nouveau": "reference/nouveau/nvkm/subdev/bios/init.c:1415-1438"
+    },
+    {
+      "offset": "0x00008e09",
+      "kind": "split_copy_nv_reg",
+      "opcode": "0x5f",
+      "instruction_bytes": 22,
+      "named_listing_line_offset": "0x00008e19",
+      "source": "reference/envytools/nvbios/nvbios.c:469-476",
+      "nouveau": "reference/nouveau/nvkm/subdev/bios/init.c:1415-1438"
+    },
+    {
+      "offset": "0x00008e1f",
+      "kind": "split_copy_nv_reg",
+      "opcode": "0x5f",
+      "instruction_bytes": 22,
+      "named_listing_line_offset": "0x00008e2f",
+      "source": "reference/envytools/nvbios/nvbios.c:469-476",
+      "nouveau": "reference/nouveau/nvkm/subdev/bios/init.c:1415-1438"
+    },
+    {
+      "offset": "0x00008e35",
+      "kind": "split_copy_nv_reg",
+      "opcode": "0x5f",
+      "instruction_bytes": 22,
+      "named_listing_line_offset": "0x00008e45",
+      "source": "reference/envytools/nvbios/nvbios.c:469-476",
+      "nouveau": "reference/nouveau/nvkm/subdev/bios/init.c:1415-1438"
+    },
+    {
+      "offset": "0x00008e4b",
+      "kind": "split_copy_nv_reg",
+      "opcode": "0x5f",
+      "instruction_bytes": 22,
+      "named_listing_line_offset": "0x00008e5b",
+      "source": "reference/envytools/nvbios/nvbios.c:469-476",
+      "nouveau": "reference/nouveau/nvkm/subdev/bios/init.c:1415-1438"
+    },
+    {
+      "offset": "0x00008e61",
+      "kind": "split_copy_nv_reg",
+      "opcode": "0x5f",
+      "instruction_bytes": 22,
+      "named_listing_line_offset": "0x00008e71",
+      "source": "reference/envytools/nvbios/nvbios.c:469-476",
+      "nouveau": "reference/nouveau/nvkm/subdev/bios/init.c:1415-1438"
+    },
+    {
+      "offset": "0x00008e77",
+      "kind": "split_copy_nv_reg",
+      "opcode": "0x5f",
+      "instruction_bytes": 22,
+      "named_listing_line_offset": "0x00008e87",
+      "source": "reference/envytools/nvbios/nvbios.c:469-476",
+      "nouveau": "reference/nouveau/nvkm/subdev/bios/init.c:1415-1438"
+    }
+  ],
+  "evidence": "OFFLINE_ROM_AND_SOURCE; observed log only, not complete reachability"
+}

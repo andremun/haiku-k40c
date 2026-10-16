@@ -1,0 +1,434 @@
+{
+  "log_instructions": 598,
+  "executed": 560,
+  "skipped": 38,
+  "opcodes": [
+    {
+      "name": "CONDITION",
+      "executed": 24,
+      "skipped": 1
+    },
+    {
+      "name": "CONDITION_TIME",
+      "executed": 9,
+      "skipped": 0
+    },
+    {
+      "name": "COPY_NV_REG",
+      "executed": 7,
+      "skipped": 0
+    },
+    {
+      "name": "COPY_ZM_REG",
+      "executed": 3,
+      "skipped": 0
+    },
+    {
+      "name": "DONE",
+      "executed": 23,
+      "skipped": 0
+    },
+    {
+      "name": "END_REPEAT",
+      "executed": 25,
+      "skipped": 0
+    },
+    {
+      "name": "GPIO",
+      "executed": 0,
+      "skipped": 1
+    },
+    {
+      "name": "GPIO_NE",
+      "executed": 1,
+      "skipped": 0
+    },
+    {
+      "name": "IO",
+      "executed": 1,
+      "skipped": 0
+    },
+    {
+      "name": "MACRO",
+      "executed": 10,
+      "skipped": 0
+    },
+    {
+      "name": "NOT",
+      "executed": 2,
+      "skipped": 2
+    },
+    {
+      "name": "NV_REG",
+      "executed": 151,
+      "skipped": 9
+    },
+    {
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "executed": 60,
+      "skipped": 1
+    },
+    {
+      "name": "REPEAT",
+      "executed": 25,
+      "skipped": 0
+    },
+    {
+      "name": "RESET_BEGUN",
+      "executed": 1,
+      "skipped": 0
+    },
+    {
+      "name": "RESET_END",
+      "executed": 1,
+      "skipped": 0
+    },
+    {
+      "name": "RESUME",
+      "executed": 18,
+      "skipped": 14
+    },
+    {
+      "name": "SUB_DIRECT",
+      "executed": 15,
+      "skipped": 4
+    },
+    {
+      "name": "TIME",
+      "executed": 7,
+      "skipped": 1
+    },
+    {
+      "name": "ZM_CR",
+      "executed": 2,
+      "skipped": 0
+    },
+    {
+      "name": "ZM_I2C_BYTE",
+      "executed": 2,
+      "skipped": 0
+    },
+    {
+      "name": "ZM_MASK_ADD",
+      "executed": 8,
+      "skipped": 0
+    },
+    {
+      "name": "ZM_REG",
+      "executed": 141,
+      "skipped": 5
+    },
+    {
+      "name": "ZM_REG_SEQUENCE",
+      "executed": 24,
+      "skipped": 0
+    }
+  ],
+  "scripts": [
+    {
+      "index": 0,
+      "offset": "0x8637"
+    },
+    {
+      "index": 1,
+      "offset": "0x8ee8"
+    },
+    {
+      "index": 2,
+      "offset": "0x657f"
+    },
+    {
+      "index": 3,
+      "offset": "0xaa1b"
+    },
+    {
+      "index": 4,
+      "offset": "0xaa1c"
+    },
+    {
+      "index": 5,
+      "offset": "0xab8d"
+    },
+    {
+      "index": 6,
+      "offset": "0xac0d"
+    }
+  ],
+  "static_instructions": 2041,
+  "log_offsets_not_in_listing": [
+    "0x00000000",
+    "0x0000858c",
+    "0x00008e09",
+    "0x00008e1f",
+    "0x00008e35",
+    "0x00008e4b",
+    "0x00008e61",
+    "0x00008e77"
+  ],
+  "listing_offsets_not_in_log": 1519,
+  "board_operations": [
+    {
+      "line": 1027,
+      "offset": "0x00008506",
+      "marker": "1",
+      "name": "IO",
+      "text": "IO\t\tI[0x03c3] &= 0x00 |= 0x01",
+      "details": []
+    },
+    {
+      "line": 1028,
+      "offset": "0x0000850b",
+      "marker": "1",
+      "name": "ZM_CR",
+      "text": "ZM_CR\tC[0x3f] = 0x57",
+      "details": []
+    },
+    {
+      "line": 1036,
+      "offset": "0x00008708",
+      "marker": "0",
+      "name": "TIME",
+      "text": "TIME\t0x0001",
+      "details": []
+    },
+    {
+      "line": 1055,
+      "offset": "0x0000877d",
+      "marker": " ",
+      "name": "TIME",
+      "text": "TIME\t0x2710",
+      "details": []
+    },
+    {
+      "line": 1131,
+      "offset": "0x0000862f",
+      "marker": "1",
+      "name": "ZM_I2C_BYTE",
+      "text": "ZM_I2C_BYTE\tI2C[0x80][0x20]",
+      "details": [
+        "nouveau 0000:00:03.0: devinit: 0x00008633[1]: \t[0xdd] = 0x03",
+        "nouveau 0000:00:03.0: i2c: bus 0002: acquire",
+        "nouveau 0000:00:03.0: i2c: pad 0102: acquire",
+        "nouveau 0000:00:03.0: i2c: pad 0102: -> i2c",
+        "nouveau 0000:00:03.0: i2c: bus 0002: release",
+        "nouveau 0000:00:03.0: i2c: pad 0102: release",
+        "nouveau 0000:00:03.0: i2c: pad 0102: -> off"
+      ]
+    },
+    {
+      "line": 1145,
+      "offset": "0x000089b7",
+      "marker": "0",
+      "name": "GPIO_NE",
+      "text": "GPIO_NE",
+      "details": [
+        "0x04",
+        "0x05",
+        "0x06",
+        "0x1a",
+        "0x73",
+        "0x74",
+        "0x75",
+        "0x76",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x04]",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x05]",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x06]",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x1a]",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x73]",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x7a]",
+        " *",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x18]",
+        " *",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x34]",
+        " *",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x2e]",
+        " *",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x79]",
+        " *",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x3d]",
+        " *",
+        "nouveau 0000:00:03.0: devinit: 0x000089b9[0]: \tFUNC[0x09]",
+        " *"
+      ]
+    },
+    {
+      "line": 1187,
+      "offset": "0x000089c2",
+      "marker": " ",
+      "name": "GPIO",
+      "text": "GPIO",
+      "details": []
+    },
+    {
+      "line": 1236,
+      "offset": "0x00008ec8",
+      "marker": "1",
+      "name": "CONDITION_TIME",
+      "text": "CONDITION_TIME\t0x0b 0xff",
+      "details": [
+        "nouveau 0000:00:03.0: devinit: 0x00008ecb[1]: \t[0x0b] (R[0x12004c] & 0x0000003f) == 0x00000000",
+        "nouveau 0000:00:03.0: devinit: 0x00008ecb[1]: \t[0x0b] (R[0x12004c] & 0x0000003f) == 0x00000000"
+      ]
+    },
+    {
+      "line": 1245,
+      "offset": "0x00008b2f",
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "text": "CONDITION_TIME\t0x07 0xff",
+      "details": [
+        "nouveau 0000:00:03.0: devinit: 0x00008b32[0]: \t[0x07] (R[0x00e800] & 0x00010000) == 0x00010000"
+      ]
+    },
+    {
+      "line": 1248,
+      "offset": "0x00008b33",
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "text": "CONDITION_TIME\t0x09 0xff",
+      "details": [
+        "nouveau 0000:00:03.0: devinit: 0x00008b36[0]: \t[0x09] (R[0x00e820] & 0x00010000) == 0x00010000"
+      ]
+    },
+    {
+      "line": 1304,
+      "offset": "0x00008c47",
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "text": "CONDITION_TIME\t0x08 0xff",
+      "details": [
+        "nouveau 0000:00:03.0: devinit: 0x00008c4a[0]: \t[0x08] (R[0x00e800] & 0x00020000) == 0x00020000"
+      ]
+    },
+    {
+      "line": 1307,
+      "offset": "0x00008c4b",
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "text": "CONDITION_TIME\t0x0a 0xff",
+      "details": [
+        "nouveau 0000:00:03.0: devinit: 0x00008c4e[0]: \t[0x0a] (R[0x00e820] & 0x00020000) == 0x00020000"
+      ]
+    },
+    {
+      "line": 1345,
+      "offset": "0x00008588",
+      "marker": "1",
+      "name": "CONDITION_TIME",
+      "text": "CONDITION_TIME\t0x00 0xff",
+      "details": [
+        "nouveau 0000:00:03.0: devinit: 0x0000858b[1]: \t[0x00] (R[0x61000c] & 0x80000000) == 0x80000000"
+      ]
+    },
+    {
+      "line": 1349,
+      "offset": "0x000085a2",
+      "marker": "1",
+      "name": "CONDITION_TIME",
+      "text": "CONDITION_TIME\t0x01 0xff",
+      "details": [
+        "nouveau 0000:00:03.0: devinit: 0x000085a5[1]: \t[0x01] (R[0x61000c] & 0x40000000) == 0x00000000",
+        "nouveau 0000:00:03.0: devinit: 0x000085a5[1]: \t[0x01] (R[0x61000c] & 0x40000000) == 0x00000000"
+      ]
+    },
+    {
+      "line": 2381,
+      "offset": "0x00009b66",
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "text": "CONDITION_TIME\t0x11 0xff",
+      "details": [
+        "nouveau 0000:00:03.0: devinit: 0x00009b69[0]: \t[0x11] (R[0x131c20] & 0x00010000) == 0x00010000"
+      ]
+    },
+    {
+      "line": 2392,
+      "offset": "0x00009b9e",
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "text": "CONDITION_TIME\t0x13 0xff",
+      "details": [
+        "nouveau 0000:00:03.0: devinit: 0x00009ba1[0]: \t[0x13] (R[0x131c20] & 0x00020000) == 0x00020000"
+      ]
+    },
+    {
+      "line": 2885,
+      "offset": "0x0000a261",
+      "marker": "0",
+      "name": "TIME",
+      "text": "TIME\t0x0064",
+      "details": []
+    },
+    {
+      "line": 2890,
+      "offset": "0x0000a288",
+      "marker": "0",
+      "name": "TIME",
+      "text": "TIME\t0x00c8",
+      "details": []
+    },
+    {
+      "line": 2956,
+      "offset": "0x0000a335",
+      "marker": "0",
+      "name": "TIME",
+      "text": "TIME\t0x0014",
+      "details": []
+    },
+    {
+      "line": 3057,
+      "offset": "0x0000a486",
+      "marker": "0",
+      "name": "TIME",
+      "text": "TIME\t0x03e8",
+      "details": []
+    },
+    {
+      "line": 3087,
+      "offset": "0x0000a59a",
+      "marker": "0",
+      "name": "TIME",
+      "text": "TIME\t0x0064",
+      "details": []
+    },
+    {
+      "line": 3118,
+      "offset": "0x0000a5cd",
+      "marker": "0",
+      "name": "TIME",
+      "text": "TIME\t0x03e8",
+      "details": []
+    },
+    {
+      "line": 3135,
+      "offset": "0x000085e8",
+      "marker": "1",
+      "name": "ZM_CR",
+      "text": "ZM_CR\tC[0x85] = 0xff",
+      "details": []
+    },
+    {
+      "line": 3184,
+      "offset": "0x0000ab8d",
+      "marker": "0",
+      "name": "ZM_I2C_BYTE",
+      "text": "ZM_I2C_BYTE\tI2C[0x80][0x4c]",
+      "details": [
+        "nouveau 0000:00:03.0: devinit: 0x0000ab91[0]: \t[0x19] = 0x73",
+        "nouveau 0000:00:03.0: i2c: bus 0002: acquire",
+        "nouveau 0000:00:03.0: i2c: pad 0102: acquire",
+        "nouveau 0000:00:03.0: i2c: pad 0102: -> i2c",
+        "nouveau 0000:00:03.0: i2c: bus 0002: release",
+        "nouveau 0000:00:03.0: i2c: pad 0102: release",
+        "nouveau 0000:00:03.0: i2c: pad 0102: -> off",
+        "nouveau 0000:00:03.0: devinit: 0x0000ab93[0]: \t[0x0d] = 0x73",
+        "nouveau 0000:00:03.0: i2c: bus 0002: acquire",
+        "nouveau 0000:00:03.0: i2c: pad 0102: acquire",
+        "nouveau 0000:00:03.0: i2c: pad 0102: -> i2c",
+        "nouveau 0000:00:03.0: i2c: bus 0002: release",
+        "nouveau 0000:00:03.0: i2c: pad 0102: release",
+        "nouveau 0000:00:03.0: i2c: pad 0102: -> off"
+      ]
+    }
+  ]
+}

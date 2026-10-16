@@ -1,2 +1,2 @@
-Step 3: compared offsets and collected board-operation details in log order.
-Next: render/check files; explain synthetic loop messages and split COPY_NV_REG lines using ROM and pinned sources.
+Step 4: deterministic JSON/Markdown generated; --check passed twice; parser regressions pass.
+Next: use the ROM/control-flow model for executor design; do not treat named-line counts as reachability.
