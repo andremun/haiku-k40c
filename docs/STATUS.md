@@ -39,7 +39,6 @@ Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 | D6 | DONE | 2026-10-13 | `tools/qmd_compare.py`: 155/155 fields match, 0 differences. First driver-vs-card check. |
 | R1 | DONE | 2026-10-14 | Fixed 7 defects (F1–F7) from external review: overlap check, unmap page-size match, shift/bounds validation, launch descriptor overflow, push-buffer guards, trace parsing, qmd_compare rewrite. |
 | A3 | STOPPED | 2026-10-15 | Stopped by the scaffold after 17 h, not accepted: the agent read `tools/check_repo.py`, and its explanation of offsets missing from the listing was wrong. Partial work kept on branch `task-a3` only. To rework. |
-
 | V1 | PARTIAL / BLOCKED | 2026-10-16 | User-directed recheck of possible mistakes by "Local": 3 helper corrections, freestanding S1 controller (58 host checks), verification gates. Full make check: 220 failures with absent reference trees; pytest/PyYAML and recorded cross-toolchain unavailable. ROM deferred by user. See work/V1/RESULT.md. |
 
 ## V1 handoff
@@ -47,7 +46,16 @@ Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 Purpose: revise possible mistakes made by "Local" and approach the
 machine-dependent implementation. `docs/S1-VERIFICATION.md` records the
 remaining gates. All existing C++ checks and new targeted tests pass on the
-host; this is neither native Haiku verification nor GPU evidence. The ROM is
-a known deferred input, not a reason to invent script data. Restore pinned
+host; this is neither native Haiku verification nor GPU evidence. The ROM was subsequently found in `~/mediaflux/vbios/` and verified against
+the recorded size/hash; saved decoder output is present. The missing-ROM
+blocker is resolved, but fresh decoding/A3 acceptance remains pending. Restore pinned
 reference sources and the verification environment before full acceptance.
 No hardware, VM, host service or push operations were performed in V1.
+
+### ROM follow-up (2026-10-16)
+
+User provided `~/mediaflux/vbios/`. Offline hash and size match the recorded
+capture exactly. Updated the generated input inventory with the explicit ROM
+path and documented the saved decoder output hash/warnings in
+`reference/vbios/README.md`. No decoder rerun, source validation or card
+access occurred. Source/toolchain/dependency blockers from V1 remain.

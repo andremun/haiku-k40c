@@ -54,7 +54,7 @@ Track labels below are S1-plan steps, not historical task IDs (some collide).
 | Gate | Required check/output | Current evidence / next action |
 |---|---|---|
 | Reproducible source review | All five pinned reference trees resolve at their recorded revisions; review outputs regenerate | BLOCKED here: all five links are broken. Restore the exact pins; do not regenerate source-derived reports against empty trees |
-| ROM identity / A1–A2 | Explicit offline ROM path, recorded size/hash, independently reproducible decoder output | Prior capture is documented; ROM absent here. User will arrange it later. No recapture requested or attempted |
+| ROM identity / A1–A2 | Explicit offline ROM path, recorded size/hash, independently reproducible decoder output | ROM verified 2026-10-16 at `~/mediaflux/vbios/`, exact recorded size/hash. Saved decoder output is present; fresh decoding remains pending. See `reference/vbios/README.md` |
 | Script inventory / A3 | Reachable bytecode, executed/skipped distinction, decoder/log/trace agreement, helper effects | Earlier attempt rejected, not accepted. Rework only with the genuine ROM and pinned sources; log counts do not prove reachability |
 | Executor / A4–A6 | Source differences, pre-POST prerequisites, changing conditions, forced/skip states, wait/failure semantics; injected tests | NOT IMPLEMENTED. Do not substitute a generic replay or a made-up instruction set |
 | Board controls / A5 | Resolve targets and helper side effects; user decision on GPIO, thermal and unknown I2C operations | Existing BOARD-OPERATIONS document is a recorded analysis, not permission. Unknown device remains unresolved |
@@ -85,8 +85,8 @@ Keep physical-device access outside the host test backend.
 See `work/V1/RESULT.md` for commands, test counts and failed checks.
 `python3 tools/s1_verification_inputs.py` generates the offline input report;
 `--check` compares it without writing, and `--require-ready` exits 2 for missing
-external inputs. Later supply `--rom /explicit/offline/path` to check the saved
-image identity. The report never reads devices or starts a VM. File presence and
+external inputs. Supply `--rom` with the mounted image path from `reference/vbios/README.md`
+for generation and `--check`; the committed inventory uses that explicit input. The report never reads devices or starts a VM. File presence and
 revision checks do not establish kernel/header ABI compatibility or decoder
 correctness. Review those separately after restoring the inputs.
 

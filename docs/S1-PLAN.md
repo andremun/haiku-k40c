@@ -64,8 +64,9 @@ and a timed matrix product as the decision point after S3 (see the end).
 possible mistakes made by "Local" and get closer to machine-dependent
 implementation. V1 adds independent host regressions and a freestanding S1
 controller/backend contract; it does not complete B2/B3 or C2/C3. The ROM
-is deferred by the user. Source and native toolchain inputs are also absent
-in this checkout; full checks and actual S1 remain pending.
+was subsequently located in `~/mediaflux/vbios/` and verified against its
+recorded hash (see `reference/vbios/README.md`). Source and native toolchain
+inputs remain absent in this checkout; full checks and actual S1 remain pending.
 
 ## The work, in three tracks
 

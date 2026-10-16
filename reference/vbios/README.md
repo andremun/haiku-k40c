@@ -41,3 +41,31 @@ reproduces the firmware's content. It warns that no strap is given and
 that it cannot parse BIT table `B`; the tables used so far (scripts, GPIO,
 I²C, external devices) decode. The board operations found with it are in
 `docs/BOARD-OPERATIONS.md`.
+
+## Available copy verified in V1 follow-up (2026-10-16)
+
+The user supplied the mounted directory `~/mediaflux/vbios/`. Read-only
+verification of `/home/unimelb.edu.au/mariom1/mediaflux/vbios/k40c-0000_04_00_0-vbios-80.80.65.00.01.rom` found exactly 181,760 bytes and SHA-256
+`aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54`,
+matching the capture above. The ROM is available locally; no recapture,
+copy into Git or physical-card access is needed.
+
+Saved decoder output: `/home/unimelb.edu.au/mariom1/mediaflux/vbios/decoded/all.txt`; SHA-256
+`dce802b40173ececd2df0217e9e3adbb816614a64d7c0b0f1d00ad26646df0bf`.
+Its opening diagnostics include no strap specified and parse warnings for
+BIT tables B, C and I, among others. These warnings do not by themselves
+establish whether the script listing is complete; review the relevant
+sections and reproduce decoding with the pinned tool before accepting A3.
+The saved output was hashed, not regenerated in this follow-up.
+
+Reproduce the offline input inventory from the repository root:
+
+```sh
+python3 tools/s1_verification_inputs.py --rom "/home/unimelb.edu.au/mariom1/mediaflux/vbios/k40c-0000_04_00_0-vbios-80.80.65.00.01.rom"
+python3 tools/s1_verification_inputs.py --rom "/home/unimelb.edu.au/mariom1/mediaflux/vbios/k40c-0000_04_00_0-vbios-80.80.65.00.01.rom" --check
+```
+
+Both commands succeed; the report records ROM match and still marks the
+other external verification inputs incomplete. `--check` must use the same
+explicit ROM argument to reproduce this report. Mounted content may be
+unavailable on another host; retain the expected hash as the identity gate.

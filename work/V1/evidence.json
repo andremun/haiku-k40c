@@ -4,8 +4,16 @@
   "evidence": "HOST_ONLY",
   "full_check_passed": false,
   "python": "Python 3.14.6",
+  "rom_followup": {
+    "decoded_path": "/home/unimelb.edu.au/mariom1/mediaflux/vbios/decoded/all.txt",
+    "decoded_sha256": "dce802b40173ececd2df0217e9e3adbb816614a64d7c0b0f1d00ad26646df0bf",
+    "decoder_rerun": false,
+    "rom_path": "/home/unimelb.edu.au/mariom1/mediaflux/vbios/k40c-0000_04_00_0-vbios-80.80.65.00.01.rom",
+    "sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
+    "size": 181760
+  },
   "source_sha256": {
-    "analysis/s1-verification-inputs.json": "53abb4638741ec34266effccd8a3f5a6f8ad88d5af92153502256d8f6ca22fbb",
+    "analysis/s1-verification-inputs.json": "426d8e6eae64d255e2209fce3bef55d8586c266453e2ed1ffd19f8a011b8069e",
     "src/fifo/PushBuffer.cpp": "cfefbca7eb4f370f340570355f8d78316674b35f230b5fc620a2e12c34c53306",
     "src/hw/RegisterIO.cpp": "b17c57187cb14b94aa620fb36d1131343577ac6870fd9c73bac3f3a000c1407b",
     "src/mmu/PageTable.cpp": "229a267117c677eab2e159e9a043306eeb692a49dba9cf9bb8f5757d7d3cdb89",

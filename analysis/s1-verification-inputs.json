@@ -19,10 +19,14 @@
   "external_inputs_complete": false,
   "hardware_verified": false,
   "rom": {
+    "exists": true,
     "expected_sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
     "expected_size": 181760,
-    "matches": false,
-    "supplied": false
+    "matches": true,
+    "path": "/home/unimelb.edu.au/mariom1/mediaflux/vbios/k40c-0000_04_00_0-vbios-80.80.65.00.01.rom",
+    "sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
+    "size": 181760,
+    "supplied": true
   },
   "scope": "OFFLINE_INPUT_INVENTORY_ONLY",
   "sources": [

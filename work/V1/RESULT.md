@@ -67,3 +67,19 @@ Existing recorded checks are not rewritten to match missing references.
 
 No physical GPU, PCI/reset/passthrough operation, host sudo, host-driver change,
 or running host model service was involved. No subagents were used.
+
+## Follow-up: user located the ROM, 2026-10-16
+
+The earlier missing-ROM finding above describes the initial pass, and is now
+resolved. Read-only `sha256sum "/home/unimelb.edu.au/mariom1/mediaflux/vbios/k40c-0000_04_00_0-vbios-80.80.65.00.01.rom"` matched the expected identity; the
+inventory checks the exact 181760-byte size too. The saved `decoded/all.txt`
+is available, hashed as documented in `reference/vbios/README.md`; its first
+14 lines include no-strap and several BIT-table parse warnings. No conclusion
+about listing completeness is drawn from the header alone.
+
+Both `python3 tools/s1_verification_inputs.py --rom "/home/unimelb.edu.au/mariom1/mediaflux/vbios/k40c-0000_04_00_0-vbios-80.80.65.00.01.rom"` and the same
+command with `--check` exited 0. The generated report now records
+`rom.matches: true`; `external_inputs_complete` remains false because the
+source/toolchain inputs are unchanged. No full repository check was repeated
+for this input/documentation update. The ROM and decoded firmware content
+remain outside Git; neither was uploaded or executed.
