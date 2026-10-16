@@ -76,9 +76,9 @@ Not verified.
 
 ## Waits
 
-Seven `TIME` waits (1 ms to 1 s), nine `CONDITION_TIME` polls of card
+Seven executed `TIME` waits (1 microsecond to 1 millisecond), nine `CONDITION_TIME` polls of card
 registers (for example `0x12004c`, `0x00e800`, `0x61000c`, `0x131c20`),
-and one skipped `TIME`. The polls are of the card's own state; they change
+and one skipped `TIME` of 10 milliseconds. `TIME` operands are microseconds, not milliseconds (`nvkm/subdev/bios/init.c:1781-1795`). The polls are of the card's own state; they change
 nothing.
 
 ## What needs a decision
@@ -94,3 +94,13 @@ nothing.
    until it is identified. Test first whether the bring-up works without
    this single write.
 4. **VGA ports.** Recommendation: leave them out in the guest.
+
+## ABC1 correction: VGA instruction helper effects (2026-10-16)
+
+The earlier inference that legacy VGA accesses can be omitted is not established.
+Nouveau's INIT_IO handler has NV50+ MMIO side effects for port 0x3c3/data 1
+(`reference/nouveau/nvkm/subdev/bios/init.c:1623-1660`), independently of
+legacy port routing through QEMU. The future executor must preserve or justify
+those helper effects; it cannot silently drop the operation because the card
+is a 3D controller. No extra hardware permission is granted. The host executor
+delegates this operation to a default-denied board/helper boundary.

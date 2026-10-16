@@ -57,7 +57,9 @@ def inventory(rom=None):
         if path.is_file():
             firmware.update(size=path.stat().st_size, sha256=digest(path))
             firmware["matches"] = firmware["size"] == ROM_SIZE and firmware["sha256"] == ROM_SHA256
-    cross = Path(os.environ.get("HAIKU_CROSS", str(Path.home() / "haiku-cross")))
+    local_cross = ROOT / "build/haiku-cross"
+    default_cross = local_cross if local_cross.is_dir() else Path.home() / "haiku-cross"
+    cross = Path(os.environ.get("HAIKU_CROSS", str(default_cross)))
     toolchain = dict(root=str(cross), compiler=(cross / "generated.x86_64/cross-tools-x86_64/bin/x86_64-unknown-haiku-gcc").is_file(),
                      headers=(cross / "haiku/headers/os/drivers/PCI.h").is_file(),
                      kernel=(cross / "lib/kernel.so").is_file())

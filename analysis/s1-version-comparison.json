@@ -1,0 +1,174 @@
+{
+  "comparison_complete": false,
+  "files": [
+    {
+      "identical": null,
+      "path": "nvkm/subdev/bios/init.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/bios/init.c",
+      "v612_sha256": "7af9d95f2fc4b61bb6320c7198505b19b2e7f88cbf3952f1770518f863c1811b",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/bios/bit.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/bios/bit.c",
+      "v612_sha256": "955da1bbd3288f978830d2d713406cbfe2929627a36769354fac8515495a9af8",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/bios/ramcfg.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/bios/ramcfg.c",
+      "v612_sha256": "7e727829ac5db539c20d1584b87dafd068be82ea5f769ece0fcb7ff733a35435",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/devinit/gf100.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c",
+      "v612_sha256": "260e57fd22b56e7f765b26ef014900e8e2e43e0fa9aac750734ffa7e9b0872be",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/engine/device/base.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/engine/device/base.c",
+      "v612_sha256": "ac7eb1bbffb41b43b336cc59eaca86b7317632a0b353805b4359af78b70ef7ab",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/fb/base.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/fb/base.c",
+      "v612_sha256": "0c0e5748c7502a266137703ec53a5614ce8897d066fd614416ba7b0cbca83f76",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/fb/gf100.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/fb/gf100.c",
+      "v612_sha256": "b0d9f8d6fa7f6b7b0c86e7c1773c8c4b77fecc4d0c23a68463be488c50dc95cf",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/instmem/nv50.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/instmem/nv50.c",
+      "v612_sha256": "0fd5655d95638a3df042c8e42d064e15be8cf44bb5211f4585dd4491f60c1b96",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/bar/g84.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/bar/g84.c",
+      "v612_sha256": "28fb3702c0ab41c1ab4ee5840f57d3c809b93ae9a779b2a57115164426c0f6ae",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/bar/gf100.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/bar/gf100.c",
+      "v612_sha256": "25ec34ce7c71da1ada414114af4f5d9045c5b6b5c2d75917edd86f4566b802c8",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/mmu/vmmgf100.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgf100.c",
+      "v612_sha256": "8485236819c37bfcbfae9824c4b03b767314b6e07156c3ed2e203f2447ad89ea",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/mmu/vmmgk104.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgk104.c",
+      "v612_sha256": "3f77d94f4f08546da6361e474c94fe13af23d41758ad5a1fd48b0e5a50ccdd97",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/mmu/gf100.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/gf100.c",
+      "v612_sha256": "ef1bf1d79658302c6e16e1f0a71e6c7f2e944fd25487a68d5477717dce8e7439",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/subdev/mmu/gk104.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/gk104.c",
+      "v612_sha256": "0a00f096c8a9f95a6f72a87d72d3868f31b22284823b842e57b83845da88492d",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/engine/fifo/gk104.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gk104.c",
+      "v612_sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/engine/fifo/gk110.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gk110.c",
+      "v612_sha256": "581d835a89d4be2a4f1a4383efb56dc02b81f66d055020f744654968b724a9cf",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/engine/fifo/gf100.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c",
+      "v612_sha256": "049a0ff8c473d28c40b97f6482c47f974338f3df2660e8bb2dd70bfb29e49371",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/engine/fifo/chan.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/engine/fifo/chan.c",
+      "v612_sha256": "a85c3ed9aee6f578523a5a427d2214453d71d7ec2960684a07f3ee2157840bc6",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvkm/engine/fifo/runl.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvkm/engine/fifo/runl.c",
+      "v612_sha256": "ff0b89d720769d341363739e0073187bab39635f272f30b4daa3f899163de51b",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nvif/user.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nvif/user.c",
+      "v612_sha256": "7d80349e4e4bfe260a3507503a79422865bebc8c4377528a19868829c27a46b4",
+      "v68_sha256": null
+    },
+    {
+      "identical": null,
+      "path": "nouveau_dma.c",
+      "status": "missing_cached_v6.8_source",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/gpu/drm/nouveau/nouveau_dma.c",
+      "v612_sha256": "2bf585c916cde08ef2b99370c8d63e5b19d49b716c8591a476382fe17f2c7d11",
+      "v68_sha256": null
+    }
+  ],
+  "scope": "upstream v6.8 tag file hashes vs pinned v6.12; Ubuntu downstream patches not covered"
+}

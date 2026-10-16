@@ -55,18 +55,18 @@ Track labels below are S1-plan steps, not historical task IDs (some collide).
 |---|---|---|
 | Reproducible source review | All five pinned reference trees resolve at their recorded revisions; review outputs regenerate | PASS in V2: all five exact pins restored, clean; full make check now passes. See work/V2/RESULT.md |
 | ROM identity / A1–A2 | Explicit offline ROM path, recorded size/hash, independently reproducible decoder output | PASS in V2: exact ROM identity; freshly rebuilt pinned decoder reproduces saved full output byte for byte. Warnings and A3 coverage remain separate |
-| Script inventory / A3 | Reachable bytecode, executed/skipped distinction, decoder/log/trace agreement, helper effects | Earlier attempt rejected, not accepted. Rework only with the genuine ROM and pinned sources; log counts do not prove reachability |
-| Executor / A4–A6 | Source differences, pre-POST prerequisites, changing conditions, forced/skip states, wait/failure semantics; injected tests | NOT IMPLEMENTED. Do not substitute a generic replay or a made-up instruction set |
+| Script inventory / A3 | Reachable bytecode, executed/skipped distinction, decoder/log/trace agreement, helper effects | ABC1 independent observed inventory passes checks; raw-ROM structural supplement covers all observed nonzero offsets. Full helper/runtime validation remains pending |
+| Executor / A4–A6 | Source differences, pre-POST prerequisites, changing conditions, forced/skip states, wait/failure semantics; injected tests | ABC1 host core/source cross-reference implemented; production helper/preinit/permissions integration pending. No replay substituted |
 | Board controls / A5 | Resolve targets and helper side effects; user decision on GPIO, thermal and unknown I2C operations | Existing BOARD-OPERATIONS document is a recorded analysis, not permission. Unknown device remains unresolved |
-| Memory / B2 | Owned allocation, CPU/guest-physical/device-IOVA/GPU-VA separation, upload/readback, host flush page lifetime, publication | NOT IMPLEMENTED. Do not pass a CPU pointer or a captured address as a device address. Allocation failure also needs explicit ownership/rollback |
-| Native backend / B3 | 64-bit BAR handling, bounded mappings, host timer/logging, cleanup; build/link/load on cardless Haiku | BLOCKED for native verification here: recorded kernel cross-toolchain, headers and matching kernel absent. Existing host tests cannot substitute |
+| Memory / B2 | Owned allocation, CPU/guest-physical/device-IOVA/GPU-VA separation, upload/readback, host flush page lifetime, publication | ABC1 typed ownership/publication layer tested, with cleanup quarantine. Real native/GPU allocation/mapping/publication adapter still pending |
+| Native backend / B3 | 64-bit BAR handling, bounded mappings, host timer/logging, cleanup; build/link/load on cardless Haiku | Cross compiler/headers restored; native backend and core objects compile. Matching guest kernel/link/load still pending; host fault-injection tests do not replace it |
 | Tooling / B4 | Cardless build identity, runtime access policy, incremental logs, host-enforced timeout | Existing scripts are reference inputs; no passthrough changes or physical card experiments made. Cardless toolchain must first be restored |
 | Read-only identity / B5 | Approved hardware identity and stable/masked register survey against reference | HARDWARE PENDING; no inferred acceptance from emulated VGA |
-| Load recipe / C1–C2 | Decode Linux load phase into named source-backed operations; specify domains, waits, faults and rollback per step | Captures are present and hashed; pinned source trees absent. No source-unchecked register recipe issued |
+| Load recipe / C1–C2 | Decode Linux load phase into named source-backed operations; specify domains, waits, faults and rollback per step | ABC1 source-anchored load survey and gated recipe prepared. Full operation-level attribution and unresolved integration choices remain partial |
 | Bring-up / A7 | Explicit reset-state prerequisites, independent faults, owned scratch patterns/complements and alias checks | HARDWARE PENDING; the initialized marker is insufficient |
 | Translation/scheduling / C3 | Physical slow-window bootstrap, flush/TLB path, page size, RAMFC, channel/runlist/PBDMA setup | HARDWARE PENDING; source and capture matching precede each first-write stage |
 | Submission / C3 | One exact NOP, publication before PUT, measured GET advancement with faults checked | Controller contract HOST_ONLY; machine-dependent operations unimplemented |
-| Teardown / C3 | Stop/preempt/remove, wait for quiescence, collect faults, then free; retain on failure | Controller policy HOST_ONLY; actual quiescence mechanism unverified |
+| Teardown / C3 | Stop/preempt/remove, wait for quiescence, collect faults, then free; retain on failure | Controller/ownership/bootstrap policy HOST_ONLY; actual quiescence mechanism unverified |
 
 The host flush page may be a **pre-POST** prerequisite: B2 is not completely
 independent of A7. “No GR” remains an experiment hypothesis. The ROM is firmware;
@@ -94,3 +94,10 @@ correctness. Review those separately after restoring the inputs.
 No physical GPU, passthrough, reset, host sudo, host driver or running model
 service was accessed. No push was attempted. S1 and the whole cardless plan
 remain incomplete; this verification pass is not a driver completion claim.
+
+## ABC1 update
+
+See `docs/ABC-CARDLESS-OUTCOME.md` for the current per-track outcome, source
+corrections, compile/test scope and native-run blockers. Earlier V1 missing
+source/compiler findings are historical; the matching guest-kernel/native
+acceptance and actual physical-device gates remain open.

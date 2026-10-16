@@ -37,6 +37,45 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/compute/LaunchDesc.h:105` | `*   LAUNCH              (0x02bc): value = 3` | src/gallium/drivers/nouveau/nvc0/nve4_compute.xml.h:170 | SOURCE_ONLY |
 | `src/compute/LaunchDesc.h:106` | `*   NV50_GRAPH_SERIALIZE(0x0110): value = 0` | src/gallium/drivers/nouveau/nv_object.xml.h:284 | SOURCE_ONLY |
 
+## src/devinit/Interpreter.cpp
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/devinit/Interpreter.cpp:80` | `case 0x36: case 0x38: case 0x71: case 0x72: case 0x8c: case 0x8d: case 0x8e: length=1; break;` | nvkm/subdev/bios/init.c:2233 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:81` | `case 0x33: case 0x6f: case 0x75: length=2; break;` | nvkm/subdev/bios/init.c:2231 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:82` | `case 0x53: case 0x56: case 0x5b: case 0x74: length=3; break;` | nvkm/subdev/bios/init.c:2252 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:83` | `case 0x69: length=5; break;` | nvkm/subdev/bios/init.c:2269 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:84` | `case 0x7a: case 0x90: length=9; break;` | nvkm/subdev/bios/init.c:2283 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:85` | `case 0x6e: case 0x97: length=13; break;` | nvkm/subdev/bios/init.c:2272 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:86` | `case 0x5f: length=22; break;` | nvkm/subdev/bios/init.c:2262 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:87` | `case 0x4d:` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:90` | `case 0x58: case 0x91:` | nvkm/subdev/bios/init.c:2256 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:93` | `case 0x8f:` | nvkm/subdev/bios/init.c:2288 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:97` | `case 0xa9:` | nvkm/subdev/bios/init.c:2297 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:107` | `case 0x71: return Stop::Done;` | nvkm/subdev/bios/init.c:2274 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:108` | `case 0x36:` | nvkm/subdev/bios/init.c:2233 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:112` | `case 0x33: {` | nvkm/subdev/bios/init.c:2231 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:126` | `case 0x5b:` | nvkm/subdev/bios/init.c:2259 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:133` | `case 0x38: flags_^=2; break;` | nvkm/subdev/bios/init.c:2235 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:134` | `case 0x72: flags_ &= ~uint8_t(2); break;` | nvkm/subdev/bios/init.c:2275 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:135` | `case 0x75: {` | nvkm/subdev/bios/init.c:2278 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:138` | `case 0x56:` | nvkm/subdev/bios/init.c:2254 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:151` | `case 0x74:` | nvkm/subdev/bios/init.c:2277 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:158` | `case 0x6e: ok=masked(reg,word(uint64_t(pc)+5,4),word(uint64_t(pc)+9,4)); break;` | nvkm/subdev/bios/init.c:2272 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:159` | `case 0x7a: ok=write(reg,word(uint64_t(pc)+5,4)); break;` | nvkm/subdev/bios/init.c:2283 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:160` | `case 0x90: { uint32_t value=0; ok=read(reg,value) && write(word(uint64_t(pc)+5,4),value); break; }` | nvkm/subdev/bios/init.c:2289 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:161` | `case 0x97: {` | nvkm/subdev/bios/init.c:2293 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:165` | `case 0x5f: {` | nvkm/subdev/bios/init.c:2262 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:167` | `const uint32_t bits=shift<0x80 ? shift : 0x100-shift;` | nvkm/subdev/bios/init.c:531 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:170` | `value=shift<0x80 ? value>>bits : value<<bits;` | nvkm/subdev/bios/init.c:531 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:174` | `case 0x58: case 0x91:` | nvkm/subdev/bios/init.c:2256 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:177` | `ok=write(reg+(op==0x58 ? 4*i : 0),word(uint64_t(pc)+6+4*i,4));` | nvkm/subdev/bios/init.c:1281 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:180` | `case 0x8f:` | nvkm/subdev/bios/init.c:2288 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:187` | `case 0x6f:` | nvkm/subdev/bios/init.c:2273 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:194` | `case 0x8c: case 0x8d: break;` | nvkm/subdev/bios/init.c:2285 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:195` | `case 0x4d: case 0x53: case 0x69: case 0x8e: case 0xa9:` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:198` | `if (active() \|\| op==0x69) {` | nvkm/subdev/bios/init.c:1623 | SOURCE_ONLY |
+
 ## src/fifo/PushBuffer.cpp
 
 | Line | Code | Source | Status |
@@ -86,6 +125,24 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/mmu/PageTable.h:40` | `static constexpr uint64_t kPteUnmapped = 0;` | nvkm/subdev/mmu/vmmgf100.c:94 | SOURCE_ONLY |
 | `src/mmu/PageTable.h:43` | `static constexpr uint64_t kLptInvalid = 2;` | nvkm/subdev/mmu/vmmgk104.c:29 | SOURCE_ONLY |
 
+## src/runtime/Bootstrap.cpp
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/runtime/Bootstrap.cpp:45` | `uint64_t window=address&~uint64_t(0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:47` | `if(!port.write32(0x001700,uint32_t(window>>16)))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:50` | `if(!port.write32(0x700000+uint32_t(address&0xfffff),data[i]))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:61` | `uint64_t window=address&~uint64_t(0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:63` | `if(!port.write32(0x001700,uint32_t(window>>16)))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:66` | `if(!port.read32(0x700000+uint32_t(address&0xfffff),data[i]))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:74` | `return port.write32(0x070000,1) && poll(port,0x070000,2,limits);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:83` | `patterns[i]=uint32_t((address>>2)^(address>>34))*0x9e3779b9u;` | no source: software test pattern | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:112` | `if(!port.hostSimulation() \|\| id>15 \|\| address>=(1ULL<<40) \|\| (address&0xfff)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:113` | `\|\| entries>0xfffff \|\| !limits.timeoutUs \|\| !limits.attempts)return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:117` | `return port.write32(0x002270,(aperture<<28)\|uint32_t(address>>12))` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:118` | `&& port.write32(0x002274,(id<<20)\|entries)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/Bootstrap.cpp:119` | `&& poll(port,0x002284+id*8,0x00100000,limits);` | no source: ambiguous citation | SOURCE_ONLY |
+
 ## Open
 
 The following constant lines have no source citation:
@@ -94,5 +151,18 @@ The following constant lines have no source citation:
 - src/fifo/PushBuffer.cpp:33 (no source: 0x7ffc is max 13-bit value aligned to 4; nvc0_winsys.h shifts mthd >> 2)
 - src/fifo/PushBuffer.cpp:39 (no source: 0x1fff is max 13-bit value for the count field;    nvc0_winsys.h uses (size << 16) with 13-bit field)
 - src/fifo/PushBuffer.cpp:269 (no source: 0xff is just 8-bit mask for address upper bits)
+- src/runtime/Bootstrap.cpp:45 (no source: ambiguous citation)
+- src/runtime/Bootstrap.cpp:47 (no source: ambiguous citation)
+- src/runtime/Bootstrap.cpp:50 (no source: ambiguous citation)
+- src/runtime/Bootstrap.cpp:61 (no source: ambiguous citation)
+- src/runtime/Bootstrap.cpp:63 (no source: ambiguous citation)
+- src/runtime/Bootstrap.cpp:66 (no source: ambiguous citation)
+- src/runtime/Bootstrap.cpp:74 (no source: ambiguous citation)
+- src/runtime/Bootstrap.cpp:83 (no source: software test pattern)
+- src/runtime/Bootstrap.cpp:112 (no source: ambiguous citation)
+- src/runtime/Bootstrap.cpp:113 (no source: ambiguous citation)
+- src/runtime/Bootstrap.cpp:117 (no source: ambiguous citation)
+- src/runtime/Bootstrap.cpp:118 (no source: ambiguous citation)
+- src/runtime/Bootstrap.cpp:119 (no source: ambiguous citation)
 
 These constants may be verified by a mmiotrace in task C5.

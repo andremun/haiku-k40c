@@ -67,9 +67,9 @@
     }
   ],
   "toolchain": {
-    "compiler": false,
-    "headers": false,
+    "compiler": true,
+    "headers": true,
     "kernel": false,
-    "root": "/home/unimelb.edu.au/mariom1/haiku-cross"
+    "root": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku-cross"
   }
 }

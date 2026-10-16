@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: ABC1 (user-directed cardless A/B/C continuation).
-Task state: IN PROGRESS. Complete feasible host/cardless steps; hardware remains out of scope.
+Current task: none. ABC1 handoff complete; native validation blocked (ESC-001).
+Task state: PARTIAL / BLOCKED for native link/load. Host work/checks pass; physical hardware stages remain pending.
 Last updated: 2026-10-16
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
@@ -40,8 +40,10 @@ Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 | R1 | DONE | 2026-10-14 | Fixed 7 defects (F1–F7) from external review: overlap check, unmap page-size match, shift/bounds validation, launch descriptor overflow, push-buffer guards, trace parsing, qmd_compare rewrite. |
 | A3 | STOPPED | 2026-10-15 | Stopped by the scaffold after 17 h, not accepted: the agent read `tools/check_repo.py`, and its explanation of offsets missing from the listing was wrong. Partial work kept on branch `task-a3` only. To rework. |
 | V1 | HOST CHECKS PASS (V2) | 2026-10-16 | User-directed recheck of possible mistakes by "Local": 3 helper corrections, freestanding S1 controller (58 host checks), verification gates. Full make check: 220 failures with absent reference trees; pytest/PyYAML and recorded cross-toolchain unavailable. ROM deferred by user. See work/V1/RESULT.md. |
-
 | V2 | DONE (offline scope) | 2026-10-16 | Restored all 5 exact clean source pins; full make check passes (0 failures). Removed pytest success suppression after a failing probe exited 0. Rebuilt pinned nvbios without sudo; fresh decode matches saved output byte for byte. A3 and native backend not implemented. See work/V2/RESULT.md. |
+
+| A3 | DONE (independent rework) | 2026-10-16 | Observed/presentation inventory passes checks; split-line COPY and repeat bookkeeping explained. Raw-ROM supplement: 530 potential starts / 25 opcodes, all observed nonzero offsets covered. Prior rejected branch not used. |
+| ABC1 | HOST WORK PASS / NATIVE BLOCKED | 2026-10-16 | A/B/C host implementation, raw-ROM/source/trace checks, typed memory boundary, source-backed bootstrap/controller, native backend object compilation. Three cardless boot timeouts; no matching-kernel link/load, no hardware/S1 claim. See docs/ABC-CARDLESS-OUTCOME.md and escalations/ESC-001.md. |
 
 ## V1 handoff (historical; input blockers resolved by V2)
 
@@ -76,3 +78,28 @@ Fresh full output equals the saved output, including warnings. A3 inventory
 rework is now a feasible next bounded task, but has not started or been accepted.
 The native cross-compiler/header/matching-kernel bundle remains absent here.
 No GPU, VM, sudo, host driver/service or push operation occurred in V2.
+
+## ABC1 current handoff
+
+See `docs/ABC-CARDLESS-OUTCOME.md` for the actual A/B/C matrix, reproduction
+commands and remaining gates; `work/ABC1/RESULT.md` and `evidence.json` retain
+checks/hashes and unsuccessful attempts. This work revises possible mistakes
+by "Local" and advances toward machine-dependent implementation. It is not
+acceptance of the earlier rejected A3 branch or evidence of a working GPU.
+
+The pinned cross compiler and headers are restored under `build/haiku-cross`.
+Both native probe configurations and four freestanding core components compile.
+B3 host failure tests pass, including cleanup failures. Native linking/loading
+is blocked because three disposable TCG guests did not reach their test job;
+all watchdogs cleaned up, KVM is absent, and further VM variants stopped under
+ESC-001. The matching kernel is not substituted. Existing vm-test.sh is unchanged.
+
+A3 inventory and raw-ROM structural coverage, source cross-reference and trace
+interval join pass generated checks. The host interpreter refuses hardware and
+default-denies board helpers. B2 actual GPU mapping/publication and C2/C3 full
+FIFO/MMU/channel integration still require design/review and subsequent hardware
+evidence. A5 decisions and unknown I2C device remain open; A7/B5/card C3 not run.
+The v6.8 comparison supplement is incomplete due HTTP 429, not evidence that
+selected sources differ. No push, physical GPU access, sudo or host-service
+change occurred. Rebuild local committed-source review artifacts with
+`python3 tools/review_bundle.py`; external firmware/caches are not bundled.

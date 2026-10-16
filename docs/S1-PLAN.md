@@ -67,8 +67,9 @@ controller/backend contract; it does not complete B2/B3 or C2/C3. The ROM
 was subsequently located in `~/mediaflux/vbios/` and verified against its
 recorded hash (see `reference/vbios/README.md`). V2 restored all five pinned
 source inputs and rebuilt the independent decoder;
-full repository checks now pass. The recorded native cross-toolchain and actual
-S1 remain pending. See `work/V2/RESULT.md`.
+full repository checks now pass. ABC1 rebuilt the native cross-toolchain and
+cross-compiled the backend/core components; native link/load and actual S1
+remain pending. See `docs/ABC-CARDLESS-OUTCOME.md`.
 
 ## The work, in three tracks
 
@@ -82,41 +83,42 @@ after review, and only with the user's go-ahead.
 |---|---|---|---|---|
 | A1 | Capture the card's firmware image in the Linux guest, with checksum | Me | Read-only guest run | **Done** 2026-10-14 (`reference/vbios/README.md`) |
 | A2 | Build the independent decoder; decode the tables and scripts offline | Me | No | **Done** 2026-10-14 (envytools `nvbios`, see `reference/vbios/README.md`) |
-| A3 | Inventory of the script instructions, matched to the driver log (executed or skipped) | Local | No | **Stopped, not accepted** 2026-10-15. To rework, after the checker is locked down. |
-| A4 | Executor design from the three sources; differences recorded | Me | No | Not started |
+| A3 | Inventory of the script instructions, matched to the driver log (executed or skipped) | Local | No | **Reworked** 2026-10-16; observed inventory passes checks. Raw-ROM structural supplement covers 530 potential starts / 25 opcodes; see `docs/ABC-CARDLESS-OUTCOME.md`. |
+| A4 | Executor design from the three sources; differences recorded | Me | No | Source cross-reference/design drafted; production helper/preinit integration still pending (`docs/DEVINIT-EXECUTOR.md`) |
 | A5 | Board-table lookup of every I²C and GPIO target; the safety list | Me, then the user | No | **List done** (`docs/BOARD-OPERATIONS.md`); **decision pending** |
-| A6 | Executor code, with host tests for changing conditions, timeouts and skipped writes | Local | No | Not started |
-| A7 | First write experiment: bring-up, with independent readiness checks and a small memory test | Reviewed, then run | Yes | Not started |
+| A6 | Executor code, with host tests for changing conditions, timeouts and skipped writes | Local | No | Host core implemented: 20 core + 5 default-denied helpers; synthetic and artificial real-ROM tests pass. Not a production executor |
+| A7 | First write experiment: bring-up, with independent readiness checks and a small memory test | Reviewed, then run | Yes | Host scratch-check algorithm tested; no card experiment performed |
 
 ### Track B: Haiku side (independent of A until the end)
 
 | # | Work | Who | Card? | State |
 |---|---|---|---|---|
 | B1 | Fix the seven code defects of the external review and the comparison tool, with regression tests | Local | No | **Done** 2026-10-14 (task R1) |
-| B2 | The layer between the encoders and the hardware: host memory, card memory, address mapping, publishing bytes to the card | Me (interfaces), local (code) | No | Not started |
-| B3 | Haiku backend, adapted from Haiku's in-tree drivers: find the card, map its regions, allocate, time, log, clean up | Local | Guest without card | Not started |
-| B4 | Guest tooling: a start script with limits the host enforces, a runtime allow-list of registers, logs saved as the run goes. Reuses the `haiku-k40c-llm` installation, with KVM | Me | No | Not started |
+| B2 | The layer between the encoders and the hardware: host memory, card memory, address mapping, publishing bytes to the card | Me (interfaces), local (code) | No | Typed ownership/publication layer implemented/tested; real allocation/VMM/visibility adapter pending |
+| B3 | Haiku backend, adapted from Haiku's in-tree drivers: find the card, map its regions, allocate, time, log, clean up | Local | Guest without card | OS backend/probes cross-compile; host failure tests pass. Matching-kernel link/load pending |
+| B4 | Guest tooling: a start script with limits the host enforces, a runtime allow-list of registers, logs saved as the run goes. Reuses the `haiku-k40c-llm` installation, with KVM | Me | No | Cardless overlay/watchdog/logging runner implemented; current probe allows identity reads only. This host has no KVM; native acceptance and hardware-stage allow-lists pending |
 | B5 | Read-only stages on the card: identity, then a survey compared with the Linux trace | Local, run by me | Read-only | Not started |
 
 ### Track C: from "awake" to S1
 
 | # | Work | Who | State |
 |---|---|---|---|
-| C1 | Decode the load phase of the Linux trace into named steps | Local tool, my interpretation | Not started |
-| C2 | One ordered recipe: master control, working memory through the slow window, address translation, scheduler set-up, channel, runlist, submission, teardown. Each step with its address domain, wait, error test and rollback | Me | Not started |
-| C3 | Implement and host-test each step; then one reviewed card experiment per stage that writes to the card for the first time | Local, then reviewed | Not started |
+| C1 | Decode the load phase of the Linux trace into named steps | Local tool, my interpretation | Six source anchors + chronological domain survey generated; full semantic attribution remains partial |
+| C2 | One ordered recipe: master control, working memory through the slow window, address translation, scheduler set-up, channel, runlist, submission, teardown. Each step with its address domain, wait, error test and rollback | Me | Gated integration recipe prepared (`docs/S1-RECIPE.md`); unresolved MMU/helper/routing/quiescence choices explicit |
+| C3 | Implement and host-test each step; then one reviewed card experiment per stage that writes to the card for the first time | Local, then reviewed | Slow window, BAR flush, runlist, scratch and S1 controller host-tested/cross-compiled; full backend/channel/MMU integration and hardware experiments pending |
 
 Facts already established for track C, from the reference runs
 (`docs/05-fifo-design.md`, "Verified by the reference run"): the host
 flush page is set before the card's start-up; bootstrap uses the slow
 window (`0x1700` / `0x700000`); big pages are 128 KiB; the chip has three
 command-fetch units (mask `0x7`) and needs no doorbell; a runlist entry is
-the channel number followed by 0, and the runlist is started by a write
-to `0x002634`.
+the channel number followed by 0. Runlist commit uses `0x002270` and
+`0x002274`; `0x002634` is channel preemption, not runlist start
+(`nvkm/engine/fifo/gk104.c:430-447`, `gf100.c:43-46`).
 
 ### Housekeeping
 
-- Rebuild the review package so that every check in it can be rerun.
+- Rebuild the local source/review artifacts with `tools/review_bundle.py`; reproduce checks using `docs/ABC-CARDLESS-OUTCOME.md` and exact external inputs. Firmware and caches are excluded.
 - The third opinion (an outside review) before any hardware task.
 
 ## How the old stages map to the tracks

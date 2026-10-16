@@ -10,7 +10,7 @@ Buffer::~Buffer()
 }
 bool Buffer::allocate(uint64_t bytes, uint64_t alignment, Placement placement)
 {
-    if (owned() || !bytes || !alignment || (alignment & (alignment - 1))) return false;
+    if ((placement!=Placement::Host && placement!=Placement::Vram) || owned() || !bytes || !alignment || (alignment & (alignment - 1))) return false;
     Allocation result;
     bool ok = backend_.allocate(bytes, alignment, placement, result);
     if (result.id) allocation_ = result; // Own partial allocations immediately.

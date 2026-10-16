@@ -1,0 +1,437 @@
+{
+  "observed_names": 24,
+  "opcodes": [
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:223",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2231",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:658",
+      "nvidia": {
+        "conditionflag": "ignores",
+        "deprecated": "false",
+        "id": "INIT_REPEAT",
+        "value": "0x33"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:3413",
+      "observed_in_log": true,
+      "observed_name": "REPEAT",
+      "opcode": "0x33"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:243",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2233",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:724",
+      "nvidia": {
+        "conditionflag": "ignores",
+        "deprecated": "false",
+        "id": "INIT_END_REPEAT",
+        "value": "0x36"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:3518",
+      "observed_in_log": true,
+      "observed_name": "END_REPEAT",
+      "opcode": "0x36"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:255",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2235",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:767",
+      "nvidia": {
+        "conditionflag": "inverts",
+        "deprecated": "false",
+        "id": "INIT_NOT",
+        "value": "0x38"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:2457",
+      "observed_in_log": true,
+      "observed_name": "NOT",
+      "opcode": "0x38"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:335",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2246",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "delegated; default-denied board/helper operation",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1033",
+      "nvidia": {
+        "conditionflag": "honors",
+        "deprecated": "false",
+        "id": "INIT_ZM_ALTERNATING_I2CREG",
+        "value": "0x4D"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:3788",
+      "observed_in_log": true,
+      "observed_name": "ZM_I2C_BYTE",
+      "opcode": "0x4d"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:391",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2252",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "delegated; default-denied board/helper operation",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1196",
+      "nvidia": {
+        "conditionflag": "honors",
+        "deprecated": "false",
+        "id": "INIT_ZM_CRTC",
+        "value": "0x53"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:2019",
+      "observed_in_log": true,
+      "observed_name": "ZM_CR",
+      "opcode": "0x53"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:407",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2254",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1237",
+      "nvidia": {
+        "conditionflag": "failsets",
+        "deprecated": "false",
+        "id": "INIT_POLL_NV",
+        "value": "0x56"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:1927",
+      "observed_in_log": true,
+      "observed_name": "CONDITION_TIME",
+      "opcode": "0x56"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:419",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2256",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1281",
+      "nvidia": {
+        "conditionflag": "honors",
+        "deprecated": "false",
+        "id": "INIT_REG_ARRAY",
+        "value": "0x58"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:979",
+      "observed_in_log": true,
+      "observed_name": "ZM_REG_SEQUENCE",
+      "opcode": "0x58"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:448",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2259",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1344",
+      "nvidia": {
+        "conditionflag": "honors",
+        "deprecated": "false",
+        "id": "INIT_SUB_DIRECT",
+        "value": "0x5B"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:3552",
+      "observed_in_log": true,
+      "observed_name": "SUB_DIRECT",
+      "opcode": "0x5b"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:469",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2262",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1415",
+      "nvidia": {
+        "conditionflag": "skipswrite",
+        "deprecated": "false",
+        "id": "INIT_NV_COPY",
+        "value": "0x5F"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:2231",
+      "observed_in_log": true,
+      "observed_name": "COPY_NV_REG",
+      "opcode": "0x5f"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:508",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2269",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "delegated; default-denied board/helper operation",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1623",
+      "nvidia": {
+        "conditionflag": "skipswrite",
+        "deprecated": "false",
+        "id": "INIT_IO",
+        "value": "0x69"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:1195",
+      "observed_in_log": true,
+      "observed_name": "IO",
+      "opcode": "0x69"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:531",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2272",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1709",
+      "nvidia": {
+        "conditionflag": "skipswrite",
+        "deprecated": "false",
+        "id": "INIT_NV_REG",
+        "value": "0x6E"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:470",
+      "observed_in_log": true,
+      "observed_name": "NV_REG",
+      "opcode": "0x6e"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:536",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2273",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1727",
+      "nvidia": {
+        "conditionflag": "honors",
+        "deprecated": "true",
+        "id": "INIT_MACRO",
+        "value": "0x6F"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:2673",
+      "observed_in_log": true,
+      "observed_name": "MACRO",
+      "opcode": "0x6f"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:543",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2274",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:610",
+      "nvidia": {
+        "conditionflag": "ignores",
+        "deprecated": "false",
+        "id": "INIT_DONE",
+        "value": "0x71"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:3454",
+      "observed_in_log": true,
+      "observed_name": "DONE",
+      "opcode": "0x71"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:547",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2275",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1751",
+      "nvidia": {
+        "conditionflag": "clears",
+        "deprecated": "false",
+        "id": "INIT_RESUME",
+        "value": "0x72"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:2423",
+      "observed_in_log": true,
+      "observed_name": "RESUME",
+      "opcode": "0x72"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:558",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2277",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1781",
+      "nvidia": {
+        "conditionflag": "honors",
+        "deprecated": "false",
+        "id": "INIT_TIME",
+        "value": "0x74"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:391",
+      "observed_in_log": true,
+      "observed_name": "TIME",
+      "opcode": "0x74"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:563",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2278",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1802",
+      "nvidia": {
+        "conditionflag": "failsets",
+        "deprecated": "false",
+        "id": "INIT_CONDITION",
+        "value": "0x75"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:2712",
+      "observed_in_log": true,
+      "observed_name": "CONDITION",
+      "opcode": "0x75"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:592",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2283",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1892",
+      "nvidia": {
+        "conditionflag": "honors",
+        "deprecated": "false",
+        "id": "INIT_ZM_REG",
+        "value": "0x7A"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:622",
+      "observed_in_log": true,
+      "observed_name": "ZM_REG",
+      "opcode": "0x7a"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:607",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2285",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1942",
+      "nvidia": {
+        "conditionflag": "ignores",
+        "deprecated": "false",
+        "id": "INIT_RESET_BEGUN",
+        "value": "0x8C"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:5690",
+      "observed_in_log": true,
+      "observed_name": "RESET_BEGUN",
+      "opcode": "0x8c"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:625",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2286",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1953",
+      "nvidia": {
+        "conditionflag": "ignores",
+        "deprecated": "false",
+        "id": "INIT_RESET_END",
+        "value": "0x8D"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:5737",
+      "observed_in_log": true,
+      "observed_name": "RESET_END",
+      "opcode": "0x8d"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:643",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2287",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "delegated; default-denied board/helper operation",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1964",
+      "nvidia": {
+        "conditionflag": "honors",
+        "deprecated": "false",
+        "id": "INIT_GPIO_ALL",
+        "value": "0x8E"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:5784",
+      "observed_in_log": true,
+      "observed_name": "GPIO",
+      "opcode": "0x8e"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:648",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2288",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:1980",
+      "nvidia": {
+        "conditionflag": "skipsarraywrite",
+        "deprecated": "false",
+        "id": "INIT_XMEMSEL_ZM_NV_REG_ARRAY",
+        "value": "0x8F"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:3290",
+      "observed_in_log": true,
+      "observed_name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "opcode": "0x8f"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:668",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2289",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:2018",
+      "nvidia": {
+        "conditionflag": "skipswrite",
+        "deprecated": "false",
+        "id": "INIT_DIRECT_COPY_NV_REG",
+        "value": "0x90"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:2308",
+      "observed_in_log": true,
+      "observed_name": "COPY_ZM_REG",
+      "opcode": "0x90"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:673",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2290",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:2035",
+      "nvidia": {
+        "conditionflag": "honors",
+        "deprecated": "false",
+        "id": "INIT_ZM_REG_REITERATE",
+        "value": "0x91"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:1019",
+      "observed_in_log": false,
+      "observed_name": "ZM_REG_GROUP",
+      "opcode": "0x91"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:703",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2293",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "host simulation core",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:2085",
+      "nvidia": {
+        "conditionflag": "skipswrite",
+        "deprecated": "false",
+        "id": "INIT_ADD_NV_REG",
+        "value": "0x97"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:5336",
+      "observed_in_log": true,
+      "observed_name": "ZM_MASK_ADD",
+      "opcode": "0x97"
+    },
+    {
+      "decoder_source": "reference/envytools/nvbios/nvbios.c:742",
+      "dispatch_source": "reference/nouveau/nvkm/subdev/bios/init.c:2297",
+      "evidence": "SOURCE_ONLY; observed occurrence in Linux log is separate",
+      "implementation": "delegated; default-denied board/helper operation",
+      "nouveau_source": "reference/nouveau/nvkm/subdev/bios/init.c:2191",
+      "nvidia": {
+        "conditionflag": "honors",
+        "deprecated": "false",
+        "id": "INIT_GPIO_EXCLUDE_ARRAY",
+        "value": "0xA9"
+      },
+      "nvidia_source": "reference/open-gpu-doc/Devinit/devinit.xml:5819",
+      "observed_in_log": true,
+      "observed_name": "GPIO_NE",
+      "opcode": "0xa9"
+    }
+  ],
+  "rom_sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
+  "scope": "observed opcode source cross-reference; not full reachability",
+  "source_sha256": {
+    "reference/envytools/nvbios/nvbios.c": "7e9f739bf8e4b45f168e90b4d6b07c0c0d039a2bdb76f753b38069714f36907f",
+    "reference/nouveau/nvkm/subdev/bios/init.c": "7af9d95f2fc4b61bb6320c7198505b19b2e7f88cbf3952f1770518f863c1811b",
+    "reference/open-gpu-doc/Devinit/devinit.xml": "b0e27e719b6b141fc96478157b2c16c443b2d78f809f054b584f1eb1e6dc78c0"
+  }
+}

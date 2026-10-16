@@ -1,0 +1,317 @@
+{
+  "acceptance_test_files_changed": "",
+  "base_revision": "1a7f391",
+  "cross_tool_packages": {
+    "bison_2%3a3.8.2+dfsg-1ubuntu0.22.04.1_amd64.deb": "40ba998a24ce53a420fc3f8188b833fde276564df1a7e90acaf875f4f9b76c4e",
+    "flex_2.6.4-8build2_amd64.deb": "980674f410fa6cb5e41d1bdf434a9391dcec0ac8fae5194cd90f9598ae074d8d",
+    "libfl-dev_2.6.4-8build2_amd64.deb": "8c65612bacfb9a9e03759f80f64ccba1ca977d3511e22c10fd881b55a762efe0",
+    "libfl2_2.6.4-8build2_amd64.deb": "b36df0dcc7b3c8769b51790fb37f780a7ca6148448af30ce572ab584ddf8a84a",
+    "m4_1.4.18-5ubuntu2_amd64.deb": "572a544d2c18bf49d25c465720c570cd8e6e38731386ac9c0a7f29bed2486f3e",
+    "nasm_2.15.05-1_amd64.deb": "3e2725cfcb308642e1de289e749ad3aad90266d1d6db7f9261ed45ce8f3d734d"
+  },
+  "final_host_check": {
+    "checker_failures": 0,
+    "exit": 0,
+    "log": "build/tests/abc-handoff-final.log",
+    "sha256": "52dfef64fc40fa86e3a15612b0520028536828628bf5499e2b8b1816ed7f0351"
+  },
+  "kvm_branch": "SOURCE_ONLY positive branch; missing-device rejection checked without launching another VM",
+  "kvm_check_scope": "verified outside sandbox; no module/device changes",
+  "kvm_device_available": false,
+  "native_attempts": [
+    {
+      "artifacts": {
+        "job.sh": {
+          "bytes": 280,
+          "sha256": "60b64a36243b296e1a3986b99ea33bece9a8c81f1713eeb339e4b1d804b403cb"
+        },
+        "launch.json": {
+          "bytes": 1162,
+          "sha256": "627a1d7fee77aaeedec950c7b04ff11007e0366ed276a4bfb395fe95c08781f8"
+        },
+        "qemu.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "result.json": {
+          "bytes": 82,
+          "sha256": "bcd73fb87668251675c2fc6be40901ac7a9dacaed0b097369889d1543ccdfe44"
+        },
+        "serial.log": {
+          "bytes": 42654,
+          "sha256": "96c80fad69b4a3862673b26cf2187fbef51d2fdcaa03b0166810023fb2018cf4"
+        }
+      },
+      "launch": {
+        "args": [
+          "qemu-system-x86_64",
+          "-name",
+          "k40-cardless-verification",
+          "-machine",
+          "q35",
+          "-accel",
+          "tcg,thread=multi",
+          "-cpu",
+          "qemu64",
+          "-smp",
+          "2",
+          "-m",
+          "2048",
+          "-drive",
+          "if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd",
+          "-drive",
+          "if=pflash,format=raw,file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/cardless/20261016-141120/vars.fd",
+          "-drive",
+          "file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/cardless/20261016-141120/overlay.qcow2,format=qcow2,if=none,id=system",
+          "-device",
+          "ide-hd,drive=system,bus=ide.0,bootindex=1",
+          "-vga",
+          "std",
+          "-netdev",
+          "user,id=n0",
+          "-device",
+          "e1000,netdev=n0",
+          "-display",
+          "none",
+          "-serial",
+          "file:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/cardless/20261016-141120/serial.log",
+          "-monitor",
+          "unix:/tmp/k40-cardless-20261016-141120.sock,server,nowait"
+        ],
+        "base": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c-llm/vm/system.qcow2",
+        "scope": "CARDLESS_TCG",
+        "timeout_seconds": 600
+      },
+      "path": "build/cardless/20261016-141120",
+      "result": {
+        "elapsed_seconds": 600.67,
+        "scope": "CARDLESS_ONLY",
+        "status": "failed"
+      }
+    },
+    {
+      "artifacts": {
+        "job.sh": {
+          "bytes": 280,
+          "sha256": "b9d249818697b8e18d17b75cdd1be51932cc532c6f33b618f9a4d137dc7a01ac"
+        },
+        "launch.json": {
+          "bytes": 1227,
+          "sha256": "38376971e807ea969bd4b9c31e174a2443768b2bb70f8bc2941996cd0d9c244f"
+        },
+        "qemu.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "result.json": {
+          "bytes": 82,
+          "sha256": "216022dea65e29c78a39a0e1028ac853002983bcb030be8da0347624f60cefb4"
+        },
+        "serial.log": {
+          "bytes": 50470,
+          "sha256": "870c633dc6c94ac288baf09a9c8ea9190fe114a53e5a63a81fb36dbc773d4a10"
+        }
+      },
+      "launch": {
+        "args": [
+          "qemu-system-x86_64",
+          "-name",
+          "k40-cardless-verification",
+          "-machine",
+          "q35",
+          "-accel",
+          "tcg,thread=multi",
+          "-cpu",
+          "qemu64",
+          "-smp",
+          "2",
+          "-m",
+          "4096",
+          "-drive",
+          "if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd",
+          "-drive",
+          "if=pflash,format=raw,file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/cardless/20261016-142252/vars.fd",
+          "-drive",
+          "file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/cardless/20261016-142252/overlay.qcow2,format=qcow2,if=none,id=system",
+          "-device",
+          "ide-hd,drive=system,bus=ide.0,bootindex=1",
+          "-device",
+          "qemu-xhci",
+          "-device",
+          "usb-tablet",
+          "-vga",
+          "std",
+          "-netdev",
+          "user,id=n0",
+          "-device",
+          "e1000,netdev=n0",
+          "-display",
+          "none",
+          "-serial",
+          "file:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/cardless/20261016-142252/serial.log",
+          "-monitor",
+          "unix:/tmp/k40-cardless-20261016-142252.sock,server,nowait"
+        ],
+        "base": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c-llm/vm/system.qcow2",
+        "scope": "CARDLESS_TCG",
+        "timeout_seconds": 600
+      },
+      "path": "build/cardless/20261016-142252",
+      "result": {
+        "elapsed_seconds": 600.66,
+        "scope": "CARDLESS_ONLY",
+        "status": "failed"
+      }
+    },
+    {
+      "artifacts": {
+        "job.sh": {
+          "bytes": 280,
+          "sha256": "74ddb4e4bf6515187a17b659455fab28e1be7510c3dbd44ca46d563c0e06eb85"
+        },
+        "launch.json": {
+          "bytes": 1227,
+          "sha256": "b514e8bdc81d8f36bcb418497f777563d4ae8eed88dcc47a9452d6c4195117d6"
+        },
+        "qemu.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "result.json": {
+          "bytes": 82,
+          "sha256": "216022dea65e29c78a39a0e1028ac853002983bcb030be8da0347624f60cefb4"
+        },
+        "serial.log": {
+          "bytes": 50406,
+          "sha256": "32d0d60ceaac6747b8ff7bc4cd441ae7588331b0a4fbd4d908fe1c0446d8d0f7"
+        }
+      },
+      "launch": {
+        "args": [
+          "qemu-system-x86_64",
+          "-name",
+          "k40-cardless-verification",
+          "-machine",
+          "q35",
+          "-accel",
+          "tcg,thread=multi",
+          "-cpu",
+          "qemu64",
+          "-smp",
+          "1",
+          "-m",
+          "4096",
+          "-drive",
+          "if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd",
+          "-drive",
+          "if=pflash,format=raw,file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/cardless/20261016-143330/vars.fd",
+          "-drive",
+          "file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/cardless/20261016-143330/overlay.qcow2,format=qcow2,if=none,id=system",
+          "-device",
+          "ide-hd,drive=system,bus=ide.0,bootindex=1",
+          "-device",
+          "qemu-xhci",
+          "-device",
+          "usb-tablet",
+          "-vga",
+          "std",
+          "-netdev",
+          "user,id=n0",
+          "-device",
+          "e1000,netdev=n0",
+          "-display",
+          "none",
+          "-serial",
+          "file:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/cardless/20261016-143330/serial.log",
+          "-monitor",
+          "unix:/tmp/k40-cardless-20261016-143330.sock,server,nowait"
+        ],
+        "base": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c-llm/vm/system.qcow2",
+        "scope": "CARDLESS_TCG",
+        "timeout_seconds": 600
+      },
+      "path": "build/cardless/20261016-143330",
+      "result": {
+        "elapsed_seconds": 600.66,
+        "scope": "CARDLESS_ONLY",
+        "status": "failed"
+      }
+    }
+  ],
+  "native_compiler": {
+    "buildtools_revision": "8375c2dbeaf109c520798cb234d57f0895463201",
+    "haiku_revision": "b42b90f5ec2839f8074400c849ee025b50d0f7f1",
+    "sha256": "3e3f6faa59871d4df9555c85f4e36255b22a0ad933adafb971a78fab07bf629c",
+    "version": "x86_64-unknown-haiku-gcc (GCC) 13.3.0"
+  },
+  "native_link_exit": 2,
+  "native_load_verified": false,
+  "native_objects": {
+    "build/haiku/Bootstrap.o": "f5ba931d286294ac12a69231bcd2c6a5dd66a03bcc817565102e8f5a41f57fde",
+    "build/haiku/HaikuBackend.o": "48249a23426dffa0583db94eca77f932c3a4701bf6db21d38087c58e393046fa",
+    "build/haiku/HaikuProbe.identity.o": "e950963ef72acbbbe5ae53959585660c5fdcd31ee700596e652dce9d9633990e",
+    "build/haiku/HaikuProbe.o": "a1cc1d1054a6d81a6f1aa41ac6f0adc3d37214fe2a5c9cbf6ee0bc1be9bf9a02",
+    "build/haiku/Interpreter.o": "66182d812d0fcef9b1c90e53f1c4c81ab5ea798484ec3cc74a141d4e0c52e7a5",
+    "build/haiku/Memory.o": "f28265dc1e7688c699034f47fb6a3158008df01573d5571db9e3ddf47dc8f06d",
+    "build/haiku/S1Experiment.o": "c037fb21108aceba54e485c62a62c5795ba8da517ea2875dcad57052db68d09c"
+  },
+  "reports_sha256": {
+    "analysis/devinit_inventory.json": "997074721b0c22b0b9ddf87e69d06c35805e2feed7da7d6dfe05dd92073853bc",
+    "analysis/devinit_preflight.json": "2b4497a7302a825d69a9d8d799d43001335895807a34b5abc5dfe6af22e2087e",
+    "analysis/devinit_sources.json": "827e8e475a3edbb1b8822e9546bb7b1b40335350dbde36def91e2c11e4ea5550",
+    "analysis/devinit_trace_join.json": "77831a72a99ff7667c500b95ccf1158fc0807ff804ecfd902f37099bf91ef8e6",
+    "analysis/load_trace.json": "59c6ea5094db06a46f89a4cd6ed9d795d5ed1752338b243b6ddc890277f4d9de",
+    "analysis/s1-verification-inputs.json": "5cbd9519677c99cfd2a86cfc1bf4656d1331a98b7b5f79939336ae03c9dfa254",
+    "analysis/s1-version-comparison.json": "fb7bc4ca8c8d7581141f5d120debc0733ce969f411044e2efec1d1defce7bae1"
+  },
+  "scope": "HOST_ONLY, SOURCE_ONLY, and NATIVE_OBJECT_COMPILE; no native link/load or GPU result",
+  "source_patch": "No upstream source patch required for cross/decoder builds",
+  "source_sha256": {
+    "src/compute/LaunchDesc.cpp": "d4575b0e51749032278773c710e8d17925af5ffe7833831d846aa730f88f7e41",
+    "src/compute/LaunchDesc.h": "184ebafd3136b8e0328ee802600eb17e438aeaed191e7a2620ce2a7afc53ac47",
+    "src/devinit/Interpreter.cpp": "118d80ded66b8fe5e15b57c0346b6d9db4379c224377bb2c15d424e6161d6ba5",
+    "src/devinit/Interpreter.h": "af3f590914461f2426bed13ad87a104854b5f75a62c0a65e8edee3357c3ae23e",
+    "src/fifo/PushBuffer.cpp": "cfefbca7eb4f370f340570355f8d78316674b35f230b5fc620a2e12c34c53306",
+    "src/fifo/PushBuffer.h": "b23b20f73c3a6c8f9ce37eb2e51983ea924bf40be8c7161381ccfb0b7ed6224f",
+    "src/hw/RegisterIO.cpp": "b17c57187cb14b94aa620fb36d1131343577ac6870fd9c73bac3f3a000c1407b",
+    "src/hw/RegisterIO.h": "c38e460274bb80d5462e1b78bd23fee107be90b8ccd2d10809d8942397e8ed27",
+    "src/memory/Memory.cpp": "ae99e9ab5d0e7975b67f86138b86a99e244dbd1c02211a23ac0e646ca653928b",
+    "src/memory/Memory.h": "924b1e278a7488f0fc7fa3d38f42e95f4c5441392bd9bf76c7344d7f36d6e6fb",
+    "src/mmu/PageTable.cpp": "229a267117c677eab2e159e9a043306eeb692a49dba9cf9bb8f5757d7d3cdb89",
+    "src/mmu/PageTable.h": "d079f4099c9653b3ba9404de3f2c044c330b99d81c025469f375e63c96c82c8c",
+    "src/os/HaikuBackend.c": "156eac0a7c6cd1f14b4a7805ff4b0263d9198162a87eb22d0fe0194ee058d70a",
+    "src/os/HaikuBackend.h": "5d9cdbd6271b4fb073f31336b573cf685f53d0654127c2625119cfbce96ba29a",
+    "src/os/HaikuProbe.c": "002b667053ae0dcdd3c3696b7f178c676fffd5d9560c61ebc24467c3a6cd2859",
+    "src/runtime/Bootstrap.cpp": "cee5c13f024dfd8db90945631efa70b2e244f38fd3d21e742de9dad7da012198",
+    "src/runtime/Bootstrap.h": "26d14c0e1889dabefd57655eda91cfbf8b7dc0da7f5bdd59443063ec11d6fef3",
+    "src/runtime/S1Experiment.cpp": "81d4baeecf906b448b8f54d7379dd3415a4d6e3bd841091e090408fd9df440f1",
+    "src/runtime/S1Experiment.h": "e264860c0cf26cb50240783b930870ecea85838244b37d6d67ae63b32d158366"
+  },
+  "tools_sha256": {
+    "tools/devinit_inventory.py": "25b123fcfcf117c0b04a3b8647fdad0273d81f5aa6210ba5eaa1d3e555072122",
+    "tools/devinit_preflight.py": "ca69231307db15d4c5539aa8cae50c3c0962b51125ac6dfde9c0757b54f3b65c",
+    "tools/devinit_sources.py": "4066bbc98b77eca10b75ece1c6c15b3f408de9e52da7cd518b44ed4c564f91a7",
+    "tools/devinit_trace_join.py": "200bd6f11d53aa4216c66f65af8cb82441bd93d756cc7671ea650e56f93d18be",
+    "tools/haiku/build_backend.sh": "af46121eface2513fa14135d15dd2205064b051f754bd58e0d1008d89b3daadf",
+    "tools/haiku/cardless_run.py": "e67cecc0a23163681095a723f873728a46f0894f0e0b3444ec13aaf55ebf258b",
+    "tools/haiku/prepare_cross.sh": "b5187e4e559313a1564c3d1d8f0a0f3deafad282f4b5cfecac67249dabc93173",
+    "tools/load_trace.py": "2adc11e3aa880813da0b9f5f9f95d1fd39af2d9ffcdba687c85ad65c0b1be4e7",
+    "tools/review_bundle.py": "f8566e18850f30b80e3806ae5cb49352d8311eb532f49695a0c9e3c34f949a3c",
+    "tools/s1_verification_inputs.py": "30c0c12393476c96444d340e05ef383cc476cc4054c900bd3f820c9f083bb59d",
+    "tools/version_comparison.py": "c14252d9c585c57e99cf3aa3675dc8fbe5e4c2c12e51bd5bdaf076e2095803a0"
+  },
+  "validation_commands": [
+    "python3 tools/devinit_inventory.py --check (twice)",
+    "python3 tools/devinit_preflight.py --check",
+    "python3 tools/devinit_sources.py --check",
+    "python3 tools/devinit_trace_join.py --check",
+    "python3 tools/load_trace.py --check",
+    "python3 tools/provenance.py --check",
+    "PATH=\"$PWD/build/verification-venv/bin:$PATH\" make check",
+    "bash tools/haiku/build_backend.sh --objects-only",
+    "bash tools/haiku/build_backend.sh (exit 2; missing matching kernel)",
+    "python3 tools/version_comparison.py --check (exit 2; incomplete source cache)"
+  ],
+  "version_comparison_complete": false,
+  "version_download_error": "HTTP 429; no further downloads attempted"
+}

@@ -105,5 +105,6 @@ is prepared and not enabled.
 |---|---|---|
 | V1 | Cardless S1 verification and backend boundary | `docs/tasks/V1.md` |
 | V2 | Restore verification inputs and reproduce ROM decoding | `docs/tasks/V2.md` |
+| ABC1 | User-directed cardless continuation across S1 tracks A/B/C | `docs/tasks/ABC1.md` |
 
 See `docs/S1-VERIFICATION.md` for results, remaining gates and external-input blockers.

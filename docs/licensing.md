@@ -34,3 +34,21 @@ block keeps its original notice and is listed in the last column below.
 
 No Nouveau or NVIDIA implementation was ported during V2. Firmware-derived
 decoder text stays under ignored build/ or the user's external mediaflux mount.
+
+## ABC1 independent cardless implementation (2026-10-16)
+
+| Source file consulted | License | Used for | Copied material |
+|---|---|---|---|
+| `reference/nouveau/nvkm/subdev/bios/init.c` | MIT notice retained in source | Opcode lengths/control state, repeat/call/condition/mask behavior; GPIO/I2C/IO helper gates | Constants/semantic facts with citations; no function bodies copied |
+| `reference/nouveau/nvkm/subdev/bios/bit.c`, `ramcfg.c`, `base.c` | MIT notices retained | BIT-I/M root/table metadata and cached RAM selection | Format facts only |
+| `reference/envytools/nvbios/nvbios.c`, `print.c` | MIT notices retained | Listing presentation, split instruction explanation | Format facts only |
+| `reference/open-gpu-doc/Devinit/devinit.xml` | Upstream license retained | Specification identifiers/condition attributes for cross-reference | Attribute metadata only |
+| `reference/nouveau/nvkm/subdev/instmem/nv50.c`, `subdev/bar/g84.c`, `subdev/fb/gf100.c` | MIT notices retained | Slow-window, flush and pre-POST page facts | Constants/algorithm facts; no copied functions |
+| `reference/nouveau/nvkm/engine/fifo/gk104.c`, `gf100.c`, `gk110.c` | MIT notices retained | Runlist commit vs preempt, channel sequencing | Constants/format facts only |
+| `reference/nouveau/nvkm/subdev/mmu/vmmgf100.c` | MIT notice retained | Invalidation dependencies for design checklist | No code copied |
+| `reference/haiku/headers/os/drivers/PCI.h`, `KernelExport.h`, `headers/os/kernel/OS.h`, `src/add-ons/kernel/drivers/graphics/nvidia/driver.c` | Haiku MIT license | Native PCI mapping/allocation/timing/module API and high BAR word handling | API/format facts, own implementation |
+
+Host test shims are expressly not Haiku ABI evidence; actual native headers are
+used independently in cross builds. Firmware payloads/complete decoded listings
+are never embedded in source or committed. The offline simulator reads the
+user-provided image at runtime and records only aggregate results.

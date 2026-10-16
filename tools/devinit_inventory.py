@@ -6,6 +6,7 @@ import argparse
 from collections import Counter
 import json
 import lzma
+import os
 from pathlib import Path
 import re
 
@@ -120,6 +121,7 @@ def markdown(report):
 
 
 def default_decoded():
+    if os.environ.get('K40_DECODED'):return Path(os.environ['K40_DECODED']).expanduser()
     original = Path.home() / "haiku-cross/vbios/decoded/all.txt"
     return original if original.is_file() else Path.home() / "mediaflux/vbios/decoded/all.txt"
 

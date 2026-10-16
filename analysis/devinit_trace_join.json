@@ -1,0 +1,5992 @@
+{
+  "coverage_claim": "No register-value or helper-completeness equivalence is claimed",
+  "duplicate_log_timestamps": 0,
+  "inputs_sha256": {
+    "reference/linux-run-debug/dmesg.txt.xz": "e15e44ac82d6172587fea176327e074e192e5c0138519e9a9716f312c7a9672b",
+    "reference/linux-run-debug/mmiotrace.txt.xz": "3cee0731faadb7f4aacb53ba1d0d3ce7d5954430c31fc764a731ad029bd2f67b"
+  },
+  "intervals": [
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 933,
+      "marker": "0",
+      "name": "RESET_BEGUN",
+      "offset": "0x00008637",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45511,
+      "last_trace_line": 45511,
+      "line": 934,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008638",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 935,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00008641",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45512,
+      "last_trace_line": 45513,
+      "line": 936,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 937,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 938,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45514,
+      "last_trace_line": 45515,
+      "line": 939,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 940,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 941,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45516,
+      "last_trace_line": 45517,
+      "line": 942,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 943,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 944,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45518,
+      "last_trace_line": 45519,
+      "line": 945,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 946,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 947,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45520,
+      "last_trace_line": 45521,
+      "line": 948,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 949,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 950,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45522,
+      "last_trace_line": 45523,
+      "line": 951,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 952,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 953,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45524,
+      "last_trace_line": 45525,
+      "line": 954,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 955,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 956,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45526,
+      "last_trace_line": 45527,
+      "line": 957,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 958,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 959,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45528,
+      "last_trace_line": 45529,
+      "line": 960,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 961,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 962,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45530,
+      "last_trace_line": 45531,
+      "line": 963,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 964,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 965,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45532,
+      "last_trace_line": 45533,
+      "line": 966,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 967,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 968,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45534,
+      "last_trace_line": 45535,
+      "line": 969,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 970,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 971,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45536,
+      "last_trace_line": 45537,
+      "line": 972,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 973,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 974,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45538,
+      "last_trace_line": 45539,
+      "line": 975,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 976,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 977,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45540,
+      "last_trace_line": 45541,
+      "line": 978,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 979,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 980,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45542,
+      "last_trace_line": 45543,
+      "line": 981,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 982,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 983,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45544,
+      "last_trace_line": 45545,
+      "line": 984,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 985,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 986,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45546,
+      "last_trace_line": 45547,
+      "line": 987,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 988,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 989,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45548,
+      "last_trace_line": 45549,
+      "line": 990,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 991,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 992,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45550,
+      "last_trace_line": 45551,
+      "line": 993,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x00008643",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 994,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x00008650",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45552,
+      "last_trace_line": 45552,
+      "line": 995,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008651",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45553,
+      "last_trace_line": 45554,
+      "line": 996,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000865a",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45555,
+      "last_trace_line": 45556,
+      "line": 997,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008667",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45557,
+      "last_trace_line": 45557,
+      "line": 998,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00008674",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1000,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x00008676",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45558,
+      "last_trace_line": 45559,
+      "line": 1001,
+      "marker": "1",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x0000e7c0",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 45560,
+      "last_trace_line": 45560,
+      "line": 1004,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000e7ce",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45561,
+      "last_trace_line": 45561,
+      "line": 1005,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000e7d7",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45562,
+      "last_trace_line": 45562,
+      "line": 1006,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000e7e0",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45563,
+      "last_trace_line": 45563,
+      "line": 1007,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000e7e9",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45564,
+      "last_trace_line": 45564,
+      "line": 1008,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000e7f2",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45565,
+      "last_trace_line": 45565,
+      "line": 1009,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000e7fb",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1010,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x0000e804",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45566,
+      "last_trace_line": 45567,
+      "line": 1011,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008679",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45568,
+      "last_trace_line": 45568,
+      "line": 1012,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00008686",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45569,
+      "last_trace_line": 45569,
+      "line": 1014,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00008688",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45570,
+      "last_trace_line": 45571,
+      "line": 1016,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x0000868a",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 45572,
+      "last_trace_line": 45573,
+      "line": 1019,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008698",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1020,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x000086a5",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45574,
+      "last_trace_line": 45574,
+      "line": 1021,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x000086a6",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45575,
+      "last_trace_line": 45576,
+      "line": 1023,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x000086a8",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45577,
+      "last_trace_line": 45578,
+      "line": 1024,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x000086b5",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1025,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x000086c2",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1026,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x000086c3",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45579,
+      "last_trace_line": 45596,
+      "line": 1027,
+      "marker": "1",
+      "name": "IO",
+      "offset": "0x00008506",
+      "reads": 7,
+      "writes": 11
+    },
+    {
+      "first_trace_line": 45597,
+      "last_trace_line": 45598,
+      "line": 1028,
+      "marker": "1",
+      "name": "ZM_CR",
+      "offset": "0x0000850b",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1029,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x0000850e",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1030,
+      "marker": "0",
+      "name": "RESET_END",
+      "offset": "0x000086c6",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45599,
+      "last_trace_line": 45600,
+      "line": 1031,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x000086c7",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45601,
+      "last_trace_line": 45602,
+      "line": 1032,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x000086d4",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45603,
+      "last_trace_line": 45604,
+      "line": 1033,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x000086e1",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45605,
+      "last_trace_line": 45606,
+      "line": 1034,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x000086ee",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45607,
+      "last_trace_line": 45608,
+      "line": 1035,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x000086fb",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1036,
+      "marker": "0",
+      "name": "TIME",
+      "offset": "0x00008708",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45609,
+      "last_trace_line": 45610,
+      "line": 1037,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000870b",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45611,
+      "last_trace_line": 45612,
+      "line": 1038,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008718",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45613,
+      "last_trace_line": 45613,
+      "line": 1039,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008725",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45614,
+      "last_trace_line": 45614,
+      "line": 1040,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x0000872e",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1042,
+      "marker": " ",
+      "name": "ZM_REG",
+      "offset": "0x00008730",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1043,
+      "marker": " ",
+      "name": "NV_REG",
+      "offset": "0x00008739",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1044,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x00008746",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45615,
+      "last_trace_line": 45615,
+      "line": 1045,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00008747",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1047,
+      "marker": " ",
+      "name": "ZM_REG",
+      "offset": "0x00008749",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1048,
+      "marker": " ",
+      "name": "NV_REG",
+      "offset": "0x00008752",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1049,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x0000875f",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45616,
+      "last_trace_line": 45616,
+      "line": 1050,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00008760",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1052,
+      "marker": " ",
+      "name": "ZM_REG",
+      "offset": "0x00008762",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1053,
+      "marker": " ",
+      "name": "ZM_REG",
+      "offset": "0x0000876b",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1054,
+      "marker": " ",
+      "name": "ZM_REG",
+      "offset": "0x00008774",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1055,
+      "marker": " ",
+      "name": "TIME",
+      "offset": "0x0000877d",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1056,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x00008780",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45617,
+      "last_trace_line": 45617,
+      "line": 1057,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008781",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45618,
+      "last_trace_line": 45618,
+      "line": 1058,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000878a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45619,
+      "last_trace_line": 45619,
+      "line": 1059,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008793",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45620,
+      "last_trace_line": 45621,
+      "line": 1060,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x0000879c",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 45622,
+      "last_trace_line": 45631,
+      "line": 1063,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x000087aa",
+      "reads": 0,
+      "writes": 10
+    },
+    {
+      "first_trace_line": 45632,
+      "last_trace_line": 45632,
+      "line": 1074,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x000087d8",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45633,
+      "last_trace_line": 45633,
+      "line": 1075,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x000087e1",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45634,
+      "last_trace_line": 45634,
+      "line": 1076,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x000087ea",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45635,
+      "last_trace_line": 45635,
+      "line": 1077,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x000087f3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45636,
+      "last_trace_line": 45636,
+      "line": 1078,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x000087fc",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45637,
+      "last_trace_line": 45637,
+      "line": 1079,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008805",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45638,
+      "last_trace_line": 45638,
+      "line": 1080,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000880e",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45639,
+      "last_trace_line": 45640,
+      "line": 1081,
+      "marker": "0",
+      "name": "ZM_MASK_ADD",
+      "offset": "0x00008817",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45641,
+      "last_trace_line": 45642,
+      "line": 1082,
+      "marker": "0",
+      "name": "ZM_MASK_ADD",
+      "offset": "0x00008824",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45643,
+      "last_trace_line": 45644,
+      "line": 1083,
+      "marker": "0",
+      "name": "ZM_MASK_ADD",
+      "offset": "0x00008831",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45645,
+      "last_trace_line": 45646,
+      "line": 1084,
+      "marker": "0",
+      "name": "ZM_MASK_ADD",
+      "offset": "0x0000883e",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45647,
+      "last_trace_line": 45648,
+      "line": 1085,
+      "marker": "0",
+      "name": "ZM_MASK_ADD",
+      "offset": "0x0000884b",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45649,
+      "last_trace_line": 45650,
+      "line": 1086,
+      "marker": "0",
+      "name": "ZM_MASK_ADD",
+      "offset": "0x00008858",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45651,
+      "last_trace_line": 45652,
+      "line": 1087,
+      "marker": "0",
+      "name": "ZM_MASK_ADD",
+      "offset": "0x00008865",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45653,
+      "last_trace_line": 45654,
+      "line": 1088,
+      "marker": "0",
+      "name": "ZM_MASK_ADD",
+      "offset": "0x00008872",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45655,
+      "last_trace_line": 45656,
+      "line": 1089,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x0000887f",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 45657,
+      "last_trace_line": 45658,
+      "line": 1092,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000888d",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45659,
+      "last_trace_line": 45659,
+      "line": 1093,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000889a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45660,
+      "last_trace_line": 45663,
+      "line": 1094,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x000088a3",
+      "reads": 0,
+      "writes": 4
+    },
+    {
+      "first_trace_line": 45664,
+      "last_trace_line": 45665,
+      "line": 1099,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x000088b9",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 45666,
+      "last_trace_line": 45667,
+      "line": 1102,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x000088c7",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 45668,
+      "last_trace_line": 45671,
+      "line": 1105,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x000088d5",
+      "reads": 0,
+      "writes": 4
+    },
+    {
+      "first_trace_line": 45672,
+      "last_trace_line": 45676,
+      "line": 1110,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x000088eb",
+      "reads": 0,
+      "writes": 5
+    },
+    {
+      "first_trace_line": 45677,
+      "last_trace_line": 45677,
+      "line": 1116,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008905",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45678,
+      "last_trace_line": 45678,
+      "line": 1117,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000890e",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45679,
+      "last_trace_line": 45679,
+      "line": 1118,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008917",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45680,
+      "last_trace_line": 45681,
+      "line": 1119,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008920",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45682,
+      "last_trace_line": 45683,
+      "line": 1120,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000892d",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45684,
+      "last_trace_line": 45685,
+      "line": 1121,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000893a",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45686,
+      "last_trace_line": 45687,
+      "line": 1122,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008947",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45688,
+      "last_trace_line": 45689,
+      "line": 1123,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008954",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45690,
+      "last_trace_line": 45691,
+      "line": 1124,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008961",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45692,
+      "last_trace_line": 45693,
+      "line": 1125,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000896e",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45694,
+      "last_trace_line": 45695,
+      "line": 1126,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000897b",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45696,
+      "last_trace_line": 45697,
+      "line": 1127,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008988",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45698,
+      "last_trace_line": 45699,
+      "line": 1128,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008995",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45700,
+      "last_trace_line": 45701,
+      "line": 1129,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x000089a2",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1130,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x000089af",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45702,
+      "last_trace_line": 45904,
+      "line": 1131,
+      "marker": "1",
+      "name": "ZM_I2C_BYTE",
+      "offset": "0x0000862f",
+      "reads": 117,
+      "writes": 86
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1139,
+      "marker": "1",
+      "name": "RESUME",
+      "offset": "0x00008635",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1140,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x00008636",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1141,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x000089b2",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1142,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x0000657f",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45905,
+      "last_trace_line": 45905,
+      "line": 1143,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x000089b5",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45906,
+      "last_trace_line": 45953,
+      "line": 1145,
+      "marker": "0",
+      "name": "GPIO_NE",
+      "offset": "0x000089b7",
+      "reads": 24,
+      "writes": 24
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1186,
+      "marker": "0",
+      "name": "NOT",
+      "offset": "0x000089c1",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1187,
+      "marker": " ",
+      "name": "GPIO",
+      "offset": "0x000089c2",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1188,
+      "marker": " ",
+      "name": "SUB_DIRECT",
+      "offset": "0x000089c3",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1189,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x000089c6",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 45954,
+      "last_trace_line": 45955,
+      "line": 1190,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x000089c7",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 45956,
+      "last_trace_line": 45957,
+      "line": 1193,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x000089d5",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 45958,
+      "last_trace_line": 45958,
+      "line": 1196,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x000089e3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45959,
+      "last_trace_line": 45959,
+      "line": 1197,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x000089ec",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45960,
+      "last_trace_line": 45963,
+      "line": 1198,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x000089f5",
+      "reads": 0,
+      "writes": 4
+    },
+    {
+      "first_trace_line": 45964,
+      "last_trace_line": 45964,
+      "line": 1203,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008a0b",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45965,
+      "last_trace_line": 45966,
+      "line": 1204,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008a14",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45967,
+      "last_trace_line": 45968,
+      "line": 1205,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008a21",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45969,
+      "last_trace_line": 45970,
+      "line": 1206,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008a2e",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45971,
+      "last_trace_line": 45972,
+      "line": 1207,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008a3b",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45973,
+      "last_trace_line": 45974,
+      "line": 1208,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008a48",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45975,
+      "last_trace_line": 45976,
+      "line": 1209,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008a55",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45977,
+      "last_trace_line": 45978,
+      "line": 1210,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008a62",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45979,
+      "last_trace_line": 45980,
+      "line": 1211,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008a6f",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45981,
+      "last_trace_line": 45982,
+      "line": 1212,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008a7c",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45983,
+      "last_trace_line": 45984,
+      "line": 1213,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008a89",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45985,
+      "last_trace_line": 45986,
+      "line": 1214,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008a96",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45987,
+      "last_trace_line": 45988,
+      "line": 1215,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008aa3",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45989,
+      "last_trace_line": 45990,
+      "line": 1216,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008ab0",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45991,
+      "last_trace_line": 45992,
+      "line": 1217,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008abd",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45993,
+      "last_trace_line": 45994,
+      "line": 1218,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008aca",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45995,
+      "last_trace_line": 45996,
+      "line": 1219,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008ad7",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45997,
+      "last_trace_line": 45998,
+      "line": 1220,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008ae4",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 45999,
+      "last_trace_line": 46000,
+      "line": 1221,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008af1",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46001,
+      "last_trace_line": 46002,
+      "line": 1222,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008afe",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46003,
+      "last_trace_line": 46004,
+      "line": 1223,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008b0b",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46005,
+      "last_trace_line": 46006,
+      "line": 1224,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008b18",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1225,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x00008b25",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46007,
+      "last_trace_line": 46007,
+      "line": 1226,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000850f",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46008,
+      "last_trace_line": 46009,
+      "line": 1227,
+      "marker": "1",
+      "name": "COPY_ZM_REG",
+      "offset": "0x00008518",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1228,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x00008521",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46010,
+      "last_trace_line": 46010,
+      "line": 1229,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00008b28",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1231,
+      "marker": " ",
+      "name": "NOT",
+      "offset": "0x00008b2a",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1232,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x00008b2b",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46011,
+      "last_trace_line": 46011,
+      "line": 1233,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x00008ead",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46012,
+      "last_trace_line": 46012,
+      "line": 1234,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x00008eb6",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46013,
+      "last_trace_line": 46013,
+      "line": 1235,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x00008ebf",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46014,
+      "last_trace_line": 46015,
+      "line": 1236,
+      "marker": "1",
+      "name": "CONDITION_TIME",
+      "offset": "0x00008ec8",
+      "reads": 2,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1239,
+      "marker": "1",
+      "name": "RESUME",
+      "offset": "0x00008ecb",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46016,
+      "last_trace_line": 46016,
+      "line": 1240,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x00008ecc",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46017,
+      "last_trace_line": 46017,
+      "line": 1241,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x00008ed5",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46018,
+      "last_trace_line": 46018,
+      "line": 1242,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x00008ede",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1243,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x00008ee7",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1244,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x00008b2e",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46019,
+      "last_trace_line": 46019,
+      "line": 1245,
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "offset": "0x00008b2f",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1247,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x00008b32",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46020,
+      "last_trace_line": 46020,
+      "line": 1248,
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "offset": "0x00008b33",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1250,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x00008b36",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46021,
+      "last_trace_line": 46022,
+      "line": 1251,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008b37",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46023,
+      "last_trace_line": 46024,
+      "line": 1252,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008b44",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46025,
+      "last_trace_line": 46027,
+      "line": 1253,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x00008b51",
+      "reads": 0,
+      "writes": 3
+    },
+    {
+      "first_trace_line": 46028,
+      "last_trace_line": 46030,
+      "line": 1257,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x00008b63",
+      "reads": 0,
+      "writes": 3
+    },
+    {
+      "first_trace_line": 46031,
+      "last_trace_line": 46031,
+      "line": 1261,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008b75",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46032,
+      "last_trace_line": 46032,
+      "line": 1262,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008b7e",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46033,
+      "last_trace_line": 46033,
+      "line": 1263,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008b87",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46034,
+      "last_trace_line": 46035,
+      "line": 1264,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x00008b90",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1267,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x00008b9e",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46036,
+      "last_trace_line": 46039,
+      "line": 1268,
+      "marker": "1",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x00008522",
+      "reads": 0,
+      "writes": 4
+    },
+    {
+      "first_trace_line": 46040,
+      "last_trace_line": 46043,
+      "line": 1273,
+      "marker": "1",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x00008538",
+      "reads": 0,
+      "writes": 4
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1278,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x0000854e",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46044,
+      "last_trace_line": 46044,
+      "line": 1279,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008ba1",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46045,
+      "last_trace_line": 46045,
+      "line": 1280,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008baa",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46046,
+      "last_trace_line": 46046,
+      "line": 1281,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008bb3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46047,
+      "last_trace_line": 46047,
+      "line": 1282,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008bbc",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46048,
+      "last_trace_line": 46048,
+      "line": 1283,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008bc5",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1284,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x00008bce",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46049,
+      "last_trace_line": 46049,
+      "line": 1285,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000854f",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46050,
+      "last_trace_line": 46050,
+      "line": 1286,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x00008558",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46051,
+      "last_trace_line": 46051,
+      "line": 1287,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x00008561",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46052,
+      "last_trace_line": 46052,
+      "line": 1288,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000856a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1289,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x00008573",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1290,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x00008bd1",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46053,
+      "last_trace_line": 46053,
+      "line": 1291,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x00008574",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1292,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x0000857d",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46054,
+      "last_trace_line": 46054,
+      "line": 1293,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008bd4",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46055,
+      "last_trace_line": 46055,
+      "line": 1294,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008bdd",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46056,
+      "last_trace_line": 46056,
+      "line": 1295,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008be6",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46057,
+      "last_trace_line": 46057,
+      "line": 1296,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008bef",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46058,
+      "last_trace_line": 46058,
+      "line": 1297,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008bf8",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46059,
+      "last_trace_line": 46059,
+      "line": 1298,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008c01",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46060,
+      "last_trace_line": 46060,
+      "line": 1299,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008c0a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46061,
+      "last_trace_line": 46062,
+      "line": 1300,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008c13",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46063,
+      "last_trace_line": 46064,
+      "line": 1301,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008c20",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46065,
+      "last_trace_line": 46066,
+      "line": 1302,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008c2d",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46067,
+      "last_trace_line": 46068,
+      "line": 1303,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008c3a",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46069,
+      "last_trace_line": 46069,
+      "line": 1304,
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "offset": "0x00008c47",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1306,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x00008c4a",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46070,
+      "last_trace_line": 46070,
+      "line": 1307,
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "offset": "0x00008c4b",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1309,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x00008c4e",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46071,
+      "last_trace_line": 46072,
+      "line": 1310,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008c4f",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46073,
+      "last_trace_line": 46074,
+      "line": 1311,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008c5c",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46075,
+      "last_trace_line": 46076,
+      "line": 1312,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008c69",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46077,
+      "last_trace_line": 46078,
+      "line": 1313,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008c76",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46079,
+      "last_trace_line": 46080,
+      "line": 1314,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008c83",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46081,
+      "last_trace_line": 46082,
+      "line": 1315,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008c90",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46083,
+      "last_trace_line": 46084,
+      "line": 1316,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008c9d",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46085,
+      "last_trace_line": 46086,
+      "line": 1317,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008caa",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46087,
+      "last_trace_line": 46088,
+      "line": 1318,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008cb7",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46089,
+      "last_trace_line": 46090,
+      "line": 1319,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008cc4",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46091,
+      "last_trace_line": 46092,
+      "line": 1320,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008cd1",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46093,
+      "last_trace_line": 46093,
+      "line": 1321,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008cde",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46094,
+      "last_trace_line": 46094,
+      "line": 1322,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008ce7",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46095,
+      "last_trace_line": 46095,
+      "line": 1323,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008cf0",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46096,
+      "last_trace_line": 46096,
+      "line": 1324,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008cf9",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46097,
+      "last_trace_line": 46097,
+      "line": 1325,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008d02",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46098,
+      "last_trace_line": 46098,
+      "line": 1326,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008d0b",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46099,
+      "last_trace_line": 46099,
+      "line": 1327,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008d14",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1328,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x00008d1d",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46100,
+      "last_trace_line": 46100,
+      "line": 1329,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000857e",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1330,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x00008587",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46101,
+      "last_trace_line": 46101,
+      "line": 1331,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008d20",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46102,
+      "last_trace_line": 46102,
+      "line": 1332,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008d29",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46103,
+      "last_trace_line": 46104,
+      "line": 1333,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008d32",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46105,
+      "last_trace_line": 46106,
+      "line": 1334,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008d3f",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46107,
+      "last_trace_line": 46108,
+      "line": 1335,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008d4c",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46109,
+      "last_trace_line": 46111,
+      "line": 1336,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x00008d59",
+      "reads": 0,
+      "writes": 3
+    },
+    {
+      "first_trace_line": 46112,
+      "last_trace_line": 46112,
+      "line": 1340,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008d6b",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46113,
+      "last_trace_line": 46113,
+      "line": 1341,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008d74",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46114,
+      "last_trace_line": 46115,
+      "line": 1342,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008d7d",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46116,
+      "last_trace_line": 46117,
+      "line": 1343,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008d8a",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1344,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x00008d97",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46118,
+      "last_trace_line": 46118,
+      "line": 1345,
+      "marker": "1",
+      "name": "CONDITION_TIME",
+      "offset": "0x00008588",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1347,
+      "marker": "1",
+      "name": "RESUME",
+      "offset": "0x0000858b",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46119,
+      "last_trace_line": 46121,
+      "line": 1348,
+      "marker": "1",
+      "name": "COPY_NV_REG",
+      "offset": "0x0000858c",
+      "reads": 2,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46122,
+      "last_trace_line": 46123,
+      "line": 1349,
+      "marker": "1",
+      "name": "CONDITION_TIME",
+      "offset": "0x000085a2",
+      "reads": 2,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1352,
+      "marker": "1",
+      "name": "RESUME",
+      "offset": "0x000085a5",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1353,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x000085a6",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46124,
+      "last_trace_line": 46125,
+      "line": 1354,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008d9a",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46126,
+      "last_trace_line": 46126,
+      "line": 1355,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008da7",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46127,
+      "last_trace_line": 46127,
+      "line": 1356,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008db0",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46128,
+      "last_trace_line": 46129,
+      "line": 1357,
+      "marker": "0",
+      "name": "COPY_ZM_REG",
+      "offset": "0x00008db9",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46130,
+      "last_trace_line": 46131,
+      "line": 1358,
+      "marker": "0",
+      "name": "COPY_ZM_REG",
+      "offset": "0x00008dc2",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46132,
+      "last_trace_line": 46132,
+      "line": 1359,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008dcb",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46133,
+      "last_trace_line": 46134,
+      "line": 1360,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008dd4",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46135,
+      "last_trace_line": 46136,
+      "line": 1361,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008de1",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46137,
+      "last_trace_line": 46137,
+      "line": 1362,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008dee",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46138,
+      "last_trace_line": 46138,
+      "line": 1363,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008df7",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46139,
+      "last_trace_line": 46139,
+      "line": 1364,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008e00",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46140,
+      "last_trace_line": 46142,
+      "line": 1365,
+      "marker": "0",
+      "name": "COPY_NV_REG",
+      "offset": "0x00008e09",
+      "reads": 2,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46143,
+      "last_trace_line": 46145,
+      "line": 1366,
+      "marker": "0",
+      "name": "COPY_NV_REG",
+      "offset": "0x00008e1f",
+      "reads": 2,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46146,
+      "last_trace_line": 46148,
+      "line": 1367,
+      "marker": "0",
+      "name": "COPY_NV_REG",
+      "offset": "0x00008e35",
+      "reads": 2,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46149,
+      "last_trace_line": 46151,
+      "line": 1368,
+      "marker": "0",
+      "name": "COPY_NV_REG",
+      "offset": "0x00008e4b",
+      "reads": 2,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46152,
+      "last_trace_line": 46154,
+      "line": 1369,
+      "marker": "0",
+      "name": "COPY_NV_REG",
+      "offset": "0x00008e61",
+      "reads": 2,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46155,
+      "last_trace_line": 46157,
+      "line": 1370,
+      "marker": "0",
+      "name": "COPY_NV_REG",
+      "offset": "0x00008e77",
+      "reads": 2,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46158,
+      "last_trace_line": 46159,
+      "line": 1371,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00008e8d",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46160,
+      "last_trace_line": 46160,
+      "line": 1372,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008e9a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46161,
+      "last_trace_line": 46161,
+      "line": 1373,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00008ea3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46162,
+      "last_trace_line": 46162,
+      "line": 1374,
+      "marker": "0",
+      "name": "DONE",
+      "offset": "0x00008eac",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46163,
+      "last_trace_line": 46163,
+      "line": 1375,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00008ee8",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46164,
+      "last_trace_line": 46164,
+      "line": 1386,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00008f0f",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46165,
+      "last_trace_line": 46165,
+      "line": 1397,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00008f36",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46166,
+      "last_trace_line": 46166,
+      "line": 1408,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00008f5d",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46167,
+      "last_trace_line": 46167,
+      "line": 1419,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00008f84",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46168,
+      "last_trace_line": 46168,
+      "line": 1430,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00008fab",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46169,
+      "last_trace_line": 46169,
+      "line": 1441,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00008fd2",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1443,
+      "marker": " ",
+      "name": "NV_REG",
+      "offset": "0x00008fd4",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1444,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x00008fe1",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46170,
+      "last_trace_line": 46170,
+      "line": 1445,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00008fe2",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1447,
+      "marker": " ",
+      "name": "NV_REG",
+      "offset": "0x00008fe4",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1448,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x00008ff1",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46171,
+      "last_trace_line": 46171,
+      "line": 1449,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00008ff2",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1451,
+      "marker": " ",
+      "name": "NV_REG",
+      "offset": "0x00008ff4",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1452,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x00009001",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46172,
+      "last_trace_line": 46172,
+      "line": 1453,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00009002",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1455,
+      "marker": " ",
+      "name": "NV_REG",
+      "offset": "0x00009004",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1456,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x00009011",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46173,
+      "last_trace_line": 46173,
+      "line": 1457,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00009012",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1459,
+      "marker": " ",
+      "name": "NV_REG",
+      "offset": "0x00009014",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1460,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x00009021",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46174,
+      "last_trace_line": 46174,
+      "line": 1461,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00009022",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1463,
+      "marker": " ",
+      "name": "NV_REG",
+      "offset": "0x00009024",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1464,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x00009031",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46175,
+      "last_trace_line": 46176,
+      "line": 1465,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00009032",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46177,
+      "last_trace_line": 46177,
+      "line": 1466,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000903f",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46178,
+      "last_trace_line": 46178,
+      "line": 1467,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009048",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46179,
+      "last_trace_line": 46179,
+      "line": 1468,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009051",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46180,
+      "last_trace_line": 46180,
+      "line": 1469,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000905a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46181,
+      "last_trace_line": 46182,
+      "line": 1470,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009063",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 46183,
+      "last_trace_line": 46183,
+      "line": 1491,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x000090aa",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46184,
+      "last_trace_line": 46185,
+      "line": 1502,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x000090d1",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 46186,
+      "last_trace_line": 46186,
+      "line": 1523,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009118",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46187,
+      "last_trace_line": 46187,
+      "line": 1534,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000913f",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46188,
+      "last_trace_line": 46188,
+      "line": 1535,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009148",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46189,
+      "last_trace_line": 46191,
+      "line": 1546,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000916f",
+      "reads": 0,
+      "writes": 3
+    },
+    {
+      "first_trace_line": 46192,
+      "last_trace_line": 46192,
+      "line": 1577,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x000091d6",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46193,
+      "last_trace_line": 46193,
+      "line": 1588,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x000091fd",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46194,
+      "last_trace_line": 46194,
+      "line": 1599,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009224",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46195,
+      "last_trace_line": 46195,
+      "line": 1610,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000924b",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46196,
+      "last_trace_line": 46196,
+      "line": 1621,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009272",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46197,
+      "last_trace_line": 46197,
+      "line": 1632,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009299",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46198,
+      "last_trace_line": 46198,
+      "line": 1643,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x000092c0",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46199,
+      "last_trace_line": 46199,
+      "line": 1654,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x000092e7",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46200,
+      "last_trace_line": 46201,
+      "line": 1665,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000930e",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1666,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x0000931b",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46202,
+      "last_trace_line": 46202,
+      "line": 1667,
+      "marker": "1",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a5f8",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46203,
+      "last_trace_line": 46203,
+      "line": 1678,
+      "marker": "1",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a61f",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46204,
+      "last_trace_line": 46209,
+      "line": 1689,
+      "marker": "1",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a646",
+      "reads": 0,
+      "writes": 6
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 1750,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x0000a70d",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46210,
+      "last_trace_line": 46211,
+      "line": 1751,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000931e",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46212,
+      "last_trace_line": 46212,
+      "line": 1752,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000932b",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46213,
+      "last_trace_line": 46232,
+      "line": 1753,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009334",
+      "reads": 0,
+      "writes": 20
+    },
+    {
+      "first_trace_line": 46233,
+      "last_trace_line": 46248,
+      "line": 1954,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x000095bb",
+      "reads": 0,
+      "writes": 16
+    },
+    {
+      "first_trace_line": 46249,
+      "last_trace_line": 46264,
+      "line": 2115,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x000097c2",
+      "reads": 0,
+      "writes": 16
+    },
+    {
+      "first_trace_line": 46265,
+      "last_trace_line": 46265,
+      "line": 2276,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x000099c9",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46266,
+      "last_trace_line": 46266,
+      "line": 2277,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x000099d2",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46267,
+      "last_trace_line": 46267,
+      "line": 2288,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x000099f9",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46268,
+      "last_trace_line": 46268,
+      "line": 2289,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009a02",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46269,
+      "last_trace_line": 46269,
+      "line": 2300,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009a29",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46270,
+      "last_trace_line": 46270,
+      "line": 2311,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009a50",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46271,
+      "last_trace_line": 46271,
+      "line": 2322,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009a77",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46272,
+      "last_trace_line": 46272,
+      "line": 2333,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009a9e",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46273,
+      "last_trace_line": 46273,
+      "line": 2344,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009ac5",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46274,
+      "last_trace_line": 46274,
+      "line": 2355,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009aec",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46275,
+      "last_trace_line": 46275,
+      "line": 2366,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009b13",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46276,
+      "last_trace_line": 46276,
+      "line": 2377,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009b3a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46277,
+      "last_trace_line": 46277,
+      "line": 2378,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009b43",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46278,
+      "last_trace_line": 46279,
+      "line": 2379,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00009b4c",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46280,
+      "last_trace_line": 46281,
+      "line": 2380,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00009b59",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46282,
+      "last_trace_line": 46282,
+      "line": 2381,
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "offset": "0x00009b66",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2383,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x00009b69",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46283,
+      "last_trace_line": 46283,
+      "line": 2384,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009b6a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46284,
+      "last_trace_line": 46285,
+      "line": 2385,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00009b73",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46286,
+      "last_trace_line": 46286,
+      "line": 2386,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x00009b80",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46287,
+      "last_trace_line": 46287,
+      "line": 2388,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009b82",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46288,
+      "last_trace_line": 46288,
+      "line": 2389,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009b8b",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2390,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x00009b94",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46289,
+      "last_trace_line": 46289,
+      "line": 2391,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009b95",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46290,
+      "last_trace_line": 46290,
+      "line": 2392,
+      "marker": "0",
+      "name": "CONDITION_TIME",
+      "offset": "0x00009b9e",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2394,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x00009ba1",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46291,
+      "last_trace_line": 46292,
+      "line": 2395,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00009ba2",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46293,
+      "last_trace_line": 46294,
+      "line": 2396,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00009baf",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46295,
+      "last_trace_line": 46296,
+      "line": 2397,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00009bbc",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46297,
+      "last_trace_line": 46298,
+      "line": 2398,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00009bc9",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46299,
+      "last_trace_line": 46300,
+      "line": 2399,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x00009bd6",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46301,
+      "last_trace_line": 46301,
+      "line": 2400,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009be3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46302,
+      "last_trace_line": 46309,
+      "line": 2401,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009bec",
+      "reads": 0,
+      "writes": 8
+    },
+    {
+      "first_trace_line": 46310,
+      "last_trace_line": 46310,
+      "line": 2482,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009cf3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46311,
+      "last_trace_line": 46311,
+      "line": 2493,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009d1a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46312,
+      "last_trace_line": 46312,
+      "line": 2504,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009d41",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46313,
+      "last_trace_line": 46316,
+      "line": 2515,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009d68",
+      "reads": 0,
+      "writes": 4
+    },
+    {
+      "first_trace_line": 46317,
+      "last_trace_line": 46317,
+      "line": 2556,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009def",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46318,
+      "last_trace_line": 46319,
+      "line": 2557,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009df8",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 46320,
+      "last_trace_line": 46321,
+      "line": 2578,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x00009e3f",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 46322,
+      "last_trace_line": 46323,
+      "line": 2581,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x00009e4d",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 46324,
+      "last_trace_line": 46324,
+      "line": 2584,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009e5b",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46325,
+      "last_trace_line": 46326,
+      "line": 2585,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x00009e64",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 46327,
+      "last_trace_line": 46327,
+      "line": 2588,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x00009e72",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46328,
+      "last_trace_line": 46329,
+      "line": 2589,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009e7b",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 46330,
+      "last_trace_line": 46331,
+      "line": 2610,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009ec2",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 46332,
+      "last_trace_line": 46335,
+      "line": 2631,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009f09",
+      "reads": 0,
+      "writes": 4
+    },
+    {
+      "first_trace_line": 46336,
+      "last_trace_line": 46339,
+      "line": 2672,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x00009f90",
+      "reads": 0,
+      "writes": 4
+    },
+    {
+      "first_trace_line": 46340,
+      "last_trace_line": 46347,
+      "line": 2713,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a017",
+      "reads": 0,
+      "writes": 8
+    },
+    {
+      "first_trace_line": 46348,
+      "last_trace_line": 46348,
+      "line": 2794,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x0000a11e",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46349,
+      "last_trace_line": 46351,
+      "line": 2796,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a120",
+      "reads": 0,
+      "writes": 3
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2827,
+      "marker": "0",
+      "name": "NOT",
+      "offset": "0x0000a187",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2828,
+      "marker": " ",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a188",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2859,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x0000a1ef",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46352,
+      "last_trace_line": 46352,
+      "line": 2860,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a1f0",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46353,
+      "last_trace_line": 46353,
+      "line": 2871,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a217",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46354,
+      "last_trace_line": 46354,
+      "line": 2872,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a220",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46355,
+      "last_trace_line": 46356,
+      "line": 2883,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000a247",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2884,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000a254",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46357,
+      "last_trace_line": 46358,
+      "line": 2885,
+      "marker": "0",
+      "name": "TIME",
+      "offset": "0x0000a261",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46359,
+      "last_trace_line": 46359,
+      "line": 2886,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a264",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46360,
+      "last_trace_line": 46360,
+      "line": 2887,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a26d",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46361,
+      "last_trace_line": 46361,
+      "line": 2888,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a276",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46362,
+      "last_trace_line": 46362,
+      "line": 2889,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a27f",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2890,
+      "marker": "0",
+      "name": "TIME",
+      "offset": "0x0000a288",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46363,
+      "last_trace_line": 46363,
+      "line": 2891,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a28b",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46364,
+      "last_trace_line": 46364,
+      "line": 2892,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a294",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46365,
+      "last_trace_line": 46365,
+      "line": 2903,
+      "marker": "0",
+      "name": "MACRO",
+      "offset": "0x0000a2bb",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46366,
+      "last_trace_line": 46366,
+      "line": 2905,
+      "marker": "0",
+      "name": "MACRO",
+      "offset": "0x0000a2bd",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46367,
+      "last_trace_line": 46367,
+      "line": 2907,
+      "marker": "0",
+      "name": "MACRO",
+      "offset": "0x0000a2bf",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2909,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x0000a2c1",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46368,
+      "last_trace_line": 46368,
+      "line": 2910,
+      "marker": "1",
+      "name": "MACRO",
+      "offset": "0x0000a2c3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2912,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x0000a2c5",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2913,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46369,
+      "last_trace_line": 46369,
+      "line": 2914,
+      "marker": "1",
+      "name": "MACRO",
+      "offset": "0x0000a2c3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2916,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x0000a2c5",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2917,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46370,
+      "last_trace_line": 46370,
+      "line": 2918,
+      "marker": "1",
+      "name": "MACRO",
+      "offset": "0x0000a2c3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2920,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x0000a2c5",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2921,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46371,
+      "last_trace_line": 46371,
+      "line": 2922,
+      "marker": "1",
+      "name": "MACRO",
+      "offset": "0x0000a2c3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2924,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x0000a2c5",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2925,
+      "marker": "0",
+      "name": "REPEAT",
+      "offset": "0x00000000",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46372,
+      "last_trace_line": 46372,
+      "line": 2926,
+      "marker": "1",
+      "name": "MACRO",
+      "offset": "0x0000a2c3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2928,
+      "marker": "1",
+      "name": "END_REPEAT",
+      "offset": "0x0000a2c5",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46373,
+      "last_trace_line": 46373,
+      "line": 2929,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a2c6",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46374,
+      "last_trace_line": 46374,
+      "line": 2930,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a2cf",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46375,
+      "last_trace_line": 46375,
+      "line": 2941,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a2f6",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46376,
+      "last_trace_line": 46376,
+      "line": 2952,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x0000a31d",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46377,
+      "last_trace_line": 46378,
+      "line": 2954,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000a31f",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46379,
+      "last_trace_line": 46379,
+      "line": 2955,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a32c",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2956,
+      "marker": "0",
+      "name": "TIME",
+      "offset": "0x0000a335",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 2957,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x0000a338",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46380,
+      "last_trace_line": 46380,
+      "line": 2958,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a339",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46381,
+      "last_trace_line": 46381,
+      "line": 2959,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a342",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46382,
+      "last_trace_line": 46382,
+      "line": 2970,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a369",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46383,
+      "last_trace_line": 46383,
+      "line": 2981,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a390",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46384,
+      "last_trace_line": 46384,
+      "line": 2992,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a3b7",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46385,
+      "last_trace_line": 46385,
+      "line": 3003,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a3de",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46386,
+      "last_trace_line": 46386,
+      "line": 3014,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a405",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46387,
+      "last_trace_line": 46387,
+      "line": 3025,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a42c",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46388,
+      "last_trace_line": 46388,
+      "line": 3036,
+      "marker": "0",
+      "name": "RAM_RESTRICT_ZM_REG_GROUP",
+      "offset": "0x0000a453",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46389,
+      "last_trace_line": 46389,
+      "line": 3047,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x0000a47a",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3049,
+      "marker": " ",
+      "name": "CONDITION",
+      "offset": "0x0000a47c",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3051,
+      "marker": " ",
+      "name": "SUB_DIRECT",
+      "offset": "0x0000a47e",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3052,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x0000a481",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46390,
+      "last_trace_line": 46390,
+      "line": 3053,
+      "marker": "0",
+      "name": "MACRO",
+      "offset": "0x0000a482",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46391,
+      "last_trace_line": 46391,
+      "line": 3055,
+      "marker": "0",
+      "name": "MACRO",
+      "offset": "0x0000a484",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3057,
+      "marker": "0",
+      "name": "TIME",
+      "offset": "0x0000a486",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46392,
+      "last_trace_line": 46392,
+      "line": 3058,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a489",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46393,
+      "last_trace_line": 46393,
+      "line": 3059,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a492",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46394,
+      "last_trace_line": 46394,
+      "line": 3060,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a49b",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46395,
+      "last_trace_line": 46395,
+      "line": 3061,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a4a4",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46396,
+      "last_trace_line": 46396,
+      "line": 3062,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a4ad",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46397,
+      "last_trace_line": 46398,
+      "line": 3063,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000a4b6",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46399,
+      "last_trace_line": 46400,
+      "line": 3064,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000a4c3",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46401,
+      "last_trace_line": 46401,
+      "line": 3065,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a4d0",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46402,
+      "last_trace_line": 46402,
+      "line": 3066,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a4d9",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46403,
+      "last_trace_line": 46403,
+      "line": 3067,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a4e2",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46404,
+      "last_trace_line": 46404,
+      "line": 3068,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a4eb",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46405,
+      "last_trace_line": 46405,
+      "line": 3069,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a4f4",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46406,
+      "last_trace_line": 46406,
+      "line": 3070,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a4fd",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46407,
+      "last_trace_line": 46407,
+      "line": 3071,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a506",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46408,
+      "last_trace_line": 46408,
+      "line": 3072,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a50f",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46409,
+      "last_trace_line": 46409,
+      "line": 3073,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a518",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46410,
+      "last_trace_line": 46410,
+      "line": 3074,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a521",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46411,
+      "last_trace_line": 46411,
+      "line": 3075,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a52a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46412,
+      "last_trace_line": 46412,
+      "line": 3076,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a533",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46413,
+      "last_trace_line": 46413,
+      "line": 3077,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a53c",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46414,
+      "last_trace_line": 46414,
+      "line": 3078,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a545",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46415,
+      "last_trace_line": 46415,
+      "line": 3079,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a54e",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46416,
+      "last_trace_line": 46416,
+      "line": 3080,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a557",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46417,
+      "last_trace_line": 46417,
+      "line": 3081,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a560",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46418,
+      "last_trace_line": 46419,
+      "line": 3082,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000a569",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46420,
+      "last_trace_line": 46420,
+      "line": 3083,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a576",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46421,
+      "last_trace_line": 46421,
+      "line": 3084,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a57f",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46422,
+      "last_trace_line": 46422,
+      "line": 3085,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a588",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46423,
+      "last_trace_line": 46423,
+      "line": 3086,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000a591",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3087,
+      "marker": "0",
+      "name": "TIME",
+      "offset": "0x0000a59a",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46424,
+      "last_trace_line": 46425,
+      "line": 3088,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000a59d",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46426,
+      "last_trace_line": 46427,
+      "line": 3089,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000a5aa",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46428,
+      "last_trace_line": 46428,
+      "line": 3090,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x0000a5b7",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3092,
+      "marker": " ",
+      "name": "SUB_DIRECT",
+      "offset": "0x0000a5b9",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3093,
+      "marker": " ",
+      "name": "NOT",
+      "offset": "0x0000a5bc",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3094,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x0000a5bd",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46429,
+      "last_trace_line": 46430,
+      "line": 3095,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000a97d",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46431,
+      "last_trace_line": 46432,
+      "line": 3096,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000a98a",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46433,
+      "last_trace_line": 46434,
+      "line": 3097,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000a997",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46435,
+      "last_trace_line": 46436,
+      "line": 3098,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000a9a4",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46437,
+      "last_trace_line": 46438,
+      "line": 3099,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000a9b1",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46439,
+      "last_trace_line": 46440,
+      "line": 3100,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000a9be",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3101,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x0000a9cb",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3102,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x0000a5c0",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46441,
+      "last_trace_line": 46441,
+      "line": 3103,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x0000a5c1",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3105,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x0000a5c3",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46442,
+      "last_trace_line": 46443,
+      "line": 3106,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000a9cc",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46444,
+      "last_trace_line": 46445,
+      "line": 3107,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000a9d9",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46446,
+      "last_trace_line": 46447,
+      "line": 3108,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000a9e6",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46448,
+      "last_trace_line": 46449,
+      "line": 3109,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000a9f3",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46450,
+      "last_trace_line": 46451,
+      "line": 3110,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000aa00",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46452,
+      "last_trace_line": 46453,
+      "line": 3111,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x0000aa0d",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3112,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x0000aa1a",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3113,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x0000a5c6",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46454,
+      "last_trace_line": 46454,
+      "line": 3114,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x0000a5c7",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3116,
+      "marker": " ",
+      "name": "SUB_DIRECT",
+      "offset": "0x0000a5c9",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3117,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x0000a5cc",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3118,
+      "marker": "0",
+      "name": "TIME",
+      "offset": "0x0000a5cd",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46455,
+      "last_trace_line": 46456,
+      "line": 3119,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000a5d0",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46457,
+      "last_trace_line": 46458,
+      "line": 3120,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000a5dd",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46459,
+      "last_trace_line": 46460,
+      "line": 3121,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000a5ea",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3122,
+      "marker": "0",
+      "name": "DONE",
+      "offset": "0x0000a5f7",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3123,
+      "marker": "0",
+      "name": "DONE",
+      "offset": "0x0000657f",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3124,
+      "marker": "0",
+      "name": "DONE",
+      "offset": "0x0000aa1b",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3125,
+      "marker": "0",
+      "name": "SUB_DIRECT",
+      "offset": "0x0000aa1c",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46461,
+      "last_trace_line": 46461,
+      "line": 3126,
+      "marker": "1",
+      "name": "CONDITION",
+      "offset": "0x000085a7",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3128,
+      "marker": " ",
+      "name": "NV_REG",
+      "offset": "0x000085a9",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3129,
+      "marker": " ",
+      "name": "RESUME",
+      "offset": "0x000085b6",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46462,
+      "last_trace_line": 46463,
+      "line": 3130,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x000085b7",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46464,
+      "last_trace_line": 46464,
+      "line": 3131,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x000085c4",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46465,
+      "last_trace_line": 46465,
+      "line": 3132,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x000085cd",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46466,
+      "last_trace_line": 46466,
+      "line": 3133,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x000085d6",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46467,
+      "last_trace_line": 46467,
+      "line": 3134,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x000085df",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46468,
+      "last_trace_line": 46469,
+      "line": 3135,
+      "marker": "1",
+      "name": "ZM_CR",
+      "offset": "0x000085e8",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 46470,
+      "last_trace_line": 46470,
+      "line": 3136,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x000085eb",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46471,
+      "last_trace_line": 46471,
+      "line": 3137,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x000085f4",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46472,
+      "last_trace_line": 46473,
+      "line": 3138,
+      "marker": "1",
+      "name": "NV_REG",
+      "offset": "0x000085fd",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46474,
+      "last_trace_line": 46474,
+      "line": 3139,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000860a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46475,
+      "last_trace_line": 46475,
+      "line": 3140,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x00008613",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46476,
+      "last_trace_line": 46476,
+      "line": 3141,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x0000861c",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46477,
+      "last_trace_line": 46477,
+      "line": 3142,
+      "marker": "1",
+      "name": "ZM_REG",
+      "offset": "0x00008625",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3143,
+      "marker": "1",
+      "name": "DONE",
+      "offset": "0x0000862e",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46478,
+      "last_trace_line": 46479,
+      "line": 3144,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000aa1f",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46480,
+      "last_trace_line": 46481,
+      "line": 3145,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000aa2c",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46482,
+      "last_trace_line": 46483,
+      "line": 3146,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x0000aa39",
+      "reads": 0,
+      "writes": 2
+    },
+    {
+      "first_trace_line": 46484,
+      "last_trace_line": 46484,
+      "line": 3149,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000aa47",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46485,
+      "last_trace_line": 46485,
+      "line": 3150,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000aa50",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46486,
+      "last_trace_line": 46487,
+      "line": 3151,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000aa59",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46488,
+      "last_trace_line": 46489,
+      "line": 3152,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000aa66",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46490,
+      "last_trace_line": 46491,
+      "line": 3153,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000aa73",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46492,
+      "last_trace_line": 46493,
+      "line": 3154,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000aa80",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46494,
+      "last_trace_line": 46495,
+      "line": 3155,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000aa8d",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46496,
+      "last_trace_line": 46496,
+      "line": 3156,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000aa9a",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46497,
+      "last_trace_line": 46497,
+      "line": 3157,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000aaa3",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46498,
+      "last_trace_line": 46503,
+      "line": 3158,
+      "marker": "0",
+      "name": "ZM_REG_SEQUENCE",
+      "offset": "0x0000aaac",
+      "reads": 0,
+      "writes": 6
+    },
+    {
+      "first_trace_line": 46504,
+      "last_trace_line": 46505,
+      "line": 3165,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000aaca",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46506,
+      "last_trace_line": 46507,
+      "line": 3166,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000aad7",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46508,
+      "last_trace_line": 46508,
+      "line": 3167,
+      "marker": "0",
+      "name": "ZM_REG",
+      "offset": "0x0000aae4",
+      "reads": 0,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46509,
+      "last_trace_line": 46510,
+      "line": 3168,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000aaed",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46511,
+      "last_trace_line": 46512,
+      "line": 3169,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000aafa",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46513,
+      "last_trace_line": 46514,
+      "line": 3170,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000ab07",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46515,
+      "last_trace_line": 46516,
+      "line": 3171,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000ab14",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46517,
+      "last_trace_line": 46518,
+      "line": 3172,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000ab21",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46519,
+      "last_trace_line": 46520,
+      "line": 3173,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000ab2e",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46521,
+      "last_trace_line": 46522,
+      "line": 3174,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000ab3b",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46523,
+      "last_trace_line": 46523,
+      "line": 3175,
+      "marker": "0",
+      "name": "CONDITION",
+      "offset": "0x0000ab48",
+      "reads": 1,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46524,
+      "last_trace_line": 46525,
+      "line": 3177,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000ab4a",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46526,
+      "last_trace_line": 46527,
+      "line": 3178,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000ab57",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46528,
+      "last_trace_line": 46529,
+      "line": 3179,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000ab64",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46530,
+      "last_trace_line": 46531,
+      "line": 3180,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000ab71",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 46532,
+      "last_trace_line": 46533,
+      "line": 3181,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000ab7e",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3182,
+      "marker": "0",
+      "name": "RESUME",
+      "offset": "0x0000ab8b",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3183,
+      "marker": "0",
+      "name": "DONE",
+      "offset": "0x0000ab8c",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 46534,
+      "last_trace_line": 47133,
+      "line": 3184,
+      "marker": "0",
+      "name": "ZM_I2C_BYTE",
+      "offset": "0x0000ab8d",
+      "reads": 344,
+      "writes": 256
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3199,
+      "marker": "0",
+      "name": "DONE",
+      "offset": "0x0000ab95",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3200,
+      "marker": "0",
+      "name": "DONE",
+      "offset": "0x0000ac0d",
+      "reads": 0,
+      "writes": 0
+    },
+    {
+      "first_trace_line": 47134,
+      "last_trace_line": 47135,
+      "line": 3201,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000abf2",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": 47136,
+      "last_trace_line": 47137,
+      "line": 3202,
+      "marker": "0",
+      "name": "NV_REG",
+      "offset": "0x0000abff",
+      "reads": 1,
+      "writes": 1
+    },
+    {
+      "first_trace_line": null,
+      "last_trace_line": null,
+      "line": 3203,
+      "marker": "0",
+      "name": "DONE",
+      "offset": "0x0000ac0c",
+      "reads": 0,
+      "writes": 0
+    }
+  ],
+  "scope": "timestamp intervals only; same-time messages, asynchronous accesses and non-MMIO helpers prevent causal attribution",
+  "skipped_intervals_with_accesses": []
+}
