@@ -1,2 +1,2 @@
-Step 1: parsed 598 log instructions, 560 executed and 38 skipped.
-Next: parse independent listing and compare offsets; do not infer reachability.
+Step 2: parsed seven main-script entries and 745 unique named listing offsets.
+Next: compare against log and inspect disagreements, preserving byte provenance.

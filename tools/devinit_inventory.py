@@ -44,6 +44,44 @@ def log_summary(instructions):
                          for name in sorted(executed.keys() | skipped.keys())])
 
 
+LISTING = re.compile(r"^0x([0-9a-fA-F]{8}):\s+((?:[0-9a-f]{2}\s+)+)(.*?)\s*$")
+SCRIPT = re.compile(r"^Init script (\d+) at (0x[0-9a-fA-F]+):$")
+
+
+def parse_listing(text):
+    scripts, instructions = [], {}
+    started = False
+    for number, line in enumerate(text.splitlines(), 1):
+        if line.startswith("Init script table at "):
+            started = True
+        if not started:
+            continue
+        script = SCRIPT.match(line)
+        if script:
+            scripts.append(dict(index=int(script[1]), offset=script[2].lower()))
+        match = LISTING.match(line)
+        if not match:
+            continue
+        payload = match[3]
+        # A multi-write instruction's byte-bearing continuation is data,
+        # not a second instruction. Preserve only named instruction records.
+        if not re.match(r"^[A-Z][A-Z0-9_]*(?:\s|$)", payload):
+            continue
+        offset = int(match[1], 16)
+        item = dict(offset=f"0x{offset:08x}", line=number,
+                    name=payload.split()[0], bytes=match[2].split(), text=payload)
+        if offset in instructions and instructions[offset] != item:
+            # The listing can print one script from more than one root. Lines
+            # differ; bytes and instruction spelling must agree.
+            old = instructions[offset]
+            if (old["bytes"], old["name"]) != (item["bytes"], item["name"]):
+                raise ValueError(f"conflicting decode at {offset:#x}")
+        instructions[offset] = item
+    return scripts, instructions
+
+
 if __name__ == "__main__":
     instructions = parse_log(lzma.open(LOG, "rt").read())
-    print(json.dumps(log_summary(instructions), indent=2))
+    scripts, listing = parse_listing((Path.home() / "mediaflux/vbios/decoded/all.txt").read_text())
+    print(json.dumps(dict(**log_summary(instructions), scripts=scripts,
+                         static_instructions=len(listing)), indent=2))
