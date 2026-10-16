@@ -49,7 +49,7 @@ SCRIPT = re.compile(r"^Init script (\d+) at (0x[0-9a-fA-F]+):$")
 
 
 def parse_listing(text):
-    scripts, instructions = [], {}
+    scripts, instructions, seen = [], [], {}
     started = False
     for number, line in enumerate(text.splitlines(), 1):
         if line.startswith("Init script table at "):
@@ -70,18 +70,32 @@ def parse_listing(text):
         offset = int(match[1], 16)
         item = dict(offset=f"0x{offset:08x}", line=number,
                     name=payload.split()[0], bytes=match[2].split(), text=payload)
-        if offset in instructions and instructions[offset] != item:
+        if offset in seen and seen[offset] != item:
             # The listing can print one script from more than one root. Lines
             # differ; bytes and instruction spelling must agree.
-            old = instructions[offset]
+            old = seen[offset]
             if (old["bytes"], old["name"]) != (item["bytes"], item["name"]):
                 raise ValueError(f"conflicting decode at {offset:#x}")
-        instructions[offset] = item
+        seen[offset] = item
+        instructions.append(item)
     return scripts, instructions
 
 
+
+def inventory(decoded, log_text):
+    instructions = parse_log(log_text)
+    scripts, listing = parse_listing(decoded)
+    log_offsets = {i["offset"] for i in instructions}
+    listing_offsets = {i["offset"] for i in listing}
+    return dict(**log_summary(instructions), scripts=scripts,
+                static_instructions=len(listing),
+                log_offsets_not_in_listing=sorted(log_offsets - listing_offsets),
+                listing_offsets_not_in_log=len(listing_offsets - log_offsets),
+                board_operations=[{key: value for key, value in i.items()}
+                                  for i in instructions if i["name"] in BOARD])
+
+
 if __name__ == "__main__":
-    instructions = parse_log(lzma.open(LOG, "rt").read())
-    scripts, listing = parse_listing((Path.home() / "mediaflux/vbios/decoded/all.txt").read_text())
-    print(json.dumps(dict(**log_summary(instructions), scripts=scripts,
-                         static_instructions=len(listing)), indent=2))
+    decoded = (Path.home() / "mediaflux/vbios/decoded/all.txt").read_text()
+    report = inventory(decoded, lzma.open(LOG, "rt").read())
+    print(json.dumps(report, indent=2))
