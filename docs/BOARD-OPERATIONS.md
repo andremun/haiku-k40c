@@ -104,3 +104,9 @@ legacy port routing through QEMU. The future executor must preserve or justify
 those helper effects; it cannot silently drop the operation because the card
 is a 3D controller. No extra hardware permission is granted. The host executor
 delegates this operation to a default-denied board/helper boundary.
+
+Register effects of that helper (`init.c:1631-1647`), for the decision:
+`0x000200` bit 30 cleared then set (an engine-enable bit), `0x00e18c`
+bit 17 set then cleared, `0x614100` and `0x614900` (display registers)
+masked and written three times, two 10 ms waits. This is a fifth item
+to decide, alongside the four above.
