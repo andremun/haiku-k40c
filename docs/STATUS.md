@@ -42,7 +42,8 @@ Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 | V1 | HOST CHECKS PASS (V2) | 2026-10-16 | User-directed recheck of possible mistakes by "Local": 3 helper corrections, freestanding S1 controller (58 host checks), verification gates. Full make check: 220 failures with absent reference trees; pytest/PyYAML and recorded cross-toolchain unavailable. ROM deferred by user. See work/V1/RESULT.md. |
 | V2 | DONE (offline scope) | 2026-10-16 | Restored all 5 exact clean source pins; full make check passes (0 failures). Removed pytest success suppression after a failing probe exited 0. Rebuilt pinned nvbios without sudo; fresh decode matches saved output byte for byte. A3 and native backend not implemented. See work/V2/RESULT.md. |
 | A3 | DONE (independent rework) | 2026-10-16 | Observed/presentation inventory passes checks; split-line COPY and repeat bookkeeping explained. Raw-ROM supplement: 530 potential starts / 25 opcodes, all observed nonzero offsets covered. Prior rejected branch not used. |
-| ABC1 | HOST WORK PASS / NATIVE BLOCKED | 2026-10-16 | A/B/C host implementation, raw-ROM/source/trace checks, typed memory boundary, source-backed bootstrap/controller, native backend object compilation. Three cardless boot timeouts; no matching-kernel link/load, no hardware/S1 claim. See docs/ABC-CARDLESS-OUTCOME.md and escalations/ESC-001.md. |
+| ABC1 | HOST WORK PASS (native gate closed by ESC-001 resolution) | 2026-10-16 | A/B/C host implementation, raw-ROM/source/trace checks, typed memory boundary, source-backed bootstrap/controller, native backend object compilation. Three cardless boot timeouts; no matching-kernel link/load, no hardware/S1 claim. See docs/ABC-CARDLESS-OUTCOME.md and escalations/ESC-001.md. |
+| ESC-001 | RESOLVED | 2026-10-18 | Native link and load pass on the persistent KVM Haiku hrev60207 guest of `opencode-haiku` (`vm/system.qcow2`, disposable overlay). Exported kernel SHA-256 `2da9a5b9...`, byte-identical to `~/haiku-cross/lib/kernel_x86_64`; both probes link; the cardless probe loads with `k40_os: PASS`, job.exit 0, no panic. Identity probe not run. Evidence: `opencode-haiku/results/t7610-20261018-driver-native/`. Cardless: not K40c evidence. See escalations/ESC-001.md, "Resolution". |
 
 ## V1 handoff (historical; input blockers resolved by V2)
 
@@ -92,6 +93,22 @@ B3 host failure tests pass, including cleanup failures. Native linking/loading
 is blocked because three disposable TCG guests did not reach their test job;
 all watchdogs cleaned up, KVM is absent, and further VM variants stopped under
 ESC-001. The matching kernel is not substituted. Existing vm-test.sh is unchanged.
+
+**Update 2026-10-18 (ESC-001 resolved).** The block above is history. With
+`/dev/kvm` now available, the native gate passed on a known-working guest:
+
+```sh
+python3 tools/haiku/cardless_run.py --base <opencode-haiku>/vm/system.qcow2 --cpus 2 --kvm
+HAIKU_CROSS=$HOME/haiku-cross bash tools/haiku/build_backend.sh
+python3 tools/haiku/cardless_run.py --base <opencode-haiku>/vm/system.qcow2 --cpus 2 --kvm \
+    --driver build/haiku/k40_cardless_probe
+```
+
+Runs `build/cardless/20261018-152513` (kernel export) and
+`build/cardless/20261018-152628` (`k40_os: PASS`). The opencode-haiku VM must
+be shut down before a run; the runner uses a disposable overlay. Evidence
+copy: `opencode-haiku/results/t7610-20261018-driver-native/`. This proves
+link and load on Haiku without a card, nothing about the K40c.
 
 A3 inventory and raw-ROM structural coverage, source cross-reference and trace
 interval join pass generated checks. The host interpreter refuses hardware and
