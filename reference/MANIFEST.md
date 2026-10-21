@@ -12,6 +12,11 @@ Do not edit them. Cite files as `reference/<name>/<path>:<line>`.
 | `mesa/` | Mesa tag mesa-25.2.8, the version in the Linux reference guest (sparse: `src/gallium/drivers/nouveau` with `codegen`, `docs/features.txt`, `docs/license.rst`, `include/drm-uapi/nouveau_drm.h`). The user-space half of a compute job: launch descriptor, compute methods, GK110 shader code emitter. | f97d7dcca0e51d7e20ed4342bb5ea8afea7db7fa | 2025-12-04 |
 | `pci/` | Captures from this T7610, 2026-10-07, without root (`scripts/capture_user.sh`) | - | - |
 
+The envytools cache above is sparse and has no `nvbios/`. The decoder source
+(`nvbios/nvbios.c`) comes from a full checkout of the same commit, outside
+`agent-refs`: `~/haiku-cross/src/envytools` (override: `K40_ENVYTOOLS_FULL`).
+`tools/restore_verification_refs.py --check` verifies it (task S1B).
+
 `pci/root/` holds the captures that need root (2026-10-07; PMC_BOOT_0 from 2026-10-05): full config
 space, capabilities, setpci reads, `/proc/iomem`, dmidecode, and
 PMC_BOOT_0 of 0000:04:00.0. `dmesg-gpu.txt` has no boot-time driver

@@ -47,6 +47,11 @@ flag to run on a card; a reviewed hardware integration is a later change.
   group count/index. Nouveau caches RAM configuration on this generation to
   avoid repeated strap reads affecting the memory controller (init.c:445-458).
 - RESET_BEGUN/END are markers; treating them as physical reset requests is wrong.
+- ZM_REG (0x7a) to `0x000200` sets bit 0 of the value (init.c:1901-1902).
+  Only this opcode has the rule. The ROM has `ZM_REG R[0x000200] = 0x00002020`
+  at 0x8638; the Linux run wrote `0x2021` (mmiotrace line 45511,
+  TRACE_VERIFIED). The 2026-10-16 core omitted the rule; fix in task S1A,
+  test `tests/accept/s1a_accept.cpp`.
 - IO is **not only VGA port I/O**. On NV50+ port 0x3c3/data 1 causes MMIO writes
   and waits in Nouveau (init.c:1623-1660). Therefore the earlier suggestion to
   omit legacy VGA operations cannot establish compatible bring-up. Even skipped

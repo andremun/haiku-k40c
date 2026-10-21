@@ -53,6 +53,12 @@ Captured addresses belong to that run and must never be reused by Haiku.
   `0x002634` is the channel preempt request, NOT runlist start. See
   `reference/nouveau/nvkm/engine/fifo/gf100.c:43-46` and the verified job sequence
   in `docs/05-fifo-design.md`. The previous S1 plan's statement was corrected.
+  On GK110 the channel hook is `gk110_chan_preempt`
+  (`reference/nouveau/nvkm/engine/fifo/gk110.c:36-46,57`): a channel in a
+  hardware channel group is preempted as a group, `0x002634 = 0x01000000 |
+  group id` (`gk110.c:61-64`); otherwise the gf100 write of the channel ID
+  applies. S1 must record which case its channel is in (INFERRED: one
+  channel without a hardware group takes the gf100 path).
 
 `src/runtime/Bootstrap.*` implements only slow-window read/write, BAR flush and
 runlist commit for host simulation. It validates extents/encoding, locks complete
