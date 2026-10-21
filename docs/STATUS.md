@@ -1,9 +1,9 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: none. Wait. The next steps need the user's decisions (docs/S1-PLAN.md, "Scaffold review 2026-10-20").
-Task state: WAITING. Host work and checks pass; ESC-001 resolved 2026-10-18 (native link and load pass on a KVM cardless guest). No card stage has run.
-Last updated: 2026-10-20
+Current task: S1A (`docs/tasks/S1A.md`). Then S1B. Both host only. The user starts the local runs.
+Task state: READY. Scaffold review of 2026-10-21 done (docs/S1-PLAN.md, "Scaffold review 2026-10-21"): one executor defect (ZM_REG `0x000200` bit 0), cite errors, a B5 probe gap, and the envytools reference gap. Fixes go to S1A and S1B. Board-operation decisions and the third opinion still wait for the user. No card stage has run.
+Last updated: 2026-10-21
 
 Older results and notes: `docs/STATUS-archive.md` (do not read it for a task).
 

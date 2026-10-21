@@ -98,6 +98,8 @@ is prepared and not enabled.
 |---|---|---|
 | R1 | Fix the defects that the external review found in the host code | `docs/tasks/R1.md` |
 | A3 | Inventory of the card's start-up script as it ran | `docs/tasks/A3.md` |
+| S1A | Fix the defects of the scaffold review of 2026-10-21 | `docs/tasks/S1A.md` |
+| S1B | Make every generated check run from sources that exist | `docs/tasks/S1B.md` |
 
 ## User-directed verification follow-up
 
