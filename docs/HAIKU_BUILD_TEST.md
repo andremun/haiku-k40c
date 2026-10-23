@@ -16,7 +16,7 @@ a Haiku virtual machine. No GPU is involved. Scripts: `tools/haiku/`.
   options. Never add host devices (`vfio-pci`, `-device ...,host=`) to it.
   A test on the real card is a user step (phases E and later).
 - Run one VM test at a time. A test uses 2 CPU threads and 2 GB of memory
-  and slows the language model while it runs.
+  and slows the `llm-server` model on the T7610 while it runs.
 - A driver reports through `dprintf`. Everything between `VMTEST-BEGIN`
   and `VMTEST-END` is printed; the full log is `~/haiku-cross/vm/serial.log`.
 - `vm-test.sh` exits 0 when the test commands ran, 1 on a timeout and 3 on
@@ -70,7 +70,7 @@ see `tools/haiku/config.sh`.
 
 GPU passthrough is possible on this machine but is not set up: each K40c
 is alone in its IOMMU group (0000:04:00.0 in group 23, 0000:03:00.0 in
-group 22; checked 2026-10-07). It needs root and takes a card away from the language model.
+group 22; checked 2026-10-07). It needs root. Only the driver card 0000:04:00.0 is passed through (`docs/PASSTHROUGH.md`). The card at 0000:03:00.0 runs `llm-server` (ADR 003).
 
 ## Persistent cardless VM
 

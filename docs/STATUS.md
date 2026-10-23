@@ -5,6 +5,8 @@ Current task: S1A (`docs/tasks/S1A.md`). Then S1B. Both host only. The user star
 Task state: READY. Scaffold review of 2026-10-21 done (docs/S1-PLAN.md, "Scaffold review 2026-10-21"): one executor defect (ZM_REG `0x000200` bit 0), cite errors, a B5 probe gap, and the envytools reference gap. Fixes go to S1A and S1B. Board-operation decisions and the third opinion still wait for the user. No card stage has run.
 Last updated: 2026-10-21
 
+Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
+
 Older results and notes: `docs/history/` (do not read it for a task).
 
 ## Task log
@@ -50,6 +52,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 1. Run `make refs`. It links `.refs` to `~/llm-server/agent-refs` and checks the pinned sources.
 2. Move the persistent VM disk folder from `opencode-haiku/vm/` to `~/haiku-vm`, or set `HAIKU_PERSISTENT_VM_DIR`.
 3. Run `make check` and `make vm-tools-test`.
+4. Run `~/llm-server/llm-mode.sh one`, so that no model runs on the driver card. Repeat after each reboot until `llm-server` starts in mode `one` by default.
+5. Install Claude Code and Codex. Set the Codex sandbox of `docs/AGENT-SETUP.md`.
 
 ## Cardless native gate
 

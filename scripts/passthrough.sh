@@ -14,7 +14,7 @@
 #                                              with no desktop session (text console)
 #   sudo scripts/passthrough.sh attach-at-boot the nvidia driver never gets the card, from the
 #                                              next boot until "detach" (use this from a desktop)
-#   sudo scripts/passthrough.sh detach         vfio-pci -> nvidia (card for the model)
+#   sudo scripts/passthrough.sh detach         vfio-pci -> nvidia (driver card back on the host driver)
 #
 # The card is the development card of tools/guest/config.sh (0000:04:00.0).
 # The other K40c and the K600 are never touched.
@@ -185,6 +185,6 @@ detach)
     nvidia-smi drain -p "$GPU_BDF" -m 0 >/dev/null 2>&1 || true
     systemctl start nvidia-persistenced 2>/dev/null || true
     [[ $(driver) == nvidia ]] || die "the card did not return to nvidia (driver '$(driver)'). A reboot restores it."
-    echo "Detached: $GPU_BDF is on nvidia again. Model: ~/llm-server/llm-mode.sh two-t1k (or dual-t1k)" ;;
+    echo "Detached: $GPU_BDF is on nvidia again. Keep llm-server in mode one: this is the driver card (ADR 003)." ;;
 *) sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac
