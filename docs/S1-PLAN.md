@@ -82,7 +82,7 @@ task texts (`docs/tasks/S1A.md`, `S1B.md`) and the acceptance test
 
 | # | Item | Finding | Evidence | State |
 |---|---|---|---|---|
-| F1 | Executor, opcode 0x7a | Nouveau sets bit 0 when ZM_REG writes `0x000200`; our core does not. The ROM writes `0x00002020` there (0x8638); our core would clear bit 0 of the master enable register | `init.c:1901-1902`; trace line 45511 writes `0x2021` (TRACE_VERIFIED) | Fixed in S1A (2026-10-23). Test fails today (1 of 8), passes with the scaffold's private fix |
+| F1 | Executor, opcode 0x7a | Nouveau sets bit 0 when ZM_REG writes `0x000200`; our core does not. The ROM writes `0x00002020` there (0x8638); our core would clear bit 0 of the master enable register | `init.c:1901-1902`; trace line 45511 writes `0x2021` (TRACE_VERIFIED) | Fixed in S1A (2026-10-23). `s1a_accept` 8 of 8 |
 | F2 | Executor, other 24 opcodes | Lengths, operand offsets, masks (`(old & keep) \| value`), flag model, CONDITION_TIME, TIME, RAM group, MACRO, copy/shift agree with Nouveau. Known fail-closed differences (zero-count REPEAT, END_REPEAT outside a loop, DONE in a repeat, shift ≥ 32) are documented | `init.c:55-82,182-212,479-536,610-2225` | Accepted |
 | F3 | Executor, IO when skipped | Correct to call the helper for a skipped IO: Nouveau's two 10 ms waits in `init_io` run even when skipped; only the writes are gated | `init.c:1638-1655`, `init_wrport` 221-225 | Accepted; the helper must keep this |
 | F4 | Executor cites | 0x91 dispatch is `init.c:2290`, not 2289 | dispatch table | Fixed in S1A (2026-10-23) |

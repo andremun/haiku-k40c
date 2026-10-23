@@ -25,9 +25,13 @@ def generate():
     preflight=json.loads((ROOT/'analysis/devinit_preflight.json').read_text())
     for opcode in preflight['opcodes']:
         selected.setdefault(int(opcode,16),'ZM_REG_GROUP' if int(opcode,16)==0x91 else 'UNOBSERVED')
+    from restore_verification_refs import envytools_full
     nouveau=ROOT/'reference/nouveau/nvkm/subdev/bios/init.c'
-    decoder=ROOT/'reference/envytools/nvbios/nvbios.c'
+    # The sparse envytools cache has no nvbios/. Read the decoder source from the full checkout
+    # at the same pin. The output keeps the logical name reference/envytools/nvbios/nvbios.c.
+    decoder=envytools_full()/'nvbios/nvbios.c'
     spec=ROOT/'reference/open-gpu-doc/Devinit/devinit.xml'
+    names={nouveau:'reference/nouveau/nvkm/subdev/bios/init.c',decoder:'reference/envytools/nvbios/nvbios.c',spec:'reference/open-gpu-doc/Devinit/devinit.xml'}
     nvlines=nouveau.read_text().splitlines(); declines=decoder.read_text().splitlines(); splines=spec.read_text().splitlines()
     xml={int(n.attrib['value'],0):n.attrib for n in ET.parse(spec).findall('.//opcode')}
     entries=[]
@@ -39,7 +43,7 @@ def generate():
         decl=next(n for n,line in enumerate(declines,1) if re.search(r'case 0x%02x:'%opcode,line))
         spl=next(n for n,line in enumerate(splines,1) if '<opcode ' in line and re.search(r'value="0x%02x"'%opcode,line,re.I))
         entries.append(dict(opcode=f'0x{opcode:02x}',observed_name=name,observed_in_log=opcode in observed,nvidia=xml[opcode],nvidia_source=f'reference/open-gpu-doc/Devinit/devinit.xml:{spl}',nouveau_source=f'reference/nouveau/nvkm/subdev/bios/init.c:{handlerline}',dispatch_source=f'reference/nouveau/nvkm/subdev/bios/init.c:{dispatch[0]}',decoder_source=f'reference/envytools/nvbios/nvbios.c:{decl}',implementation='delegated; default-denied board/helper operation' if opcode in board else 'host simulation core',evidence='SOURCE_ONLY; observed occurrence in Linux log is separate'))
-    return dict(scope='observed opcode source cross-reference; not full reachability',rom_sha256=hashlib.sha256(rom).hexdigest(),opcodes=entries,source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (nouveau,decoder,spec)},observed_names=len(inventory['opcodes']))
+    return dict(scope='observed opcode source cross-reference; not full reachability',rom_sha256=hashlib.sha256(rom).hexdigest(),opcodes=entries,source_sha256={names[p]:hashlib.sha256(p.read_bytes()).hexdigest() for p in (nouveau,decoder,spec)},observed_names=len(inventory['opcodes']))
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true');args=parser.parse_args()
