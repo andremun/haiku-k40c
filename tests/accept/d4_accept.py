@@ -4,8 +4,6 @@
 
 Run: python3 tests/accept/d4_accept.py   (from the repository root)
 """
-# Copyright (c) 2026 Mario Andres Munoz
-# Distributed under the terms of the MIT License. See LICENSE.
 import importlib.util
 import os
 import subprocess

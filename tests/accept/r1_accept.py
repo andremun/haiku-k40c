@@ -16,8 +16,6 @@ writes nothing) when an input is invalid. With --verify it writes nothing
 and exits 0 only when the inputs are valid, every field is equal, and both
 output files are exactly what it would write.
 """
-# Copyright (c) 2026 Mario Andres Munoz
-# Distributed under the terms of the MIT License. See LICENSE.
 import json
 import os
 import shutil
