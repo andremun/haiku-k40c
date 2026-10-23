@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Run in the Linux guest with the K40c (tools/guest/linux-run.sh --gpu).
 # Saves Nouveau's copy of the card's firmware image (VBIOS) to out/vbios/.
 # Reads only. The guest has no PCI ROM file for the card (QEMU does not

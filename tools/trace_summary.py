@@ -2,12 +2,14 @@
 """Parse a mmiotrace reference-run file and produce a summary.
 
 Outputs:
-    analysis/linux_run_trace.json   – structured summary
-    analysis/linux_run_trace.md     – human-readable Markdown report
+    analysis/linux_run_trace.json   - structured summary
+    analysis/linux_run_trace.md     - human-readable Markdown report
 
 Usage:
     python3 tools/trace_summary.py [--check]
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import json
 import os
 import sys
@@ -53,7 +55,7 @@ def main():
             if not parts:
                 continue
 
-            # PCIDEV lines – look for K40c card
+            # PCIDEV lines - look for K40c card
             if parts[0] == "PCIDEV" and len(parts) >= 18 and parts[2] == "10de1024":
                 for i in range(7):
                     addr = int(parts[4 + i], 16)
@@ -98,12 +100,12 @@ def main():
             # MARK line
             if parts[0] == "MARK":
                 marks.append({"line": line_no, "text": " ".join(parts[2:])})
-                # Advance phase: load→job, job→after
+                # Advance phase: load->job, job->after
                 phase_map = {"load": "job", "job": "after"}
                 cur_phase = phase_map.get(cur_phase, cur_phase)
                 continue
 
-            # R / W line – register access
+            # R / W line - register access
             if parts[0] in ("R", "W"):
                 mid = parts[3]
                 m = by_id.get(mid)
@@ -116,7 +118,7 @@ def main():
                     phases[cur_phase]["first_line"] = line_no
                 phases[cur_phase]["last_line"] = line_no
 
-                # Job-phase BAR 0 accesses – collect register info
+                # Job-phase BAR 0 accesses - collect register info
                 if cur_phase == "job" and m["bar"] == 0:
                     phys = int(parts[4], 16)
                     offset = phys - bars[0][0]

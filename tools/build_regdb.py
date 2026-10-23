@@ -9,6 +9,8 @@ Usage:
     python3 tools/build_regdb.py            # write all files
     python3 tools/build_regdb.py --check    # verify files match, exit 0 if ok
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import copy
 import difflib
 import json
@@ -138,7 +140,7 @@ def write_yaml(entries, path):
     """Write a YAML file from a dict of entries, sorted by reg."""
     import yaml
     sorted_entries = sorted(entries.values(), key=lambda e: e["reg"])
-    # Use a custom representer for None → null, and preserve insertion order
+    # Use a custom representer for None -> null, and preserve insertion order
     doc = []
     for e in sorted_entries:
         doc.append({

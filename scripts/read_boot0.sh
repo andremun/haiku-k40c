@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Read PMC_BOOT_0 (BAR0 offset 0x0, 4 bytes) of the K40c at 0000:04:00.0.
 # READ-ONLY: maps the first page of BAR0 read-only and reads one register.
 # It answers open question Q1 (which Nouveau chipset entry the card uses).

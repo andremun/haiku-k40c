@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Read-only PCI captures that need root. Writes to reference/pci/root/.
 # No writes to PCI config space, no BAR access, no driver changes.
 # Usage: sudo scripts/capture_root.sh

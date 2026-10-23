@@ -23,7 +23,7 @@ CXX_TESTS := test_bootstrap:runtime \
              ref_qmd:compute+fifo r1_accept:compute+fifo+hw+mmu
 # The Python tests run once the tool of task D4 exists.
 PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard test_compare_traces.py accept/d4_accept.py)) \
-             accept/r1_accept.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_rom.py test_devinit_trace_join.py
+             accept/r1_accept.py test_vm_tools.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_rom.py test_devinit_trace_join.py
 
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 

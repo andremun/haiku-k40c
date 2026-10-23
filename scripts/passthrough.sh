@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Give one K40c to a virtual machine (vfio-pci) and take it back.
 # USER STEP: the agent must not run this (AGENTS.md, hardware safety).
 # NOT TESTED YET (written 2026-10-07 without root, details checked

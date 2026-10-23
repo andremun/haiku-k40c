@@ -11,6 +11,8 @@ Usage:
   python3 tools/shader_extract.py
   python3 tools/shader_extract.py --check
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import os
 import re
 import sys

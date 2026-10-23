@@ -1,3 +1,5 @@
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Shared settings for the Haiku tools. Sourced, not run.
 # HAIKU_CROSS holds the cross compiler, the Haiku source tree, kernel.so and
 # the test VM (see docs/HAIKU_BUILD_TEST.md for how it was built).

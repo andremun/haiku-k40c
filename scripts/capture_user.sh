@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # PCI and driver captures that need no root. Writes to reference/pci/.
 # Read-only: sysfs, /proc and query commands. Formats: reference/pci/README.md.
 # Covers every NVIDIA display device that is present, so a change of slot

@@ -1,4 +1,6 @@
 #!/bin/sh
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 set -eu
 host=http://10.0.2.2:34317
 uname -a > /tmp/k40-environment.txt

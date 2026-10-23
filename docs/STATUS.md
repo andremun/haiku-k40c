@@ -45,6 +45,12 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | ABC1 | HOST WORK PASS (native gate closed by ESC-001 resolution) | 2026-10-16 | A/B/C host implementation, raw-ROM/source/trace checks, typed memory boundary, source-backed bootstrap/controller, native backend object compilation. Three cardless boot timeouts; no matching-kernel link/load, no hardware/S1 claim. See docs/ABC-CARDLESS-OUTCOME.md and escalations/ESC-001.md. |
 | ESC-001 | RESOLVED | 2026-10-18 | Native link and load pass on the persistent KVM Haiku hrev60207 guest of `opencode-haiku` (`vm/system.qcow2`, disposable overlay). Exported kernel SHA-256 `2da9a5b9...`, byte-identical to `~/haiku-cross/lib/kernel_x86_64`; both probes link; the cardless probe loads with `k40_os: PASS`, job.exit 0, no panic. Identity probe not run. Evidence: `results/20261018-esc001-native-load/`. Cardless: not K40c evidence. See escalations/ESC-001.md, "Resolution". |
 
+## Steps for the T7610 after the alignment (2026-10-23)
+
+1. Run `make refs`. It links `.refs` to `~/llm-server/agent-refs` and checks the pinned sources.
+2. Move the persistent VM disk folder from `opencode-haiku/vm/` to `~/haiku-vm`, or set `HAIKU_PERSISTENT_VM_DIR`.
+3. Run `make check` and `make vm-tools-test`.
+
 ## Cardless native gate
 
 The driver links and loads on a cardless KVM Haiku guest (ESC-001, resolved 2026-10-18).

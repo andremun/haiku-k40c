@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# qmd_compare.py — compare our QMD words against the reference run.
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
+# qmd_compare.py -- compare our QMD words against the reference run.
 # Distributed under the terms of the MIT License.
 #
 # Reads the Nouveau header at runtime, runs ref_qmd --words,
@@ -164,7 +166,7 @@ def parse_value(value_str, field_name, named):
     for name, val in named.items():
         if name.endswith("_" + value_str) or name == value_str:
             return val
-    # F4: unknown named value — refuse instead of zeroing
+    # F4: unknown named value -- refuse instead of zeroing
     raise ValueError(f"Unknown named value '{value_str}' for field '{field_name}'")
 
 

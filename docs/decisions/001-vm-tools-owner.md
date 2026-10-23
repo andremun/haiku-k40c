@@ -13,7 +13,7 @@ Three repositories ran Haiku VMs with their own tools: `tools/haiku/` here,
 
 `tools/haiku/` owns the cross toolchain, the throw-away test VM, the persistent
 cardless VM runner and the transfer server. VM disks live outside every repository,
-in the folder that `HAIKU_VM_DIR` names. Other repositories pin this repository by
+in the folder that `HAIKU_PERSISTENT_VM_DIR` names (default `~/haiku-vm`). `HAIKU_VM_DIR` in `tools/haiku/config.sh` stays the folder of the throw-away test VM. Other repositories pin this repository by
 commit and file hash. They keep no copies.
 
 The rule of `vm-test.sh` stays: no host device is ever given to a VM by these tools.
@@ -22,4 +22,4 @@ The rule of `vm-test.sh` stays: no host device is ever given to a VM by these to
 
 Phase 2 merges the two `app_vm.py` versions into `tools/haiku/` with all their options.
 It keeps the atomic transfer server. It changes the default disk path of `cardless_run.py`
-to `HAIKU_VM_DIR`. `docs/design/layout.md` states the target.
+to `$HAIKU_PERSISTENT_VM_DIR/system.qcow2`. `docs/design/layout.md` states the target.

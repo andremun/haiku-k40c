@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Build everything in $HAIKU_CROSS (default ~/haiku-cross) that the other
 # scripts here need: host tools, Haiku sources, the cross compiler, the
 # test image and kernel.so. No root. No GPU. Each step is skipped when its

@@ -10,6 +10,8 @@ Usage:
 
 The script is deterministic: re-running produces the same output.
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import json
 import os
 import re
@@ -153,10 +155,10 @@ def build_role(rel_path, info, all_listed_paths, class_name):
     # Phase 1 entries: ctor is None, field holds the ctor name.
     # Closure entries: ctor holds the reference name that brought this file in.
     if ctor is None:
-        # Constructor file — describe it as a chipset constructor
+        # Constructor file -- describe it as a chipset constructor
         role = f"chipset constructor {field} in {subsystem} subsystem"
     else:
-        # Closure entry — describe which listed file uses it, with a prefix
+        # Closure entry -- describe which listed file uses it, with a prefix
         # that adds at least 2 words so the total reaches 6.
         if class_name == "GF100-inherited":
             prefix = "Fermi implementation,"
@@ -262,7 +264,7 @@ def main():
             if len(existing) != len(results):
                 print(f"  Length: existing={len(existing)}, expected={len(results)}", file=sys.stderr)
             sys.exit(1)
-        # If we get here, the file matches — write nothing and exit 0
+        # If we get here, the file matches -- write nothing and exit 0
         sys.exit(0)
 
     if dry_run:

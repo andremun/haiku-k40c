@@ -5,6 +5,8 @@ Checks the format of the task outputs that exist (see docs/PHASES.md) and
 that references point at real source lines. It does not check whether an
 analysis is complete. Exit code 1 if any check fails.
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import glob
 import json
 import os
@@ -854,7 +856,7 @@ if ld is not None and "B4" not in SKIP:
                 for m in re.finditer(r"^\|\s*`(\w+)`\s*\|\s*(\d+)\s*\|", mdt, re.M)}
         wrong = sorted(n for n in b4_count if rows.get(n) != b4_count[n])
         if wrong:
-            fail(f"analysis/linux_deps.md: {len(wrong)} symbols have no table row `| \`symbol\` | count | ...` "
+            fail(f"analysis/linux_deps.md: {len(wrong)} symbols have no table row `| `symbol` | count | ...` "
                  f"with the count of the JSON file, for example {wrong[:5]}. Let the tool write the tables")
     tool = os.path.join(ROOT, "tools", "linux_deps.py")
     if not os.path.exists(tool) or "--check" not in open(tool, errors="replace").read():

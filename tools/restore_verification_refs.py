@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
-# Copyright 2026 Mario Andrés Muñoz.
+# Copyright 2026 Mario Andres Munoz.
 # Distributed under the terms of the MIT License.
 """Restore exact public source pins at the existing reference symlink targets.
+
+The links in reference/ point into .refs/, an ignored link to the source cache.
+The cache folder is $K40_REFS (default ~/llm-server/agent-refs). This tool
+creates the .refs link when it is absent, then fetches each missing source at
+its pinned commit (reference/MANIFEST.md).
 
 --check verifies without writing or using the network. Existing repositories
 must be clean and at the correct revision; they are never reset or overwritten.
 This does not install system packages or access hardware.
 """
 import argparse
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -35,6 +41,14 @@ def main():
                            (ROOT / "reference/MANIFEST.md").read_text()))
     if set(pins) != set(SOURCES):
         raise ValueError("source manifest does not contain exactly the expected five pins")
+    refs = ROOT / ".refs"
+    if not refs.exists():
+        if args.check:
+            raise ValueError("missing .refs link; run without --check to create it")
+        cache = Path(os.environ.get("K40_REFS", Path.home() / "llm-server/agent-refs"))
+        cache.mkdir(parents=True, exist_ok=True)
+        refs.symlink_to(cache.resolve(), target_is_directory=True)
+    cache = refs.resolve()
     for name, (url, sparse) in SOURCES.items():
         link = ROOT / "reference" / name
         if not link.is_symlink():
@@ -44,7 +58,7 @@ def main():
             if path.parts[-4:] != ("drivers", "gpu", "drm", "nouveau"):
                 raise ValueError("unexpected Nouveau target layout")
             path = path.parents[3]
-        if "agent-refs" not in path.parts:
+        if cache not in path.parents:
             raise ValueError(f"unexpected source-cache target: {path}")
         if not path.exists():
             if args.check:

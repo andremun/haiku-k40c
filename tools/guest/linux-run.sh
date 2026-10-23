@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Start the Linux reference guest and run a command in it over SSH.
 #
 #   tools/guest/linux-run.sh                 start, copy tools/guest/files, open a shell

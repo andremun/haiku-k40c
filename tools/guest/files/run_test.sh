@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Run in the Linux guest. Builds and runs the reference compute job and
 # writes the logs to ./out (copy them to reference/linux-run/ on the host).
 #   ./run_test.sh           software renderer, or Nouveau if it is loaded

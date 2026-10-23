@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2026 Mario Andrés Muñoz.
+# Copyright 2026 Mario Andres Munoz.
 # Distributed under the terms of the MIT License.
 """Bounded, snapshot-only Haiku kernel/probe runner. No host devices/options.
 
@@ -19,7 +19,7 @@ import time
 
 ROOT=Path(__file__).resolve().parents[2]
 HMP=Path(__file__).with_name('qemu_hmp.py')
-DEFAULT_BASE=ROOT.parent/'haiku-k40c-llm/vm/system.qcow2'
+DEFAULT_BASE=Path(os.environ.get('HAIKU_PERSISTENT_VM_DIR',Path.home()/'haiku-vm')).expanduser()/'system.qcow2'
 
 
 def run(base,driver,seconds,cpus=1,kvm=False):

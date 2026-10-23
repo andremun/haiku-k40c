@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2026 Mario Andrés Muñoz.
+# Copyright 2026 Mario Andres Munoz.
 # Distributed under the terms of the MIT License.
 """Conservative raw-ROM structural preflight, never executes hardware effects.
 

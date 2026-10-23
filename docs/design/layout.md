@@ -1,4 +1,4 @@
-# Target layout and code rules (Phase 2 blueprint)
+# Layout and code rules
 
 This file states what the repository must look like after Phase 2 of the alignment
 plan (`haiku-k40c-llm/docs/refactor-spec.md`). The task system, the evidence labels
@@ -37,3 +37,20 @@ the other three repositories.
 3. `make haiku-selftest` prints `MMIO read16 [BAR2+0x500] = 0xb0c5`.
 4. `cardless_run.py --kvm` gives `k40_os: PASS` with a disk in `HAIKU_VM_DIR` (user step).
 5. `git grep -l '/home/unimelb.edu.au'` lists only `docs/history/`, `work/` evidence and provenance JSON.
+
+## 5. As built (23 October 2026)
+
+| Item | Result |
+|---|---|
+| VM tools | Done. `tools/haiku/app_vm.py`, `transfer_server.py` and `job.sh` merged from the other repositories. `tests/test_vm_tools.py` (19 checks) covers upload routing, name and size checks, atomic writes, job status handling and the monitor allowlist. One change: `app_vm.py` checks the ISO only for a first install, because an installed VM does not need it. |
+| VM disk variable | `HAIKU_PERSISTENT_VM_DIR` (default `~/haiku-vm`), not `HAIKU_VM_DIR`. `tools/haiku/config.sh` already uses `HAIKU_VM_DIR` for the throw-away test VM. |
+| `cardless_run.py` default disk | `$HAIKU_PERSISTENT_VM_DIR/system.qcow2` |
+| Reference sources | Done. `reference/*` link into `.refs/`. `make refs` creates `.refs` and fetches the pins. In the cloud session of 23 October 2026 four of five sources restored. Mesa failed: the session proxy blocks `gitlab.freedesktop.org`. |
+| Python text | Comments and docstrings are ASCII. Eight generator tools keep non-ASCII characters in output string literals (dashes and arrows), so that the generated files stay the same. |
+| Headers | Added to every authored Python and shell file that had none. |
+| Defect | `tools/check_repo.py` had an invalid escape sequence in an f-string (`SyntaxWarning`, an error in later Python versions). Fixed. |
+| CI | `.github/workflows/check.yml`: `make refs`, `make check` with task A3 skipped (the VBIOS image is private), `make vm-tools-test`. Not yet run. |
+| `make check` | Same failure set as before the code changes, with the restored sources: 18 failures. Each comes from the absent Mesa tree or the private VBIOS image. |
+| `opencode.json` paths | Unchanged. The agent permissions need the real cache path. |
+| Design document renames | Not done. They gain little, and generators and checks use the names. |
+
