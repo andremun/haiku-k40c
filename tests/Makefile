@@ -13,7 +13,7 @@ CXXFLAGS := -std=c++17 -Wall -Wextra -Werror -I../src -fsanitize=undefined -fno-
 BUILDDIR := ../build/tests
 
 CXX_TESTS := test_bootstrap:runtime \
-             test_devinit:devinit \
+             test_devinit:devinit s1a_accept:devinit \
              test_memory:memory \
              test_s1_boundaries:fifo+hw+mmu test_s1_experiment:runtime \
              test_registerio:hw d1_accept:hw \

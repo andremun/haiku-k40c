@@ -87,7 +87,7 @@ Interpreter::Stop Interpreter::execute(uint32_t& pc,uint32_t depth,bool repeatBo
         case 0x4d: // nvkm/subdev/bios/init.c:2246
             if (!span(pc,4)) return Stop::Failed;
             length=4+2*rom_[pc+3]; break;
-        case 0x58: case 0x91: // nvkm/subdev/bios/init.c:2256,2289
+        case 0x58: case 0x91: // nvkm/subdev/bios/init.c:2256,2290
             if (!span(pc,6)) return Stop::Failed;
             length=6+4*rom_[pc+5]; break;
         case 0x8f: // nvkm/subdev/bios/init.c:2288
@@ -156,7 +156,11 @@ Interpreter::Stop Interpreter::execute(uint32_t& pc,uint32_t depth,bool repeatBo
             }
             break;
         case 0x6e: ok=masked(reg,word(uint64_t(pc)+5,4),word(uint64_t(pc)+9,4)); break; // nvkm/subdev/bios/init.c:2272
-        case 0x7a: ok=write(reg,word(uint64_t(pc)+5,4)); break; // nvkm/subdev/bios/init.c:2283
+        case 0x7a: { // nvkm/subdev/bios/init.c:2283
+            uint32_t value=word(uint64_t(pc)+5,4);
+            if (reg==0x000200) value|=0x00000001; // INIT_ZM_REG only: nvkm/subdev/bios/init.c:1901-1902
+            ok=write(reg,value); break;
+        }
         case 0x90: { uint32_t value=0; ok=read(reg,value) && write(word(uint64_t(pc)+5,4),value); break; } // nvkm/subdev/bios/init.c:2289
         case 0x97: { // nvkm/subdev/bios/init.c:2293
             uint32_t value=0, mask=word(uint64_t(pc)+5,4);
@@ -171,7 +175,7 @@ Interpreter::Stop Interpreter::execute(uint32_t& pc,uint32_t depth,bool repeatBo
             value=(value & word(uint64_t(pc)+6,4)) ^ word(uint64_t(pc)+10,4);
             ok=ok && masked(word(uint64_t(pc)+14,4),word(uint64_t(pc)+18,4),value); break;
         }
-        case 0x58: case 0x91: // nvkm/subdev/bios/init.c:2256,2289
+        case 0x58: case 0x91: // nvkm/subdev/bios/init.c:2256,2290
             for (uint32_t i=0;ok && i<rom_[pc+5];++i) {
                 if (reg>UINT32_MAX-4*i) { result_.error=Error::Input; return Stop::Failed; }
                 ok=write(reg+(op==0x58 ? 4*i : 0),word(uint64_t(pc)+6+4*i,4)); // nvkm/subdev/bios/init.c:1281-1300,2034-2052
