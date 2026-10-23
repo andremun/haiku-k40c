@@ -8,6 +8,8 @@ matches what the tool would generate, else exits 1.
 Scope: all .c files listed in analysis/files.json.
 Roots: gk110_fb_new, gk104_mmu_new, gk110_fifo_new, gk110b_gr_new.
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import json
 import os
 import re
@@ -29,7 +31,7 @@ def load_files():
 
 
 def scope_dirs(entries):
-    """Return the sorted list of nvkm/… subdirectories for the four scope subsystems."""
+    """Return the sorted list of nvkm/... subdirectories for the four scope subsystems."""
     subsystems = {"fb", "mmu", "fifo", "gr"}
     dirs = set()
     for e in entries:
@@ -162,31 +164,31 @@ def find_edges_in_body(body, node_names):
         line = re.sub(r"/\*.*?\*/", "", line)
         line = re.sub(r"#.*$", "", line)
 
-        # Pattern 1: function call — name(  or name (
+        # Pattern 1: function call -- name(  or name (
         for m in re.finditer(r'\b(\w+)\s*\(', line):
             name = m.group(1)
             if name in name_set:
                 edges.add(name)
 
-        # Pattern 2: address-of — &name
+        # Pattern 2: address-of -- &name
         for m in re.finditer(r'\&(\w+)\b', line):
             name = m.group(1)
             if name in name_set:
                 edges.add(name)
 
-        # Pattern 3: struct field — .name =  (extracts field name)
+        # Pattern 3: struct field -- .name =  (extracts field name)
         for m in re.finditer(r'\.(\w+)\s*=', line):
             name = m.group(1)
             if name in name_set:
                 edges.add(name)
 
-        # Pattern 4: struct field value — .name = value  (extracts value)
+        # Pattern 4: struct field value -- .name = value  (extracts value)
         for m in re.finditer(r'\.\w+\s*=\s*(?:&|)(\w+)\b', line):
             name = m.group(1)
             if name in name_set:
                 edges.add(name)
 
-        # Pattern 5: function call arguments — inside ( ... )
+        # Pattern 5: function call arguments -- inside ( ... )
         for m in re.finditer(r'\(\s*([^)]*)\s*\)', line):
             args = m.group(1)
             for arg in args.split(','):

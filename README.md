@@ -2,7 +2,22 @@
 
 Native Haiku compute driver for the NVIDIA Tesla K40c (GK110B). Design:
 `docs/design/design.md`. Specification: `docs/design/specification.md`.
-License: MIT (`LICENSE`, `docs/licensing.md`).
+License: MIT (`LICENSE`, `docs/licensing.md`). Changes: `CHANGELOG.md`.
+
+## Disclaimer
+
+This is research code. It is not production code.
+
+I made it as part of a project that tests the Tesla K40c hardware under Haiku. I like
+unusual operating systems, and Haiku is an interesting one. That is the main reason this
+project exists.
+
+The code is not meant for inclusion in Haiku, HaikuPorts or any other Haiku project.
+AI coding agents generated most of it ("vibe coding"). I understand that the Haiku
+project does not want such packages, and I do not submit them. If the research is
+useful to someone, I am glad.
+
+Use it at your own risk. The license gives no warranty.
 
 ## Purpose: two experiments in one repository
 
@@ -71,4 +86,8 @@ Start a new OpenCode session for each task. The repository is the memory:
 | `hardware/`, `analysis/`, `registers/`, `firmware/` | Task outputs. |
 | `work/` | Per-task plans, findings and results. |
 | `escalations/` | Problems that need a decision. |
+| `results/` | Evidence that is not a task output, with an index (`results/README.md`). |
+| `docs/history/` | Dated handoffs and old status text. Read-only. Not for task work. |
+| `docs/decisions/` | Architecture decision records. |
+| `docs/design/layout.md` | Target layout for the next cleanup phase. |
 | `scripts/capture_user.sh`, `scripts/capture_root.sh` | Read-only PCI captures: without root, and for the user to run with sudo. Run both after a hardware change, then `tools/hardware_record.py`. |

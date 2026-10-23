@@ -4,3 +4,4 @@ build/
 *.o
 tests/bin/
 .check-skip
+.refs

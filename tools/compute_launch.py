@@ -9,6 +9,8 @@ Usage:
   python3 tools/compute_launch.py           # generate
   python3 tools/compute_launch.py --check   # verify output matches tool
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 
 import argparse
 import json
@@ -83,12 +85,12 @@ def resolve_method_name(raw):
     """
     raw = raw.strip()
 
-    # Handle SUBC_CP(hex_value) — return hex as-is (lowercase)
+    # Handle SUBC_CP(hex_value) -- return hex as-is (lowercase)
     m = re.match(r'^SUBC_CP\s*\(\s*(0x[0-9a-fA-F]+)\s*\)$', raw, re.I)
     if m:
         return m.group(1).lower(), None
 
-    # Handle SUBC_CP(NAME) — uppercase the name
+    # Handle SUBC_CP(NAME) -- uppercase the name
     m = re.match(r'^SUBC_CP\s*\(\s*(\w+)\s*\)$', raw, re.I)
     if m:
         return m.group(1).upper(), None
@@ -237,7 +239,7 @@ def extract_methods_with_branch_filter(lines, abs_start, abs_end):
 
     methods = []
     in_block_comment = False
-    in_preprocessor = False       # inside #if … #endif
+    in_preprocessor = False       # inside #if ... #endif
     if_depth = 0                   # number of open if-else blocks (brace-gated)
     cond_stack = []               # (gk110_taken, condition_string) per open block
 
@@ -436,7 +438,7 @@ def extract_launch_grid():
     """Extract the GK110 launch sequence from nve4_launch_grid.
 
     GK110 path:
-      - oclass < GA102_COMPUTE_CLASS → True: LAUNCH with 0x3
+      - oclass < GA102_COMPUTE_CLASS -> True: LAUNCH with 0x3
       - else (GP100+/GA102+) branch is NOT taken.
     """
     full_src = read_file(NVE4_COMPUTE_C)

@@ -9,6 +9,8 @@ Usage:
     python3 tools/hwmodel.py              # write all JSON + Markdown
     python3 tools/hwmodel.py --check      # verify output matches, exit 0
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import glob
 import json
 import os

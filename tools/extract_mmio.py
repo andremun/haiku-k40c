@@ -8,6 +8,8 @@ Outputs registers/mmio_accesses.json: a list of
 --check  writes nothing and exits 0 when the JSON file is exactly what
 the tool generates, else 1.
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import json
 import os
 import re
@@ -209,7 +211,7 @@ def _extract_from_line(results, path, path_to_sub, line_idx, line_text,
 
     # Check if parens are unbalanced (call spans multiple lines)
     if line_text.count("(") > line_text.count(")"):
-        # The call spans multiple lines — join and use multi-line logic
+        # The call spans multiple lines -- join and use multi-line logic
         joined = line_text
         end_line = i
         while end_line + 1 < total_lines and joined.count("(") > joined.count(")"):

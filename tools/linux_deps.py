@@ -8,6 +8,8 @@ Linux symbol found in the 70 non-other-chip files.
 --check  writes nothing and exits 0 when the JSON file is exactly what
 the tool generates, else 1.
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import json
 import os
 import re
@@ -463,7 +465,7 @@ CLASSIFY = {
         "note": "flush_work waits for a work item to complete. Haiku has no workqueue; use thread join instead."
     },
 
-    # --- Firmware loading (D-ignore — not used by GK110 path) ---
+    # --- Firmware loading (D-ignore -- not used by GK110 path) ---
     "request_firmware": {
         "category": "D-ignore", "haiku_api": [],
         "header": None,
@@ -507,7 +509,7 @@ CLASSIFY = {
         "note": "sg_dma_len returns the DMA length of a scatterlist entry. Haiku has no scatterlist; driver manages its own descriptors."
     },
 
-    # --- PCI subsystem (D-ignore — AGP, unnecessary) ---
+    # --- PCI subsystem (D-ignore -- AGP, unnecessary) ---
     "agp_enable": {
         "category": "D-ignore", "haiku_api": [],
         "header": None,
@@ -554,7 +556,7 @@ CLASSIFY = {
         "note": "pci_is_pcie checks if a device is PCIe. Haiku driver reads PCI config space directly for this check."
     },
 
-    # --- Arithmetic and bit macros (A-reimplement — not Linux functions) ---
+    # --- Arithmetic and bit macros (A-reimplement -- not Linux functions) ---
     "BIT": {
         "category": "A-reimplement", "haiku_api": [],
         "header": None,
@@ -763,7 +765,7 @@ CLASSIFY = {
     },
 }
 
-# Symbols not in the classification table — classify them
+# Symbols not in the classification table -- classify them
 HW_CONSTS = {"FBP", "LTC", "GPC_UNIT", "TPC_UNIT", "VMM_DEBUG",
              "CASE", "REF_PTES", "MAP_PTES", "CLR_PTES", "PTE"}
 GPU_FUNCS = {"gf100_grctx_patch_wr32", "nvkm_wr32", "nvkm_rd32",

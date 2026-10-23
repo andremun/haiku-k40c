@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Build the Linux reference guest (Ubuntu 24.04, Nouveau and Mesa). No root.
 # The guest is the reference for milestone S3: with the K40c passed
 # through, it shows that Nouveau and Mesa run a compute job on this card,

@@ -14,6 +14,8 @@ reference/pci/root/boot0-*.txt. The read identifies a card by its PCI
 address at that time: BOOT0_VALID_FOR below records which GPU UUID the
 read belongs to, so a moved card does not inherit it by address alone.
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import glob
 import json
 import os

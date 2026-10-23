@@ -78,7 +78,7 @@
       "*registers/mmio_accesses.json": "deny",
       "*analysis/linux_run_trace.json": "deny",
       "*analysis/linux_run_trace.md": "deny",
-      "*docs/STATUS-archive.md": "deny",
+      "*docs/history/*": "deny",
       "*linux-run/mmiotrace*": "deny",
       "*tools/check_repo.py": "deny"
     },

@@ -10,6 +10,8 @@ Usage:
     python3 tools/fw_manifest.py --check     # verify manifest matches, exit 0
     python3 tools/fw_manifest.py --extract   # write firmware/*.bin to build/
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import hashlib
 import os
 import re

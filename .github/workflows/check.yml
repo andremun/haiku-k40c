@@ -1,0 +1,20 @@
+name: check
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r tools/verification-requirements.txt pytest
+      - name: Restore the pinned reference sources
+        run: K40_REFS="$RUNNER_TEMP/refs" make refs
+      # The VBIOS image of the card is private and not in CI. Task A3 checks need it,
+      # and tests/test_devinit_rom.py reports NOT RUN when K40_CI_NO_VBIOS=1.
+      - run: echo A3 > .check-skip
+      - run: make check
+        env:
+          K40_CI_NO_VBIOS: "1"
+      - run: make vm-tools-test

@@ -24,6 +24,8 @@ Written by the scaffold (2026-10-13). The trace is
 reference/linux-run/mmiotrace.txt.xz; line numbers are those of
 analysis/linux_run_trace.md.
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import json
 import lzma
 import os

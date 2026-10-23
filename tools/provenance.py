@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# provenance.py — Source provenance of driver constants.
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
+# provenance.py -- Source provenance of driver constants.
 # Reads constant lines from src/*.h and src/*.cpp, extracts citations,
 # and writes docs/register-provenance.md.
 #
@@ -21,7 +23,7 @@ MESABASE = os.path.join(ROOT, "reference", "mesa")
 CIT_RE = re.compile(r"([\w./-]*\w\.(?:c|h)):(\d+)")
 # Regex for "no source:" in comments
 NOSRC_RE = re.compile(r"no source:")
-# Regex for constant lines: hex ≥2 digits or constexpr
+# Regex for constant lines: hex >=2 digits or constexpr
 CONST_RE = re.compile(r'0x[0-9a-fA-F]{2,}|\bconstexpr\b')
 
 

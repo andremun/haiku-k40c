@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Compile Haiku kernel add-on sources on Linux with the cross compiler.
 # Usage: tools/haiku/kcc [gcc options] -c file.c -o file.o
 # Kernel add-ons are position-independent code (the compiler default). Do

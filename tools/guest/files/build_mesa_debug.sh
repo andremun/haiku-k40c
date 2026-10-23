@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Run in the Linux guest (no GPU needed, about 30 to 60 minutes, needs the
 # network). Builds the same Mesa version as the Ubuntu package as a debug
 # build with only the Nouveau driver and installs it in /opt/mesa-debug.

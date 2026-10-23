@@ -1,5 +1,18 @@
 # make check: repository format checks plus host-side tests (if present).
-.PHONY: check test haiku-selftest
+.PHONY: help check test refs vm-tools-test haiku-selftest
+help:
+	@echo "make refs           restore the pinned reference sources into .refs (network)"
+	@echo "make check          repository checks and host tests (needs make refs)"
+	@echo "make test           host tests only"
+	@echo "make vm-tools-test  offline test of tools/haiku VM tools"
+	@echo "make haiku-selftest load a test driver in the throw-away VM (about 2 minutes)"
+
+refs:
+	python3 tools/restore_verification_refs.py
+
+vm-tools-test:
+	python3 tests/test_vm_tools.py
+
 check:
 	python3 tools/check_repo.py
 	@if [ -f tests/Makefile ]; then $(MAKE) -s -C tests; fi

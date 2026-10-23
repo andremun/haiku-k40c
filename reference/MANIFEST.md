@@ -1,7 +1,8 @@
 # Pinned reference sources (read-only)
 
-The directories here are symbolic links to `~/llm-server/agent-refs/`.
-Do not edit them. Cite files as `reference/<name>/<path>:<line>`.
+The directories here are symbolic links into `.refs/`, an ignored link to the source
+cache. `make refs` creates `.refs` (target `$K40_REFS`, default `~/llm-server/agent-refs`)
+and fetches each missing source at its pinned commit. Do not edit them. Cite files as `reference/<name>/<path>:<line>`.
 
 | Link | Source | Commit | Date |
 |---|---|---|---|

@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Register-trace comparison tool — Task D4.
+"""Register-trace comparison tool -- Task D4.
 
 Parses trace files (the text format of task D1), converts Linux mmiotrace
 output, and compares two traces to find differences.
 
 Standard library only (yaml may be used for --names). No pytest.
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import sys
 import os
 import argparse
@@ -159,7 +161,7 @@ def compare(expected, actual, writes_only=False, ignore_read_values=False,
 
         # If one trace ended, report missing or extra
         if e_entry is None:
-            # Expected ended first; actual has more → "extra"
+            # Expected ended first; actual has more -> "extra"
             return {
                 "equal": False,
                 "matched": matched,
@@ -172,7 +174,7 @@ def compare(expected, actual, writes_only=False, ignore_read_values=False,
                 }
             }
         if a_entry is None:
-            # Actual ended first; expected has more → "missing"
+            # Actual ended first; expected has more -> "missing"
             return {
                 "equal": False,
                 "matched": matched,

@@ -71,3 +71,22 @@ see `tools/haiku/config.sh`.
 GPU passthrough is possible on this machine but is not set up: each K40c
 is alone in its IOMMU group (0000:04:00.0 in group 23, 0000:03:00.0 in
 group 22; checked 2026-10-07). It needs root and takes a card away from the language model.
+
+## Persistent cardless VM
+
+`tools/haiku/` also holds the tools for the persistent Haiku VM that the
+`haiku-k40c-llm` and `opencode-haiku` repositories use for their test runs.
+This repository owns them (`docs/decisions/001-vm-tools-owner.md`).
+
+| Tool | Use |
+|---|---|
+| `app_vm.py` | Start, inspect, type into, click and stop the VM. `--kvm` uses KVM with `-cpu host`. |
+| `transfer_server.py` | Localhost file service for the guest. `--root` names the work folder, `--results` the results folder. |
+| `job.sh` | Run one shell job in the guest and wait for `exit=N`. |
+| `cardless_run.py` | Boot a disposable overlay of the VM disk and load a driver probe. |
+
+The VM disk is outside every repository, in `$HAIKU_PERSISTENT_VM_DIR` (default
+`~/haiku-vm`): `system.qcow2`, `vars.fd` and, for a first install, the pinned
+hrev60207 anyboot ISO. The same rule as for `vm-test.sh` applies: no host device
+is ever given to the VM by these tools.
+

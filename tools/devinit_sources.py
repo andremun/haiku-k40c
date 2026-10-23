@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2026 Mario Andrés Muñoz.
+# Copyright 2026 Mario Andres Munoz.
 # Distributed under the terms of the MIT License.
 """Generate an opcode/source cross-reference, not executable firmware data."""
 import argparse

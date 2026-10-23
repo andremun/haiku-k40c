@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Load one kernel driver in the Haiku test VM and print what it logged.
 #
 # Usage: tools/haiku/vm-test.sh DRIVER_FILE [DEV_SUBDIR]

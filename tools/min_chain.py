@@ -8,6 +8,8 @@ Usage:
     python3 tools/min_chain.py          # write analysis/min_chain.json
     python3 tools/min_chain.py --check  # write nothing; exit 0 if file is correct
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import argparse
 import json
 import os
@@ -109,7 +111,7 @@ def load_callgraph():
 
 
 def load_mmio():
-    """Load registers/mmio_accesses.json. Returns dict: func_name → list of (file, line, reg)."""
+    """Load registers/mmio_accesses.json. Returns dict: func_name -> list of (file, line, reg)."""
     path = os.path.join(ROOT, "registers", "mmio_accesses.json")
     with open(path) as f:
         data = json.load(f)

@@ -3,6 +3,8 @@
 
 Run: python3 tests/test_compare_traces.py   (from the repository root)
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "tools"))
@@ -49,7 +51,7 @@ check(c == [("W", 0x0, 0x1234)],
       "convert_mmiotrace skips non-4-byte widths")
 
 # mmiotrace address outside the BAR range (should be skipped)
-# BAR0 = 0xf6000000, default size = 0x1000000 → valid range [0xf6000000, 0xf7000000)
+# BAR0 = 0xf6000000, default size = 0x1000000 -> valid range [0xf6000000, 0xf7000000)
 MMIO_OUTSIDE = """W 4 12.000200 1 0xf7000000 0x555 0x0 0
 W 4 12.000300 1 0xf6000200 0x100 0x0 0
 """

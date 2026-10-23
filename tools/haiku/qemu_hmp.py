@@ -4,6 +4,8 @@
   qemu_hmp.py SOCKET cmd  'screendump /tmp/s.ppm'   one monitor command
   qemu_hmp.py SOCKET type 'uname -a'                type a line + Return
 """
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 import socket
 import sys
 import time

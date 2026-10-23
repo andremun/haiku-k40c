@@ -1,3 +1,5 @@
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Shared settings for the GPU guest tools. Sourced, not run.
 # The guests live outside the repository, next to the Haiku test VM.
 : "${HAIKU_CROSS:=${HOME:-/root}/haiku-cross}"   # HOME is not set in a boot-time unit

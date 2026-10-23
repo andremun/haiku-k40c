@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Mario Andres Munoz
+# Distributed under the terms of the MIT License. See LICENSE.
 # Build a loadable Haiku kernel driver on Linux.
 # Usage: tools/haiku/build-driver.sh NAME SOURCE.c [SOURCE.c ...]
 # Output: build/haiku/NAME (ELF shared object linked against kernel.so).
