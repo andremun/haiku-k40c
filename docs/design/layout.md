@@ -49,7 +49,7 @@ the other three repositories.
 | Python text | Comments and docstrings are ASCII. Eight generator tools keep non-ASCII characters in output string literals (dashes and arrows), so that the generated files stay the same. |
 | Headers | Added to every authored Python and shell file that had none. |
 | Defect | `tools/check_repo.py` had an invalid escape sequence in an f-string (`SyntaxWarning`, an error in later Python versions). Fixed. |
-| CI | `.github/workflows/check.yml`: `make refs`, `make check` with task A3 skipped (the VBIOS image is private), `make vm-tools-test`. Not yet run. |
+| CI | `.github/workflows/check.yml`: `make refs`, `make check` with task A3 skipped and `K40_CI_NO_VBIOS=1` (the VBIOS image is private: `tests/test_devinit_rom.py` reports NOT RUN in CI, and still fails locally when the image is missing), `make vm-tools-test`. |
 | `make check` | Same failure set as before the code changes, with the restored sources: 18 failures. Each comes from the absent Mesa tree or the private VBIOS image. |
 | `opencode.json` paths | Unchanged. The agent permissions need the real cache path. |
 | Design document renames | Not done. They gain little, and generators and checks use the names. |
