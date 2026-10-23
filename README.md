@@ -17,12 +17,6 @@ AI coding agents generated most of it ("vibe coding"). I understand that the Hai
 project does not want such packages, and I do not submit them. If the research is
 useful to someone, I am glad.
 
-A second question drives the work: can Haiku be a suitable sandbox for AI coding
-agents? I do not know of specific vulnerabilities of Haiku for this use. An uncommon
-system can also be a useful barrier. This is a question to test, not a claim of
-security. The target use is agents that test scientific software, such as GNU Octave,
-scientific Python and perhaps R.
-
 Use it at your own risk. The license gives no warranty.
 
 ## Purpose: two experiments in one repository
