@@ -35,7 +35,7 @@ the other three repositories.
 1. `make check` shows the same result set as before Phase 2 on the same machine. In the cloud session of 23 October 2026 it had 273 failures. Absent reference trees caused them.
 2. `make check` passes on the T7610 with the restored references.
 3. `make haiku-selftest` prints `MMIO read16 [BAR2+0x500] = 0xb0c5`.
-4. `cardless_run.py --kvm` gives `k40_os: PASS` with a disk in `HAIKU_VM_DIR` (user step).
+4. `cardless_run.py --kvm` gives `k40_os: PASS` with a disk in `HAIKU_PERSISTENT_VM_DIR` (user step).
 5. `git grep -l '/home/unimelb.edu.au'` lists only `docs/history/`, `work/` evidence and provenance JSON.
 
 ## 5. As built (23 October 2026)
