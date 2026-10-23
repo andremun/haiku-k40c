@@ -20,7 +20,7 @@ the other three repositories.
 
 ## 2. What does not change
 
-- `tools/check_repo.py` stays hidden from the agent and keeps its role (ADR 003 keeps this for Claude Code and Codex).
+- `tools/check_repo.py` keeps its role. Since ADR 003 it is no longer hidden: no agent is under test.
 - File names that generators or checks use: `docs/04-*.md` to `docs/08-*.md`, `docs/tasks/`, `work/`, `analysis/`, `hardware/`, `registers/`, `firmware/`.
 - `reference/` content and the captures in `reference/linux-run*/` and `reference/pci/`.
 - The hardware safety rules in `AGENTS.md`.

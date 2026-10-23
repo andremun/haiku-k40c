@@ -23,11 +23,12 @@ Agent research now has its own project, `optima-agent-bench`, with its own hardw
    `optima-agent-bench` needs.
 4. `opencode.json` and `.opencode/` are removed. Their safety rules move to
    `.claude/settings.json` and to the Codex settings in `docs/AGENT-SETUP.md`.
-5. The evidence rules, the hardware safety rules, the task files, `make check` and the
-   rule that `tools/check_repo.py` is not read during task work stay. They protect the
-   correctness of the driver, not the experiment.
+5. The evidence rules, the hardware safety rules, the task files and `make check` stay.
+   They protect the correctness of the driver and the hardware.
 6. The rules that only served the local model go: the context-size limits, the ban on
-   sub-agents and the model-mode instructions.
+   sub-agents, the model-mode instructions, and the answer hiding. `tools/check_repo.py`,
+   `tests/accept/` and `docs/history/` are open to read. They hid the reviewer's
+   solutions from an agent under test. No agent is under test now.
 7. The record of the experiment stays unchanged: `work/`, the task log and
    `docs/history/20261023-local-agent-experiment.md`.
 

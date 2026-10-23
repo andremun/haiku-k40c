@@ -5,10 +5,6 @@
       "Bash(make check:*)"
     ],
     "ask": [
-      "Bash(sudo:*)",
-      "Bash(su:*)",
-      "Bash(doas:*)",
-      "Bash(pkexec:*)",
       "Bash(modprobe:*)",
       "Bash(rmmod:*)",
       "Bash(insmod:*)",
@@ -44,13 +40,12 @@
       "WebFetch"
     ],
     "deny": [
-      "Read(./tools/check_repo.py)",
-      "Edit(./tools/check_repo.py)",
-      "Bash(*check_repo.py*)",
+      "Bash(sudo:*)",
+      "Bash(su:*)",
+      "Bash(doas:*)",
+      "Bash(pkexec:*)",
       "Edit(./reference/**)",
-      "Edit(./LICENSE)",
-      "Edit(./tests/accept/**)",
-      "Edit(./.claude/**)"
+      "Edit(./LICENSE)"
     ]
   }
 }

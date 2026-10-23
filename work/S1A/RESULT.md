@@ -29,12 +29,9 @@ Done on the host. Session: Claude Code in a cloud container, 2026-10-23 (ADR 003
 
 ## Process note
 
-During the provenance step, the session ran `grep` on `tools/check_repo.py` to find how
-`make check` called `tools/provenance.py`. `AGENTS.md` forbids any read of that file in task
-work. The output showed only the provenance check lines. No task output uses it. Earlier the same day, before S1A started, the session also read
-lines 50-100 of that file to see whether a change of `docs/OPEN_QUESTIONS.md` was safe. Those
-lines hold the project-state and citation checks. The
-reviewer decides whether this needs a rework.
+The session read parts of `tools/check_repo.py` (lines 50-100, and one `grep` for the
+provenance check). The rule against it was lifted the same day (ADR 003, item 6): no
+agent is under test. No rework needed.
 
 ## For the next task and the T7610
 

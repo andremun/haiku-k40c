@@ -28,12 +28,9 @@ the truth.
    Read `docs/tasks/<ID>.md`. Do that task and no other.
 2. Read only the files that the task needs.
 3. Do one task. Write `work/<task-id>/PLAN.md` before large work.
-4. Run `make check`. Fix what fails.
-   `make check` runs `tools/check_repo.py`. Do not read that file, with
-   any tool or command (`sed`, `grep`, `cat`, Python). It has the
-   reviewer's own solution of some tasks, and work that copies it is
-   rejected. The messages of `make check` say what is wrong; the task
-   text says what is wanted.
+4. Run `make check`. Fix what fails. `tools/check_repo.py` and
+   `tests/accept/` are the reviewer's checks. Read them when they help.
+   Change them only when the task says so.
 5. Run the handoff (Claude Code: `/handoff`): update `docs/STATUS.md`,
    write `work/<task-id>/RESULT.md` (max 40 lines), add open questions to
    `docs/OPEN_QUESTIONS.md` and root needs to `docs/REQUESTS.md`, commit
@@ -46,6 +43,8 @@ the task log), not the current task, and ends with ACCEPT or REWORK.
 
 ## Hardware safety (never break these)
 
+- Never run as root: no `sudo`, `su`, `doas` or `pkexec`, on the T7610 or
+  anywhere else. A step that needs root is a user step in `docs/REQUESTS.md`.
 - The K40c at 0000:03:00.0 runs `llm-server` for other projects. Never
   touch it. The K40c at 0000:04:00.0 is the driver card, but only the user
   changes its state. For both cards: no `sudo`, no module load or unload,
@@ -84,18 +83,15 @@ the task log), not the current task, and ends with ACCEPT or REWORK.
 - When `make check` verifies a value against a capture, accept it. Do not
   verify the same value again by hand.
 - Generate data (JSON/YAML) with scripts in `tools/`, not by hand.
-- Do not read generated files whole (`analysis/*.json`,
-  `analysis/callgraph.md`, `registers/*.json`). Use `grep -n`, `head`, or a
-  short script that prints counts or a few entries. Let the tools you write
-  do the reading.
 - Write what you learn into `work/<task-id>/FINDINGS.md` as you go.
-- Do not read `docs/history/` for a task.
+- `docs/history/` is a record. Current facts are in `docs/STATUS.md` and the
+  task files.
 - A tool that generates an output file has a `--check` option: it writes
   nothing and exits 0 when the file is what the tool generates. Compare
   the text that would be written with the text of the file. Sort every
   set before use: the output must be the same on every run.
-- Sub-agents may read and search. They must not edit files or run
-  hardware or VM commands. The main session owns the task and its commit.
+- Sub-agents follow these rules. Hardware and VM commands stay in the main
+  session, which owns the task and its commit.
 
 ## Escalation
 

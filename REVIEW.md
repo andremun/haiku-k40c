@@ -21,8 +21,8 @@ Report as Important (red) only:
 - A cardless or VM result presented as K40c evidence.
 - Code copied from Nouveau (more than a few lines in sequence), or a consulted
   Nouveau file missing from `docs/licensing.md`.
-- A change to `reference/`, `tests/accept/` or `LICENSE`. A read of
-  `tools/check_repo.py` in task work.
+- A change to `reference/` or `LICENSE`. A change to `tests/accept/` or
+  `tools/check_repo.py` that the task does not ask for.
 - A task marked DONE while `make check` fails, or without `work/<ID>/RESULT.md`.
 - A generated file edited by hand, or a generator whose `--check` no longer matches.
 - A wrong result: a logic error, a wrong unit, an off-by-one, unsorted output where the
