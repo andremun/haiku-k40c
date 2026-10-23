@@ -56,14 +56,16 @@ Run `claude` or `codex` in this directory. Both read `AGENTS.md` (Claude Code th
 Start a new session for each task. The repository is the memory:
 `docs/STATUS.md`, `docs/tasks/<task>.md`, `work/<task>/`. The task steps are in
 `AGENTS.md` ("Session protocol"). Claude Code also has them as skills: `/next`,
-`/handoff`, `/escalate` and `/review`.
+`/handoff`, `/escalate` and `/review`. Review a branch or pull request with
+`/pr-review` ([REVIEW.md](REVIEW.md)).
 
 ## Layout
 
 | Path | Content |
 |---|---|
 | `AGENTS.md`, `CLAUDE.md` | Rules for coding agents (safety, evidence, protocol). `CLAUDE.md` points to `AGENTS.md`. |
-| `.claude/` | Claude Code permissions and task skills. |
+| `.claude/` | Claude Code permissions and skills: task steps and `/pr-review`. |
+| `REVIEW.md` | What a review reports and how severe it is. |
 | `docs/` | Status, phases, open questions, requests, design documents. |
 | `reference/` | Pinned read-only sources (`MANIFEST.md`) and PCI captures. |
 | `tools/` | Analysis scripts and `check_repo.py`. |

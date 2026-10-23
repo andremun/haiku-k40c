@@ -120,3 +120,8 @@ under the terms of the MIT License." Record every consulted Nouveau file in
 
 Commit small working steps. Never push, never rewrite history, never
 delete `reference/`.
+
+## Review guidelines
+
+Reviews follow `REVIEW.md`. Report only Important findings (P0, P1) unless the request
+asks for more. In Claude Code, run the review with `/pr-review`.
