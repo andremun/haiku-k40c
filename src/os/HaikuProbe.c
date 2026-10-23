@@ -3,6 +3,9 @@
 #include "HaikuBackend.h"
 #include <Drivers.h>
 
+/* PMC_BOOT_0 of the development card (K40c 0000:04:00.0): hardware/record.json:37. */
+#define K40_EXPECTED_BOOT0 0x0f1240a1u
+
 int32 api_version=B_CUR_DRIVER_API_VERSION;
 static const char* devices[]={NULL};
 static k40_os os;
@@ -39,10 +42,30 @@ status_t init_driver(void)
         /* Recorded K40c PCI identity: hardware/record.json; no PCI writes. */
         if (info.vendor_id!=0x10de || info.device_id!=0x1024) continue;
         found=true;
+        /* Read the command register only. Haiku's nvidia driver turns memory decode on before it maps
+         * the BAR (src/add-ons/kernel/drivers/graphics/nvidia/driver.c:543-550). This probe must not
+         * write PCI configuration, so it refuses instead. */
+        uint16 command=(uint16)os.pci->read_pci_config(info.bus,info.device,info.function,PCI_command,2);
+        dprintf("k40_os: PCI command 0x%04x\n",(unsigned)command);
+        if ((command & PCI_command_memory)==0) {
+            dprintf("k40_os: memory decode off; not mapped\n");
+            status=B_NOT_ALLOWED;
+            goto failed;
+        }
         status=k40_os_map_readonly(&os,&info,0,B_PAGE_SIZE);
         uint32 identity=0;
         if (status==B_OK) status=k40_os_read32(&os,0,&identity);
         if (status!=B_OK) goto failed;
+        if (identity==0xffffffffu) {
+            dprintf("k40_os: BAR0 does not answer\n");
+            status=B_IO_ERROR;
+            goto failed;
+        }
+        if (identity!=K40_EXPECTED_BOOT0) {
+            dprintf("k40_os: unexpected identity 0x%08lx\n",(unsigned long)identity);
+            status=B_BAD_DATA;
+            goto failed;
+        }
         dprintf("k40_os: GPU identity 0x%08lx; no bring-up or DMA\n",(unsigned long)identity);
 #endif
         break;
