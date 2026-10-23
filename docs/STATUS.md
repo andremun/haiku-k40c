@@ -1,9 +1,9 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A (`docs/tasks/S1A.md`). Then S1B. Both host only. The user starts the local runs.
-Task state: READY. Scaffold review of 2026-10-21 done (docs/S1-PLAN.md, "Scaffold review 2026-10-21"): one executor defect (ZM_REG `0x000200` bit 0), cite errors, a B5 probe gap, and the envytools reference gap. Fixes go to S1A and S1B. Board-operation decisions and the third opinion still wait for the user. No card stage has run.
-Last updated: 2026-10-21
+Current task: S1B (`docs/tasks/S1B.md`). Host only.
+Task state: READY. S1A done on the host (2026-10-23). Its probe link (`tools/haiku/build_backend.sh`) waits for the T7610. Board-operation decisions and the third opinion still wait for the user. No card stage has run.
+Last updated: 2026-10-23
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
 
@@ -46,6 +46,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | A3 | DONE (independent rework) | 2026-10-16 | Observed/presentation inventory passes checks; split-line COPY and repeat bookkeeping explained. Raw-ROM supplement: 530 potential starts / 25 opcodes, all observed nonzero offsets covered. Prior rejected branch not used. |
 | ABC1 | HOST WORK PASS (native gate closed by ESC-001 resolution) | 2026-10-16 | A/B/C host implementation, raw-ROM/source/trace checks, typed memory boundary, source-backed bootstrap/controller, native backend object compilation. Three cardless boot timeouts; no matching-kernel link/load, no hardware/S1 claim. See docs/ABC-CARDLESS-OUTCOME.md and escalations/ESC-001.md. |
 | ESC-001 | RESOLVED | 2026-10-18 | Native link and load pass on the persistent KVM Haiku hrev60207 guest of `opencode-haiku` (`vm/system.qcow2`, disposable overlay). Exported kernel SHA-256 `2da9a5b9...`, byte-identical to `~/haiku-cross/lib/kernel_x86_64`; both probes link; the cardless probe loads with `k40_os: PASS`, job.exit 0, no panic. Identity probe not run. Evidence: `results/20261018-esc001-native-load/`. Cardless: not K40c evidence. See escalations/ESC-001.md, "Resolution". |
+| S1A | DONE (host; probe link not run) | 2026-10-23 | ZM_REG bit 0 for `0x000200`, 0x91 and nv50.c cites, `s1a_accept` 8/8, K40c probe checks memory decode and PMC_BOOT_0. Probe link needs `~/haiku-cross` (T7610). Process note in RESULT.md: `tools/check_repo.py` was grepped once. See work/S1A/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 
