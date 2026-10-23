@@ -2,7 +2,7 @@
 .PHONY: help check test refs vm-tools-test haiku-selftest
 help:
 	@echo "make refs           restore the pinned reference sources into .refs (network)"
-	@echo "make check          repository checks and host tests (needs make refs)"
+	@echo "make check          repository checks, source and generator checks, host tests (needs make refs)"
 	@echo "make test           host tests only"
 	@echo "make vm-tools-test  offline test of tools/haiku VM tools"
 	@echo "make haiku-selftest load a test driver in the throw-away VM (about 2 minutes)"
@@ -13,8 +13,20 @@ refs:
 vm-tools-test:
 	python3 tests/test_vm_tools.py
 
+# The three devinit tools below read the private VBIOS image. CI skips them with
+# task A3 in .check-skip, the same switch that tools/check_repo.py uses.
 check:
 	python3 tools/check_repo.py
+	python3 tools/restore_verification_refs.py --check
+	python3 tools/devinit_trace_join.py --check
+	python3 tools/load_trace.py --check
+	@if grep -qw A3 .check-skip 2>/dev/null; then \
+		echo "devinit_inventory, devinit_preflight, devinit_sources --check: NOT RUN (A3 in .check-skip, private VBIOS image)"; \
+	else \
+		python3 tools/devinit_inventory.py --check && \
+		python3 tools/devinit_preflight.py --check && \
+		python3 tools/devinit_sources.py --check; \
+	fi
 	@if [ -f tests/Makefile ]; then $(MAKE) -s -C tests; fi
 
 test:

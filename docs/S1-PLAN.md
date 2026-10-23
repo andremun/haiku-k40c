@@ -94,8 +94,8 @@ task texts (`docs/tasks/S1A.md`, `S1B.md`) and the acceptance test
 | F10 | Haiku backend | BAR high word, page bounds, read-only map, cleanup on failure correct. Host allocation is `B_CONTIGUOUS`, not `B_32_BIT_CONTIGUOUS` as Haiku's nvidia driver uses; matters for B2, not B5 | `driver.c:674-695,939-957` | Note for B2 |
 | F11 | Memory layer | No hardware constants. Ownership, publication, pin and quarantine rules hold | `src/memory/` | Accepted |
 | F12 | A3 inventory | Counts 598/560/38, 24 names, 7 scripts agree with the plan and RESULT. The IO at 0x8506 (port `0x3c3`, data 1) ran in the Linux run, and its register writes are in the trace | trace lines 45579-45594 (TRACE_VERIFIED) | Accepted; input for board decision 5 |
-| F13 | Restore helper | `--check` says "clean" for a sparse cache that lacks a file a tool needs. Its `SOURCES` lists also differ from the real caches (nouveau, envytools, mesa) | `git sparse-checkout list` of each cache | Open: task S1B |
-| F14 | `devinit_sources.py` | Needs `nvbios/nvbios.c`; the full checkout `~/haiku-cross/src/envytools` is at the pin and its hash equals the recorded one. The scaffold's private fix passes `--check` with no change to the output | `analysis/devinit_sources.json` | Open: task S1B. Note added to `reference/MANIFEST.md` |
+| F13 | Restore helper | `--check` says "clean" for a sparse cache that lacks a file a tool needs. Its `SOURCES` lists also differ from the real caches (nouveau, envytools, mesa) | `git sparse-checkout list` of each cache | Fixed in S1B (2026-10-23) |
+| F14 | `devinit_sources.py` | Needs `nvbios/nvbios.c`; the full checkout `~/haiku-cross/src/envytools` is at the pin and its hash equals the recorded one. The scaffold's private fix passes `--check` with no change to the output | `analysis/devinit_sources.json` | Fixed in S1B (2026-10-23). Note added to `reference/MANIFEST.md` |
 
 **Next steps, in order.**
 

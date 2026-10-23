@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1B (`docs/tasks/S1B.md`). Host only.
-Task state: READY. S1A done on the host (2026-10-23). Its probe link (`tools/haiku/build_backend.sh`) waits for the T7610. Board-operation decisions and the third opinion still wait for the user. No card stage has run.
+Current task: none. S1A and S1B are done on the host. The next steps wait for the user (`docs/S1-PLAN.md`, "Next steps").
+Task state: WAITING FOR USER. On the T7610: `make refs`, `make check`, and the probe link of S1A (`tools/haiku/build_backend.sh`). Board-operation decisions and the third opinion still wait for the user. No card stage has run.
 Last updated: 2026-10-23
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -47,10 +47,11 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | ABC1 | HOST WORK PASS (native gate closed by ESC-001 resolution) | 2026-10-16 | A/B/C host implementation, raw-ROM/source/trace checks, typed memory boundary, source-backed bootstrap/controller, native backend object compilation. Three cardless boot timeouts; no matching-kernel link/load, no hardware/S1 claim. See docs/ABC-CARDLESS-OUTCOME.md and escalations/ESC-001.md. |
 | ESC-001 | RESOLVED | 2026-10-18 | Native link and load pass on the persistent KVM Haiku hrev60207 guest of `opencode-haiku` (`vm/system.qcow2`, disposable overlay). Exported kernel SHA-256 `2da9a5b9...`, byte-identical to `~/haiku-cross/lib/kernel_x86_64`; both probes link; the cardless probe loads with `k40_os: PASS`, job.exit 0, no panic. Identity probe not run. Evidence: `results/20261018-esc001-native-load/`. Cardless: not K40c evidence. See escalations/ESC-001.md, "Resolution". |
 | S1A | DONE (host; probe link not run) | 2026-10-23 | ZM_REG bit 0 for `0x000200`, 0x91 and nv50.c cites, `s1a_accept` 8/8, K40c probe checks memory decode and PMC_BOOT_0. Probe link needs `~/haiku-cross` (T7610). Process note in RESULT.md: `tools/check_repo.py` was grepped once. See work/S1A/RESULT.md. |
+| S1B | DONE (host; Mesa and VBIOS checks not run here) | 2026-10-23 | Restore helper checks sparse lists, required paths and the full envytools decoder checkout (`envytools_full()`). `devinit_sources.py` reads `nvbios.c` from it, output unchanged. `make check` runs six source and generator checks; three need the VBIOS and follow `.check-skip` A3. See work/S1B/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 
-1. Run `make refs`. It links `.refs` to `~/llm-server/agent-refs` and checks the pinned sources.
+1. Run `make refs`. It links `.refs` to `~/llm-server/agent-refs`, checks the pinned sources and needs the full envytools checkout `~/haiku-cross/src/envytools` (or `K40_ENVYTOOLS_FULL`).
 2. Move the persistent VM disk folder from `opencode-haiku/vm/` to `~/haiku-vm`, or set `HAIKU_PERSISTENT_VM_DIR`.
 3. Run `make check` and `make vm-tools-test`.
 4. Run `~/llm-server/llm-mode.sh one`, so that no model runs on the driver card. Repeat after each reboot until `llm-server` starts in mode `one` by default.
