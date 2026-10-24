@@ -3,6 +3,8 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-10-23: Review rules: `REVIEW.md`, the `/pr-review` skill (`.claude/skills/pr-review/`) and a "Review guidelines" section in `AGENTS.md` for Codex. Q1 closed and assumption S1 updated after ADR 003. Questions Q2 to Q5 from `haiku-k40c-llm`.
+- 2026-10-23: Local agent experiment closed (ADR 003). Task work with Claude Code and Codex. `opencode.json` and `.opencode/` replaced by `CLAUDE.md`, `.claude/` and `docs/AGENT-SETUP.md`. Driver card 0000:04:00.0, `llm-server` on 0000:03:00.0.
 - 2026-10-23: Repository alignment, phase 2 (code). Shared VM tools merged into `tools/haiku/` with a test. Reference links point into `.refs/` (`make refs`). ASCII comments and headers. Escape-sequence fix in `tools/check_repo.py`. CI workflow.
 - 2026-10-23: Repository alignment, phase 1 (documentation). Dated handoffs and old status text moved to `docs/history/`. ESC-001 evidence copied in from `opencode-haiku` (`results/20261018-esc001-native-load/`). ADRs 001 and 002. Phase 2 blueprint `docs/design/layout.md`.
 - 2026-10-21: Scaffold review against Nouveau v6.12 and the trace (findings F1 to F14). Tasks S1A and S1B.

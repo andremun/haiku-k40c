@@ -1,5 +1,6 @@
 ---
-description: Start the current task from docs/STATUS.md
+name: next
+description: Start the current task of docs/STATUS.md in this repository. Use at the start of a task session.
 ---
 Start work on the current task.
 
@@ -15,6 +16,4 @@ Start work on the current task.
    will check them. Keep it under 30 lines.
 5. Do the task. Follow `AGENTS.md`.
 6. Run `make check` and fix failures.
-7. Finish with the handoff steps of `/handoff`.
-
-$ARGUMENTS
+7. Finish with the steps of the `handoff` skill.

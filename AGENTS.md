@@ -4,6 +4,9 @@ Goal: a native Haiku kernel driver that runs one verified compute job on a
 Tesla K40c (GK110). Design and specification: `docs/design/`. This file
 holds rules only. Project knowledge lives in the files below.
 
+These rules apply to Claude Code and Codex (cloud models, run on the T7610).
+Claude Code reads them through `CLAUDE.md`. Setup: `docs/AGENT-SETUP.md`.
+
 ## Where the project state is
 
 - `docs/STATUS.md`: current phase, current task, last result. Read first.
@@ -25,24 +28,28 @@ the truth.
    Read `docs/tasks/<ID>.md`. Do that task and no other.
 2. Read only the files that the task needs.
 3. Do one task. Write `work/<task-id>/PLAN.md` before large work.
-4. Run `make check`. Fix what fails.
-   `make check` runs `tools/check_repo.py`. Do not read that file, with
-   any tool or command (`sed`, `grep`, `cat`, Python). It has the
-   reviewer's own solution of some tasks, and work that copies it is
-   rejected. The messages of `make check` say what is wrong; the task
-   text says what is wanted.
-5. Run the handoff (`/handoff`): update `docs/STATUS.md`, write
-   `work/<task-id>/RESULT.md`, record open questions, commit.
+4. Run `make check`. Fix what fails. `tools/check_repo.py` and
+   `tests/accept/` are the reviewer's checks. Read them when they help.
+   Change them only when the task says so.
+5. Run the handoff (Claude Code: `/handoff`): update `docs/STATUS.md`,
+   write `work/<task-id>/RESULT.md` (max 40 lines), add open questions to
+   `docs/OPEN_QUESTIONS.md` and root needs to `docs/REQUESTS.md`, commit
+   with `<task-id>: <summary>`.
 6. Stop. The next task starts in a new session.
 
-`/review` runs in its own new session after the handoff. It reviews the
-last finished task (last row of the task log), not the current task.
+The review (Claude Code: `/review`) runs in its own new session after the
+handoff. It is read-only. It reviews the last finished task (last row of
+the task log), not the current task, and ends with ACCEPT or REWORK.
 
 ## Hardware safety (never break these)
 
-- Both K40c cards run the language model you are running on. Never touch
-  them: no `sudo`, no module load or unload, no `setpci` writes, no BAR or
-  `/dev/mem` access, no `nvidia-smi` with options, no GPU reset.
+- Never run as root: no `sudo`, `su`, `doas` or `pkexec`, on the T7610 or
+  anywhere else. A step that needs root is a user step in `docs/REQUESTS.md`.
+- The K40c at 0000:03:00.0 runs `llm-server` for other projects. Never
+  touch it. The K40c at 0000:04:00.0 is the driver card, but only the user
+  changes its state. For both cards: no `sudo`, no module load or unload,
+  no `setpci` writes, no BAR or `/dev/mem` access, no `nvidia-smi` with
+  options, no GPU reset.
 - The Haiku test VM (`tools/haiku/vm-test.sh`) has no GPU. Never give it
   one: no `vfio-pci`, no QEMU host-device options, no change to that
   script's QEMU command line. A VM result is never hardware evidence.
@@ -76,31 +83,21 @@ last finished task (last row of the task log), not the current task.
 - When `make check` verifies a value against a capture, accept it. Do not
   verify the same value again by hand.
 - Generate data (JSON/YAML) with scripts in `tools/`, not by hand.
-- Your context is small: about 25,000 tokens are free for the work. One
-  large file fills it, the session is then compressed and you lose what
-  you read. So:
-  - Never read a generated file whole (`analysis/*.json`,
-    `analysis/callgraph.md`, `registers/*.json`). Look at it with
-    `grep -n`, `head -30`, `wc -l`, or a short `python3 -c` that prints
-    counts or a few entries.
-  - Never read a source file of more than 200 lines whole. Find the place
-    with `grep -n`, then read at most 80 lines (`sed -n 'A,Bp'`, or the
-    read tool with `offset` and `limit`).
-  - Let the tool that you write do the reading. Do not copy source into
-    your own notes to analyse it by hand.
-  - Write what you learn into `work/<task-id>/FINDINGS.md` in a few
-    lines as you go. After a compression, read that file first.
+- Write what you learn into `work/<task-id>/FINDINGS.md` as you go.
+- `docs/history/` is a record. Current facts are in `docs/STATUS.md` and the
+  task files.
 - A tool that generates an output file has a `--check` option: it writes
   nothing and exits 0 when the file is what the tool generates. Compare
   the text that would be written with the text of the file. Sort every
   set before use: the output must be the same on every run.
-- Do not start sub-agents.
+- Sub-agents follow these rules. Hardware and VM commands stay in the main
+  session, which owns the task and its commit.
 
 ## Escalation
 
 After 3 materially different attempts at the same problem, or when the
 evidence contradicts the reference, stop. Write `escalations/ESC-NNN.md`
-(use `/escalate`) and end the task.
+(Claude Code: `/escalate`) and end the task.
 
 ## Definition of done (task)
 
@@ -119,3 +116,8 @@ under the terms of the MIT License." Record every consulted Nouveau file in
 
 Commit small working steps. Never push, never rewrite history, never
 delete `reference/`.
+
+## Review guidelines
+
+Reviews follow `REVIEW.md`. Report only Important findings (P0, P1) unless the request
+asks for more. In Claude Code, run the review with `/pr-review`.

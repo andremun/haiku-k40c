@@ -19,66 +19,53 @@ useful to someone, I am glad.
 
 Use it at your own risk. The license gives no warranty.
 
-## Purpose: two experiments in one repository
+## Purpose
 
-1. **Driver development.** The goal is a Haiku kernel driver that runs one
-   verified compute job on a Tesla K40c, built from a study of the
-   open-source Nouveau driver. It is a hobby project. It is not production
-   software and it may never reach the goal.
-2. **A test of a local LLM coding agent.** Most task work is done by a
-   language model that runs on the same two K40c cards (Qwen3.6-35B-A3B
-   through llama.cpp and OpenCode), one task per session, with a human who
-   reads its output. The repository is set up to measure how far such an
-   agent gets and where it fails.
+A Haiku kernel driver that runs one verified compute job on a Tesla K40c, built from a
+study of the open-source Nouveau driver. It is a hobby project. It is not production
+software and it may never reach the goal.
 
-Read the content with the second purpose in mind:
+Until 23 October 2026 the repository was also a test of a local LLM coding agent. That
+experiment is closed (`docs/decisions/003-end-local-agent-experiment.md`). Its record is
+in `work/`, the task log of `docs/STATUS.md` and
+`docs/history/20261023-local-agent-experiment.md`.
 
 | Part | Written by | Trust |
 |---|---|---|
-| `AGENTS.md`, `docs/PHASES.md`, `docs/design/`, `.opencode/`, `tools/check_repo.py`, `tools/haiku/`, `scripts/`, `reference/pci/` | The user, with Claude (Anthropic) as assistant | Reviewed |
-| Task outputs: `hardware/`, `analysis/`, `registers/`, `firmware/`, `work/`, later the driver source | The local agent. Commits start with the task ID (`A1: ...`). | As labelled. A claim is KNOWN, INFERRED or UNKNOWN, and a register is SOURCE_ONLY until it is verified. `make check` verifies format and some facts, not completeness. |
+| `AGENTS.md`, `docs/PHASES.md`, `docs/design/`, `.claude/`, `tools/check_repo.py`, `tools/haiku/`, `scripts/`, `reference/pci/` | The user, with Claude (Anthropic) as assistant | Reviewed |
+| Task outputs to 2026-10-23: `hardware/`, `analysis/`, `registers/`, `firmware/`, `work/` | The local agent. Commits start with the task ID (`A1: ...`). | As labelled. A claim is KNOWN, INFERRED or UNKNOWN, and a register is SOURCE_ONLY until it is verified. `make check` verifies format and some facts, not completeness. |
+| Task outputs from 2026-10-23, later the driver source | Claude Code or Codex, with cloud models. Same commit and evidence rules. | As above |
 | `docs/STATUS.md`, `docs/OPEN_QUESTIONS.md` | Both | Check against the task log and the reviews |
 
 Agent output can contain confident errors, including citations of files
 that do not exist. Do not use a register value or a command sequence from
 this repository on real hardware without checking its source.
 
-## Working with OpenCode
+## Cards
 
-Run `opencode` in this directory. The project config (`opencode.json`)
-allows routine commands, asks
-before risky ones (sudo, module and PCI tools, `git push`, network
-downloads) and blocks edits to `reference/` and `docs/design/`.
-
-Commands:
-
-| Command | Use |
+| Card | Use |
 |---|---|
-| `/next` | Start the current task from `docs/STATUS.md`. |
-| `/handoff` | Close the task: check, result, status, commit. `/next` ends with these steps. |
-| `/check` | Run `make check` and report. |
-| `/escalate` | Write an escalation and stop the task. |
-| `/review` | Read-only review of the last finished task, in a new session after the handoff (`review` agent). |
+| K40c 0000:04:00.0 | The driver: captures, passthrough (`docs/PASSTHROUGH.md`), hardware tests. No model process. |
+| K40c 0000:03:00.0 | `llm-server` in mode `one`, for `optima-agent-bench`. Not for driver work. |
 
-Model configurations (`~/llm-server/llm-mode.sh`):
+## Working with Claude Code or Codex
 
-| Mode | Use |
-|---|---|
-| `dual` | One model on both K40c. Default, fastest single session. |
-| `two` | One model per K40c. Two sessions at a time: `opencode` and `opencode -m llamacpp/qwen3.6-k40b`. |
-| `one` | One model on the K40c at 03:00.0. No process on the K40c at 04:00.0, for hardware tests. |
+Run `claude` or `codex` in this directory. Both read `AGENTS.md` (Claude Code through
+`CLAUDE.md`). Setup and permissions: `docs/AGENT-SETUP.md`.
 
-The project config has no fixed model. It uses the OpenCode default, which
-`llm-mode.sh` sets.
-
-Start a new OpenCode session for each task. The repository is the memory:
-`docs/STATUS.md`, `docs/tasks/<task>.md`, `work/<task>/`.
+Start a new session for each task. The repository is the memory:
+`docs/STATUS.md`, `docs/tasks/<task>.md`, `work/<task>/`. The task steps are in
+`AGENTS.md` ("Session protocol"). Claude Code also has them as skills: `/next`,
+`/handoff`, `/escalate` and `/review`. Review a branch or pull request with
+`/pr-review` ([REVIEW.md](REVIEW.md)).
 
 ## Layout
 
 | Path | Content |
 |---|---|
-| `AGENTS.md` | Rules for the agent (safety, evidence, protocol). |
+| `AGENTS.md`, `CLAUDE.md` | Rules for coding agents (safety, evidence, protocol). `CLAUDE.md` points to `AGENTS.md`. |
+| `.claude/` | Claude Code permissions and skills: task steps and `/pr-review`. |
+| `REVIEW.md` | What a review reports and how severe it is. |
 | `docs/` | Status, phases, open questions, requests, design documents. |
 | `reference/` | Pinned read-only sources (`MANIFEST.md`) and PCI captures. |
 | `tools/` | Analysis scripts and `check_repo.py`. |

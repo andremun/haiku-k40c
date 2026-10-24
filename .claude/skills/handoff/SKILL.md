@@ -1,5 +1,6 @@
 ---
-description: Close the current task and hand off to the next session
+name: handoff
+description: Close the current task of this repository and hand off to the next session.
 ---
 Close the current task.
 
@@ -12,5 +13,5 @@ Close the current task.
    needs to `docs/REQUESTS.md`.
 4. Update `docs/STATUS.md`: current task (next one if this one is done),
    last result, one row in the task log.
-5. Commit: `git add -A && git commit -m "<task-id>: <summary>"`.
+5. Commit: `git add -A && git commit -m "<task-id>: <summary>"`. Do not push.
 6. Report in 5 lines or fewer: done or not done, and why.

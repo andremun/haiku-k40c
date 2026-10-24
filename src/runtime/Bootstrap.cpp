@@ -12,7 +12,7 @@ private: BootstrapPort& port_; bool held_;
 };
 bool range(OwnedVram owned,uint64_t offset,size_t count)
 {
-    // Physical PRAMIN address masks span 44 bits in nvkm/subdev/instmem/nv50.c:64-65,84-85.
+    // Physical PRAMIN address masks span 44 bits in nvkm/subdev/instmem/nv50.c:62-63,81-82.
     const uint64_t limit=1ULL<<44;
     return count && count<=4096 && !(owned.base.value&3) && !(offset&3)
         && owned.base.value<limit && owned.bytes<=limit-owned.base.value
@@ -42,12 +42,12 @@ bool writeSlowWindow(BootstrapPort& port,OwnedVram owned,uint64_t offset,const u
     uint64_t selected=UINT64_MAX;
     for(size_t i=0;i<count;++i) {
         uint64_t address=owned.base.value+offset+4*i;
-        uint64_t window=address&~uint64_t(0xfffff); // nvkm/subdev/instmem/nv50.c:64-65
+        uint64_t window=address&~uint64_t(0xfffff); // nvkm/subdev/instmem/nv50.c:62-63
         if(window!=selected) {
-            if(!port.write32(0x001700,uint32_t(window>>16)))return false; // nvkm/subdev/instmem/nv50.c:70
+            if(!port.write32(0x001700,uint32_t(window>>16)))return false; // nvkm/subdev/instmem/nv50.c:68
             selected=window;
         }
-        if(!port.write32(0x700000+uint32_t(address&0xfffff),data[i]))return false; // nvkm/subdev/instmem/nv50.c:74
+        if(!port.write32(0x700000+uint32_t(address&0xfffff),data[i]))return false; // nvkm/subdev/instmem/nv50.c:71
     }
     return true; // Publication/flush is a separate mandatory step.
 }
@@ -58,12 +58,12 @@ bool readSlowWindow(BootstrapPort& port,OwnedVram owned,uint64_t offset,uint32_t
     uint64_t selected=UINT64_MAX;
     for(size_t i=0;i<count;++i) {
         uint64_t address=owned.base.value+offset+4*i;
-        uint64_t window=address&~uint64_t(0xfffff); // nvkm/subdev/instmem/nv50.c:84-85
+        uint64_t window=address&~uint64_t(0xfffff); // nvkm/subdev/instmem/nv50.c:81-82
         if(window!=selected) {
-            if(!port.write32(0x001700,uint32_t(window>>16)))return false; // nvkm/subdev/instmem/nv50.c:91
+            if(!port.write32(0x001700,uint32_t(window>>16)))return false; // nvkm/subdev/instmem/nv50.c:88
             selected=window;
         }
-        if(!port.read32(0x700000+uint32_t(address&0xfffff),data[i]))return false; // nvkm/subdev/instmem/nv50.c:94
+        if(!port.read32(0x700000+uint32_t(address&0xfffff),data[i]))return false; // nvkm/subdev/instmem/nv50.c:91
     }
     return true;
 }

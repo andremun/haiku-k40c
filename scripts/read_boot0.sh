@@ -4,7 +4,7 @@
 # Read PMC_BOOT_0 (BAR0 offset 0x0, 4 bytes) of the K40c at 0000:04:00.0.
 # READ-ONLY: maps the first page of BAR0 read-only and reads one register.
 # It answers open question Q1 (which Nouveau chipset entry the card uses).
-# Run it in mode "one" (llm-mode.sh one), so that no model is on this card.
+# llm-server must be in mode "one" (llm-mode.sh one), so that no model is on this card.
 # Usage: sudo scripts/read_boot0.sh [BDF]      (default 0000:04:00.0)
 set -euo pipefail
 [[ ${EUID} -eq 0 ]] || { echo "Run with sudo." >&2; exit 1; }

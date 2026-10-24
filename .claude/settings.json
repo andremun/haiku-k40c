@@ -1,0 +1,51 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(make check)",
+      "Bash(make check:*)"
+    ],
+    "ask": [
+      "Bash(modprobe:*)",
+      "Bash(rmmod:*)",
+      "Bash(insmod:*)",
+      "Bash(setpci:*)",
+      "Bash(dd:*)",
+      "Bash(mkfs:*)",
+      "Bash(mount:*)",
+      "Bash(umount:*)",
+      "Bash(reboot:*)",
+      "Bash(shutdown:*)",
+      "Bash(systemctl:*)",
+      "Bash(nvidia-smi:*)",
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean:*)",
+      "Bash(git rebase:*)",
+      "Bash(git filter-branch:*)",
+      "Bash(rm -rf:*)",
+      "Bash(rm -fr:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(apt:*)",
+      "Bash(apt-get:*)",
+      "Bash(pip install:*)",
+      "Bash(qemu-system-x86_64:*)",
+      "Bash(scripts/passthrough.sh:*)",
+      "Bash(tools/guest/linux-run.sh --gpu:*)",
+      "Bash(*vfio*)",
+      "Edit(./AGENTS.md)",
+      "Edit(./CLAUDE.md)",
+      "Edit(./docs/design/**)",
+      "Edit(./tools/haiku/**)",
+      "WebFetch"
+    ],
+    "deny": [
+      "Bash(sudo:*)",
+      "Bash(su:*)",
+      "Bash(doas:*)",
+      "Bash(pkexec:*)",
+      "Edit(./reference/**)",
+      "Edit(./LICENSE)"
+    ]
+  }
+}

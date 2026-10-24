@@ -20,7 +20,7 @@ the other three repositories.
 
 ## 2. What does not change
 
-- `tools/check_repo.py` stays hidden from the agent and keeps its role.
+- `tools/check_repo.py` keeps its role. Since ADR 003 it is no longer hidden: no agent is under test.
 - File names that generators or checks use: `docs/04-*.md` to `docs/08-*.md`, `docs/tasks/`, `work/`, `analysis/`, `hardware/`, `registers/`, `firmware/`.
 - `reference/` content and the captures in `reference/linux-run*/` and `reference/pci/`.
 - The hardware safety rules in `AGENTS.md`.
@@ -51,6 +51,6 @@ the other three repositories.
 | Defect | `tools/check_repo.py` had an invalid escape sequence in an f-string (`SyntaxWarning`, an error in later Python versions). Fixed. |
 | CI | `.github/workflows/check.yml`: `make refs`, `make check` with task A3 skipped and `K40_CI_NO_VBIOS=1` (the VBIOS image is private: `tests/test_devinit_rom.py` reports NOT RUN in CI, and still fails locally when the image is missing), `make vm-tools-test`. |
 | `make check` | Same failure set as before the code changes, with the restored sources: 18 failures. Each comes from the absent Mesa tree or the private VBIOS image. |
-| `opencode.json` paths | Unchanged. The agent permissions need the real cache path. |
+| `opencode.json` paths | Superseded: ADR 003 removed `opencode.json`. |
 | Design document renames | Not done. They gain little, and generators and checks use the names. |
 

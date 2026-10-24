@@ -62,19 +62,20 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/devinit/Interpreter.cpp:138` | `case 0x56:` | nvkm/subdev/bios/init.c:2254 | SOURCE_ONLY |
 | `src/devinit/Interpreter.cpp:151` | `case 0x74:` | nvkm/subdev/bios/init.c:2277 | SOURCE_ONLY |
 | `src/devinit/Interpreter.cpp:158` | `case 0x6e: ok=masked(reg,word(uint64_t(pc)+5,4),word(uint64_t(pc)+9,4)); break;` | nvkm/subdev/bios/init.c:2272 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:159` | `case 0x7a: ok=write(reg,word(uint64_t(pc)+5,4)); break;` | nvkm/subdev/bios/init.c:2283 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:160` | `case 0x90: { uint32_t value=0; ok=read(reg,value) && write(word(uint64_t(pc)+5,4),value); break; }` | nvkm/subdev/bios/init.c:2289 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:161` | `case 0x97: {` | nvkm/subdev/bios/init.c:2293 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:165` | `case 0x5f: {` | nvkm/subdev/bios/init.c:2262 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:167` | `const uint32_t bits=shift<0x80 ? shift : 0x100-shift;` | nvkm/subdev/bios/init.c:531 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:170` | `value=shift<0x80 ? value>>bits : value<<bits;` | nvkm/subdev/bios/init.c:531 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:174` | `case 0x58: case 0x91:` | nvkm/subdev/bios/init.c:2256 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:177` | `ok=write(reg+(op==0x58 ? 4*i : 0),word(uint64_t(pc)+6+4*i,4));` | nvkm/subdev/bios/init.c:1281 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:180` | `case 0x8f:` | nvkm/subdev/bios/init.c:2288 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:187` | `case 0x6f:` | nvkm/subdev/bios/init.c:2273 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:194` | `case 0x8c: case 0x8d: break;` | nvkm/subdev/bios/init.c:2285 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:195` | `case 0x4d: case 0x53: case 0x69: case 0x8e: case 0xa9:` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
-| `src/devinit/Interpreter.cpp:198` | `if (active() \|\| op==0x69) {` | nvkm/subdev/bios/init.c:1623 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:159` | `case 0x7a: {` | nvkm/subdev/bios/init.c:2283 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:161` | `if (reg==0x000200) value\|=0x00000001;` | nvkm/subdev/bios/init.c:1901 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:164` | `case 0x90: { uint32_t value=0; ok=read(reg,value) && write(word(uint64_t(pc)+5,4),value); break; }` | nvkm/subdev/bios/init.c:2289 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:165` | `case 0x97: {` | nvkm/subdev/bios/init.c:2293 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:169` | `case 0x5f: {` | nvkm/subdev/bios/init.c:2262 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:171` | `const uint32_t bits=shift<0x80 ? shift : 0x100-shift;` | nvkm/subdev/bios/init.c:531 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:174` | `value=shift<0x80 ? value>>bits : value<<bits;` | nvkm/subdev/bios/init.c:531 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:178` | `case 0x58: case 0x91:` | nvkm/subdev/bios/init.c:2256 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:181` | `ok=write(reg+(op==0x58 ? 4*i : 0),word(uint64_t(pc)+6+4*i,4));` | nvkm/subdev/bios/init.c:1281 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:184` | `case 0x8f:` | nvkm/subdev/bios/init.c:2288 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:191` | `case 0x6f:` | nvkm/subdev/bios/init.c:2273 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:198` | `case 0x8c: case 0x8d: break;` | nvkm/subdev/bios/init.c:2285 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:199` | `case 0x4d: case 0x53: case 0x69: case 0x8e: case 0xa9:` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
+| `src/devinit/Interpreter.cpp:202` | `if (active() \|\| op==0x69) {` | nvkm/subdev/bios/init.c:1623 | SOURCE_ONLY |
 
 ## src/fifo/PushBuffer.cpp
 
