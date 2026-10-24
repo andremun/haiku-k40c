@@ -37,6 +37,8 @@
       "Edit(./CLAUDE.md)",
       "Edit(./docs/design/**)",
       "Edit(./tools/haiku/**)",
+      "Edit(./scripts/**)",
+      "Edit(./tools/guest/**)",
       "WebFetch"
     ],
     "deny": [

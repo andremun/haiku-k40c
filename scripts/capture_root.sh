@@ -3,11 +3,15 @@
 # Distributed under the terms of the MIT License. See LICENSE.
 # Read-only PCI captures that need root. Writes to reference/pci/root/.
 # No writes to PCI config space, no BAR access, no driver changes.
+# Root writes into a private temporary folder. The user account copies the
+# files into the repository (scripts/root-guard.sh).
 # Usage: sudo scripts/capture_root.sh
 set -euo pipefail
+. "$(dirname "$0")/root-guard.sh"
 [[ ${EUID} -eq 0 ]] || { echo "Run with sudo." >&2; exit 1; }
-OUT="$(cd "$(dirname "$0")/.." && pwd)/reference/pci/root"
-mkdir -p "${OUT}"
+root_guard_check
+OUT=$(mktemp -d)
+trap 'rm -rf "${OUT}"' EXIT
 # Every NVIDIA display device that is present (2 x K40c and the K600).
 gpus=()
 for d in /sys/bus/pci/devices/*; do
@@ -28,5 +32,5 @@ grep -iE "nvidia|${pat}" /proc/iomem > "${OUT}/iomem.txt" || true
 dmesg | grep -iE "nvidia|nouveau|NVRM|${pat}" > "${OUT}/dmesg-gpu.txt" || true
 dmidecode -t memory > "${OUT}/dmidecode-memory.txt"
 dmidecode -t bios -t system > "${OUT}/dmidecode-system.txt"
-chown -R "${SUDO_USER:-root}:" "${OUT}"
-echo "Written to ${OUT} for: ${gpus[*]}"
+root_guard_save reference/pci/root "${OUT}"/*
+echo "Written to ${ROOT_GUARD_REPO}/reference/pci/root for: ${gpus[*]}"

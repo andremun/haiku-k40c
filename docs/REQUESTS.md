@@ -3,6 +3,12 @@
 Actions the agent cannot do (root, installs, hardware). The agent adds
 entries. The user marks them done.
 
+The root scripts (`capture_root.sh`, `read_boot0.sh`, `passthrough.sh`)
+stop unless `scripts/` and `tools/guest/config.sh` are equal to
+`origin/main`. So a change to them must be merged through a pull request
+before it runs as root. Root writes no file in the repository: your
+account copies the results (`scripts/root-guard.sh`).
+
 | ID | Request | Why | Status |
 |---|---|---|---|
 | R1 | Install analysis tools: `sudo apt install ripgrep universal-ctags clang clangd bear` | Specification section 5. Only `grep` is available now. | done 2026-10-05 |

@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-10-24: Security fixes. Root scripts run only files equal to `origin/main`, run git as the user and write no repository file as root (`scripts/root-guard.sh`); `GPU_BDF` is checked. `transfer_server.py`: write-once job logs, an upload budget, `--port 0 --port-file`; `vm-test.sh` and `setup.sh` use it instead of servers on fixed ports. Monitor sockets of `app_vm.py` and `cardless_run.py` moved from `/tmp` to the VM or run folder. Edits to `scripts/` and `tools/guest/` ask first.
 - 2026-10-23: Review rules: `REVIEW.md`, the `/pr-review` skill (`.claude/skills/pr-review/`) and a "Review guidelines" section in `AGENTS.md` for Codex. Q1 closed and assumption S1 updated after ADR 003. Questions Q2 to Q5 from `haiku-k40c-llm`.
 - 2026-10-23: Local agent experiment closed (ADR 003). Task work with Claude Code and Codex. `opencode.json` and `.opencode/` replaced by `CLAUDE.md`, `.claude/` and `docs/AGENT-SETUP.md`. Driver card 0000:04:00.0, `llm-server` on 0000:03:00.0.
 - 2026-10-23: Repository alignment, phase 2 (code). Shared VM tools merged into `tools/haiku/` with a test. Reference links point into `.refs/` (`make refs`). ASCII comments and headers. Escape-sequence fix in `tools/check_repo.py`. CI workflow.

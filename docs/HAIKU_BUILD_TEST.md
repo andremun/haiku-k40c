@@ -80,8 +80,8 @@ This repository owns them (`docs/decisions/001-vm-tools-owner.md`).
 
 | Tool | Use |
 |---|---|
-| `app_vm.py` | Start, inspect, type into, click and stop the VM. `--kvm` uses KVM with `-cpu host`. |
-| `transfer_server.py` | Localhost file service for the guest. `--root` names the work folder, `--results` the results folder. |
+| `app_vm.py` | Start, inspect, type into, click and stop the VM. `--kvm` uses KVM with `-cpu host`. The monitor sockets are `monitor.sock` and `monitor.sock.qmp` in the VM folder. |
+| `transfer_server.py` | Localhost file service for the guest. `--root` names the work folder, `--results` the results folder. A job log in `logs/` is written once (a retry with the same bytes is accepted). `--max-total` limits all uploads of one run. `--port 0 --port-file FILE` takes a free port. |
 | `job.sh` | Run one shell job in the guest and wait for `exit=N`. |
 | `cardless_run.py` | Boot a disposable overlay of the VM disk and load a driver probe. |
 

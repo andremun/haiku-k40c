@@ -20,7 +20,13 @@
 # The other K40c and the K600 are never touched.
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
+# As root: run only when this script and config.sh are equal to origin/main.
+. "$HERE/scripts/root-guard.sh"
+root_guard_check
 . "$HERE/tools/guest/config.sh"
+# GPU_BDF goes into a modprobe.d line that runs as root at each boot.
+root_guard_bdf "$GPU_BDF"
+[[ $GPU_UUID =~ ^GPU-[0-9a-f-]{36}$ ]] || root_guard_die "not a GPU UUID: '$GPU_UUID'"
 DEV=/sys/bus/pci/devices/$GPU_BDF
 XCONF=/etc/X11/xorg.conf.d/20-display-k600-only.conf
 MODCONF=/etc/modprobe.d/k40c-vfio.conf

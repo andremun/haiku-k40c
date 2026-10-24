@@ -28,9 +28,9 @@ VM = Path(os.environ.get("HAIKU_PERSISTENT_VM_DIR", Path.home() / "haiku-vm")).e
 ISO = Path(
     os.environ.get("HAIKU_VM_ISO", VM / "haiku-master-hrev60207-x86_64-anyboot.iso")
 ).expanduser()
-SOCKET = Path(
-    "/tmp/haiku-app-" + hashlib.sha256(str(VM.resolve()).encode()).hexdigest()[:12] + ".sock"
-)
+# The monitor sockets stay in the VM folder, not in /tmp, so that no other
+# process can create the path first and receive the typed text.
+SOCKET = VM / "monitor.sock"
 EXPECTED = "4cd0765e078414681cd64b1063f5d6c0d19dc6daa51c142c544cc4d614260e35"
 PLAIN = {
     " ": "spc", "-": "minus", "=": "equal", ".": "dot", ",": "comma", "/": "slash",
@@ -93,6 +93,9 @@ def type_line(text, submit=True):
 
 
 def start(installed, memory_mib, kvm=False):
+    # A Unix socket path has at most 107 bytes (sun_path); ".qmp" is added for QMP.
+    if len(os.fsencode(SOCKET)) + len(".qmp") > 107:
+        raise SystemExit("VM folder path is too long for a monitor socket: " + str(VM))
     VM.mkdir(parents=True, exist_ok=True)
     if SOCKET.exists():
         try:

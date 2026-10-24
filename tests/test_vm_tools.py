@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Offline tests of the shared VM tools in tools/haiku/ (no QEMU, no guest).
 
-Covers: transfer server upload routing, name and size checks, atomic writes and
-share serving; job.sh request, result and exit-status handling; app_vm.py key
-mapping and the read-only monitor allowlist.
+Covers: transfer server upload routing, name and size checks, atomic writes,
+write-once job logs, the upload budget, the port file and share serving; job.sh
+request, result and exit-status handling; app_vm.py key mapping, the monitor
+socket folder and the read-only monitor allowlist.
 Run from the repository root: python3 tests/test_vm_tools.py
 """
 # Copyright (c) 2026 Mario Andres Munoz
@@ -11,7 +12,6 @@ Run from the repository root: python3 tests/test_vm_tools.py
 
 import importlib.util
 import os
-import socket
 import subprocess
 import sys
 import tempfile
@@ -42,12 +42,6 @@ def load(name):
     return module
 
 
-def free_port():
-    with socket.socket() as s:
-        s.bind(("127.0.0.1", 0))
-        return s.getsockname()[1]
-
-
 def put(port, name, data):
     request = urllib.request.Request(f"http://127.0.0.1:{port}/{name}", data=data, method="PUT")
     try:
@@ -61,22 +55,29 @@ def test_transfer_server(tmp):
     (root / "share").mkdir(parents=True)
     (root / "share/hello.txt").write_text("hello\n")
     results = root / "results/20261023-test"
-    port = free_port()
+    port_file = tmp / "port"
     proc = subprocess.Popen([sys.executable, str(TOOLS / "transfer_server.py"), "--root", str(root),
-                             "--results", str(results), "--port", str(port)],
+                             "--results", str(results), "--port", "0", "--port-file", str(port_file),
+                             "--max-total", "100"],
                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)  # fmt: skip
     try:
         for _ in range(50):
-            try:
-                body = urllib.request.urlopen(f"http://127.0.0.1:{port}/hello.txt", timeout=1).read()
+            if port_file.exists():
                 break
-            except OSError:
-                time.sleep(0.1)
+            time.sleep(0.1)
+        port = int(port_file.read_text())
+        check(port > 0, "--port 0 takes a free port and writes it to --port-file")
+        body = urllib.request.urlopen(f"http://127.0.0.1:{port}/hello.txt", timeout=5).read()
         check(body == b"hello\n", "share/ files are served")
         check(put(port, "guest-run.log", b"abc") == 201, "a valid upload is accepted")
         check((results / "guest-run.log").read_bytes() == b"abc", "a result goes to the results folder")
         check(put(port, "job7.out", b"exit=0\n") == 201, "a job upload is accepted")
         check((root / "logs/job7.out").read_text() == "exit=0\n", "a job upload goes to logs/")
+        check(put(port, "job7.out", b"exit=0\n") == 201, "a retry with the same job result is accepted")
+        check(put(port, "job7.out", b"exit=1\n") == 409, "a different job result is refused")
+        check((root / "logs/job7.out").read_text() == "exit=0\n", "the first job result stays")
+        check(put(port, "big.log", b"x" * 95) == 507, "an upload over the budget is refused")
+        check(not (results / "big.log").exists(), "a refused upload writes nothing")
         check(put(port, "../escape", b"x") in (400, 404), "a path outside the folder is refused")
         check(put(port, ".hidden", b"x") == 400, "a name that starts with a dot is refused")
         check(not list(results.glob(".upload-*")), "no temporary file is left")
@@ -116,6 +117,7 @@ def test_app_vm(tmp):
     os.environ["HAIKU_PERSISTENT_VM_DIR"] = str(tmp / "vm")
     app_vm = load("app_vm")
     check(app_vm.VM == tmp / "vm", "the VM folder comes from HAIKU_PERSISTENT_VM_DIR")
+    check(app_vm.SOCKET.parent == tmp / "vm", "the monitor socket is in the VM folder, not in /tmp")
     check(app_vm.key("A") == "shift-a" and app_vm.key("_") == "shift-minus", "key mapping")
     try:
         app_vm.key("\u00e9")
