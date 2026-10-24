@@ -69,23 +69,13 @@ fi
 # 5. kernel.so: the image's own kernel, copied out of the running VM.
 if [ ! -f "$H/lib/kernel.so" ]; then
     V=$H/vm; up=$(mktemp -d); log=$V/serial.log
-    python3 - "$up" <<'PY' &
-import http.server, os, sys
-class H(http.server.BaseHTTPRequestHandler):
-    def do_PUT(self):
-        left = int(self.headers.get("Content-Length", 0))
-        with open(os.path.join(sys.argv[1], os.path.basename(self.path)), "wb") as f:
-            while left:
-                b = self.rfile.read(min(left, 1 << 16))
-                if not b:
-                    break
-                f.write(b); left -= len(b)
-        self.send_response(201); self.end_headers()
-    def log_message(self, *a):
-        pass
-http.server.HTTPServer(("127.0.0.1", 8001), H).serve_forever()
-PY
+    # Upload receiver for the guest kernel: a free port (written to a file),
+    # a name check and a size limit (transfer_server.py).
+    python3 "$T/transfer_server.py" --root "$up" --results "$up/in" --port 0 --port-file "$up/port" \
+        --max-total $((128 << 20)) >/dev/null 2>&1 &
     srv=$!
+    for _ in $(seq 50); do [ -s "$up/port" ] && break; sleep 0.1; done
+    port=$(cat "$up/port" 2>/dev/null) || { kill "$srv"; echo "the upload server did not start" >&2; exit 1; }
     hmp() { python3 "$T/qemu_hmp.py" "$V/monitor.sock" cmd "$1" >/dev/null; }
     waitlog() { local i; for ((i = 0; i < $2; i++)); do grep -aq "$1" "$log" 2>/dev/null && return 0; sleep 1; done; return 1; }
     trap '[ -S "$V/monitor.sock" ] && hmp quit; kill $srv 2>/dev/null; rm -f "$V/monitor.sock"' EXIT
@@ -103,9 +93,9 @@ PY
     waitlog "first login script" 120 || { echo "desktop did not start" >&2; exit 1; }
     sleep 12; hmp "sendkey alt-meta_l-t"; sleep 8
     python3 "$T/qemu_hmp.py" "$V/monitor.sock" type \
-        "curl -s -T /boot/system/kernel_x86_64 http://10.0.2.2:8001/kernel_x86_64; echo UPLOAD-END > /dev/dprintf"
+        "curl -s -T /boot/system/kernel_x86_64 http://10.0.2.2:$port/kernel_x86_64; echo UPLOAD-END > /dev/dprintf"
     waitlog "UPLOAD-END" 90 || { echo "kernel copy did not finish" >&2; exit 1; }
-    cp "$up/kernel_x86_64" "$H/lib/kernel_x86_64"; cp "$up/kernel_x86_64" "$H/lib/kernel.so"
+    cp "$up/in/kernel_x86_64" "$H/lib/kernel_x86_64"; cp "$up/in/kernel_x86_64" "$H/lib/kernel.so"
     elfedit --output-type dyn "$H/lib/kernel.so"
     rm -rf "$up"
 fi

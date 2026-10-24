@@ -173,8 +173,9 @@ qemu-system-x86_64 -name haiku-test -enable-kvm -machine q35 -cpu host \
 
 What a test does, step by step:
 
-1. Serve the driver file from a temporary directory with a small HTTP
-   server on the host (port 8000).
+1. Serve the driver file from a temporary directory with
+   `transfer_server.py` on the host. It takes a free port and writes the
+   number to a file, so the guest never reads from another server.
 2. Start the VM and wait for `ps2: keyboard found` in the log (up to
    120 s), then press Return on the "Try Haiku" dialog.
 3. Wait for `first login script` (the desktop), then open a Terminal

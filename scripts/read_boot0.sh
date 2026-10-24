@@ -6,12 +6,17 @@
 # It answers open question Q1 (which Nouveau chipset entry the card uses).
 # llm-server must be in mode "one" (llm-mode.sh one), so that no model is on this card.
 # Usage: sudo scripts/read_boot0.sh [BDF]      (default 0000:04:00.0)
+# Root writes into a private temporary folder. The user account copies the
+# file into reference/pci/root/ (scripts/root-guard.sh).
 set -euo pipefail
+. "$(dirname "$0")/root-guard.sh"
 [[ ${EUID} -eq 0 ]] || { echo "Run with sudo." >&2; exit 1; }
+root_guard_check
 BDF=${1:-0000:04:00.0}
-OUT="$(cd "$(dirname "$0")/.." && pwd)/reference/pci/root"
-mkdir -p "${OUT}"
-python3 - "/sys/bus/pci/devices/${BDF}/resource0" "${BDF}" <<'PY' | tee "${OUT}/boot0-${BDF//[:.]/_}.txt"
+root_guard_bdf "${BDF}"
+OUT=$(mktemp -d)
+trap 'rm -rf "${OUT}"' EXIT
+python3 -I - "/sys/bus/pci/devices/${BDF}/resource0" "${BDF}" <<'PY' | tee "${OUT}/boot0-${BDF//[:.]/_}.txt"
 import mmap, os, struct, sys
 fd = os.open(sys.argv[1], os.O_RDONLY)
 m = mmap.mmap(fd, 4096, mmap.MAP_SHARED, mmap.PROT_READ)
@@ -23,4 +28,4 @@ print(f"PMC_BOOT_0 = 0x{v:08x}")
 print(f"chipset field (bits 28:20) = 0x{chipset:03x}")
 print("Nouveau: 0x0f0 -> nvf0_chipset (GK110), 0x0f1 -> nvf1_chipset (GK110B)")
 PY
-chown -R "${SUDO_USER:-root}:" "${OUT}"
+root_guard_save reference/pci/root "${OUT}"/*

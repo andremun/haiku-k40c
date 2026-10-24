@@ -30,8 +30,9 @@ def run(base,driver,seconds,cpus=1,kvm=False):
     if driver is not None and not driver.is_file():raise ValueError('missing driver binary')
     folder=ROOT/'build/cardless'/time.strftime('%Y%m%d-%H%M%S')
     folder.mkdir(parents=True,exist_ok=False)
-    monitor=Path('/tmp')/('k40-cardless-'+folder.name+'.sock')
-    if monitor.exists():raise ValueError('monitor path already exists')
+    # The monitor socket stays in the run folder, not in /tmp (sun_path: 107 bytes at most).
+    monitor=folder/'monitor.sock'
+    if len(os.fsencode(monitor))>107:raise ValueError('run folder path is too long for a monitor socket')
     peer_vars=base.parent/'vars.fd'
     shutil.copyfile(peer_vars if peer_vars.is_file() else '/usr/share/OVMF/OVMF_VARS_4M.fd',folder/'vars.fd')
     subprocess.run(['qemu-img','create','-q','-f','qcow2','-F','qcow2','-b',str(base.resolve()),str(folder/'overlay.qcow2')],check=True)

@@ -25,6 +25,7 @@ The same mechanism gives the Linux reference guest of task C5.
 | File | Use | Root |
 |---|---|---|
 | `scripts/passthrough.sh` | `status`, `prepare-xorg`, `attach`, `detach` | yes, except `status` |
+| `scripts/root-guard.sh` | Sourced by the root scripts. As root, they stop unless `scripts/` and `tools/guest/config.sh` are equal to `origin/main` | - |
 | `tools/guest/linux-setup.sh` | Builds the Linux reference guest in `~/haiku-cross/linux-guest` | no |
 | `tools/guest/linux-run.sh [--gpu] [CMD]` | Starts the guest, copies `tools/guest/files`, runs a command | no |
 | `tools/guest/files/compute_test.c` | The reference job `output[i] = input[i] + 1` (GL ES 3.1 compute shader) | - |
