@@ -51,10 +51,10 @@ class Budget:
 
 
 class Handler(SimpleHTTPRequestHandler):
-    def __init__(self, *args, root, results, budget, **kwargs):
+    def __init__(self, *args, root, results, budget=None, **kwargs):
         self.root = root
         self.results = results
-        self.budget = budget
+        self.budget = budget  # None: no limit (callers that build Handler themselves)
         super().__init__(*args, directory=str(root / "share"), **kwargs)
 
     def do_PUT(self):
@@ -85,7 +85,7 @@ class Handler(SimpleHTTPRequestHandler):
             else:
                 self.send_error(409, "Job result already written")
             return
-        if not self.budget.take(n):
+        if self.budget is not None and not self.budget.take(n):
             self.send_error(507, "Upload budget of this server run is used up")
             return
         out.mkdir(parents=True, exist_ok=True)
