@@ -47,7 +47,9 @@ ADR 005 records these rules.
   Never pass through the Quadro K600 at `0000:82:00.0`.
 - The user permits Haiku passthrough of only `0000:04:00.0` for read-only stages (ADR 005).
   Refuse unless it is bound to `vfio-pci`, alone in its IOMMU group, with a writable VFIO group device.
-  Only the user changes its host binding. Write stages require the user's go-ahead (ADR 004).
+  Only the user changes its host binding. Write stages require the user's go-ahead
+  (ADR 004). ADR 008 records approval for planned S1 hardware stages when their
+  implementation, review and prerequisites are ready. All other gates remain.
 - No root, module load or unload, `setpci` writes, host BAR or `/dev/mem` access,
   `nvidia-smi` options, or manual GPU reset. The VFIO reset at VM start is permitted.
 - `tools/haiku/vm-test.sh` stays cardless. Never change its QEMU command line or add a host device.

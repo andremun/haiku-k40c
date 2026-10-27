@@ -42,3 +42,9 @@ outside the mapped-operation semantics is needed for this task.
 Host model/tests only. No VM, physical card, PCI/BAR, root, binding, reset, live
 ioctl tracing or DMA experiment. D0 and D1 remain unimplemented and unauthorized.
 A successful synthetic coverage test supplies no live IOVA or cache-visibility proof.
+
+## Authorization update
+
+ADR 008 records the user's hardware approval during this task. This task itself
+remains host-only. Later concrete hardware stages retain all isolation, review,
+evidence and stop rules. D0/D1 are not implemented by this model.

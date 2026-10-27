@@ -160,8 +160,9 @@ from this proposal.
 There is no justified self-checking pre-POST payload test in the consulted source.
 The smallest useful first stage is therefore D0 mapping observation. It can narrow
 the address contract without pretending to close payload visibility. D1 is a
-separate conditional physical transaction experiment. Neither stage is implemented
-or authorized. Neither belongs in the closed B5 identity launcher.
+separate conditional physical transaction experiment. Neither stage is implemented. ADR 008 now records the user's hardware approval
+for planned S1 stages once concrete implementations and prerequisites are ready.
+Neither belongs in the closed B5 identity launcher.
 
 ### D0: observe the host mapping for one owned guest page
 
@@ -239,11 +240,12 @@ unknown old target, free while a target may refer to it, manually reset, or retr
 Normal guest termination must follow the reviewed VFIO mapping/backing teardown
 order. It is not a new proof of hardware quiescence by itself.
 
-D0 needs explicit approval for the new observation stage and its changed host
-observer/guest probe. D1 needs separate first-write approval naming its exact
-register list and prerequisites, as do A7/first C3 writes under the existing rules.
-No approval is requested now because neither runnable package is ready. This task
-performs design work only. There is no current need for a root-readable fact to
+The user approved planned S1 hardware work under ADR 008 after this source audit.
+That approval covers D0 and necessary first-write stages once their implementation,
+exact register scope, review and prerequisites are ready. Do not repeat the general
+approval request. It does not authorize guessing missing protocols or bypassing
+review/stop rules. This document remains a design, not a runnable package.
+There is no current need for a root-readable fact to
 complete this source audit. Future physical baseline collection may need a user
 step, which must then name the exact read-only command in docs/REQUESTS.md.
 

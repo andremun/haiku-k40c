@@ -255,3 +255,10 @@ Content hashes and exact URLs are in work/S1DMACONTRACT/evidence.json.
   source ranges for DMA-mapped flush storage, hook selection and BAR completion.
 
 No physical protocol or sentinel semantics were imported from an unverified source.
+
+## S1DMAMODEL unmap observation semantics
+
+Reconsulted Linux v6.8 drivers/vfio/vfio_iommu_type1.c:1279-1426 under the already
+recorded content pin. GPL-2.0-only source facts about Type1/V2 whole-map removal
+and returned size were reimplemented as an original host diagnostic model. No
+implementation blocks were copied. No native provider or hardware API was added.
