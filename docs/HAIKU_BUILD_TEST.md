@@ -14,7 +14,7 @@ a Haiku virtual machine. No GPU is involved. Scripts: `tools/haiku/`.
 
 - The VM has no access to the K40c cards. `vm-test.sh` takes no QEMU
   options. Never add host devices (`vfio-pci`, `-device ...,host=`) to it.
-  A test on the real card is a user step (phases E and later).
+  The separate `card_run.py` launcher handles read-only B5 under ADR 005.
 - Run one VM test at a time. A test uses 2 CPU threads and 2 GB of memory
   and slows the `llm-server` model on the T7610 while it runs.
 - A driver reports through `dprintf`. Everything between `VMTEST-BEGIN`
@@ -68,9 +68,10 @@ machine was reinstalled, and `make haiku-selftest` passed.
 The scripts find these through `HAIKU_CROSS` (default `~/haiku-cross`),
 see `tools/haiku/config.sh`.
 
-GPU passthrough is possible on this machine but is not set up: each K40c
-is alone in its IOMMU group (0000:04:00.0 in group 23, 0000:03:00.0 in
-group 22; checked 2026-10-07). It needs root. Only the driver card 0000:04:00.0 is passed through (`docs/PASSTHROUGH.md`). The card at 0000:03:00.0 runs `llm-server` (ADR 003).
+Read-only Haiku passthrough is authorized by ADR 005. The user already bound
+`0000:04:00.0` to VFIO. The launcher checks binding, group isolation, and access.
+The card at `0000:03:00.0` runs `llm-server` and is never passed through.
+No agent step changes host binding or uses root.
 
 ## Persistent cardless VM
 
@@ -90,3 +91,44 @@ The VM disk is outside every repository, in `$HAIKU_PERSISTENT_VM_DIR` (default
 hrev60207 anyboot ISO. The same rule as for `vm-test.sh` applies: no host device
 is ever given to the VM by these tools.
 
+
+## B5 identity stage with the development card
+
+Build and validate the B5-tagged probe:
+
+```sh
+HAIKU_CROSS="$HOME/haiku-cross" bash tools/haiku/build_backend.sh
+python3 tools/haiku/probe_stage.py build/haiku/k40_identity_probe --check
+python3 tools/haiku/card_run.py --check
+```
+
+`--check` reads host inventory and stage metadata. It does not start a guest.
+`GPU_BDF` must equal `0000:04:00.0`. Other values fail before launch.
+The stage metadata binds the ELF hash, source hashes, and matching guest kernel hash.
+`probe_stage.py --check` compares the exact generated metadata without writing.
+
+Run the stage once:
+
+```sh
+python3 tools/haiku/card_run.py --timeout 600
+```
+
+The default evidence folder is `results/YYYYMMDD-b5-identity/`.
+The launcher refuses an existing evidence folder. It saves command, stage,
+source commit, host isolation, serial log, HTTP log, and result as the run proceeds.
+The disk overlay and copied driver stay under `build/b5/`. The base disk stays unchanged.
+`HAIKU_PERSISTENT_VM_DIR` selects the base folder. `HAIKU_OVMF_DIR` selects the firmware folder.
+No additional QEMU options are accepted.
+
+The shared launch lock and host QEMU inventory enforce one guest at a time.
+Ask before stopping an existing VM. A separate watchdog enforces at most ten minutes,
+even if the launcher exits. It signals the exact process through a Linux pidfd.
+A panic, hang, failed probe, or unexpected identity ends the run. Stop and report without a modified retry.
+
+B5 reads the PCI command register and refuses mapping if memory decode is off.
+It maps BAR0 read-only and reads only PMC_BOOT_0. It never uses the slow window.
+A pass is HARDWARE_VERIFIED only for PMC_BOOT_0 under Haiku. It proves no DMA,
+bring-up, scheduling, or compute support. Cardless results remain Haiku OS evidence only.
+
+Run host launcher and shared-tool tests with `make vm-tools-test`.
+Do not run `scripts/passthrough.sh`, Linux `--gpu`, or a write stage under this permission.

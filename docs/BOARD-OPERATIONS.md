@@ -113,7 +113,7 @@ user's go-ahead. The executor hardware gate remains until reviewed integration.
 
 The earlier inference that legacy VGA accesses can be omitted is not established.
 Nouveau's INIT_IO handler has NV50+ MMIO side effects for port 0x3c3/data 1
-(`reference/nouveau/nvkm/subdev/bios/init.c:1623-1660`), in addition to
+(`reference/nouveau/nvkm/subdev/bios/init.c:1623-1656`), in addition to
 the byte-wide VGA MMIO accesses described above.
 The future executor must preserve or justify those helper effects.
 The card's 3D controller class does not justify omission.
@@ -121,7 +121,7 @@ ADR 004 now permits the observed operation within its stated limits.
 The host executor still delegates it to a default-denied board/helper boundary.
 Reviewed helper implementation and hardware integration remain necessary.
 
-Register effects of that helper (`init.c:1631-1647`), covered by ADR 004:
+Register effects of that helper (`init.c:1638-1650`), covered by ADR 004:
 `0x000200` bit 30 cleared then set (an engine-enable bit), `0x00e18c`
 bit 17 set then cleared, `0x614100` and `0x614900` (display registers)
 masked and written three times, two 10 ms waits.

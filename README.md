@@ -78,3 +78,11 @@ Start a new session for each task. The repository is the memory:
 | `docs/decisions/` | Architecture decision records. |
 | `docs/design/layout.md` | Target layout for the next cleanup phase. |
 | `scripts/capture_user.sh`, `scripts/capture_root.sh` | Read-only PCI captures: without root, and for the user to run with sudo. Run both after a hardware change, then `tools/hardware_record.py`. |
+
+## Haiku B5 identity launcher
+
+`tools/haiku/card_run.py` runs the read-only identity stage authorized by ADR 005.
+It accepts only the development card, a B5-tagged probe, and a disposable VM overlay.
+See [the build and test guide](docs/HAIKU_BUILD_TEST.md#b5-identity-stage-with-the-development-card)
+for checks, commands, evidence files, and the ten-minute limit.
+Run `make vm-tools-test` for host-only launcher tests.

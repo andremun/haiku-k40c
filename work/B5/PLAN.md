@@ -1,12 +1,14 @@
-# B5 macro-task plan
+# B5 Rework Plan
 
-1. Record ADR 005 and update repository rules and review scope. Check and commit.
-2. Build a separate guarded B5 launcher, stage-tag the identity probe, and add host refusal tests.
-3. Apply the four S1C/S1D review fixes and document launcher use.
-4. Verify the host state without changing binding. Build both native probes.
-5. Run the pending cardless KVM check, then one authorized B5 identity stage.
-6. Save dated command, hash, launch, serial, and result evidence. Stop on a hang or panic.
-7. Run make check and vm-tools-test, commit, re-pin shared tools, and hand off the macro task.
+## 12 failures to fix
 
-No VM was running at task start. A read-only host process check found no QEMU.
-The saved ~/haiku-vm/pid was stale. Both monitor sockets were absent.
+1-4. Change `top`, `ltc`, `timer`, `privring` from optional to **needed** with correct reasons sourced from grep output.
+5. Change `imem` reason: "instantiated" → "instance memory" (GPU objects like page tables, RAMFC).
+6. Change `mc` reason: "memory controller" → "master control" (engine enable bits, interrupts).
+7. Change `privring` reason: "ring buffer" → "PRI ring" (register bus to engines).
+8. Change `top` reason: "multi-gpu" → "device topology table" (lists engines and runlists).
+9. Change HWW reason: "workqueue" → "hardware warning" (error report).
+10. Add channel step with: `gf100_gr_init_ctxctl_int`, `gk104_chan_ramfc_write`, `gk104_runl_commit`, `gf100_gr_chan_new`, `gf100_grctx_generate`.
+11. Steps 1,3,4,5: add init functions or use `partly-known`.
+12. GR hook `init`: change use from `compute` → `both`.
+13. After launch: add steps for job completion and result reading (unknown status).

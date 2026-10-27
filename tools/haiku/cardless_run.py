@@ -23,6 +23,13 @@ DEFAULT_BASE=Path(os.environ.get('HAIKU_PERSISTENT_VM_DIR',Path.home()/'haiku-vm
 
 
 def run(base,driver,seconds,cpus=1,kvm=False):
+    from vm_guard import guest_lock
+
+    with guest_lock(base.parent):
+        return _run(base,driver,seconds,cpus,kvm)
+
+
+def _run(base,driver,seconds,cpus=1,kvm=False):
     if not 30<=seconds<=600:raise ValueError('timeout must be 30..600 seconds')
     if cpus not in (1,2):raise ValueError('cardless CPU count must be one or two')
     if kvm and not os.access('/dev/kvm',os.R_OK|os.W_OK):raise ValueError('KVM unavailable to this user; no sudo attempted')

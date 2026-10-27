@@ -12,6 +12,7 @@ refs:
 
 vm-tools-test:
 	python3 tests/test_vm_tools.py
+	python3 tests/test_card_run.py
 
 # The three devinit tools below read the private VBIOS image. CI skips them with
 # task A3 in .check-skip, the same switch that tools/check_repo.py uses.

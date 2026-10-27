@@ -1,11 +1,14 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: B5 (macro task: Haiku card launcher and identity reads).
+Current task: S1B5 (macro task: Haiku card launcher and identity reads).
 Task state: IN PROGRESS. Record ADR 005, then implement and verify the read-only launcher. S1C/S1D small fixes join this macro task. No VM was running at task start.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
+
+On 2026-10-26, `make refs`, `make check`, and both probe links passed on the T7610.
+The restore helper was fixed for git 2.34's `--no-cone` sparse-pattern line.
 
 Older results and notes: `docs/history/` (do not read it for a task).
 

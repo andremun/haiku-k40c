@@ -93,6 +93,13 @@ def type_line(text, submit=True):
 
 
 def start(installed, memory_mib, kvm=False):
+    from vm_guard import guest_lock
+
+    with guest_lock(VM) as guard_fd:
+        _start(installed, memory_mib, kvm, guard_fd)
+
+
+def _start(installed, memory_mib, kvm, guard_fd):
     # A Unix socket path has at most 107 bytes (sun_path); ".qmp" is added for QMP.
     if len(os.fsencode(SOCKET)) + len(".qmp") > 107:
         raise SystemExit("VM folder path is too long for a monitor socket: " + str(VM))
@@ -139,7 +146,7 @@ def start(installed, memory_mib, kvm=False):
             "-device", "ide-hd,drive=install,bus=ide.1,bootindex=1",
         ]  # fmt: skip
     log = (VM / "qemu.out").open("wb")
-    p = subprocess.Popen(args, stdout=log, stderr=log, start_new_session=True)
+    p = subprocess.Popen(args, stdout=log, stderr=log, start_new_session=True, pass_fds=(guard_fd,))
     time.sleep(1)
     if p.poll() is not None:
         raise SystemExit((VM / "qemu.out").read_text())

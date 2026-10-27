@@ -100,17 +100,15 @@ task texts (`docs/tasks/S1A.md`, `S1B.md`) and the acceptance test
 
 **Next steps, in order.**
 
-1. Codex completes one host task per branch. Claude Code reviews each task.
-   S1C corrects the board-operation documentation and work roles.
-   S1D incorporates ADR 004. Claude Code review remains pending.
-2. Add the host-only allow / omit / stop policy mechanism. Keep other operations
-   denied by default. Allow only the ROM and operations specified in ADR 004.
-   Then complete B2, A4, and the C2 choices.
-3. Complete the cardless KVM run for the S1A probe change.
-   Ask the user before shutting down the running VM. This gives no card evidence.
-4. Apply the accepted decisions in ADR 004. No further outside review is required.
-   Keep the hardware integration gate until the implementation is reviewed.
-5. Prepare B5 identity reads. Every card stage requires the user's go-ahead.
+1. Complete the Haiku card launcher and B5 identity reads (macro task S1B5).
+   Run the pending S1A cardless KVM check first. Ask before shutting down a running VM.
+2. Implement the host-only board-operation policy and helpers under ADR 004.
+   Allow only its specified ROM and observed operations. Deny other operations.
+3. Complete B2 allocation and mapping, A4 pre-start state, and the C2 choices.
+4. Start A7 only after the user's go-ahead. First writes in C3 also need that approval.
+
+Work uses only main. Claude Code reviews completed macro tasks (ADR 005).
+No further outside review is required. The reviewed hardware integration gate remains for the executor.
 
 S1A and S1B host work is complete. The 2026-10-26 checks and probe links
 passed (`docs/STATUS.md`). No card stage has run.
@@ -165,7 +163,7 @@ the channel number followed by 0. Runlist commit uses `0x002270` and
 ### Housekeeping
 
 - Rebuild the local source/review artifacts with `tools/review_bundle.py`; reproduce checks using `docs/ABC-CARDLESS-OUTCOME.md` and exact external inputs. Firmware and caches are excluded.
-- No further outside review is required (ADR 004). Claude Code reviews each implementation task.
+- No further outside review is required (ADR 004). Claude Code reviews completed macro tasks.
 
 ## How the old stages map to the tracks
 
@@ -182,12 +180,10 @@ the channel number followed by 0. Runlist commit uses `0x002270` and
 
 ## Limits for the agent starting the guest with the card
 
-The user decided on 2026-10-13 that the agent may start the Haiku guest
-with the development card. These limits apply, and are enforced by the
+ADR 005 permits the agent to start read-only Haiku stages with the development card. These limits apply, and are enforced by the
 host where possible (B4):
 
-- Only through one script written by the scaffold. The agent cannot
-  change the script or its virtual-machine options.
+- Use only the guarded card launcher. It accepts no additional QEMU options.
 - Only the development card (`0000:04:00.0`), only while it is bound to
   `vfio-pci`. The other card and the display card are never touched. The
   script refuses anything else.
@@ -199,13 +195,12 @@ host where possible (B4):
 - Never: writes to fan, voltage or firmware-chip registers. Clock and
   memory-controller writes only when they come from the card's own
   start-up script through the executor, never from our own numbers.
-  Board operations in the script (GPIO, I²C) only as the user decides on
-  `docs/BOARD-OPERATIONS.md`.
+  Board operations in the script (GPIO, I²C) only within ADR 004's ROM and operation limits.
 - Every run saves its log. A hang or a panic is recorded, and the agent
   stops and reports instead of trying again with changes.
 - Stages that write to the card for the first time (A7, and each first
-  write in C3) are started by the scaffold after review, not by the agent
-  on its own.
+  write in C3) require review and the user's go-ahead. B5 read-only stages
+  are authorized by ADR 005.
 
 ## The unknowns
 

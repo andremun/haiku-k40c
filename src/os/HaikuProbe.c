@@ -13,6 +13,9 @@ static k40_host_allocation allocation={.area=-1};
 status_t init_hardware(void) { return B_OK; }
 status_t init_driver(void)
 {
+#ifndef K40_CARDLESS_TEST
+    dprintf("k40_stage: B5_IDENTITY_READ_ONLY\n");
+#endif
     status_t status=k40_os_init(&os);
     if (status!=B_OK) return status;
     status=k40_os_allocate(B_PAGE_SIZE,&allocation);
@@ -73,11 +76,19 @@ status_t init_driver(void)
 #ifdef K40_CARDLESS_TEST
     if (!found) { status=B_ENTRY_NOT_FOUND; goto failed; }
 #else
-    if (!found) dprintf("k40_os: no K40c (expected in cardless guest)\n");
+    if (!found) {
+        dprintf("k40_os: no K40c; B5 identity unavailable\n");
+        status=B_ENTRY_NOT_FOUND;
+        goto failed;
+    }
 #endif
     status=k40_os_close(&os);
     if (status!=B_OK) goto failed;
+#ifdef K40_CARDLESS_TEST
     dprintf("k40_os: PASS native OS mechanics only\n");
+#else
+    dprintf("k40_os: PASS B5 identity reads only\n");
+#endif
     return B_OK;
 failed:
     dprintf("k40_os: FAIL status %ld\n",(long)status);

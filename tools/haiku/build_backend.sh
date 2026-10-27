@@ -23,4 +23,5 @@ fi
 [[ -f $HAIKU_CROSS/lib/kernel.so ]] || { echo 'Matching kernel.so absent. Retrieve the guest kernel with cardless_run.py, preserve its hash/environment, then convert a copy with elfedit --output-type dyn.' >&2; exit 2; }
 KCFLAGS="-std=gnu11 -Werror -DK40_CARDLESS_TEST -Isrc/os" tools/haiku/build-driver.sh k40_cardless_probe src/os/HaikuBackend.c src/os/HaikuProbe.c
 KCFLAGS="-std=gnu11 -Werror -Isrc/os" tools/haiku/build-driver.sh k40_identity_probe src/os/HaikuBackend.c src/os/HaikuProbe.c
-echo 'Linked probes. Only cardless_run.py --driver build/haiku/k40_cardless_probe is an agent test; no passthrough.'
+python3 tools/haiku/probe_stage.py build/haiku/k40_identity_probe
+echo 'Linked probes. B5 uses card_run.py under ADR 005. Cardless checks use cardless_run.py.'
