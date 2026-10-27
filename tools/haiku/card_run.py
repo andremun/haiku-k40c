@@ -82,7 +82,7 @@ def verdict(serial, job_exit):
     if not all(marker in section for marker in required):
         raise RuntimeError("job ended without complete B5 identity evidence")
     commands = re.findall(r"k40_os: PCI command 0x([0-9a-fA-F]{4})", section)
-    if len(commands) != 1 or not int(commands[0], 16) & 2:
+    if not commands or any(not int(command, 16) & 2 for command in commands):
         raise RuntimeError("PCI memory decode evidence missing or off")
     return True
 

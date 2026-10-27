@@ -111,6 +111,9 @@ class CardRunTests(unittest.TestCase):
     def test_complete_evidence_only(self):
         serial = self.serial()
         self.assertTrue(card_run.verdict(serial, b"0\n"))
+        # Haiku devfs can reload a driver whose published device list is empty.
+        repeated = serial.replace("K40-B5-END", serial.split("K40-B5-BEGIN\n")[1])
+        self.assertTrue(card_run.verdict(repeated, b"0\n"))
         self.assertFalse(card_run.verdict(serial, None))
         self.assertFalse(card_run.verdict(serial.replace("K40-B5-END", ""), b"0"))
         for bad in (

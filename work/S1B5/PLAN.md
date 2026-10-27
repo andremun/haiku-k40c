@@ -1,4 +1,4 @@
-# B5 macro-task plan
+# S1B5 macro-task plan
 
 1. Record ADR 005 and update repository rules and review scope. Check and commit.
 2. Build a separate guarded B5 launcher, stage-tag the identity probe, and add host refusal tests.

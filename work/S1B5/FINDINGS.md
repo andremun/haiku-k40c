@@ -31,3 +31,16 @@ Only the matching kernel hash is retained in B5 evidence, not the kernel binary.
 The identity host-spy test reports 32 checks and zero failures.
 The launcher suite reports 11 tests and zero failures.
 The unchanged shared transfer-server suite reports 26 checks and zero failures.
+
+## Cardless native run
+
+The single cardless KVM run passed in 51.74 seconds (tool result.json).
+Evidence: results/20261027-s1a-cardless/. No panic. job.exit is 0.
+Devfs loaded the cardless probe twice. Both loads reported OS PASS.
+B5 verdict validation must accept multiple valid decode/identity observations.
+No hardware-stage attempt has occurred yet.
+
+The post-cardless make check passes. The B5 log validator accepts repeated valid
+identity observations while rejecting any failed decode, panic, or probe failure.
+The sibling OpenCode runner suite passes 21 tests using the bundled Node runtime.
+The application integration checker fixture suite passes five tests.
