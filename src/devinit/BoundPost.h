@@ -2,14 +2,23 @@
 // Distributed under the terms of the MIT License.
 #pragma once
 #include "devinit/PostImage.h"
-#include "devinit/Board.h"
+#include "devinit/I2c.h"
 namespace k40::devinit {
-// Host-only executor adapter. PostImage itself is freestanding. Callers serialize
+enum class PostI2c { TransactionCallback, DedicatedPins };
+// Freestanding host-only executor adapter. Callers serialize
 // selection/execution, and keep the image and both transports alive throughout.
 class BoundPost final : private Backend, private BoardTransport {
 public:
-    BoundPost(PostImage& image, Backend& registers, BoardTransport& ports)
-        : image_(image), registers_(registers), ports_(ports), helpers_(*this,*this) {}
+    BoundPost(PostImage& image, Backend& registers, BoardTransport& ports,
+              PostI2c mode = PostI2c::TransactionCallback)
+        : image_(image), registers_(registers), ports_(ports), helpers_(*this,*this),
+          i2c_(*this,ports), mode_(mode) {}
+    BoundPost(const BoundPost&) = delete;
+    BoundPost& operator=(const BoundPost&) = delete;
+    // Separate host preinit: derive the dedicated bus, then write its init value.
+    // One preparation attempt per image, no retry or implicit init during POST.
+    Error prepareI2c();
+    I2cResult i2cResult() const { return i2c_.result(); }
     Result runPost(Limits limits = {}); // No caller root, table pointer, digest, or RAM index.
 private:
     bool hostSimulation() const override { return registers_.hostSimulation() && ports_.hostSimulation(); }
@@ -28,6 +37,10 @@ private:
     Backend& registers_;
     BoardTransport& ports_;
     BoardHelpers helpers_;
+    DedicatedI2c i2c_;
+    const PostI2c mode_;
+    uint32_t pin_ = 0;
+    bool preparing_ = false, prepared_ = false, inI2c_ = false;
     uint32_t pc_ = 0;
     uint64_t started_ = 0, last_ = 0, timeout_ = 0;
     bool running_ = false, active_ = false;

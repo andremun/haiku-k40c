@@ -2,6 +2,7 @@
   "allowed_accesses": 777,
   "artificial_exercise": "instructions 530 roots 8 scenarios 32 successes 16 policy_denials 16",
   "compiled_comparison": "pass",
+  "dedicated_pin_exercise": "dedicated_pins profiles 2 complete 1 policy_denials 1 faults 10 permission_bypasses 0 transaction_callbacks 0",
   "directions": {
     "read": 218,
     "write": 559
@@ -13,21 +14,26 @@
   "scope": "HOST_ONLY binding and per-instruction policy; not a hardware permission",
   "source_sha256": {
     "docs/decisions/004-board-operations-and-review.md": "0a5a318829217b89c1e06bb157f7f8d312c64ef934954502c1b460be44b44cd4",
-    "src/devinit/Board.cpp": "ae9df39ec521e2beae936cd2cca45a16316741e4d9b62bf2b38f86802ce7b9d3",
-    "src/devinit/Board.h": "a53c49baad2cdc13a1ae6bdac970ac5e41222b87c70b87eaf0b421504bb74105",
+    "src/devinit/Board.cpp": "5e6dfdeb0711b687a56f67a02d14914949254ed93753e4032bf7058fcb7608b4",
+    "src/devinit/Board.h": "c8b2c9daca206854f059245d19c9280f80d4da31b50bb5a7b55f46d20ae897ce",
+    "src/devinit/BoardCore.cpp": "2a20defc5a76261ccd17cdba155698cd3e02a70fbc119e01792930c5f807f2fd",
+    "src/devinit/BoardCore.h": "e2ffaae84a490a7461723f3f88d9bfecf440a306c0cf75b6bdd004f21df632e1",
     "src/devinit/BoardPolicy.cpp": "902da09784c5dc807ca0c2bdff69382f6bc95a9b8f3f717f14f496e7b5206dbc",
     "src/devinit/BoardPolicy.h": "69632ac56b9719600824bf0c35d14fa56a82e2d2a1a1f4f91a086a7c5d92e2ce",
-    "src/devinit/BoundPost.cpp": "09e63e0e9c67a4f6671b7fd37cc85ccb9475404fffd6564557421dc02483b87c",
-    "src/devinit/BoundPost.h": "c62d222801976743306cacb4be003e2baf79b7e18afa11a0160dfa687d7ae5f9",
+    "src/devinit/BoundPost.cpp": "c8197d2aa4de234a5ec8e5060913a82c912d29299f1ce20acda26db68538bc1e",
+    "src/devinit/BoundPost.h": "430696284e9bbcce4a1197aa8ef8559c9096b408e6dbc3f48d4dd5428a093b59",
+    "src/devinit/I2c.cpp": "3ca524e9220cbfc1530e80f9a864ab866c143abc8750252bc1bb32c0cbdba152",
+    "src/devinit/I2c.h": "3f04ffcfc49782e9f02278a9694bf2707df9b22f77dfb7e46312cb13e4991873",
     "src/devinit/Interpreter.cpp": "8617354577f1c20af4968844b42d4eb8b16ad6da4eb4275b5b920ec3a434bc65",
     "src/devinit/Interpreter.h": "af3f590914461f2426bed13ad87a104854b5f75a62c0a65e8edee3357c3ae23e",
     "src/devinit/PostImage.cpp": "be3e9ff11f3cc1c445dc52d69fd2401f5be6ae486b45de961103acd6fe64c6be",
-    "src/devinit/PostImage.h": "47b10acd84e29913fc625dd2791395f9784e604f804cd9c3ac58ce1f06e48375",
+    "src/devinit/PostImage.h": "196abf668dfe6fa31661cb8c9b3610ad81e38f0f4758944dcfc0b73c7273f974",
     "src/devinit/Sha256.cpp": "3fe7912249a87e6b0cdec87da818a1a2f9ebfaf3145c40e7aa827df50554e19b",
     "src/devinit/Sha256.h": "f4b1caa7558a5886ef7bc121ffef2ca65ec25bb89b18c62bc980e144bcc8ffbc",
     "tests/board_fake.h": "177de1bd09395158c46a9513a17d465fdeb78e5e2bff8a49ea23b057c12d5d25",
-    "tests/post_probe.cpp": "bd329a6baffb4c7a96860cfc9bc148bf9856ef900bb2a18d19039661baf01cb9",
-    "tools/post_policy.py": "64d7d78d8732ffe93549ab5021818b25df76c889fe78878856b38115fcddff37"
+    "tests/i2c_wire.h": "b67838aa94c6881c162eb2c78452b084e8afcbf8a882381fe1c540995e7917f3",
+    "tests/post_probe.cpp": "a8756fecd3eed65950e01e44672549eb6f220962a835ce7bd07879009362dde8",
+    "tools/post_policy.py": "aab011670ef3169216a13427a2a5f3f71b563fbde311e84b8b29bbc3c261a7d6"
   },
   "widths": {
     "1": 6,

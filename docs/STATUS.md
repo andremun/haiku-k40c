@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1HELPERS (freestanding guarded board helpers). S1POST is complete in the pending review batch.
-Task state: S1POST host binding/policy scope DONE. Immutable exact-ROM inputs, cached simulated strap selection and per-instruction access checks pass. Binding/policy cross-compile freestanding; execution adapter remains hosted. Native helper/owner integration, DMA and readiness remain gated. No write stage is authorized.
+Current task: S1OWNERPOST (persistent owner POST binding). S1HELPERS joins the pending review batch.
+Task state: S1HELPERS host/helper and native link scope DONE. Bound core and helpers are freestanding. Dedicated I2C pin operations use the instruction policy, with separate one-shot simulated bus preinit. Owner integration, DMA and readiness remain gated. No write stage is authorized.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -62,6 +62,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1NATIVE | DONE (source/host/native link, batched review pending) | 2026-10-27 | Separate KEEP_LOADED owner, client lease/handle API, one-shot/quarantine retention; 161 host checks and native link pass. No load/reload or DMA claim. See work/S1NATIVE/RESULT.md. |
 | S1OWNERTEST | DONE (native cardless lifetime, batched review pending) | 2026-10-27 | First run passes in 52.57 s; two real init/uninit pairs retain token 2, Failed state and one quarantine. No DMA/GPU claim. See work/S1OWNERTEST/RESULT.md. |
 | S1POST | DONE (host binding/policy; native object compile, review pending) | 2026-10-27 | 34,128 access queries match; 32 scenarios complete or hit the intended GPIO denial. Owned inputs, one cached selection, aggregate budgets. See work/S1POST/RESULT.md. |
+| S1HELPERS | DONE (host/helper and native link, review pending) | 2026-10-27 | Bounded GPIO storage, guarded dedicated I2C pins, separate preinit and full core cross-link. See work/S1HELPERS/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

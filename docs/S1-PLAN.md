@@ -255,6 +255,16 @@ host where possible (B4):
 11. Whether Haiku in the guest can map the card's large memory regions.
     Tested in the first read-only stage (B5).
 
+## Current host integration sequence
+
+S1POST binds immutable inputs and instruction permissions. S1HELPERS removes
+hosted helper storage and cross-links the complete bound core. Dedicated host
+I2C pin operations now pass through that policy, with separate explicit preinit.
+Their compile/link and simulated wire results provide no native execution claim.
+Next, S1OWNERPOST connects the immutable image, execution state and startup attempt
+to the persistent owner. DMA/visibility, owned VRAM, readiness and A7 approval stay
+separate gates. Grouped Claude review remains pending under ADR 007.
+
 ## After S1
 
 Not in this plan: interrupts (S1 is shown by polling), the copy engine

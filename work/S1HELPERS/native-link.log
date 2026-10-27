@@ -1,0 +1,4 @@
+built /home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_post_core
+                 U operator delete(void*, unsigned long)@KERNEL_BASE
+                 U memcmp@KERNEL_BASE
+                 U memset@KERNEL_BASE

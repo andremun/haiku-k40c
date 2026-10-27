@@ -153,6 +153,21 @@ int main()
         unsigned writes = 0; for (auto event : f.events) writes += event.kind == 'W';
         CHECK(writes == 14); // GPIO_NE resets the duplicate function twice.
     }
+    {
+        // Exercise the complete byte-sized table capacity, including its last row.
+        Synthetic maximum; maximum.bytes.resize(0xc4 + 255 * 5);
+        maximum.bytes[0xc2] = 255;
+        for (unsigned i = 0; i < 255; ++i) maximum.gpio(i, 0, 4, false, 0, 0, 0, 1);
+        maximum.gpio(254, 7, 0x18, true, 0x55, 3, 0, 1);
+        BoardFake f; BoardHelpers helpers(f,f);
+        const uint8_t exclusions[] = {0xa9,1,4};
+        CHECK(helpers.execute(maximum.view(),exclusions,sizeof(exclusions),true)==Error::None);
+        CHECK((f.regs[0xd62c]&0x30ff)==0x3055 && f.regs[0xd748]==7);
+        CHECK(f.events.size()==8);
+        BoardFake truncated; BoardHelpers bounded(truncated,truncated);
+        CHECK(bounded.execute({maximum.bytes.data(),uint32_t(maximum.bytes.size()-1)},exclusions,sizeof(exclusions),true)==Error::Input);
+        CHECK(truncated.events.empty());
+    }
     for (int failure = 0; failure < 14; ++failure) {
         BoardFake f; f.failAt = failure; BoardHelpers helpers(f, f);
         CHECK(helpers.execute(rom.view(), gpio, sizeof(gpio), true) == Error::Io);

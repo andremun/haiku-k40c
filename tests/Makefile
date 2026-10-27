@@ -70,3 +70,5 @@ $(BUILDDIR)/test_owner_probe: test_owner_probe.cpp os_shim/module.h os_shim/Driv
 
 $(BUILDDIR)/post_probe: post_probe.cpp board_fake.h $(wildcard ../src/devinit/*.cpp ../src/devinit/*.h) | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) post_probe.cpp $(wildcard ../src/devinit/*.cpp) -o $@
+
+$(BUILDDIR)/test_i2c $(BUILDDIR)/post_probe: i2c_wire.h board_fake.h

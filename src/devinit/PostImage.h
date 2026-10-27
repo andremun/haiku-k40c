@@ -55,6 +55,7 @@ private:
     // Large storage belongs in a persistent owner or host heap, not a kernel stack.
     std::array<uint8_t,approvedRomBytes> rom_{};
     PostLayout layout_;
+    bool i2cPreparationAttempted_ = false;
     bool approved_ = false, selectionAttempted_ = false, selected_ = false, attempted_ = false;
     uint8_t group_ = 0;
     Error layoutError_ = Error::Input;

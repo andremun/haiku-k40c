@@ -114,7 +114,7 @@ intervals with accesses are review candidates, not automatic executor defects.
 
 ## S1BOARD: permission-bearing host adapter
 
-`src/devinit/Board.cpp` implements `PolicyBackend` and four helper semantics.
+`src/devinit/Board.cpp` implements `PolicyBackend`. BoardCore.* holds four helper semantics.
 This adapter remains host-only. It does not change the interpreter hardware gate.
 Both the register backend and the byte/I2C transport must report host simulation.
 The base backend still denies every board operation unless a reviewed adapter supplies it.
@@ -219,5 +219,8 @@ The six ADR 004 rules are shared through freestanding BoardPolicy.*.
 Independent compiled-policy comparison covers 34,128 queries. Of 32 artificial
 full-POST scenarios, 16 complete and 16 stop on the denied GPIO at 0x89c2.
 This is expected fail-closed behavior, not production compatibility for all states.
-Only binding/parser/policy code is freestanding so far. Native helper/owner
-integration, physical stage transports, DMA/visibility and readiness remain gated.
+S1HELPERS also cross-links BoundPost, Interpreter and board/I2C helpers freestanding.
+The legacy adapter alone keeps hosted storage. DedicatedPins mode checks pin
+operations through the instruction policy, with explicit separate simulated bus
+preinit. See docs/POST-BINDING.md for mode, lifetime and failure contracts.
+Native owner integration, physical stage transports, DMA/visibility and readiness remain gated.

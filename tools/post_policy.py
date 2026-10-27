@@ -19,10 +19,12 @@ from board_trace import read_policy, ADR
 
 ROOT = Path(__file__).resolve().parents[1]
 PROBE = ROOT / 'build/tests/post_probe'
-SOURCES = ('src/devinit/PostImage.h', 'src/devinit/PostImage.cpp',
+SOURCES = (
+    'src/devinit/BoardCore.h', 'src/devinit/BoardCore.cpp','src/devinit/PostImage.h', 'src/devinit/PostImage.cpp',
            'src/devinit/BoundPost.h', 'src/devinit/BoundPost.cpp',
            'src/devinit/BoardPolicy.h', 'src/devinit/BoardPolicy.cpp',
            'src/devinit/Board.cpp', 'src/devinit/Board.h',
+           'src/devinit/I2c.h', 'src/devinit/I2c.cpp', 'tests/i2c_wire.h',
            'src/devinit/Interpreter.cpp', 'src/devinit/Interpreter.h',
            'src/devinit/Sha256.cpp', 'src/devinit/Sha256.h',
            'tests/post_probe.cpp', 'tests/board_fake.h', 'tools/post_policy.py',
@@ -128,7 +130,8 @@ def report(path):
         if (row == '1') != (query in expected):
             raise ValueError(f'compiled access policy differs for {query}')
     exercise = subprocess.check_output([str(PROBE), str(path), '--exercise'], text=True, timeout=60).strip()
-    return dict(scope='HOST_ONLY binding and per-instruction policy; not a hardware permission',
+    pins = subprocess.check_output([str(PROBE), str(path), '--pins'], text=True, timeout=60).strip()
+    return dict(dedicated_pin_exercise=pins, scope='HOST_ONLY binding and per-instruction policy; not a hardware permission',
                 rom_sha256=EXPECTED, potential_starts=len(code), policy_queries=len(queries),
                 allowed_accesses=len(expected), directions=dict(sorted(Counter('write' if q[3] else 'read' for q in expected).items())),
                 widths=dict(sorted(Counter(str(q[2]) for q in expected).items())),

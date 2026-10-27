@@ -19,6 +19,7 @@ from board_trace import read_policy, ADR
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = (
+    'src/devinit/BoardCore.h', 'src/devinit/BoardCore.cpp',
     'src/devinit/BoardPolicy.cpp',
     'src/devinit/BoardPolicy.h',
     'tools/devinit_closure.py', 'tools/devinit_preflight.py',

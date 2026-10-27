@@ -1,7 +1,7 @@
 // Copyright 2026 Mario Andres Munoz.
 // Distributed under the terms of the MIT License.
 #pragma once
-#include "devinit/Board.h"
+#include "devinit/BoardCore.h"
 
 namespace k40::devinit {
 enum class I2cError { None, HardwareDisabled, Input, NotInitialized, Io, Nack, Stretch, Timeout, Clock, Budget };

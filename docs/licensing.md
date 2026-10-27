@@ -216,3 +216,14 @@ no implementation blocks copied. Source paths below are under reference/nouveau/
 Board permission identity/size remain software decisions from ADR 004 and the
 existing VBIOS record. They were moved, not expanded. SHA-256 uses the previously
 recorded NIST algorithm facts. No new external algorithm implementation was copied.
+
+## S1HELPERS freestanding board helpers
+
+Independent refactor of the existing MIT implementation. No source blocks copied.
+Reconsulted only the existing pinned Nouveau semantic ranges:
+
+- nvkm/subdev/bios/gpio.c:28-64,103-110: byte-sized count and GPIO 4.1 records.
+- nvkm/subdev/i2c/busgf119.c:27-93: dedicated pins, sense fields and init value.
+- nvkm/subdev/i2c/bit.c:90-150: START/STOP and bit delay/ACK behavior.
+
+Existing cited helper/CCB semantics remain unchanged. No firmware bytes were added.

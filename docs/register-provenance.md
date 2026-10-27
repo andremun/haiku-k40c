@@ -37,60 +37,60 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/compute/LaunchDesc.h:105` | `*   LAUNCH              (0x02bc): value = 3` | src/gallium/drivers/nouveau/nvc0/nve4_compute.xml.h:170 | SOURCE_ONLY |
 | `src/compute/LaunchDesc.h:106` | `*   NV50_GRAPH_SERIALIZE(0x0110): value = 0` | src/gallium/drivers/nouveau/nv_object.xml.h:284 | SOURCE_ONLY |
 
-## src/devinit/Board.cpp
+## src/devinit/BoardCore.cpp
 
 | Line | Code | Source | Status |
 |------|------|--------|--------|
-| `src/devinit/Board.cpp:13` | `if (!rom.contains(0x36, 2)) return false;` | nvkm/subdev/bios/dcb.c:35 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:14` | `const auto dcb = rom.little(0x36, 2);` | nvkm/subdev/bios/dcb.c:35 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:15` | `if (!dcb \|\| !rom.contains(dcb, 12) \|\| rom.data[dcb] < 0x30 \|\| rom.data[dcb] > 0x41` | nvkm/subdev/bios/dcb.c:43 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:16` | `\|\| rom.data[dcb + 1] < 12 \|\| rom.little(dcb + 6, 4) != 0x4edcbdcb)` | nvkm/subdev/bios/dcb.c:48 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:35` | `if (version != 0x41 \|\| header < 4 \|\| stride < 5` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/devinit/Board.cpp:41` | `if (function == 0xff) continue;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/devinit/Board.cpp:42` | `const auto line = uint8_t(raw & 0x3f);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/devinit/Board.cpp:44` | `const bool defaults = raw & 0x80;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/devinit/Board.cpp:47` | `defaults, uint8_t(raw >> 16), uint8_t((raw >> 24) & 0x1f)});` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/devinit/Board.cpp:74` | `if (port == 0x03c3 && bytes[4] == 1) {` | nvkm/subdev/bios/init.c:1636 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:76` | `constexpr Step steps[] = {` | no source: software sequence container; each hardware value has its own citation. | SOURCE_ONLY |
-| `src/devinit/Board.cpp:77` | `{0x614100,0xf0800000,0x00800000,true,false},` | nvkm/subdev/bios/init.c:1640 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:78` | `{0x00e18c,0x00020000,0x00020000,true,false},` | nvkm/subdev/bios/init.c:1641 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:79` | `{0x614900,0xf0800000,0x00800000,true,false},` | nvkm/subdev/bios/init.c:1642 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:80` | `{0x000200,0x40000000,0x00000000,true,true},` | nvkm/subdev/bios/init.c:1643 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:81` | `{0x00e18c,0x00020000,0x00000000,true,false},` | nvkm/subdev/bios/init.c:1645 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:82` | `{0x000200,0x40000000,0x40000000,true,false},` | nvkm/subdev/bios/init.c:1646 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:83` | `{0x614100,0,0x00800018,false,false},` | nvkm/subdev/bios/init.c:1647 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:84` | `{0x614900,0,0x00800018,false,true},` | nvkm/subdev/bios/init.c:1648 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:85` | `{0x614100,0,0x10000018,false,false},` | nvkm/subdev/bios/init.c:1650 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:86` | `{0x614900,0,0x10000018,false,false},` | nvkm/subdev/bios/init.c:1651 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:97` | `const uint32_t address = 0x601000 + port;` | nvkm/engine/disp/vga.c:52 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:111` | `if ((version != 0x40 && version != 0x41) \|\| header < 5 \|\| stride < 4` | nvkm/subdev/bios/i2c.c:32 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:114` | `if (index == 0x80 \|\| index == 0xff) index = rom.data[at + 4] & 0x0f;` | nvkm/subdev/bios/init.c:263 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:115` | `else if (index == 0x81) index = rom.data[at + 4] >> 4;` | nvkm/subdev/bios/init.c:274 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:121` | `if (version == 0x40) {` | nvkm/subdev/bios/i2c.c:79 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:124` | `if (bus.type != 0x05) return false;` | nvkm/subdev/bios/i2c.c:107 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:125` | `bus.drive = raw & 0x0f;` | nvkm/subdev/bios/i2c.c:109 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:126` | `if (raw & 0x100) bus.share = uint8_t((raw >> 9) & 0x7f);` | nvkm/subdev/bios/i2c.c:110 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:129` | `bus.type = 0x80;` | nvkm/subdev/bios/i2c.c:79 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:130` | `bus.drive = raw & 0x1f;` | nvkm/subdev/bios/i2c.c:119 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:131` | `bus.aux = (raw >> 5) & 0x1f;` | nvkm/subdev/bios/i2c.c:122 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:132` | `if (bus.drive == 0x1f) return false;` | nvkm/subdev/bios/i2c.c:120 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:133` | `if (bus.aux == 0x1f) bus.aux = 0xff;` | nvkm/subdev/bios/i2c.c:123 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:156` | `const uint32_t reg = 0x00d610 + uint32_t(pin.line) * 4;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/devinit/Board.cpp:160` | `if (!masked(reg, 0x00003000, direction \| level)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/devinit/Board.cpp:161` | `\|\| !masked(0x00d604, 1, 1)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/devinit/Board.cpp:162` | `\|\| !masked(reg, 0xff, pin.route)) return Error::Io;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/devinit/Board.cpp:163` | `if (pin.selector && !masked(0x00d740 + uint32_t(pin.selector - 1) * 4, 0xff, pin.line))` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/devinit/Board.cpp:175` | `case 0x69: return length == 5 ? io(bytes, active) : Error::Input;` | nvkm/subdev/bios/init.c:2269 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:176` | `case 0x53:` | nvkm/subdev/bios/init.c:2252 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:179` | `if (active && (!ports_.write8(0x6013d4, bytes[1]) \|\| !ports_.write8(0x6013d5, bytes[2])))` | nvkm/engine/disp/vga.c:104 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:182` | `case 0x4d: {` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
-| `src/devinit/Board.cpp:193` | `case 0xa9:` | nvkm/subdev/bios/init.c:2297 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:11` | `if (!rom.contains(0x36, 2)) return false;` | nvkm/subdev/bios/dcb.c:35 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:12` | `const auto dcb = rom.little(0x36, 2);` | nvkm/subdev/bios/dcb.c:35 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:13` | `if (!dcb \|\| !rom.contains(dcb, 12) \|\| rom.data[dcb] < 0x30 \|\| rom.data[dcb] > 0x41` | nvkm/subdev/bios/dcb.c:43 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:14` | `\|\| rom.data[dcb + 1] < 12 \|\| rom.little(dcb + 6, 4) != 0x4edcbdcb)` | nvkm/subdev/bios/dcb.c:48 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:35` | `if (version != 0x41 \|\| header < 4 \|\| stride < 5` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:41` | `if (function == 0xff) continue;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:42` | `const auto line = uint8_t(raw & 0x3f);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:44` | `const bool defaults = raw & 0x80;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:47` | `defaults, uint8_t(raw >> 16), uint8_t((raw >> 24) & 0x1f)};` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:74` | `if (port == 0x03c3 && bytes[4] == 1) {` | nvkm/subdev/bios/init.c:1636 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:76` | `constexpr Step steps[] = {` | no source: software sequence container; each hardware value has its own citation. | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:77` | `{0x614100,0xf0800000,0x00800000,true,false},` | nvkm/subdev/bios/init.c:1640 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:78` | `{0x00e18c,0x00020000,0x00020000,true,false},` | nvkm/subdev/bios/init.c:1641 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:79` | `{0x614900,0xf0800000,0x00800000,true,false},` | nvkm/subdev/bios/init.c:1642 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:80` | `{0x000200,0x40000000,0x00000000,true,true},` | nvkm/subdev/bios/init.c:1643 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:81` | `{0x00e18c,0x00020000,0x00000000,true,false},` | nvkm/subdev/bios/init.c:1645 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:82` | `{0x000200,0x40000000,0x40000000,true,false},` | nvkm/subdev/bios/init.c:1646 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:83` | `{0x614100,0,0x00800018,false,false},` | nvkm/subdev/bios/init.c:1647 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:84` | `{0x614900,0,0x00800018,false,true},` | nvkm/subdev/bios/init.c:1648 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:85` | `{0x614100,0,0x10000018,false,false},` | nvkm/subdev/bios/init.c:1650 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:86` | `{0x614900,0,0x10000018,false,false},` | nvkm/subdev/bios/init.c:1651 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:97` | `const uint32_t address = 0x601000 + port;` | nvkm/engine/disp/vga.c:52 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:111` | `if ((version != 0x40 && version != 0x41) \|\| header < 5 \|\| stride < 4` | nvkm/subdev/bios/i2c.c:32 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:114` | `if (index == 0x80 \|\| index == 0xff) index = rom.data[at + 4] & 0x0f;` | nvkm/subdev/bios/init.c:263 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:115` | `else if (index == 0x81) index = rom.data[at + 4] >> 4;` | nvkm/subdev/bios/init.c:274 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:121` | `if (version == 0x40) {` | nvkm/subdev/bios/i2c.c:79 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:124` | `if (bus.type != 0x05) return false;` | nvkm/subdev/bios/i2c.c:107 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:125` | `bus.drive = raw & 0x0f;` | nvkm/subdev/bios/i2c.c:109 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:126` | `if (raw & 0x100) bus.share = uint8_t((raw >> 9) & 0x7f);` | nvkm/subdev/bios/i2c.c:110 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:129` | `bus.type = 0x80;` | nvkm/subdev/bios/i2c.c:79 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:130` | `bus.drive = raw & 0x1f;` | nvkm/subdev/bios/i2c.c:119 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:131` | `bus.aux = (raw >> 5) & 0x1f;` | nvkm/subdev/bios/i2c.c:122 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:132` | `if (bus.drive == 0x1f) return false;` | nvkm/subdev/bios/i2c.c:120 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:133` | `if (bus.aux == 0x1f) bus.aux = 0xff;` | nvkm/subdev/bios/i2c.c:123 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:161` | `const uint32_t reg = 0x00d610 + uint32_t(pin.line) * 4;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:165` | `if (!masked(reg, 0x00003000, direction \| level)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:166` | `\|\| !masked(0x00d604, 1, 1)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:167` | `\|\| !masked(reg, 0xff, pin.route)) return Error::Io;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:168` | `if (pin.selector && !masked(0x00d740 + uint32_t(pin.selector - 1) * 4, 0xff, pin.line))` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:180` | `case 0x69: return length == 5 ? io(bytes, active) : Error::Input;` | nvkm/subdev/bios/init.c:2269 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:181` | `case 0x53:` | nvkm/subdev/bios/init.c:2252 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:184` | `if (active && (!ports_.write8(0x6013d4, bytes[1]) \|\| !ports_.write8(0x6013d5, bytes[2])))` | nvkm/engine/disp/vga.c:104 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:187` | `case 0x4d: {` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
+| `src/devinit/BoardCore.cpp:198` | `case 0xa9:` | nvkm/subdev/bios/init.c:2297 | SOURCE_ONLY |
 
-## src/devinit/Board.h
+## src/devinit/BoardCore.h
 
 | Line | Code | Source | Status |
 |------|------|--------|--------|
-| `src/devinit/Board.h:17` | `uint8_t index = 0, type = 0, drive = 0xff, share = 0xff, aux = 0xff;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoardCore.h:16` | `uint8_t index = 0, type = 0, drive = 0xff, share = 0xff, aux = 0xff;` | no source: ambiguous citation | SOURCE_ONLY |
 
 ## src/devinit/BoardPolicy.cpp
 
@@ -114,10 +114,14 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 
 | Line | Code | Source | Status |
 |------|------|--------|--------|
-| `src/devinit/BoundPost.cpp:36` | `if (inst->opcode==0x69) allowed=us==10000;` | nvkm/subdev/bios/init.c:1644 | SOURCE_ONLY |
-| `src/devinit/BoundPost.cpp:37` | `if (inst->opcode==0x56) allowed=active_ && us==20000;` | nvkm/subdev/bios/init.c:1246 | SOURCE_ONLY |
-| `src/devinit/BoundPost.cpp:38` | `if (inst->opcode==0x74) {` | nvkm/subdev/bios/init.c:1769 | SOURCE_ONLY |
-| `src/devinit/BoundPost.cpp:71` | `if (!inst \|\| inst->opcode!=0x4d \|\| !boardAllowed(approvedRomDigest(),pc_,inst->opcode)) {` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
+| `src/devinit/BoundPost.cpp:41` | `bool allowed=inI2c_ && active_ && inst && inst->opcode==0x4d && (us==1 \|\| us==5);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoundPost.cpp:44` | `if (inst->opcode==0x69) allowed=us==10000;` | nvkm/subdev/bios/init.c:1644 | SOURCE_ONLY |
+| `src/devinit/BoundPost.cpp:45` | `if (inst->opcode==0x56) allowed=active_ && us==20000;` | nvkm/subdev/bios/init.c:1246 | SOURCE_ONLY |
+| `src/devinit/BoundPost.cpp:46` | `if (inst->opcode==0x74) {` | nvkm/subdev/bios/init.c:1769 | SOURCE_ONLY |
+| `src/devinit/BoundPost.cpp:79` | `if (!inst \|\| inst->opcode!=0x4d \|\| !boardAllowed(approvedRomDigest(),pc_,inst->opcode)) {` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
+| `src/devinit/BoundPost.cpp:116` | `if (inst->opcode!=0x4d \|\| !boardAllowed(approvedRomDigest(),inst->offset,inst->opcode)) continue;` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
+| `src/devinit/BoundPost.cpp:123` | `if (!found \|\| bus.type!=0x05 \|\| bus.share!=0xff \|\| bus.drive>15) return Error::Input;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoundPost.cpp:124` | `pin_=0x00d014+uint32_t(bus.drive)*0x20;` | nvkm/subdev/i2c/busgf119.c:93 | SOURCE_ONLY |
 
 ## src/devinit/I2c.cpp
 
@@ -357,23 +361,25 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 The following constant lines have no source citation:
 
 - src/compute/LaunchDesc.h:23 (no source: derived)
-- src/devinit/Board.cpp:35 (no source: ambiguous citation)
-- src/devinit/Board.cpp:41 (no source: ambiguous citation)
-- src/devinit/Board.cpp:42 (no source: ambiguous citation)
-- src/devinit/Board.cpp:44 (no source: ambiguous citation)
-- src/devinit/Board.cpp:47 (no source: ambiguous citation)
-- src/devinit/Board.cpp:76 (no source: software sequence container; each hardware value has its own citation.)
-- src/devinit/Board.cpp:156 (no source: ambiguous citation)
-- src/devinit/Board.cpp:160 (no source: ambiguous citation)
-- src/devinit/Board.cpp:161 (no source: ambiguous citation)
-- src/devinit/Board.cpp:162 (no source: ambiguous citation)
-- src/devinit/Board.cpp:163 (no source: ambiguous citation)
-- src/devinit/Board.h:17 (no source: ambiguous citation)
+- src/devinit/BoardCore.cpp:35 (no source: ambiguous citation)
+- src/devinit/BoardCore.cpp:41 (no source: ambiguous citation)
+- src/devinit/BoardCore.cpp:42 (no source: ambiguous citation)
+- src/devinit/BoardCore.cpp:44 (no source: ambiguous citation)
+- src/devinit/BoardCore.cpp:47 (no source: ambiguous citation)
+- src/devinit/BoardCore.cpp:76 (no source: software sequence container; each hardware value has its own citation.)
+- src/devinit/BoardCore.cpp:161 (no source: ambiguous citation)
+- src/devinit/BoardCore.cpp:165 (no source: ambiguous citation)
+- src/devinit/BoardCore.cpp:166 (no source: ambiguous citation)
+- src/devinit/BoardCore.cpp:167 (no source: ambiguous citation)
+- src/devinit/BoardCore.cpp:168 (no source: ambiguous citation)
+- src/devinit/BoardCore.h:16 (no source: ambiguous citation)
 - src/devinit/BoardPolicy.cpp:7 (no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.)
 - src/devinit/BoardPolicy.cpp:8 (no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.)
 - src/devinit/BoardPolicy.cpp:9 (no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.)
 - src/devinit/BoardPolicy.cpp:11 (no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.)
 - src/devinit/BoardPolicy.h:7 (no source: software exact-image permission size, ADR 004 and reference/vbios/README.md.)
+- src/devinit/BoundPost.cpp:41 (no source: ambiguous citation)
+- src/devinit/BoundPost.cpp:123 (no source: ambiguous citation)
 - src/devinit/I2c.cpp:12 (no source: ambiguous citation)
 - src/devinit/PostImage.cpp:43 (no source: ambiguous citation)
 - src/devinit/PostImage.cpp:164 (no source: ambiguous citation)
