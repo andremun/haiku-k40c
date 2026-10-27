@@ -1,0 +1,10 @@
+"GET /job.sh HTTP/1.1" 200 -
+"PUT /environment.txt HTTP/1.1" 201 -
+"PUT /kernel_x86_64 HTTP/1.1" 201 -
+"GET /owner HTTP/1.1" 200 -
+"GET /memory HTTP/1.1" 200 -
+"GET /identity HTTP/1.1" 200 -
+"PUT /ready.txt HTTP/1.1" 201 -
+"GET /release HTTP/1.1" 404 -
+"GET /release HTTP/1.1" 200 -
+"PUT /job.exit HTTP/1.1" 201 -

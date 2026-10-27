@@ -1,0 +1,156 @@
+{
+  "args": [
+    "/usr/bin/qemu-system-x86_64",
+    "-name",
+    "k40-d0-map-observe",
+    "-machine",
+    "q35",
+    "-accel",
+    "kvm",
+    "-cpu",
+    "host",
+    "-smp",
+    "2",
+    "-m",
+    "4096",
+    "-drive",
+    "if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd",
+    "-drive",
+    "if=pflash,format=raw,file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/0bedf9cd/vars.fd",
+    "-drive",
+    "file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/0bedf9cd/overlay.qcow2,format=qcow2,if=none,id=system",
+    "-device",
+    "ide-hd,drive=system,bus=ide.0,bootindex=1",
+    "-device",
+    "qemu-xhci",
+    "-device",
+    "usb-tablet",
+    "-vga",
+    "std",
+    "-device",
+    "vfio-pci,host=0000:04:00.0",
+    "-netdev",
+    "user,id=n0",
+    "-device",
+    "e1000,netdev=n0",
+    "-display",
+    "none",
+    "-serial",
+    "file:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/results/20261028-d0-mapping-retry-01/serial.log",
+    "-monitor",
+    "unix:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/0bedf9cd/monitor.sock,server,nowait",
+    "-qmp",
+    "unix:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/0bedf9cd/qmp,server,nowait"
+  ],
+  "host": {
+    "bdf": "0000:04:00.0",
+    "driver": "vfio-pci",
+    "group": "23",
+    "members": [
+      "0000:04:00.0"
+    ],
+    "vfio": "/dev/vfio/23"
+  },
+  "kernel_stream": {
+    "baseline_bytes": 296,
+    "baseline_sha256": "585eaa9674f3a05a6235769ae4cce8fe5eef41495b44be5fa6e2a35040b82a9c",
+    "filter_pattern": "dmar|amd-vi|iommu|vfio|remapping|0000:04:00|aer|pcie bus error",
+    "filter_pid": 1630615,
+    "path": "/home/unimelb.edu.au/mariom1/k40-s1-kernel.log",
+    "pcie_policy": "stop on every new AER or PCIe Bus Error line, including the card and its root port",
+    "reader_pid": 1630634,
+    "scope": "one kernel control entry plus filtered classes; not a complete kernel log"
+  },
+  "source_commit": "002217e2fbe76097df32a405fc5357958b4408d9",
+  "stage": "D0_MAPPING_OBSERVE_ONLY",
+  "suite": {
+    "artifacts": {
+      "identity": {
+        "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_identity_probe",
+        "sha256": "8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f"
+      },
+      "memory": {
+        "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_d0_memory_probe",
+        "sha256": "4b3b9a3d8033be921b8b33e7f85c3d99206e732005856b596b3103ab79b63591"
+      },
+      "observer": {
+        "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/observer/strace-source/src/strace",
+        "sha256": "75b7aeed34785c8ac729d68cbca83d256434acb036e336d0adf5a4bdc30bc7a2"
+      },
+      "owner": {
+        "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_owner_post_module",
+        "sha256": "8831260b5045d36ee1afdf903f345138522b825b9282ee4e35f57039f8e8cdf3"
+      },
+      "qemu": {
+        "path": "/usr/bin/qemu-system-x86_64",
+        "sha256": "55862c768c21fa7d3e72ca1b24797d8ab5b406eb5ef4c9ab9c2280f4e0b8f330"
+      }
+    },
+    "claim": "mapping observation only; no payload/coherency proof",
+    "device_iova_publication": false,
+    "identity": {
+      "driver_sha256": "8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f",
+      "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+      "sources": {
+        "src/os/HaikuBackend.c": "7d3afdd37b8deed4106920dad8a48fcbc04994b3e5c34ff69c4dbaa3384f06d8",
+        "src/os/HaikuBackend.h": "1ad0cdba01d1ba72cdb62121a31c3972dd31242447fc98434c6236d6efc2667c",
+        "src/os/HaikuProbe.c": "3fbee4126fa98ca4bbf4917a44fc616b133bbbd37485f5f0d8baf014a6b18b92",
+        "tools/haiku/build-driver.sh": "4324a332a95ca39540365c7c5cbe36b370a176aed13c77340cb4c8dd9b4e4527",
+        "tools/haiku/build_backend.sh": "69bbadd7f3943fd9daa317d76629b5141b699a3b63e2bef3bfd9fafb6582fe2f",
+        "tools/haiku/kcc": "b788c87c5644c11bb4d56105c5858d02f965fdab6bfd4e7581fcf2f434c1ca81",
+        "tools/haiku/probe_stage.py": "cea7e555287d8e398a67b207a5582991c25d7d7db5f0dc44b21f1e97bcf7ebec"
+      },
+      "stage": "B5_IDENTITY_READ_ONLY"
+    },
+    "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+    "probe_gpu_writes": false,
+    "sources": {
+      "src/devinit/BoardCore.cpp": "2a20defc5a76261ccd17cdba155698cd3e02a70fbc119e01792930c5f807f2fd",
+      "src/devinit/BoardCore.h": "e2ffaae84a490a7461723f3f88d9bfecf440a306c0cf75b6bdd004f21df632e1",
+      "src/devinit/BoardPolicy.cpp": "902da09784c5dc807ca0c2bdff69382f6bc95a9b8f3f717f14f496e7b5206dbc",
+      "src/devinit/BoardPolicy.h": "69632ac56b9719600824bf0c35d14fa56a82e2d2a1a1f4f91a086a7c5d92e2ce",
+      "src/devinit/BoundPost.cpp": "c8197d2aa4de234a5ec8e5060913a82c912d29299f1ce20acda26db68538bc1e",
+      "src/devinit/BoundPost.h": "430696284e9bbcce4a1197aa8ef8559c9096b408e6dbc3f48d4dd5428a093b59",
+      "src/devinit/I2c.cpp": "3ca524e9220cbfc1530e80f9a864ab866c143abc8750252bc1bb32c0cbdba152",
+      "src/devinit/I2c.h": "3f04ffcfc49782e9f02278a9694bf2707df9b22f77dfb7e46312cb13e4991873",
+      "src/devinit/Interpreter.cpp": "8617354577f1c20af4968844b42d4eb8b16ad6da4eb4275b5b920ec3a434bc65",
+      "src/devinit/Interpreter.h": "af3f590914461f2426bed13ad87a104854b5f75a62c0a65e8edee3357c3ae23e",
+      "src/devinit/PostImage.cpp": "be3e9ff11f3cc1c445dc52d69fd2401f5be6ae486b45de961103acd6fe64c6be",
+      "src/devinit/PostImage.h": "196abf668dfe6fa31661cb8c9b3610ad81e38f0f4758944dcfc0b73c7273f974",
+      "src/devinit/Sha256.cpp": "3fe7912249a87e6b0cdec87da818a1a2f9ebfaf3145c40e7aa827df50554e19b",
+      "src/devinit/Sha256.h": "f4b1caa7558a5886ef7bc121ffef2ca65ec25bb89b18c62bc980e144bcc8ffbc",
+      "src/memory/Memory.h": "c0dff96a930c571f9ff7bc65f847c6cffbfd31c6ffa1a0cd8e16a9a5980792d1",
+      "src/os/HaikuBackend.c": "7d3afdd37b8deed4106920dad8a48fcbc04994b3e5c34ff69c4dbaa3384f06d8",
+      "src/os/HaikuBackend.h": "1ad0cdba01d1ba72cdb62121a31c3972dd31242447fc98434c6236d6efc2667c",
+      "src/os/HaikuMemory.cpp": "ad8a93de49f0784293e5d004bc0aeacabf973a4fece457188a7f80928e7328a1",
+      "src/os/HaikuMemory.h": "b1d71c0d2c4764d192d9dbb04d2987cc22b7b6a9f8e7fcf6af7a0032b0329565",
+      "src/os/HaikuOwnerModule.cpp": "be3ef3bdab2008e5a119d238a062f7a8c46c3f1835a9139e82d41099fbf7ffe0",
+      "src/os/HaikuOwnerModule.h": "5108d21c4611d3e3d17f86bbae5a899f9df098e8a635d5dc919ee2e3c8f07318",
+      "src/os/NativeOwner.cpp": "7b103013f74ee828559f611c5c524399812cc5bb07406c031efad8012c480534",
+      "src/os/NativeOwner.h": "8975226a5240fb4b1929e2904fdd84b7bebc137e4486116d30977624a1ccf484",
+      "src/os/OwnerClient.cpp": "10d83a9e654d8299a23ce98ecd2ca6c491396cd626770b207a9e7e8a3fc11f88",
+      "src/os/OwnerClient.h": "6ceaf1c91038bdc759b171eecd20efabc89bc56e4b0921ea55ba6467798fa923",
+      "src/runtime/BootState.h": "c31bafc3c26063d086ecaad7b1d91c05b70365de40b4ede2d67611b26da92aa9",
+      "tools/dma_model.py": "98183080e811e1b1a958098732a4019238d36e4aaaf3c44170a9857f72230f4a",
+      "tools/haiku/card_run.py": "de92c0ad3ac917209270e2ab9dd9989eb29b25bc2c6aba7130860401e4da61f0",
+      "tools/haiku/d0_evidence.py": "1f2d27ca74ae24d412b4d09dd695b56a7be60c0e607b50e3927fe3e986c11097",
+      "tools/haiku/d0_kernel_log.py": "a6b792f5df1efcbcf46123df258a3321b092c8cbffb53ea52e0f189a0edd54f6",
+      "tools/haiku/d0_monitor.py": "d4ad9e66b8287d2652ac32b80f0e64009325a57c167bf0180a4615990a57785d",
+      "tools/haiku/d0_run.py": "a28ad4313ac9cf0aee157ff5e4460b27d781b097a3dd9cddc0df73c0f7d60cd1",
+      "tools/haiku/d0_stage.py": "6e5852dc4a49674381b82743b4bb092d96b8cc81f2a582030c5c2b03b7c1de3c",
+      "tools/haiku/d0_topology.py": "7693687b9ad4128308e9bc832cc50b1d4eaf270aef6ac83001166ef206e799fc",
+      "tools/haiku/qemu_hmp.py": "4b97b24be316b7d19f2c26df45de846bb06285e8a0564ea206e21af245e519f4",
+      "tools/haiku/selftest/map_owner.cpp": "79ca09a205d30c9b80d5231fc5e02a75f035877617b6ce108fae75115522204d",
+      "tools/haiku/vm_guard.py": "3a0c1af360106cd8bb0ae59da48f76facefefc57907c25bf7f4ccd562e925045",
+      "tools/observer/binding.py": "b794bd7f75217d19ce7ce7f359116615c112e1208a5dca8d8d31d4281288aee5",
+      "tools/observer/build.py": "5258754e859394e20c11dcf531ffeb0d69d46201193383462a5843a02d389423",
+      "tools/observer/normalize.py": "35503808d0f7a2da85d7857e4790c1f800a60c4ce438fd37ef4e33e6ba912bde",
+      "tools/observer/supervise.py": "4a854920c8d0a3f67d928fb8c5e58cec861649075b491369a72618dbe09442b4",
+      "tools/observer/task_proof.inc": "53c5b96dc4ea5c9b74c2ed86808d16dbdc3bc5f1c305d72ca34ebcb840401cfe",
+      "tools/observer/task_stream.py": "22878546bb0a9e34d08c5d34b34cac1ffccbf339d1bb3d9cdee0edb48d64c0ef",
+      "tools/observer/vfio_decode.inc": "b5b8ff720c35f123ba08c4537f5e603bf3bd168608385ca78d618792600a795a"
+    },
+    "stage": "D0_MAPPING_OBSERVE_ONLY"
+  },
+  "timeout_seconds": 600
+}

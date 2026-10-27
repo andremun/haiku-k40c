@@ -19,3 +19,5 @@ on 23 October 2026 with unchanged bytes. `hashes.txt` lists the file hashes.
 | `20261027-d0-topology-fixture/` | Actual Q35 cardless QMP formatting and bounded owned-child tracing. No GPU evidence. | `docs/D0-STAGE-REVIEW.md` |
 
 | `20261028-d0-mapping/` | First physical D0 attempt stopped on unproved second-task FD sharing. No extent/cutoff or probe output. | `work/S1D0RUN/RESULT.md` |
+
+| `20261028-d0-mapping-retry-01/` | D0 structural mapping cutoff passes for retained storage. No payload/coherency or S1 proof. | `work/S1D0RETRY/RESULT.md` |

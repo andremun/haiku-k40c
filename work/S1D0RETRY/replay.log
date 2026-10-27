@@ -1,0 +1,5 @@
+PASS: saved cutoff hash, retained extent, topology and mapping witness agree
+PASS: complete selected final trace parses
+PASS: filtered before/after bytes agree; not a complete kernel-log claim
+No explicit final VFIO close is captured: process exit, not this passive ledger, ends live authority
+No provider publication, device payload or coherency proof

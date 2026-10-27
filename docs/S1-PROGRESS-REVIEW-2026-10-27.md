@@ -28,23 +28,27 @@ log gives its scope. Each task has its own commit. Start the D0 review at
 are generated in work/S1D0PACKAGE/stage.json. The package self-review is explicitly
 not a Claude acceptance.
 
-## D0 attempt and present gate
+## D0 results and present gate
 
-The user started the R5 stream. Its reviewed updates and host tests pass.
-The exact current command is in docs/REQUESTS.md and docs/D0-STAGE-REVIEW.md.
-The stream saves one kernel control entry and the retained/live filtered classes.
-The first physical D0 attempt stopped after 124.63 s on an unproved second task's
-mapping. No native extent, cutoff or probe output was attested. S1 is incomplete.
+The first physical D0 attempt stopped on unproved task/FD sharing. The user then
+authorized a correction and one retry. S1D0THREAD adds syscall-stop TGID and
+KCMP_FILES proof, tested with real shared/private-table threads and a fork.
+It also rejects exec/split operations that could change the FD namespace.
 
-The next prerequisite is owned thread/FD-table lineage proof. Do not accept
-arbitrary TIDs just to pass. No modified retry occurred. ADR 006 requires explicit
-user go-ahead before another run. The filtered before/after logs match, which
-establishes no new captured filtered line, not a clean complete kernel log.
-Evidence and exact hashes are in results/20261028-d0-mapping/.
+The authorized retry passes in 110.5 s. A retained 4096-byte native allocation
+at GPA 0x15e4000 has complete structural mapping coverage at the recorded cutoff.
+The selected final trace parses and the guest exits. The passive ledger does
+not observe implicit FD closure at process exit and supplies no post-exit authority.
+The filtered logs match. This is not a claim of a clean full kernel log.
+Evidence: results/20261028-d0-mapping-retry-01/ and work/S1D0RETRY/RESULT.md.
+
+D0 proves no physical payload or coherency. Publication stays denied and Q7
+remains open. The next package is native POST/A7, not D1. A7 requires an explicit
+yes for one run after its concrete command, binaries, writes and limits are ready.
 
 ## Remaining path
 
-D0 must first observe actual structural coverage for retained native storage.
+D0 has observed structural coverage for retained native storage.
 After D0, prepare native POST integration and an A7 package for an explicit
 per-run yes. D1 and its separate DMA/publication questions follow POST. Do not
 build more mapping or visibility machinery before A7. Neither an address equality nor a BAR completion bit proves payload

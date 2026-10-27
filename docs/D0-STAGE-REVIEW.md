@@ -133,3 +133,16 @@ arbitrary TIDs. Exact current source/observer hashes are in the regenerated stag
 record. Guest binaries, device options, fault checks and watchdog are unchanged.
 The fixed command remains `python3 tools/haiku/d0_run.py`. The fresh output folder
 ends in `d0-mapping-retry-01`. A new stop requires another report and go-ahead.
+
+## Authorized retry result, 2026-10-28
+
+S1D0RETRY passes in 110.5 s. The retained 4096-byte allocation at GPA 0x15e4000
+has complete structural READ/WRITE map coverage at the captured cutoff.
+The full selected final trace parses. No explicit final VFIO close is captured.
+The supervised process exit ends live authority outside the passive ledger.
+Do not reuse its supplied-record witness after the VM ends.
+
+No new filtered log line was captured. This is not a clean-kernel claim.
+No provider, DMA publication, payload/coherency proof or S1 pass follows.
+The next task prepares native POST integration and the A7 package for explicit
+write-stage permission. See work/S1D0RETRY/RESULT.md and its replay.log.
