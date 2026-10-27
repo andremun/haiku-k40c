@@ -28,8 +28,8 @@ PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard tes
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 
 .PHONY: all clean
-all: $(PROGRAMS) $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe
-	@for p in $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe; do $$p || exit 1; done
+all: $(PROGRAMS) $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory
+	@for p in $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory; do $$p || exit 1; done
 	@for t in $(PY_TESTS); do (cd .. && python3 tests/$$t) || exit 1; done
 
 define RULE
@@ -58,3 +58,6 @@ $(BUILDDIR)/test_board: board_fake.h
 
 $(BUILDDIR)/board_probe: board_probe.cpp board_fake.h $(wildcard ../src/devinit/*.cpp ../src/devinit/*.h) | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) board_probe.cpp $(wildcard ../src/devinit/*.cpp) -o $@
+
+$(BUILDDIR)/test_haiku_memory: test_haiku_memory.cpp ../src/os/HaikuMemory.cpp ../src/os/HaikuMemory.h ../src/os/HaikuBackend.h ../src/memory/Memory.cpp ../src/memory/Memory.h os_shim/KernelExport.h os_shim/PCI.h | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -Ios_shim test_haiku_memory.cpp ../src/os/HaikuMemory.cpp ../src/memory/Memory.cpp -o $@

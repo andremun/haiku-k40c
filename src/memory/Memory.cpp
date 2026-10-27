@@ -27,7 +27,7 @@ bool Buffer::allocate(uint64_t bytes, uint64_t alignment, Placement placement)
 }
 bool Buffer::range(uint64_t offset, size_t bytes) const
 {
-    return owned() && offset <= allocation_.bytes && bytes <= allocation_.bytes - offset;
+    return owned() && !releaseFailed_ && offset <= allocation_.bytes && bytes <= allocation_.bytes - offset;
 }
 bool Buffer::write(uint64_t offset, const void* data, size_t bytes)
 {
@@ -42,19 +42,19 @@ bool Buffer::read(uint64_t offset, void* data, size_t bytes)
 }
 bool Buffer::publish()
 {
-    if (!owned() || pinned_) return false;
+    if (!owned() || pinned_ || releaseFailed_) return false;
     published_ = backend_.publish(allocation_);
     return published_;
 }
 bool Buffer::deviceAddress(DeviceIova& address) const
 {
-    if (!owned() || allocation_.placement != Placement::Host || !allocation_.deviceAddressVerified) return false;
+    if (!owned() || releaseFailed_ || allocation_.placement != Placement::Host || !allocation_.deviceAddressVerified) return false;
     address = allocation_.device;
     return true;
 }
 bool Buffer::vramAddress(VramPhysical& address) const
 {
-    if (!owned() || allocation_.placement != Placement::Vram || !allocation_.vramAddressVerified) return false;
+    if (!owned() || releaseFailed_ || allocation_.placement != Placement::Vram || !allocation_.vramAddressVerified) return false;
     address = allocation_.vram;
     return true;
 }
@@ -74,9 +74,12 @@ bool Buffer::retire(bool quiescenceVerified)
 }
 bool Buffer::close()
 {
-    if (!owned() || pinned_ || !backend_.release(allocation_)) return false;
-    allocation_ = {};
+    if (!owned() || pinned_) return false;
     published_ = false;
+    releaseFailed_ = true;
+    if (!backend_.release(allocation_)) return false;
+    allocation_ = {};
+    releaseFailed_ = false;
     return true;
 }
 } // namespace k40::memory

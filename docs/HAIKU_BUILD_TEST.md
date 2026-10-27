@@ -132,3 +132,21 @@ bring-up, scheduling, or compute support. Cardless results remain Haiku OS evide
 
 Run host launcher and shared-tool tests with `make vm-tools-test`.
 Do not run `scripts/passthrough.sh`, Linux `--gpu`, or a write stage under this permission.
+
+## Cardless native memory adapter check
+
+`build_backend.sh` now also links `build/haiku/k40_memory_probe`.
+This C++ probe exercises the native DMA32 allocator and typed memory adapter.
+It checks aligned guest physical storage, byte readback, default-denied IOVA publication,
+and successful cleanup. It does not enumerate PCI devices or touch a GPU.
+
+```sh
+HAIKU_CROSS="$HOME/haiku-cross" bash tools/haiku/build_backend.sh
+python3 tools/haiku/cardless_run.py --kvm --driver build/haiku/k40_memory_probe
+```
+
+The existing cardless runner installs the binary under its fixed probe filename.
+It accepts the probe's `k40_os: PASS` marker. Evidence remains under `build/cardless/`.
+A reported stop requires user approval before another run (ADR 006).
+The probe's successful path proves native allocation mechanics only.
+It does not validate production pool lifetime, quarantine recovery, DMA, or IOVA equality.

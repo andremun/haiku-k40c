@@ -16,7 +16,8 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 ADDITIONS = ("tools/haiku/card_run.py", "tools/haiku/probe_stage.py",
-             "tools/haiku/vm_guard.py")
+             "tools/haiku/vm_guard.py", "tools/haiku/build_backend.sh",
+             "tools/haiku/selftest/memory.cpp")
 
 
 def generate(target, commit):

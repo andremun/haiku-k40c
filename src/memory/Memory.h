@@ -54,12 +54,15 @@ public:
     bool close();
     bool owned() const { return allocation_.id != 0; }
     bool pinned() const { return pinned_; }
-    bool visible() const { return owned() && published_; }
+    bool visible() const { return owned() && published_ && !releaseFailed_; }
 private:
     bool range(uint64_t offset, size_t bytes) const;
     Backend& backend_;
     Allocation allocation_{};
     bool published_ = false;
     bool pinned_ = false;
+    // A failed release may already have removed a device mapping.
+    // Only another close attempt is allowed until ownership is discharged.
+    bool releaseFailed_ = false;
 };
 } // namespace k40::memory

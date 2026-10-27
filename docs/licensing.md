@@ -85,3 +85,27 @@ The new implementation uses semantic facts and cited hardware constants only.
 SHA-256 uses algorithm facts from NIST FIPS 180-4, sections 4.1.2, 4.2.2,
 5.1.1, 5.3.3, and 6.2. No library implementation was copied.
 Source: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf.
+
+## S1B2 native allocation adapter (2026-10-27)
+
+| Source file consulted | License | Used for | Copied material |
+|---|---|---|---|
+| `reference/haiku/src/add-ons/kernel/drivers/graphics/nvidia/driver.c` | Haiku MIT | Contiguous DMA32 allocation choice and physical alignment | API and semantic facts only |
+| `reference/haiku/headers/os/kernel/OS.h` | Haiku MIT | B_32_BIT_CONTIGUOUS meaning | API constant only |
+| `reference/haiku/headers/os/drivers/PCI.h` | Haiku MIT | Native adapter type inclusion and existing PCI interface | API declarations only |
+
+The adapter introduces no GPU register constants or Nouveau-derived implementation.
+
+## Host-flush-page and pre-start dependency research (S1B2/S1A4 batch)
+
+All files below carry MIT notices. No implementation was copied.
+The source facts explain the mapping and pre-start obligations that remain gated.
+
+| Source files consulted | Used for |
+|---|---|
+| `reference/nouveau/nvkm/subdev/devinit/gf100.c`, `base.c`, `nv04.c`, `nv50.c` | Selected POST callback, preinit decision, CRTC unlock, and script roots |
+| `reference/nouveau/nvkm/core/subdev.c` | Difference between preinit, oneinit, and normal init |
+| `reference/nouveau/nvkm/subdev/fb/base.c`, `gf100.c` | Flush-page allocation, DMA mapping, pre-POST programming, and lifetime |
+| `reference/nouveau/nvkm/engine/device/pci.c` | Resume-only PCI preinit branch |
+| `reference/nouveau/nvkm/subdev/i2c/gk110.c`, `padgf119.c`, `busgf119.c`, `pad.c`, `bus.c` | Selected pad/bus constructors and early bus initialization |
+| `reference/nouveau/nvkm/subdev/mc/base.c`, `bus/base.c`, `timer/base.c` | Check which lifecycle callbacks exist before POST |

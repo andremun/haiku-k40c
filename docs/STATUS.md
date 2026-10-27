@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: none. S1BOARD host implementation is complete. Continue with native B2 allocation and mapping under ADR 007.
-Task state: S1BOARD DONE (host only, macro review pending). make check passes. Exact ADR 004 policy and helper semantics are tested against the private ROM and Linux IO trace. The hardware gate stays closed. S1B5 is ACCEPT. Related host tasks may continue while Claude reviews are pending.
+Current task: S1B2 (native allocation and mapping adapter). S1BOARD is complete in the review batch.
+Task state: S1B2 IN PROGRESS. S1BOARD DONE (host only, macro review pending). make check passes. Exact ADR 004 policy and helper semantics are tested against the private ROM and Linux IO trace. The hardware gate stays closed. S1B5 is ACCEPT. Related host tasks may continue while Claude reviews are pending.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.

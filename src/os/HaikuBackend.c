@@ -49,18 +49,23 @@ status_t k40_os_read32(k40_os* os,size_t offset,uint32* value)
     *value=*(volatile const uint32*)(os->registers+offset);
     return B_OK;
 }
-status_t k40_os_allocate(size_t bytes,k40_host_allocation* result)
+static status_t allocate_host(size_t bytes,k40_host_allocation* result,uint32 locking)
 {
     if (!result || !bytes || bytes>SIZE_MAX-(B_PAGE_SIZE-1)) return B_BAD_VALUE;
     size_t rounded=(bytes+B_PAGE_SIZE-1)&~(size_t)(B_PAGE_SIZE-1);
+    if (locking==B_32_BIT_CONTIGUOUS && rounded>(uint64)UINT32_MAX+1) return B_BAD_VALUE;
     memset(result,0,sizeof(*result)); result->area=-1;
     /* nvidia/driver.c:939-957; kernel OS.h area locking, KernelExport.h map. */
     result->area=create_area("k40 host scratch",&result->address,B_ANY_KERNEL_ADDRESS,
-        rounded,B_CONTIGUOUS,B_KERNEL_READ_AREA|B_KERNEL_WRITE_AREA);
+        rounded,locking,B_KERNEL_READ_AREA|B_KERNEL_WRITE_AREA);
     if (result->area<0) return result->area;
     physical_entry entry;
     status_t status=get_memory_map(result->address,rounded,&entry,1);
-    if (status!=B_OK || entry.size<rounded) {
+    const bool bad_extent=status==B_OK && (entry.size<rounded || entry.address%B_PAGE_SIZE
+        || rounded>UINT64_MAX-entry.address
+        || (locking==B_32_BIT_CONTIGUOUS && (entry.address>UINT32_MAX
+            || rounded>((uint64)UINT32_MAX+1)-entry.address)));
+    if (status!=B_OK || bad_extent) {
         status_t cleanup=delete_area(result->area);
         if (cleanup!=B_OK) return cleanup; /* Partial allocation stays owned. */
         result->area=-1; result->address=NULL;
@@ -69,6 +74,16 @@ status_t k40_os_allocate(size_t bytes,k40_host_allocation* result)
     result->bytes=rounded; result->guest_physical=entry.address;
     memset(result->address,0,rounded);
     return B_OK;
+}
+status_t k40_os_allocate(size_t bytes,k40_host_allocation* result)
+{
+    return allocate_host(bytes,result,B_CONTIGUOUS);
+}
+status_t k40_os_allocate_dma32(size_t bytes,k40_host_allocation* result)
+{
+    /* Haiku nvidia/driver.c:939-957, OS.h:77: contiguous below 4 GiB.
+     * This is a conservative host allocation limit, not a claim about GK110 DMA width. */
+    return allocate_host(bytes,result,B_32_BIT_CONTIGUOUS);
 }
 status_t k40_os_free(k40_host_allocation* allocation)
 {

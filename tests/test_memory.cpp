@@ -58,6 +58,12 @@ int main() {
       CHECK(f.retained==1); }
     { Fake f; f.allocateOk=false; f.freeOk=false; { Buffer b(f); CHECK(!b.allocate(16,4,Placement::Host)); }
       CHECK(f.frees==1 && f.retained==1); }
+    { Fake f; Buffer b(f); CHECK(b.allocate(16,4,Placement::Host) && b.publish());
+      f.freeOk=false; CHECK(!b.close() && b.owned() && !b.visible());
+      DeviceIova address{0}; unsigned value=0;
+      CHECK(!b.deviceAddress(address) && !b.publish() && !b.pinForSubmission());
+      CHECK(!b.read(0,&value,4) && !b.write(0,&value,4));
+      f.freeOk=true; CHECK(b.close() && !b.owned()); }
     std::printf("memory ownership/publication: %u checks, %u failures (HOST_ONLY)\n",checks,failed);
     return failed ? 1 : 0;
 }

@@ -128,12 +128,27 @@ def test_app_vm(tmp):
     check(all(c.startswith("info ") for c in app_vm.READ_ONLY_COMMANDS), "only info commands")
 
 
+def test_cardless_probe_result():
+    runner = load("cardless_run")
+    check(not runner.probe_complete("Welcome to kernel debugger output!\n"), "normal banner is not completion")
+    check(runner.probe_complete("k40_os: PASS native memory\nK40-CARDLESS-END\n"), "completed native probe passes")
+    for transcript in ("K40-CARDLESS-END\n", "k40_os: FAIL status -1\n",
+                       "k40_os: FAIL first load\nk40_os: PASS second load\nK40-CARDLESS-END\n",
+                       "k40_os: PASS\ncleanup failed\nK40-CARDLESS-END\n"):
+        try:
+            runner.probe_complete(transcript)
+            check(False, "a failed or incomplete probe must not pass")
+        except RuntimeError:
+            check(True, "a failed or incomplete probe is rejected")
+
+
 def main():
     with tempfile.TemporaryDirectory(prefix="vm_tools_") as name:
         tmp = Path(name)
         test_transfer_server(tmp)
         test_job_runner(tmp)
         test_app_vm(tmp)
+        test_cardless_probe_result()
     print(f"test_vm_tools.py: {checks} checks, {failures} failures")
     return 1 if failures else 0
 

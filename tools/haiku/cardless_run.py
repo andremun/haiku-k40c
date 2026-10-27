@@ -22,6 +22,17 @@ HMP=Path(__file__).with_name('qemu_hmp.py')
 DEFAULT_BASE=Path(os.environ.get('HAIKU_PERSISTENT_VM_DIR',Path.home()/'haiku-vm')).expanduser()/'system.qcow2'
 
 
+def probe_complete(serial):
+    """Reject any failed load, including failure followed by a devfs reload PASS."""
+    if 'k40_os: FAIL' in serial or 'cleanup failed' in serial:
+        raise RuntimeError('cardless probe failed; stop without retry')
+    if 'K40-CARDLESS-END' not in serial:
+        return False
+    if 'k40_os: PASS' not in serial:
+        raise RuntimeError('guest commands completed without driver PASS')
+    return True
+
+
 def run(base,driver,seconds,cpus=1,kvm=False):
     from vm_guard import guest_lock
 
@@ -101,6 +112,7 @@ def _run(base,driver,seconds,cpus=1,kvm=False):
             while time.monotonic()-start<seconds and process.poll() is None:
                 serial=(folder/'serial.log').read_text(errors='replace') if (folder/'serial.log').is_file() else ''
                 if 'PANIC:' in serial:raise RuntimeError('kernel panic; see incremental serial log')
+                if driver is not None:probe_complete(serial)
                 if not launched and ('first login script' in serial or 'Volume::InitialVerify(): volume at "/boot/home/config" is consistent' in serial):
                     # Wait for Tracker before sending its terminal shortcut.
                     time.sleep(12);hmp('cmd','sendkey alt-meta_l-t');time.sleep(8)
@@ -109,8 +121,7 @@ def _run(base,driver,seconds,cpus=1,kvm=False):
                 if 'job.exit' in received:
                     if (folder/'job.exit').read_text().strip()!='0':raise RuntimeError('guest job failed')
                     if driver is not None:
-                        if 'K40-CARDLESS-END' not in serial:time.sleep(1);continue
-                        if 'k40_os: PASS' not in serial:raise RuntimeError('guest commands completed without driver PASS')
+                        if not probe_complete(serial):time.sleep(1);continue
                     status='pass';break
                 time.sleep(1)
             if status!='pass':raise RuntimeError('guest ended or host deadline expired; see saved logs')

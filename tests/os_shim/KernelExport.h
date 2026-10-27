@@ -21,7 +21,7 @@ typedef struct { phys_addr_t address;phys_size_t size; } physical_entry;
 enum { B_OK=0,B_ERROR=-1,B_BAD_VALUE=-2,B_BAD_DATA=-3 };
 enum { B_NOT_ALLOWED=-4,B_IO_ERROR=-5,B_ENTRY_NOT_FOUND=-6 };
 /* API tokens for host mocks; not used to infer native numeric values. */
-enum { B_PAGE_SIZE=4096,B_ANY_KERNEL_ADDRESS=1,B_KERNEL_READ_AREA=16,B_KERNEL_WRITE_AREA=32,B_CONTIGUOUS=3 };
+enum { B_PAGE_SIZE=4096,B_ANY_KERNEL_ADDRESS=1,B_KERNEL_READ_AREA=16,B_KERNEL_WRITE_AREA=32,B_CONTIGUOUS=3,B_32_BIT_CONTIGUOUS=6 };
 status_t get_module(const char*,module_info**);
 status_t put_module(const char*);
 area_id map_physical_memory(const char*,phys_addr_t,size_t,uint32,uint32,void**);

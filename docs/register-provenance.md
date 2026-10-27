@@ -206,6 +206,12 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/mmu/PageTable.h:40` | `static constexpr uint64_t kPteUnmapped = 0;` | nvkm/subdev/mmu/vmmgf100.c:94 | SOURCE_ONLY |
 | `src/mmu/PageTable.h:43` | `static constexpr uint64_t kLptInvalid = 2;` | nvkm/subdev/mmu/vmmgk104.c:29 | SOURCE_ONLY |
 
+## src/os/HaikuMemory.h
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/os/HaikuMemory.h:39` | `static constexpr size_t capacity = 16;` | no source: software ownership-record capacity, not a GPU limit. | SOURCE_ONLY |
+
 ## src/runtime/Bootstrap.cpp
 
 | Line | Code | Source | Status |
@@ -261,6 +267,7 @@ The following constant lines have no source citation:
 - src/fifo/PushBuffer.cpp:33 (no source: 0x7ffc is max 13-bit value aligned to 4; nvc0_winsys.h shifts mthd >> 2)
 - src/fifo/PushBuffer.cpp:39 (no source: 0x1fff is max 13-bit value for the count field;    nvc0_winsys.h uses (size << 16) with 13-bit field)
 - src/fifo/PushBuffer.cpp:269 (no source: 0xff is just 8-bit mask for address upper bits)
+- src/os/HaikuMemory.h:39 (no source: software ownership-record capacity, not a GPU limit.)
 - src/runtime/Bootstrap.cpp:45 (no source: ambiguous citation)
 - src/runtime/Bootstrap.cpp:47 (no source: ambiguous citation)
 - src/runtime/Bootstrap.cpp:50 (no source: ambiguous citation)
