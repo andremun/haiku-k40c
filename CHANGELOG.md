@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-10-28: Native A7 prerequisite audit stops at ESC-002 for the flush-target arming/publication contract. No write entry point is added. D0 remains a structural result only.
 - 2026-10-28: The authorized D0 retry passes with syscall-stop task proof and retained allocation coverage. DMA publication stays denied. Native POST/A7 is next. S1 remains incomplete.
 - 2026-10-28: S1D0THREAD adds syscall-stop TGID and kernel FD-table proof to the private observer. Owned shared/private-table tests pass. D0 retry approval is limited to one run.
 - 2026-10-28: Apply Claude's filtered R5 journal changes. The first physical D0 attempt stops on unproved task/FD sharing. Evidence is retained. No retry or DMA publication occurs.

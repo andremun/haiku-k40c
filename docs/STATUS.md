@@ -2,7 +2,7 @@
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
 Current task: S1A7NATIVE (native POST integration and A7 package).
-Task state: S1D0RETRY PASS in structural mapping scope (110.5 s). Retained 4096-byte allocation, task/FD proof, topology and complete API map coverage agree at the cutoff. The guest exits and selected final trace parses. Filtered logs are unchanged. No payload/coherency, provider publication, POST or S1 proof. Full checks pass. Next: host-only native POST integration and a concrete A7 package. A7 needs an explicit per-run yes.
+Task state: S1D0RETRY PASS in structural mapping scope, committed d217b6f. S1A7NATIVE prerequisite audit is STOPPED at ESC-002: resolve the arm-only flush-target contract versus the existing production publication prerequisite before native binding. D0 does not close Q7 or authorize a fresh A7 mapping. No native write entry point or runnable A7 package was added. Hardware gates remain closed. S1 is incomplete.
 Last updated: 2026-10-28
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -75,6 +75,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1D0THREAD | DONE (host-only correction, self-review) | 2026-10-28 | Syscall-stop task/FD-table proof and split/exec guards. Five tests include real shared/private tables and fork cases. Full checks pass. See work/S1D0THREAD/RESULT.md. |
 
 | S1D0RETRY | PASS (structural mapping only) | 2026-10-28 | Retained 4096-byte page has complete map coverage at the cutoff. Task proofs and trace replay pass. No payload/coherency or S1 claim. See work/S1D0RETRY/RESULT.md. |
+
+| S1A7NATIVE | STOPPED (prerequisite audit only) | 2026-10-28 | ESC-002 asks how arm-only pre-POST references relate to the current publication prerequisite. Native binding/package not implemented. Hardware gates unchanged. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

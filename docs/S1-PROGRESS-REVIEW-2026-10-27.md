@@ -58,3 +58,12 @@ NOP with GET advancement, no faults and source-backed teardown.
 
 Do not interpret the number of host tests, source pins or linked objects as S1
 success. Keep unknown physical behavior labeled UNKNOWN until captured.
+
+## Native POST prerequisite decision
+
+The S1A7NATIVE audit stopped at ESC-002. Pinned Nouveau arms its host flush
+address before POST. The current candidate requires production publication first,
+which D0 deliberately does not grant. This does not prove a DMA transaction is
+required before POST. Resolve an arm-only experimental contract versus the current
+submission prerequisite before adding the native binding. No A7 write entry
+point or runnable write-stage package was added. Hardware gates stay closed.

@@ -301,3 +301,11 @@ into the driver. The exact desc.c hash and fixture pins are recorded by
 `tools/observer/task_pins.py`. Linux `kcmp.h` and `sys/syscall.h` supply public
 syscall constants. The consulted kcmp(2) man page documents KCMP_FILES equality
 and read-access checks. No additional Nouveau source or device protocol was used.
+
+## S1A7NATIVE prerequisite audit
+
+Reconsulted pinned Nouveau `nvkm/subdev/fb/base.c`, `fb/gf100.c`, `fb/gk110.c`,
+`devinit/base.c`, `devinit/gf100.c`, `engine/device/base.c` and
+`include/nvkm/core/layout.h` for constructor, preinit and POST ordering. These
+are existing MIT reference sources. No source blocks were copied and no new
+hardware constant was introduced. ESC-002 records the source-only findings.
