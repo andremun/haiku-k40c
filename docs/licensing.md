@@ -182,3 +182,18 @@ blocks copied. Nouveau was not consulted for this task.
 
 Source URLs and hash record are in docs/NATIVE-OWNER.md and
 work/S1NATIVE/source-hashes.log. The cross-source module.cpp is byte-identical.
+
+## S1OWNERTEST cardless staging and reload
+
+Haiku MIT semantic/API facts only. No implementation blocks copied.
+Consulted pinned commit 49a0af9585d80e42240af63ab66e31e9873f59b8:
+
+- src/system/kernel/module.cpp:336-343,632-654: user/nonpackaged module paths.
+- src/system/kernel/device_manager/legacy_drivers.cpp:259-264,300-355,463-476:
+  driver paths, empty-node unload, and uninit lifecycle.
+- src/system/kernel/fs/vfs.cpp:4426-4494: module path resolution stops at the image file.
+- src/system/libroot/os/find_directory.cpp:148-181: user config/nonpackaged add-ons.
+- Existing module.h and Drivers.h API declarations used through the matching cross headers.
+
+Sparse-omitted sources were read from exact official raw.githubusercontent URLs
+into /tmp. Source hashes are saved in work/S1OWNERTEST/source-hashes.log.

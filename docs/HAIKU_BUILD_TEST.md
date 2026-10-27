@@ -159,3 +159,30 @@ installed or loaded. It is a kernel module, not a device-node probe. Do not feed
 it to cardless_run.py as a legacy driver. A later explicit cardless task must
 stage the module and a client that validates reload and quarantine behavior.
 The B5 and cardless launcher commands are unchanged.
+
+## Cardless owner module and reload probe
+
+S1OWNERTEST adds a separate owner-client probe and an optional fixed staging mode.
+Build the owner with the command in docs/NATIVE-OWNER.md, then build its client:
+
+```sh
+HAIKU_CROSS="$HOME/haiku-cross" KCFLAGS='-Werror -Isrc' \
+  bash tools/haiku/build-driver.sh k40_owner_probe \
+  src/os/OwnerClient.cpp tools/haiku/selftest/owner.cpp
+python3 tools/haiku/cardless_run.py --kvm \
+  --driver build/haiku/k40_owner_probe --owner-module build/haiku/k40_owner_module
+```
+
+The owner flag requires both matching ELF roles. The job uses finddir for the
+user nonpackaged add-on path, stages generic/k40c_owner before the client, and
+lists the test device directory four times. Empty-device clients unload after
+publication, as specified in pinned legacy_drivers.cpp:300-355. The owner remains
+a separate KEEP_LOADED module. QEMU options and the base disk are unchanged.
+
+Owner-mode success requires actual ordered init/uninit markers, an advancing
+lease, the same retained token, failed startup state and one quarantined record,
+plus native host-byte cleanup and denied publication. Missing/malformed reload
+evidence is a failure even if another probe printed PASS. Launch evidence records
+both ELF hashes, source commit and expected kernel hash. The uploaded guest kernel
+must match. A reported stop requires user approval before another run.
+This is a cardless lifetime test, not physical DMA or GPU bring-up evidence.

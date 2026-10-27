@@ -2,7 +2,7 @@
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
 Current task: S1OWNERTEST (cardless owner load and reload evidence). S1NATIVE is complete in the pending review batch.
-Task state: S1NATIVE source/host/link scope DONE. Separate permanent owner and client ABI retain startup/quarantine state and deny DMA publication. Native load/reload remains unverified. Next: cardless owner test. No write stage is authorized.
+Task state: S1OWNERTEST PREPARED. Owner/client cross-link and host lifecycle/runner tests pass. Complete repository checks and commit before the single prepared cardless run. Native reload remains unverified; DMA publication and every card write stay gated.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
