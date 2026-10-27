@@ -1,0 +1,9 @@
+{
+  "claim": "PMC_BOOT_0 only under Haiku",
+  "driver_sha256": "7e82493d84340bcbac561df290f7eb327978320821f852fe818ed1f62f468d61",
+  "elapsed_seconds": 128.49,
+  "error": "",
+  "stage": "B5_IDENTITY_READ_ONLY",
+  "status": "pass",
+  "verification": "HARDWARE_VERIFIED"
+}

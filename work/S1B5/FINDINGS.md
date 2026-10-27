@@ -56,3 +56,21 @@ Preserve the first result and logs. Fix only the host parser and add a regressio
 This was no real hang or panic. A further authorized read-only attempt uses
 the same guest options and driver. A real hang or panic still forbids retry.
 The corrected host suite passes 12 tests.
+
+## B5 identity result
+
+KNOWN / HARDWARE_VERIFIED: PMC_BOOT_0 = 0x0f1240a1 under Haiku.
+Evidence: results/20261027-b5-identity/attempt-02/serial.log.
+The probe observed PCI command 0x0007, with memory decode enabled.
+Both devfs loads passed. No actual PANIC message occurred.
+The successful tool result reports 128.49 seconds and the exact driver hash.
+The uploaded kernel hash matched before driver download.
+No slow-window read, bring-up, DMA, or compute job occurred.
+The launcher terminated its own QEMU process at completion.
+The shared-tool re-pin is committed in haiku-k40c-llm as 9bbd144.
+The owner tool revision is 5368556. Application make check passed.
+
+Final make check exits 0, recorded in check-final.log.
+Final make vm-tools-test exits 0, recorded in vm-tools-final.log.
+No QEMU guest remains running after launcher cleanup (read-only host /proc inventory).
+The generated application tool pin passes pin_tools.py --commit 5368556 --check.

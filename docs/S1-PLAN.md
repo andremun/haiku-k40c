@@ -100,8 +100,8 @@ task texts (`docs/tasks/S1A.md`, `S1B.md`) and the acceptance test
 
 **Next steps, in order.**
 
-1. Complete the Haiku card launcher and B5 identity reads (macro task S1B5).
-   Run the pending S1A cardless KVM check first. Ask before shutting down a running VM.
+1. Review completed macro task S1B5: the launcher, cardless check, and B5 identity pass.
+   The user requests Claude Code review before the next macro task.
 2. Implement the host-only board-operation policy and helpers under ADR 004.
    Allow only its specified ROM and observed operations. Deny other operations.
 3. Complete B2 allocation and mapping, A4 pre-start state, and the C2 choices.
@@ -111,7 +111,9 @@ Work uses only main. Claude Code reviews completed macro tasks (ADR 005).
 No further outside review is required. The reviewed hardware integration gate remains for the executor.
 
 S1A and S1B host work is complete. The 2026-10-26 checks and probe links
-passed (`docs/STATUS.md`). No card stage has run.
+passed (`docs/STATUS.md`). B5 identity passed on 2026-10-27.
+KNOWN / HARDWARE_VERIFIED: PMC_BOOT_0 was `0x0f1240a1` under Haiku
+(`results/20261027-b5-identity/attempt-02/serial.log`). No write stage has run.
 
 ## The work, in three tracks
 
@@ -139,9 +141,9 @@ responsibility for remaining work and its review.
 |---|---|---|---|---|
 | B1 | Fix the seven code defects of the external review and the comparison tool, with regression tests | Historical local agent (R1) | No | **Done** 2026-10-14 (task R1) |
 | B2 | The layer between the encoders and the hardware: host memory, card memory, address mapping, publishing bytes to the card | Codex, Claude Code review | No | Typed ownership/publication layer implemented/tested; real allocation/VMM/visibility adapter pending |
-| B3 | Haiku backend, adapted from Haiku's in-tree drivers: find the card, map its regions, allocate, time, log, clean up | Codex, Claude Code review | Guest without card | OS backend/probes cross-compile; host failure tests pass. Matching-kernel cardless link/load passed (ESC-001). S1A cardless rerun pending |
-| B4 | Guest tooling: a start script with limits the host enforces, a runtime allow-list of registers, logs saved as the run goes. Reuses the `haiku-k40c-llm` installation, with KVM | Codex, Claude Code review | No | Cardless overlay/watchdog/logging runner implemented; current probe allows identity reads only. Cardless KVM native load passed (ESC-001). S1A rerun and hardware-stage allow-lists pending |
-| B5 | Read-only stages on the card: identity, then a survey compared with the Linux trace | Codex preparation, user-authorized run | Read-only | Not started |
+| B3 | Haiku backend, adapted from Haiku's in-tree drivers: find the card, map its regions, allocate, time, log, clean up | Codex, Claude Code review | Guest without card | OS backend/probes cross-compile; host failure tests pass. Matching-kernel cardless link/load passed (ESC-001). S1A cardless rerun passed 2026-10-27 |
+| B4 | Guest tooling: a start script with limits the host enforces, a runtime allow-list of registers, logs saved as the run goes. Reuses the `haiku-k40c-llm` installation, with KVM | Codex, Claude Code review | No | Cardless overlay/watchdog/logging runner implemented; current probe allows identity reads only. Cardless KVM native load passed (ESC-001). S1A rerun and B5 identity passed 2026-10-27. Write-stage allow-lists pending |
+| B5 | Read-only stages on the card: identity, then a survey compared with the Linux trace | Codex, Claude Code macro review | Read-only | Identity passed 2026-10-27 (S1B5, HARDWARE_VERIFIED). Register survey remains pending |
 
 ### Track C: from "awake" to S1
 
