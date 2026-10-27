@@ -23,7 +23,8 @@ The sparse reference checkout omits these two kernel files. They were read from
 the exact pinned commit into /tmp. `work/S1NATIVE/source-hashes.log` records their
 SHA-256 values. The module file matches the cross-source checkout byte for byte.
 The kernel used for linking is the previously exported matching hrev60207 kernel.
-This source check does not establish runtime module behavior on that guest.
+This source check alone does not establish runtime behavior. The later
+S1OWNERTEST result below supplies the bounded cardless lifetime observation.
 
 ## Implementation
 
@@ -63,11 +64,18 @@ Detach during Running records Failed. No transition returns to Fresh, even when
 all allocations were freed. These state markers grant no write permission and
 are not independent hardware-readiness evidence.
 
-The existing probes do not use this owner yet. Future integration must acquire
-this module rather than create another latch or NativePool inside the driver.
-A cardless test must install/load the owner, load/unload clients repeatedly, and
-observe the retained state, failed cleanup and one-shot refusal before A7.
-Neither source inspection nor host simulation closes that native runtime gate.
+S1OWNERTEST now loads this owner with a dedicated cardless client probe.
+`results/20261027-owner-reload/` records the successful 52.57-second hrev60207 run.
+Client lease 1 consumes the software latch and detaches allocation token 2 into
+quarantine. After real uninit/reload, lease 2 observes token 2, Failed state,
+one owned record and one quarantine record. Startup and allocation are refused.
+Host pattern readback, aligned GPA, clean release and denied publication also pass.
+
+This is KNOWN Haiku OS evidence for the tested lifetime path. It does not test
+failed delete_area recovery, arbitrary concurrent clients, physical DMA or GPU
+references. Identity/memory probes remain isolated tests. Future production
+integration must acquire this module rather than create another latch or pool
+inside an unloadable driver. The lifetime result supplies no DMA/readiness proof.
 
 ## DMA proof required before a provider exists
 

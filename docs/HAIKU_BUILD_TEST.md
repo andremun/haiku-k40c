@@ -154,10 +154,10 @@ It does not validate production pool lifetime, quarantine recovery, DMA, or IOVA
 ## Permanent owner module: build only
 
 S1NATIVE adds `k40_owner_module`, built with the command in
-`docs/NATIVE-OWNER.md`. It links against the matching kernel but has not been
-installed or loaded. It is a kernel module, not a device-node probe. Do not feed
-it to cardless_run.py as a legacy driver. A later explicit cardless task must
-stage the module and a client that validates reload and quarantine behavior.
+`docs/NATIVE-OWNER.md`. It links against the matching kernel. S1OWNERTEST later loaded it with the
+separate owner-client probe described below. It is a kernel module, not a device-node probe. Do not feed
+it to cardless_run.py as a legacy driver. Use the owner staging flag below to pair it with the client and strict reload
+validation.
 The B5 and cardless launcher commands are unchanged.
 
 ## Cardless owner module and reload probe
@@ -186,3 +186,8 @@ evidence is a failure even if another probe printed PASS. Launch evidence record
 both ELF hashes, source commit and expected kernel hash. The uploaded guest kernel
 must match. A reported stop requires user approval before another run.
 This is a cardless lifetime test, not physical DMA or GPU bring-up evidence.
+
+S1OWNERTEST's first prepared run passed in 52.57 seconds. Evidence is in
+`results/20261027-owner-reload/`. Both client uninit calls and the reload are
+recorded; lease 2 retains token 2, Failed state and one quarantine record.
+This validates the tested native owner lifetime, not DMA or GPU readiness.

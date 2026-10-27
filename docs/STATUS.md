@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1OWNERTEST (cardless owner load and reload evidence). S1NATIVE is complete in the pending review batch.
-Task state: S1OWNERTEST PREPARED. Owner/client cross-link and host lifecycle/runner tests pass. Complete repository checks and commit before the single prepared cardless run. Native reload remains unverified; DMA publication and every card write stay gated.
+Current task: S1POST (immutable execution binding and register policy). S1OWNERTEST is complete in the pending review batch.
+Task state: S1OWNERTEST DONE for native cardless lifetime scope. First prepared run passes: owner survives client unload/reload with the same token, Failed latch and quarantine. Kernel match verified. Production executor binding, DMA/visibility and card readiness remain gated. No write stage is authorized.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -60,6 +60,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1C2 | DONE (source design, batched review pending) | 2026-10-27 | Mode 17, PDB invalidation, discovered routing, software-only group and release obligations; corrected timeout/scratch/DMA claims. See work/S1C2/RESULT.md. |
 | S1A6 | DONE (host only, batched review pending) | 2026-10-27 | Deterministic POST input audit, exact board-policy binding, bounded dedicated I2C candidate; 908 wire checks and 10 input-audit tests. Native/hardware gates remain. See work/S1A6/RESULT.md. |
 | S1NATIVE | DONE (source/host/native link, batched review pending) | 2026-10-27 | Separate KEEP_LOADED owner, client lease/handle API, one-shot/quarantine retention; 161 host checks and native link pass. No load/reload or DMA claim. See work/S1NATIVE/RESULT.md. |
+| S1OWNERTEST | DONE (native cardless lifetime, batched review pending) | 2026-10-27 | First run passes in 52.57 s; two real init/uninit pairs retain token 2, Failed state and one quarantine. No DMA/GPU claim. See work/S1OWNERTEST/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

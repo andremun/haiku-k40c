@@ -15,3 +15,16 @@
   source commit, checks uploaded kernel hash, and refuses generic PASS evidence.
 - Native reload, module residency, and actual retention remain UNKNOWN until run.
 - Prepared full make check passes with zero failures. No guest run yet; commit this snapshot before launch.
+
+- First prepared cardless run PASSES in 52.57 seconds. Source 45923d6.
+  Evidence: results/20261027-owner-reload/. No retry occurred.
+- Native phase1 init/uninit: lease 1, token 2. The reload uses lease 2 and the
+  same token, Failed state, owned=1/quarantine=1, followed by phase2 uninit/PASS.
+- Owner/client hashes match staged artifacts; uploaded kernel hash matches the
+  expected link kernel. QEMU exited through normal runner cleanup.
+- Application shared tools re-pinned to 45923d6 in commit 0d59079. Its offline/host
+  checks pass outside the sandbox. A first sandboxed server check did not start;
+  this was a host CPU test, not another VM run or a launcher stop.
+- This is native OS lifetime evidence, not DMA or K40c evidence. Failed OS release
+  paths and physical references were not exercised by this successful cardless run.
+- Final make check passes with zero failures. Both source and application working changes are ready for the final handoff; no second guest was started.

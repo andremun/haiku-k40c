@@ -120,7 +120,8 @@ KNOWN / HARDWARE_VERIFIED: PMC_BOOT_0 was `0x0f1240a1` under Haiku
 Claude accepted S1B5 on 2026-10-27. After any launcher-reported stop,
 report and ask before another run, including a later-diagnosed false alarm (ADR 006).
 
-Before A7, prove that write-stage startup runs once per guest boot despite devfs reloads.
+S1OWNERTEST proves the tested native owner preserves the latch across devfs client reloads.
+Before A7, bind write-stage startup to this owner; a separate driver static is insufficient.
 The B5 probe ran twice. Its read-only behavior does not establish safe repeated initialization.
 
 KNOWN: B5 observed PCI command `0x0007`, including the bus-master enable bit.
@@ -154,7 +155,7 @@ responsibility for remaining work and its review.
 | # | Work | Who | Card? | State |
 |---|---|---|---|---|
 | B1 | Fix the seven code defects of the external review and the comparison tool, with regression tests | Historical local agent (R1) | No | **Done** 2026-10-14 (task R1) |
-| B2 | The layer between the encoders and the hardware: host memory, card memory, address mapping, publishing bytes to the card | Codex, Claude Code review | No | Native DMA32 allocation/ownership adapter passes host and cardless checks (S1B2). S1NATIVE adds a permanent owner/client API with host tests and native link. Owner reload, device IOVA/visibility, GPU VA and VRAM integration remain gated |
+| B2 | The layer between the encoders and the hardware: host memory, card memory, address mapping, publishing bytes to the card | Codex, Claude Code review | No | Native DMA32 allocation/ownership adapter passes host and cardless checks (S1B2). S1NATIVE adds a permanent owner/client API with host tests and native link. S1OWNERTEST validates the tested cardless owner reload path. Production executor binding, device IOVA/visibility, GPU VA and VRAM integration remain gated |
 | B3 | Haiku backend, adapted from Haiku's in-tree drivers: find the card, map its regions, allocate, time, log, clean up | Codex, Claude Code review | Guest without card | OS backend/probes cross-compile; host failure tests pass. Matching-kernel cardless link/load passed (ESC-001). S1A cardless rerun passed 2026-10-27 |
 | B4 | Guest tooling: a start script with limits the host enforces, a runtime allow-list of registers, logs saved as the run goes. Reuses the `haiku-k40c-llm` installation, with KVM | Codex, Claude Code review | No | Cardless overlay/watchdog/logging runner implemented; current probe allows identity reads only. Cardless KVM native load passed (ESC-001). S1A rerun and B5 identity passed 2026-10-27. Write-stage allow-lists pending |
 | B5 | Read-only stages on the card: identity, then a survey compared with the Linux trace | Codex, Claude Code macro review | Read-only | Identity passed 2026-10-27 (S1B5, HARDWARE_VERIFIED). Register survey remains pending |

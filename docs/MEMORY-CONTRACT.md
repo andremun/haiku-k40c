@@ -77,5 +77,6 @@ No external provider implementation or driver callback can be installed in v1.
 
 The owner denies publication and conservatively retains storage after any startup
 attempt. It exposes no recovery or reset shortcut. Host tests and native linking
-pass; actual Haiku module load/client reload behavior remains untested. Existing
-probes still use their isolated test pools and have no production lifetime claim.
+pass. S1OWNERTEST subsequently verifies the tested Haiku module load/client
+reload path in results/20261027-owner-reload/. Existing identity/memory probes
+still use isolated test pools. No production DMA or GPU lifetime claim follows.

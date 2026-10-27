@@ -1,0 +1,33 @@
+host-env/bin/python tests/test_offline.py
+test_fixture_inventory (__main__.OfflineTests.test_fixture_inventory) ... ok
+test_guest_bundle_required_build_inputs (__main__.OfflineTests.test_guest_bundle_required_build_inputs) ... ok
+test_patch_manifest_matches_pins (__main__.OfflineTests.test_patch_manifest_matches_pins)
+reference/PATCH-MANIFEST.json (written by make prepare) agrees with reference/LLAMA-INPUTS.json. ... ok
+test_reject_bad_gguf (__main__.OfflineTests.test_reject_bad_gguf) ... ok
+test_verifier_passes_matching_run (__main__.OfflineTests.test_verifier_passes_matching_run) ... ok
+test_verifier_rejects_wrong_or_missing_output (__main__.OfflineTests.test_verifier_rejects_wrong_or_missing_output) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.853s
+
+OK
+host-env/bin/python tests/host_checks.py
+[
+  {
+    "name": "host-reasoning",
+    "exit_code": 0
+  },
+  {
+    "name": "host-chat-template",
+    "exit_code": 0
+  },
+  {
+    "name": "host-completion",
+    "exit_code": 0
+  },
+  {
+    "name": "host-server",
+    "exit_code": 0,
+    "tokens_predicted": 8
+  }
+]
