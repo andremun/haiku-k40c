@@ -154,9 +154,11 @@ nm -uC build/haiku/k40_post_core
 
 ## Remaining integration
 
-A later task must place the immutable snapshot and executor in the persistent
-owner, supply reviewed stage transports, and prove that
-all lifetimes and the guest-wide latch apply to that execution. Preserve the
+S1OWNERPOST now places the immutable snapshot and copied execution state in the
+persistent owner. Its host-only simulation uses the existing boot latch before
+selection/preinit/POST and retains no callback references. See docs/OWNER-POST.md.
+This revision is cross-linked only. Native execution and physical stage transports
+still need separate integration and lifetime proof. Preserve the
 existing default-denied DMA contract. Verified IOVA/visibility, VRAM ownership,
 fault/readiness coverage and quiescence remain open. A7 still requires review and
 the user's explicit go-ahead. No write-stage package is ready from this task alone.

@@ -22,14 +22,15 @@ check:
 	python3 tools/devinit_trace_join.py --check
 	python3 tools/load_trace.py --check
 	@if grep -qw A3 .check-skip 2>/dev/null; then \
-		echo "devinit_inventory, devinit_preflight, devinit_sources, board_trace, devinit_closure, post_policy --check: NOT RUN (A3 in .check-skip, private VBIOS image)"; \
+		echo "devinit_inventory, devinit_preflight, devinit_sources, board_trace, devinit_closure, post_policy, owner_post_check --check: NOT RUN (A3 in .check-skip, private VBIOS image)"; \
 	else \
 		python3 tools/devinit_inventory.py --check && \
 		python3 tools/devinit_preflight.py --check && \
 		python3 tools/devinit_sources.py --check && \
 		python3 tools/board_trace.py --check && \
 		python3 tools/devinit_closure.py --check && \
-		python3 tools/post_policy.py --check; \
+		python3 tools/post_policy.py --check && \
+		python3 tools/owner_post_check.py --check; \
 	fi
 	@if [ -f tests/Makefile ]; then $(MAKE) -s -C tests; fi
 

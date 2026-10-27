@@ -123,7 +123,8 @@ build/tests/test_prestart
 HAIKU_CROSS="$HOME/haiku-cross" KCFLAGS='-Werror -Isrc' \
   bash tools/haiku/build-driver.sh k40_owner_module \
   src/os/HaikuBackend.c src/os/HaikuMemory.cpp src/os/NativeOwner.cpp \
-  src/os/HaikuOwnerModule.cpp src/os/OwnerClient.cpp
+  src/os/HaikuOwnerModule.cpp src/os/OwnerClient.cpp \
+  src/devinit/PostImage.cpp src/devinit/BoardPolicy.cpp src/devinit/Sha256.cpp
 make check
 ```
 
@@ -131,3 +132,13 @@ The build compiles against real Haiku headers with freestanding C++, no RTTI or
 exceptions, and links with --no-undefined against matching kernel.so. It exports
 the module table without a dynamic global constructor. It is not installed or
 loaded by these commands. No VM, PCI/BAR access, reset or root step is involved.
+
+## S1OWNERPOST resident POST storage
+
+The owner now reserves the immutable ROM/layout and copied execution diagnostics.
+A host-only simulation fixture connects the existing boot latch to selection,
+bus preparation and POST. No callback-bearing executor remains after the call.
+The native ABI stays version 1 and exposes no new firmware or startup operation.
+See docs/OWNER-POST.md for binding, latch, quarantine and build contracts.
+This revision cross-links but has not been loaded in Haiku. The S1OWNERTEST result
+above applies to the recorded earlier owner revision. No GPU evidence follows.

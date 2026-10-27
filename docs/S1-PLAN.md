@@ -261,8 +261,11 @@ S1POST binds immutable inputs and instruction permissions. S1HELPERS removes
 hosted helper storage and cross-links the complete bound core. Dedicated host
 I2C pin operations now pass through that policy, with separate explicit preinit.
 Their compile/link and simulated wire results provide no native execution claim.
-Next, S1OWNERPOST connects the immutable image, execution state and startup attempt
-to the persistent owner. DMA/visibility, owned VRAM, readiness and A7 approval stay
+S1OWNERPOST connects the immutable image, copied execution state and startup attempt
+to the persistent owner in host tests. Its native module excludes simulation and
+has only compile/link evidence for this revision. Next, S1DMACONTRACT studies the
+remaining DMA/publication evidence and a separate verification-stage design.
+DMA/visibility, owned VRAM, readiness and A7 approval stay
 separate gates. Grouped Claude review remains pending under ADR 007.
 
 ## After S1

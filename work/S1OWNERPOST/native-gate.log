@@ -1,0 +1,3 @@
+src/os/OwnerPostSimulation.cpp:4:2: error: #error "OwnerPostSimulation is a host fixture and must not enter a kernel build"
+    4 | #error "OwnerPostSimulation is a host fixture and must not enter a kernel build"
+Native header gate compiles; host fixture kernel build rejected; simulatePost symbol absent.

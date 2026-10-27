@@ -1,0 +1,12 @@
+built /home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_owner_post_module
+                 U operator delete(void*, unsigned long)@KERNEL_BASE
+                 U create_area@KERNEL_BASE
+                 U delete_area@KERNEL_BASE
+                 U get_memory_map@KERNEL_BASE
+                 U get_module@KERNEL_BASE
+                 U map_physical_memory@KERNEL_BASE
+                 U memcmp@KERNEL_BASE
+                 U memcpy@KERNEL_BASE
+                 U memset@KERNEL_BASE
+                 U put_module@KERNEL_BASE
+                 U strcmp@KERNEL_BASE

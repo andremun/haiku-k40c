@@ -1,6 +1,7 @@
 // Copyright 2026 Mario Andres Munoz.
 // Distributed under the terms of the MIT License.
 #include "os/NativeOwner.h"
+#include <new>
 namespace k40::os {
 OwnerError NativeOwner::acquire(uint64_t& lease)
 {
@@ -120,4 +121,27 @@ OwnerError NativeOwner::describe(uint64_t lease, size_t index, HaikuMemory::Info
     if (!valid(lease)) return OwnerError::Lease;
     return memory_.describe(index, info) ? OwnerError::None : OwnerError::Input;
 }
+OwnerError NativeOwner::bindPost(uint64_t lease, const uint8_t* rom, uint32_t bytes)
+{
+    Guard guard(lock_);
+    if (!guard.held) return OwnerError::Busy;
+    if (!valid(lease)) return OwnerError::Lease;
+    if (!fresh()) return OwnerError::Startup;
+    if (memory_.quarantinedCount()) return OwnerError::Retained;
+    if (postInfo_.bindingAttempted || !rom || bytes!=devinit::approvedRomBytes) return OwnerError::Input;
+    postInfo_.bindingAttempted=true;
+    post_=new (postStorage_) devinit::PostImage(rom,bytes);
+    postInfo_.bound=post_->approved();
+    return postInfo_.bound?OwnerError::None:OwnerError::Input;
+}
+OwnerError NativeOwner::inspectPost(uint64_t lease, OwnerPostInfo& info)
+{
+    info={};
+    Guard guard(lock_);
+    if (!guard.held) return OwnerError::Busy;
+    if (!valid(lease)) return OwnerError::Lease;
+    info=postInfo_;
+    return OwnerError::None;
+}
+
 }

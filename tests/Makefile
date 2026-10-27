@@ -12,6 +12,10 @@ CXX      := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -Werror -I../src -fsanitize=undefined -fno-sanitize-recover=all
 BUILDDIR := ../build/tests
 
+# Resident owner construction now binds freestanding POST image storage.
+OWNER_POST_CORE := ../src/devinit/PostImage.cpp ../src/devinit/BoardPolicy.cpp ../src/devinit/Sha256.cpp
+OWNER_POST_HEADERS := $(wildcard ../src/devinit/*.h)
+
 CXX_TESTS := test_bootstrap:runtime+memory test_prestart:runtime+memory \
              test_devinit:devinit s1a_accept:devinit test_board:devinit test_i2c:devinit test_post_image:devinit \
              test_memory:memory \
@@ -28,7 +32,7 @@ PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard tes
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 
 .PHONY: all clean
-all: $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
+all: $(BUILDDIR)/owner_post_probe $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
 	@for p in $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe; do $$p || exit 1; done
 	@for t in $(PY_TESTS); do (cd .. && python3 tests/$$t) || exit 1; done
 
@@ -63,12 +67,17 @@ $(BUILDDIR)/test_haiku_memory: test_haiku_memory.cpp ../src/os/HaikuMemory.cpp .
 	$(CXX) $(CXXFLAGS) -Ios_shim test_haiku_memory.cpp ../src/os/HaikuMemory.cpp ../src/memory/Memory.cpp -o $@
 
 $(BUILDDIR)/test_native_owner: test_native_owner.cpp os_shim/module.h os_shim/KernelExport.h $(wildcard ../src/os/NativeOwner.* ../src/os/HaikuOwnerModule.* ../src/os/OwnerClient.* ../src/os/HaikuMemory.* ../src/runtime/BootState.h) | $(BUILDDIR)
-	$(CXX) $(CXXFLAGS) -Ios_shim test_native_owner.cpp ../src/os/NativeOwner.cpp ../src/os/HaikuOwnerModule.cpp ../src/os/OwnerClient.cpp ../src/os/HaikuMemory.cpp -o $@
+	$(CXX) $(CXXFLAGS) -Ios_shim test_native_owner.cpp ../src/os/NativeOwner.cpp ../src/os/HaikuOwnerModule.cpp ../src/os/OwnerClient.cpp ../src/os/HaikuMemory.cpp $(OWNER_POST_CORE) -o $@
 
 $(BUILDDIR)/test_owner_probe: test_owner_probe.cpp os_shim/module.h os_shim/Drivers.h os_shim/KernelExport.h ../src/runtime/BootState.h ../tools/haiku/selftest/owner.cpp $(wildcard ../src/os/NativeOwner.* ../src/os/HaikuOwnerModule.* ../src/os/OwnerClient.* ../src/os/HaikuMemory.*) | $(BUILDDIR)
-	$(CXX) $(CXXFLAGS) -Ios_shim test_owner_probe.cpp ../tools/haiku/selftest/owner.cpp ../src/os/NativeOwner.cpp ../src/os/HaikuOwnerModule.cpp ../src/os/OwnerClient.cpp ../src/os/HaikuMemory.cpp -o $@
+	$(CXX) $(CXXFLAGS) -Ios_shim test_owner_probe.cpp ../tools/haiku/selftest/owner.cpp ../src/os/NativeOwner.cpp ../src/os/HaikuOwnerModule.cpp ../src/os/OwnerClient.cpp ../src/os/HaikuMemory.cpp $(OWNER_POST_CORE) -o $@
 
 $(BUILDDIR)/post_probe: post_probe.cpp board_fake.h $(wildcard ../src/devinit/*.cpp ../src/devinit/*.h) | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) post_probe.cpp $(wildcard ../src/devinit/*.cpp) -o $@
 
 $(BUILDDIR)/test_i2c $(BUILDDIR)/post_probe: i2c_wire.h board_fake.h
+
+$(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe: $(OWNER_POST_CORE) $(OWNER_POST_HEADERS)
+
+$(BUILDDIR)/owner_post_probe: owner_post_probe.cpp i2c_wire.h board_fake.h $(wildcard ../src/devinit/*.h ../src/devinit/*.cpp ../src/os/NativeOwner.* ../src/os/OwnerPostSimulation.cpp ../src/os/HaikuMemory.*) | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -pthread -Ios_shim owner_post_probe.cpp ../src/os/NativeOwner.cpp ../src/os/OwnerPostSimulation.cpp ../src/os/HaikuMemory.cpp $(wildcard ../src/devinit/*.cpp) -o $@

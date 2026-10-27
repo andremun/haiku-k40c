@@ -164,6 +164,30 @@ int main()
         CHECK(owner->allocate(client,64,64,handle) == OwnerError::Retained);
         CHECK(owner->detach(client) == OwnerError::Retained);
     }
+    {
+        // Binding failures also persist without the private approved ROM.
+        alignas(NativeOwner) unsigned char storage[sizeof(NativeOwner)];
+        auto* owner = new (storage) NativeOwner;
+        uint64_t client=0;
+        CHECK(owner->acquire(client)==OwnerError::None);
+        OwnerPostInfo post;
+        CHECK(owner->inspectPost(client+1,post)==OwnerError::Lease);
+        CHECK(owner->inspectPost(client,post)==OwnerError::None && !post.bindingAttempted);
+        std::vector<uint8_t> wrong(k40::devinit::approvedRomBytes,0);
+        CHECK(owner->bindPost(client+1,wrong.data(),wrong.size())==OwnerError::Lease);
+        CHECK(owner->bindPost(client,nullptr,wrong.size())==OwnerError::Input);
+        CHECK(owner->bindPost(client,wrong.data(),wrong.size()-1)==OwnerError::Input);
+        CHECK(owner->inspectPost(client,post)==OwnerError::None && !post.bindingAttempted);
+        CHECK(owner->bindPost(client,wrong.data(),wrong.size())==OwnerError::Input);
+        CHECK(owner->inspectPost(client,post)==OwnerError::None && post.bindingAttempted && !post.bound);
+        CHECK(owner->detach(client)==OwnerError::None);
+        CHECK(owner->acquire(client)==OwnerError::None);
+        CHECK(owner->bindPost(client,wrong.data(),wrong.size())==OwnerError::Input);
+        CHECK(owner->inspectPost(client,post)==OwnerError::None && post.bindingAttempted && !post.executionAttempted);
+        CHECK(owner->begin(client)==OwnerError::None);
+        CHECK(owner->bindPost(client,wrong.data(),wrong.size())==OwnerError::Startup);
+        CHECK(owner->detach(client)==OwnerError::None);
+    }
     // Only test-process termination discards these simulated quarantined areas.
     std::printf("native owner host contracts: %u checks, %u failures; NOT native load evidence\n",checks,failures);
     return failures ? 1 : 0;
