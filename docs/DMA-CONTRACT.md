@@ -160,7 +160,7 @@ from this proposal.
 There is no justified self-checking pre-POST payload test in the consulted source.
 The smallest useful first stage is therefore D0 mapping observation. It can narrow
 the address contract without pretending to close payload visibility. D1 is a
-separate conditional physical transaction experiment. Neither stage is implemented. ADR 008 now records the user's hardware approval
+separate conditional physical transaction experiment. D0 now has a prepared package (docs/D0-STAGE-REVIEW.md), without a physical run. D1 remains a design. ADR 008 records the user's hardware approval
 for planned S1 stages once concrete implementations and prerequisites are ready.
 Neither belongs in the closed B5 identity launcher.
 

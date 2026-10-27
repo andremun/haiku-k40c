@@ -1,0 +1,8 @@
+1283812 close(3</etc/ld.so.cache>)      = 0
+1283812 close(3</usr/lib/x86_64-linux-gnu/libc.so.6>) = 0
+1283812 openat(-100</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c>, "/dev/null", 0x80002) = 3</dev/null>
+1283812 ioctl(3</dev/null>, 0x3b67, K40_STATUS{error}) = -1 ENOTTY (Inappropriate ioctl for device)
+1283812 ioctl(3</dev/null>, 0x3b68, K40_ATTACH{3}) = -1 ENOTTY (Inappropriate ioctl for device)
+1283812 ioctl(3</dev/null>, 0x3b6a, K40_DEVICE{"0000:04:00.0\0\0\1\33\3;0\0\0\0\5\0\0\0\4\360\377\377d\0"...}) = -1 ENOTTY (Inappropriate ioctl for device)
+1283812 ioctl(3</dev/null>, 0x3b69, K40_DETACH{}) = -1 ENOTTY (Inappropriate ioctl for device)
+1283812 close(3</dev/null>)             = 0

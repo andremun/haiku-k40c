@@ -27,13 +27,13 @@ CXX_TESTS := test_bootstrap:runtime+memory test_prestart:runtime+memory \
              ref_qmd:compute+fifo r1_accept:compute+fifo+hw+mmu
 # The Python tests run once the tool of task D4 exists.
 PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard test_compare_traces.py accept/d4_accept.py)) \
-             accept/r1_accept.py test_dma_model.py test_observer.py test_vm_tools.py test_owner_runner.py test_card_run.py test_board_tools.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_closure.py test_post_policy.py test_devinit_rom.py test_devinit_trace_join.py
+             accept/r1_accept.py test_dma_model.py test_observer.py test_observer_binding.py test_observer_supervisor.py test_d0_monitor.py test_d0_topology.py test_d0_evidence.py test_d0_kernel_log.py test_d0_run.py test_vm_tools.py test_owner_runner.py test_card_run.py test_board_tools.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_closure.py test_post_policy.py test_devinit_rom.py test_devinit_trace_join.py
 
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 
 .PHONY: all clean
-all: $(BUILDDIR)/owner_post_probe $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
-	@for p in $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe; do $$p || exit 1; done
+all: $(BUILDDIR)/test_map_owner_probe $(BUILDDIR)/owner_post_probe $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
+	@for p in $(BUILDDIR)/test_map_owner_probe $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe; do $$p || exit 1; done
 	@for t in $(PY_TESTS); do (cd .. && python3 tests/$$t) || exit 1; done
 
 define RULE
@@ -81,3 +81,6 @@ $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe: $(OWNER_POST_CORE) $
 
 $(BUILDDIR)/owner_post_probe: owner_post_probe.cpp i2c_wire.h board_fake.h $(wildcard ../src/devinit/*.h ../src/devinit/*.cpp ../src/os/NativeOwner.* ../src/os/OwnerPostSimulation.cpp ../src/os/HaikuMemory.*) | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) -pthread -Ios_shim owner_post_probe.cpp ../src/os/NativeOwner.cpp ../src/os/OwnerPostSimulation.cpp ../src/os/HaikuMemory.cpp $(wildcard ../src/devinit/*.cpp) -o $@
+
+$(BUILDDIR)/test_map_owner_probe: test_map_owner_probe.cpp ../tools/haiku/selftest/map_owner.cpp $(wildcard ../src/os/NativeOwner.* ../src/os/HaikuOwnerModule.* ../src/os/OwnerClient.* ../src/os/HaikuMemory.*) $(OWNER_POST_CORE) $(OWNER_POST_HEADERS) | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -Ios_shim test_map_owner_probe.cpp ../tools/haiku/selftest/map_owner.cpp ../src/os/NativeOwner.cpp ../src/os/HaikuOwnerModule.cpp ../src/os/OwnerClient.cpp ../src/os/HaikuMemory.cpp $(OWNER_POST_CORE) -o $@

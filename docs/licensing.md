@@ -274,3 +274,19 @@ observer, not code linked into the MIT driver. Upstream notices remain in the
 ignored external build tree. Installed Linux userspace vfio.h API facts use its
 GPL-2.0 WITH Linux-syscall-note UAPI terms. Exact hashes and package versions are
 recorded in work/S1D0OBSERVER/. No proprietary firmware or device data was copied.
+
+## S1D0PACKAGE observation and topology
+
+Reconsulted exact Ubuntu QEMU 6.2+dfsg-2ubuntu6.31 source facts:
+`hw/vfio/common.c` group/container/device association and mapping;
+`softmmu/memory.c:3188-3255` FlatView formatting;
+`softmmu/physmem.c:1300-1320` ramblock formatting;
+`monitor/qmp-cmds.c` and `hmp-commands-info.hx` read-only query names;
+`softmmu/qdev-monitor.c` qtree formatting;
+`hw/core/qdev-properties-system.c:801-825` full host BDF property;
+`util/osdep.c:292-307` close-on-exec open behavior.
+The existing source pin set is in `work/S1DMACONTRACT/evidence.json`.
+Consulted strace `src/defs.h` and `src/util.c` bounded NUL-terminated string
+printing, and reconsulted `src/pathtrace.c`. Existing upstream license notices
+remain in the external trees. Original helpers decode API facts and text formats.
+No implementation blocks or new Nouveau code were copied.

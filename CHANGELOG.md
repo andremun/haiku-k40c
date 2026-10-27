@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-10-27: S1D0PACKAGE prepares a closed mapping observation stage with retained native memory, bounded tracing and fault monitoring. Host and cardless checks pass. Physical D0 awaits R5. S1 remains incomplete.
 - 2026-10-27: S1B2 connects typed memory ownership to native Haiku DMA32 allocation. The cardless aligned readback and cleanup probe passes. Device IOVA publication remains denied without verification.
 - 2026-10-27: S1BOARD adds the exact ADR 004 ROM policy and host-only board helpers. IO/CRTC accesses match the Linux capture. The hardware gate stays closed. ADRs 006 and 007 record retry approval and batched host work.
 - 2026-10-27: ADR 005 records main-only work, macro reviews, and read-only Haiku passthrough. S1B5 adds the guarded launcher. The cardless rerun passes, and PMC_BOOT_0 is HARDWARE_VERIFIED under Haiku. No bring-up, DMA, or compute claim.

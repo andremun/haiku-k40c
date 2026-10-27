@@ -57,14 +57,15 @@ class Context:
 
 
 class Stream:
-    def __init__(self,launch,*,fixture=False,max_bytes=16*1024*1024,max_lines=100000):
+    def __init__(self,launch,*,fixture=False,expected_pid=None,max_bytes=16*1024*1024,max_lines=100000):
         # Validate launch with the same policy as the typed ledger.
         Ledger(Identity(launch,1,1))
         if type(fixture) is not bool or type(max_bytes) is not int or not 0<max_bytes<=16*1024*1024 or type(max_lines) is not int or not 0<max_lines<=100000:
             raise ValueError('observer bounds')
         self._launch=launch
         self._path='/dev/null' if fixture else '/dev/vfio/vfio'
-        self._bytes=0;self._lines=0;self._pid=None;self._next=1;self._contexts={}
+        if expected_pid is not None and (type(expected_pid) is not int or not 0<expected_pid<2**31):raise ValueError('process identity')
+        self._bytes=0;self._lines=0;self._pid=expected_pid;self._next=1;self._contexts={}
         self._max_bytes=max_bytes;self._max_lines=max_lines
         self._error=None
 
@@ -121,6 +122,9 @@ class Stream:
         ledger=context.ledger
         if not ledger.apply(Observation(ledger.identity,ledger.cutoff+1,operation,**fields)):
             raise InvalidTrace(ledger.error)
+
+    def has_fd(self,fd):
+        return fd in self._contexts and self._contexts[fd].active
 
     def coverage(self,fd,**request):
         if self.error:return None

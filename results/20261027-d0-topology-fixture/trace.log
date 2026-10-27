@@ -1,0 +1,117 @@
+1289438 close(3</etc/ld.so.cache>)      = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libpixman-1.so.0.40.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libz.so.1.2.11>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libpng16.so.16.37.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libjpeg.so.8.2.2>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libpmem.so.1.0.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libseccomp.so.2.5.3>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libfdt-1.6.1.so>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.7200.4>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.7200.4>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.7200.4>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/librdmacm.so.1.3.39.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libibverbs.so.1.14.39.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libslirp.so.0.3.1>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libudev.so.1.7.2>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/liburing.so.2.1.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.7200.4>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libnettle.so.8.4>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libfuse3.so.3.10.5>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libaio.so.1.0.1>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libm.so.6>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libgcc_s.so.1>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libc.so.6>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libhogweed.so.6.4>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libndctl.so.6.20.1>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libdaxctl.so.1.6.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libmount.so.1.1.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libselinux.so.1>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libffi.so.8.1.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libpcre.so.3.13.3>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libnl-route-3.so.200.26.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libkmod.so.2.3.7>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libblkid.so.1.1.0>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.10.4>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5>) = 0
+1289438 close(3</usr/lib/x86_64-linux-gnu/libcrypto.so.3>) = 0
+1289438 close(3</proc/filesystems>)     = 0
+1289438 close(3</proc/1289438/status>)  = 0
+1289438 close(4</sys/devices/system/node/node0/meminfo>) = 0
+1289438 close(4</sys/devices/system/node/node1/meminfo>) = 0
+1289438 close(3</sys/devices/system/node>) = 0
+1289438 close(3</sys/devices/system/cpu>) = 0
+1289438 close(3</proc/1289438/status>)  = 0
+1289438 close(4</sys/bus/nd/devices>)   = 0
+1289438 close(3</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c>) = 0
+1289438 close(3</memfd:test (deleted)>) = 0
+1289438 close(6<anon_inode:[io_uring]>) = 0
+1289438 close(3<anon_inode:[io_uring]>) = 0
+1289438 close(3</memfd:test (deleted)>) = 0
+1289438 close(8</usr/share/OVMF/OVMF_CODE_4M.fd>) = 0
+1289438 close(8</dev/urandom>)          = 0
+1289438 openat(-100</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c>, "/dev/null", 0x2) = 8</dev/null>
+1289438 fcntl(8</dev/null>, 0x24, {l_type=0x2, l_whence=0, l_start=0, l_len=0, l_pid=0}) = 0
+1289438 close(8</dev/null>)             = 0
+1289438 close(9</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/47a1adc5/vars.fd>) = 0
+1289438 close(10</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/47a1adc5/overlay.qcow2>) = 0
+1289438 close(10</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/47a1adc5/overlay.qcow2>) = 0
+1289438 close(10</home/unimelb.edu.au/mariom1/haiku-vm/system.qcow2>) = 0
+1289438 close(20<anon_inode:[eventfd]>) = 0
+1289438 close(19<anon_inode:[eventfd]>) = 0
+1289438 close(18<anon_inode:[eventfd]>) = 0
+1289438 close(17<anon_inode:[eventfd]>) = 0
+1289438 close(16<anon_inode:[eventfd]>) = 0
+1289438 close(15<anon_inode:[eventfd]>) = 0
+1289438 close(14<anon_inode:[eventfd]>) = 0
+1289438 close(14</dev/urandom>)         = 0
+1289438 close(14<anon_inode:[io_uring]>) = 0
+1289438 close(9</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/47a1adc5/vars.fd>) = 0
+1289438 close(9</usr/share/qemu/kvmvapic.bin>) = 0
+1289438 close(20</usr/share/zoneinfo/Australia/Melbourne>) = 0
+1289438 close(20</usr/share/seabios/vgabios-stdvga.bin>) = 0
+1289438 close(20</usr/share/seabios/vgabios-stdvga.bin>) = 0
+1289438 close(20</usr/lib/ipxe/qemu/efi-e1000.rom>) = 0
+1289438 close(20</usr/lib/ipxe/qemu/efi-e1000.rom>) = 0
+1289448 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289449 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289448 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289449 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289448 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289449 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289448 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289449 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289448 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289449 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289448 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289448 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289449 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289448 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289449 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289447 close(9<socket:[70616058]>)     = 0
+1289438 --- SIGTERM {si_signo=15, si_code=0, si_pid=1289407, si_uid=1389220685} ---
+1289438 close(9</proc/1289407/cmdline>) = 0
+1289448 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289449 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289448 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289449 --- SIGUSR1 {si_signo=10, si_code=0xfffffffa, si_pid=1289438, si_uid=1389220685} ---
+1289438 close(8</usr/share/OVMF/OVMF_CODE_4M.fd>) = 0
+1289438 close(19</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/47a1adc5/vars.fd>) = 0
+1289438 close(8</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/47a1adc5/vars.fd>) = 0
+1289438 close(10</home/unimelb.edu.au/mariom1/haiku-vm/system.qcow2>) = 0
+1289438 close(11</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/47a1adc5/overlay.qcow2>) = 0
+1289438 close(8</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/47a1adc5/overlay.qcow2>) = 0
+1289438 close(16<anon_inode:[eventfd]>) = 0
+1289438 close(15<anon_inode:[eventfd]>) = 0
+1289438 close(14</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/results/20261027-d0-topology-fixture/serial.log>) = 0
+1289438 close(3<socket:[70615994]>)     = 0

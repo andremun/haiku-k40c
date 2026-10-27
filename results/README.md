@@ -12,3 +12,8 @@ Evidence that is not a generated task output. Task outputs stay in `hardware/`,
 
 The folder came from `opencode-haiku/results/t7610-20261018-driver-native/` (commit `dcfd6f2`)
 on 23 October 2026 with unchanged bytes. `hashes.txt` lists the file hashes.
+
+| Folder | Claim | Cited by |
+|---|---|---|
+| `20261027-d0-owner-readiness/` | Enlarged resident owner reload passes in a cardless guest. No GPU evidence. | `work/S1D0PACKAGE/RESULT.md` |
+| `20261027-d0-topology-fixture/` | Actual Q35 cardless QMP formatting and bounded owned-child tracing. No GPU evidence. | `docs/D0-STAGE-REVIEW.md` |

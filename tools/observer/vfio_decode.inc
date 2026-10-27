@@ -8,6 +8,29 @@
 static int
 k40_vfio_decode(struct tcb *tcp, unsigned int code, kernel_ulong_t arg)
 {
+    if (code == VFIO_GROUP_GET_STATUS) {
+        struct vfio_group_status status;
+        if (entering(tcp)) return 0;
+        tprint_arg_next();
+        if (syserror(tcp)) tprints("K40_STATUS{error}");
+        else if (umove(tcp,arg,&status)) tprints("K40_STATUS{unreadable}");
+        else tprintf("K40_STATUS{argsz=%u, flags=%#x}",status.argsz,status.flags);
+        return RVAL_IOCTL_DECODED;
+    }
+    if (code == VFIO_GROUP_SET_CONTAINER) {
+        int container;
+        tprint_arg_next();
+        if (umove_or_printaddr(tcp,arg,&container)) return RVAL_IOCTL_DECODED;
+        tprintf("K40_ATTACH{%d}",container);
+        return RVAL_IOCTL_DECODED;
+    }
+    if (code == VFIO_GROUP_UNSET_CONTAINER) {
+        tprint_arg_next();tprints("K40_DETACH{}");return RVAL_IOCTL_DECODED;
+    }
+    if (code == VFIO_GROUP_GET_DEVICE_FD) {
+        tprint_arg_next();tprints("K40_DEVICE{");printstr_ex(tcp,arg,128,QUOTE_0_TERMINATED);tprints("}");
+        return RVAL_IOCTL_DECODED;
+    }
     if (code == VFIO_SET_IOMMU) {
         tprint_arg_next();
         tprintf("K40_SETUP{%llu}", (unsigned long long)arg);
