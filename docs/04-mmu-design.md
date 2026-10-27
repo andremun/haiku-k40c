@@ -61,7 +61,7 @@ instance memory.
     (`nvkm_fo64(inst, 0x0200, 0x00000000, 2)`): it removes the page
     directory address and the limit again.
 14. **VMM scratch memory** — `gf100_fb_oneinit`
-    (`nvkm/subdev/fb/gf100.c:45`) calls `nvkm_instmem_memory_new` to
+    (`nvkm/subdev/fb/gf100.c:44-64`) calls `nvkm_memory_new` to
     allocate MMU read and write scratch memory from instance memory.
 15. **BAR1 init** — `gf100_bar_bar1_init`
     (`nvkm/subdev/bar/gf100.c:52`) writes the BAR1 instance block address
@@ -70,7 +70,7 @@ instance memory.
     (`nvkm/subdev/bar/gf100.c:73`) writes the BAR2 instance block address
     (shifted right by 12) to MMIO `0x001714` with bit 31 set.
 17. **BAR flush** — `g84_bar_flush` (`nvkm/subdev/bar/g84.c:29`) sets bit 0
-    of MMIO `0x070000` and waits up to 2ms for bit 1.
+    of MMIO `0x070000` and waits up to 2000 ms for bit 1.
 
 ## Haiku driver design
 
@@ -110,12 +110,13 @@ instance memory.
    These are from `gf100_bar_bar1_init` (line 52) and
    `gf100_bar_bar2_init` (line 73) of gf100.c.
 10. **BAR flush** — After BAR writes, set bit 0 of MMIO `0x070000` and
-    poll bit 1 until clear, with a 2ms timeout, following
+    poll bit 1 until clear, with a 2000 ms timeout, following
     `g84_bar_flush` at line 29 of g84.c.
-11. **Skip the scratch memory allocation** — `gf100_fb_oneinit`
-    (`nvkm/subdev/fb/gf100.c:45`) allocates MMU read/write scratch
-    memory from instance memory; for S1 this is not needed for compute.
-    It will be addressed in S3 when the GR engine needs scratch buffers.
+11. **Retain the MMU scratch dependency** — `gf100_fb_oneinit`
+    (`nvkm/subdev/fb/gf100.c:44-64`) allocates two MMU debug buffers.
+    The previous claim that S1 could defer these to GR was unsupported.
+    The S1 candidate preserves the selected allocations; see
+    `docs/S1-INTEGRATION-CHOICES.md` for size, ownership, and remaining gates.
 
 ## Haiku interfaces
 
@@ -124,8 +125,9 @@ instance memory.
    and have a known physical address (see "Not known" for which memory
    the tables live in).
 2. `` `get_memory_map()` `` — `headers/os/drivers/KernelExport.h`: the
-   physical address of locked memory, for a mapping with target HOST;
-   it replaces `dma_map_page` (`analysis/linux_deps.md`).
+   physical address of locked memory. It does not replace `dma_map_page`
+   in a VFIO guest: GPA and device IOVA need separate verification and
+   publication. See `docs/MEMORY-CONTRACT.md` and `src/os/HaikuMemory.h`.
 3. `` `map_physical_memory()` `` — `headers/os/drivers/KernelExport.h`:
    maps the PCI memory regions of the card (BAR0 for registers, BAR1 and
    BAR2 for GPU memory).
@@ -153,17 +155,19 @@ the access log.
 
 - The exact contents of the MMU read and write scratch buffers that
   `gf100_fb_oneinit` allocates from instance memory at
-  `nvkm/subdev/fb/gf100.c:45` — their size, purpose, and how the GR
-  engine accesses them are not established.
+  `nvkm/subdev/fb/gf100.c:44-64`: the default size is now established
+  (128 KiB each for selected mode 17), but physical necessity on the
+  minimal S1 path is UNKNOWN. They are not established as GR-only.
 - The MMU flush is not in this design. Nouveau has one:
   `gf100_vmm_invalidate` (`nvkm/subdev/mmu/vmmgf100.c:188`) waits on
   register `0x100c80` and writes `0x100cb8` and `0x100cbc`
-  (`hardware/registers/mmu.yaml`). When it must be called (after every
-  map and unmap, or only after a change of the directory) was not
-  analysed.
+  (`hardware/registers/mmu.yaml`). The S1 candidate now specifies
+  publication plus invalidation after mapping changes in
+  `docs/S1-INTEGRATION-CHOICES.md`; physical effectiveness remains gated.
 - How the Haiku driver writes instance memory and page tables. They are
   GPU memory. Nouveau reaches them through BAR2 or a window in BAR0
-  (`docs/hardware-model/imem.md`); the design above does not choose.
+  (`docs/hardware-model/imem.md`). S1 now chooses the locked slow window
+  for bootstrap, then reviewed BAR mappings. Physical ownership remains gated.
 - Whether the kind lookup table values (0x00–0xfe) have a fixed mapping
   to hardware compression formats documented in the GK110 PRM, or
   if they are driver-internal tags only. The 256-entry array is fully

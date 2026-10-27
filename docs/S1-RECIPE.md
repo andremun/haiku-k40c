@@ -1,6 +1,8 @@
 # C2: ordered S1 integration recipe and remaining gates
 
-2026-10-16. This is a reviewed-input checklist/design, not a register replay
+Updated 2026-10-27. Source choices are in [S1-INTEGRATION-CHOICES.md](S1-INTEGRATION-CHOICES.md)
+and pre-POST ordering in [S1-PRESTART.md](S1-PRESTART.md).
+This is a reviewed-input checklist/design, not a register replay
 or an approved hardware experiment. SOURCE_ONLY entries below are tied to the
 pinned v6.12 source; TRACE_VERIFIED means the named access is also observed in
 the Linux capture, whose kernel was 6.8. That mismatch must remain visible.
@@ -17,7 +19,7 @@ Captured addresses belong to that run and must never be reused by Haiku.
 | 2. Selected preinit + VBIOS program | MC/bus/private-ring/I2C/GPIO/timer/FB prerequisites and validated ROM tables | Validate complete reachable bytecode/helper set first; bounded waits; each board target needs explicit decision | Fail before first write if preflight/board policy missing. Do not equate script marker with readiness |
 | 3. Independent bring-up ladder | Reserved VRAM scratch and physical PRAMIN window, under one global selector/data lock | Stable identity/timer, raw bus/private-ring faults, address-dependent patterns and complements at owned locations; test aliases | No full-VRAM readiness claim. Do not free/restore unknown firmware-owned memory. A7 requires separate review |
 | 4. Instance memory/bootstrap | Allocate owned channel/PGD/table/runlist/USERD/pushbuffer storage; physical VRAM via slow window | Upload/read back zeroes and encoded bytes; verify address domain, alignment and extent | Release only unreferenced allocations; retain all possibly referenced storage on any later failure |
-| 5. BAR/MMU mapping | Program owned page tables and BAR contexts; select 4 KiB/128 KiB geometry and scratch dependencies | Publish table bytes, BAR flush, context-specific TLB invalidation; validate mappings independently of the host vector model | Mapping failures prevent channel binding. Full scratch/BAR2 recipe and page-size mode remain required integration work |
+| 5. BAR/MMU mapping | Program owned page tables and BAR contexts; select 4 KiB/128 KiB geometry and scratch dependencies | Publish table bytes, BAR flush, context-specific TLB invalidation; validate mappings independently of the host vector model | Mapping failures prevent channel binding. Mode 17 with 4 KiB mappings is selected; scratch/BAR2 ownership and physical validation remain required integration work |
 | 6. FIFO/PBDMA routing | TOP-selected runlist/engine association, discovered PBDMA mask, stage-specific interrupt masking | Validate routing, channel/runlist ownership and relevant raw faults. Keep IRQs masked for a polling-only test | Do not copy in-tree interrupt enabling without a handler. Do not infer GR-independent scheduling from class selection |
 | 7. Channel/RAMFC/USERD | Owned instance block, GPU VA and physical references explicitly distinguished | Fill every context-dependent word from owned addresses/masks; publish/read back; bind and enable, checking status | Stop/preempt/remove/unbind before freeing. Remaining opaque words need exact source provenance and rationale |
 | 8. Runlist publication | Owned aligned VRAM or NCOH list with reviewed target, runlist ID and entry count | Write runlist address then commit count/ID; bound pending poll and preserve fault snapshots | Failed commit may be active; do not free the list. Existing simulation primitive tests encoding/order only |
@@ -57,8 +59,9 @@ Captured addresses belong to that run and must never be reused by Haiku.
   (`reference/nouveau/nvkm/engine/fifo/gk110.c:36-46,57`): a channel in a
   hardware channel group is preempted as a group, `0x002634 = 0x01000000 |
   group id` (`gk110.c:61-64`); otherwise the gf100 write of the channel ID
-  applies. S1 must record which case its channel is in (INFERRED: one
-  channel without a hardware group takes the gf100 path).
+  applies. S1 now explicitly chooses a software-only group (hw=false),
+  channel-only runlist record, and gf100 preempt path. The native constructor
+  must enforce and log this choice; channel count alone does not determine it.
 
 `src/runtime/Bootstrap.*` implements only slow-window read/write, BAR flush and
 runlist commit for host simulation. It validates extents/encoding, locks complete
@@ -72,16 +75,23 @@ submission experiment, not the missing hardware initialization steps. Its
 success predicate includes fault-free progress and verified cleanup. Neither
 primitive is yet integrated into the native Haiku probe.
 
-## Exact decisions still required before hardware implementation
+## Resolved source choices and remaining hardware gates
 
-1. Complete whole-program bytecode reachability and BIT-I/M/helper/preinit model;
-   the observed 24-opcode inventory is insufficient for changing conditions.
-2. Review GPIO/I2C/IO helper effects; identify device 0x20 or keep it denied.
-3. Choose and validate host DMA/IOMMU address mapping, scratch/page-table/BAR
-   layout and lifetime, MMU page-size mode and invalidation protocol.
-4. Resolve TOP/runlist/PBDMA selection and GR omission experimentally, with fault
-   diagnosis that distinguishes memory/routing faults from a GR dependency.
-5. Define actual preempt/idle/recovery evidence before claiming quiescence.
+SOURCE_ONLY choices: mode 17 with small 4 KiB mappings; owned VRAM bootstrap
+structures; distinct BAR contexts; serialized PDB-specific invalidation; TOP
+and PBDMA discovery; software-only group with channel-ID preemption; fail-closed
+release obligations. See S1-INTEGRATION-CHOICES.md for exact source anchors.
+The native implementation and physical evidence remain incomplete:
+
+1. Complete whole-program bytecode reachability and BIT-I/M/helper preflight.
+2. Implement bounded physical I2C transfer and native boot-persistent ownership;
+   preserve ADR 004's exact instruction limits, including the unknown device 0x20.
+3. Verify host DMA/IOMMU mapping and visibility, VRAM arena ownership, scratch,
+   page-table/BAR layout, physical translation and invalidation.
+4. Capture live TOP/runlist/PBDMA association under an approved stage; test GR
+   omission with complete fault diagnosis. Discovery may itself require writes.
+5. Verify the conservative preempt/idle/unbind/recovery contract before releasing
+   any referenced storage. Queued invalidation or GET progress is insufficient.
 
 Until those are closed, the integration recipe remains PARTIAL, with explicit
 stops rather than invented register operations. Cardless testing cannot close

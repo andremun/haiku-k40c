@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1C2 (MMU, routing, and quiescence choices). S1BOARD, S1B2, and S1A4 are complete in the pending review batch.
-Task state: S1A4 host candidate scope DONE. Cold startup ordering and once-per-boot state pass host checks; physical transports and readiness remain gated. Continue C2 under ADR 007. No write stage is authorized.
+Current task: S1A6 (executor closure and bounded board transport). Host batch S1BOARD/S1B2/S1A4/S1C2 is complete; grouped review pending.
+Task state: S1C2 source-design scope DONE. MMU geometry, invalidation, discovered routing and teardown obligations are specified; hardware outcomes remain UNKNOWN. Next host work is S1A6, not A7. No write stage is authorized.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -58,6 +58,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1B2 | DONE (native host/cardless scope, batched review pending) | 2026-10-27 | DMA32 allocator and ownership/mapping adapter. Cardless aligned readback and cleanup pass. IOVA publication remains closed by default. See work/S1B2/RESULT.md. |
 
 | S1A4 | DONE (host candidate, batched review pending) | 2026-10-27 | Selected preinit lifecycle, one-shot controller, source-backed register helpers; 228 host checks. Physical I2C and readiness remain gated. See work/S1A4/RESULT.md. |
+
+| S1C2 | DONE (source design, batched review pending) | 2026-10-27 | Mode 17, PDB invalidation, discovered routing, software-only group and release obligations; corrected timeout/scratch/DMA claims. See work/S1C2/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

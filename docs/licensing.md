@@ -126,3 +126,22 @@ Source facts only; no implementation blocks copied.
 - `reference/nouveau/include/nvkm/core/layout.h`: MIT; selected lifecycle, register semantics, or callback dispatch.
 - `reference/nouveau/include/nvkm/core/device.h`: MIT; selected lifecycle, register semantics, or callback dispatch.
 - `reference/nouveau/nvkm/subdev/fb/gk110.c`: MIT; selected lifecycle, register semantics, or callback dispatch.
+
+## S1C2 integration choices
+
+MIT sources; semantic and constant facts only. No implementation blocks copied.
+
+- `reference/nouveau/nvkm/subdev/mmu/gk104.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/subdev/mmu/vmmgk104.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/subdev/mmu/vmmgf100.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/subdev/bar/gf100.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/subdev/bar/g84.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/subdev/top/gk104.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/engine/fifo/gk110.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/engine/fifo/gk104.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/engine/fifo/gf100.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/engine/fifo/nv50.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/engine/fifo/chan.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/engine/fifo/cgrp.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/engine/fifo/runl.c`: selected geometry, publication, routing, or teardown semantics.
+- `reference/nouveau/nvkm/engine/fifo/uchan.c`: selected geometry, publication, routing, or teardown semantics.

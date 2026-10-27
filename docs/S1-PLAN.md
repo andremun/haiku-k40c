@@ -65,6 +65,8 @@ and a timed matrix product as the decision point after S3 (see the end).
 |---|---|
 | This file | Plan, tracks, limits and unknowns. The latest scaffold review. |
 | [S1-RECIPE.md](S1-RECIPE.md) | Step-by-step recipe for the card stages |
+| [S1-PRESTART.md](S1-PRESTART.md) | Selected preinit lifecycle and host startup gates |
+| [S1-INTEGRATION-CHOICES.md](S1-INTEGRATION-CHOICES.md) | MMU, BAR, routing and release choices |
 | [S1-VERIFICATION.md](S1-VERIFICATION.md) | Verification gates and their results |
 | [BOARD-OPERATIONS.md](BOARD-OPERATIONS.md) | Board operations and the accepted ADR 004 limits |
 | [DEVINIT-EXECUTOR.md](DEVINIT-EXECUTOR.md) | Design of the semantic start-up script executor |
@@ -142,7 +144,7 @@ responsibility for remaining work and its review.
 | A1 | Capture the card's firmware image in the Linux guest, with checksum | Historical scaffold | Read-only guest run | **Done** 2026-10-14 (`reference/vbios/README.md`) |
 | A2 | Build the independent decoder; decode the tables and scripts offline | Historical scaffold | No | **Done** 2026-10-14 (envytools `nvbios`, see `reference/vbios/README.md`) |
 | A3 | Inventory of the script instructions, matched to the driver log (executed or skipped) | Independent rework (A3) | No | **Reworked** 2026-10-16; observed inventory passes checks. Raw-ROM structural supplement covers 530 potential starts / 25 opcodes; see `docs/ABC-CARDLESS-OUTCOME.md`. |
-| A4 | Executor design from the three sources; differences recorded | Codex, Claude Code review | No | Source cross-reference/design drafted; production helper/preinit integration still pending (`docs/DEVINIT-EXECUTOR.md`) |
+| A4 | Executor design from the three sources; differences recorded | Codex, Claude Code review | No | Selected preinit and cold one-shot host controller done (S1A4); physical transport, native persistent owner and readiness remain gated (`docs/S1-PRESTART.md`) |
 | A5 | Board-table lookup of every I²C and GPIO target; the safety list | Codex implementation, Claude Code review | No | **List done** (`docs/BOARD-OPERATIONS.md`); **decisions accepted** 2026-10-27 (ADR 004) |
 | A6 | Executor code, with host tests for changing conditions, timeouts and skipped writes | Codex, Claude Code review | No | Host core implemented: 20 core + 5 default-denied helpers; synthetic and artificial real-ROM tests pass. Not a production executor |
 | A7 | First write experiment: bring-up, with independent readiness checks and a small memory test | Claude Code review, user-authorized run | Yes | Host scratch-check algorithm tested; no card experiment performed |
@@ -162,7 +164,7 @@ responsibility for remaining work and its review.
 | # | Work | Who | State |
 |---|---|---|---|
 | C1 | Decode the load phase of the Linux trace into named steps | Codex, Claude Code review | Six source anchors + chronological domain survey generated; full semantic attribution remains partial |
-| C2 | One ordered recipe: master control, working memory through the slow window, address translation, scheduler set-up, channel, runlist, submission, teardown. Each step with its address domain, wait, error test and rollback | Codex, Claude Code review | Gated integration recipe prepared (`docs/S1-RECIPE.md`); unresolved MMU/helper/routing/quiescence choices explicit |
+| C2 | One ordered recipe: master control, working memory through the slow window, address translation, scheduler set-up, channel, runlist, submission, teardown. Each step with its address domain, wait, error test and rollback | Codex, Claude Code review | Source choices recorded in S1C2 (`docs/S1-INTEGRATION-CHOICES.md`): mode 17, PDB invalidation, discovered routing, standalone group, conservative release. Physical implementation/evidence remain gated |
 | C3 | Implement and host-test each step; then one reviewed card experiment per stage that writes to the card for the first time | Codex, Claude Code review | Slow window, BAR flush, runlist, scratch and S1 controller host-tested/cross-compiled; full backend/channel/MMU integration and hardware experiments pending |
 
 Facts already established for track C, from the reference runs
