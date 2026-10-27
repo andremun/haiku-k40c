@@ -1,0 +1,139 @@
+1617905 close(3</etc/ld.so.cache>)      = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libpixman-1.so.0.40.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libz.so.1.2.11>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libpng16.so.16.37.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libjpeg.so.8.2.2>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libpmem.so.1.0.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libseccomp.so.2.5.3>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libfdt-1.6.1.so>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.7200.4>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.7200.4>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.7200.4>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/librdmacm.so.1.3.39.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libibverbs.so.1.14.39.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libslirp.so.0.3.1>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libudev.so.1.7.2>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/liburing.so.2.1.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.7200.4>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libnettle.so.8.4>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libfuse3.so.3.10.5>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libaio.so.1.0.1>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libm.so.6>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libgcc_s.so.1>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libc.so.6>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libhogweed.so.6.4>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libndctl.so.6.20.1>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libdaxctl.so.1.6.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libmount.so.1.1.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libselinux.so.1>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libffi.so.8.1.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libpcre.so.3.13.3>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libnl-3.so.200.26.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libnl-route-3.so.200.26.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libkmod.so.2.3.7>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libblkid.so.1.1.0>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.10.4>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5>) = 0
+1617905 close(3</usr/lib/x86_64-linux-gnu/libcrypto.so.3>) = 0
+1617905 close(3</proc/filesystems>)     = 0
+1617905 close(3</proc/1617905/status>)  = 0
+1617905 close(4</sys/devices/system/node/node0/meminfo>) = 0
+1617905 close(4</sys/devices/system/node/node1/meminfo>) = 0
+1617905 close(3</sys/devices/system/node>) = 0
+1617905 close(3</sys/devices/system/cpu>) = 0
+1617905 close(3</proc/1617905/status>)  = 0
+1617905 close(4</sys/bus/nd/devices>)   = 0
+1617905 close(3</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c>) = 0
+1617905 close(3</memfd:test (deleted)>) = 0
+1617905 close(6<anon_inode:[io_uring]>) = 0
+1617905 close(3<anon_inode:[io_uring]>) = 0
+1617905 close(3</memfd:test (deleted)>) = 0
+1617905 close(9</usr/share/OVMF/OVMF_CODE_4M.fd>) = 0
+1617905 close(9</dev/urandom>)          = 0
+1617905 close(9</dev/null>)             = 0
+1617905 close(10</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/2e983a68/vars.fd>) = 0
+1617905 close(11</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/2e983a68/overlay.qcow2>) = 0
+1617905 close(11</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/2e983a68/overlay.qcow2>) = 0
+1617905 close(11</home/unimelb.edu.au/mariom1/haiku-vm/system.qcow2>) = 0
+1617905 close(21<anon_inode:[eventfd]>) = 0
+1617905 close(20<anon_inode:[eventfd]>) = 0
+1617905 close(19<anon_inode:[eventfd]>) = 0
+1617905 close(18<anon_inode:[eventfd]>) = 0
+1617905 close(17<anon_inode:[eventfd]>) = 0
+1617905 close(16<anon_inode:[eventfd]>) = 0
+1617905 close(15<anon_inode:[eventfd]>) = 0
+1617905 close(15</dev/urandom>)         = 0
+1617905 close(15<anon_inode:[io_uring]>) = 0
+1617905 close(10</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/2e983a68/vars.fd>) = 0
+1617905 close(10</usr/share/qemu/kvmvapic.bin>) = 0
+1617905 close(10</usr/share/zoneinfo/Australia/Melbourne>) = 0
+1617905 close(10</usr/share/seabios/vgabios-stdvga.bin>) = 0
+1617905 close(10</usr/share/seabios/vgabios-stdvga.bin>) = 0
+1617905 openat(-100</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c>, "/dev/vfio/23", 0x80002) = 10</dev/vfio/23>
+1617905 ioctl(10</dev/vfio/23>, 0x3b67, K40_STATUS{argsz=8, flags=0x1}) = 0
+1617905 openat(-100</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c>, "/dev/vfio/vfio", 0x80002) = 21</dev/vfio/vfio>
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b64, 0) = 0
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b65, 0x3) = 1
+1617905 ioctl(10</dev/vfio/23>, 0x3b68, K40_ATTACH{21}) = 0
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b66, K40_SETUP{3}) = 0
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b70, 0x57646b6325a0) = 0
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b70, 0x57646b6325a0) = 0
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d403e00000, iova=0, size=0xa0000}) = 0
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d403ec0000, iova=0xc0000, size=0x7ff40000}) = 0
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d483e00000, iova=0x100000000, size=0x80000000}) = 0
+1617905 ioctl(10</dev/vfio/23>, 0x3b6a, K40_DEVICE{"0000:04:00.0"}) = 23
+1617905 close(28</usr/lib/ipxe/qemu/efi-e1000.rom>) = 0
+1617905 close(28</usr/lib/ipxe/qemu/efi-e1000.rom>) = 0
+1617905 close(25<anon_inode:[eventfd]>) = 0
+1617905 close(24<anon_inode:[eventfd]>) = 0
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0xc0000, size=0x7ff40000, returned=0x7ff40000}) = 0
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x1, hva=0x76d50d400000, iova=0xc0000, size=0x20000}) = 0
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x1, hva=0x76d50d800000, iova=0xe0000, size=0x20000}) = 0
+1617905 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d403f00000, iova=0x100000, size=0x7ff00000}) = 0
+1617911 close(28</proc/sys/vm/overcommit_memory>) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d50c200000, iova=0xc0000000, size=0x1000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x1, hva=0x76d403c00000, iova=0xc2000000, size=0x10000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0xc0000000, size=0x1000000, returned=0x1000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0xc2000000, size=0x10000, returned=0x10000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x1, hva=0x76d400800000, iova=0xc2000000, size=0x80000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0xc2000000, size=0x80000, returned=0x80000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d50c200000, iova=0xc0000000, size=0x1000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0xc0000000, size=0x1000000, returned=0x1000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d402937000, iova=0xc1000000, size=0x1000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d3e4000000, iova=0x800000000, size=0x10000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d400937000, iova=0x810000000, size=0x2000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0xc1000000, size=0x1000000, returned=0x1000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0x800000000, size=0x10000000, returned=0x10000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0x810000000, size=0x2000000, returned=0x2000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d50c200000, iova=0xc0000000, size=0x1000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d402937000, iova=0xc1000000, size=0x1000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d3e4000000, iova=0x800000000, size=0x10000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d400937000, iova=0x810000000, size=0x2000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0xc0000000, size=0x1000000, returned=0x1000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0xc1000000, size=0x1000000, returned=0x1000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0x800000000, size=0x10000000, returned=0x10000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0x810000000, size=0x2000000, returned=0x2000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d50c200000, iova=0xc0000000, size=0x1000000}) = 0
+1617915 ioctl(21</dev/vfio/vfio>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x76d50c200000, iova=0xa0000, size=0x10000}) = 0
+1617905 close(28</proc/1617892/cmdline>) = 0
+1617905 close(9</usr/share/OVMF/OVMF_CODE_4M.fd>) = 0
+1617905 close(20</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/2e983a68/vars.fd>) = 0
+1617905 close(9</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/2e983a68/vars.fd>) = 0
+1617905 close(11</home/unimelb.edu.au/mariom1/haiku-vm/system.qcow2>) = 0
+1617905 close(12</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/2e983a68/overlay.qcow2>) = 0
+1617905 close(9</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/d0/2e983a68/overlay.qcow2>) = 0
+1617905 close(17<anon_inode:[eventfd]>) = 0
+1617905 close(16<anon_inode:[eventfd]>) = 0
+1617905 close(15</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/results/20261028-d0-mapping/serial.log>) = 0
+1617905 close(3<socket:[72560376]>)     = 0
+1617905 close(8<socket:[72560377]>)     = 0

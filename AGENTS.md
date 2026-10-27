@@ -115,6 +115,9 @@ still open.
 
 ## License
 
+Use ASCII "Mario Andres Munoz" in Python and C/C++ comments. Use
+"Mario Andrés Muñoz" in prose.
+
 MIT (`LICENSE`). New source files start with a copyright line and "Distributed
 under the terms of the MIT License." Record every consulted Nouveau file in
 `docs/licensing.md`.

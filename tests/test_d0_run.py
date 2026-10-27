@@ -2,7 +2,9 @@
 # Copyright 2026 Mario Andres Munoz.
 # Distributed under the terms of the MIT License.
 """D0 orchestration fixtures. Success records below are synthetic, never VFIO evidence."""
+import contextlib
 import hashlib
+import io
 import json
 from pathlib import Path
 import sys
@@ -102,6 +104,15 @@ class D0Tests(unittest.TestCase):
     with self.assertRaises(RuntimeError):run.finish_trace(trace,Stream(),prefix,b'')
    trace.write_bytes(b'rewritten\n')
    with self.assertRaises(RuntimeError):run.finish_trace(trace,Stream(),prefix,b'')
+ def test_missing_journal_check_reports_r5_without_traceback(self):
+  output=io.StringIO()
+  with patch.object(sys,'argv',['d0_run.py','--check']),patch.object(run.os,'geteuid',return_value=1000),\
+       patch.object(run.d0_stage,'validate'),patch.object(run,'prerequisites'),\
+       patch.object(run.card_run,'preflight'),patch.object(run,'KernelLog',side_effect=FileNotFoundError('missing journal')),\
+       contextlib.redirect_stderr(output):
+   self.assertEqual(run.main(),1)
+  self.assertIn('R5',output.getvalue());self.assertNotIn('Traceback',output.getvalue())
+  self.assertEqual(len(output.getvalue().splitlines()),1)
  def test_wrong_role_is_rejected(self):
   with tempfile.TemporaryDirectory() as d:
    path=Path(d)/'driver';path.write_bytes(b'X'*4096)

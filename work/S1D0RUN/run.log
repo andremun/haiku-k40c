@@ -1,0 +1,13 @@
+/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/results/20261028-d0-mapping
+Traceback (most recent call last):
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/d0_run.py", line 249, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/d0_run.py", line 246, in main
+    else:run()
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/d0_run.py", line 216, in run
+    stream,prefix,pending=monitor(child,folder,evidence,port,release,host,kernel)
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/d0_run.py", line 134, in monitor
+    drain()
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/d0_run.py", line 122, in drain
+    raise RuntimeError('D0 observer: '+str(stream.error))
+RuntimeError: D0 observer: unproved binding process

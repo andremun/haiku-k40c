@@ -203,7 +203,7 @@ def run():
         subprocess.run(['qemu-img','create','-q','-f','qcow2','-F','qcow2','-b',str(BASE.resolve()),str(folder/'overlay.qcow2')],check=True)
         args=arguments(folder,evidence);save(evidence/'kernel-before.log',kernel.before)
         save_json(evidence/'launch.json',dict(stage=d0_stage.STAGE,args=args,host=host,suite=suite,
-            timeout_seconds=600,source_commit=subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip()))
+            timeout_seconds=600,kernel_stream=kernel.metadata(),source_commit=subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip()))
         status='failed';error='';start=time.monotonic()
         try:
             with exchange(folder,evidence,suite) as (port,release),(evidence/'qemu.log').open('xb') as log:
@@ -224,18 +224,24 @@ def run():
             save_json(evidence/'result.json',dict(status=status,error=error,stage=d0_stage.STAGE,
                 elapsed_seconds=round(time.monotonic()-start,2),
                 claim='structural mapping observation only' if status=='pass' else 'none',
-                device_payload_verified=False,coherency_verified=False,publication=False))
+                device_payload_verified=False,coherency_verified=False,publication=False,
+                kernel_log_scope='no new fault indication in filtered classes' if status=='pass' else 'not established',
+                kernel_filter=kernel.metadata()['filter_pattern']))
             print(evidence,flush=True)
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true');args=parser.parse_args()
     if args.check:
-        if os.geteuid()==0:raise ValueError('root execution forbidden')
-        d0_stage.validate();prerequisites()
-        if os.environ.get('GPU_BDF',card_run.ALLOWED_BDF)!=card_run.ALLOWED_BDF:raise ValueError('only 04:00.0 is approved')
-        card_run.preflight(card_run.ALLOWED_BDF)
-        with KernelLog() as log:log.poll()
+        try:
+            if os.geteuid()==0:raise ValueError('root execution forbidden')
+            d0_stage.validate();prerequisites()
+            if os.environ.get('GPU_BDF',card_run.ALLOWED_BDF)!=card_run.ALLOWED_BDF:raise ValueError('only 04:00.0 is approved')
+            card_run.preflight(card_run.ALLOWED_BDF)
+            with KernelLog() as log:log.poll()
+        except (OSError,ValueError,RuntimeError) as error:
+            print('D0 prerequisite: '+str(error)+'; see R5 in docs/REQUESTS.md',file=sys.stderr)
+            return 1
         print('D0 prerequisites available; no guest started')
     else:run()
     return 0

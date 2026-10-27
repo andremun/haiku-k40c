@@ -22,7 +22,25 @@ The shared guest lock rejects another running QEMU guest.
 R5 in `docs/REQUESTS.md` must be satisfied first. The user starts the read-only
 kernel journal stream. The agent does not run a privileged command. The launcher
 requires a live journal reader, a kernel baseline and append-only bounded data.
-New IOMMU/VFIO fault indications stop the stage. A stop requires a report and
+Start the stream only during a card stage and stop it afterwards:
+
+```sh
+{ sudo journalctl -k -b -n 1 --no-pager --output=short-monotonic; sudo journalctl -k -b -n all -f --no-pager --output=short-monotonic | grep --line-buffered -iE 'dmar|amd-vi|iommu|vfio|remapping|0000:04:00|aer|pcie bus error'; } > ~/k40-s1-kernel.log
+```
+
+`K40_KERNEL_LOG` can override the home-folder path. The first query saves one
+real kernel entry as a baseline control. The second includes all retained boot
+entries matching the filter and follows new ones. This handles a journal with
+no retained boot entries in the selected classes. The user approved this command
+on 2026-10-28 after the filtered-only file remained empty.
+
+Each run records the control baseline, filter pattern and limited scope.
+The watcher pins both journalctl and the full-pattern filter with pidfds. It
+checks that the user-owned filter writes the same log inode. A pass means
+no new fault indication in those classes, not a clean complete kernel log.
+New IOMMU/VFIO fault indications and all new AER or PCIe Bus Error lines stop
+the stage. This includes the card and its root port. The conservative AER rule
+also stops when a line does not identify a device. A stop requires a report and
 user authorization before another guest run, including a parser false alarm.
 
 ## Native effects
@@ -93,4 +111,15 @@ Positive VFIO-format fixtures in tests are explicitly synthetic.
 `results/20261027-d0-topology-fixture/` records actual cardless QMP formatting.
 Neither result is K40c evidence. Native linking and CPU checks do not establish
 physical DMA. The final repository check is recorded in
-`work/S1D0PACKAGE/check-final.log`. Claude review remains pending in the batch.
+`work/S1D0PACKAGE/check-final.log`. Claude accepted the batch on 2026-10-28. The supplied review is preserved in
+work/S1D0RUN/CLAUDE-REVIEW.md. Its filtered-stream changes are applied before D0.
+
+## First physical attempt, 2026-10-28
+
+S1D0RUN stopped after 124.63 s. The observer rejected trace line 104 because a
+second task performed MAP_DMA without captured FD-table sharing proof. The
+serial log is empty. No native extent or cutoff was attested. Do not rerun the
+current package or admit arbitrary task IDs. Prepare a thread-aware proof first.
+Preserve the original capture. ADR 006 requires explicit approval before retry.
+The before/after filtered logs match. This does not establish a clean kernel log.
+See work/S1D0RUN/RESULT.md and results/20261028-d0-mapping/.

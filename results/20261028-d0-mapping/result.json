@@ -1,0 +1,12 @@
+{
+  "claim": "none",
+  "coherency_verified": false,
+  "device_payload_verified": false,
+  "elapsed_seconds": 124.63,
+  "error": "D0 observer: unproved binding process",
+  "kernel_filter": "dmar|amd-vi|iommu|vfio|remapping|0000:04:00|aer|pcie bus error",
+  "kernel_log_scope": "not established",
+  "publication": false,
+  "stage": "D0_MAPPING_OBSERVE_ONLY",
+  "status": "failed"
+}
