@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A4 (pre-start state and helper integration). S1BOARD and S1B2 are complete in the pending review batch.
-Task state: S1B2 native host/cardless scope DONE. The aligned DMA32 allocator, typed adapter, cleanup, and default-denied IOVA publication pass host and cardless checks. No device IOVA or GPU-VA mapping is verified. Continue A4, then C2, under ADR 007. No write stage is authorized.
+Current task: S1C2 (MMU, routing, and quiescence choices). S1BOARD, S1B2, and S1A4 are complete in the pending review batch.
+Task state: S1A4 host candidate scope DONE. Cold startup ordering and once-per-boot state pass host checks; physical transports and readiness remain gated. Continue C2 under ADR 007. No write stage is authorized.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -56,6 +56,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1B5 | ACCEPT (Claude Code, user-supplied review) | 2026-10-27 | Guarded launcher and identity-only Haiku stage pass. PMC_BOOT_0 HARDWARE_VERIFIED. Cardless rerun and host checks pass. See work/S1B5/RESULT.md. |
 | S1BOARD | DONE (host only, batched review pending) | 2026-10-27 | Exact ROM policy, IO/CRTC/I2C/GPIO helpers, and host adapter. 20 trace accesses match. make check passes. See work/S1BOARD/RESULT.md. |
 | S1B2 | DONE (native host/cardless scope, batched review pending) | 2026-10-27 | DMA32 allocator and ownership/mapping adapter. Cardless aligned readback and cleanup pass. IOVA publication remains closed by default. See work/S1B2/RESULT.md. |
+
+| S1A4 | DONE (host candidate, batched review pending) | 2026-10-27 | Selected preinit lifecycle, one-shot controller, source-backed register helpers; 228 host checks. Physical I2C and readiness remain gated. See work/S1A4/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

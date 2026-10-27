@@ -12,10 +12,10 @@ CXX      := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -Werror -I../src -fsanitize=undefined -fno-sanitize-recover=all
 BUILDDIR := ../build/tests
 
-CXX_TESTS := test_bootstrap:runtime \
+CXX_TESTS := test_bootstrap:runtime+memory test_prestart:runtime+memory \
              test_devinit:devinit s1a_accept:devinit test_board:devinit \
              test_memory:memory \
-             test_s1_boundaries:fifo+hw+mmu test_s1_experiment:runtime \
+             test_s1_boundaries:fifo+hw+mmu test_s1_experiment:runtime+memory \
              test_registerio:hw d1_accept:hw \
              test_pagetable:mmu d2_accept:mmu \
              test_pushbuffer:fifo d3_accept:fifo \

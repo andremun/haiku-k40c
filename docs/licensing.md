@@ -109,3 +109,20 @@ The source facts explain the mapping and pre-start obligations that remain gated
 | `reference/nouveau/nvkm/engine/device/pci.c` | Resume-only PCI preinit branch |
 | `reference/nouveau/nvkm/subdev/i2c/gk110.c`, `padgf119.c`, `busgf119.c`, `pad.c`, `bus.c` | Selected pad/bus constructors and early bus initialization |
 | `reference/nouveau/nvkm/subdev/mc/base.c`, `bus/base.c`, `timer/base.c` | Check which lifecycle callbacks exist before POST |
+
+## S1A4 selected pre-start lifecycle
+
+Source facts only; no implementation blocks copied.
+
+- `reference/nouveau/nvkm/subdev/i2c/padg94.c`: MIT; selected lifecycle, register semantics, or callback dispatch.
+- `reference/nouveau/nvkm/subdev/i2c/bit.c`: MIT; selected lifecycle, register semantics, or callback dispatch.
+- `reference/nouveau/nvkm/subdev/privring/gk104.c`: MIT; selected lifecycle, register semantics, or callback dispatch.
+- `reference/nouveau/nvkm/engine/fifo/base.c`: MIT; selected lifecycle, register semantics, or callback dispatch.
+- `reference/nouveau/nvkm/subdev/pci/base.c`: MIT; selected lifecycle, register semantics, or callback dispatch.
+- `reference/nouveau/nvkm/subdev/mc/gk104.c`: MIT; selected lifecycle, register semantics, or callback dispatch.
+- `reference/nouveau/nvkm/subdev/mc/nv04.c`: MIT; selected lifecycle, register semantics, or callback dispatch.
+- `reference/nouveau/nvkm/subdev/mc/gt215.c`: MIT; selected lifecycle, register semantics, or callback dispatch.
+- `reference/nouveau/nvkm/core/intr.c`: MIT; selected lifecycle, register semantics, or callback dispatch.
+- `reference/nouveau/include/nvkm/core/layout.h`: MIT; selected lifecycle, register semantics, or callback dispatch.
+- `reference/nouveau/include/nvkm/core/device.h`: MIT; selected lifecycle, register semantics, or callback dispatch.
+- `reference/nouveau/nvkm/subdev/fb/gk110.c`: MIT; selected lifecycle, register semantics, or callback dispatch.

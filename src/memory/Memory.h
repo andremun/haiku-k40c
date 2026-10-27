@@ -53,6 +53,7 @@ public:
     bool retire(bool quiescenceVerified);
     bool close();
     bool owned() const { return allocation_.id != 0; }
+    uint64_t bytes() const { return allocation_.bytes; }
     bool pinned() const { return pinned_; }
     bool visible() const { return owned() && published_ && !releaseFailed_; }
 private:
