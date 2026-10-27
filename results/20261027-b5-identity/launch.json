@@ -1,0 +1,70 @@
+{
+  "args": [
+    "qemu-system-x86_64",
+    "-name",
+    "k40-b5-identity",
+    "-machine",
+    "q35",
+    "-accel",
+    "kvm",
+    "-cpu",
+    "host",
+    "-smp",
+    "2",
+    "-m",
+    "4096",
+    "-drive",
+    "if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd",
+    "-drive",
+    "if=pflash,format=raw,file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/b5/20261027-b5-identity/vars.fd",
+    "-drive",
+    "file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/b5/20261027-b5-identity/overlay.qcow2,format=qcow2,if=none,id=system",
+    "-device",
+    "ide-hd,drive=system,bus=ide.0,bootindex=1",
+    "-device",
+    "qemu-xhci",
+    "-device",
+    "usb-tablet",
+    "-vga",
+    "std",
+    "-device",
+    "vfio-pci,host=0000:04:00.0",
+    "-netdev",
+    "user,id=n0",
+    "-device",
+    "e1000,netdev=n0",
+    "-display",
+    "none",
+    "-serial",
+    "file:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/results/20261027-b5-identity/serial.log",
+    "-monitor",
+    "unix:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/b5/20261027-b5-identity/monitor.sock,server,nowait"
+  ],
+  "base": "/home/unimelb.edu.au/mariom1/haiku-vm/system.qcow2",
+  "host": {
+    "bdf": "0000:04:00.0",
+    "driver": "vfio-pci",
+    "group": "23",
+    "members": [
+      "0000:04:00.0"
+    ],
+    "vfio": "/dev/vfio/23"
+  },
+  "scope": "B5_IDENTITY_READ_ONLY",
+  "source_commit": "95b1160983c0896abc2275b1c307e5a5087949be",
+  "stage": {
+    "driver_sha256": "7e82493d84340bcbac561df290f7eb327978320821f852fe818ed1f62f468d61",
+    "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+    "sources": {
+      "src/os/HaikuBackend.c": "156eac0a7c6cd1f14b4a7805ff4b0263d9198162a87eb22d0fe0194ee058d70a",
+      "src/os/HaikuBackend.h": "5d9cdbd6271b4fb073f31336b573cf685f53d0654127c2625119cfbce96ba29a",
+      "src/os/HaikuProbe.c": "3fbee4126fa98ca4bbf4917a44fc616b133bbbd37485f5f0d8baf014a6b18b92",
+      "tools/haiku/build-driver.sh": "4324a332a95ca39540365c7c5cbe36b370a176aed13c77340cb4c8dd9b4e4527",
+      "tools/haiku/build_backend.sh": "03e71495b1e059597a64a57b289ba7b54c122785647dab85db13feb327213a96",
+      "tools/haiku/kcc": "b788c87c5644c11bb4d56105c5858d02f965fdab6bfd4e7581fcf2f434c1ca81",
+      "tools/haiku/probe_stage.py": "cea7e555287d8e398a67b207a5582991c25d7d7db5f0dc44b21f1e97bcf7ebec"
+    },
+    "stage": "B5_IDENTITY_READ_ONLY"
+  },
+  "timeout_seconds": 600
+}

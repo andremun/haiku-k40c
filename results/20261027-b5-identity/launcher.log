@@ -1,0 +1,13 @@
+/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/results/20261027-b5-identity
+Traceback (most recent call last):
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/card_run.py", line 323, in <module>
+    main()
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/card_run.py", line 319, in main
+    run(args.base, args.driver, args.results, args.timeout, bdf)
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/card_run.py", line 280, in run
+    monitor_guest(process, folder, evidence, port, seconds)
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/card_run.py", line 214, in monitor_guest
+    if verdict(serial, job_exit):
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/card_run.py", line 67, in verdict
+    raise RuntimeError("guest panic; stop without retry")
+RuntimeError: guest panic; stop without retry

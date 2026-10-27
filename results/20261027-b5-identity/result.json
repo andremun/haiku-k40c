@@ -1,0 +1,9 @@
+{
+  "claim": "none",
+  "driver_sha256": "7e82493d84340bcbac561df290f7eb327978320821f852fe818ed1f62f468d61",
+  "elapsed_seconds": 115.09,
+  "error": "guest panic; stop without retry",
+  "stage": "B5_IDENTITY_READ_ONLY",
+  "status": "failed",
+  "verification": "UNKNOWN"
+}

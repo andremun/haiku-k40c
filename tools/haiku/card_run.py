@@ -63,7 +63,7 @@ def preflight(bdf, sysfs=Path("/sys"), dev=Path("/dev")):
 
 def verdict(serial, job_exit):
     """Validate the complete B5 evidence, not just a shell's exit status."""
-    if re.search(r"PANIC:|KERNEL PANIC|kernel debugger", serial, re.I):
+    if re.search(r"^\s*(?:PANIC:|KERNEL PANIC\b)", serial, re.I | re.M):
         raise RuntimeError("guest panic; stop without retry")
     if "k40_os: FAIL" in serial or "cleanup failed" in serial:
         raise RuntimeError("identity probe failed; see serial log")

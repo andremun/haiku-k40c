@@ -129,6 +129,13 @@ class CardRunTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             card_run.verdict(serial, b"1")
 
+    def test_normal_haiku_debug_output_banner(self):
+        banner = "Welcome to kernel debugger output!\r\n"
+        self.assertFalse(card_run.verdict(banner, None))
+        self.assertTrue(card_run.verdict(banner + self.serial(), b"0"))
+        with self.assertRaises(RuntimeError):
+            card_run.verdict(banner + "PANIC: real failure\n", None)
+
     def test_closed_qemu_options(self):
         args = card_run.qemu_args(self.tmp / "base", self.tmp, self.tmp, card_run.ALLOWED_BDF)
         host_devices = [arg for arg in args if "host=" in arg]

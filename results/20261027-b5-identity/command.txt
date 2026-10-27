@@ -1,0 +1,1 @@
+/usr/bin/python3 tools/haiku/card_run.py --timeout 600

@@ -44,3 +44,15 @@ The post-cardless make check passes. The B5 log validator accepts repeated valid
 identity observations while rejecting any failed decode, panic, or probe failure.
 The sibling OpenCode runner suite passes 21 tests using the bundled Node runtime.
 The application integration checker fixture suite passes five tests.
+
+## First B5 attempt: false panic classification
+
+The first B5 launcher stopped at a normal Haiku boot banner, before probe load.
+result.json records the tool's panic error. That classification was wrong.
+The banner appears in both the failed-stage serial log (line 235) and the
+successful cardless serial log (line 237). Neither has an actual PANIC message.
+No B5 stage or identity marker appeared. No guest HTTP job ran.
+Preserve the first result and logs. Fix only the host parser and add a regression.
+This was no real hang or panic. A further authorized read-only attempt uses
+the same guest options and driver. A real hang or panic still forbids retry.
+The corrected host suite passes 12 tests.

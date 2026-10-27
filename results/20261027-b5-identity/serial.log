@@ -1,0 +1,310 @@
+[2J[01;01H[=3h[2J[01;01HBdsDxe: loading Boot0001 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+BdsDxe: starting Boot0001 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+[2J[01;01H[=3h[2J[01;01H[2J[01;01Hacpi_init: found ACPI RSDP signature at 0x000000007fb7d014
+acpi: found rsdp at 0x000000007fb7d014 oem id: BOCHS , rev 2
+acpi: rsdp points to rsdt at 0x7fb7c074
+acpi: found valid XSDT at 0x000000007fb7c0e8
+acpi: searching 6 entries for table 'HPET'
+acpi: Looking for 'HPET'. Skipping 'FACP'
+acpi: Looking for 'HPET'. Skipping 'APIC'
+acpi: Found 'HPET' @ 0x000000007fb7c11c
+acpi: searching 6 entries for table 'APIC'
+acpi: Looking for 'APIC'. Skipping 'FACP'
+acpi: Found 'APIC' @ 0x000000007fb7c114
+Welcome to the Haiku boot loader!
+Haiku revision: hrev60207
+efi/network: EFI reports network unavaiable
+add_partitions_for(0x000000007df2bcb8, mountFS = no)
+add_partitions_for(fd = 0, mountFS = no)
+0x000000007df2bd10 Partition::Partition
+0x000000007df2bd10 Partition::Scan()
+check for partitioning_system: GUID Partition Map
+EFI header: EFI PART
+EFI revision: 10000
+header size: 92
+header CRC: 8e9b8e09
+absolute block: 1
+alternate block: 67108863
+first usable block: 34
+last usable block: 67108830
+disk GUID: d9953e2e-13ed-8448-86b1-016d5b7a7fb2
+entries block: 2
+entry size:  128
+entry count: 128
+entries CRC: da254e26
+EFI header: EFI PART
+EFI revision: 10000
+header size: 92
+header CRC: 9db7bf86
+absolute block: 67108863
+alternate block: 1
+first usable block: 34
+last usable block: 67108830
+disk GUID: d9953e2e-13ed-8448-86b1-016d5b7a7fb2
+entries block: 67108831
+entry size:  128
+entry count: 128
+entries CRC: da254e26
+[  0] partition type: c12a7328-f81f-11d2-ba4b-00a0c93ec93b
+      unique id: 2427e0f9-1a8f-da49-a036-a83ccb300064
+      start block: 40
+      end block: 524327
+      size: 255.999 MB
+      attributes: 0
+      name: ESP
+[  1] partition type: 42465331-3ba3-10f1-802a-4861696b7521
+      unique id: da7ff85c-9b69-6742-b9c8-55973491c779
+      start block: 524328
+      end block: 67106855
+      size: 32510.999 MB
+      attributes: 0
+      name: HaikuVM
+  priority: 960
+check for partitioning_system: Intel Partition Map
+intel: Found GPT signature, ignoring.
+check for partitioning_system: Intel Extended Partition
+efi_gpt_scan_partition(cookie = 0x000000007df2be18)
+0x000000007df2fef8 Partition::Partition
+0x000000007df2bd10 Partition::AddChild 0x000000007df2fef8
+0x000000007df2fef8 Partition::SetParent 0x000000007df2bd10
+new child partition!
+0x000000007df30018 Partition::Partition
+0x000000007df2bd10 Partition::AddChild 0x000000007df30018
+0x000000007df30018 Partition::SetParent 0x000000007df2bd10
+new child partition!
+0x000000007df2bd10 Partition::Scan(): scan child 0x000000007df2fef8 (start = 20480, size = 268435456, parent = 0x000000007df2bd10)!
+0x000000007df2fef8 Partition::Scan()
+check for partitioning_system: GUID Partition Map
+check for partitioning_system: Intel Partition Map
+check for partitioning_system: Intel Extended Partition
+0x000000007df2bd10 Partition::Scan(): scan child 0x000000007df30018 (start = 268455936, size = 34090254336, parent = 0x000000007df2bd10)!
+0x000000007df30018 Partition::Scan()
+check for partitioning_system: GUID Partition Map
+check for partitioning_system: Intel Partition Map
+check for partitioning_system: Intel Extended Partition
+0x000000007df2bd10 Partition::~Partition
+0x000000007df2fef8 Partition::SetParent 0x0000000000000000
+0x000000007df30018 Partition::SetParent 0x0000000000000000
+0x000000007df30018 Partition::_Mount check for file_system: BFS Filesystem
+PackageVolumeInfo::SetTo()
+load kernel kernel_x86_64...
+ucode_load: system/non-packaged/data/firmware/intel-ucode/06-3e-04
+ucode_load: couldn't find microcode
+smbios: found v2 at 0x000000007f922000
+kernel:
+  text: 0xffffffff80000000, 0x1ce000
+  data: 0xffffffff801ce000, 0x67000
+  entry: 0xffffffff8006b1a0
+GDT at 0xffffff007e10a6a0
+Kernel stack at 0xffffffff82931000
+System provided memory map:
+  phys: 0x00000000-0x00001000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x00001000-0x00087000, virt: 0x00000000-0x00086000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x00087000-0x00088000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x00088000-0x000a0000, virt: 0x00000000-0x00018000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x00100000-0x00806000, virt: 0x00000000-0x00706000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x00806000-0x00808000, virt: 0x00000000-0x00002000, type: EfiACPIMemoryNVS (0xa), attr: 0xf
+  phys: 0x00808000-0x00810000, virt: 0x00000000-0x00008000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x00810000-0x00900000, virt: 0x00000000-0x000f0000, type: EfiACPIMemoryNVS (0xa), attr: 0xf
+  phys: 0x00900000-0x01500000, virt: 0x00000000-0x00c00000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x01500000-0x7bf2e000, virt: 0x00000000-0x7aa2e000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x7bf2e000-0x7bf4e000, virt: 0x00000000-0x00020000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7bf4e000-0x7d435000, virt: 0x00000000-0x014e7000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x7d435000-0x7e0ab000, virt: 0x00000000-0x00c76000, type: EfiLoaderData (0x2), attr: 0xf
+  phys: 0x7e0ab000-0x7e11e000, virt: 0x00000000-0x00073000, type: EfiLoaderCode (0x1), attr: 0xf
+  phys: 0x7e11e000-0x7e18f000, virt: 0x00000000-0x00071000, type: EfiLoaderData (0x2), attr: 0xf
+  phys: 0x7e18f000-0x7e736000, virt: 0x00000000-0x005a7000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7e736000-0x7e737000, virt: 0x00000000-0x00001000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x7e737000-0x7e845000, virt: 0x00000000-0x0010e000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7e845000-0x7e846000, virt: 0x00000000-0x00001000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x7e846000-0x7e852000, virt: 0x00000000-0x0000c000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7e852000-0x7e906000, virt: 0x00000000-0x000b4000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7e906000-0x7e936000, virt: 0x00000000-0x00030000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7e936000-0x7e9d6000, virt: 0x00000000-0x000a0000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7e9d6000-0x7ea1d000, virt: 0x00000000-0x00047000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ea1d000-0x7ea3a000, virt: 0x00000000-0x0001d000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ea3a000-0x7ea3c000, virt: 0x00000000-0x00002000, type: EfiLoaderData (0x2), attr: 0xf
+  phys: 0x7ea3c000-0x7ea3d000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ea3d000-0x7ea4c000, virt: 0x00000000-0x0000f000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ea4c000-0x7ea4e000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ea4e000-0x7ea84000, virt: 0x00000000-0x00036000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ea84000-0x7ea89000, virt: 0x00000000-0x00005000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ea89000-0x7ea9d000, virt: 0x00000000-0x00014000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ea9d000-0x7ea9f000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ea9f000-0x7eaa2000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eaa2000-0x7eaa8000, virt: 0x00000000-0x00006000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eaa8000-0x7eabd000, virt: 0x00000000-0x00015000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eabd000-0x7eac4000, virt: 0x00000000-0x00007000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eac4000-0x7eacb000, virt: 0x00000000-0x00007000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eacb000-0x7ead2000, virt: 0x00000000-0x00007000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ead2000-0x7eada000, virt: 0x00000000-0x00008000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eada000-0x7eadc000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eadc000-0x7eaf1000, virt: 0x00000000-0x00015000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eaf1000-0x7eaf3000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eaf3000-0x7eb07000, virt: 0x00000000-0x00014000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eb07000-0x7eb0e000, virt: 0x00000000-0x00007000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eb0e000-0x7eb31000, virt: 0x00000000-0x00023000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eb31000-0x7eb34000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eb34000-0x7eb39000, virt: 0x00000000-0x00005000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eb39000-0x7eb3b000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eb3b000-0x7ebb4000, virt: 0x00000000-0x00079000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebb4000-0x7ebb6000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebb6000-0x7ebb9000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebb9000-0x7ebbb000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebbb000-0x7ebc8000, virt: 0x00000000-0x0000d000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebc8000-0x7ebcb000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebcb000-0x7ebcd000, virt: 0x00000000-0x00002000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebcd000-0x7ebcf000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebcf000-0x7ebd9000, virt: 0x00000000-0x0000a000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebd9000-0x7ebdd000, virt: 0x00000000-0x00004000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebdd000-0x7ebeb000, virt: 0x00000000-0x0000e000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebeb000-0x7ebed000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebed000-0x7ec00000, virt: 0x00000000-0x00013000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ec00000-0x7ee01000, virt: 0x00000000-0x00201000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee01000-0x7ee05000, virt: 0x00000000-0x00004000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee05000-0x7ee07000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee07000-0x7ee14000, virt: 0x00000000-0x0000d000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee14000-0x7ee15000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee15000-0x7ee16000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee16000-0x7ee17000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee17000-0x7ee2b000, virt: 0x00000000-0x00014000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee2b000-0x7ee30000, virt: 0x00000000-0x00005000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee30000-0x7ee38000, virt: 0x00000000-0x00008000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee38000-0x7ee3f000, virt: 0x00000000-0x00007000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee3f000-0x7ee43000, virt: 0x00000000-0x00004000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee43000-0x7ee47000, virt: 0x00000000-0x00004000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee47000-0x7ee4b000, virt: 0x00000000-0x00004000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee4b000-0x7ee4e000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee4e000-0x7ee4f000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee4f000-0x7ee55000, virt: 0x00000000-0x00006000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee55000-0x7ee58000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee58000-0x7ee5b000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee5b000-0x7ee8f000, virt: 0x00000000-0x00034000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee8f000-0x7ee96000, virt: 0x00000000-0x00007000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee96000-0x7ee9c000, virt: 0x00000000-0x00006000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee9c000-0x7ef9e000, virt: 0x00000000-0x00102000, type: EfiRuntimeServicesData (0x6), attr: 0x800000000000000f
+  phys: 0x7ef9e000-0x7f39e000, virt: 0x00000000-0x00400000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f39e000-0x7f40f000, virt: 0x00000000-0x00071000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f40f000-0x7f414000, virt: 0x00000000-0x00005000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f414000-0x7f418000, virt: 0x00000000-0x00004000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f418000-0x7f41c000, virt: 0x00000000-0x00004000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f41c000-0x7f432000, virt: 0x00000000-0x00016000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f432000-0x7f433000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f433000-0x7f436000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f436000-0x7f438000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f438000-0x7f441000, virt: 0x00000000-0x00009000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f441000-0x7f442000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f442000-0x7f443000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f443000-0x7f445000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f445000-0x7f446000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f446000-0x7f448000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f448000-0x7f44b000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f44b000-0x7f44d000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f44d000-0x7f44e000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f44e000-0x7f44f000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f44f000-0x7f450000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f450000-0x7f462000, virt: 0x00000000-0x00012000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f462000-0x7f46d000, virt: 0x00000000-0x0000b000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f46d000-0x7f46e000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f46e000-0x7f46f000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f46f000-0x7f472000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f472000-0x7f47e000, virt: 0x00000000-0x0000c000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f47e000-0x7f480000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f480000-0x7f489000, virt: 0x00000000-0x00009000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f489000-0x7f48c000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f48c000-0x7f48f000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f48f000-0x7f8ee000, virt: 0x00000000-0x0045f000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f8ee000-0x7f9ee000, virt: 0x00000000-0x00100000, type: EfiRuntimeServicesData (0x6), attr: 0x800000000000000f
+  phys: 0x7f9ee000-0x7faee000, virt: 0x00000000-0x00100000, type: EfiRuntimeServicesCode (0x5), attr: 0x800000000000000f
+  phys: 0x7faee000-0x7fb6e000, virt: 0x00000000-0x00080000, type: EfiReservedMemoryType (0x0), attr: 0xf
+  phys: 0x7fb6e000-0x7fb7e000, virt: 0x00000000-0x00010000, type: EfiACPIReclaimMemory (0x9), attr: 0xf
+  phys: 0x7fb7e000-0x7fbfe000, virt: 0x00000000-0x00080000, type: EfiACPIMemoryNVS (0xa), attr: 0xf
+  phys: 0x7fbfe000-0x7fe00000, virt: 0x00000000-0x00202000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7fe00000-0x7fe82000, virt: 0x00000000-0x00082000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x7fe82000-0x7fea2000, virt: 0x00000000-0x00020000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7fea2000-0x7fec8000, virt: 0x00000000-0x00026000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7fec8000-0x7fed9000, virt: 0x00000000-0x00011000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7fed9000-0x7feec000, virt: 0x00000000-0x00013000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7feec000-0x7ff70000, virt: 0x00000000-0x00084000, type: EfiRuntimeServicesData (0x6), attr: 0x800000000000000f
+  phys: 0x7ff70000-0x80000000, virt: 0x00000000-0x00090000, type: EfiACPIMemoryNVS (0xa), attr: 0xf
+  phys: 0x100000000-0x180000000, virt: 0x00000000-0x80000000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0xb0000000-0xc0000000, virt: 0x00000000-0x10000000, type: EfiReservedMemoryType (0x0), attr: 0x1
+  phys: 0xffc00000-0x100000000, virt: 0x00000000-0x00400000, type: EfiMemoryMappedIO (0xb), attr: 0x8000000000000001
+Calling ExitBootServices. So long, EFI!
+arch_enter_kernel(final_pml4: 0x7e845000, kernelArgs: 0x000000007e10e900, kernelEntry: 0xffffffff8006b1a0, sp: 0xffffffff82936000)
+Welcome to kernel debugger output!
+Haiku revision: hrev60207, debug level: 2
+CPU: no microcode provided
+CPU: TSC frequency calibrated via PIT: 2050199
+CPU 0: type 0 family 6 extended_family 0 model 14 extended_model 3 stepping 4, string 'GenuineIntel'
+CPU 0: vendor 'Intel' model name 'Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz'
+CPU 0: apic id 0, package 0, core 0, smt 0
+CPU 0: cache sharing: L1 id 0, L2 id 0, L3 id 0
+CPU 0: features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clfsh mmx fxsr sse sse2 ss htt sse3 pclmulqdq vmx ssse3 cx16 pdcm pcid sse4_1 sse4_2 x2apic popcnt tscdeadline aes xsave avx f16c rdrnd hypervisor syscall nx pdpe1gb long arat tsc_adjust smep erms umip ibrs stibp msr_arch ssbd xsaveopt ibpb amd_ssbd 
+CPU 0: patch_level 0x0
+using PAT for memory type configuration
+PAT MSR on CPU 0 before init: 0x7040600070406
+PAT MSR on CPU 0 after init: 0x7040100070406
+reserve_io_interrupt_vectors: reserved 16 vectors starting from 0
+kernel malloc: using slab_heap
+mark_page_range_in_use(0x0, 0x100): start page is before free list
+mark_page_range_in_use(0x0, 0xa0): start page is before free list
+enable SMEP
+arch_altcodepatch_replace found 2 altcodepatches for tag 3
+arch_altcodepatch_replace found 5 altcodepatches for tag 4
+arch_altcodepatch_replace found 4 altcodepatches for tag 5
+enable XSAVE 0x7 832
+CPU 1: type 0 family 6 extended_family 0 model 14 extended_model 3 stepping 4, string 'GenuineIntel'
+CPU 1: vendor 'Intel' model name 'Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz'
+CPU 1: apic id 1, package 0, core 1, smt 0
+CPU 1: cache sharing: L1 id 1, L2 id 1, L3 id 0
+CPU 1: patch_level 0x0
+PAT MSR on CPU 1 before init: 0x7040600070406
+PAT MSR on CPU 1 after init: 0x7040100070406
+reserve_io_interrupt_vectors: reserved 3 vectors starting from 221
+APIC timer frequency: 999848202
+reserve_io_interrupt_vectors: reserved 1 vectors starting from 219
+arch_init_timer: using APIC timer.
+allocate_commpage_entry(2, 16) -> 0x0000000000000200
+scheduler_init: found 2 logical cpus and 3 cache levels
+scheduler switches: single core: false, cpu load tracking: false, core load tracking: true
+scheduler: switching to low latency mode
+msi support enabled
+PCI: pci_module_init
+ACPI: RSDP 0x000000007FB7D014 000024 (v02 BOCHS )
+ACPI: XSDT 0x000000007FB7C0E8 000054 (v01 BOCHS  BXPC     00000001      01000013)
+ACPI: FACP 0x000000007FB78000 0000F4 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: DSDT 0x000000007FB79000 0020E7 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: FACS 0x000000007FBDC000 000040
+ACPI: APIC 0x000000007FB77000 000080 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: HPET 0x000000007FB76000 000038 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: MCFG 0x000000007FB75000 00003C (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: WAET 0x000000007FB74000 000028 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: BGRT 0x000000007FB73000 000038 (v01 INTEL  EDK2     00000002      01000013)
+smbios_scan
+found System Information at 0xffffffff83527008
+found vendor 1 product 2
+smbios_scan found vendor QEMU product Standard PC (Q35 + ICH9, 2009)
+ACPI: Forced DSDT copy: length 0x020E7 copied locally, original unmapped
+ACPI: 1 ACPI AML tables successfully acquired and loaded
+ACPI: Enabled 2 GPEs in block 00 to 3F
+found io-apic with address 0xfec00000, global interrupt base 0, apic-id 0
+mapping io-apic 0 at physical address 0xfec00000
+io-apic 0 has range 0-23, 24 entries, version 0x00170011, apic-id 0
+setting ACPI interrupt model to APIC
+found interrupt override for bus 0, source irq 0, global irq 2, flags 0x00000000
+found interrupt override for bus 0, source irq 5, global irq 5, flags 0x0000000d
+found interrupt override for bus 0, source irq 9, global irq 9, flags 0x0000000d
+found interrupt override for bus 0, source irq 10, global irq 10, flags 0x0000000d
+found interrupt override for bus 0, source irq 11, global irq 11, flags 0x0000000d
+free_io_interrupt_vectors: freeing 16 vectors starting from 0
+reserve_io_interrupt_vectors: reserved 24 vectors starting from 0
+using io-apics for interrupt routing
+slab memory manager: created area 0xffffffff80801000 (206)
+allocate_commpage_entry(3, 69) -> 0x0000000000000210
+slab memory manager: created area 0xffffffff81001000 (207)
+publish device: node 0xffffffff831303c0, path acpi/namespace, module bus_managers/acpi/namespace/device_v1
+publish device: node 0xffffffff831303c0, path acpi/call, module bus_managers/acpi/call/device_v1
+registering power button
+initialize PCI controller from ACPI
+PCI: range from ACPI [0(1),ff(1)] with lengt
