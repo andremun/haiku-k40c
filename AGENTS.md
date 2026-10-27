@@ -31,7 +31,8 @@ the truth.
 5. Keep `docs/STATUS.md` and `work/<task-id>/FINDINGS.md` current.
 6. At the macro-task handoff, write `work/<task-id>/RESULT.md` (max 40 lines).
    Record questions in `docs/OPEN_QUESTIONS.md` and root needs in `docs/REQUESTS.md`.
-7. Report the completed macro task. The user requests Claude Code review.
+7. Report completed macro tasks or grouped review batches. The user requests Claude Code review.
+   Authorized sequential host tasks may continue while review is pending (ADR 007).
 
 Claude Code reviews milestone-sized macro tasks, such as the B5 launcher or
 board-operation policy and helpers. Small fixes within a macro task need no
@@ -55,6 +56,8 @@ ADR 005 records these rules.
   `tools/guest/linux-run.sh --gpu` needs separate user approval. Linux without `--gpu` is permitted.
 - Run one guest at a time, with a disposable overlay, incremental logs, and a ten-minute deadline.
   Ask before shutting down a running VM. Record a hang or panic and stop without a modified retry.
+  After any launcher-reported stop, report and ask the user before another run,
+  even if diagnosis finds a parser false alarm (ADR 006).
 - If a task needs data that only root can read, write the exact read-only
   command into `docs/REQUESTS.md` and continue with other work.
 

@@ -13,7 +13,7 @@ CXXFLAGS := -std=c++17 -Wall -Wextra -Werror -I../src -fsanitize=undefined -fno-
 BUILDDIR := ../build/tests
 
 CXX_TESTS := test_bootstrap:runtime \
-             test_devinit:devinit s1a_accept:devinit \
+             test_devinit:devinit s1a_accept:devinit test_board:devinit \
              test_memory:memory \
              test_s1_boundaries:fifo+hw+mmu test_s1_experiment:runtime \
              test_registerio:hw d1_accept:hw \
@@ -23,12 +23,12 @@ CXX_TESTS := test_bootstrap:runtime \
              ref_qmd:compute+fifo r1_accept:compute+fifo+hw+mmu
 # The Python tests run once the tool of task D4 exists.
 PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard test_compare_traces.py accept/d4_accept.py)) \
-             accept/r1_accept.py test_vm_tools.py test_card_run.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_rom.py test_devinit_trace_join.py
+             accept/r1_accept.py test_vm_tools.py test_card_run.py test_board_tools.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_rom.py test_devinit_trace_join.py
 
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 
 .PHONY: all clean
-all: $(PROGRAMS) $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe
+all: $(PROGRAMS) $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe
 	@for p in $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe; do $$p || exit 1; done
 	@for t in $(PY_TESTS); do (cd .. && python3 tests/$$t) || exit 1; done
 
@@ -53,3 +53,8 @@ $(BUILDDIR)/test_haiku_backend: test_haiku_backend.c os_shim/KernelExport.h os_s
 
 $(BUILDDIR)/test_identity_probe: test_identity_probe.c os_shim/KernelExport.h os_shim/PCI.h os_shim/Drivers.h ../src/os/HaikuProbe.c ../src/os/HaikuBackend.h | $(BUILDDIR)
 	gcc -std=c11 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=all -Ios_shim -I../src/os test_identity_probe.c ../src/os/HaikuProbe.c -o $@
+
+$(BUILDDIR)/test_board: board_fake.h
+
+$(BUILDDIR)/board_probe: board_probe.cpp board_fake.h $(wildcard ../src/devinit/*.cpp ../src/devinit/*.h) | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) board_probe.cpp $(wildcard ../src/devinit/*.cpp) -o $@

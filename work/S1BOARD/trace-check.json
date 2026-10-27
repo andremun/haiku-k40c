@@ -1,0 +1,35 @@
+{
+  "active_waits_us": [
+    10000,
+    10000
+  ],
+  "approved_policy_rows": 6,
+  "inputs_sha256": {
+    "docs/decisions/004-board-operations-and-review.md": "0a5a318829217b89c1e06bb157f7f8d312c64ef934954502c1b460be44b44cd4",
+    "src/devinit/Board.cpp": "805592c7bee2310cf7274ce3146a4b723ec5b886ef714d8c16bde127626f9e89",
+    "src/devinit/Board.h": "c1efe64eda1f8c1c7cbad0fac17b93db4a5016bbf5b04b0d52a060017a27dd35",
+    "src/devinit/Interpreter.cpp": "8617354577f1c20af4968844b42d4eb8b16ad6da4eb4275b5b920ec3a434bc65",
+    "src/devinit/Interpreter.h": "af3f590914461f2426bed13ad87a104854b5f75a62c0a65e8edee3357c3ae23e",
+    "src/devinit/Sha256.cpp": "3fe7912249a87e6b0cdec87da818a1a2f9ebfaf3145c40e7aa827df50554e19b",
+    "src/devinit/Sha256.h": "f4b1caa7558a5886ef7bc121ffef2ca65ec25bb89b18c62bc980e144bcc8ffbc",
+    "tests/board_fake.h": "177de1bd09395158c46a9513a17d465fdeb78e5e2bff8a49ea23b057c12d5d25",
+    "tests/board_probe.cpp": "e135a92a2d12fd5c700752e122d096046d5cbb8453a3ffec4afc3de6654ea9cc",
+    "tools/board_trace.py": "4d398e4050b713f9eb993efbf86e7d21ae37ed1987c17eae3bfb264a5d21cd32"
+  },
+  "matched_accesses": 20,
+  "reads": 7,
+  "real_rom_policy_and_failure_exercise": "pass",
+  "rom_sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
+  "scope": "HOST_ONLY helpers; IO and following ZM_CR access facts TRACE_VERIFIED",
+  "skipped_waits_us": [
+    10000,
+    10000
+  ],
+  "trace": "reference/linux-run-debug/mmiotrace.txt.xz",
+  "trace_lines": [
+    45579,
+    45598
+  ],
+  "trace_sha256": "3cee0731faadb7f4aacb53ba1d0d3ce7d5954430c31fc764a731ad029bd2f67b",
+  "writes": 13
+}

@@ -37,6 +37,69 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/compute/LaunchDesc.h:105` | `*   LAUNCH              (0x02bc): value = 3` | src/gallium/drivers/nouveau/nvc0/nve4_compute.xml.h:170 | SOURCE_ONLY |
 | `src/compute/LaunchDesc.h:106` | `*   NV50_GRAPH_SERIALIZE(0x0110): value = 0` | src/gallium/drivers/nouveau/nv_object.xml.h:284 | SOURCE_ONLY |
 
+## src/devinit/Board.cpp
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/devinit/Board.cpp:10` | `constexpr Digest allowedRom = {` | no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md. | SOURCE_ONLY |
+| `src/devinit/Board.cpp:11` | `0xae,0xcb,0x0b,0x5f,0xa4,0x66,0xf6,0x4e,0x26,0x51,0xa5,0x51,0xa3,0xca,0xd5,0x7c,` | no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md. | SOURCE_ONLY |
+| `src/devinit/Board.cpp:12` | `0xcc,0xbd,0xed,0xd9,0x29,0xe3,0x99,0x6f,0x54,0x22,0x01,0xaf,0x06,0xff,0x1f,0x54,` | no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md. | SOURCE_ONLY |
+| `src/devinit/Board.cpp:14` | `constexpr uint32_t allowedSize = 181760;` | no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md. | SOURCE_ONLY |
+| `src/devinit/Board.cpp:15` | `constexpr std::array<BoardRule, 6> rules = {{` | no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md. | SOURCE_ONLY |
+| `src/devinit/Board.cpp:16` | `{0x8506, 0x69, allowedRom}, {0x850b, 0x53, allowedRom},` | nvkm/subdev/bios/init.c:2269 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:17` | `{0x85e8, 0x53, allowedRom}, {0x862f, 0x4d, allowedRom},` | nvkm/subdev/bios/init.c:2252 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:18` | `{0x89b7, 0xa9, allowedRom}, {0xab8d, 0x4d, allowedRom},` | nvkm/subdev/bios/init.c:2297 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:25` | `if (!rom.contains(0x36, 2)) return false;` | nvkm/subdev/bios/dcb.c:35 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:26` | `const auto dcb = rom.little(0x36, 2);` | nvkm/subdev/bios/dcb.c:35 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:27` | `if (!dcb \|\| !rom.contains(dcb, 12) \|\| rom.data[dcb] < 0x30 \|\| rom.data[dcb] > 0x41` | nvkm/subdev/bios/dcb.c:43 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:28` | `\|\| rom.data[dcb + 1] < 12 \|\| rom.little(dcb + 6, 4) != 0x4edcbdcb)` | nvkm/subdev/bios/dcb.c:48 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:47` | `if (version != 0x41 \|\| header < 4 \|\| stride < 5` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/Board.cpp:53` | `if (function == 0xff) continue;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/Board.cpp:54` | `const auto line = uint8_t(raw & 0x3f);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/Board.cpp:56` | `const bool defaults = raw & 0x80;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/Board.cpp:59` | `defaults, uint8_t(raw >> 16), uint8_t((raw >> 24) & 0x1f)});` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/Board.cpp:94` | `if (port == 0x03c3 && bytes[4] == 1) {` | nvkm/subdev/bios/init.c:1636 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:96` | `constexpr Step steps[] = {` | no source: software sequence container; each hardware value has its own citation. | SOURCE_ONLY |
+| `src/devinit/Board.cpp:97` | `{0x614100,0xf0800000,0x00800000,true,false},` | nvkm/subdev/bios/init.c:1640 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:98` | `{0x00e18c,0x00020000,0x00020000,true,false},` | nvkm/subdev/bios/init.c:1641 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:99` | `{0x614900,0xf0800000,0x00800000,true,false},` | nvkm/subdev/bios/init.c:1642 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:100` | `{0x000200,0x40000000,0x00000000,true,true},` | nvkm/subdev/bios/init.c:1643 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:101` | `{0x00e18c,0x00020000,0x00000000,true,false},` | nvkm/subdev/bios/init.c:1645 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:102` | `{0x000200,0x40000000,0x40000000,true,false},` | nvkm/subdev/bios/init.c:1646 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:103` | `{0x614100,0,0x00800018,false,false},` | nvkm/subdev/bios/init.c:1647 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:104` | `{0x614900,0,0x00800018,false,true},` | nvkm/subdev/bios/init.c:1648 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:105` | `{0x614100,0,0x10000018,false,false},` | nvkm/subdev/bios/init.c:1650 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:106` | `{0x614900,0,0x10000018,false,false},` | nvkm/subdev/bios/init.c:1651 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:117` | `const uint32_t address = 0x601000 + port;` | nvkm/engine/disp/vga.c:52 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:131` | `if ((version != 0x40 && version != 0x41) \|\| header < 5 \|\| stride < 4` | nvkm/subdev/bios/i2c.c:32 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:134` | `if (index == 0x80 \|\| index == 0xff) index = rom.data[at + 4] & 0x0f;` | nvkm/subdev/bios/init.c:263 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:135` | `else if (index == 0x81) index = rom.data[at + 4] >> 4;` | nvkm/subdev/bios/init.c:274 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:141` | `if (version == 0x40) {` | nvkm/subdev/bios/i2c.c:79 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:144` | `if (bus.type != 0x05) return false;` | nvkm/subdev/bios/i2c.c:107 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:145` | `bus.drive = raw & 0x0f;` | nvkm/subdev/bios/i2c.c:109 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:146` | `if (raw & 0x100) bus.share = uint8_t((raw >> 9) & 0x7f);` | nvkm/subdev/bios/i2c.c:110 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:149` | `bus.type = 0x80;` | nvkm/subdev/bios/i2c.c:79 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:150` | `bus.drive = raw & 0x1f;` | nvkm/subdev/bios/i2c.c:119 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:151` | `bus.aux = (raw >> 5) & 0x1f;` | nvkm/subdev/bios/i2c.c:122 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:152` | `if (bus.drive == 0x1f) return false;` | nvkm/subdev/bios/i2c.c:120 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:153` | `if (bus.aux == 0x1f) bus.aux = 0xff;` | nvkm/subdev/bios/i2c.c:123 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:176` | `const uint32_t reg = 0x00d610 + uint32_t(pin.line) * 4;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/Board.cpp:180` | `if (!masked(reg, 0x00003000, direction \| level)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/Board.cpp:181` | `\|\| !masked(0x00d604, 1, 1)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/Board.cpp:182` | `\|\| !masked(reg, 0xff, pin.route)) return Error::Io;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/Board.cpp:183` | `if (pin.selector && !masked(0x00d740 + uint32_t(pin.selector - 1) * 4, 0xff, pin.line))` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/Board.cpp:195` | `case 0x69: return length == 5 ? io(bytes, active) : Error::Input;` | nvkm/subdev/bios/init.c:2269 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:196` | `case 0x53:` | nvkm/subdev/bios/init.c:2252 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:199` | `if (active && (!ports_.write8(0x6013d4, bytes[1]) \|\| !ports_.write8(0x6013d5, bytes[2])))` | nvkm/engine/disp/vga.c:104 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:202` | `case 0x4d: {` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
+| `src/devinit/Board.cpp:213` | `case 0xa9:` | nvkm/subdev/bios/init.c:2297 | SOURCE_ONLY |
+
+## src/devinit/Board.h
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/devinit/Board.h:21` | `uint8_t index = 0, type = 0, drive = 0xff, share = 0xff, aux = 0xff;` | no source: ambiguous citation | SOURCE_ONLY |
+
 ## src/devinit/Interpreter.cpp
 
 | Line | Code | Source | Status |
@@ -76,6 +139,23 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/devinit/Interpreter.cpp:198` | `case 0x8c: case 0x8d: break;` | nvkm/subdev/bios/init.c:2285 | SOURCE_ONLY |
 | `src/devinit/Interpreter.cpp:199` | `case 0x4d: case 0x53: case 0x69: case 0x8e: case 0xa9:` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
 | `src/devinit/Interpreter.cpp:202` | `if (active() \|\| op==0x69) {` | nvkm/subdev/bios/init.c:1623 | SOURCE_ONLY |
+
+## src/devinit/Sha256.cpp
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/devinit/Sha256.cpp:9` | `constexpr uint32_t rounds[] = {` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
+| `src/devinit/Sha256.cpp:10` | `0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
+| `src/devinit/Sha256.cpp:11` | `0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
+| `src/devinit/Sha256.cpp:12` | `0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
+| `src/devinit/Sha256.cpp:13` | `0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
+| `src/devinit/Sha256.cpp:14` | `0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
+| `src/devinit/Sha256.cpp:15` | `0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
+| `src/devinit/Sha256.cpp:16` | `0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
+| `src/devinit/Sha256.cpp:17` | `0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2,` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
+| `src/devinit/Sha256.cpp:25` | `uint32_t state[] = {0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
+| `src/devinit/Sha256.cpp:26` | `0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19};` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
+| `src/devinit/Sha256.cpp:34` | `else if (at == size) byte = 0x80;` | no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3. | SOURCE_ONLY |
 
 ## src/fifo/PushBuffer.cpp
 
@@ -149,6 +229,35 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 The following constant lines have no source citation:
 
 - src/compute/LaunchDesc.h:23 (no source: derived)
+- src/devinit/Board.cpp:10 (no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.)
+- src/devinit/Board.cpp:11 (no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.)
+- src/devinit/Board.cpp:12 (no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.)
+- src/devinit/Board.cpp:14 (no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.)
+- src/devinit/Board.cpp:15 (no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.)
+- src/devinit/Board.cpp:47 (no source: ambiguous citation)
+- src/devinit/Board.cpp:53 (no source: ambiguous citation)
+- src/devinit/Board.cpp:54 (no source: ambiguous citation)
+- src/devinit/Board.cpp:56 (no source: ambiguous citation)
+- src/devinit/Board.cpp:59 (no source: ambiguous citation)
+- src/devinit/Board.cpp:96 (no source: software sequence container; each hardware value has its own citation.)
+- src/devinit/Board.cpp:176 (no source: ambiguous citation)
+- src/devinit/Board.cpp:180 (no source: ambiguous citation)
+- src/devinit/Board.cpp:181 (no source: ambiguous citation)
+- src/devinit/Board.cpp:182 (no source: ambiguous citation)
+- src/devinit/Board.cpp:183 (no source: ambiguous citation)
+- src/devinit/Board.h:21 (no source: ambiguous citation)
+- src/devinit/Sha256.cpp:9 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
+- src/devinit/Sha256.cpp:10 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
+- src/devinit/Sha256.cpp:11 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
+- src/devinit/Sha256.cpp:12 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
+- src/devinit/Sha256.cpp:13 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
+- src/devinit/Sha256.cpp:14 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
+- src/devinit/Sha256.cpp:15 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
+- src/devinit/Sha256.cpp:16 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
+- src/devinit/Sha256.cpp:17 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
+- src/devinit/Sha256.cpp:25 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
+- src/devinit/Sha256.cpp:26 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
+- src/devinit/Sha256.cpp:34 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
 - src/fifo/PushBuffer.cpp:33 (no source: 0x7ffc is max 13-bit value aligned to 4; nvc0_winsys.h shifts mthd >> 2)
 - src/fifo/PushBuffer.cpp:39 (no source: 0x1fff is max 13-bit value for the count field;    nvc0_winsys.h uses (size << 16) with 13-bit field)
 - src/fifo/PushBuffer.cpp:269 (no source: 0xff is just 8-bit mask for address upper bits)

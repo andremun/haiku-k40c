@@ -17,7 +17,7 @@ Nouveau behavior is the compatibility reference when documentation differs.
 
 The cross-reference covers 24 observed opcode names plus potential ZM_REG_GROUP
 (0x91), found by the raw-ROM structural preflight. Five board/helper
-operations are delegated and default-denied: ZM_I2C_BYTE, ZM_CR, IO, GPIO,
+operations are delegated and default-denied by the base backend: ZM_I2C_BYTE, ZM_CR, IO, GPIO,
 GPIO_NE. The other 20 have a freestanding host simulation implementation.
 No hardware backend exists for this interpreter. It refuses a backend that
 identifies itself as anything other than host simulation. Do not bypass that
@@ -53,14 +53,14 @@ flag to run on a card; a reviewed hardware integration is a later change.
   TRACE_VERIFIED). The 2026-10-16 core omitted the rule; fix in task S1A,
   test `tests/accept/s1a_accept.cpp`.
 - IO is **not only VGA port I/O**. On NV50+ port 0x3c3/data 1 causes MMIO writes
-  and waits in Nouveau (init.c:1623-1660). Therefore the earlier suggestion to
+  and waits in Nouveau (init.c:1623-1656). Therefore the earlier suggestion to
   omit legacy VGA operations cannot establish compatible bring-up. Even skipped
   IO is sent to the denied helper boundary, rather than silently hiding those
   unconditional helper effects. A5 must review this operation too.
 - GPIO_NE applies defaults to functions outside the exclusion list, including
   mux/routing effects. I2C requires board bus resolution and 7-bit address
   conversion, not just register-range permission. No approval is inferred from
-  ROM origin. The unresolved device remains denied.
+  ROM origin. ADR 004 permits the specified write to the unidentified device. Its identity remains UNKNOWN.
 
 ## Safety limits and intentional restrictions
 
@@ -111,3 +111,48 @@ BAR-access counts and raw trace line ranges by their shared kernel clock. This
 is time correlation, not semantic equivalence: same-time log messages, other
 workers and helpers outside MMIO prevent a causal completeness claim. Skipped
 intervals with accesses are review candidates, not automatic executor defects.
+
+## S1BOARD: permission-bearing host adapter
+
+`src/devinit/Board.cpp` implements `PolicyBackend` and four helper semantics.
+This adapter remains host-only. It does not change the interpreter hardware gate.
+Both the register backend and the byte/I2C transport must report host simulation.
+The base backend still denies every board operation unless a reviewed adapter supplies it.
+
+`PolicyBackend` copies the exact-size ROM and computes SHA-256 over that owned copy.
+The six policy rows contain the ADR 004 hash, ROM offset, and opcode.
+Wrong hashes, offsets, opcodes, lengths, or payload bytes fail before helper effects.
+The caller's buffer cannot change the bound snapshot. No caller-supplied digest grants permission.
+Denied operations and helper outcomes reach the transport audit callback.
+`PolicyBackend::run` uses the owned ROM and propagates helper I/O failures to the interpreter.
+
+The helper boundary has these semantics:
+
+- `IO` uses the NV50+ register sequence and byte-wide VGA MMIO.
+  Its two 10 ms waits still run when skipped. Skipped IO performs no register or port access.
+- `ZM_CR` writes the index and value to the two byte-wide CRTC MMIO addresses.
+- `ZM_I2C_BYTE` reads the ROM's CCB default index and converts the stored address to seven bits.
+  The transport receives the resolved bus descriptor and one register/value pair per call.
+  An unavailable bus or NACK stops the run.
+- `GPIO_NE` excludes the listed functions and unused entries, then applies table defaults.
+  GK110B uses GK104 GPIO with GF119 drive/reset helpers (device/base.c:1779, gpio/gk104.c:64-69).
+  Drive direction, level, latch, and routing fields follow those helpers.
+  Duplicate functions retain Nouveau's repeated reset and first-match logic behavior.
+
+DCB 3.0 through 4.1 headers, GPIO 4.1 entries, and CCB 4.0 NVIO/4.1 PMGR entries
+are the reviewed table formats here. The approved ROM uses DCB 4.0, GPIO 4.1, and CCB 4.0.
+Other layouts fail closed. No display-output context is supplied for I2C index 0xff.
+The approved instructions use index 0x80, so no display-output fallback is needed.
+
+Physical I2C transactions and bus initialization remain transport/pre-start integration work.
+No physical byte/MMIO transport is provided. The current adapter owns STL storage and is host-only.
+A4 prerequisites, B2 mappings, and A7 one-shot startup remain separate tasks.
+Failures can follow partial simulated effects. No rollback or safe hardware cleanup is implied.
+Callbacks must be bounded. The interpreter checks its deadline after the helper returns.
+
+`tools/board_trace.py` compares the IO sequence and following CRTC write against
+`reference/linux-run-debug/mmiotrace.txt.xz:45579-45598`.
+The capture supplies initial read values, never a replay of its writes.
+The generated report is `work/S1BOARD/trace-check.json`.
+Run `python3 tools/board_trace.py --check` to compare it without writing.
+The comparison verifies access facts for that captured state. It is not a hardware helper run.

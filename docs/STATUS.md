@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: none. S1B5 is ready for Claude Code macro review. Next macro task: host-only board-operation policy and helpers.
-Task state: S1B5 DONE. B5 identity PASS. KNOWN / HARDWARE_VERIFIED: PMC_BOOT_0 = 0x0f1240a1 under Haiku, identity only. Evidence: results/20261027-b5-identity/attempt-02/. The S1A cardless KVM rerun also passed. The first B5 attempt stopped on a normal-banner parser false alarm, not a real panic. The parser is fixed and that record is preserved. No write stage ran. Final make check and make vm-tools-test pass. No guest remains running.
+Current task: none. S1BOARD host implementation is complete. Continue with native B2 allocation and mapping under ADR 007.
+Task state: S1BOARD DONE (host only, macro review pending). make check passes. Exact ADR 004 policy and helper semantics are tested against the private ROM and Linux IO trace. The hardware gate stays closed. S1B5 is ACCEPT. Related host tasks may continue while Claude reviews are pending.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -53,7 +53,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1B | DONE (host; Mesa and VBIOS checks not run here) | 2026-10-23 | Restore helper checks sparse lists, required paths and the full envytools decoder checkout (`envytools_full()`). `devinit_sources.py` reads `nvbios.c` from it, output unchanged. `make check` runs six source and generator checks; three need the VBIOS and follow `.check-skip` A3. See work/S1B/RESULT.md. |
 | S1C | DONE (small fixes included in S1B5 macro review) | 2026-10-27 | Correct VGA MMIO evidence and decision 4. Update S1 next steps and work roles. `make check` passes. See work/S1C/RESULT.md. |
 | S1D | DONE (small fixes included in S1B5 macro review) | 2026-10-27 | Incorporate ADR 004 and align the board-operation document, plan, and status. `make check` passes. See work/S1D/RESULT.md. |
-| S1B5 | DONE (macro review pending) | 2026-10-27 | Guarded launcher and identity-only Haiku stage pass. PMC_BOOT_0 HARDWARE_VERIFIED. Cardless rerun and host checks pass. See work/S1B5/RESULT.md. |
+| S1B5 | ACCEPT (Claude Code, user-supplied review) | 2026-10-27 | Guarded launcher and identity-only Haiku stage pass. PMC_BOOT_0 HARDWARE_VERIFIED. Cardless rerun and host checks pass. See work/S1B5/RESULT.md. |
+| S1BOARD | DONE (host only, batched review pending) | 2026-10-27 | Exact ROM policy, IO/CRTC/I2C/GPIO helpers, and host adapter. 20 trace accesses match. make check passes. See work/S1BOARD/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

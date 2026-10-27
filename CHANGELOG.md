@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-10-27: S1BOARD adds the exact ADR 004 ROM policy and host-only board helpers. IO/CRTC accesses match the Linux capture. The hardware gate stays closed. ADRs 006 and 007 record retry approval and batched host work.
 - 2026-10-27: ADR 005 records main-only work, macro reviews, and read-only Haiku passthrough. S1B5 adds the guarded launcher. The cardless rerun passes, and PMC_BOOT_0 is HARDWARE_VERIFIED under Haiku. No bring-up, DMA, or compute claim.
 - 2026-10-24: Security fixes. Root scripts run only files equal to `origin/main`, run git as the user and write no repository file as root (`scripts/root-guard.sh`); `GPU_BDF` is checked. `transfer_server.py`: write-once job logs, an upload budget, `--port 0 --port-file`; `vm-test.sh` and `setup.sh` use it instead of servers on fixed ports. Monitor sockets of `app_vm.py` and `cardless_run.py` moved from `/tmp` to the VM or run folder. Edits to `scripts/` and `tools/guest/` ask first.
 - 2026-10-23: Review rules: `REVIEW.md`, the `/pr-review` skill (`.claude/skills/pr-review/`) and a "Review guidelines" section in `AGENTS.md` for Codex. Q1 closed and assumption S1 updated after ADR 003. Questions Q2 to Q5 from `haiku-k40c-llm`.

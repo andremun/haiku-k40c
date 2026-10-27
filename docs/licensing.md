@@ -59,3 +59,29 @@ user-provided image at runtime and records only aggregate results.
 |---|---|---|---|
 | `reference/nouveau/nvkm/engine/disp/vga.c` | MIT notice in file | NV50+ byte-wide VGA MMIO routing | Semantic facts only |
 | `reference/nouveau/nvkm/subdev/bios/init.c` | MIT notice in file | INIT_IO helper effects and unconditional waits | Semantic facts only |
+
+## S1BOARD host-only policy and helpers (2026-10-27)
+
+Every file below has an MIT notice. No Nouveau function body was copied.
+The new implementation uses semantic facts and cited hardware constants only.
+
+| Source file consulted | License | Used for | Copied material |
+|---|---|---|---|
+| `reference/nouveau/nvkm/subdev/bios/init.c` | MIT notice | IO waits/side effects, I2C byte addressing, GPIO_NE exclusions | Constants and semantic facts only |
+| `reference/nouveau/nvkm/engine/disp/vga.c` | MIT notice | NV50+ byte MMIO and CRTC index/data order | Constants and semantic facts only |
+| `reference/nouveau/nvkm/subdev/gpio/base.c` | MIT notice | First matching function/line and GPIO logic levels | Semantic facts only |
+| `reference/nouveau/nvkm/subdev/gpio/gf119.c` | MIT notice | GPIO drive, latch, and reset routing | Constants and semantic facts only |
+| `reference/nouveau/nvkm/subdev/gpio/gk104.c` | MIT notice | 32 lines and inherited GF119 helpers | Semantic facts only |
+| `reference/nouveau/nvkm/subdev/bios/dcb.c` | MIT notice | DCB pointer and signature | Format facts only |
+| `reference/nouveau/nvkm/subdev/bios/gpio.c` | MIT notice | GPIO 4.1 layout and duplicate matching | Format facts only |
+| `reference/nouveau/nvkm/subdev/bios/i2c.c` | MIT notice | CCB 4.0/4.1 layout and bus descriptors | Format facts only |
+| `reference/nouveau/nvkm/subdev/i2c/base.c` | MIT notice | Default bus lookup | Semantic facts only |
+| `reference/nouveau/include/nvkm/subdev/i2c.h` | SPDX MIT | CCB indices and primary/secondary meanings | Constants only |
+| `reference/nouveau/include/nvkm/subdev/bios/gpio.h` | SPDX MIT | Unused function and GPIO logic bits | Constants only |
+| `reference/nouveau/include/nvkm/subdev/bios/i2c.h` | SPDX MIT | NVIO and PMGR bus identifiers | Constants only |
+| `reference/nouveau/nvkm/engine/device/base.c` | MIT notice | GK110B GPIO/I2C dispatch | Semantic facts only |
+| `reference/haiku/headers/os/drivers/PCI.h` | Haiku MIT | Meaning of bus-master bit in the recorded B5 command word | Constant only |
+
+SHA-256 uses algorithm facts from NIST FIPS 180-4, sections 4.1.2, 4.2.2,
+5.1.1, 5.3.3, and 6.2. No library implementation was copied.
+Source: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf.

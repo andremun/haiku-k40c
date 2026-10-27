@@ -100,20 +100,33 @@ task texts (`docs/tasks/S1A.md`, `S1B.md`) and the acceptance test
 
 **Next steps, in order.**
 
-1. Review completed macro task S1B5: the launcher, cardless check, and B5 identity pass.
-   The user requests Claude Code review before the next macro task.
+1. S1B5 is accepted by Claude Code (2026-10-27). See work/S1B5/REVIEW.md.
 2. Implement the host-only board-operation policy and helpers under ADR 004.
    Allow only its specified ROM and observed operations. Deny other operations.
 3. Complete B2 allocation and mapping, A4 pre-start state, and the C2 choices.
 4. Start A7 only after the user's go-ahead. First writes in C3 also need that approval.
 
-Work uses only main. Claude Code reviews completed macro tasks (ADR 005).
+Work uses only main. Related host macro tasks may share a review batch (ADRs 005 and 007).
 No further outside review is required. The reviewed hardware integration gate remains for the executor.
 
 S1A and S1B host work is complete. The 2026-10-26 checks and probe links
 passed (`docs/STATUS.md`). B5 identity passed on 2026-10-27.
 KNOWN / HARDWARE_VERIFIED: PMC_BOOT_0 was `0x0f1240a1` under Haiku
 (`results/20261027-b5-identity/attempt-02/serial.log`). No write stage has run.
+
+## Requirements carried from the S1B5 review
+
+Claude accepted S1B5 on 2026-10-27. After any launcher-reported stop,
+report and ask before another run, including a later-diagnosed false alarm (ADR 006).
+
+Before A7, prove that write-stage startup runs once per guest boot despite devfs reloads.
+The B5 probe ran twice. Its read-only behavior does not establish safe repeated initialization.
+
+KNOWN: B5 observed PCI command `0x0007`, including the bus-master enable bit.
+Sources: `results/20261027-b5-identity/attempt-02/serial.log:902` and
+`reference/haiku/headers/os/drivers/PCI.h:686`.
+INFERRED: Haiku or VM firmware enabled it before the probe. The source is unverified.
+Account for the enabled bit in B2 and A7. B5 proves no DMA or IOVA correctness.
 
 ## The work, in three tracks
 
