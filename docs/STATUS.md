@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1DMACONTRACT (DMA publication source/evidence closure). S1OWNERPOST joins the pending review batch.
-Task state: S1OWNERPOST resident binding/host integration and native link scope DONE. The immutable image and copied outcome live in the owner. Host-only POST consumes its existing latch before effects and quarantines attempted storage. Native POST execution, DMA and readiness remain gated. No write stage is authorized.
+Current task: S1DMAMODEL (host mapping coverage/lifetime evidence model). S1DMACONTRACT joins the pending review batch.
+Task state: S1DMACONTRACT source/evidence/design scope DONE. Conditional GPA/IOVA chain and separate D0/D1 verification designs are recorded. Live mapping, coherency and physical payload visibility remain unverified; publication stays denied. No new stage or write is authorized.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -64,6 +64,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1POST | DONE (host binding/policy; native object compile, review pending) | 2026-10-27 | 34,128 access queries match; 32 scenarios complete or hit the intended GPIO denial. Owned inputs, one cached selection, aggregate budgets. See work/S1POST/RESULT.md. |
 | S1HELPERS | DONE (host/helper and native link, review pending) | 2026-10-27 | Bounded GPIO storage, guarded dedicated I2C pins, separate preinit and full core cross-link. See work/S1HELPERS/RESULT.md. |
 | S1OWNERPOST | DONE (resident binding/host integration and native link, review pending) | 2026-10-27 | Nine lifecycle/concurrency scenarios, 6,388 assertions, native simulation exclusion and quarantine retention. See work/S1OWNERPOST/RESULT.md. |
+| S1DMACONTRACT | DONE (source/evidence/design, review pending) | 2026-10-27 | Exact Ubuntu QEMU source, 14 external pins, conditional address chain and D0/D1 designs. Q7 remains open. See work/S1DMACONTRACT/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

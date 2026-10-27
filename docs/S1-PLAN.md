@@ -263,8 +263,9 @@ I2C pin operations now pass through that policy, with separate explicit preinit.
 Their compile/link and simulated wire results provide no native execution claim.
 S1OWNERPOST connects the immutable image, copied execution state and startup attempt
 to the persistent owner in host tests. Its native module excludes simulation and
-has only compile/link evidence for this revision. Next, S1DMACONTRACT studies the
-remaining DMA/publication evidence and a separate verification-stage design.
+has only compile/link evidence for this revision. S1DMACONTRACT studies the remaining DMA/publication evidence and records separate
+D0/D1 verification designs. No live mapping or payload proof follows. Next,
+S1DMAMODEL implements host-only mapping coverage/lifetime evidence checks.
 DMA/visibility, owned VRAM, readiness and A7 approval stay
 separate gates. Grouped Claude review remains pending under ADR 007.
 

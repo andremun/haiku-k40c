@@ -146,3 +146,7 @@ translation tests, scheduling without GR, and complete teardown evidence.
 The next host work must close those implementations and preflight coverage;
 A7 still needs review and the user's explicit go-ahead. No write-stage run is
 ready for approval from these documents alone.
+
+S1DMACONTRACT now records the candidate host DMA address chain and exact additional
+source identities in docs/DMA-CONTRACT.md. It leaves live mapping/coherency and
+payload visibility open. Neither proposed D0/D1 experiment is a runnable stage.

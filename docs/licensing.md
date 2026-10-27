@@ -234,3 +234,24 @@ No new external implementation or hardware source was consulted. This task uses
 the already recorded Haiku module lifetime and bound-interpreter source facts.
 Resident storage and host fixture code are original MIT work. No firmware bytes
 were added. The native module ABI and board permissions remain unchanged.
+
+## S1DMACONTRACT address/visibility source audit
+
+Source/API facts only. No external implementation blocks or files were copied
+into the driver. Additional source copies remain outside reference/ and the repo.
+Content hashes and exact URLs are in work/S1DMACONTRACT/evidence.json.
+
+- QEMU upstream v6.2.0 and exact Ubuntu 1:6.2+dfsg-2ubuntu6.31 source:
+  hw/vfio/common.c, hw/vfio/pci.c, hw/pci/pci.c, hw/vfio/trace-events.
+  VFIO C files carry GPL version 2 notices. The PCI bus manager has an MIT notice.
+  Only mapping facts and trace-event metadata were used.
+  The package patch-series metadata was recorded for reconstruction.
+- Linux upstream v6.8 drivers/vfio/vfio_iommu_type1.c: GPL-2.0 source facts.
+  This was not asserted to be the exact running Ubuntu -138 implementation.
+- Haiku pin 49a0af9585d80e42240af63ab66e31e9873f59b8: vm.cpp, VMArea.cpp,
+  VMArea.h, X86VMTranslationMap64Bit.cpp, X86PagingMethod64Bit.h and the existing
+  x86/64/atomic.h. MIT/NewOS notices remain with the consulted originals.
+- Nouveau nvkm/subdev/fb/base.c, gf100.c, gk110.c and bar/g84.c: existing MIT
+  source ranges for DMA-mapped flush storage, hook selection and BAR completion.
+
+No physical protocol or sentinel semantics were imported from an unverified source.

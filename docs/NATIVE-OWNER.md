@@ -142,3 +142,10 @@ The native ABI stays version 1 and exposes no new firmware or startup operation.
 See docs/OWNER-POST.md for binding, latch, quarantine and build contracts.
 This revision cross-links but has not been loaded in Haiku. The S1OWNERTEST result
 above applies to the recorded earlier owner revision. No GPU evidence follows.
+
+## S1DMACONTRACT source and evidence limits
+
+See docs/DMA-CONTRACT.md for the reconstructed Ubuntu QEMU source, address chain,
+coherency obligations and proposed D0/D1 experiments. GPA-as-IOVA remains a
+conditional source inference. No live mapping, trusted evidence handoff or payload
+visibility was verified. ABI v1 and default-denied publication are unchanged.

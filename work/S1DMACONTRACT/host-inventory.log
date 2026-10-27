@@ -1,0 +1,7 @@
+QEMU emulator version 6.2.0 (Debian 1:6.2+dfsg-2ubuntu6.31)
+Copyright (c) 2003-2021 Fabrice Bellard and the QEMU Project developers
+linux-modules-6.8.0-138-generic 6.8.0-138.138~22.04.1 linux-hwe-6.8
+qemu-system-common 1:6.2+dfsg-2ubuntu6.31 qemu
+qemu-system-x86 1:6.2+dfsg-2ubuntu6.31 qemu
+6.8.0-138-generic
+55862c768c21fa7d3e72ca1b24797d8ab5b406eb5ef4c9ab9c2280f4e0b8f330  /usr/bin/qemu-system-x86_64

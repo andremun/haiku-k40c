@@ -21,6 +21,7 @@ check:
 	python3 tools/restore_verification_refs.py --check
 	python3 tools/devinit_trace_join.py --check
 	python3 tools/load_trace.py --check
+	python3 tools/dma_contract.py --check
 	@if grep -qw A3 .check-skip 2>/dev/null; then \
 		echo "devinit_inventory, devinit_preflight, devinit_sources, board_trace, devinit_closure, post_policy, owner_post_check --check: NOT RUN (A3 in .check-skip, private VBIOS image)"; \
 	else \
