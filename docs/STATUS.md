@@ -2,8 +2,8 @@
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
 Current task: none. S1A and S1B are done on the host. The next steps wait for the user (`docs/S1-PLAN.md`, "Next steps").
-Task state: WAITING FOR USER. On the T7610: `make refs`, `make check`, and the probe link of S1A (`tools/haiku/build_backend.sh`). Board-operation decisions and the third opinion still wait for the user. No card stage has run.
-Last updated: 2026-10-23
+Task state: WAITING FOR USER. T7610 steps done 2026-10-26 (no root): `make refs` (caches clean at the pins), `make check` (passes, with the VBIOS checks), probe link (`tools/haiku/build_backend.sh`: both probes link; identity probe carries the S1A guards). `make check` first failed: git 2.34 had stored `--no-cone` as a sparse pattern line in the caches; `tools/restore_verification_refs.py` now skips that line and no longer writes it. Board-operation decisions and the third opinion still wait for the user. No card stage has run.
+Last updated: 2026-10-26
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
 

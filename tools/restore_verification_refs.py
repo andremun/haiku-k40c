@@ -66,7 +66,10 @@ def sparse_list(path):
                             text=True, capture_output=True)
     if result.returncode != 0:
         return []
-    return sorted(line.strip().strip("/") for line in result.stdout.splitlines() if line.strip())
+    # git 2.34 does not know "set --no-cone" and stores "--no-cone" as a pattern
+    # line. Such a line is not a path of these caches: skip option text.
+    return sorted(line.strip().strip("/") for line in result.stdout.splitlines()
+                  if line.strip() and not line.strip().startswith("--"))
 
 
 def envytools_full():
@@ -124,7 +127,9 @@ def main():
             git(path, "init")
             git(path, "remote", "add", "origin", url)
             if sparse:
-                git(path, "sparse-checkout", "set", "--no-cone", *("/" + entry for entry in sparse))
+                # "init --no-cone", then "set": also correct on git 2.34 (see sparse_list).
+                git(path, "sparse-checkout", "init", "--no-cone")
+                git(path, "sparse-checkout", "set", *("/" + entry for entry in sparse))
             git(path, "fetch", "--depth=1", "--filter=blob:none", "origin", pins[name])
             git(path, "checkout", "--detach", "FETCH_HEAD")
         actual = git(path, "rev-parse", "HEAD", capture=True).stdout.strip()
