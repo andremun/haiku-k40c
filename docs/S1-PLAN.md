@@ -99,50 +99,55 @@ task texts (`docs/tasks/S1A.md`, `S1B.md`) and the acceptance test
 
 **Next steps, in order.**
 
-1. Local runs S1A, then S1B (the user starts the runs). Scaffold reviews
-   each, and runs the cardless KVM guest for S1A's probe change.
-2. User decisions (step 3 above): the five board operations, and the
-   third opinion before any card stage. F12 is new evidence for the
-   `IO` decision: on this card, under Linux, those writes ran and
-   bring-up went on. That shows they did no harm once; it does not show
-   they are needed.
-3. Then the remaining host work and B5, as listed above.
+1. Codex completes one host task per branch. Claude Code reviews each task.
+   S1C corrects the board-operation documentation and work roles. Review it before the next task.
+2. Add the host-only allow / omit / stop policy mechanism. Keep all entries
+   at stop until the user decides. Then complete B2, A4, and the C2 choices.
+3. Complete the cardless KVM run for the S1A probe change.
+   Ask the user before shutting down the running VM. This gives no card evidence.
+4. Obtain the user's five board-operation decisions and outside-review decision.
+   The user also decides whether B5 may precede that review.
+5. Prepare B5 identity reads. Every card stage requires the user's go-ahead.
+
+S1A and S1B host work is complete. The 2026-10-26 checks and probe links
+passed (`docs/STATUS.md`). No card stage has run.
 
 ## The work, in three tracks
 
-"Local" is the local agent; "me" is the scaffold (review, design,
-interpretation). A track A or C step that writes to the card is run only
-after review, and only with the user's go-ahead.
+Codex implements the remaining host work. Claude Code reviews it.
+The user decides board policy, outside review, and each card stage.
+Completed rows name their historical contributor. Other Who entries assign
+responsibility for remaining work and its review.
 
 ### Track A: card bring-up (the critical path)
 
 | # | Work | Who | Card? | State |
 |---|---|---|---|---|
-| A1 | Capture the card's firmware image in the Linux guest, with checksum | Me | Read-only guest run | **Done** 2026-10-14 (`reference/vbios/README.md`) |
-| A2 | Build the independent decoder; decode the tables and scripts offline | Me | No | **Done** 2026-10-14 (envytools `nvbios`, see `reference/vbios/README.md`) |
-| A3 | Inventory of the script instructions, matched to the driver log (executed or skipped) | Local | No | **Reworked** 2026-10-16; observed inventory passes checks. Raw-ROM structural supplement covers 530 potential starts / 25 opcodes; see `docs/ABC-CARDLESS-OUTCOME.md`. |
-| A4 | Executor design from the three sources; differences recorded | Me | No | Source cross-reference/design drafted; production helper/preinit integration still pending (`docs/DEVINIT-EXECUTOR.md`) |
-| A5 | Board-table lookup of every I²C and GPIO target; the safety list | Me, then the user | No | **List done** (`docs/BOARD-OPERATIONS.md`); **decision pending** |
-| A6 | Executor code, with host tests for changing conditions, timeouts and skipped writes | Local | No | Host core implemented: 20 core + 5 default-denied helpers; synthetic and artificial real-ROM tests pass. Not a production executor |
-| A7 | First write experiment: bring-up, with independent readiness checks and a small memory test | Reviewed, then run | Yes | Host scratch-check algorithm tested; no card experiment performed |
+| A1 | Capture the card's firmware image in the Linux guest, with checksum | Historical scaffold | Read-only guest run | **Done** 2026-10-14 (`reference/vbios/README.md`) |
+| A2 | Build the independent decoder; decode the tables and scripts offline | Historical scaffold | No | **Done** 2026-10-14 (envytools `nvbios`, see `reference/vbios/README.md`) |
+| A3 | Inventory of the script instructions, matched to the driver log (executed or skipped) | Independent rework (A3) | No | **Reworked** 2026-10-16; observed inventory passes checks. Raw-ROM structural supplement covers 530 potential starts / 25 opcodes; see `docs/ABC-CARDLESS-OUTCOME.md`. |
+| A4 | Executor design from the three sources; differences recorded | Codex, Claude Code review | No | Source cross-reference/design drafted; production helper/preinit integration still pending (`docs/DEVINIT-EXECUTOR.md`) |
+| A5 | Board-table lookup of every I²C and GPIO target; the safety list | Codex, then user decision | No | **List done** (`docs/BOARD-OPERATIONS.md`); **decision pending** |
+| A6 | Executor code, with host tests for changing conditions, timeouts and skipped writes | Codex, Claude Code review | No | Host core implemented: 20 core + 5 default-denied helpers; synthetic and artificial real-ROM tests pass. Not a production executor |
+| A7 | First write experiment: bring-up, with independent readiness checks and a small memory test | Claude Code review, user-authorized run | Yes | Host scratch-check algorithm tested; no card experiment performed |
 
 ### Track B: Haiku side (independent of A until the end)
 
 | # | Work | Who | Card? | State |
 |---|---|---|---|---|
-| B1 | Fix the seven code defects of the external review and the comparison tool, with regression tests | Local | No | **Done** 2026-10-14 (task R1) |
-| B2 | The layer between the encoders and the hardware: host memory, card memory, address mapping, publishing bytes to the card | Me (interfaces), local (code) | No | Typed ownership/publication layer implemented/tested; real allocation/VMM/visibility adapter pending |
-| B3 | Haiku backend, adapted from Haiku's in-tree drivers: find the card, map its regions, allocate, time, log, clean up | Local | Guest without card | OS backend/probes cross-compile; host failure tests pass. Matching-kernel link/load pending |
-| B4 | Guest tooling: a start script with limits the host enforces, a runtime allow-list of registers, logs saved as the run goes. Reuses the `haiku-k40c-llm` installation, with KVM | Me | No | Cardless overlay/watchdog/logging runner implemented; current probe allows identity reads only. This host has no KVM; native acceptance and hardware-stage allow-lists pending |
-| B5 | Read-only stages on the card: identity, then a survey compared with the Linux trace | Local, run by me | Read-only | Not started |
+| B1 | Fix the seven code defects of the external review and the comparison tool, with regression tests | Historical local agent (R1) | No | **Done** 2026-10-14 (task R1) |
+| B2 | The layer between the encoders and the hardware: host memory, card memory, address mapping, publishing bytes to the card | Codex, Claude Code review | No | Typed ownership/publication layer implemented/tested; real allocation/VMM/visibility adapter pending |
+| B3 | Haiku backend, adapted from Haiku's in-tree drivers: find the card, map its regions, allocate, time, log, clean up | Codex, Claude Code review | Guest without card | OS backend/probes cross-compile; host failure tests pass. Matching-kernel cardless link/load passed (ESC-001). S1A cardless rerun pending |
+| B4 | Guest tooling: a start script with limits the host enforces, a runtime allow-list of registers, logs saved as the run goes. Reuses the `haiku-k40c-llm` installation, with KVM | Codex, Claude Code review | No | Cardless overlay/watchdog/logging runner implemented; current probe allows identity reads only. Cardless KVM native load passed (ESC-001). S1A rerun and hardware-stage allow-lists pending |
+| B5 | Read-only stages on the card: identity, then a survey compared with the Linux trace | Codex preparation, user-authorized run | Read-only | Not started |
 
 ### Track C: from "awake" to S1
 
 | # | Work | Who | State |
 |---|---|---|---|
-| C1 | Decode the load phase of the Linux trace into named steps | Local tool, my interpretation | Six source anchors + chronological domain survey generated; full semantic attribution remains partial |
-| C2 | One ordered recipe: master control, working memory through the slow window, address translation, scheduler set-up, channel, runlist, submission, teardown. Each step with its address domain, wait, error test and rollback | Me | Gated integration recipe prepared (`docs/S1-RECIPE.md`); unresolved MMU/helper/routing/quiescence choices explicit |
-| C3 | Implement and host-test each step; then one reviewed card experiment per stage that writes to the card for the first time | Local, then reviewed | Slow window, BAR flush, runlist, scratch and S1 controller host-tested/cross-compiled; full backend/channel/MMU integration and hardware experiments pending |
+| C1 | Decode the load phase of the Linux trace into named steps | Codex, Claude Code review | Six source anchors + chronological domain survey generated; full semantic attribution remains partial |
+| C2 | One ordered recipe: master control, working memory through the slow window, address translation, scheduler set-up, channel, runlist, submission, teardown. Each step with its address domain, wait, error test and rollback | Codex, Claude Code review | Gated integration recipe prepared (`docs/S1-RECIPE.md`); unresolved MMU/helper/routing/quiescence choices explicit |
+| C3 | Implement and host-test each step; then one reviewed card experiment per stage that writes to the card for the first time | Codex, Claude Code review | Slow window, BAR flush, runlist, scratch and S1 controller host-tested/cross-compiled; full backend/channel/MMU integration and hardware experiments pending |
 
 Facts already established for track C, from the reference runs
 (`docs/05-fifo-design.md`, "Verified by the reference run"): the host

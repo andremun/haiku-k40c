@@ -52,3 +52,10 @@ Host test shims are expressly not Haiku ABI evidence; actual native headers are
 used independently in cross builds. Firmware payloads/complete decoded listings
 are never embedded in source or committed. The offline simulator reads the
 user-provided image at runtime and records only aggregate results.
+
+## S1C documentation correction (2026-10-27)
+
+| Source file consulted | License | Used for | Copied material |
+|---|---|---|---|
+| `reference/nouveau/nvkm/engine/disp/vga.c` | MIT notice in file | NV50+ byte-wide VGA MMIO routing | Semantic facts only |
+| `reference/nouveau/nvkm/subdev/bios/init.c` | MIT notice in file | INIT_IO helper effects and unconditional waits | Semantic facts only |

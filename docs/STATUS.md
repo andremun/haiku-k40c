@@ -1,9 +1,9 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: none. S1A and S1B are done on the host. The next steps wait for the user (`docs/S1-PLAN.md`, "Next steps").
-Task state: WAITING FOR USER. T7610 steps done 2026-10-26 (no root): `make refs` (caches clean at the pins), `make check` (passes, with the VBIOS checks), probe link (`tools/haiku/build_backend.sh`: both probes link; identity probe carries the S1A guards). `make check` first failed: git 2.34 had stored `--no-cone` as a sparse pattern line in the caches; `tools/restore_verification_refs.py` now skips that line and no longer writes it. Board-operation decisions and the third opinion still wait for the user. No card stage has run.
-Last updated: 2026-10-26
+Current task: none. S1C awaits Claude Code review. The next host task is the board-operation policy mechanism.
+Task state: S1C DONE (documentation only). `make check` passed on 2026-10-27 outside the sandbox. The sandbox run failed in local-server tests. No VM or card stage ran. Board-operation decisions and the outside review remain with the user.
+Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
 
@@ -48,6 +48,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | ESC-001 | RESOLVED | 2026-10-18 | Native link and load pass on the persistent KVM Haiku hrev60207 guest of `opencode-haiku` (`vm/system.qcow2`, disposable overlay). Exported kernel SHA-256 `2da9a5b9...`, byte-identical to `~/haiku-cross/lib/kernel_x86_64`; both probes link; the cardless probe loads with `k40_os: PASS`, job.exit 0, no panic. Identity probe not run. Evidence: `results/20261018-esc001-native-load/`. Cardless: not K40c evidence. See escalations/ESC-001.md, "Resolution". |
 | S1A | DONE (host; probe link not run) | 2026-10-23 | ZM_REG bit 0 for `0x000200`, 0x91 and nv50.c cites, `s1a_accept` 8/8, K40c probe checks memory decode and PMC_BOOT_0. Probe link needs `~/haiku-cross` (T7610). See work/S1A/RESULT.md. |
 | S1B | DONE (host; Mesa and VBIOS checks not run here) | 2026-10-23 | Restore helper checks sparse lists, required paths and the full envytools decoder checkout (`envytools_full()`). `devinit_sources.py` reads `nvbios.c` from it, output unchanged. `make check` runs six source and generator checks; three need the VBIOS and follow `.check-skip` A3. See work/S1B/RESULT.md. |
+| S1C | DONE (documentation only, review pending) | 2026-10-27 | Correct VGA MMIO evidence and decision 4. Update S1 next steps and work roles. `make check` passes. See work/S1C/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

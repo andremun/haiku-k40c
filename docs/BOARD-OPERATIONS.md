@@ -68,11 +68,18 @@ at `0x20` with register `0xdd` is not identified.
 | 1028 | `ZM_CR` | VGA CRTC register `0x3f` = `0x57` |
 | 3135 | `ZM_CR` | VGA CRTC register `0x85` = `0xff` |
 
-In the guest these legacy VGA accesses go through QEMU. The K40c is passed
-through as a compute device (class 3D controller), without the legacy VGA
-ranges, so they most likely reach nothing. Nouveau did them in the guest
-and the card came up, so they are not required for the bring-up there.
-Not verified.
+**KNOWN (TRACE_VERIFIED):** On NV50 and later, Nouveau reads and writes
+VGA ports through byte-wide card MMIO at `0x601000 + port`
+(`reference/nouveau/nvkm/engine/disp/vga.c:27-30,49-52`).
+The Linux capture records the port `0x3c3` access and CRTC `0x3f` write
+at `reference/linux-run-debug/mmiotrace.txt.xz:45595-45598`.
+It records the CRTC `0x85` write at lines 46468-46469.
+These accesses reach card registers through MMIO, independently of QEMU
+legacy VGA port routing.
+
+**UNKNOWN:** Whether bring-up can succeed without these operations.
+The Linux run executed them. It does not establish that omission is safe.
+The user must choose allow, omit, or stop for decision 4.
 
 ## Waits
 
@@ -93,16 +100,18 @@ nothing.
 3. **The unknown device at `0x20`.** Recommendation: do not write to it
    until it is identified. Test first whether the bring-up works without
    this single write.
-4. **VGA ports.** Recommendation: leave them out in the guest.
+4. **VGA ports and registers.** Choose allow, omit, or stop for the
+   byte-wide card MMIO operations described above. Their necessity is
+   UNKNOWN. QEMU legacy VGA routing does not justify omission.
 
 ## ABC1 correction: VGA instruction helper effects (2026-10-16)
 
 The earlier inference that legacy VGA accesses can be omitted is not established.
 Nouveau's INIT_IO handler has NV50+ MMIO side effects for port 0x3c3/data 1
-(`reference/nouveau/nvkm/subdev/bios/init.c:1623-1660`), independently of
-legacy port routing through QEMU. The future executor must preserve or justify
-those helper effects; it cannot silently drop the operation because the card
-is a 3D controller. No extra hardware permission is granted. The host executor
+(`reference/nouveau/nvkm/subdev/bios/init.c:1623-1660`), in addition to
+the byte-wide VGA MMIO accesses described above.
+The future executor must preserve or justify those helper effects.
+The card's 3D controller class does not justify omission. No extra hardware permission is granted. The host executor
 delegates this operation to a default-denied board/helper boundary.
 
 Register effects of that helper (`init.c:1631-1647`), for the decision:

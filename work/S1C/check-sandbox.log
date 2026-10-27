@@ -1,0 +1,8 @@
+python3 tools/check_repo.py
+FAIL: make -C tests fails: ["FileNotFoundError: [Errno 2] No such file or directory: '/tmp/vm_tools_h591vulp/port'", 'make[1]: *** [Makefile:33: all] Error 1']
+FAIL: make -C tests fails: ["FileNotFoundError: [Errno 2] No such file or directory: '/tmp/vm_tools_brsm31vx/port'", 'make[1]: *** [Makefile:33: all] Error 1']
+FAIL: make -C tests fails: ["FileNotFoundError: [Errno 2] No such file or directory: '/tmp/vm_tools_vc70luv_/port'", 'make[1]: *** [Makefile:33: all] Error 1']
+FAIL: make -C tests fails: ["FileNotFoundError: [Errno 2] No such file or directory: '/tmp/vm_tools_8rqm170_/port'", 'make[1]: *** [Makefile:33: all] Error 1']
+FAIL: make -s -C tests fails: ['    return self._accessor.open(self, mode, buffering, encoding, errors,', "FileNotFoundError: [Errno 2] No such file or directory: '/tmp/vm_tools_f7s6cb5n/port'", 'make[1]: *** [Makefile:33: all] Error 1']
+check_repo: 5 failure(s)
+make: *** [Makefile:19: check] Error 1
