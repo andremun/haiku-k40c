@@ -48,3 +48,14 @@ These are source facts only. No pre-start hardware operation was run.
 The final adapter suite passes 146 host checks after pool-capacity tests.
 make check and make vm-tools-test both exit 0. The cardless-result parser regression passes.
 All three native probes link. Native runtime verification is the next step.
+
+## Native runtime
+
+The single cardless KVM run passed in 50.75 seconds (result.json).
+The probe checked an aligned 513-byte host view and successful cleanup twice,
+once for each devfs load. Both reported IOVA unverified and native memory PASS.
+No failed-probe marker or PANIC occurred. No GPU was passed through.
+Evidence: results/20261027-b2-native-memory/. This is native OS evidence only.
+
+Final make check exits 0. Shared tools re-pinned to 54db484 in application commit 3b9b7e7.
+The application make check also exits 0. The A4 plan is prepared for the next batch step.

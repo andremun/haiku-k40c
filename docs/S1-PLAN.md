@@ -101,9 +101,8 @@ task texts (`docs/tasks/S1A.md`, `S1B.md`) and the acceptance test
 **Next steps, in order.**
 
 1. S1B5 is accepted by Claude Code (2026-10-27). See work/S1B5/REVIEW.md.
-2. Implement the host-only board-operation policy and helpers under ADR 004.
-   Allow only its specified ROM and observed operations. Deny other operations.
-3. Complete B2 allocation and mapping, A4 pre-start state, and the C2 choices.
+2. S1BOARD is complete for host scope. Its exact ADR 004 policy and helpers await batched review.
+3. S1B2 native allocation passes cardless checks. Continue A4 pre-start state and C2 choices.
 4. Start A7 only after the user's go-ahead. First writes in C3 also need that approval.
 
 Work uses only main. Related host macro tasks may share a review batch (ADRs 005 and 007).
@@ -153,7 +152,7 @@ responsibility for remaining work and its review.
 | # | Work | Who | Card? | State |
 |---|---|---|---|---|
 | B1 | Fix the seven code defects of the external review and the comparison tool, with regression tests | Historical local agent (R1) | No | **Done** 2026-10-14 (task R1) |
-| B2 | The layer between the encoders and the hardware: host memory, card memory, address mapping, publishing bytes to the card | Codex, Claude Code review | No | Typed ownership/publication layer implemented/tested; real allocation/VMM/visibility adapter pending |
+| B2 | The layer between the encoders and the hardware: host memory, card memory, address mapping, publishing bytes to the card | Codex, Claude Code review | No | Native DMA32 allocation/ownership adapter passes host and cardless checks (S1B2). Device IOVA/visibility verification, GPU VA and VRAM integration remain gated |
 | B3 | Haiku backend, adapted from Haiku's in-tree drivers: find the card, map its regions, allocate, time, log, clean up | Codex, Claude Code review | Guest without card | OS backend/probes cross-compile; host failure tests pass. Matching-kernel cardless link/load passed (ESC-001). S1A cardless rerun passed 2026-10-27 |
 | B4 | Guest tooling: a start script with limits the host enforces, a runtime allow-list of registers, logs saved as the run goes. Reuses the `haiku-k40c-llm` installation, with KVM | Codex, Claude Code review | No | Cardless overlay/watchdog/logging runner implemented; current probe allows identity reads only. Cardless KVM native load passed (ESC-001). S1A rerun and B5 identity passed 2026-10-27. Write-stage allow-lists pending |
 | B5 | Read-only stages on the card: identity, then a survey compared with the Linux trace | Codex, Claude Code macro review | Read-only | Identity passed 2026-10-27 (S1B5, HARDWARE_VERIFIED). Register survey remains pending |
