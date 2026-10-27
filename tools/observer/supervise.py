@@ -70,7 +70,7 @@ def observed_child(observer,argv,trace,log,seconds,watch_record,paths):
     if not 0<seconds<=600:raise ValueError('deadline outside stage bounds')
     observer=Path(observer).resolve(strict=True);target=Path(argv[0]).resolve(strict=True)
     if trace.exists():raise ValueError('observer output must be fresh')
-    command=[str(observer),'-D','-f','-qq','-y','-X','raw','-e','trace=openat,ioctl,close,dup,dup2,dup3,fcntl','-e','signal=none']
+    command=[str(observer),'-D','-f','-qq','-y','-X','raw','-e','trace=openat,ioctl,close,dup,dup2,dup3,fcntl,execve,execveat,unshare,close_range','-e','signal=none']
     for path in sorted(set(paths)):command+=['-P',path]
     command+=['-o',str(trace),'--',str(target),*argv[1:]]
     process=subprocess.Popen(command,stdout=log,stderr=log,start_new_session=True)

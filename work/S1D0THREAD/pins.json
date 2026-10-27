@@ -1,0 +1,21 @@
+{
+  "api": "Linux KCMP_FILES and proc TGID; exact original desc.c is in the pinned strace source package",
+  "observer_sha256": "75b7aeed34785c8ac729d68cbca83d256434acb036e336d0adf5a4bdc30bc7a2",
+  "original_desc_sha256": "340cbc008974197f6269a85765ccd02e588161107ee6ec00c4ca4d9b5522ba2b",
+  "scope": "owned /dev/null fixture; no successful VFIO ioctl",
+  "source_and_capture_sha256": {
+    "tests/observer_tasks.c": "1fee351af477dc21e6eb84eb9144d4d4f165e2d9b5b3ff18c6881fa8c19aa57a",
+    "tests/test_task_stream.py": "2ffc392808d91022953229866a454c336e0e5c010cdaa44033bb638331fe3ad3",
+    "tools/observer/binding.py": "b794bd7f75217d19ce7ce7f359116615c112e1208a5dca8d8d31d4281288aee5",
+    "tools/observer/build.py": "5258754e859394e20c11dcf531ffeb0d69d46201193383462a5843a02d389423",
+    "tools/observer/supervise.py": "4a854920c8d0a3f67d928fb8c5e58cec861649075b491369a72618dbe09442b4",
+    "tools/observer/task_pins.py": "56eef72cc6db8fd6c8fe4f64efd8bfa7ba890870998f0f26d36e4230a7b218e1",
+    "tools/observer/task_proof.inc": "53c5b96dc4ea5c9b74c2ed86808d16dbdc3bc5f1c305d72ca34ebcb840401cfe",
+    "tools/observer/task_stream.py": "22878546bb0a9e34d08c5d34b34cac1ffccbf339d1bb3d9cdee0edb48d64c0ef",
+    "tools/observer/vfio_decode.inc": "b5b8ff720c35f123ba08c4537f5e603bf3bd168608385ca78d618792600a795a",
+    "work/S1D0THREAD/owned-fork-02.log": "2200a6846b695f94a1d55efe520e21833ad3cbf1da3c79ca1cd98338b5123ded",
+    "work/S1D0THREAD/owned-guard-02.log": "f7fcb4d08f1929f058fa7ec43856e260adabe04363e7667e6f6c84398f0b99d5",
+    "work/S1D0THREAD/owned-private-02.log": "7ee7f982f897f9a0777d5b4712e99d52f3c74160b4efe9253e287dfa5aeeaea9",
+    "work/S1D0THREAD/owned-thread-02.log": "0c398a1e384319aec21d8c95c02006f2d77d5c0e8cc6b5a2b820f48c5559cf2e"
+  }
+}

@@ -123,3 +123,13 @@ current package or admit arbitrary task IDs. Prepare a thread-aware proof first.
 Preserve the original capture. ADR 006 requires explicit approval before retry.
 The before/after filtered logs match. This does not establish a clean kernel log.
 See work/S1D0RUN/RESULT.md and results/20261028-d0-mapping/.
+
+## Task-proof correction and authorized retry
+
+The user said “Go ahead” on 2026-10-28 after the stopped attempt was reported.
+This authorizes the correction and one retry. docs/D0-TASK-PROOF.md gives the
+syscall-time TGID/KCMP_FILES proof and namespace guards. The host does not accept
+arbitrary TIDs. Exact current source/observer hashes are in the regenerated stage
+record. Guest binaries, device options, fault checks and watchdog are unchanged.
+The fixed command remains `python3 tools/haiku/d0_run.py`. The fresh output folder
+ends in `d0-mapping-retry-01`. A new stop requires another report and go-ahead.

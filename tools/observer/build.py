@@ -31,19 +31,34 @@ def main():
     path_original=(args.source/'src/pathtrace.c').read_text()
     if hashlib.sha256(path_original.encode()).hexdigest()!='36b24c6fffc454d924ae75ef15e0663432ef3c9668cee2b0149062d8b5e5f68d':
         raise ValueError('path-filter source is not the recorded baseline')
-    path_expected=path_original.replace('switch (s->sen) {','switch (s->sen) {\n\tcase SEN_close:\n\t\treturn true; /* K40: observe all descriptor lifetimes. */',1)
+    previous_path=path_original.replace('switch (s->sen) {','switch (s->sen) {\n\tcase SEN_close:\n\t\treturn true; /* K40: observe all descriptor lifetimes. */',1)
+    guard='if (s->sen == SEN_close || s->sen == SEN_execve || s->sen == SEN_execveat || s->sen == SEN_unshare || s->sen == SEN_close_range) return true;\n\tswitch (s->sen) {'
+    previous_guard=path_original.replace('switch (s->sen) {',guard,1)
+    path_expected=path_original.replace('s = tcp_sysent(tcp);','s = tcp_sysent(tcp);\n\t'+guard.split('\n')[0],1)
+    desc_original=(args.source/'src/desc.c').read_text()
+    if hashlib.sha256(desc_original.encode()).hexdigest()!='340cbc008974197f6269a85765ccd02e588161107ee6ec00c4ca4d9b5522ba2b':
+        raise ValueError('close decoder source is not the recorded baseline')
+    desc_expected=desc_original.replace('#include "defs.h"','#include "defs.h"\n#include "k40_task.inc"',1)
+    desc_expected=desc_expected.replace('SYS_FUNC(close)\n{','SYS_FUNC(close)\n{\n\tk40_task_proof(tcp);',1)
+    task_include=(ROOT/'tools/observer/task_proof.inc').read_text()
     target=ROOT/'build/observer/strace-source'
     if args.check:
         return 0 if ((target/'src/ioctl.c').is_file() and (target/'src/ioctl.c').read_text()==expected
             and (target/'src/k40_vfio.inc').is_file() and (target/'src/k40_vfio.inc').read_text()==include
-            and (target/'src/pathtrace.c').read_text()==path_expected) else 1
+            and (target/'src/pathtrace.c').read_text()==path_expected
+            and (target/'src/desc.c').read_text()==desc_expected
+            and (target/'src/k40_task.inc').read_text()==task_include) else 1
     if not target.exists():
         target.parent.mkdir(parents=True,exist_ok=True)
         shutil.copytree(args.source,target,symlinks=True)
     elif (target/'src/ioctl.c').read_text() not in (original,expected):
         raise ValueError('existing observer source differs; preserve and investigate')
-    if (target/'src/pathtrace.c').read_text() not in (path_original,path_expected):
+    if (target/'src/pathtrace.c').read_text() not in (path_original,previous_path,previous_guard,path_expected):
         raise ValueError('existing path-filter source differs; preserve and investigate')
+    if (target/'src/desc.c').read_text() not in (desc_original,desc_expected):
+        raise ValueError('existing close decoder differs; preserve and investigate')
+    (target/'src/desc.c').write_text(desc_expected)
+    (target/'src/k40_task.inc').write_text(task_include)
     (target/'src/pathtrace.c').write_text(path_expected)
     (target/'src/ioctl.c').write_text(expected)
     (target/'src/k40_vfio.inc').write_text(include)

@@ -59,7 +59,7 @@ class D0Tests(unittest.TestCase):
     trace=Path(d)/'trace'
     records=[line.replace('iova=0x1000','iova=0x100000') for line in LINES]
     if problem=='binding':records[-1]=records[-1].replace('04:00.0','03:00.0')
-    trace.write_text(''.join('100 '+line+'\n' for line in records))
+    trace.write_text('100 execve(\"'+str(Path(run.d0_stage.FILES['qemu']).resolve())+'\", [], 0) = 0\n'+''.join('100 '+line+'\n' for line in records))
     serial=SERIAL.replace('0x0f1240a1','0xdeadbeef') if problem=='identity' else SERIAL
     if problem=='role':serial+='k40_stage: UNREVIEWED_WRITE\n'
     (evidence/'serial.log').write_text(serial);(evidence/'ready.txt').write_bytes(b'ready\n')

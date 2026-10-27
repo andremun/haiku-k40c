@@ -1,0 +1,6 @@
+python3 tools/check_repo.py
+FAIL: make -C tests fails: ['FAILED (failures=1)', 'make[1]: *** [Makefile:37: all] Error 1']
+FAIL: make -C tests fails: ['FAILED (failures=1)', 'make[1]: *** [Makefile:37: all] Error 1']
+FAIL: make -C tests fails: ['FAILED (failures=1)', 'make[1]: *** [Makefile:37: all] Error 1']
+check_repo: 3 failure(s)
+make: *** [Makefile:20: check] Error 1

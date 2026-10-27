@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1D0RUN (one physical mapping observation).
-Task state: STOPPED after the first physical D0 attempt (124.63 s). The observer rejects a mapping from another traced task because shared FD-table lineage is unproved. No probe output or allocation cutoff was attested. No modified retry occurred. Evidence: results/20261028-d0-mapping/. Next: thread/FD-proof correction and reviewed retry package. ADR 006 requires user go-ahead before another run. Claude accepted S1BOARD through S1D0PACKAGE with the supplied review scope. R5 changes and host checks pass. S1 remains incomplete.
+Current task: S1D0RETRY (one approved physical D0 retry).
+Task state: S1D0THREAD is DONE in host-only scope. Syscall-stop TGID/KCMP_FILES proof, namespace guards, real private/shared-table fixtures and full checks pass. The user authorized this correction and one retry on 2026-10-28. R5 is restarted and the stage check passes. Preserve the first stopped capture. No retry has run yet. S1 remains incomplete.
 Last updated: 2026-10-28
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -71,6 +71,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1D0PACKAGE | DONE (host/native link/cardless, review pending) | 2026-10-27 | Closed D0 launcher, retained memory client, bounded supervision and mapping/topology checks. Two cardless fixtures pass. No physical D0 run. R5 gates S1D0RUN. See work/S1D0PACKAGE/RESULT.md. |
 
 | S1D0RUN | STOPPED (first physical attempt) | 2026-10-28 | Observer rejects an unproved second task's mapping. No native extent/cutoff or probe output. Filtered fault log unchanged. No retry. See work/S1D0RUN/RESULT.md. |
+
+| S1D0THREAD | DONE (host-only correction, self-review) | 2026-10-28 | Syscall-stop task/FD-table proof and split/exec guards. Five tests include real shared/private tables and fork cases. Full checks pass. See work/S1D0THREAD/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

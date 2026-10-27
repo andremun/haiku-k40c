@@ -29,7 +29,7 @@ from tools.haiku.d0_kernel_log import KernelLog
 from tools.haiku.d0_evidence import native_extent
 from tools.haiku.d0_monitor import snapshot
 from tools.haiku.d0_topology import parse as parse_topology
-from tools.observer.binding import BoundStream
+from tools.observer.task_stream import TaskStream
 from tools.observer.supervise import observed_child
 BASE=card_run.DEFAULT_BASE
 
@@ -108,7 +108,11 @@ def arguments(folder,evidence):
 
 
 def monitor(child,folder,evidence,port,release,host,kernel):
-    stream=BoundStream(folder.name,child.process.pid,int(host['group']))
+    def proof_record(value):
+        with (evidence/'task-proofs.jsonl').open('a') as out:
+            out.write(json.dumps(value,sort_keys=True)+'\n')
+    stream=TaskStream(folder.name,child.process.pid,int(host['group']),
+                      target=str(Path(d0_stage.FILES['qemu']).resolve()),sink=proof_record)
     old=b'';pending=b'';launched=False;launch_at=None;terminal_at=None;cutoff=False
     def drain():
         nonlocal old,pending
@@ -192,7 +196,7 @@ def run():
     prerequisites()
     host=card_run.preflight(card_run.ALLOWED_BDF)
     with guest_lock(BASE.parent),KernelLog() as kernel:
-        evidence=ROOT/'results'/(datetime.now().strftime('%Y%m%d')+'-d0-mapping')
+        evidence=ROOT/'results'/(datetime.now().strftime('%Y%m%d')+'-d0-mapping-retry-01')
         evidence.mkdir(mode=0o700,exist_ok=False)
         folder=ROOT/'build/d0'/uuid.uuid4().hex[:8];folder.mkdir(mode=0o700,parents=True,exist_ok=False)
         if max(len(os.fsencode(folder/name)) for name in ('qmp','monitor.sock'))>107:raise ValueError('monitor path too long')

@@ -1,0 +1,6 @@
+1627970 execve("build/tests/observer_tasks", ["build/tests/observer_tasks"], 0x7ffeb0a27a88 /* 81 vars */) = 0
+1627970 close(K40_TASK{tgid=1627970, files=0} 3</etc/ld.so.cache>) = 0
+1627970 close(K40_TASK{tgid=1627970, files=0} 3</usr/lib/x86_64-linux-gnu/libc.so.6>) = 0
+1627970 openat(-100</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c>, "/dev/null", 0x2) = 3</dev/null>
+1628100 ioctl(3</dev/null>, 0x3b66, K40_TASK{tgid=1627970, files=0} K40_SETUP{3}) = -1 ENOTTY (Inappropriate ioctl for device)
+1627970 close(K40_TASK{tgid=1627970, files=0} 3</dev/null>) = 0

@@ -98,6 +98,9 @@ class BoundStream:
         if reopened and int(reopened[1]) in (self._group_fd,self._device_fd):raise InvalidTrace('descriptor role collision')
         if not self._base.feed(line):raise InvalidTrace(self._base.error)
 
+    def related_fd(self,fd):
+        return fd in (self._group_fd,self._container_fd,self._device_fd) or self._base.has_fd(fd)
+
     def coverage(self,**request):
         if self.error or self._retired or self._container_fd is None or self._device_fd is None:return None
         mapping=self._base.coverage(self._container_fd,**request)

@@ -24,7 +24,7 @@ SOURCES=(
  'tools/haiku/d0_topology.py','tools/haiku/d0_kernel_log.py','tools/haiku/d0_evidence.py',
  'tools/haiku/selftest/map_owner.cpp','tools/haiku/card_run.py','tools/haiku/vm_guard.py',
  'tools/haiku/qemu_hmp.py','tools/observer/supervise.py','tools/observer/binding.py',
- 'tools/observer/normalize.py','tools/observer/vfio_decode.inc','tools/observer/build.py','tools/dma_model.py',
+ 'tools/observer/normalize.py','tools/observer/task_stream.py','tools/observer/task_proof.inc','tools/observer/vfio_decode.inc','tools/observer/build.py','tools/dma_model.py',
  'src/os/OwnerClient.cpp','src/os/OwnerClient.h','src/os/HaikuOwnerModule.cpp','src/os/HaikuOwnerModule.h',
  'src/os/NativeOwner.cpp','src/os/NativeOwner.h','src/os/HaikuMemory.cpp','src/os/HaikuMemory.h',
  'src/os/HaikuBackend.c','src/os/HaikuBackend.h','src/devinit/PostImage.cpp','src/devinit/PostImage.h',

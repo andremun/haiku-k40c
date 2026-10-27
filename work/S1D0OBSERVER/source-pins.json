@@ -40,10 +40,10 @@
     "tests/observer_null.c": "43f2d397aae52a5a7cab7a81bb7b3dd6222e9032005c3e1347a056cf8e01d438",
     "tests/test_observer.py": "e450be4e3204736741a4bfefe6ce1c93e83362a08bc205c3d7b0e0c9dca2b33e",
     "tools/dma_model.py": "98183080e811e1b1a958098732a4019238d36e4aaaf3c44170a9857f72230f4a",
-    "tools/observer/build.py": "e600d08a65b7c88029796b4e76bfbfd6958f343ad8db3177a52fb195f6017238",
+    "tools/observer/build.py": "5258754e859394e20c11dcf531ffeb0d69d46201193383462a5843a02d389423",
     "tools/observer/normalize.py": "35503808d0f7a2da85d7857e4790c1f800a60c4ce438fd37ef4e33e6ba912bde",
     "tools/observer/pins.py": "50956e5ee43b6395bef0ecce9cb1efa3a7a5b89c682ea46b157b37b474155196",
-    "tools/observer/vfio_decode.inc": "73b5011f7abfbbc17d2ca2e1928397b110f7facc03ba907858bff17b2f2966c7",
+    "tools/observer/vfio_decode.inc": "b5b8ff720c35f123ba08c4537f5e603bf3bd168608385ca78d618792600a795a",
     "work/S1D0OBSERVER/null-trace.log": "3cb2b72331c516a0b090ad2454b06f8f33f68247652dae31aac68d4590d7f8d9",
     "work/S1D0OBSERVER/observer-identity.log": "35375cb8b8c76dd9daee83841dd2d318694ba068e73d4d0164809d1fff524758"
   }

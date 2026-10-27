@@ -290,3 +290,14 @@ Consulted strace `src/defs.h` and `src/util.c` bounded NUL-terminated string
 printing, and reconsulted `src/pathtrace.c`. Existing upstream license notices
 remain in the external trees. Original helpers decode API facts and text formats.
 No implementation blocks or new Nouveau code were copied.
+
+## S1D0THREAD task and file-table proof
+
+Reconsulted exact Ubuntu strace 5.16-0ubuntu3 `src/ioctl.c`, `src/pathtrace.c`
+and `src/desc.c` (LGPL-2.1-or-later). The added helper and parser are original MIT
+code. The close hook is one original helper call. No upstream implementation
+block was copied. The private build retains upstream notices and is not linked
+into the driver. The exact desc.c hash and fixture pins are recorded by
+`tools/observer/task_pins.py`. Linux `kcmp.h` and `sys/syscall.h` supply public
+syscall constants. The consulted kcmp(2) man page documents KCMP_FILES equality
+and read-access checks. No additional Nouveau source or device protocol was used.

@@ -10,7 +10,7 @@
     },
     "observer": {
       "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/observer/strace-source/src/strace",
-      "sha256": "3a74b7ac0a2869f36ccbe99194ba9778077514b41213ba007890e93b082e8c6c"
+      "sha256": "75b7aeed34785c8ac729d68cbca83d256434acb036e336d0adf5a4bdc30bc7a2"
     },
     "owner": {
       "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_owner_post_module",
@@ -71,17 +71,19 @@
     "tools/haiku/d0_evidence.py": "1f2d27ca74ae24d412b4d09dd695b56a7be60c0e607b50e3927fe3e986c11097",
     "tools/haiku/d0_kernel_log.py": "a6b792f5df1efcbcf46123df258a3321b092c8cbffb53ea52e0f189a0edd54f6",
     "tools/haiku/d0_monitor.py": "d4ad9e66b8287d2652ac32b80f0e64009325a57c167bf0180a4615990a57785d",
-    "tools/haiku/d0_run.py": "56968b169edb4dc0e51a4ade8b831dd62857fbd52854f25bdcb22030ec156f1d",
-    "tools/haiku/d0_stage.py": "f0f0a2fb5956e9e89d5a5a368686b815fe60314cf40d757b884645014e505df6",
+    "tools/haiku/d0_run.py": "a28ad4313ac9cf0aee157ff5e4460b27d781b097a3dd9cddc0df73c0f7d60cd1",
+    "tools/haiku/d0_stage.py": "6e5852dc4a49674381b82743b4bb092d96b8cc81f2a582030c5c2b03b7c1de3c",
     "tools/haiku/d0_topology.py": "7693687b9ad4128308e9bc832cc50b1d4eaf270aef6ac83001166ef206e799fc",
     "tools/haiku/qemu_hmp.py": "4b97b24be316b7d19f2c26df45de846bb06285e8a0564ea206e21af245e519f4",
     "tools/haiku/selftest/map_owner.cpp": "79ca09a205d30c9b80d5231fc5e02a75f035877617b6ce108fae75115522204d",
     "tools/haiku/vm_guard.py": "3a0c1af360106cd8bb0ae59da48f76facefefc57907c25bf7f4ccd562e925045",
-    "tools/observer/binding.py": "56d8897c0e1398a2b19f5208c1dd18ad51c048e123bee21e775018f20501164b",
-    "tools/observer/build.py": "e600d08a65b7c88029796b4e76bfbfd6958f343ad8db3177a52fb195f6017238",
+    "tools/observer/binding.py": "b794bd7f75217d19ce7ce7f359116615c112e1208a5dca8d8d31d4281288aee5",
+    "tools/observer/build.py": "5258754e859394e20c11dcf531ffeb0d69d46201193383462a5843a02d389423",
     "tools/observer/normalize.py": "35503808d0f7a2da85d7857e4790c1f800a60c4ce438fd37ef4e33e6ba912bde",
-    "tools/observer/supervise.py": "ebfe0cb969c0055759fc399822f5c4ba35658f676e4981b41bc622af91204529",
-    "tools/observer/vfio_decode.inc": "73b5011f7abfbbc17d2ca2e1928397b110f7facc03ba907858bff17b2f2966c7"
+    "tools/observer/supervise.py": "4a854920c8d0a3f67d928fb8c5e58cec861649075b491369a72618dbe09442b4",
+    "tools/observer/task_proof.inc": "53c5b96dc4ea5c9b74c2ed86808d16dbdc3bc5f1c305d72ca34ebcb840401cfe",
+    "tools/observer/task_stream.py": "22878546bb0a9e34d08c5d34b34cac1ffccbf339d1bb3d9cdee0edb48d64c0ef",
+    "tools/observer/vfio_decode.inc": "b5b8ff720c35f123ba08c4537f5e603bf3bd168608385ca78d618792600a795a"
   },
   "stage": "D0_MAPPING_OBSERVE_ONLY"
 }

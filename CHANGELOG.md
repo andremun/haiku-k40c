@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-10-28: S1D0THREAD adds syscall-stop TGID and kernel FD-table proof to the private observer. Owned shared/private-table tests pass. D0 retry approval is limited to one run.
 - 2026-10-28: Apply Claude's filtered R5 journal changes. The first physical D0 attempt stops on unproved task/FD sharing. Evidence is retained. No retry or DMA publication occurs.
 - 2026-10-27: S1D0PACKAGE prepares a closed mapping observation stage with retained native memory, bounded tracing and fault monitoring. Host and cardless checks pass. Physical D0 awaits R5. S1 remains incomplete.
 - 2026-10-27: S1B2 connects typed memory ownership to native Haiku DMA32 allocation. The cardless aligned readback and cleanup probe passes. Device IOVA publication remains denied without verification.
