@@ -1,0 +1,14 @@
+strace -- version 5.16
+Copyright (c) 1991-2022 The strace developers <https://strace.io>.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Optional features enabled: stack-trace=libunwind stack-demangle m32-mpers mx32-mpers
+linux-libc-dev 5.15.0-198.208
+strace 5.16-0ubuntu3
+38a5c75cb29dd85ddd7780d54f5bf595554d7a1b5c42524b23065f5dc4c4b01d  /usr/bin/strace
+ed78e4a399fb3d864d5bc23e3345b645f92295f420fa06c5b073c10924c2c0ea  /usr/include/linux/vfio.h
+c8979aa394766c5a96bc553b3edcf32c9ce9b3d7d3ad5887146d6ea2cb244157  build/observer/strace-source/src/strace
+e6fef9b6ae782ed55d762e70a3d084525df80ab590a03d3b58211c0f61a6d0f5  tools/observer/vfio_decode.inc
+498dae513368703a7266d9748be61236954b70a6347aebeb19e9e0bda8b98c42  tools/observer/build.py
+ca56e06ac6850d6964c1c88ba67892d618e17f79a41bd8400f50c1d2169a6685  build/observer/strace-source/src/ioctl.c

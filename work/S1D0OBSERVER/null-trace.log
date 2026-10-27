@@ -1,0 +1,5 @@
+1270649 openat(-100</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c>, "/dev/null", 0x80002) = 3</dev/null>
+1270649 ioctl(3</dev/null>, 0x3b66, K40_SETUP{3}) = -1 ENOTTY (Inappropriate ioctl for device)
+1270649 ioctl(3</dev/null>, 0x3b71, K40_MAP{argsz=32, flags=0x3, hva=0x100000, iova=0x1000, size=0x2000}) = -1 ENOTTY (Inappropriate ioctl for device)
+1270649 ioctl(3</dev/null>, 0x3b72, K40_UNMAP{argsz=24, flags=0, iova=0x1000, size=0x2000, returned=error}) = -1 ENOTTY (Inappropriate ioctl for device)
+1270649 close(3</dev/null>)             = 0

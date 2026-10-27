@@ -262,3 +262,15 @@ Reconsulted Linux v6.8 drivers/vfio/vfio_iommu_type1.c:1279-1426 under the alrea
 recorded content pin. GPL-2.0-only source facts about Type1/V2 whole-map removal
 and returned size were reimplemented as an original host diagnostic model. No
 implementation blocks were copied. No native provider or hardware API was added.
+
+## S1D0OBSERVER userspace decoder
+
+Exact Ubuntu strace 5.16-0ubuntu3 source was reconstructed outside reference/.
+Consulted src/ioctl.c: ioctl dispatch, entry/exit return flags and generic output;
+src/pathtrace.c: descriptor/path filtering; src/nsfs.c: API usage example only.
+These files carry LGPL-2.1-or-later notices. No implementation block was copied.
+The original MIT decoder include and build helper produce a separate userspace
+observer, not code linked into the MIT driver. Upstream notices remain in the
+ignored external build tree. Installed Linux userspace vfio.h API facts use its
+GPL-2.0 WITH Linux-syscall-note UAPI terms. Exact hashes and package versions are
+recorded in work/S1D0OBSERVER/. No proprietary firmware or device data was copied.

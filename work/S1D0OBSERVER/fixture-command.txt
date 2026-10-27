@@ -1,0 +1,6 @@
+gcc -std=c11 -D_GNU_SOURCE -Wall -Wextra -Werror tests/observer_null.c -o build/tests/observer_null
+build/observer/strace-source/src/strace -f -qq -y -X raw -e trace=openat,ioctl,close -P /dev/null -o work/S1D0OBSERVER/null-trace.log build/tests/observer_null
+
+This command launches a fresh inert child. No existing process is attached.
+The fixture can open only /dev/null. All three ioctl calls return ENOTTY.
+The raw trace is archived, not a deterministic regenerated fixture.

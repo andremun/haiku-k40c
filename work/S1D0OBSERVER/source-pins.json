@@ -1,0 +1,50 @@
+{
+  "actual_fixture": "owned /dev/null: all three ioctl calls returned ENOTTY",
+  "actual_successful_vfio_ioctl": false,
+  "physical_visibility_verified": false,
+  "production_eligible": false,
+  "scope": "HOST_ONLY source/binary/capture metadata; no live DMA",
+  "source_pins": [
+    {
+      "origin": "https://archive.ubuntu.com/ubuntu/pool/main/s/strace/strace_5.16-0ubuntu3.dsc",
+      "path": "strace-ubuntu.dsc",
+      "sha256": "2531ee5c4e44a909cf94a1f246cad50b05065212035d52712ceddd99b32f536f"
+    },
+    {
+      "origin": "https://archive.ubuntu.com/ubuntu/pool/main/s/strace/strace_5.16.orig.tar.xz",
+      "path": "strace_5.16.orig.tar.xz",
+      "sha256": "dc7db230ff3e57c249830ba94acab2b862da1fcaac55417e9b85041a833ca285"
+    },
+    {
+      "origin": "https://archive.ubuntu.com/ubuntu/pool/main/s/strace/strace_5.16-0ubuntu3.debian.tar.xz",
+      "path": "strace_5.16-0ubuntu3.debian.tar.xz",
+      "sha256": "65a5620cb1edb29b1d07d88db347f6dadbc868b22fe2bd85751ed6e241b9d495"
+    },
+    {
+      "origin": "Exact reconstructed Ubuntu 5.16-0ubuntu3 source",
+      "path": "strace-ubuntu/src/ioctl.c",
+      "sha256": "ffc4fae7d375a3926093446958861f8598a717f674bb1471e092107e764cb322"
+    },
+    {
+      "origin": "Exact reconstructed Ubuntu 5.16-0ubuntu3 source",
+      "path": "strace-ubuntu/src/pathtrace.c",
+      "sha256": "36b24c6fffc454d924ae75ef15e0663432ef3c9668cee2b0149062d8b5e5f68d"
+    },
+    {
+      "origin": "Installed /usr/include/linux/vfio.h; package version in observer-identity.log",
+      "path": "linux-vfio.h",
+      "sha256": "ed78e4a399fb3d864d5bc23e3345b645f92295f420fa06c5b073c10924c2c0ea"
+    }
+  ],
+  "source_sha256": {
+    "tests/observer_null.c": "43f2d397aae52a5a7cab7a81bb7b3dd6222e9032005c3e1347a056cf8e01d438",
+    "tests/test_observer.py": "e450be4e3204736741a4bfefe6ce1c93e83362a08bc205c3d7b0e0c9dca2b33e",
+    "tools/dma_model.py": "98183080e811e1b1a958098732a4019238d36e4aaaf3c44170a9857f72230f4a",
+    "tools/observer/build.py": "498dae513368703a7266d9748be61236954b70a6347aebeb19e9e0bda8b98c42",
+    "tools/observer/normalize.py": "0635cdf8100b58e986642fc037ba2ec42b64bae0defe5ab4d705f3f13b6ce90e",
+    "tools/observer/pins.py": "50956e5ee43b6395bef0ecce9cb1efa3a7a5b89c682ea46b157b37b474155196",
+    "tools/observer/vfio_decode.inc": "e6fef9b6ae782ed55d762e70a3d084525df80ab590a03d3b58211c0f61a6d0f5",
+    "work/S1D0OBSERVER/null-trace.log": "3cb2b72331c516a0b090ad2454b06f8f33f68247652dae31aac68d4590d7f8d9",
+    "work/S1D0OBSERVER/observer-identity.log": "35375cb8b8c76dd9daee83841dd2d318694ba068e73d4d0164809d1fff524758"
+  }
+}

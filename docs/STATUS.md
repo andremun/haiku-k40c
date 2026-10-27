@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1D0OBSERVER (host observation/source/fixture boundary). S1DMAMODEL joins the pending review batch.
-Task state: S1DMAMODEL host scope DONE. Bounded typed mapping/lifetime diagnostics pass synthetic tests. Live mapping/coherency/payload proof and publication remain gated. The user approves planned S1 hardware work on 04:00.0 (ADR 008). Continue one task per commit; stage prerequisites and stop/review rules remain.
+Current task: S1D0PACKAGE (closed read-only mapping observation package). S1D0OBSERVER joins the pending review batch.
+Task state: S1D0OBSERVER host scope DONE. A source-pinned userspace decoder and strict normalization pass inert owned-child/source-format tests. No VFIO mapping or physical visibility was measured. Continue one task per commit under ADR 008; D0 package prerequisites, review and stop rules remain.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -66,6 +66,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1OWNERPOST | DONE (resident binding/host integration and native link, review pending) | 2026-10-27 | Nine lifecycle/concurrency scenarios, 6,388 assertions, native simulation exclusion and quarantine retention. See work/S1OWNERPOST/RESULT.md. |
 | S1DMACONTRACT | DONE (source/evidence/design, review pending) | 2026-10-27 | Exact Ubuntu QEMU source, 14 external pins, conditional address chain and D0/D1 designs. Q7 remains open. See work/S1DMACONTRACT/RESULT.md. |
 | S1DMAMODEL | DONE (host model, review pending) | 2026-10-27 | Ten tests with a 500-update independent oracle. No live mapping authority. Hardware approval recorded in ADR 008. See work/S1DMAMODEL/RESULT.md. |
+| S1D0OBSERVER | DONE (host decoder/normalization, review pending) | 2026-10-27 | Separate userspace observer builds; inert /dev/null errors decoded, eight tests pass. No VFIO device. See work/S1D0OBSERVER/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 
