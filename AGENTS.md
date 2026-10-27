@@ -24,38 +24,37 @@ the truth.
 
 ## Session protocol
 
-1. Read `docs/STATUS.md`. Its line `Current task:` names one task ID.
-   Read `docs/tasks/<ID>.md`. Do that task and no other.
-2. Read only the files that the task needs.
-3. Do one task. Write `work/<task-id>/PLAN.md` before large work.
-4. Run `make check`. Fix what fails. `tools/check_repo.py` and
-   `tests/accept/` are the reviewer's checks. Read them when they help.
-   Change them only when the task says so.
-5. Run the handoff (Claude Code: `/handoff`): update `docs/STATUS.md`,
-   write `work/<task-id>/RESULT.md` (max 40 lines), add open questions to
-   `docs/OPEN_QUESTIONS.md` and root needs to `docs/REQUESTS.md`, commit
-   with `<task-id>: <summary>`.
-6. Stop. The next task starts in a new session.
+1. Read `docs/STATUS.md` and the current macro task in `docs/tasks/<ID>.md`.
+2. Read only the files that the macro task needs.
+3. Write `work/<task-id>/PLAN.md` before large work. Commit small working steps directly to `main`.
+4. Run `make check` before every commit. Fix failures. Change reviewer checks only when the task requires it.
+5. Keep `docs/STATUS.md` and `work/<task-id>/FINDINGS.md` current.
+6. At the macro-task handoff, write `work/<task-id>/RESULT.md` (max 40 lines).
+   Record questions in `docs/OPEN_QUESTIONS.md` and root needs in `docs/REQUESTS.md`.
+7. Report the completed macro task. The user requests Claude Code review.
 
-The review (Claude Code: `/review`) runs in its own new session after the
-handoff. It is read-only. It reviews the last finished task (last row of
-the task log), not the current task, and ends with ACCEPT or REWORK.
+Claude Code reviews milestone-sized macro tasks, such as the B5 launcher or
+board-operation policy and helpers. Small fixes within a macro task need no
+separate review. Reviews run read-only in a new session under `REVIEW.md`.
+ADR 005 records these rules.
 
 ## Hardware safety (never break these)
 
 - Never run as root: no `sudo`, `su`, `doas` or `pkexec`, on the T7610 or
   anywhere else. A step that needs root is a user step in `docs/REQUESTS.md`.
-- The K40c at 0000:03:00.0 runs `llm-server` for other projects. Never
-  touch it. The K40c at 0000:04:00.0 is the driver card, but only the user
-  changes its state. For both cards: no `sudo`, no module load or unload,
-  no `setpci` writes, no BAR or `/dev/mem` access, no `nvidia-smi` with
-  options, no GPU reset.
-- The Haiku test VM (`tools/haiku/vm-test.sh`) has no GPU. Never give it
-  one: no `vfio-pci`, no QEMU host-device options, no change to that
-  script's QEMU command line. A VM result is never hardware evidence.
-- `scripts/passthrough.sh` and `tools/guest/linux-run.sh --gpu` give a
-  real K40c to a VM. They are user steps (`docs/PASSTHROUGH.md`). Never
-  run them. You may run the Linux guest without `--gpu`.
+- The K40c at `0000:03:00.0` runs `llm-server`. Never touch it or pass it through.
+  Never pass through the Quadro K600 at `0000:82:00.0`.
+- The user permits Haiku passthrough of only `0000:04:00.0` for read-only stages (ADR 005).
+  Refuse unless it is bound to `vfio-pci`, alone in its IOMMU group, with a writable VFIO group device.
+  Only the user changes its host binding. Write stages require the user's go-ahead (ADR 004).
+- No root, module load or unload, `setpci` writes, host BAR or `/dev/mem` access,
+  `nvidia-smi` options, or manual GPU reset. The VFIO reset at VM start is permitted.
+- `tools/haiku/vm-test.sh` stays cardless. Never change its QEMU command line or add a host device.
+  Cardless results are never K40c evidence. The separate card launcher enforces the approved stage and host limits.
+- Never run `scripts/passthrough.sh`. The user already bound the development card.
+  `tools/guest/linux-run.sh --gpu` needs separate user approval. Linux without `--gpu` is permitted.
+- Run one guest at a time, with a disposable overlay, incremental logs, and a ten-minute deadline.
+  Ask before shutting down a running VM. Record a hang or panic and stop without a modified retry.
 - If a task needs data that only root can read, write the exact read-only
   command into `docs/REQUESTS.md` and continue with other work.
 
@@ -114,8 +113,11 @@ under the terms of the MIT License." Record every consulted Nouveau file in
 
 ## Git
 
-Commit small working steps. Never push, never rewrite history, never
-delete `reference/`.
+Use only `main`. Do not create task branches. Commit small working steps after `make check` passes.
+Never push. The user pushes. Never rewrite history or delete `reference/`.
+Do not use the rejected A3 attempt, retained only as tag `archive/task-a3`.
+`reference/HAIKU-TOOLS.json` in `haiku-k40c-llm` may be re-pinned after shared-tool changes.
+Other `reference/` content remains read-only.
 
 ## Review guidelines
 

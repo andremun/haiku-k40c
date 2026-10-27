@@ -5,13 +5,22 @@ the local `/pr-review` skill and Codex (through `AGENTS.md`, "Review guidelines"
 Project rules are in `AGENTS.md`. This file says what a review reports and how severe
 it is.
 
+## Review scope
+
+Review completed macro tasks, not each small fix. A macro task is a milestone-sized
+piece of work. The user requests the review after the macro-task handoff.
+Small fixes within that macro task need no separate review. Work uses only `main`
+and never pushes (ADR 005).
+
 ## What Important means here
 
 Report as Important (red) only:
 
 - A change that can touch a card: a write to a PCI configuration register, a BAR,
-  a GPU reset, a module load, or a VM with a host device, outside
-  `scripts/passthrough.sh` and `tools/guest/linux-run.sh --gpu`. Any change that
+  a GPU reset, a module load, or a VM with a host device, outside the user-authorized stage. ADR 005 permits Haiku read-only passthrough
+  of `0000:04:00.0` through the guarded card launcher, including the VFIO startup reset.
+  Write stages still require user approval. Host binding changes, manual resets,
+  root commands, and Linux `--gpu` remain outside that authorization. Any change that
   uses the K40c at 0000:03:00.0 (it runs `llm-server`, ADR 003).
 - A hardware constant (register, bit field, value, command sequence, firmware
   format) without a source: `file:line` in the pinned Nouveau tree, an `rnndb` entry

@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: none. S1D and S1C await Claude Code review. The next host task is the board-operation policy mechanism under ADR 004.
-Task state: S1D DONE (documentation only). ADR 004 is incorporated. It allows the specified board operations on the specified ROM and requires no further outside review. Other operations stay denied. Every card stage still needs user approval. `make check` passed on 2026-10-27 outside the sandbox. No VM or card stage ran.
+Current task: B5 (macro task: Haiku card launcher and identity reads).
+Task state: IN PROGRESS. Record ADR 005, then implement and verify the read-only launcher. S1C/S1D small fixes join this macro task. No VM was running at task start.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
