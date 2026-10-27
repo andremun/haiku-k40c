@@ -83,8 +83,10 @@ and PBDMA discovery; software-only group with channel-ID preemption; fail-closed
 release obligations. See S1-INTEGRATION-CHOICES.md for exact source anchors.
 The native implementation and physical evidence remain incomplete:
 
-1. Complete whole-program bytecode reachability and BIT-I/M/helper preflight.
-2. Implement bounded physical I2C transfer and native boot-persistent ownership;
+1. Bind the S1A6 conservative POST input audit to native immutable execution
+   inputs. Runtime conditions may still reach the denied GPIO; display roots,
+   call depth, termination and physical readiness are not proved by the report.
+2. Integrate the bounded host I2C candidate physically and implement native boot-persistent ownership;
    preserve ADR 004's exact instruction limits, including the unknown device 0x20.
 3. Verify host DMA/IOMMU mapping and visibility, VRAM arena ownership, scratch,
    page-table/BAR layout, physical translation and invalidation.

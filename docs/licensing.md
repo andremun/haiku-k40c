@@ -145,3 +145,20 @@ MIT sources; semantic and constant facts only. No implementation blocks copied.
 - `reference/nouveau/nvkm/engine/fifo/cgrp.c`: selected geometry, publication, routing, or teardown semantics.
 - `reference/nouveau/nvkm/engine/fifo/runl.c`: selected geometry, publication, routing, or teardown semantics.
 - `reference/nouveau/nvkm/engine/fifo/uchan.c`: selected geometry, publication, routing, or teardown semantics.
+
+## S1A6 POST inputs and dedicated I2C candidate
+
+Source facts and constants only. No implementation blocks copied.
+
+| Source consulted | License | Purpose |
+|---|---|---|
+| `reference/nouveau/nvkm/subdev/bios/init.c` | MIT | POST roots, tables, encoded registers, conditions, macros and write framing |
+| `reference/nouveau/nvkm/subdev/bios/ramcfg.c` | MIT | Group count, strap cache input and translation fallback |
+| `reference/nouveau/nvkm/subdev/bios/M0203.c` | MIT | First-match strap/group table |
+| `reference/nouveau/include/nvkm/subdev/bios/M0203.h` | SPDX MIT | Reviewed RAMCFG table type |
+| `reference/nouveau/nvkm/subdev/bios/dcb.c`, `gpio.c`, `i2c.c` | MIT | Board-table versions, entries and bounds |
+| `reference/nouveau/nvkm/subdev/devinit/base.c`, `gf100.c` | MIT | Selected MMIO dispatch boundary |
+| `reference/nouveau/nvkm/subdev/i2c/bit.c` | MIT | Optional internal START/STOP, byte/ACK and bounded stretch semantics |
+| `reference/nouveau/nvkm/subdev/i2c/busgf119.c` | MIT | Dedicated pin drive/sense and initialization |
+
+The internal algorithm is a SOURCE_ONLY candidate. Capture configuration remains UNKNOWN.

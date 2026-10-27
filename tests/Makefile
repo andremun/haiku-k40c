@@ -13,7 +13,7 @@ CXXFLAGS := -std=c++17 -Wall -Wextra -Werror -I../src -fsanitize=undefined -fno-
 BUILDDIR := ../build/tests
 
 CXX_TESTS := test_bootstrap:runtime+memory test_prestart:runtime+memory \
-             test_devinit:devinit s1a_accept:devinit test_board:devinit \
+             test_devinit:devinit s1a_accept:devinit test_board:devinit test_i2c:devinit \
              test_memory:memory \
              test_s1_boundaries:fifo+hw+mmu test_s1_experiment:runtime+memory \
              test_registerio:hw d1_accept:hw \
@@ -23,7 +23,7 @@ CXX_TESTS := test_bootstrap:runtime+memory test_prestart:runtime+memory \
              ref_qmd:compute+fifo r1_accept:compute+fifo+hw+mmu
 # The Python tests run once the tool of task D4 exists.
 PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard test_compare_traces.py accept/d4_accept.py)) \
-             accept/r1_accept.py test_vm_tools.py test_card_run.py test_board_tools.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_rom.py test_devinit_trace_join.py
+             accept/r1_accept.py test_vm_tools.py test_card_run.py test_board_tools.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_closure.py test_devinit_rom.py test_devinit_trace_join.py
 
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 

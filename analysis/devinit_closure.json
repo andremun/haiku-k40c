@@ -1,0 +1,315 @@
+{
+  "bit_entries": {
+    "I": {
+      "length": 18,
+      "offset": "0x292",
+      "version": 1
+    },
+    "M": {
+      "length": 17,
+      "offset": "0x2a6",
+      "version": 2
+    }
+  },
+  "board_operations": [
+    {
+      "allowed": true,
+      "offset": "0x8506",
+      "opcode": "0x69",
+      "runtime": "helper when active; IO waits even when skipped"
+    },
+    {
+      "allowed": true,
+      "offset": "0x850b",
+      "opcode": "0x53",
+      "runtime": "helper when active; IO waits even when skipped"
+    },
+    {
+      "allowed": true,
+      "offset": "0x85e8",
+      "opcode": "0x53",
+      "runtime": "helper when active; IO waits even when skipped"
+    },
+    {
+      "allowed": true,
+      "offset": "0x862f",
+      "opcode": "0x4d",
+      "runtime": "helper when active; IO waits even when skipped"
+    },
+    {
+      "allowed": true,
+      "offset": "0x89b7",
+      "opcode": "0xa9",
+      "runtime": "helper when active; IO waits even when skipped"
+    },
+    {
+      "allowed": false,
+      "offset": "0x89c2",
+      "opcode": "0x8e",
+      "runtime": "DENY if active; condition feasibility not proved"
+    },
+    {
+      "allowed": true,
+      "offset": "0xab8d",
+      "opcode": "0x4d",
+      "runtime": "helper when active; IO waits even when skipped"
+    }
+  ],
+  "condition_indices": [
+    0,
+    1,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    17,
+    19,
+    20,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    50
+  ],
+  "control_flow_limitations": "conservative starts, not condition feasibility, call-depth or termination proof; runtime budgets remain mandatory",
+  "evidence": "KNOWN from ROM/source; SOURCE_ONLY semantics",
+  "helper_inputs": {
+    "dcb_version": "0x40",
+    "gpio": {
+      "entries": 32,
+      "semantics": "defaults, exclusions, first-match logic, drive/latch/routing",
+      "version": "0x41"
+    },
+    "i2c": {
+      "resolved": [
+        {
+          "drive": 2,
+          "index": 2,
+          "offset": "0x862f",
+          "share": 255,
+          "type": 5
+        },
+        {
+          "drive": 2,
+          "index": 2,
+          "offset": "0xab8d",
+          "share": 255,
+          "type": 5
+        }
+      ],
+      "transport": "SOURCE_ONLY internal-bit candidate, host backend only",
+      "version": "0x40"
+    }
+  },
+  "input_bounds_valid": true,
+  "input_pointers": {
+    "conditions": "0x5019",
+    "extra": "0xabf2",
+    "functions": "0x4fdd",
+    "io_conditions": "0x527d",
+    "io_flag_conditions": "0x52be",
+    "macro_index": "0x4fdd",
+    "macros": "0x4fe9",
+    "scripts": "0x4fcd",
+    "xlat": "0x52be"
+  },
+  "issues": [],
+  "macro_indices": [
+    3,
+    4,
+    5
+  ],
+  "missing_table_behavior": {
+    "conditions": "false",
+    "macros": "no-op"
+  },
+  "opcode_counts": {
+    "0x33": 2,
+    "0x36": 2,
+    "0x38": 4,
+    "0x4d": 2,
+    "0x53": 2,
+    "0x56": 9,
+    "0x58": 24,
+    "0x5b": 19,
+    "0x5f": 7,
+    "0x69": 1,
+    "0x6e": 141,
+    "0x6f": 6,
+    "0x71": 23,
+    "0x72": 32,
+    "0x74": 8,
+    "0x75": 25,
+    "0x7a": 146,
+    "0x8c": 1,
+    "0x8d": 1,
+    "0x8e": 1,
+    "0x8f": 61,
+    "0x90": 3,
+    "0x91": 1,
+    "0x97": 8,
+    "0xa9": 1
+  },
+  "post_entry_semantics": "fresh execute flags per main root, then extra root (init.c:2331-2344)",
+  "post_roots": [
+    "0x8637",
+    "0x8ee8",
+    "0x657f",
+    "0xaa1b",
+    "0xaa1c",
+    "0xab8d",
+    "0xac0d",
+    "0xabf2"
+  ],
+  "potential_instruction_count": 530,
+  "production_eligible": false,
+  "ram": {
+    "candidates": [
+      {
+        "group": 0,
+        "strap": 0,
+        "valid": true
+      },
+      {
+        "group": 1,
+        "strap": 1,
+        "valid": true
+      },
+      {
+        "group": 2,
+        "strap": 2,
+        "valid": true
+      },
+      {
+        "group": 3,
+        "strap": 3,
+        "valid": true
+      },
+      {
+        "group": 4,
+        "strap": 4,
+        "valid": true
+      },
+      {
+        "group": 5,
+        "strap": 5,
+        "valid": true
+      },
+      {
+        "group": 6,
+        "strap": 6,
+        "valid": true
+      },
+      {
+        "group": 7,
+        "strap": 7,
+        "valid": true
+      },
+      {
+        "group": 0,
+        "strap": 8,
+        "valid": true
+      },
+      {
+        "group": 1,
+        "strap": 9,
+        "valid": true
+      },
+      {
+        "group": 2,
+        "strap": 10,
+        "valid": true
+      },
+      {
+        "group": 3,
+        "strap": 11,
+        "valid": true
+      },
+      {
+        "group": 4,
+        "strap": 12,
+        "valid": true
+      },
+      {
+        "group": 5,
+        "strap": 13,
+        "valid": true
+      },
+      {
+        "group": 6,
+        "strap": 14,
+        "valid": true
+      },
+      {
+        "group": 7,
+        "strap": 15,
+        "valid": true
+      }
+    ],
+    "count": 8,
+    "live_selection": "UNKNOWN: cache one 0x101000 strap read and validate selected group before writes",
+    "mode": "M0203 first match, then translation/identity fallback"
+  },
+  "register_summary": {
+    "contextual": 0,
+    "distinct_registers": 349,
+    "low_bit_normalizations": 0,
+    "references": 438,
+    "roles": {
+      "condition": 34,
+      "destination": 10,
+      "macro": 3,
+      "operand": 391
+    },
+    "unknown_bits": 0
+  },
+  "remaining_gates": [
+    "Denied board operation must stop if a changed condition enables it",
+    "Native immutable ROM/table binding and cached live RAM selection",
+    "Physical register normalization/stage policy and bounded transports",
+    "I2C internal algorithm choice not verified against capture configuration",
+    "Native boot-persistent owner, DMA/visibility, VRAM ownership and readiness",
+    "Display/encoder scripts outside POST roots are excluded, not proved unnecessary"
+  ],
+  "rom_sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
+  "scope": "conservative POST inputs; not feasible paths, display scripts, permission or readiness",
+  "source_sha256": {
+    "docs/decisions/004-board-operations-and-review.md": "0a5a318829217b89c1e06bb157f7f8d312c64ef934954502c1b460be44b44cd4",
+    "reference/nouveau/nvkm/subdev/bios/M0203.c": "f1138c6ae8616ab554f2390d2ea2e251a0b0c9732a3f1977e74345380c699789",
+    "reference/nouveau/nvkm/subdev/bios/dcb.c": "328e5f6d7220e4ca45f1ceb2b3d1443d5e41a513673c5411ae199b7939586a0e",
+    "reference/nouveau/nvkm/subdev/bios/gpio.c": "00408520241fe398517e2e3f99c8d52bf81f186c992375934dfd8ba684b61260",
+    "reference/nouveau/nvkm/subdev/bios/i2c.c": "4d51892b5c771f01770ce092071f463422dff53e047e648ee7cca49d828e46aa",
+    "reference/nouveau/nvkm/subdev/bios/init.c": "7af9d95f2fc4b61bb6320c7198505b19b2e7f88cbf3952f1770518f863c1811b",
+    "reference/nouveau/nvkm/subdev/bios/ramcfg.c": "7e727829ac5db539c20d1584b87dafd068be82ea5f769ece0fcb7ff733a35435",
+    "reference/nouveau/nvkm/subdev/i2c/bit.c": "b7086513e88715c1c629fecbdf3387836860527663039c7146fdbf5cd255944e",
+    "reference/nouveau/nvkm/subdev/i2c/busgf119.c": "24cdf28deab20486c48b4702c473375b6d91e4e6a0286475e5f9f48ca88a17f7",
+    "src/devinit/Board.cpp": "805592c7bee2310cf7274ce3146a4b723ec5b886ef714d8c16bde127626f9e89",
+    "src/devinit/Board.h": "c1efe64eda1f8c1c7cbad0fac17b93db4a5016bbf5b04b0d52a060017a27dd35",
+    "src/devinit/I2c.cpp": "3ca524e9220cbfc1530e80f9a864ab866c143abc8750252bc1bb32c0cbdba152",
+    "src/devinit/I2c.h": "0f331f46d9b08e0072878b6036b1315ebec24d447d853deec23b3fc74d33d8dd",
+    "src/devinit/Interpreter.cpp": "8617354577f1c20af4968844b42d4eb8b16ad6da4eb4275b5b920ec3a434bc65",
+    "src/devinit/Interpreter.h": "af3f590914461f2426bed13ad87a104854b5f75a62c0a65e8edee3357c3ae23e",
+    "tools/devinit_closure.py": "05123b127fb7082139bc781ccb2ffb70424c3d4ffb54f0709d051a1c1b62b64f",
+    "tools/devinit_preflight.py": "00db2b30ed002e5dee633585f5806a5f77ccfb23ca0cc47fe22a92f2ea53bddb"
+  }
+}

@@ -54,8 +54,10 @@ clock rollback fails. Deadline checks cannot interrupt an unbounded backend call
 
 The register helper covers dedicated NVIO I2C initialization only. The approved
 ROM resolves its default bus to dedicated drive 2 (CCB 4.0). Shared pads are
-rejected. Physical byte transfer, clock stretching, ACK failures, and bus recovery
-remain unimplemented. The internal bit algorithm in i2c/bit.c is conditional on
+rejected. S1A6 now models dedicated transfer, clock stretching and ACK failures
+in `src/devinit/I2c.*`, with explicit initialization and bounded host tests.
+Physical integration and bus recovery remain unimplemented. The internal bit
+algorithm in i2c/bit.c is conditional on
 CONFIG_NOUVEAU_I2C_INTERNAL; the capture's configuration is UNKNOWN. Its timings
 must not be presented as trace-verified transport behavior.
 

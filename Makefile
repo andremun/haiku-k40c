@@ -14,7 +14,7 @@ vm-tools-test:
 	python3 tests/test_vm_tools.py
 	python3 tests/test_card_run.py
 
-# The three devinit tools below read the private VBIOS image. CI skips them with
+# The ROM tools below read the private VBIOS image. CI skips them with
 # task A3 in .check-skip, the same switch that tools/check_repo.py uses.
 check:
 	python3 tools/check_repo.py
@@ -22,12 +22,13 @@ check:
 	python3 tools/devinit_trace_join.py --check
 	python3 tools/load_trace.py --check
 	@if grep -qw A3 .check-skip 2>/dev/null; then \
-		echo "devinit_inventory, devinit_preflight, devinit_sources, board_trace --check: NOT RUN (A3 in .check-skip, private VBIOS image)"; \
+		echo "devinit_inventory, devinit_preflight, devinit_sources, board_trace, devinit_closure --check: NOT RUN (A3 in .check-skip, private VBIOS image)"; \
 	else \
 		python3 tools/devinit_inventory.py --check && \
 		python3 tools/devinit_preflight.py --check && \
 		python3 tools/devinit_sources.py --check && \
-		python3 tools/board_trace.py --check; \
+		python3 tools/board_trace.py --check && \
+		python3 tools/devinit_closure.py --check; \
 	fi
 	@if [ -f tests/Makefile ]; then $(MAKE) -s -C tests; fi
 

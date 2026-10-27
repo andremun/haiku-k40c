@@ -144,8 +144,21 @@ are the reviewed table formats here. The approved ROM uses DCB 4.0, GPIO 4.1, an
 Other layouts fail closed. No display-output context is supplied for I2C index 0xff.
 The approved instructions use index 0x80, so no display-output fallback is needed.
 
-Physical I2C transactions and bus initialization remain transport/pre-start integration work.
-No physical byte/MMIO transport is provided. The current adapter owns STL storage and is host-only.
+S1A6 adds `DedicatedI2c`, a host-only GF119 dedicated-bus transport candidate.
+It requires explicit bus initialization and exact descriptor matching. It sends
+one seven-bit write address and the register/value bytes, MSB first, with ACK
+checks. Stretch polls, host time and callback counts bound each transaction.
+The optional internal algorithm supplies the 1/5 microsecond timing and 2200
+stretch-poll limit (`nvkm/subdev/i2c/bit.c:27-29,63-211`). Its selection in the
+Linux capture is UNKNOWN. These timings remain SOURCE_ONLY.
+
+A NACK or callback failure stops payload transmission. STOP uses the remaining
+transaction budget and reports cleanup failure separately from the primary error.
+A failed transaction disables the transport until explicit reinitialization.
+No automatic retry or bus-recovery pulses exist. STOP does not prove recovery.
+Shared pads, PMGR layouts and physical backends are rejected. Callers serialize
+all bus operations, including initialization. No physical byte/MMIO transport is
+provided. The policy adapter owns STL storage and is host-only.
 A4 prerequisites, B2 mappings, and A7 one-shot startup remain separate tasks.
 Failures can follow partial simulated effects. No rollback or safe hardware cleanup is implied.
 Callbacks must be bounded. The interpreter checks its deadline after the helper returns.
@@ -156,3 +169,39 @@ The capture supplies initial read values, never a replay of its writes.
 The generated report is `work/S1BOARD/trace-check.json`.
 Run `python3 tools/board_trace.py --check` to compare it without writing.
 The comparison verifies access facts for that captured state. It is not a hardware helper run.
+
+## S1A6 conservative POST input audit
+
+`tools/devinit_closure.py` generates `analysis/devinit_closure.json` from the
+exact approved ROM and ADR 004. `--check` compares text without writing.
+It runs after structural preflight in `make check`, under the same private-ROM
+skip rule. Synthetic tests run even when the private image is absent.
+
+The audit validates BIT-I/M versions and bounds, main and extra roots, RAM group
+mapping for every strap candidate, condition/macro spans, register encoding,
+copy shifts and generated register ranges, table overlap, DCB/GPIO/CCB layouts,
+and dedicated I2C descriptors. It binds permitted board rows to the ROM digest,
+offset and opcode. Generated counts are not proof of feasible execution paths.
+Each POST root starts fresh execution flags (`bios/init.c:2331-2344`). Display
+encoder roots outside POST are excluded explicitly. Call depth and termination
+remain runtime-budget obligations.
+
+KNOWN from the approved image: 530 potential starts, 25 opcode values, 438
+register references to 349 distinct registers, and no unresolved reviewed-input
+issues. All 16 possible strap candidates resolve within eight RAM groups. No
+live strap read occurred. The 32-entry GPIO table is version 4.1; the CCB is 4.0,
+and both approved I2C instructions resolve to dedicated NVIO bus/drive 2.
+These are ROM/source facts, not hardware execution evidence.
+
+Seven board instructions are structurally reachable. Six match ADR 004. GPIO at
+0x89c2 stays denied if active. Changed conditions must therefore stop rather than
+force a successful POST. Missing condition tables evaluate false; absent macro
+tables are no-ops in the selected compatibility behavior. Unknown layouts or
+out-of-bounds inputs are rejected.
+
+The report always sets production_eligible=false. It is an offline audit, not a
+permission token. Native immutable input binding, cached live RAM selection,
+register normalization and stage policy, persistent boot ownership, DMA/visibility,
+VRAM ownership and independent readiness remain gates. Physical I2C integration
+also needs a reviewed algorithm choice and hardware evidence. No claim of
+production executor completion follows from the host transport or the audit.

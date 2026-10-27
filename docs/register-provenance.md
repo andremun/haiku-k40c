@@ -100,6 +100,16 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 |------|------|--------|--------|
 | `src/devinit/Board.h:21` | `uint8_t index = 0, type = 0, drive = 0xff, share = 0xff, aux = 0xff;` | no source: ambiguous citation | SOURCE_ONLY |
 
+## src/devinit/I2c.cpp
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/devinit/I2c.cpp:12` | `if (bus.type != 0x05 \|\| bus.share != 0xff \|\| bus.drive > 15) {` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/I2c.cpp:15` | `address_ = 0x00d014 + uint32_t(bus.drive) * 0x20;` | nvkm/subdev/i2c/busgf119.c:93 | SOURCE_ONLY |
+| `src/devinit/I2c.cpp:60` | `if (!delay(1) \|\| !sense(0x10, high)) return false;` | nvkm/subdev/i2c/busgf119.c:53 | SOURCE_ONLY |
+| `src/devinit/I2c.cpp:68` | `if (!sense(0x10, scl) \|\| !sense(0x20, sda)) return false;` | nvkm/subdev/i2c/busgf119.c:53 | SOURCE_ONLY |
+| `src/devinit/I2c.cpp:89` | `\|\| !sense(0x20, nack) \|\| !drive(1, false) \|\| !delay(5)) return false;` | nvkm/subdev/i2c/busgf119.c:61 | SOURCE_ONLY |
+
 ## src/devinit/Interpreter.cpp
 
 | Line | Code | Source | Status |
@@ -278,6 +288,7 @@ The following constant lines have no source citation:
 - src/devinit/Board.cpp:182 (no source: ambiguous citation)
 - src/devinit/Board.cpp:183 (no source: ambiguous citation)
 - src/devinit/Board.h:21 (no source: ambiguous citation)
+- src/devinit/I2c.cpp:12 (no source: ambiguous citation)
 - src/devinit/Sha256.cpp:9 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
 - src/devinit/Sha256.cpp:10 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
 - src/devinit/Sha256.cpp:11 (no source: SHA-256 algorithm, not hardware. NIST FIPS 180-4 sections 4.2.2,5.1.1,5.3.3.)
