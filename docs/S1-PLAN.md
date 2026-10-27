@@ -3,8 +3,9 @@
 First draft by the scaffold 2026-10-13. Rewritten 2026-10-16 to record the
 plan as it now stands, after the external reviews and the five research
 documents in `docs/external/`, and after reading the `haiku-k40c-llm`
-package. For the user's review and the third opinion. No hardware task of
-this plan starts before the user says so.
+package. The user accepted the board-operation decisions and waived further outside
+review in [ADR 004](decisions/004-board-operations-and-review.md).
+Every card stage still requires the user's go-ahead.
 
 ## What S1 is
 
@@ -65,7 +66,7 @@ and a timed matrix product as the decision point after S3 (see the end).
 | This file | Plan, tracks, limits and unknowns. The latest scaffold review. |
 | [S1-RECIPE.md](S1-RECIPE.md) | Step-by-step recipe for the card stages |
 | [S1-VERIFICATION.md](S1-VERIFICATION.md) | Verification gates and their results |
-| [BOARD-OPERATIONS.md](BOARD-OPERATIONS.md) | Board operations in the start-up script that wait for a user decision |
+| [BOARD-OPERATIONS.md](BOARD-OPERATIONS.md) | Board operations and the accepted ADR 004 limits |
 | [DEVINIT-EXECUTOR.md](DEVINIT-EXECUTOR.md) | Design of the semantic start-up script executor |
 | [MEMORY-CONTRACT.md](MEMORY-CONTRACT.md) | Memory ownership and publication boundary |
 | [PASSTHROUGH.md](PASSTHROUGH.md) | How a VM gets one K40c (user step) |
@@ -100,13 +101,15 @@ task texts (`docs/tasks/S1A.md`, `S1B.md`) and the acceptance test
 **Next steps, in order.**
 
 1. Codex completes one host task per branch. Claude Code reviews each task.
-   S1C corrects the board-operation documentation and work roles. Review it before the next task.
-2. Add the host-only allow / omit / stop policy mechanism. Keep all entries
-   at stop until the user decides. Then complete B2, A4, and the C2 choices.
+   S1C corrects the board-operation documentation and work roles.
+   S1D incorporates ADR 004. Claude Code review remains pending.
+2. Add the host-only allow / omit / stop policy mechanism. Keep other operations
+   denied by default. Allow only the ROM and operations specified in ADR 004.
+   Then complete B2, A4, and the C2 choices.
 3. Complete the cardless KVM run for the S1A probe change.
    Ask the user before shutting down the running VM. This gives no card evidence.
-4. Obtain the user's five board-operation decisions and outside-review decision.
-   The user also decides whether B5 may precede that review.
+4. Apply the accepted decisions in ADR 004. No further outside review is required.
+   Keep the hardware integration gate until the implementation is reviewed.
 5. Prepare B5 identity reads. Every card stage requires the user's go-ahead.
 
 S1A and S1B host work is complete. The 2026-10-26 checks and probe links
@@ -115,7 +118,8 @@ passed (`docs/STATUS.md`). No card stage has run.
 ## The work, in three tracks
 
 Codex implements the remaining host work. Claude Code reviews it.
-The user decides board policy, outside review, and each card stage.
+The user decided board policy and outside review in ADR 004.
+Each card stage still needs user approval.
 Completed rows name their historical contributor. Other Who entries assign
 responsibility for remaining work and its review.
 
@@ -127,7 +131,7 @@ responsibility for remaining work and its review.
 | A2 | Build the independent decoder; decode the tables and scripts offline | Historical scaffold | No | **Done** 2026-10-14 (envytools `nvbios`, see `reference/vbios/README.md`) |
 | A3 | Inventory of the script instructions, matched to the driver log (executed or skipped) | Independent rework (A3) | No | **Reworked** 2026-10-16; observed inventory passes checks. Raw-ROM structural supplement covers 530 potential starts / 25 opcodes; see `docs/ABC-CARDLESS-OUTCOME.md`. |
 | A4 | Executor design from the three sources; differences recorded | Codex, Claude Code review | No | Source cross-reference/design drafted; production helper/preinit integration still pending (`docs/DEVINIT-EXECUTOR.md`) |
-| A5 | Board-table lookup of every I²C and GPIO target; the safety list | Codex, then user decision | No | **List done** (`docs/BOARD-OPERATIONS.md`); **decision pending** |
+| A5 | Board-table lookup of every I²C and GPIO target; the safety list | Codex implementation, Claude Code review | No | **List done** (`docs/BOARD-OPERATIONS.md`); **decisions accepted** 2026-10-27 (ADR 004) |
 | A6 | Executor code, with host tests for changing conditions, timeouts and skipped writes | Codex, Claude Code review | No | Host core implemented: 20 core + 5 default-denied helpers; synthetic and artificial real-ROM tests pass. Not a production executor |
 | A7 | First write experiment: bring-up, with independent readiness checks and a small memory test | Claude Code review, user-authorized run | Yes | Host scratch-check algorithm tested; no card experiment performed |
 
@@ -161,7 +165,7 @@ the channel number followed by 0. Runlist commit uses `0x002270` and
 ### Housekeeping
 
 - Rebuild the local source/review artifacts with `tools/review_bundle.py`; reproduce checks using `docs/ABC-CARDLESS-OUTCOME.md` and exact external inputs. Firmware and caches are excluded.
-- The third opinion (an outside review) before any hardware task.
+- No further outside review is required (ADR 004). Claude Code reviews each implementation task.
 
 ## How the old stages map to the tracks
 
@@ -217,7 +221,7 @@ host where possible (B4):
    readiness ladder); they are not all identified yet.
 4. What do the I²C and GPIO operations control? Answered for most of
    them in `docs/BOARD-OPERATIONS.md`; the device at I²C address `0x20`
-   is still unknown. The safety decision is the user's.
+   remains UNKNOWN. ADR 004 permits the observed write within its stated limits.
 
 **Would cost time, not stop it**
 

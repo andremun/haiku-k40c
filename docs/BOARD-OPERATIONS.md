@@ -5,8 +5,10 @@ By the scaffold, 2026-10-14 (step A5 of `docs/S1-PLAN.md`). Source: the start-up
 decompressed log), and the card's own board
 tables decoded from its firmware image with envytools `nvbios -p gpio,
 i2c, extdev` (image: `reference/vbios/README.md`). This is the list that
-`docs/S1-PLAN.md` asks for before any change to the safety rules. **No rule
-is changed by this document; the decision is the user's.**
+`docs/S1-PLAN.md` asks for before any change to the safety rules.
+The user made the decisions on 2026-10-27 in
+[ADR 004](decisions/004-board-operations-and-review.md).
+That record defines the permission and its limits.
 
 ## GPIO: one reset of the board's functions
 
@@ -79,7 +81,7 @@ legacy VGA port routing.
 
 **UNKNOWN:** Whether bring-up can succeed without these operations.
 The Linux run executed them. It does not establish that omission is safe.
-The user must choose allow, omit, or stop for decision 4.
+The user allowed decision 4 within the limits of ADR 004.
 
 ## Waits
 
@@ -88,21 +90,24 @@ registers (for example `0x12004c`, `0x00e800`, `0x61000c`, `0x131c20`),
 and one skipped `TIME` of 10 milliseconds. `TIME` operands are microseconds, not milliseconds (`nvkm/subdev/bios/init.c:1781-1795`). The polls are of the card's own state; they change
 nothing.
 
-## What needs a decision
+## User decisions (2026-10-27)
 
-1. **GPIO reset.** Allow the executor to reset the seven listed functions
-   to the board's defaults (memory voltage, memory reference, power, fan),
-   as the vendor script does, while the core-voltage lines stay untouched.
-2. **The temperature sensor.** Allow the two writes to the MAX6649 at
-   `0x4c`: they set the high and the critical limit of the GPU die to
-   115 °C, the vendor's values. Without them the sensor keeps its
-   power-on limits, which were not looked up.
-3. **The unknown device at `0x20`.** Recommendation: do not write to it
-   until it is identified. Test first whether the bring-up works without
-   this single write.
-4. **VGA ports and registers.** Choose allow, omit, or stop for the
-   byte-wide card MMIO operations described above. Their necessity is
-   UNKNOWN. QEMU legacy VGA routing does not justify omission.
+[ADR 004](decisions/004-board-operations-and-review.md) allows all five
+operations as Linux ran them, on the specified ROM image only:
+
+1. GPIO reset at ROM offset `0x89b7`.
+2. MAX6649 writes at `0xab8d`.
+3. The unidentified I2C device write at `0x862f`.
+4. VGA operations at `0x8506`, `0x850b`, and `0x85e8`.
+5. The `IO` helper writes and waits at `0x8506`.
+
+ADR 004 lists the exact operands and ROM SHA-256.
+Operations skipped by Linux stay denied if our run would execute them.
+Other offsets and other ROM images stay denied. A difference stops the executor.
+The device at I2C `0x20` remains UNKNOWN. Permission does not establish necessity.
+
+No further outside review is required. Every card stage still requires the
+user's go-ahead. The executor hardware gate remains until reviewed integration.
 
 ## ABC1 correction: VGA instruction helper effects (2026-10-16)
 
@@ -111,11 +116,13 @@ Nouveau's INIT_IO handler has NV50+ MMIO side effects for port 0x3c3/data 1
 (`reference/nouveau/nvkm/subdev/bios/init.c:1623-1660`), in addition to
 the byte-wide VGA MMIO accesses described above.
 The future executor must preserve or justify those helper effects.
-The card's 3D controller class does not justify omission. No extra hardware permission is granted. The host executor
-delegates this operation to a default-denied board/helper boundary.
+The card's 3D controller class does not justify omission.
+ADR 004 now permits the observed operation within its stated limits.
+The host executor still delegates it to a default-denied board/helper boundary.
+Reviewed helper implementation and hardware integration remain necessary.
 
-Register effects of that helper (`init.c:1631-1647`), for the decision:
+Register effects of that helper (`init.c:1631-1647`), covered by ADR 004:
 `0x000200` bit 30 cleared then set (an engine-enable bit), `0x00e18c`
 bit 17 set then cleared, `0x614100` and `0x614900` (display registers)
-masked and written three times, two 10 ms waits. This is a fifth item
-to decide, alongside the four above.
+masked and written three times, two 10 ms waits.
+ADR 004 includes these effects as the fifth board-operation decision.

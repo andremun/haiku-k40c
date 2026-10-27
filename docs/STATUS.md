@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: none. S1C awaits Claude Code review. The next host task is the board-operation policy mechanism.
-Task state: S1C DONE (documentation only). `make check` passed on 2026-10-27 outside the sandbox. The sandbox run failed in local-server tests. No VM or card stage ran. Board-operation decisions and the outside review remain with the user.
+Current task: none. S1D and S1C await Claude Code review. The next host task is the board-operation policy mechanism under ADR 004.
+Task state: S1D DONE (documentation only). ADR 004 is incorporated. It allows the specified board operations on the specified ROM and requires no further outside review. Other operations stay denied. Every card stage still needs user approval. `make check` passed on 2026-10-27 outside the sandbox. No VM or card stage ran.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -49,6 +49,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A | DONE (host; probe link not run) | 2026-10-23 | ZM_REG bit 0 for `0x000200`, 0x91 and nv50.c cites, `s1a_accept` 8/8, K40c probe checks memory decode and PMC_BOOT_0. Probe link needs `~/haiku-cross` (T7610). See work/S1A/RESULT.md. |
 | S1B | DONE (host; Mesa and VBIOS checks not run here) | 2026-10-23 | Restore helper checks sparse lists, required paths and the full envytools decoder checkout (`envytools_full()`). `devinit_sources.py` reads `nvbios.c` from it, output unchanged. `make check` runs six source and generator checks; three need the VBIOS and follow `.check-skip` A3. See work/S1B/RESULT.md. |
 | S1C | DONE (documentation only, review pending) | 2026-10-27 | Correct VGA MMIO evidence and decision 4. Update S1 next steps and work roles. `make check` passes. See work/S1C/RESULT.md. |
+| S1D | DONE (documentation only, review pending) | 2026-10-27 | Incorporate ADR 004 and align the board-operation document, plan, and status. `make check` passes. See work/S1D/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 
