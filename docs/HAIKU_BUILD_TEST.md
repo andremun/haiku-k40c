@@ -150,3 +150,12 @@ It accepts the probe's `k40_os: PASS` marker. Evidence remains under `build/card
 A reported stop requires user approval before another run (ADR 006).
 The probe's successful path proves native allocation mechanics only.
 It does not validate production pool lifetime, quarantine recovery, DMA, or IOVA equality.
+
+## Permanent owner module: build only
+
+S1NATIVE adds `k40_owner_module`, built with the command in
+`docs/NATIVE-OWNER.md`. It links against the matching kernel but has not been
+installed or loaded. It is a kernel module, not a device-node probe. Do not feed
+it to cardless_run.py as a legacy driver. A later explicit cardless task must
+stage the module and a client that validates reload and quarantine behavior.
+The B5 and cardless launcher commands are unchanged.

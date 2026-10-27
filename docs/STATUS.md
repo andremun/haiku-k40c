@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1NATIVE (persistent native owner and DMA contract). S1A6 is complete in the pending host review batch.
-Task state: S1A6 host scope DONE. Conservative POST input audit and bounded dedicated I2C candidate pass. Native immutable inputs, physical transports, boot-persistent ownership, verified DMA and readiness remain gated. No write stage is authorized.
+Current task: S1OWNERTEST (cardless owner load and reload evidence). S1NATIVE is complete in the pending review batch.
+Task state: S1NATIVE source/host/link scope DONE. Separate permanent owner and client ABI retain startup/quarantine state and deny DMA publication. Native load/reload remains unverified. Next: cardless owner test. No write stage is authorized.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -59,6 +59,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A4 | DONE (host candidate, batched review pending) | 2026-10-27 | Selected preinit lifecycle, one-shot controller, source-backed register helpers; 228 host checks. Physical I2C and readiness remain gated. See work/S1A4/RESULT.md. |
 | S1C2 | DONE (source design, batched review pending) | 2026-10-27 | Mode 17, PDB invalidation, discovered routing, software-only group and release obligations; corrected timeout/scratch/DMA claims. See work/S1C2/RESULT.md. |
 | S1A6 | DONE (host only, batched review pending) | 2026-10-27 | Deterministic POST input audit, exact board-policy binding, bounded dedicated I2C candidate; 908 wire checks and 10 input-audit tests. Native/hardware gates remain. See work/S1A6/RESULT.md. |
+| S1NATIVE | DONE (source/host/native link, batched review pending) | 2026-10-27 | Separate KEEP_LOADED owner, client lease/handle API, one-shot/quarantine retention; 161 host checks and native link pass. No load/reload or DMA claim. See work/S1NATIVE/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

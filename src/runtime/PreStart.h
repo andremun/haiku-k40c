@@ -3,20 +3,14 @@
 #pragma once
 #include "memory/Memory.h"
 #include "devinit/Board.h"
-#include <atomic>
+#include "runtime/BootState.h"
 
 namespace k40::runtime::startup {
-enum class BootState : uint8_t { Fresh, Running, Complete, Failed };
 enum class Step { Inputs, Identity, Interrupts, PostDecision, Crtc, PrivateRing,
                   I2c, FlushPage, FifoReset, Rom, Readiness, Complete };
 enum class Error { None, HardwareDisabled, AlreadyAttempted, Inputs, Io, UnexpectedState, Timeout, Clock };
 struct Result { Error error = Error::None; Step step = Step::Inputs; bool flushPinned = false; };
-class OncePerBoot {
-    friend class Controller;
-    std::atomic<BootState> state_{BootState::Fresh};
-public:
-    BootState state() const { return state_.load(std::memory_order_acquire); }
-};
+
 class Backend {
 public:
     virtual ~Backend() = default;

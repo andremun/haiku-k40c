@@ -162,3 +162,23 @@ Source facts and constants only. No implementation blocks copied.
 | `reference/nouveau/nvkm/subdev/i2c/busgf119.c` | MIT | Dedicated pin drive/sense and initialization |
 
 The internal algorithm is a SOURCE_ONLY candidate. Capture configuration remains UNKNOWN.
+
+## S1NATIVE module lifetime and DMA boundary
+
+Haiku MIT sources only. API declarations and semantic facts, no implementation
+blocks copied. Nouveau was not consulted for this task.
+
+- `reference/haiku/headers/os/drivers/module.h`: module_info, standard operations,
+  KEEP_LOADED flag, and get_module/put_module interface.
+- `reference/haiku/headers/private/kernel/kmodule.h`: distinction between raw
+  image loading and module acquisition.
+- Haiku commit `49a0af9585d80e42240af63ab66e31e9873f59b8`,
+  `src/system/kernel/module.cpp`: permanent reference and initialized-state lifetime.
+- Same commit, `src/system/kernel/device_manager/legacy_drivers.cpp`: driver
+  uninitialization and add-on unload. These two sparse-omitted files were retrieved
+  from official raw.githubusercontent URLs into /tmp, not added to reference/.
+- `reference/haiku/src/add-ons/kernel/drivers/graphics/nvidia/driver.c`:
+  existing module reference use. Only relevant get/put ranges were consulted.
+
+Source URLs and hash record are in docs/NATIVE-OWNER.md and
+work/S1NATIVE/source-hashes.log. The cross-source module.cpp is byte-identical.

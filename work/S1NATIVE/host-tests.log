@@ -1,0 +1,2 @@
+native owner host contracts: 161 checks, 0 failures; NOT native load evidence
+pre-start controller/helpers: 228 checks, 0 failures (HOST_ONLY)

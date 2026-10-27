@@ -28,8 +28,8 @@ PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard tes
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 
 .PHONY: all clean
-all: $(PROGRAMS) $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory
-	@for p in $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory; do $$p || exit 1; done
+all: $(PROGRAMS) $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner
+	@for p in $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner; do $$p || exit 1; done
 	@for t in $(PY_TESTS); do (cd .. && python3 tests/$$t) || exit 1; done
 
 define RULE
@@ -61,3 +61,6 @@ $(BUILDDIR)/board_probe: board_probe.cpp board_fake.h $(wildcard ../src/devinit/
 
 $(BUILDDIR)/test_haiku_memory: test_haiku_memory.cpp ../src/os/HaikuMemory.cpp ../src/os/HaikuMemory.h ../src/os/HaikuBackend.h ../src/memory/Memory.cpp ../src/memory/Memory.h os_shim/KernelExport.h os_shim/PCI.h | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) -Ios_shim test_haiku_memory.cpp ../src/os/HaikuMemory.cpp ../src/memory/Memory.cpp -o $@
+
+$(BUILDDIR)/test_native_owner: test_native_owner.cpp os_shim/module.h os_shim/KernelExport.h $(wildcard ../src/os/NativeOwner.* ../src/os/HaikuOwnerModule.* ../src/os/OwnerClient.* ../src/os/HaikuMemory.* ../src/runtime/BootState.h) | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -Ios_shim test_native_owner.cpp ../src/os/NativeOwner.cpp ../src/os/HaikuOwnerModule.cpp ../src/os/OwnerClient.cpp ../src/os/HaikuMemory.cpp -o $@

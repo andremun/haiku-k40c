@@ -244,27 +244,27 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 
 | Line | Code | Source | Status |
 |------|------|--------|--------|
-| `src/runtime/PreStart.cpp:71` | `if (!registers_.write32(0x000140 + leaf * 4, 0)) return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:73` | `return registers_.read32(0x000140, drain);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:79` | `if (!allowed() \|\| !registers_.read32(0x02240c, state)) return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:88` | `return bytes_.write8(0x6013d4, 0x1f)` | nvkm/engine/disp/vga.c:130 | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:89` | `&& bytes_.read8(0x6013d5, oldLock)` | nvkm/engine/disp/vga.c:100 | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:90` | `&& bytes_.write8(0x6013d4, 0x3f)` | nvkm/engine/disp/vga.c:135 | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:91` | `&& bytes_.write8(0x6013d5, 0x57);` | nvkm/engine/disp/vga.c:131 | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:98` | `{0x122318,0x1000},` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:99` | `{0x12231c,0x0200},` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:100` | `{0x122310,0x0800},` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:101` | `{0x122348,0x0100},` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:102` | `{0x1223b0,0x0fff},` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:103` | `{0x122348,0x0200},` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:104` | `{0x122358,0x2880},` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:107` | `if (!masked(setting.reg, 0x0003ffff, setting.value)) return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:113` | `if (!allowed() \|\| bus.type != 0x05 \|\| bus.share != 0xff \|\| bus.drive > 15) return false;` | nvkm/subdev/i2c/padgf119.c:42 | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:114` | `return registers_.write32(0x00d014 + uint32_t(bus.drive) * 0x20, 7);` | nvkm/subdev/i2c/busgf119.c:69 | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:119` | `return registers_.write32(0x100c10, uint32_t(address.value >> 8));` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:126` | `return masked(0x000200, 0x00000100, 0)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:127` | `&& masked(0x000200, 0x00000100, 0x00000100)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/runtime/PreStart.cpp:128` | `&& registers_.read32(0x000200, drain);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:70` | `if (!registers_.write32(0x000140 + leaf * 4, 0)) return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:72` | `return registers_.read32(0x000140, drain);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:78` | `if (!allowed() \|\| !registers_.read32(0x02240c, state)) return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:87` | `return bytes_.write8(0x6013d4, 0x1f)` | nvkm/engine/disp/vga.c:130 | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:88` | `&& bytes_.read8(0x6013d5, oldLock)` | nvkm/engine/disp/vga.c:100 | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:89` | `&& bytes_.write8(0x6013d4, 0x3f)` | nvkm/engine/disp/vga.c:135 | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:90` | `&& bytes_.write8(0x6013d5, 0x57);` | nvkm/engine/disp/vga.c:131 | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:97` | `{0x122318,0x1000},` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:98` | `{0x12231c,0x0200},` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:99` | `{0x122310,0x0800},` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:100` | `{0x122348,0x0100},` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:101` | `{0x1223b0,0x0fff},` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:102` | `{0x122348,0x0200},` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:103` | `{0x122358,0x2880},` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:106` | `if (!masked(setting.reg, 0x0003ffff, setting.value)) return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:112` | `if (!allowed() \|\| bus.type != 0x05 \|\| bus.share != 0xff \|\| bus.drive > 15) return false;` | nvkm/subdev/i2c/padgf119.c:42 | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:113` | `return registers_.write32(0x00d014 + uint32_t(bus.drive) * 0x20, 7);` | nvkm/subdev/i2c/busgf119.c:69 | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:118` | `return registers_.write32(0x100c10, uint32_t(address.value >> 8));` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:125` | `return masked(0x000200, 0x00000100, 0)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:126` | `&& masked(0x000200, 0x00000100, 0x00000100)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/runtime/PreStart.cpp:127` | `&& registers_.read32(0x000200, drain);` | no source: ambiguous citation | SOURCE_ONLY |
 
 ## Open
 
@@ -318,20 +318,20 @@ The following constant lines have no source citation:
 - src/runtime/Bootstrap.cpp:117 (no source: ambiguous citation)
 - src/runtime/Bootstrap.cpp:118 (no source: ambiguous citation)
 - src/runtime/Bootstrap.cpp:119 (no source: ambiguous citation)
-- src/runtime/PreStart.cpp:71 (no source: ambiguous citation)
-- src/runtime/PreStart.cpp:73 (no source: ambiguous citation)
-- src/runtime/PreStart.cpp:79 (no source: ambiguous citation)
+- src/runtime/PreStart.cpp:70 (no source: ambiguous citation)
+- src/runtime/PreStart.cpp:72 (no source: ambiguous citation)
+- src/runtime/PreStart.cpp:78 (no source: ambiguous citation)
+- src/runtime/PreStart.cpp:97 (no source: ambiguous citation)
 - src/runtime/PreStart.cpp:98 (no source: ambiguous citation)
 - src/runtime/PreStart.cpp:99 (no source: ambiguous citation)
 - src/runtime/PreStart.cpp:100 (no source: ambiguous citation)
 - src/runtime/PreStart.cpp:101 (no source: ambiguous citation)
 - src/runtime/PreStart.cpp:102 (no source: ambiguous citation)
 - src/runtime/PreStart.cpp:103 (no source: ambiguous citation)
-- src/runtime/PreStart.cpp:104 (no source: ambiguous citation)
-- src/runtime/PreStart.cpp:107 (no source: ambiguous citation)
-- src/runtime/PreStart.cpp:119 (no source: ambiguous citation)
+- src/runtime/PreStart.cpp:106 (no source: ambiguous citation)
+- src/runtime/PreStart.cpp:118 (no source: ambiguous citation)
+- src/runtime/PreStart.cpp:125 (no source: ambiguous citation)
 - src/runtime/PreStart.cpp:126 (no source: ambiguous citation)
 - src/runtime/PreStart.cpp:127 (no source: ambiguous citation)
-- src/runtime/PreStart.cpp:128 (no source: ambiguous citation)
 
 These constants may be verified by a mmiotrace in task C5.

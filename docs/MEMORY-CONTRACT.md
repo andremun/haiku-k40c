@@ -66,3 +66,16 @@ Host tests exercise alignment, distinct GPA/IOVA values, missing verification, p
 partial allocation/mapping, failed unmap/free, pool exhaustion, stale tokens, and quarantine recovery.
 The native `k40_memory_probe` checks host allocation/readback and default-denied submission only.
 It uses no PCI enumeration, BAR mapping, DMA, or GPU. A cardless pass is Haiku OS evidence only.
+
+## S1NATIVE permanent owner
+
+`docs/NATIVE-OWNER.md` specifies the separate KEEP_LOADED module and DMA proof
+requirements. The module owns its NativePool and exports opaque handles through
+a versioned kernel API. A legacy driver uses OwnerClient, detaches its lease,
+then releases its module reference. Startup state and quarantine remain resident.
+No external provider implementation or driver callback can be installed in v1.
+
+The owner denies publication and conservatively retains storage after any startup
+attempt. It exposes no recovery or reset shortcut. Host tests and native linking
+pass; actual Haiku module load/client reload behavior remains untested. Existing
+probes still use their isolated test pools and have no production lifetime claim.

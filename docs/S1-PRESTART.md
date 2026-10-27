@@ -48,7 +48,9 @@ A caller-owned atomic `OncePerBoot` changes Fresh to Running exactly once and
 ends Complete or Failed. Reentrant calls and recreated controllers sharing it
 are rejected. The owner must survive driver unload/reload for the entire guest
 boot. A static variable inside an unloadable driver does not meet that condition;
-that native owner remains a gate before A7. No automatic retry or reset exists.
+S1NATIVE now implements a separate KEEP_LOADED owner candidate and client API
+(`docs/NATIVE-OWNER.md`). Native load/reload validation and driver integration
+remain gates before A7. No automatic retry or reset exists.
 Each callback must itself be bounded; deadlines are checked around callbacks and
 clock rollback fails. Deadline checks cannot interrupt an unbounded backend call.
 

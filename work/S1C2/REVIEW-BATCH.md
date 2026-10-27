@@ -9,7 +9,8 @@ No physical card stage ran in this batch. The B2 VM had no GPU.
 | S1B2 | 54db484, ed67895 | Native DMA32 adapter and passing cardless memory probe |
 | S1A4 | ebb1604 | Selected cold preinit model and persistent caller-owned one-shot state |
 | S1C2 | a833165 | Source-backed integration choices and old design corrections |
-| S1A6 | Subsequent handoff | POST input audit and bounded host I2C transport |
+| S1A6 | 22865da | POST input audit and bounded host I2C transport |
+| S1NATIVE | Subsequent handoff | Permanent owner/client API, host tests and native link; DMA denied |
 
 Read each work/<ID>/RESULT.md, then its PLAN/FINDINGS and required task outputs.
 Tests and source-derived reports are host evidence. B2 cardless evidence is

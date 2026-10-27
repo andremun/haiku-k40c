@@ -7,12 +7,11 @@ Result Controller::run(Backend& backend, memory::Buffer& page, uint64_t timeoutU
 {
     Result result;
     if (!backend.hostSimulation()) { result.error = Error::HardwareDisabled; return result; }
-    auto expected = BootState::Fresh;
-    if (!state_.state_.compare_exchange_strong(expected, BootState::Running, std::memory_order_acq_rel)) {
+    if (!state_.begin()) {
         result.error = Error::AlreadyAttempted; return result;
     }
     auto fail = [&](Error error) {
-        state_.state_.store(BootState::Failed, std::memory_order_release);
+        state_.finish(false);
         result.error = error;
         return result;
     };
@@ -54,7 +53,7 @@ Result Controller::run(Backend& backend, memory::Buffer& page, uint64_t timeoutU
         || !call(Step::Rom, [&] { return backend.executeRom(); })
         || !call(Step::Readiness, [&] { return backend.independentReadiness(); })) return fail(result.error);
     result.step = Step::Complete;
-    state_.state_.store(BootState::Complete, std::memory_order_release);
+    state_.finish(true);
     return result;
 }
 
