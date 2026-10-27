@@ -6,18 +6,6 @@
 
 namespace k40::devinit {
 namespace {
-// Permission identity: docs/decisions/004-board-operations-and-review.md.
-constexpr Digest allowedRom = { // no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.
-    0xae,0xcb,0x0b,0x5f,0xa4,0x66,0xf6,0x4e,0x26,0x51,0xa5,0x51,0xa3,0xca,0xd5,0x7c, // no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.
-    0xcc,0xbd,0xed,0xd9,0x29,0xe3,0x99,0x6f,0x54,0x22,0x01,0xaf,0x06,0xff,0x1f,0x54, // no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.
-};
-constexpr uint32_t allowedSize = 181760; // reference/vbios/README.md, image size. no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.
-constexpr std::array<BoardRule, 6> rules = {{ // no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.
-    {0x8506, 0x69, allowedRom}, {0x850b, 0x53, allowedRom}, // nvkm/subdev/bios/init.c:2269,2252; offsets from ADR 004.
-    {0x85e8, 0x53, allowedRom}, {0x862f, 0x4d, allowedRom}, // nvkm/subdev/bios/init.c:2252,2246; offsets from ADR 004.
-    {0x89b7, 0xa9, allowedRom}, {0xab8d, 0x4d, allowedRom}, // nvkm/subdev/bios/init.c:2297,2246; offsets from ADR 004.
-}};
-
 // Current ROM uses DCB 4.0. Older table layouts remain deliberately unsupported.
 // nvkm/subdev/bios/dcb.c:28-60, gpio.c:33-64, i2c.c:32-62.
 bool table(RomView rom, unsigned pointer, uint32_t& at)
@@ -60,14 +48,6 @@ bool gpioEntries(RomView rom, std::vector<Gpio>& out)
     }
     return true;
 }
-}
-
-const std::array<BoardRule, 6>& boardRules() { return rules; }
-bool boardAllowed(const Digest& rom, uint32_t offset, uint8_t opcode)
-{
-    for (const auto& rule : rules)
-        if (rule.offset == offset && rule.opcode == opcode && rule.rom == rom) return true;
-    return false;
 }
 
 bool RomView::contains(uint32_t at, uint32_t length) const
@@ -218,9 +198,9 @@ Error BoardHelpers::execute(RomView rom, const uint8_t* bytes, uint32_t length, 
 }
 
 PolicyBackend::PolicyBackend(const uint8_t* rom, uint32_t size, Backend& registers, BoardTransport& ports)
-    : rom_(rom && size == allowedSize ? std::vector<uint8_t>(rom, rom + size) : std::vector<uint8_t>{}),
+    : rom_(rom && size == approvedRomBytes ? std::vector<uint8_t>(rom, rom + size) : std::vector<uint8_t>{}),
       digest_(sha256(rom_.data(), uint32_t(rom_.size()))),
-      approved_(rom_.size() == allowedSize && digest_ == allowedRom),
+      approved_(rom_.size() == approvedRomBytes && digest_ == approvedRomDigest()),
       registers_(registers), ports_(ports), helpers_(registers, ports) {}
 
 bool PolicyBackend::hostSimulation() const { return registers_.hostSimulation() && ports_.hostSimulation(); }

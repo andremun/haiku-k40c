@@ -1,0 +1,2 @@
+immutable POST parser: 37 checks, 0 failures (HOST_ONLY)
+instructions 530 roots 8 scenarios 32 successes 16 policy_denials 16

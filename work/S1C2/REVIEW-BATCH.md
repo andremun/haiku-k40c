@@ -11,7 +11,8 @@ No physical card stage ran in this batch. Both B2 and S1OWNERTEST VMs had no GPU
 | S1C2 | a833165 | Source-backed integration choices and old design corrections |
 | S1A6 | 22865da | POST input audit and bounded host I2C transport |
 | S1NATIVE | d9b158f | Permanent owner/client API, host tests and native link; DMA denied |
-| S1OWNERTEST | 45923d6 + handoff | Native cardless owner/client reload passes; DMA denied |
+| S1OWNERTEST | 45923d6, 25fb273 | Native cardless owner/client reload passes; DMA denied |
+| S1POST | This handoff | Immutable binding and per-instruction host policy; native objects compile |
 
 Read each work/<ID>/RESULT.md, then its PLAN/FINDINGS and required task outputs.
 Tests and source-derived reports are host evidence. B2 cardless evidence is

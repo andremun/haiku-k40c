@@ -1,0 +1,5 @@
+Freestanding object compilation passed for PostImage.cpp, BoardPolicy.cpp and Sha256.cpp.
+Command for each source:
+HAIKU_CROSS=$HOME/haiku-cross tools/haiku/kcc -std=c++17 -Werror -Wframe-larger-than=4096 -Isrc -c src/devinit/NAME.cpp -o build/haiku/NAME.o
+kcc supplies -ffreestanding -fno-exceptions -fno-rtti.
+No native link/load or VM result is claimed for this binding.

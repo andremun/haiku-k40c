@@ -6,15 +6,17 @@
   "approved_policy_rows": 6,
   "inputs_sha256": {
     "docs/decisions/004-board-operations-and-review.md": "0a5a318829217b89c1e06bb157f7f8d312c64ef934954502c1b460be44b44cd4",
-    "src/devinit/Board.cpp": "805592c7bee2310cf7274ce3146a4b723ec5b886ef714d8c16bde127626f9e89",
-    "src/devinit/Board.h": "c1efe64eda1f8c1c7cbad0fac17b93db4a5016bbf5b04b0d52a060017a27dd35",
+    "src/devinit/Board.cpp": "ae9df39ec521e2beae936cd2cca45a16316741e4d9b62bf2b38f86802ce7b9d3",
+    "src/devinit/Board.h": "a53c49baad2cdc13a1ae6bdac970ac5e41222b87c70b87eaf0b421504bb74105",
+    "src/devinit/BoardPolicy.cpp": "902da09784c5dc807ca0c2bdff69382f6bc95a9b8f3f717f14f496e7b5206dbc",
+    "src/devinit/BoardPolicy.h": "69632ac56b9719600824bf0c35d14fa56a82e2d2a1a1f4f91a086a7c5d92e2ce",
     "src/devinit/Interpreter.cpp": "8617354577f1c20af4968844b42d4eb8b16ad6da4eb4275b5b920ec3a434bc65",
     "src/devinit/Interpreter.h": "af3f590914461f2426bed13ad87a104854b5f75a62c0a65e8edee3357c3ae23e",
     "src/devinit/Sha256.cpp": "3fe7912249a87e6b0cdec87da818a1a2f9ebfaf3145c40e7aa827df50554e19b",
     "src/devinit/Sha256.h": "f4b1caa7558a5886ef7bc121ffef2ca65ec25bb89b18c62bc980e144bcc8ffbc",
     "tests/board_fake.h": "177de1bd09395158c46a9513a17d465fdeb78e5e2bff8a49ea23b057c12d5d25",
     "tests/board_probe.cpp": "e135a92a2d12fd5c700752e122d096046d5cbb8453a3ffec4afc3de6654ea9cc",
-    "tools/board_trace.py": "4d398e4050b713f9eb993efbf86e7d21ae37ed1987c17eae3bfb264a5d21cd32"
+    "tools/board_trace.py": "1b57a51b792cf621c2add4f2cfffa7d7708c819fa17b8933d3f7ff87eff7bb74"
   },
   "matched_accesses": 20,
   "reads": 7,

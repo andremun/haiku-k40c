@@ -197,3 +197,22 @@ Consulted pinned commit 49a0af9585d80e42240af63ab66e31e9873f59b8:
 
 Sparse-omitted sources were read from exact official raw.githubusercontent URLs
 into /tmp. Source hashes are saved in work/S1OWNERTEST/source-hashes.log.
+
+## S1POST immutable binding and per-instruction policy
+
+All consulted Nouveau files carry MIT notices. Constants and semantic facts only;
+no implementation blocks copied. Source paths below are under reference/nouveau/.
+
+- nvkm/subdev/bios/init.c: selected POST dispatch, table lookup, opcode lengths,
+  register wrapper, condition/macro operands, IO helper, and GPIO_NE exclusion.
+- nvkm/subdev/bios/base.c: BIT signature discovery.
+- nvkm/subdev/bios/bit.c: BIT entry fields and stride.
+- nvkm/subdev/bios/ramcfg.c and M0203.c: cached strap selection and group lookup.
+- nvkm/subdev/bios/dcb.c, gpio.c and i2c.c: reviewed board-table fields.
+- nvkm/subdev/gpio/gf119.c: GPIO drive/latch/routing access addresses.
+- nvkm/subdev/i2c/base.c and busgf119.c: default bus and dedicated pin register.
+- nvkm/engine/disp/vga.c: indexed byte MMIO addresses, via existing reviewed helpers.
+
+Board permission identity/size remain software decisions from ADR 004 and the
+existing VBIOS record. They were moved, not expanded. SHA-256 uses the previously
+recorded NIST algorithm facts. No new external algorithm implementation was copied.

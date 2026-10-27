@@ -13,7 +13,7 @@ CXXFLAGS := -std=c++17 -Wall -Wextra -Werror -I../src -fsanitize=undefined -fno-
 BUILDDIR := ../build/tests
 
 CXX_TESTS := test_bootstrap:runtime+memory test_prestart:runtime+memory \
-             test_devinit:devinit s1a_accept:devinit test_board:devinit test_i2c:devinit \
+             test_devinit:devinit s1a_accept:devinit test_board:devinit test_i2c:devinit test_post_image:devinit \
              test_memory:memory \
              test_s1_boundaries:fifo+hw+mmu test_s1_experiment:runtime+memory \
              test_registerio:hw d1_accept:hw \
@@ -23,12 +23,12 @@ CXX_TESTS := test_bootstrap:runtime+memory test_prestart:runtime+memory \
              ref_qmd:compute+fifo r1_accept:compute+fifo+hw+mmu
 # The Python tests run once the tool of task D4 exists.
 PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard test_compare_traces.py accept/d4_accept.py)) \
-             accept/r1_accept.py test_vm_tools.py test_owner_runner.py test_card_run.py test_board_tools.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_closure.py test_devinit_rom.py test_devinit_trace_join.py
+             accept/r1_accept.py test_vm_tools.py test_owner_runner.py test_card_run.py test_board_tools.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_closure.py test_post_policy.py test_devinit_rom.py test_devinit_trace_join.py
 
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 
 .PHONY: all clean
-all: $(PROGRAMS) $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
+all: $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
 	@for p in $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe; do $$p || exit 1; done
 	@for t in $(PY_TESTS); do (cd .. && python3 tests/$$t) || exit 1; done
 
@@ -67,3 +67,6 @@ $(BUILDDIR)/test_native_owner: test_native_owner.cpp os_shim/module.h os_shim/Ke
 
 $(BUILDDIR)/test_owner_probe: test_owner_probe.cpp os_shim/module.h os_shim/Drivers.h os_shim/KernelExport.h ../src/runtime/BootState.h ../tools/haiku/selftest/owner.cpp $(wildcard ../src/os/NativeOwner.* ../src/os/HaikuOwnerModule.* ../src/os/OwnerClient.* ../src/os/HaikuMemory.*) | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) -Ios_shim test_owner_probe.cpp ../tools/haiku/selftest/owner.cpp ../src/os/NativeOwner.cpp ../src/os/HaikuOwnerModule.cpp ../src/os/OwnerClient.cpp ../src/os/HaikuMemory.cpp -o $@
+
+$(BUILDDIR)/post_probe: post_probe.cpp board_fake.h $(wildcard ../src/devinit/*.cpp ../src/devinit/*.h) | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) post_probe.cpp $(wildcard ../src/devinit/*.cpp) -o $@

@@ -303,13 +303,15 @@
     "reference/nouveau/nvkm/subdev/bios/ramcfg.c": "7e727829ac5db539c20d1584b87dafd068be82ea5f769ece0fcb7ff733a35435",
     "reference/nouveau/nvkm/subdev/i2c/bit.c": "b7086513e88715c1c629fecbdf3387836860527663039c7146fdbf5cd255944e",
     "reference/nouveau/nvkm/subdev/i2c/busgf119.c": "24cdf28deab20486c48b4702c473375b6d91e4e6a0286475e5f9f48ca88a17f7",
-    "src/devinit/Board.cpp": "805592c7bee2310cf7274ce3146a4b723ec5b886ef714d8c16bde127626f9e89",
-    "src/devinit/Board.h": "c1efe64eda1f8c1c7cbad0fac17b93db4a5016bbf5b04b0d52a060017a27dd35",
+    "src/devinit/Board.cpp": "ae9df39ec521e2beae936cd2cca45a16316741e4d9b62bf2b38f86802ce7b9d3",
+    "src/devinit/Board.h": "a53c49baad2cdc13a1ae6bdac970ac5e41222b87c70b87eaf0b421504bb74105",
+    "src/devinit/BoardPolicy.cpp": "902da09784c5dc807ca0c2bdff69382f6bc95a9b8f3f717f14f496e7b5206dbc",
+    "src/devinit/BoardPolicy.h": "69632ac56b9719600824bf0c35d14fa56a82e2d2a1a1f4f91a086a7c5d92e2ce",
     "src/devinit/I2c.cpp": "3ca524e9220cbfc1530e80f9a864ab866c143abc8750252bc1bb32c0cbdba152",
     "src/devinit/I2c.h": "0f331f46d9b08e0072878b6036b1315ebec24d447d853deec23b3fc74d33d8dd",
     "src/devinit/Interpreter.cpp": "8617354577f1c20af4968844b42d4eb8b16ad6da4eb4275b5b920ec3a434bc65",
     "src/devinit/Interpreter.h": "af3f590914461f2426bed13ad87a104854b5f75a62c0a65e8edee3357c3ae23e",
-    "tools/devinit_closure.py": "05123b127fb7082139bc781ccb2ffb70424c3d4ffb54f0709d051a1c1b62b64f",
+    "tools/devinit_closure.py": "b4e224453a437e772d4a99691f4a520f33ce0239926a20213be27853074aa46b",
     "tools/devinit_preflight.py": "00db2b30ed002e5dee633585f5806a5f77ccfb23ca0cc47fe22a92f2ea53bddb"
   }
 }

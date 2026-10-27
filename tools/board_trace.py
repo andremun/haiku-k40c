@@ -22,6 +22,8 @@ TRACE = ROOT / "reference/linux-run-debug/mmiotrace.txt.xz"
 ADR = ROOT / "docs/decisions/004-board-operations-and-review.md"
 PROBE = ROOT / "build/tests/board_probe"
 SOURCES = (
+    "src/devinit/BoardPolicy.cpp",
+    "src/devinit/BoardPolicy.h",
     "src/devinit/Board.h", "src/devinit/Board.cpp", "src/devinit/Interpreter.cpp",
     "src/devinit/Interpreter.h", "src/devinit/Sha256.h", "src/devinit/Sha256.cpp",
     "tests/board_fake.h", "tests/board_probe.cpp", "tools/board_trace.py",

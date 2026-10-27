@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1POST (immutable execution binding and register policy). S1OWNERTEST is complete in the pending review batch.
-Task state: S1OWNERTEST DONE for native cardless lifetime scope. First prepared run passes: owner survives client unload/reload with the same token, Failed latch and quarantine. Kernel match verified. Production executor binding, DMA/visibility and card readiness remain gated. No write stage is authorized.
+Current task: S1HELPERS (freestanding guarded board helpers). S1POST is complete in the pending review batch.
+Task state: S1POST host binding/policy scope DONE. Immutable exact-ROM inputs, cached simulated strap selection and per-instruction access checks pass. Binding/policy cross-compile freestanding; execution adapter remains hosted. Native helper/owner integration, DMA and readiness remain gated. No write stage is authorized.
 Last updated: 2026-10-27
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -61,6 +61,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A6 | DONE (host only, batched review pending) | 2026-10-27 | Deterministic POST input audit, exact board-policy binding, bounded dedicated I2C candidate; 908 wire checks and 10 input-audit tests. Native/hardware gates remain. See work/S1A6/RESULT.md. |
 | S1NATIVE | DONE (source/host/native link, batched review pending) | 2026-10-27 | Separate KEEP_LOADED owner, client lease/handle API, one-shot/quarantine retention; 161 host checks and native link pass. No load/reload or DMA claim. See work/S1NATIVE/RESULT.md. |
 | S1OWNERTEST | DONE (native cardless lifetime, batched review pending) | 2026-10-27 | First run passes in 52.57 s; two real init/uninit pairs retain token 2, Failed state and one quarantine. No DMA/GPU claim. See work/S1OWNERTEST/RESULT.md. |
+| S1POST | DONE (host binding/policy; native object compile, review pending) | 2026-10-27 | 34,128 access queries match; 32 scenarios complete or hit the intended GPIO denial. Owned inputs, one cached selection, aggregate budgets. See work/S1POST/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

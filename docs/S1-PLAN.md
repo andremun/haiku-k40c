@@ -147,7 +147,7 @@ responsibility for remaining work and its review.
 | A3 | Inventory of the script instructions, matched to the driver log (executed or skipped) | Independent rework (A3) | No | **Reworked** 2026-10-16; observed inventory passes checks. Raw-ROM structural supplement covers 530 potential starts / 25 opcodes; see `docs/ABC-CARDLESS-OUTCOME.md`. |
 | A4 | Executor design from the three sources; differences recorded | Codex, Claude Code review | No | Selected preinit and cold one-shot host controller done (S1A4); physical transport, native persistent owner and readiness remain gated (`docs/S1-PRESTART.md`) |
 | A5 | Board-table lookup of every I²C and GPIO target; the safety list | Codex implementation, Claude Code review | No | **List done** (`docs/BOARD-OPERATIONS.md`); **decisions accepted** 2026-10-27 (ADR 004) |
-| A6 | Executor code, with host tests for changing conditions, timeouts and skipped writes | Codex, Claude Code review | No | S1A6 host input audit and dedicated I2C candidate pass; six exact board permissions remain unchanged and alternate GPIO stays denied. Native binding/transport/readiness remain gated |
+| A6 | Executor code, with host tests for changing conditions, timeouts and skipped writes | Codex, Claude Code review | No | S1A6 audit/I2C candidate and S1POST immutable binding/per-instruction policy pass host checks. Native helper/owner integration and physical transport/readiness remain gated |
 | A7 | First write experiment: bring-up, with independent readiness checks and a small memory test | Claude Code review, user-authorized run | Yes | Host scratch-check algorithm tested; no card experiment performed |
 
 ### Track B: Haiku side (independent of A until the end)

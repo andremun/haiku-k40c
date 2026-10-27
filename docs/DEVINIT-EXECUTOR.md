@@ -205,3 +205,19 @@ register normalization and stage policy, persistent boot ownership, DMA/visibili
 VRAM ownership and independent readiness remain gates. Physical I2C integration
 also needs a reviewed algorithm choice and hardware evidence. No claim of
 production executor completion follows from the host transport or the audit.
+
+## S1POST immutable execution binding
+
+See docs/POST-BINDING.md for the new PostImage/BoundPost entry point and limits.
+The hosted legacy PolicyBackend API remains for existing tests; it is not the
+new bound entry point. BoundPost derives roots/tables from its owned exact-ROM
+snapshot and uses one cached simulated strap selection. No caller-selected
+root/table/index or execution flag enters runPost. Per-instruction address,
+width and direction checks cover core, table and approved helper accesses.
+The six ADR 004 rules are shared through freestanding BoardPolicy.*.
+
+Independent compiled-policy comparison covers 34,128 queries. Of 32 artificial
+full-POST scenarios, 16 complete and 16 stop on the denied GPIO at 0x89c2.
+This is expected fail-closed behavior, not production compatibility for all states.
+Only binding/parser/policy code is freestanding so far. Native helper/owner
+integration, physical stage transports, DMA/visibility and readiness remain gated.

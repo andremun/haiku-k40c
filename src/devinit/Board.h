@@ -2,15 +2,11 @@
 // Distributed under the terms of the MIT License.
 #pragma once
 #include "devinit/Interpreter.h"
-#include "devinit/Sha256.h"
+#include "devinit/BoardPolicy.h"
 #include <array>
 #include <vector>
 
 namespace k40::devinit {
-struct BoardRule { uint32_t offset; uint8_t opcode; Digest rom; };
-const std::array<BoardRule, 6>& boardRules(); // Exact permission from ADR 004.
-bool boardAllowed(const Digest& rom, uint32_t offset, uint8_t opcode);
-
 struct RomView {
     const uint8_t* data;
     uint32_t size;
