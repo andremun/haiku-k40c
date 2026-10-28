@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-10-28: The third approved A7 run stops at hard-link publication before probe loading. Record evidence and open ESC-003 under the three-attempt installation rule. No fourth package or launch is attempted.
 - 2026-10-28: Correct A7 guest add-on publication: stage complete executable files outside watched directories, publish atomic hard links, and wait for the character device before one open. Prepare a new package without a guest run.
 - 2026-10-28: The second individually approved A7 run stops at device open before request/grant. Shell diagnostics capture a read-only filesystem error. Evidence and both consumed markers remain. No retry occurs.
 - 2026-10-28: Fix the four A7 review nits: enforce FIFO bit changes and the selected I2C pin, persist the verifier checkout, and list omitted Linux setup. Prepare a new package with failure diagnostics. No retry runs.

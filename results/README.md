@@ -27,3 +27,6 @@ on 23 October 2026 with unchanged bytes. `hashes.txt` lists the file hashes.
 
 | `20261028-a7-post-02/` | Second individually approved A7 run stopped at stream-device open. No request/grant or POST. Shell error captured; empty R5 delta; mastering disabled after exit. | `work/S1A7RUN2/RESULT.md` |
 | `20261028-a7-4ac95d19/` | Original immutable launcher evidence for the same second approved launch. | `results/20261028-a7-post-02/summary.json` |
+
+| `20261028-a7-post-03/` | Third approved A7 run stopped at hard-link publication before B5 or native A7. No grant/POST. R5 unchanged; mastering disabled. ESC-003. | `work/S1A7RUN3/RESULT.md` |
+| `20261028-a7-c07e1db9/` | Original immutable launcher evidence for the same third approved launch. | `results/20261028-a7-post-03/summary.json` |

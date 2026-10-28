@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7INSTALL (host-only guest add-on publication correction).
-Task state: S1A7INSTALL DONE (host-only package), review and fresh one-run approval pending. Full make check, host fixtures, native links and package checks pass. S1A7RUN2 is committed as 2c8a34d: one approved 24fb578 launch stopped at the stream-device open before request/grant. Source diagnosis supports an installation/publication race. New guest setup stages complete executable files privately, publishes atomic hard links, and waits for the character node before exactly one open. GPU register sequences are unchanged. Both consumed packages and captures remain. No new guest or D1 is approved. S1 remains incomplete.
+Current task: S1A7RUN3 (third individually approved A7 attempt; ESC-003).
+Task state: STOPPED at identity add-on publication. Unchanged 0390b8b passed build/host checks and launched once. Haiku rejected the hard link with Operation not allowed after 103.26 s. No B5 reads, owner/client download, request/grant, arming, POST or readiness was reached. R5 delta is empty and host command after exit is 0x0002. All three consumed markers and captures remain. ESC-003 is OPEN under the three-attempt installation rule. Evidence/host checks pass. No fourth correction or launch is attempted pending review. S1 remains incomplete; D1 is unapproved.
 Last updated: 2026-10-28
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -85,6 +85,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A7RUN2 | STOPPED (device open) | 2026-10-28 | One individually approved unchanged 24fb578 launch. Shell open failed read-only filesystem at 95.26 s; no request/grant or POST. R5 delta empty, host mastering disabled. No retry. See work/S1A7RUN2/RESULT.md. |
 
 | S1A7INSTALL | DONE (host-only package; review pending) | 2026-10-28 | Stage complete executable add-ons outside watched paths, publish atomic hard links and wait for the character node before one open. Five inert shell fixtures, full checks and native links pass. No third guest. See work/S1A7INSTALL/RESULT.md. |
+
+| S1A7RUN3 | STOPPED / ESC-003 | 2026-10-28 | One approved unchanged 0390b8b launch. Haiku rejected hard-link publication before probe loading (103.26 s). No grant/POST. R5 unchanged, host mastering disabled. Three-attempt installation problem escalated. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

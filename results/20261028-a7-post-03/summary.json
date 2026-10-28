@@ -1,0 +1,102 @@
+{
+  "S1_complete": false,
+  "artifact_archive": {
+    "client": "build/a7/approved-0390b8b/client",
+    "identity": "build/a7/approved-0390b8b/identity",
+    "observer": "build/a7/approved-0390b8b/observer",
+    "owner": "build/a7/approved-0390b8b/owner"
+  },
+  "artifacts": {
+    "client": {
+      "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_a7_stage",
+      "sha256": "b99101a130a7b8a391b7f7e6e3ece6ce560e98ba897023dca56ab6cf726af44c"
+    },
+    "identity": {
+      "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_identity_probe",
+      "sha256": "8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f"
+    },
+    "license": {
+      "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/a7/package-publication/ed25519-license.txt",
+      "sha256": "f68d76b9c1c2271422e55134ea94cf71f2ac3fc3ed6a7ec6b83a1a0538753214"
+    },
+    "observer": {
+      "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/observer/strace-source/src/strace",
+      "sha256": "75b7aeed34785c8ac729d68cbca83d256434acb036e336d0adf5a4bdc30bc7a2"
+    },
+    "owner": {
+      "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_a7_owner_module",
+      "sha256": "25856dc2720eb183671dc56ddb37bdc52f613ab45074f3ecb6db3b6e4e628a18"
+    },
+    "qemu": {
+      "path": "/usr/bin/qemu-system-x86_64",
+      "sha256": "55862c768c21fa7d3e72ca1b24797d8ab5b406eb5ef4c9ab9c2280f4e0b8f330"
+    }
+  },
+  "authorization": "User replied aproval is given to one unchanged 0390b8b package run; consumed, no retry authorized",
+  "b5": {
+    "identity": null,
+    "pci_command": null,
+    "status": "NOT_REACHED"
+  },
+  "command": "python3 tools/a7/run.py --run-approved-A7-once",
+  "consumed_marker": "build/a7/package-publication/consumed.json retained; no fourth launch authorized",
+  "failure_location": "KNOWN hard-link publication of the identity add-on failed with Operation not allowed",
+  "kernel_log": {
+    "after_sha256": "585eaa9674f3a05a6235769ae4cce8fe5eef41495b44be5fa6e2a35040b82a9c",
+    "before_sha256": "585eaa9674f3a05a6235769ae4cce8fe5eef41495b44be5fa6e2a35040b82a9c",
+    "delta_bytes": 0,
+    "scope": "KNOWN R5 selected classes only, not a complete kernel log"
+  },
+  "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+  "launcher_result": {
+    "S1_complete": false,
+    "dma_publication": false,
+    "elapsed_seconds": 103.26,
+    "error": "A7 guest job failed",
+    "kernel_scope": "R5 selected classes only; any new selected-class line stops stage",
+    "payload_visibility": false,
+    "stage": "A7_ARM_ONLY_POST_WRITE",
+    "status": "failed"
+  },
+  "native_events": [],
+  "package_sha256": "38c9c7f545e2b6bb599f91500830547565a952a54d6f4372783c81e527fc19cb",
+  "post": {
+    "arm_request_received": false,
+    "grant_issued": false,
+    "readiness": "NOT_REACHED",
+    "register_100c10_after": null,
+    "register_100c10_before": null,
+    "status": "NOT_REACHED",
+    "verification": "UNKNOWN; no POST result",
+    "write_claim": "INFERRED no A7 writes: no host grant; approved source gates all writes on a valid grant"
+  },
+  "preflight_commands": [
+    "python3 tools/a7/build.py --check",
+    "python3 tools/a7/run.py --host-check"
+  ],
+  "raw_sha256": {
+    "environment.txt": "6fceaa9d8ef1adb95f3361a95a75113317ec281f58ec8d7214e87b19ff29bb41",
+    "http.log": "f23bd5ef3009a00e869a48128d196ba7ae01eaa984f2fef0d3b8610263457dde",
+    "job-output.txt": "36c46696b14f7cc5f40edd8ebeb2b0fe510ee61a88103e58bcb4bcd1b39ff777",
+    "job.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "kernel-after.log": "585eaa9674f3a05a6235769ae4cce8fe5eef41495b44be5fa6e2a35040b82a9c",
+    "kernel-before.log": "585eaa9674f3a05a6235769ae4cce8fe5eef41495b44be5fa6e2a35040b82a9c",
+    "kernel.sha256": "9da8819b72502746d3f1db5eb718c2febc3685799a4a9248d82b362282bb1f7c",
+    "launch.json": "d7e193009c6bcf8f5db2a41a5cba11c6f32ac902eb070b9580a719493a9f8307",
+    "processes.json": "5ce05e9160d446a2bddb8bd7cf9a684578600bfd421e10acd77059e2fd6c4b1a",
+    "qemu.log": "26de7a87089b042be2a7af93895e944fe8c11623a4238ef4a9c5910b53bbc696",
+    "result.json": "c6f262593172e1e851a6de1700926fcb7c88549c78c08a8831a6887c843e29f5",
+    "serial.log": "ae96c289d3263b03bed0173ace508bc8bd8432b0a98638b94a557010264584fd",
+    "task-proofs.jsonl": "85e1427566c3fd630e5b875a10e2a692d5bc22d84b2c7186db76f8ed3bf7d9a6",
+    "teardown.json": "592d3267c571780ef74c52d4e89f753c3a0bf3a747aca2cc836b92855118e080",
+    "trace.log": "a1eb4b2a0f8a055cb3e60b6017e178b908975d8903ec2a30a59d27e80d7cfb39"
+  },
+  "rom_sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
+  "source_commit": "0390b8b647375c83822852f47e41daab3d94cc95",
+  "source_evidence": "results/20261028-a7-c07e1db9",
+  "stage": "A7_ARM_ONLY_POST_WRITE",
+  "teardown": {
+    "bus_master_enable": false,
+    "host_pci_command_after": 2
+  }
+}

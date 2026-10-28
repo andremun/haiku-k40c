@@ -1,5 +1,13 @@
 # A7 package after publication correction (2026-10-28)
 
+**Current status:** package 0390b8b was individually approved and launched once.
+It stopped at hard-link publication before probe loading. The package is
+consumed. ESC-003 is OPEN under the three-attempt installation rule.
+No retry or fourth package is prepared. See results/20261028-a7-post-03/.
+The preparation record below is historical and supplies no current run approval.
+
+## Preparation record before the third attempt
+
 This is a new host-only package after two individually approved attempts.
 Both stopped before request/grant, so POST and readiness were not reached.
 The second captured a read-only-filesystem error at stream-device open and a

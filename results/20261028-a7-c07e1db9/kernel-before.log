@@ -1,0 +1,1 @@
+[1297695.714323] uld-jvnhw22.mobility.unimelb.net.au kernel: audit: type=1400 audit(1793142233.967:455): apparmor="ALLOWED" operation="open" class="file" profile="/usr/sbin/sssd" name="/etc/selinux/semanage.conf" pid=1630611 comm="selinux_child" requested_mask="r" denied_mask="r" fsuid=0 ouid=0

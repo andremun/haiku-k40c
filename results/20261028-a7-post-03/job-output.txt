@@ -1,0 +1,2 @@
+A7-JOB-START
+ln: failed to create hard link '/boot/home/config/non-packaged/add-ons/kernel/drivers/bin/k40_identity_probe' => '/boot/home/config/non-packaged/add-ons/.k40-a7-staging/identity/addon': Operation not allowed
