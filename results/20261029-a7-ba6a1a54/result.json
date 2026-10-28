@@ -1,0 +1,10 @@
+{
+  "S1_complete": false,
+  "dma_publication": false,
+  "elapsed_seconds": 2.52,
+  "error": "new R5 selected-class line; stop without retry",
+  "kernel_scope": "R5 selected classes only; any new selected-class line stops stage",
+  "payload_visibility": false,
+  "stage": "A7_ARM_ONLY_POST_WRITE",
+  "status": "failed"
+}
