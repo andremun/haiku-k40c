@@ -85,7 +85,8 @@ def exchange(folder, evidence, suite):
     lock = threading.Lock()
     ready = threading.Event()
     downloads = {
-        name: folder / name for name in ("identity", "owner", "client", "job.sh")
+        name: folder / name
+        for name in ("identity", "owner", "client", "helper", "job.sh")
     }
     limits = {
         "environment.txt": 65536,
@@ -431,7 +432,7 @@ def run():
             > 107
         ):
             raise ValueError("monitor path too long")
-        for role in ("identity", "owner", "client"):
+        for role in ("identity", "owner", "client", "helper"):
             shutil.copyfile(suite["artifacts"][role]["path"], folder / role)
             if build.sha(folder / role) != suite["artifacts"][role]["sha256"]:
                 raise ValueError("staged artifact differs")

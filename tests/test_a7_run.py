@@ -122,7 +122,7 @@ class A7Tests(unittest.TestCase):
             folder.mkdir()
             evidence = Path(d) / "e"
             evidence.mkdir()
-            for name in ("identity", "owner", "client"):
+            for name in ("identity", "owner", "client", "helper"):
                 (folder / name).write_bytes(name.encode())
             kernel = b"synthetic kernel"
             suite = {
@@ -132,7 +132,7 @@ class A7Tests(unittest.TestCase):
                         bytes=len(name),
                         sha256=hashlib.sha256(name.encode()).hexdigest(),
                     )
-                    for name in ("identity", "owner", "client")
+                    for name in ("identity", "owner", "client", "helper")
                 },
             }
             with run.exchange(folder, evidence, suite) as (port, ready):

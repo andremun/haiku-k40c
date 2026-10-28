@@ -1,12 +1,13 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7REHEARSAL (Claude's ESC-003 resolution).
-Task state: Cardless rehearsal PASS in 52.34 s. Checked system-folder installs,
-same-inode renames, node publication and native no-card refusal are recorded.
-Build validation binds the exact job/binaries/kernel to that evidence. ESC-003
-is RESOLVED. Full make check passes. The package is ready for Claude review. No physical
-fourth launch occurred or is approved. S1 remains incomplete. D1 is unapproved.
+Current task: S1A7REHEARSAL2 DONE (cardless). Next: one A7 card run, after the user's explicit yes.
+Task state: WAITING FOR USER. The second cardless rehearsal passed
+(results/20261028-142613-a7-rehearsal/): staging outside watched folders,
+final-name loads only, one prepare, open returns B_ERROR, owner state kept on
+reload. ESC-003 is RESOLVED. Package build/a7/package-rehearsal2/ is unconsumed;
+review record docs/A7-REVIEW-PACKAGE.md. No fourth physical run has occurred.
+S1 remains incomplete. D1 is unapproved.
 Last updated: 2026-10-28
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -92,7 +93,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 
 | S1A7RUN3 | STOPPED / ESC-003 | 2026-10-28 | One approved unchanged 0390b8b launch. Haiku rejected hard-link publication before probe loading (103.26 s). No grant/POST. R5 unchanged, host mastering disabled. Three-attempt installation problem escalated. |
 
-| S1A7REHEARSAL | DONE (cardless; review pending) | 2026-10-28 | Exact A7 job/binaries install and reach the no-card refusal in 52.34 s. ESC-003 resolved. No physical launch. |
+| S1A7REHEARSAL | SUPERSEDED (REWORK by Claude review) | 2026-10-28 | Exact A7 job/binaries install and reach the no-card refusal in 52.34 s. ESC-003 resolved. No physical launch. |
+| S1A7REHEARSAL2 | DONE (cardless) | 2026-10-28 | Staging outside watched folders; final-name loads; one prepare; open B_ERROR; owner state kept on reload. 79.31 s. Records finished by Claude Code. See work/S1A7REHEARSAL2/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

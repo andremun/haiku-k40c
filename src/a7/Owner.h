@@ -50,6 +50,7 @@ public:
     Status prepare(uint64_t& lease,uint8_t request[requestBytes]);
     Status submit(uint64_t lease,const uint8_t*,size_t);
     Status detach(uint64_t lease);
+    bool observeClientLoad();
     Outcome outcome() const { return outcome_; }
     runtime::startup::BootState state() const { return once_.state(); }
 private:
@@ -115,6 +116,7 @@ private:
     const uint64_t expectedVram_;
     Outcome outcome_;
     std::atomic_flag lock_=ATOMIC_FLAG_INIT;
+    uint64_t clientLoads_=0;
     bool prepared_=false,attached_=false,submitted_=false;
 };
 }

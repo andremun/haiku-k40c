@@ -27,6 +27,7 @@ status_t standard(int32 op,...)
         for(unsigned j=0;j<4;++j)challenge[4*i+j]=uint8(value>>(8*j));
     }
     owner=new(ownerMemory) Owner(*platform,*storage,a7PublicKey,a7PackageNonce,challenge,a7Rom,sizeof(a7Rom),a7ExpectedVram);
+    platform->log("OWNER_LOAD",1,0);
     return B_OK;
 }
 int32 prepare(uint64* lease,uint8 request[128])
@@ -34,6 +35,7 @@ int32 prepare(uint64* lease,uint8 request[128])
 int32 submit(uint64 lease,const uint8 grant[192],size_t size)
 {return owner?int32(owner->submit(lease,grant,size)):K40_A7_INPUT;}
 int32 detach(uint64 lease){return owner?int32(owner->detach(lease)):K40_A7_INPUT;}
-k40_a7_module interface={{K40_A7_OWNER_NAME,B_KEEP_LOADED,standard},1,prepare,submit,detach};
+int32 observeClientLoad(){return owner && owner->observeClientLoad()?K40_A7_OK:K40_A7_BUSY;}
+k40_a7_module interface={{K40_A7_OWNER_NAME,B_KEEP_LOADED,standard},2,prepare,submit,detach,observeClientLoad};
 }
 extern "C" {module_info* modules[]={&interface.info,nullptr};}

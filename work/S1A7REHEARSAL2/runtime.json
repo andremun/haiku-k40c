@@ -1,0 +1,14 @@
+{
+  "capture_sha256": {
+    "environment.txt": "bdac7c7ffcd0d848930d01a0d7686c9031d8ea7b545bd2b9866eebce42ee6bf9",
+    "job.sh": "071bf4585393c78f36377e6636f2faa32fb8d6fd7a3d7f4db75785b332d45599",
+    "kernel_x86_64": "72a24e24b662651b8f29ad8512642ff0d8ed4c013db70eb35c58e3591898f407",
+    "launch.json": "6dd357c8e00e5355bfdc3c48dab011b539ab07153aa1caf68cd674149af93845",
+    "result.json": "6ad2fbeace1be1c54aa9dd038eb49a5aca2caf761370be323087bf6107eba4e9",
+    "serial.log": "c82f215daed5f67fa36da9f7e2c641a78e4fa4ad8d765902c194914c997a0bf3"
+  },
+  "folder": "build/cardless/20261028-142110",
+  "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+  "library_sha256": "72a24e24b662651b8f29ad8512642ff0d8ed4c013db70eb35c58e3591898f407",
+  "scope": "CARDLESS_LIBROOT_EXPORT_ONLY"
+}

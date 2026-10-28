@@ -12,9 +12,15 @@ void Owner::failed()
     if(once_.state()==runtime::startup::BootState::Fresh)once_.begin();
     if(once_.state()==runtime::startup::BootState::Running)once_.finish(false);
 }
+bool Owner::observeClientLoad()
+{
+    Guard guard(lock_);if(!guard.held)return false;
+    platform_.log("CLIENT_LOAD",++clientLoads_,unsigned(once_.state()));return true;
+}
 Status Owner::prepare(uint64_t& lease,uint8_t request[requestBytes])
 {
     lease=0;Guard guard(lock_);if(!guard.held)return Status::Busy;
+    platform_.log("PREPARE_CALL",prepared_?2:1,unsigned(once_.state()));
     if(prepared_ || once_.state()!=runtime::startup::BootState::Fresh)return Status::Retained;
     prepared_=true;
     uint32_t identity=0;

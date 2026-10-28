@@ -23,15 +23,15 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 sys.path.insert(0, str(ROOT / "tools/haiku"))
-from tools.a7 import crypto_sources, omissions, install_sources
+from tools.a7 import crypto_sources, omissions, install_sources, runtime_export
 import devinit_preflight
 import post_policy
 import probe_stage
 from board_trace import read_policy, ADR
 
-PACKAGE = ROOT / "build/a7/package-rehearsed"
-PUBLIC = ROOT / "work/S1A7REHEARSAL/package.json"
-INVENTORY = ROOT / "work/S1A7REHEARSAL/write-inventory.json"
+PACKAGE = ROOT / "build/a7/package-rehearsal2"
+PUBLIC = ROOT / "work/S1A7REHEARSAL2/package.json"
+INVENTORY = ROOT / "work/S1A7REHEARSAL2/write-inventory.json"
 ROM = Path(
     os.environ.get(
         "K40_VBIOS",
@@ -61,6 +61,7 @@ OWNER = (
 )
 CLIENT = ("tools/haiku/selftest/a7_client.cpp",)
 ARTIFACTS = {
+    "helper": ROOT / "build/haiku/k40_a7_open",
     "license": PACKAGE / "ed25519-license.txt",
     "owner": ROOT / "build/haiku/k40_a7_owner_module",
     "client": ROOT / "build/haiku/k40_a7_stage",
@@ -274,6 +275,8 @@ def source_names():
             *CLIENT,
             "tools/a7/build.py",
             "tools/a7/guest_job.py",
+            "tools/a7/open_session.c",
+            "tools/a7/runtime_export.py",
             "tools/a7/rehearse.py",
             "tools/a7/install_sources.py",
             "tools/a7/run.py",
@@ -338,6 +341,7 @@ def manifest():
     for role, tag in (
         ("owner", b"generic/k40c_a7_owner/v1"),
         ("client", b"A7_ARM_ONLY_POST_WRITE"),
+        ("helper", b"A7-OPEN-RESULT"),
     ):
         raw = ARTIFACTS[role].read_bytes()
         if raw[:6] != b"\x7fELF\x02\x01" or raw[18:20] != b"\x3e\x00" or tag not in raw:
@@ -351,6 +355,8 @@ def manifest():
     ):
         raise ValueError("forbidden owner artifact capability")
     return dict(
+        runtime_library_sha256=sha(runtime_export.LIBRARY),
+        runtime_export_sha256=sha(runtime_export.OUTPUT),
         stage="A7_ARM_ONLY_POST_WRITE",
         approval="explicit yes required for ONE run",
         public_key_hex=public.hex(),
@@ -360,7 +366,7 @@ def manifest():
             name: dict(
                 bytes=ARTIFACTS[name].stat().st_size, sha256=sha(ARTIFACTS[name])
             )
-            for name in ("identity", "owner", "client")
+            for name in ("identity", "owner", "client", "helper")
         },
         artifacts={
             name: dict(path=str(path.resolve()), sha256=sha(path))
@@ -376,7 +382,7 @@ def manifest():
         ),
         config_sha256=sha(PACKAGE / "a7_config.h"),
         verifier=crypto,
-        host_check_sha256=sha(ROOT / "work/S1A7REHEARSAL/host-check.json"),
+        host_check_sha256=sha(ROOT / "work/S1A7REHEARSAL2/host-check.json"),
         teardown_sources_sha256=sha(ROOT / "work/S1A7NATIVE/teardown-sources.json"),
         installation_sources_sha256=sha(install_sources.OUTPUT),
         inventory_sha256=hashlib.sha256(dump(inventory(data)).encode()).hexdigest(),
@@ -453,6 +459,40 @@ def build():
         ["bash", "tools/haiku/build-driver.sh", "k40_a7_stage", *CLIENT],
         cwd=ROOT,
         env=env,
+        check=True,
+    )
+    subprocess.run(
+        [
+            "tools/haiku/kcc",
+            "-U_KERNEL_MODE",
+            "-Werror",
+            "-O2",
+            "-c",
+            "tools/a7/open_session.c",
+            "-o",
+            "build/haiku/obj/a7_open.o",
+        ],
+        cwd=ROOT,
+        check=True,
+    )
+    compiler = str(
+        Path.home()
+        / "haiku-cross/generated.x86_64/cross-tools-x86_64/bin/x86_64-unknown-haiku-gcc"
+    )
+    subprocess.run(
+        [
+            compiler,
+            "-shared",
+            "-nostdlib",
+            "-Wl,-e,_start",
+            "-Wl,--no-undefined",
+            "-Wl,-z,max-page-size=0x1000",
+            "build/haiku/obj/a7_open.o",
+            str(runtime_export.LIBRARY),
+            "-o",
+            str(ARTIFACTS["helper"]),
+        ],
+        cwd=ROOT,
         check=True,
     )
     if frozen != {

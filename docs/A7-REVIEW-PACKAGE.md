@@ -1,19 +1,21 @@
-# A7 package after the cardless rehearsal (2026-10-28)
+# A7 package after the second cardless rehearsal (2026-10-28)
 
-**Current status:** the exact guest job and candidate binaries passed cardless
-KVM rehearsal in 52.34 seconds. ESC-003 is RESOLVED by the user-supplied Claude
-review and this rehearsal. No fourth physical launch has occurred or is approved.
-S1 remains incomplete. D1 remains unapproved.
+**Current status:** S1A7REHEARSAL2 is complete. The exact guest job and
+candidate binaries passed the cardless KVM rehearsal of
+`results/20261028-142613-a7-rehearsal/` in 79.31 seconds. The rehearsal of
+88678c4 (`results/20261028-134127-a7-rehearsal/`) is kept as a record only: Haiku
+loaded the `.partial` files there (serial lines 852 and 862), so it is not a gate.
+ESC-003 is RESOLVED. No fourth physical launch has occurred. It needs the user's
+explicit yes for one run of this package. S1 remains incomplete. D1 is unapproved.
 
-Review the complete change since the last reviewed package, commit 8974695.
-This includes **24fb578 and 0390b8b**, whose preinit guards and installation
-changes had not been reviewed. `git diff 8974695..HEAD` covers the review scope after this task is committed. Earlier consumed markers and all three raw captures
-remain unchanged. The hard-link method from 0390b8b has been removed.
-The resolution is recorded in work/S1A7REHEARSAL/REVIEW-RESOLUTION.md.
+The review scope since the last reviewed package (commit 8974695) is
+`git diff 8974695..HEAD`. It includes 24fb578 and 0390b8b (FIFO and I2C preinit
+guards, reviewed by Claude Code on 2026-10-28) and S1A7REHEARSAL2. Earlier consumed
+markers and all three raw card captures remain unchanged. Hard links are gone.
 
 ## Exact inputs and commands
 
-`work/S1A7REHEARSAL/package.json` is the generated artifact/source manifest.
+`work/S1A7REHEARSAL2/package.json` is the generated artifact/source manifest.
 `write-inventory.json` in that folder lists all 544 possible script-write
 locations from the exact ROM's structural preflight and independent access
 policy decoder. Each row gives the script PC, opcode, register, width and
@@ -24,8 +26,9 @@ separately in the same file. Private firmware and signing material stay in build
 
 | Artifact | SHA-256 |
 |---|---|
-| `k40_a7_owner_module` | `694ca685f555405158a58b0ac47d758420921f190be19726761c5fd5739f8baf` |
-| `k40_a7_stage` | `b99101a130a7b8a391b7f7e6e3ece6ce560e98ba897023dca56ab6cf726af44c` |
+| `k40_a7_owner_module` | `fc19c9ac698470aafa44826d50373e6133ec67538bdabdba9e80dd5ac129bca6` |
+| `k40_a7_stage` | `d11b0d3773e8f1a206a98b79b85a1c6e7c73948dbe096001d472ef0ee66ee122` |
+| Open helper (`tools/a7/open_session.c`) | `58bec7c51730bf95f541c61c8ed9b8379b97f1c2b335702de0f9542698914977` |
 | Identity probe | `8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f` |
 | Observer | `75b7aeed34785c8ac729d68cbca83d256434acb036e336d0adf5a4bdc30bc7a2` |
 | Guest kernel | `2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62` |
@@ -50,7 +53,7 @@ python3 tools/a7/run.py --run-approved-A7-once
 ```
 
 The execution option is an operator approval assertion; it does not obtain or
-replace human approval. The default and `--check` never start a guest. The new package directory is `build/a7/package-rehearsed/`. The host
+replace human approval. The default and `--check` never start a guest. The new package directory is `build/a7/package-rehearsal2/`. The host
 signing key is a fresh per-package Ed25519 key, mode 0600. The launcher atomically
 creates a consumed marker before starting QEMU. Even a failed launch consumes
 the package. A retry requires reporting the stop, a new reviewed package and
@@ -175,17 +178,17 @@ unmapped address should fault, but no negative DMA experiment is authorized.
 
 ## Validation and review focus
 
-`work/S1A7REHEARSAL/host-check.json` records 32 ROM/strap scenarios (16 complete), 192 altered-frame
+`work/S1A7REHEARSAL2/host-check.json` records 32 ROM/strap scenarios (16 complete), 192 altered-frame
 rejections, seven correctly signed wrong-scope rejections, a noncanonical
 signature rejection and I2C/clock failures. The actual owner/controller execute
 against simulated registers; this is not card evidence. Actual NativePlatform
 and client source tests cover reservation and duplicate-device failure, no permit
 writes, DMA32 alignment/zeroing, partial allocation retention, partial stream
-input, copy errors and reload refusal. They pass 4129 and 24 assertions with host
-OS mocks. Native compilation separately uses real Haiku headers and the matching
-kernel exports. `work/S1A7REHEARSAL/native-build.log` records successful links.
+input, copy errors and reload refusal. They pass with host OS mocks
+(counts in `work/S1A7REHEARSAL2/check-final.log`). Native compilation separately uses real Haiku headers and the matching
+kernel exports. `work/S1A7REHEARSAL2/native-build.log` records successful links.
 
-The complete `make check` passes. Its log is in `work/S1A7REHEARSAL/check-final.log`.
+The complete `make check` passes. Its log is in `work/S1A7REHEARSAL2/check-final.log`.
 Review the explicit physical permit, request/grant signer, permanent retention,
 write allowlist, scratch reservation and teardown boundary before approving the
 fourth physical run. Native owner loading and the no-card refusal now have
@@ -230,49 +233,53 @@ results/20261028-a7-post/. Fresh review and explicit one-run approval are requir
 
 ## Installation and exact cardless rehearsal
 
-The job uses /boot/system/non-packaged/add-ons/kernel, the proven B5 folder.
-Each download uses a same-directory hidden partial file. Guest stat checks its
-size, and sha256sum checks its bytes against the host manifest. The executable
-file moves to its final name with mv. Equal pre/post inode numbers are required.
-A failed download, size/hash mismatch, failed move or inode change stops the job.
-There is no explicit copying fallback. Both paths share one parent directory.
-No staging directory or hard link remains. The owner finishes before the client.
-Each device symlink is published only after its binary is complete and checked.
+The job installs into /boot/system/non-packaged/add-ons/kernel, the folder that
+B5 and D0 used. Each file downloads into the staging folder
+`/boot/system/non-packaged/.k40-a7-staging/`, which Haiku does not watch for
+drivers or modules. Guest `stat` checks the size and `sha256sum` checks the bytes
+against the host manifest. `mv` then moves the file to its final name in
+`kernel/generic/` or `kernel/drivers/bin/`. Equal inode numbers before and after
+are required: this proves a rename on one volume, not a copy. A failed download,
+size or hash mismatch, failed move or inode change stops the job. There is no
+copy fallback. The owner module is installed before the client. Each device
+symlink is created only after its binary is complete and checked.
 
-B5-BEGIN precedes identity publication. A bounded 30-second loop checks for the
-A7 character node without opening it. The script then attempts exactly one open.
-The native no-card diagnostic adds no GPU permission or register access.
+The client driver now loads the owner module in `init_driver` and calls the
+read-only `observe_client_load` hook (module ABI 2). The owner constructor only
+sets fields. The card search, PCI reservation and storage preparation happen only
+in `prepare`, called by the one open. The job opens the device once, through the
+native helper `tools/a7/open_session.c`. The helper prints the raw Haiku status of
+`_kern_open` (bash misreports negative Haiku status values) and keeps the
+descriptor as fd 3 for the rest of the job. The helper's libroot link input was
+exported from the guest (`tools/a7/runtime_export.py`, `work/S1A7REHEARSAL2/runtime.json`).
 
-`tools/a7/rehearse.py` starts a fixed cardless KVM guest with a disposable disk
-and an independent 600-second watchdog. It shares the production exchange and
-job generator. It copies the exact identity, owner and client binaries. It never
-reads the host signing key, sets grant readiness, signs a grant or supplies VFIO.
-The script has no rehearsal branch. The runtime HTTP port is its only variable.
+Expected cardless behaviour, from `docs/tasks/S1A7REHEARSAL2.md`: client init
+publishes `misc/k40_a7_stage` without starting hardware. The one open calls
+`prepare`. The PCI search finds no card before any reservation or BAR mapping.
+The owner enters the Failed state (3) and the open returns `B_ERROR`.
 
-KNOWN / cardless OS evidence: results/20261028-134127-a7-rehearsal/ records three
-successful size/SHA-256 checks and unchanged inodes, A7-DEVICE-PUBLISHED,
-A7-OPEN-DEVICE, and the native REFUSED no matching PCI card before reservation.
-The client then logs FAIL client prepare. Shell open reports ambiguous redirect
-and exits 1, because owner preparation occurs inside the callback. That is the
-expected refusal, distinct from the earlier absent-node/devfs error. It does
-not yield a prepared descriptor. No request, grant, arming, POST or readiness ran.
-The identity probe's no-card failure is also expected in this cardless guest.
-This proves native installation and callback entry, not physical bring-up.
+KNOWN / cardless OS evidence, `results/20261028-142613-a7-rehearsal/`:
+- `job-output.txt`: four checked installs (identity, owner, client, helper), each
+  with equal inodes, then `A7-DEVICE-PUBLISHED`, `A7-OPEN-DEVICE` and
+  `A7-OPEN-RESULT status=0xffffffff` (`B_ERROR`).
+- `serial.log`: no `partial` or staging name. `driver "k40_identity_probe" added`
+  (864) and `driver "k40_a7_stage" added` (880) use final names. `OWNER_LOAD` 1,
+  `CLIENT_LOAD` 1, `PREPARE_CALL` 1, then `REFUSED no matching PCI card before
+  reservation` and Failed state 3 (881-887).
+- Rehearsal-only reload (lines 888-898): the client reloads (`CLIENT_LOAD a=0x2
+  b=0x3`) with the owner still Failed and no second `PREPARE_CALL`. The reload
+  step exists only in the rehearsal command (`reload-command.txt`).
+- The identity probe's no-card failure is expected in a cardless guest.
 
-`work/S1A7REHEARSAL/rehearsal.json` binds the canonical job rendered with port 0,
-the three exact binary sizes/hashes, guest kernel and immutable capture hashes.
-Validation also compares the actual saved job using its recorded runtime port.
-`build.py --check` and all physical launcher prerequisites require this matching
-passing record. A changed job or binary requires another cardless rehearsal.
-The public package manifest binds the sources, binaries and host checks as before.
-Building a candidate alone does not make it eligible for physical execution.
+This proves native installation, final-name loading, one-open entry and the
+one-shot owner state. It does not prove physical bring-up. No request, grant,
+arming, POST or readiness ran.
 
-Four host fixtures cover corrupted/short downloads, chmod/move failure,
-copy-instead-of-rename detection, existing destination, bounded node wait,
-one-open ordering, and rejection of incomplete/no-card/physical rehearsal logs.
-The full native test and source-bound host reports remain separate from this
-actual guest evidence. No physical retry command was executed in this task.
+`work/S1A7REHEARSAL2/rehearsal.json` binds the job (SHA-256 `9ba5fc89...`), the
+four binary sizes and hashes, the guest kernel and the capture hashes.
+`build.py --check` and every physical launcher prerequisite require this
+matching passing record. A changed job or binary needs another rehearsal.
 
 The original 8974695, 24fb578 and 0390b8b consumed markers and binary archives
-remain. Claude must review this package, including the earlier FIFO and I2C
-guards. Only after that review may the user approve one new physical run.
+remain. After Claude Code's review of this record, the user may approve one new
+physical run.

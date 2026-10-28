@@ -27,7 +27,19 @@ from tools.a7.run import exchange
 from tools.haiku import card_run, cardless_run
 from tools.haiku.vm_guard import guest_lock, deadline
 
-BINDING = ROOT / "work/S1A7REHEARSAL/rehearsal.json"
+BINDING = ROOT / "work/S1A7REHEARSAL2/rehearsal.json"
+
+
+RELOAD = "echo K40-A7-RELOAD-BEGIN > /dev/dprintf; touch /boot/system/non-packaged/add-ons/kernel/drivers/bin/k40_identity_probe /boot/system/non-packaged/add-ons/kernel/drivers/bin/k40_a7_stage; for pass in 1 2 3 4; do ls /dev/misc >/dev/null; sleep 1; done; echo K40-A7-RELOAD-END > /dev/dprintf"
+
+
+def load_counts(serial):
+    """Count real driver initializations, not directory watcher notifications."""
+    return dict(
+        identity=serial.count("k40_stage: B5_IDENTITY_READ_ONLY"),
+        client=serial.count("k40_stage: A7_ARM_ONLY_POST_WRITE"),
+        owner=serial.count("k40_a7: OWNER_LOAD"),
+    )
 
 
 def binding(suite):
@@ -45,8 +57,6 @@ def capture_verdict(folder, suite):
     """Require complete checked installations and the specific native no-card refusal."""
     output = (folder / "job-output.txt").read_text()
     serial = (folder / "serial.log").read_text(errors="replace")
-    import re
-
     for role, info in suite["guest_artifacts"].items():
         matches = re.findall(
             r"A7-INSTALL "
@@ -68,6 +78,41 @@ def capture_verdict(folder, suite):
         or "k40_a7: FAIL client prepare" not in serial
     ):
         raise ValueError("missing expected native no-card refusal")
+    if (
+        output.count("A7-OPEN-RESULT status=0xffffffff") != 1
+        or "ambiguous redirect" in output
+    ):
+        raise ValueError("expected raw B_ERROR from the one open")
+    names = re.findall(r'driver "([^"\n]+)" (?:added|removed)', serial)
+    relevant = [name for name in names if "k40" in name or ".partial" in name]
+    if not relevant or any(
+        name not in ("k40_identity_probe", "k40_a7_stage") for name in relevant
+    ):
+        raise ValueError("driver discovered from a non-final filename")
+    paths = re.findall(r"(?:loaded driver|reload driver) [^\r\n]*", serial)
+    if any(("partial" in line or "staging" in line) for line in paths):
+        raise ValueError("driver loaded from staging/partial path")
+    if not all(
+        'driver "' + name + '" added' in serial
+        for name in ("k40_identity_probe", "k40_a7_stage")
+    ):
+        raise ValueError("missing final-name discovery")
+    loads = re.findall(r"k40_a7: CLIENT_LOAD a=0x([0-9a-f]+) b=0x([0-9a-f]+)", serial)
+    if (
+        len(loads) < 2
+        or loads[0] != ("1", "0")
+        or any(int(n, 16) != i + 1 for i, (n, state) in enumerate(loads))
+        or any(state != "3" for n, state in loads[1:])
+    ):
+        raise ValueError("reload did not retain resident Failed state")
+    if (
+        load_counts(serial)["owner"] != 1
+        or serial.count("k40_a7: PREPARE_CALL") != 1
+        or "k40_a7: PREPARE_CALL a=0x1 b=0x0" not in serial
+    ):
+        raise ValueError("owner reconstructed or preparation repeated")
+    if "K40-A7-RELOAD-END" not in serial:
+        raise ValueError("reload rehearsal incomplete")
     if (folder / "job.exit").read_text().strip() == "0":
         raise ValueError("unexpected successful device preparation without card")
     if (folder / "kernel.sha256").read_text().strip() != suite["kernel_sha256"]:
@@ -101,6 +146,10 @@ def validate_evidence(suite):
     if (folder / "job.sh").read_text() != job(launch["port"], suite["guest_artifacts"]):
         raise ValueError("saved guest job differs")
     capture_verdict(folder, suite)
+    if record["load_counts"] != load_counts(
+        (folder / "serial.log").read_text(errors="replace")
+    ):
+        raise ValueError("driver load count differs")
     return record
 
 
@@ -112,7 +161,7 @@ def run():
     for name, digest in suite["source_sha256"].items():
         if build.sha(ROOT / name) != digest:
             raise ValueError("candidate source changed: " + name)
-    for role in ("identity", "owner", "client"):
+    for role in ("identity", "owner", "client", "helper"):
         if build.sha(build.ARTIFACTS[role]) != suite["guest_artifacts"][role]["sha256"]:
             raise ValueError("candidate binary changed: " + role)
     base = cardless_run.DEFAULT_BASE
@@ -124,7 +173,7 @@ def run():
         folder.mkdir(parents=True, exist_ok=False)
         work = ROOT / ("build/a7/rehearsal-" + stamp)
         work.mkdir(parents=True, exist_ok=False)
-        for role in ("identity", "owner", "client"):
+        for role in ("identity", "owner", "client", "helper"):
             shutil.copyfile(build.ARTIFACTS[role], work / role)
         shutil.copyfile(base.parent / "vars.fd", work / "vars.fd")
         subprocess.run(
@@ -206,6 +255,7 @@ def run():
                     process = subprocess.Popen(args, stdout=log, stderr=log)
                 with deadline(process, 600, folder / "watchdog.txt"):
                     launched = False
+                    reload_started = False
                     while time.monotonic() - start < 570 and process.poll() is None:
                         serial = (
                             (folder / "serial.log").read_text(errors="replace")
@@ -230,7 +280,18 @@ def run():
                                 f"curl -fsS http://10.0.2.2:{port}/job.sh -o /tmp/a7-job.sh; sh /tmp/a7-job.sh",
                             )
                             launched = True
-                        if (folder / "job.exit").exists():
+                        if (folder / "job.exit").exists() and not reload_started:
+                            if (
+                                "A7-OPEN-RESULT status=0xffffffff"
+                                not in (folder / "job-output.txt").read_text()
+                            ):
+                                raise ValueError(
+                                    "installation/open failed before expected no-card refusal"
+                                )
+                            (folder / "reload-command.txt").write_text(RELOAD + "\n")
+                            card_run.hmp(monitor, "type", RELOAD)
+                            reload_started = True
+                        if reload_started and "K40-A7-RELOAD-END" in serial:
                             capture_verdict(folder, suite)
                             status = "PASS_CARDLESS_NO_CARD"
                             break
@@ -258,6 +319,7 @@ def run():
             print(folder, flush=True)
         names = (
             "job.sh",
+            "reload-command.txt",
             "launch.json",
             "job-output.txt",
             "job.exit",
@@ -272,6 +334,9 @@ def run():
             status=status,
             folder=str(folder.relative_to(ROOT)),
             binding=binding(suite),
+            load_counts=load_counts(
+                (folder / "serial.log").read_text(errors="replace")
+            ),
             capture_sha256={name: build.sha(folder / name) for name in names},
         )
         BINDING.write_text(build.dump(record))

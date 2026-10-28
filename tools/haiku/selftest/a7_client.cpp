@@ -20,7 +20,7 @@ status_t openDevice(const char*,uint32,void** out)
     if(loaded!=B_OK) {attached.clear();dprintf("k40_a7: FAIL client get_module status=%ld\n",long(loaded));return B_ERROR;}
     auto* api=reinterpret_cast<k40_a7_module*>(info);
     if(!api || !info->name || std::strcmp(info->name,K40_A7_OWNER_NAME) || !(info->flags&B_KEEP_LOADED)
-        || api->abi!=1 || !api->prepare || !api->submit || !api->detach
+        || api->abi!=2 || !api->prepare || !api->submit || !api->detach
         || api->prepare(&cookie.lease,cookie.request)!=K40_A7_OK || !cookie.lease) {
         put_module(K40_A7_OWNER_NAME);attached.clear();dprintf("k40_a7: FAIL client prepare\n");return B_ERROR;
     }
@@ -70,8 +70,18 @@ device_hooks hooks={openDevice,closeDevice,freeCookie,controlDevice,readDevice,w
 extern "C" {
 int32 api_version=B_CUR_DRIVER_API_VERSION;
 status_t init_hardware(){return B_OK;}
-status_t init_driver(){dprintf("k40_stage: A7_ARM_ONLY_POST_WRITE\n");return B_OK;}
-void uninit_driver(){}
+status_t init_driver()
+{
+    dprintf("k40_stage: A7_ARM_ONLY_POST_WRITE\n");
+    module_info* info=nullptr;
+    if(get_module(K40_A7_OWNER_NAME,&info)!=B_OK)return B_ERROR;
+    auto* api=reinterpret_cast<k40_a7_module*>(info);
+    const bool valid=api && api->abi==2 && api->observe_client_load
+        && api->observe_client_load()==K40_A7_OK;
+    const auto released=put_module(K40_A7_OWNER_NAME);
+    return valid && released==B_OK?B_OK:B_ERROR;
+}
+void uninit_driver(){dprintf("k40_a7: CLIENT_UNLOAD\n");}
 const char** publish_devices(){return devices;}
 device_hooks* find_device(const char* name){return name && !std::strcmp(name,devices[0])?&hooks:nullptr;}
 }

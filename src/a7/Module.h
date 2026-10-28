@@ -10,4 +10,5 @@ typedef struct {
     int32 (*prepare)(uint64* lease,uint8 request[128]);
     int32 (*submit)(uint64 lease,const uint8 grant[192],size_t);
     int32 (*detach)(uint64 lease);
+    int32 (*observe_client_load)(void);
 } k40_a7_module;

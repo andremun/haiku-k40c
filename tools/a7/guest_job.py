@@ -11,7 +11,7 @@ INSTALL = """install_artifact() {
     destination=$2
     expected_size=$3
     expected_sha=$4
-    partial="${destination%/*}/.${destination##*/}.partial"
+    partial="$stage/$role.partial"
     test ! -e "$destination"
     test ! -e "$partial"
     curl -fsS -o "$partial" "$host/$role"
@@ -64,6 +64,8 @@ def job(port, artifacts):
             'curl -fsS -T /boot/system/kernel_x86_64 "$host/kernel_x86_64"',
             "base=/boot/system/non-packaged/add-ons/kernel",
             'mkdir -p "$base/generic" "$base/drivers/bin" "$base/drivers/dev/misc"',
+            "stage=/boot/system/non-packaged/.k40-a7-staging",
+            'mkdir "$stage"',
             INSTALL,
             WAIT,
             "echo K40-B5-BEGIN > /dev/dprintf",
@@ -75,9 +77,8 @@ def job(port, artifacts):
             install("client", "$base/drivers/bin/k40_a7_stage"),
             'ln -s ../../bin/k40_a7_stage "$base/drivers/dev/misc/k40_a7_stage"',
             "wait_a7_node",
-            "echo A7-OPEN-DEVICE",
-            "exec 3<>/dev/misc/k40_a7_stage",
-            "echo A7-DEVICE-OPEN",
+            install("helper", "/boot/system/non-packaged/.k40-a7-open"),
+            "cat > /tmp/a7-session.sh <<'A7_SESSION'",
             "dd bs=128 count=1 <&3 > /tmp/a7.request",
             'curl -fsS -T /tmp/a7.request "$host/request.bin"',
             'poll=0; while [ "$poll" -lt 120 ]; do',
@@ -85,6 +86,10 @@ def job(port, artifacts):
             "cat /tmp/a7.grant >&3; exec 3>&-; echo K40-A7-END > /dev/dprintf; exit 0; fi",
             "poll=$((poll+1)); sleep 1; done",
             "exit 1",
+            "A7_SESSION",
+            "export host",
+            "echo A7-OPEN-DEVICE",
+            "/boot/system/non-packaged/.k40-a7-open",
             "",
         ]
     )
