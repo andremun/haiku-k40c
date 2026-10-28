@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7RUN2 (second individually approved A7 attempt).
-Task state: STOPPED at device open, before request/grant. Unchanged 24fb578 passed build/host checks and launched once. Shell captured Read-only file system at /dev/misc/k40_a7_stage. Serial also shows a transient identity add-on Not an executable, followed by valid B5 identity reads. POST/readiness were NOT_REACHED. R5 delta is empty; host command after exit is 0x0002. No retry approved. Both consumed markers and earlier evidence remain. S1 is incomplete. Next is host-only loader/publication diagnosis.
+Current task: S1A7INSTALL (host-only guest add-on publication correction).
+Task state: S1A7INSTALL DONE (host-only package), review and fresh one-run approval pending. Full make check, host fixtures, native links and package checks pass. S1A7RUN2 is committed as 2c8a34d: one approved 24fb578 launch stopped at the stream-device open before request/grant. Source diagnosis supports an installation/publication race. New guest setup stages complete executable files privately, publishes atomic hard links, and waits for the character node before exactly one open. GPU register sequences are unchanged. Both consumed packages and captures remain. No new guest or D1 is approved. S1 remains incomplete.
 Last updated: 2026-10-28
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -83,6 +83,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A7NITS | DONE (host-only new package; review pending) | 2026-10-28 | Enforce FIFO bit-0x100 pairing and the selected I2C pin; persist pinned verifier; document Linux omissions. Add bounded failure diagnostics. Host/full checks and native links pass. No retry. See work/S1A7NITS/RESULT.md. |
 
 | S1A7RUN2 | STOPPED (device open) | 2026-10-28 | One individually approved unchanged 24fb578 launch. Shell open failed read-only filesystem at 95.26 s; no request/grant or POST. R5 delta empty, host mastering disabled. No retry. See work/S1A7RUN2/RESULT.md. |
+
+| S1A7INSTALL | DONE (host-only package; review pending) | 2026-10-28 | Stage complete executable add-ons outside watched paths, publish atomic hard links and wait for the character node before one open. Five inert shell fixtures, full checks and native links pass. No third guest. See work/S1A7INSTALL/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

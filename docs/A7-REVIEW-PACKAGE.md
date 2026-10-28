@@ -1,16 +1,17 @@
-# A7 package after review nits (2026-10-28)
+# A7 package after publication correction (2026-10-28)
 
-This is a new host-only package after the four supplied review nits.
-The single approved 8974695 package ran once and stopped before an arm request
-or grant. POST and readiness were not reached. See results/20261028-a7-post/.
-The original consumed marker remains at build/a7/package/consumed.json.
-**This new package has not run and has no run approval. S1 remains incomplete.**
+This is a new host-only package after two individually approved attempts.
+Both stopped before request/grant, so POST and readiness were not reached.
+The second captured a read-only-filesystem error at stream-device open and a
+transient identity add-on Not an executable error. See results/20261028-a7-post-02/.
+Both original consumed markers remain. The new package has not run and has no
+run approval. S1 remains incomplete.
 The review decision is recorded in
 `work/S1A7NATIVE/CLAUDE-ESC002-REVIEW.md`. ESC-002 is resolved; Q7 stays open.
 
 ## Exact inputs and commands
 
-`work/S1A7NITS/package.json` is the generated artifact/source manifest.
+`work/S1A7INSTALL/package.json` is the generated artifact/source manifest.
 `write-inventory.json` in that folder lists all 544 possible script-write
 locations from the exact ROM's structural preflight and independent access
 policy decoder. Each row gives the script PC, opcode, register, width and
@@ -21,7 +22,7 @@ separately in the same file. Private firmware and signing material stay in build
 
 | Artifact | SHA-256 |
 |---|---|
-| `k40_a7_owner_module` | `a31c23849f362c88992983368c9e4fb4a3a98e8293f6f62284d151259e132233` |
+| `k40_a7_owner_module` | `25856dc2720eb183671dc56ddb37bdc52f613ab45074f3ecb6db3b6e4e628a18` |
 | `k40_a7_stage` | `b99101a130a7b8a391b7f7e6e3ece6ce560e98ba897023dca56ab6cf726af44c` |
 | Identity probe | `8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f` |
 | Observer | `75b7aeed34785c8ac729d68cbca83d256434acb036e336d0adf5a4bdc30bc7a2` |
@@ -45,7 +46,7 @@ python3 tools/a7/run.py --run-approved-A7-once
 ```
 
 The execution option is an operator approval assertion; it does not obtain or
-replace human approval. The default and `--check` never start a guest. The new package directory is `build/a7/package-review-nits/`. The host
+replace human approval. The default and `--check` never start a guest. The new package directory is `build/a7/package-publication/`. The host
 signing key is a fresh per-package Ed25519 key, mode 0600. The launcher atomically
 creates a consumed marker before starting QEMU. Even a failed launch consumes
 the package. A retry requires reporting the stop, a new reviewed package and
@@ -170,7 +171,7 @@ unmapped address should fault, but no negative DMA experiment is authorized.
 
 ## Validation and review focus
 
-`work/S1A7NITS/host-check.json` records 32 ROM/strap scenarios (16 complete), 192 altered-frame
+`work/S1A7INSTALL/host-check.json` records 32 ROM/strap scenarios (16 complete), 192 altered-frame
 rejections, seven correctly signed wrong-scope rejections, a noncanonical
 signature rejection and I2C/clock failures. The actual owner/controller execute
 against simulated registers; this is not card evidence. Actual NativePlatform
@@ -178,9 +179,9 @@ and client source tests cover reservation and duplicate-device failure, no permi
 writes, DMA32 alignment/zeroing, partial allocation retention, partial stream
 input, copy errors and reload refusal. They pass 4129 and 24 assertions with host
 OS mocks. Native compilation separately uses real Haiku headers and the matching
-kernel exports. `work/S1A7NITS/native-build.log` records successful links.
+kernel exports. `work/S1A7INSTALL/native-build.log` records successful links.
 
-The complete `make check` passes. Its log is in `work/S1A7NITS/check-final.log`.
+The complete `make check` passes. Its log is in `work/S1A7INSTALL/check-final.log`.
 Review the explicit physical permit, request/grant signer, permanent retention,
 write allowlist, scratch reservation and teardown boundary before approving the
 first run. Native A7 owner loading and real timer/memory/scratch behavior remain
@@ -221,3 +222,46 @@ run's exact discovery/open cause remains UNKNOWN. No modified retry has run.
 The old owner/client/identity/observer artifacts remain in
 build/a7/approved-8974695/. The immutable original manifest and captures are in
 results/20261028-a7-post/. Fresh review and explicit one-run approval are required.
+
+## Guest installation and publication correction
+
+The second approved launch is committed as 2c8a34d. Its shell reached
+A7-OPEN-DEVICE and failed with a read-only-filesystem error. No owner request,
+grant or POST result was captured. The first and second attempts remain
+immutable. No retry of this corrected package has run.
+
+KNOWN / SOURCE_ONLY at the pinned Haiku revision: devfs creates character nodes
+at devfs.cpp:774-779 and has no file-create hook at line 1986. In VFS,
+vfs.cpp:5587-5590 returns B_READ_ONLY_DEVICE when the create path finds no entry
+and the parent has no create operation. Existing entries open normally at
+5578. The legacy loader queues watched-directory changes at
+legacy_drivers.cpp:1090-1101 and later loads add-ons at line 1161.
+INFERRED: direct writes into watched paths and an immediate shell open raced
+loading/publication. These sources support that mechanism, not proof of every
+runtime scheduling step. Exact running-kernel source identity is not established.
+The source URLs/hashes are in work/S1A7INSTALL/source-pins.json, produced by
+tools/a7/install_sources.py. reference/ was not changed.
+
+The corrected job uses tools/a7/guest_job.py. It creates an exclusive private
+staging directory outside kernel's watched directories. Each role also gets
+an exclusive staging subdirectory. A download must finish and become executable
+before a plain hard link publishes it. No copy/rename fallback is allowed.
+An existing destination, failed download/chmod/link or cross-filesystem link
+fails the job. A second install cannot truncate an already published inode.
+B5-BEGIN precedes identity publication so a fast load is inside the evidence window.
+
+A bounded loop scans for the fixed A7 character node for at most 30 one-second
+intervals. It does not open the driver during polling. After publication, the
+script opens the stream exactly once. Timeout, disappearing node or open error
+stops the job. The host's 570/600 s bounds and all R5/observer stop rules remain.
+No write permission, register sequence, board operation or DMA contract changes.
+Five host fixtures execute the actual shell functions against inert paths and
+mock downloads. They cover partial bytes, modes/inodes, each failure path,
+repeat-install refusal, bounded waits, script syntax and the single open.
+They are not Haiku filesystem or GPU execution evidence.
+
+New owner hash is in the table above. The client remains b99101a1... . The new
+key/nonce and package are separate from both consumed packages. Original binaries
+are archived under build/a7/approved-8974695/ and build/a7/approved-24fb578/.
+Both raw-capture recorders still pass. Fresh review and an explicit one-run yes
+are required before another physical launch under ADR 006 and ADR 008.

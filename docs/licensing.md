@@ -341,3 +341,14 @@ Reconsulted `nvkm/subdev/i2c/base.c`, `busgf119.c`, `pad.c`, `padg94.c`,
 The original board/table parser was refactored, not copied from Nouveau.
 No Linux pad, bus or shadow implementation block was copied or executed.
 The same zlib Ed25519 revision now lives in a persistent pinned external checkout.
+
+## S1A7INSTALL publication diagnosis
+
+Consulted Haiku `src/system/kernel/device_manager/devfs.cpp`,
+`device_manager/legacy_drivers.cpp` and `fs/vfs.cpp` at the project's pinned
+revision, captured outside reference/ by tools/a7/install_sources.py.
+Also inspected the same source paths in the existing b42b90f5 cross checkout
+as a baseline before obtaining the exact reference revision. Source records
+separate that evidence from the unestablished running-kernel source identity.
+The new shell installation and publication-wait functions are original code.
+No Haiku implementation blocks were copied. No additional Nouveau file was used.

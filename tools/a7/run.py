@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools/haiku"))
 from tools.a7 import build
+from tools.a7.guest_job import job
 import card_run
 from tools.haiku import d0_run
 from tools.haiku.d0_kernel_log import KernelLog, FILTER_PATTERN
@@ -77,48 +78,6 @@ def stopped_command():
                 "PCI bus mastering remains enabled after owned guest exit; STOP"
             )
         time.sleep(0.05)
-
-
-def job(port):
-    host = f"http://10.0.2.2:{port}"
-    return "\n".join(
-        [
-            "#!/bin/sh",
-            "set -eu",
-            f"host={host}",
-            'finish() { code=$?; trap - EXIT; curl -fsS -T /tmp/a7.output "$host/job-output.txt" || true; echo "$code" > /tmp/a7.exit; curl -fsS -T /tmp/a7.exit "$host/job.exit" || true; }',
-            "trap finish EXIT",
-            "exec > /tmp/a7.output 2>&1",
-            "echo A7-JOB-START",
-            "uname -a > /tmp/a7.environment",
-            'curl -fsS -T /tmp/a7.environment "$host/environment.txt"',
-            'curl -fsS -T /boot/system/kernel_x86_64 "$host/kernel_x86_64"',
-            "base=$(finddir B_USER_NONPACKAGED_ADDONS_DIRECTORY)",
-            'mkdir -p "$base/kernel/generic" "$base/kernel/drivers/bin" "$base/kernel/drivers/dev/misc"',
-            'curl -fsS -o "$base/kernel/drivers/bin/k40_identity_probe" "$host/identity"',
-            'chmod +x "$base/kernel/drivers/bin/k40_identity_probe"',
-            'ln -sf ../../bin/k40_identity_probe "$base/kernel/drivers/dev/misc/k40_identity_probe"',
-            "echo K40-B5-BEGIN > /dev/dprintf",
-            "for pass in 1 2 3 4; do ls /dev/misc >/dev/null; sleep 1; done",
-            "echo K40-B5-END > /dev/dprintf",
-            'curl -fsS -o "$base/kernel/generic/k40c_a7_owner" "$host/owner"',
-            'curl -fsS -o "$base/kernel/drivers/bin/k40_a7_stage" "$host/client"',
-            'chmod +x "$base/kernel/generic/k40c_a7_owner" "$base/kernel/drivers/bin/k40_a7_stage"',
-            'ln -sf ../../bin/k40_a7_stage "$base/kernel/drivers/dev/misc/k40_a7_stage"',
-            "ls /dev/misc >/dev/null",
-            "echo A7-OPEN-DEVICE",
-            "exec 3<>/dev/misc/k40_a7_stage",
-            "echo A7-DEVICE-OPEN",
-            "dd bs=128 count=1 <&3 > /tmp/a7.request",
-            'curl -fsS -T /tmp/a7.request "$host/request.bin"',
-            'poll=0; while [ "$poll" -lt 120 ]; do',
-            'if curl -fsS "$host/grant.bin" -o /tmp/a7.grant 2>/dev/null; then',
-            "cat /tmp/a7.grant >&3; exec 3>&-; echo K40-A7-END > /dev/dprintf; exit 0; fi",
-            "poll=$((poll+1)); sleep 1; done",
-            "exit 1",
-            "",
-        ]
-    )
 
 
 @contextmanager

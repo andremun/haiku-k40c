@@ -23,15 +23,15 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 sys.path.insert(0, str(ROOT / "tools/haiku"))
-from tools.a7 import crypto_sources, omissions
+from tools.a7 import crypto_sources, omissions, install_sources
 import devinit_preflight
 import post_policy
 import probe_stage
 from board_trace import read_policy, ADR
 
-PACKAGE = ROOT / "build/a7/package-review-nits"
-PUBLIC = ROOT / "work/S1A7NITS/package.json"
-INVENTORY = ROOT / "work/S1A7NITS/write-inventory.json"
+PACKAGE = ROOT / "build/a7/package-publication"
+PUBLIC = ROOT / "work/S1A7INSTALL/package.json"
+INVENTORY = ROOT / "work/S1A7INSTALL/write-inventory.json"
 ROM = Path(
     os.environ.get(
         "K40_VBIOS",
@@ -273,6 +273,8 @@ def source_names():
             *OWNER,
             *CLIENT,
             "tools/a7/build.py",
+            "tools/a7/guest_job.py",
+            "tools/a7/install_sources.py",
             "tools/a7/run.py",
             "tools/a7/crypto_sources.py",
             "tools/a7/omissions.py",
@@ -284,6 +286,7 @@ def source_names():
             "tests/test_a7_client.cpp",
             "tests/test_a7_run.py",
             "tests/test_a7_omissions.py",
+            "tests/test_a7_install.py",
             "tools/devinit_preflight.py",
             "tools/post_policy.py",
             "tools/board_trace.py",
@@ -320,6 +323,8 @@ def source_names():
 
 def manifest():
     data, total, capture = inputs()
+    if install_sources.OUTPUT.read_text() != install_sources.render():
+        raise ValueError("installation source record differs")
     public, nonce = key_inputs()
     crypto = crypto_sources.validate()
     if (PACKAGE / "a7_config.h").read_text() != config(data, public, nonce, total):
@@ -364,8 +369,9 @@ def manifest():
         ),
         config_sha256=sha(PACKAGE / "a7_config.h"),
         verifier=crypto,
-        host_check_sha256=sha(ROOT / "work/S1A7NITS/host-check.json"),
+        host_check_sha256=sha(ROOT / "work/S1A7INSTALL/host-check.json"),
         teardown_sources_sha256=sha(ROOT / "work/S1A7NATIVE/teardown-sources.json"),
+        installation_sources_sha256=sha(install_sources.OUTPUT),
         inventory_sha256=hashlib.sha256(dump(inventory(data)).encode()).hexdigest(),
         production_dma_publication=False,
         payload_visibility_claim=False,

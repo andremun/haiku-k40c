@@ -1,0 +1,18 @@
+{
+  "revision": "49a0af9585d80e42240af63ab66e31e9873f59b8",
+  "scope": "KNOWN / SOURCE_ONLY project Haiku reference revision; exact running-kernel source identity not established",
+  "sources": {
+    "src/system/kernel/device_manager/devfs.cpp": {
+      "sha256": "50ee9b40fc58bc732ed207e842a597504e17b106dc06d5e181531663c7212b32",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/system/kernel/device_manager/devfs.cpp"
+    },
+    "src/system/kernel/device_manager/legacy_drivers.cpp": {
+      "sha256": "e1e72821eacd9fb7639af6926bcc3beff27cc3e371d62723dc5f7f9b8c8d066c",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/system/kernel/device_manager/legacy_drivers.cpp"
+    },
+    "src/system/kernel/fs/vfs.cpp": {
+      "sha256": "1acc05306bbd2173c6c9a3adb96dcb88b08af59d0f7d9734c0f9d53fb407f4dd",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/system/kernel/fs/vfs.cpp"
+    }
+  }
+}

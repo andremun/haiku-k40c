@@ -1,0 +1,262 @@
+{
+  "boundary_binary_sha256": {
+    "test_a7_client": "23c141e51fb7047a395868afcb98735b69954faf8c799f0f5b1a789254504653",
+    "test_a7_native": "311b6022c0aa279168d5832669e036a52c4db3edb964296437456202a0ae220c"
+  },
+  "faults": {
+    "clock-fail": "status 6 step 12 error 4 arms 2 writes 851 checks 2023",
+    "pins-fail": "status 6 step 6 error 4 arms 0 writes 13 checks 21"
+  },
+  "fixture_key": "RFC 8032 public TEST 1; never a production key",
+  "mutation_rejections": 192,
+  "native_boundaries": {
+    "test_a7_client": "A7 actual client: 24 checks pass (host mocks only)",
+    "test_a7_native": "A7 native boundary: 4129 checks pass (host mocks only)"
+  },
+  "native_gate_object_sha256": "8532dabe2ab15f64180ee877116cf03ca4b91fc058669e8cdb3491cdaf03f1e2",
+  "noncanonical_signature_rejections": 1,
+  "probe_sha256": "2b1dd8aa17b9d9119e9ec87f9580d85a71ba2f742f313b89602193acb9085052",
+  "scenarios": [
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 0
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 1
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 2
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 3
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 4
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 5
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 6
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 7
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 8
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 9
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 10
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 11
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 12
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 13
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 14
+    },
+    {
+      "profile": 0,
+      "result": "status 6 step 9 error 4 arms 1 writes 234 checks 563",
+      "strap": 15
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 0
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 1
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 2
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 3
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 4
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 5
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 6
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 7
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 8
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 9
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 10
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 11
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 12
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 13
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 14
+    },
+    {
+      "profile": 1,
+      "result": "status 0 step 13 error 0 arms 2 writes 871 checks 2046",
+      "strap": 15
+    }
+  ],
+  "scope": "HOST simulation of physical-permit code; NO hardware proof",
+  "signed_scope_rejections": 7,
+  "source_sha256": {
+    "src/a7/ArmAuthority.cpp": "7f0556a448f71736c300ce8b6f2abb4e7d85f289f32a73c58ae938ae5d1b25a8",
+    "src/a7/ArmAuthority.h": "b1ee9b267e3434cb0e0c69337587833ee9247af0eb95cfb985ecf7fc031255dc",
+    "src/a7/ExecutionPermit.h": "edc7cf9e0d9e48f5a335128f84bd9cadf98c5980910bdf33cd60d83e3ede8541",
+    "src/a7/Module.h": "8383964231bd9c7ea11fe787211765b986c047d4859ba5356b425c368903510a",
+    "src/a7/NativePlatform.cpp": "4b878d706873ac4d9a56bbfbea488ae5033d81834eea834cfa2ce28a086db406",
+    "src/a7/NativePlatform.h": "de6b3c59d06a82375c0cb5f0190c25ba12101c3f56581c2a755e231712eca344",
+    "src/a7/Owner.cpp": "8d3b49c567de6b15d9e3f077025a9b3127b699563e170f455530b68f8e35ccd9",
+    "src/a7/Owner.h": "5580f716704139b3064da8a19942c65860f9e6165e0d3a0f711c8aa1c0f5a083",
+    "src/devinit/Board.h": "c8b2c9daca206854f059245d19c9280f80d4da31b50bb5a7b55f46d20ae897ce",
+    "src/devinit/BoardCore.cpp": "960b19e3a070c1c3ffb1d1bcb3f417c2539ed13e7d305d5b961358665194bb2a",
+    "src/devinit/BoardCore.h": "7ce223661bc6eacfd62a9bc917450c035c41770f5c6ff10631402f8ffaed8cdf",
+    "src/devinit/BoardPolicy.cpp": "902da09784c5dc807ca0c2bdff69382f6bc95a9b8f3f717f14f496e7b5206dbc",
+    "src/devinit/BoardPolicy.h": "69632ac56b9719600824bf0c35d14fa56a82e2d2a1a1f4f91a086a7c5d92e2ce",
+    "src/devinit/BoundPost.cpp": "3845812062148ea85160cc7a9a6aba105467ff5e008901031f090c294a73bcf3",
+    "src/devinit/BoundPost.h": "452a486a1f75b6473cb05d4e1ea859ffd556d2b26e4c2b97ab1bfb4142faebb1",
+    "src/devinit/I2c.cpp": "bd242139bd4018ca41e1257d6308660e97daddde9e5fa4d3e81f79b62c8adfe1",
+    "src/devinit/I2c.h": "a27f6b0ce8ca0b027cbaef952562fa63791bb940cfff50b6da0b4616d92c9d45",
+    "src/devinit/Interpreter.cpp": "5237c54ebe5c1bdb40c7904e0377877dc36374d10a63158dfe70aa2a49bd3559",
+    "src/devinit/Interpreter.h": "54a4b25cc34ff96afd6f39a48a71a803f0ec7ef2042fd01c9245b01ca0a54ce6",
+    "src/devinit/PostImage.cpp": "e1299da1b0c1f19b0e1f69f1cde132d589c9fd8e642a5213c100e5b0c0375976",
+    "src/devinit/PostImage.h": "196abf668dfe6fa31661cb8c9b3610ad81e38f0f4758944dcfc0b73c7273f974",
+    "src/devinit/Sha256.cpp": "3fe7912249a87e6b0cdec87da818a1a2f9ebfaf3145c40e7aa827df50554e19b",
+    "src/devinit/Sha256.h": "f4b1caa7558a5886ef7bc121ffef2ca65ec25bb89b18c62bc980e144bcc8ffbc",
+    "src/memory/ArmedReference.cpp": "db32bda8fc987a342c33fde8be8b699801f3a4cee1604e9b2a3e5a80403418cb",
+    "src/memory/ArmedReference.h": "a7c275ecc81ba20f23338ebe67b5da462829589d91580e404714c90b0c022e0f",
+    "src/memory/Memory.h": "c0dff96a930c571f9ff7bc65f847c6cffbfd31c6ffa1a0cd8e16a9a5980792d1",
+    "src/os/HaikuBackend.h": "1ad0cdba01d1ba72cdb62121a31c3972dd31242447fc98434c6236d6efc2667c",
+    "src/os/HaikuMemory.cpp": "ad8a93de49f0784293e5d004bc0aeacabf973a4fece457188a7f80928e7328a1",
+    "src/os/HaikuMemory.h": "b1d71c0d2c4764d192d9dbb04d2987cc22b7b6a9f8e7fcf6af7a0032b0329565",
+    "src/runtime/BootState.h": "9e2614ef3df7d74f357350e9bb6d644f6a5bf1a5cca22de60b31a8262d94b8c4",
+    "src/runtime/Bootstrap.cpp": "b66263b054c58ae8e7ce19c32949e2502c96105c5c01e10a958e92e5af5f3c89",
+    "src/runtime/Bootstrap.h": "97d4c8dc74347d1971684325180f5f5e78d837ac9a75a62604ce282e9c25c4f8",
+    "src/runtime/PreStart.cpp": "d83dc89ef6000404080fbf1fd701c8e80878584ea7cf90a20d5e8ddd2b4ad4de",
+    "src/runtime/PreStart.h": "ccc3a4f59c52a2e1bdab9c57f8ce136daf681241221f1cf8a68011beba0a3221",
+    "src/runtime/S1Experiment.h": "e264860c0cf26cb50240783b930870ecea85838244b37d6d67ae63b32d158366",
+    "tests/Makefile": "88ace2428177a72fd4aada0731123915f4c77070e85cfd30286ab6c6efa5726b",
+    "tests/a7_owner_probe.cpp": "877671da80f1bc38d6685dd23ad5db8420c9770b2926199b8b09992e7813fdac",
+    "tests/a7_shim/Drivers.h": "51b362cd3549ca353ab3fca5e4f27bf1932f0c6b604d0e8573053103ba919374",
+    "tests/a7_shim/KernelExport.h": "bf3708f685d577f6e92d218144449a256b3c50f3e7bc157efa7a33adc2478b43",
+    "tests/a7_shim/PCI.h": "e3609ae3b060cf40841f3b93b7946f86da7b34f8d3512c97045f1f2116c3979b",
+    "tests/native_arm_gate.cpp": "9960507ae417ef15d8cfc817ee55273eca72332ff2fda77afeafd61ed39fb8d9",
+    "tests/os_shim/Drivers.h": "508c28c8827ee83929c1c233625e1959fef3b4155f6a24d35b5d769024e903c4",
+    "tests/os_shim/KernelExport.h": "b30aa0df0488cc6b2f47814234c3e9ce91cfe882a4fe73621acdccca65dc776b",
+    "tests/os_shim/PCI.h": "e1d0788b3a91b41330a66884d21fe664043d316eefc6034b1f2a735fdd140f12",
+    "tests/os_shim/module.h": "802de23e015605898c22d3bf25709f3319da8944861be0f6c14e7e59d605dfb9",
+    "tests/test_a7_client.cpp": "5eb37052e29ee5f0abc8242e1e884ec17c1ca51aed43769d090eab66cf3c3492",
+    "tests/test_a7_native.cpp": "cdf71050d89d74b806b91cf38ddd45a7329d7690e2d0018275c1d16a26bdcf57",
+    "tools/a7/host_check.py": "6de6d1baf6325d39512947f49021a9c8120fecee775ee6a273426465c76fcd32",
+    "tools/haiku/selftest/a7_client.cpp": "24942c763a6fe84f8c2536434fcd342571a6c50786fcd47458fbe201e6f65478"
+  },
+  "successful_cases": 16,
+  "verifier": {
+    "commit": "b1f19fab4aebe607805620d25a5e42566ce46a0e",
+    "compiled_sources": [
+      "fe.c",
+      "ge.c",
+      "sc.c",
+      "sha512.c",
+      "verify.c"
+    ],
+    "license": "zlib; original source/notice retained in persistent pinned checkout",
+    "origin": "https://github.com/orlp/ed25519",
+    "sha256": {
+      "license.txt": "f68d76b9c1c2271422e55134ea94cf71f2ac3fc3ed6a7ec6b83a1a0538753214",
+      "src/ed25519.h": "8b09800605ac592c1f7d6e701f3526f84156db15bbd68904d39ad398e7d7c8ce",
+      "src/fe.c": "71082937da43def6ecaf7811c23410bd8ea763969dfec67383f8129b12b1926d",
+      "src/fe.h": "0476ae2ebb86978d1e0b9fbeb63dcddd7566d6b74806db47dda7688df74aaafb",
+      "src/fixedint.h": "451fd529865e7fc69156f4cbe7c548857704ae4913768ad9ed7103656efdfc17",
+      "src/ge.c": "c3bb834817edea83d843828a75af19867b93144d15140eadfd9784d40cf11409",
+      "src/ge.h": "b16be2ea1731d9212933e7beeaef6882145fdcdaebdff9996efb5cf97faa2651",
+      "src/precomp_data.h": "c7d63a8b7ecd7bc6a3ac2b826a540a69dee0fc7e8bf3b00ef5dd98ce00a7c224",
+      "src/sc.c": "c1bdb840416b34e79ceb7472d1a4ac4b1407c47b4c982cad981c72142ef42407",
+      "src/sc.h": "b0ef537b4d4dad7bd2910e2a663a02a7ac25b473511a929c3c609d82f9bdf87d",
+      "src/sha512.c": "b34128b950036777c299943d624bd830a234a65932c394fdf455e4948258fb6d",
+      "src/sha512.h": "647ed5784d4dcd682b9c42add2e39107582efb4df9e1362c8e5120613eb9a0ce",
+      "src/verify.c": "a2ca7197c5f6d193c9f526d432429dfb44a65853a7ec18e10a5761334bdcf48c"
+    }
+  }
+}
