@@ -9,11 +9,22 @@ fixtures. No standalone VM, network or file-writing entry point exists here.
 INSTALL = """install_artifact() {
     role=$1
     destination=$2
+    expected_size=$3
+    expected_sha=$4
+    partial="${destination%/*}/.${destination##*/}.partial"
     test ! -e "$destination"
-    mkdir "$stage/$role"
-    curl -fsS -o "$stage/$role/addon" "$host/$role"
-    chmod +x "$stage/$role/addon"
-    ln "$stage/$role/addon" "$destination"
+    test ! -e "$partial"
+    curl -fsS -o "$partial" "$host/$role"
+    test "$(stat -c %s "$partial")" = "$expected_size"
+    actual_sha=$(sha256sum "$partial")
+    test "${actual_sha%% *}" = "$expected_sha"
+    chmod +x "$partial"
+    before=$(stat -c %i "$partial")
+    mv "$partial" "$destination"
+    after=$(stat -c %i "$destination")
+    test "$before" = "$after"
+    test ! -e "$partial"
+    echo "A7-INSTALL $role size=$expected_size sha256=$expected_sha inode-before=$before inode-after=$after"
 }"""
 WAIT = """wait_a7_node() {
     node_poll=0
@@ -31,7 +42,13 @@ WAIT = """wait_a7_node() {
 }"""
 
 
-def job(port):
+def job(port, artifacts):
+    def install(role, destination):
+        info = artifacts[role]
+        return (
+            f'install_artifact {role} "{destination}" {info["bytes"]} {info["sha256"]}'
+        )
+
     host = f"http://10.0.2.2:{port}"
     return "\n".join(
         [
@@ -45,21 +62,18 @@ def job(port):
             "uname -a > /tmp/a7.environment",
             'curl -fsS -T /tmp/a7.environment "$host/environment.txt"',
             'curl -fsS -T /boot/system/kernel_x86_64 "$host/kernel_x86_64"',
-            "base=$(finddir B_USER_NONPACKAGED_ADDONS_DIRECTORY)",
-            'stage="$base/.k40-a7-staging"',
-            'mkdir -p "$base"',
-            'mkdir "$stage"',
-            'mkdir -p "$base/kernel/generic" "$base/kernel/drivers/bin" "$base/kernel/drivers/dev/misc"',
+            "base=/boot/system/non-packaged/add-ons/kernel",
+            'mkdir -p "$base/generic" "$base/drivers/bin" "$base/drivers/dev/misc"',
             INSTALL,
             WAIT,
             "echo K40-B5-BEGIN > /dev/dprintf",
-            'install_artifact identity "$base/kernel/drivers/bin/k40_identity_probe"',
-            'ln -s ../../bin/k40_identity_probe "$base/kernel/drivers/dev/misc/k40_identity_probe"',
+            install("identity", "$base/drivers/bin/k40_identity_probe"),
+            'ln -s ../../bin/k40_identity_probe "$base/drivers/dev/misc/k40_identity_probe"',
             "for pass in 1 2 3 4; do ls /dev/misc >/dev/null; sleep 1; done",
             "echo K40-B5-END > /dev/dprintf",
-            'install_artifact owner "$base/kernel/generic/k40c_a7_owner"',
-            'install_artifact client "$base/kernel/drivers/bin/k40_a7_stage"',
-            'ln -s ../../bin/k40_a7_stage "$base/kernel/drivers/dev/misc/k40_a7_stage"',
+            install("owner", "$base/generic/k40c_a7_owner"),
+            install("client", "$base/drivers/bin/k40_a7_stage"),
+            'ln -s ../../bin/k40_a7_stage "$base/drivers/dev/misc/k40_a7_stage"',
             "wait_a7_node",
             "echo A7-OPEN-DEVICE",
             "exec 3<>/dev/misc/k40_a7_stage",

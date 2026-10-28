@@ -1,0 +1,7 @@
+A7-JOB-START
+A7-INSTALL identity size=8696 sha256=8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f inode-before=3670128 inode-after=3670128
+A7-INSTALL owner size=360624 sha256=694ca685f555405158a58b0ac47d758420921f190be19726761c5fd5739f8baf inode-before=3670129 inode-after=3670129
+A7-INSTALL client size=7552 sha256=b99101a130a7b8a391b7f7e6e3ece6ce560e98ba897023dca56ab6cf726af44c inode-before=3670130 inode-after=3670130
+A7-DEVICE-PUBLISHED
+A7-OPEN-DEVICE
+/tmp/a7-job.sh: line 57: /dev/misc/k40_a7_stage: ambiguous redirect

@@ -1,0 +1,866 @@
+[2J[01;01H[=3h[2J[01;01HBdsDxe: loading Boot0001 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+BdsDxe: starting Boot0001 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+[2J[01;01H[=3h[2J[01;01H[2J[01;01Hacpi_init: found ACPI RSDP signature at 0x000000007fb7d014
+acpi: found rsdp at 0x000000007fb7d014 oem id: BOCHS , rev 2
+acpi: rsdp points to rsdt at 0x7fb7c074
+acpi: found valid XSDT at 0x000000007fb7c0e8
+acpi: searching 6 entries for table 'HPET'
+acpi: Looking for 'HPET'. Skipping 'FACP'
+acpi: Looking for 'HPET'. Skipping 'APIC'
+acpi: Found 'HPET' @ 0x000000007fb7c11c
+acpi: searching 6 entries for table 'APIC'
+acpi: Looking for 'APIC'. Skipping 'FACP'
+acpi: Found 'APIC' @ 0x000000007fb7c114
+Welcome to the Haiku boot loader!
+Haiku revision: hrev60207
+efi/network: EFI reports network unavaiable
+add_partitions_for(0x000000007df31cb8, mountFS = no)
+add_partitions_for(fd = 0, mountFS = no)
+0x000000007df31d10 Partition::Partition
+0x000000007df31d10 Partition::Scan()
+check for partitioning_system: GUID Partition Map
+EFI header: EFI PART
+EFI revision: 10000
+header size: 92
+header CRC: 8e9b8e09
+absolute block: 1
+alternate block: 67108863
+first usable block: 34
+last usable block: 67108830
+disk GUID: d9953e2e-13ed-8448-86b1-016d5b7a7fb2
+entries block: 2
+entry size:  128
+entry count: 128
+entries CRC: da254e26
+EFI header: EFI PART
+EFI revision: 10000
+header size: 92
+header CRC: 9db7bf86
+absolute block: 67108863
+alternate block: 1
+first usable block: 34
+last usable block: 67108830
+disk GUID: d9953e2e-13ed-8448-86b1-016d5b7a7fb2
+entries block: 67108831
+entry size:  128
+entry count: 128
+entries CRC: da254e26
+[  0] partition type: c12a7328-f81f-11d2-ba4b-00a0c93ec93b
+      unique id: 2427e0f9-1a8f-da49-a036-a83ccb300064
+      start block: 40
+      end block: 524327
+      size: 255.999 MB
+      attributes: 0
+      name: ESP
+[  1] partition type: 42465331-3ba3-10f1-802a-4861696b7521
+      unique id: da7ff85c-9b69-6742-b9c8-55973491c779
+      start block: 524328
+      end block: 67106855
+      size: 32510.999 MB
+      attributes: 0
+      name: HaikuVM
+  priority: 960
+check for partitioning_system: Intel Partition Map
+intel: Found GPT signature, ignoring.
+check for partitioning_system: Intel Extended Partition
+efi_gpt_scan_partition(cookie = 0x000000007df31e18)
+0x000000007df35ef8 Partition::Partition
+0x000000007df31d10 Partition::AddChild 0x000000007df35ef8
+0x000000007df35ef8 Partition::SetParent 0x000000007df31d10
+new child partition!
+0x000000007df36018 Partition::Partition
+0x000000007df31d10 Partition::AddChild 0x000000007df36018
+0x000000007df36018 Partition::SetParent 0x000000007df31d10
+new child partition!
+0x000000007df31d10 Partition::Scan(): scan child 0x000000007df35ef8 (start = 20480, size = 268435456, parent = 0x000000007df31d10)!
+0x000000007df35ef8 Partition::Scan()
+check for partitioning_system: GUID Partition Map
+check for partitioning_system: Intel Partition Map
+check for partitioning_system: Intel Extended Partition
+0x000000007df31d10 Partition::Scan(): scan child 0x000000007df36018 (start = 268455936, size = 34090254336, parent = 0x000000007df31d10)!
+0x000000007df36018 Partition::Scan()
+check for partitioning_system: GUID Partition Map
+check for partitioning_system: Intel Partition Map
+check for partitioning_system: Intel Extended Partition
+0x000000007df31d10 Partition::~Partition
+0x000000007df35ef8 Partition::SetParent 0x0000000000000000
+0x000000007df36018 Partition::SetParent 0x0000000000000000
+0x000000007df36018 Partition::_Mount check for file_system: BFS Filesystem
+PackageVolumeInfo::SetTo()
+load kernel kernel_x86_64...
+ucode_load: system/non-packaged/data/firmware/intel-ucode/06-3e-04
+ucode_load: couldn't find microcode
+smbios: found v2 at 0x000000007f922000
+kernel:
+  text: 0xffffffff80000000, 0x1ce000
+  data: 0xffffffff801ce000, 0x67000
+  entry: 0xffffffff8006b1a0
+GDT at 0xffffff007e1106a0
+Kernel stack at 0xffffffff82931000
+System provided memory map:
+  phys: 0x00000000-0x00001000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x00001000-0x00087000, virt: 0x00000000-0x00086000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x00087000-0x00088000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x00088000-0x000a0000, virt: 0x00000000-0x00018000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x00100000-0x00806000, virt: 0x00000000-0x00706000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x00806000-0x00808000, virt: 0x00000000-0x00002000, type: EfiACPIMemoryNVS (0xa), attr: 0xf
+  phys: 0x00808000-0x00810000, virt: 0x00000000-0x00008000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x00810000-0x00900000, virt: 0x00000000-0x000f0000, type: EfiACPIMemoryNVS (0xa), attr: 0xf
+  phys: 0x00900000-0x01500000, virt: 0x00000000-0x00c00000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x01500000-0x7bf2e000, virt: 0x00000000-0x7aa2e000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x7bf2e000-0x7bf4e000, virt: 0x00000000-0x00020000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7bf4e000-0x7d438000, virt: 0x00000000-0x014ea000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x7d438000-0x7e0b1000, virt: 0x00000000-0x00c79000, type: EfiLoaderData (0x2), attr: 0xf
+  phys: 0x7e0b1000-0x7e124000, virt: 0x00000000-0x00073000, type: EfiLoaderCode (0x1), attr: 0xf
+  phys: 0x7e124000-0x7e192000, virt: 0x00000000-0x0006e000, type: EfiLoaderData (0x2), attr: 0xf
+  phys: 0x7e192000-0x7e852000, virt: 0x00000000-0x006c0000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7e852000-0x7e906000, virt: 0x00000000-0x000b4000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7e906000-0x7e936000, virt: 0x00000000-0x00030000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7e936000-0x7e9d6000, virt: 0x00000000-0x000a0000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7e9d6000-0x7ea1d000, virt: 0x00000000-0x00047000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ea1d000-0x7ea3a000, virt: 0x00000000-0x0001d000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ea3a000-0x7ea3d000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ea3d000-0x7ea4c000, virt: 0x00000000-0x0000f000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ea4c000-0x7ea4e000, virt: 0x00000000-0x00002000, type: EfiLoaderData (0x2), attr: 0xf
+  phys: 0x7ea4e000-0x7ea84000, virt: 0x00000000-0x00036000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ea84000-0x7ea89000, virt: 0x00000000-0x00005000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ea89000-0x7ea9d000, virt: 0x00000000-0x00014000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ea9d000-0x7ea9f000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ea9f000-0x7eaa2000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eaa2000-0x7eaa8000, virt: 0x00000000-0x00006000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eaa8000-0x7eabd000, virt: 0x00000000-0x00015000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eabd000-0x7eac4000, virt: 0x00000000-0x00007000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eac4000-0x7eacb000, virt: 0x00000000-0x00007000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eacb000-0x7ead2000, virt: 0x00000000-0x00007000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ead2000-0x7eada000, virt: 0x00000000-0x00008000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eada000-0x7eadc000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eadc000-0x7eaf1000, virt: 0x00000000-0x00015000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eaf1000-0x7eaf3000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eaf3000-0x7eb07000, virt: 0x00000000-0x00014000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eb07000-0x7eb0e000, virt: 0x00000000-0x00007000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eb0e000-0x7eb31000, virt: 0x00000000-0x00023000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eb31000-0x7eb34000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eb34000-0x7eb39000, virt: 0x00000000-0x00005000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7eb39000-0x7eb3b000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7eb3b000-0x7ebb4000, virt: 0x00000000-0x00079000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebb4000-0x7ebb6000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebb6000-0x7ebb9000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebb9000-0x7ebbb000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebbb000-0x7ebc8000, virt: 0x00000000-0x0000d000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebc8000-0x7ebcb000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebcb000-0x7ebcd000, virt: 0x00000000-0x00002000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebcd000-0x7ebcf000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebcf000-0x7ebd9000, virt: 0x00000000-0x0000a000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebd9000-0x7ebdd000, virt: 0x00000000-0x00004000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebdd000-0x7ebeb000, virt: 0x00000000-0x0000e000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ebeb000-0x7ebed000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ebed000-0x7ec00000, virt: 0x00000000-0x00013000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ec00000-0x7ee01000, virt: 0x00000000-0x00201000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee01000-0x7ee05000, virt: 0x00000000-0x00004000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee05000-0x7ee07000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee07000-0x7ee14000, virt: 0x00000000-0x0000d000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee14000-0x7ee15000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee15000-0x7ee16000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee16000-0x7ee17000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee17000-0x7ee2b000, virt: 0x00000000-0x00014000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee2b000-0x7ee30000, virt: 0x00000000-0x00005000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee30000-0x7ee38000, virt: 0x00000000-0x00008000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee38000-0x7ee3f000, virt: 0x00000000-0x00007000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee3f000-0x7ee43000, virt: 0x00000000-0x00004000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee43000-0x7ee47000, virt: 0x00000000-0x00004000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee47000-0x7ee4b000, virt: 0x00000000-0x00004000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee4b000-0x7ee4e000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee4e000-0x7ee4f000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee4f000-0x7ee55000, virt: 0x00000000-0x00006000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee55000-0x7ee58000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee58000-0x7ee5b000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee5b000-0x7ee8f000, virt: 0x00000000-0x00034000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee8f000-0x7ee96000, virt: 0x00000000-0x00007000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7ee96000-0x7ee9c000, virt: 0x00000000-0x00006000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7ee9c000-0x7ef9e000, virt: 0x00000000-0x00102000, type: EfiRuntimeServicesData (0x6), attr: 0x800000000000000f
+  phys: 0x7ef9e000-0x7f39e000, virt: 0x00000000-0x00400000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f39e000-0x7f40f000, virt: 0x00000000-0x00071000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f40f000-0x7f414000, virt: 0x00000000-0x00005000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f414000-0x7f418000, virt: 0x00000000-0x00004000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f418000-0x7f41c000, virt: 0x00000000-0x00004000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f41c000-0x7f432000, virt: 0x00000000-0x00016000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f432000-0x7f433000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f433000-0x7f436000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f436000-0x7f438000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f438000-0x7f441000, virt: 0x00000000-0x00009000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f441000-0x7f442000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f442000-0x7f443000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f443000-0x7f445000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f445000-0x7f446000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f446000-0x7f448000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f448000-0x7f44b000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f44b000-0x7f44d000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f44d000-0x7f44e000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f44e000-0x7f44f000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f44f000-0x7f450000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f450000-0x7f462000, virt: 0x00000000-0x00012000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f462000-0x7f46d000, virt: 0x00000000-0x0000b000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f46d000-0x7f46e000, virt: 0x00000000-0x00001000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f46e000-0x7f46f000, virt: 0x00000000-0x00001000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f46f000-0x7f472000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f472000-0x7f47e000, virt: 0x00000000-0x0000c000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f47e000-0x7f480000, virt: 0x00000000-0x00002000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f480000-0x7f489000, virt: 0x00000000-0x00009000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f489000-0x7f48c000, virt: 0x00000000-0x00003000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f48c000-0x7f48f000, virt: 0x00000000-0x00003000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7f48f000-0x7f8ee000, virt: 0x00000000-0x0045f000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7f8ee000-0x7f9ee000, virt: 0x00000000-0x00100000, type: EfiRuntimeServicesData (0x6), attr: 0x800000000000000f
+  phys: 0x7f9ee000-0x7faee000, virt: 0x00000000-0x00100000, type: EfiRuntimeServicesCode (0x5), attr: 0x800000000000000f
+  phys: 0x7faee000-0x7fb6e000, virt: 0x00000000-0x00080000, type: EfiReservedMemoryType (0x0), attr: 0xf
+  phys: 0x7fb6e000-0x7fb7e000, virt: 0x00000000-0x00010000, type: EfiACPIReclaimMemory (0x9), attr: 0xf
+  phys: 0x7fb7e000-0x7fbfe000, virt: 0x00000000-0x00080000, type: EfiACPIMemoryNVS (0xa), attr: 0xf
+  phys: 0x7fbfe000-0x7fe00000, virt: 0x00000000-0x00202000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7fe00000-0x7fe82000, virt: 0x00000000-0x00082000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0x7fe82000-0x7fea2000, virt: 0x00000000-0x00020000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7fea2000-0x7fec8000, virt: 0x00000000-0x00026000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7fec8000-0x7fed9000, virt: 0x00000000-0x00011000, type: EfiBootServicesData (0x4), attr: 0xf
+  phys: 0x7fed9000-0x7feec000, virt: 0x00000000-0x00013000, type: EfiBootServicesCode (0x3), attr: 0xf
+  phys: 0x7feec000-0x7ff70000, virt: 0x00000000-0x00084000, type: EfiRuntimeServicesData (0x6), attr: 0x800000000000000f
+  phys: 0x7ff70000-0x80000000, virt: 0x00000000-0x00090000, type: EfiACPIMemoryNVS (0xa), attr: 0xf
+  phys: 0x100000000-0x180000000, virt: 0x00000000-0x80000000, type: EfiConventionalMemory (0x7), attr: 0xf
+  phys: 0xb0000000-0xc0000000, virt: 0x00000000-0x10000000, type: EfiReservedMemoryType (0x0), attr: 0x1
+  phys: 0xffc00000-0x100000000, virt: 0x00000000-0x00400000, type: EfiMemoryMappedIO (0xb), attr: 0x8000000000000001
+Calling ExitBootServices. So long, EFI!
+arch_enter_kernel(final_pml4: 0x7d437000, kernelArgs: 0x000000007e114900, kernelEntry: 0xffffffff8006b1a0, sp: 0xffffffff82936000)
+Welcome to kernel debugger output!
+Haiku revision: hrev60207, debug level: 2
+CPU: no microcode provided
+CPU: TSC frequency calibrated via PIT: 2050168
+CPU 0: type 0 family 6 extended_family 0 model 14 extended_model 3 stepping 4, string 'GenuineIntel'
+CPU 0: vendor 'Intel' model name 'Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz'
+CPU 0: apic id 0, package 0, core 0, smt 0
+CPU 0: cache sharing: L1 id 0, L2 id 0, L3 id 0
+CPU 0: features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clfsh mmx fxsr sse sse2 ss htt sse3 pclmulqdq vmx ssse3 cx16 pdcm pcid sse4_1 sse4_2 x2apic popcnt tscdeadline aes xsave avx f16c rdrnd hypervisor syscall nx pdpe1gb long arat tsc_adjust smep erms umip ibrs stibp msr_arch ssbd xsaveopt ibpb amd_ssbd 
+CPU 0: patch_level 0x0
+using PAT for memory type configuration
+PAT MSR on CPU 0 before init: 0x7040600070406
+PAT MSR on CPU 0 after init: 0x7040100070406
+reserve_io_interrupt_vectors: reserved 16 vectors starting from 0
+kernel malloc: using slab_heap
+mark_page_range_in_use(0x0, 0x100): start page is before free list
+mark_page_range_in_use(0x0, 0xa0): start page is before free list
+enable SMEP
+arch_altcodepatch_replace found 2 altcodepatches for tag 3
+arch_altcodepatch_replace found 5 altcodepatches for tag 4
+arch_altcodepatch_replace found 4 altcodepatches for tag 5
+enable XSAVE 0x7 832
+CPU 1: type 0 family 6 extended_family 0 model 14 extended_model 3 stepping 4, string 'GenuineIntel'
+CPU 1: vendor 'Intel' model name 'Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz'
+CPU 1: apic id 1, package 0, core 1, smt 0
+CPU 1: cache sharing: L1 id 1, L2 id 1, L3 id 0
+CPU 1: patch_level 0x0
+PAT MSR on CPU 1 before init: 0x7040600070406
+PAT MSR on CPU 1 after init: 0x7040100070406
+reserve_io_interrupt_vectors: reserved 3 vectors starting from 221
+APIC timer frequency: 999941271
+reserve_io_interrupt_vectors: reserved 1 vectors starting from 219
+arch_init_timer: using APIC timer.
+allocate_commpage_entry(2, 16) -> 0x0000000000000200
+scheduler_init: found 2 logical cpus and 3 cache levels
+scheduler switches: single core: false, cpu load tracking: false, core load tracking: true
+scheduler: switching to low latency mode
+msi support enabled
+PCI: pci_module_init
+ACPI: RSDP 0x000000007FB7D014 000024 (v02 BOCHS )
+ACPI: XSDT 0x000000007FB7C0E8 000054 (v01 BOCHS  BXPC     00000001      01000013)
+ACPI: FACP 0x000000007FB78000 0000F4 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: DSDT 0x000000007FB79000 0020D6 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: FACS 0x000000007FBDC000 000040
+ACPI: APIC 0x000000007FB77000 000080 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: HPET 0x000000007FB76000 000038 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: MCFG 0x000000007FB75000 00003C (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: WAET 0x000000007FB74000 000028 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+ACPI: BGRT 0x000000007FB73000 000038 (v01 INTEL  EDK2     00000002      01000013)
+smbios_scan
+found System Information at 0xffffffff83527008
+found vendor 1 product 2
+smbios_scan found vendor QEMU product Standard PC (Q35 + ICH9, 2009)
+ACPI: Forced DSDT copy: length 0x020D6 copied locally, original unmapped
+ACPI: 1 ACPI AML tables successfully acquired and loaded
+ACPI: Enabled 2 GPEs in block 00 to 3F
+found io-apic with address 0xfec00000, global interrupt base 0, apic-id 0
+mapping io-apic 0 at physical address 0xfec00000
+io-apic 0 has range 0-23, 24 entries, version 0x00170011, apic-id 0
+setting ACPI interrupt model to APIC
+found interrupt override for bus 0, source irq 0, global irq 2, flags 0x00000000
+found interrupt override for bus 0, source irq 5, global irq 5, flags 0x0000000d
+found interrupt override for bus 0, source irq 9, global irq 9, flags 0x0000000d
+found interrupt override for bus 0, source irq 10, global irq 10, flags 0x0000000d
+found interrupt override for bus 0, source irq 11, global irq 11, flags 0x0000000d
+free_io_interrupt_vectors: freeing 16 vectors starting from 0
+reserve_io_interrupt_vectors: reserved 24 vectors starting from 0
+using io-apics for interrupt routing
+slab memory manager: created area 0xffffffff80801000 (206)
+allocate_commpage_entry(3, 69) -> 0x0000000000000210
+slab memory manager: created area 0xffffffff81001000 (207)
+publish device: node 0xffffffff831303c0, path acpi/namespace, module bus_managers/acpi/namespace/device_v1
+publish device: node 0xffffffff831303c0, path acpi/call, module bus_managers/acpi/call/device_v1
+registering power button
+initialize PCI controller from ACPI
+PCI: range from ACPI [0(1),ff(1)] with length 100
+PCI: range from ACPI [0(1),cf7(1)] with length cf8
+PCI: range from ACPI [d00(1),ffff(1)] with length f300
+PCI: range from ACPI [a0000(1),bffff(1)] with length 20000
+PCI: range from ACPI [80000000(1),afffffff(1)] with length 30000000
+PCI: range from ACPI [c0000000(1),febfffff(1)] with length 3ec00000
+PCI: range from ACPI [800000000(1),fffffffff(1)] with length 800000000
+PCI: mechanism addr: b0000000, seg: 0, start: 0, end: ff
+IRQ routing table with 3 entries
+address 0x2ffff; pin 0; source 0xffffffff8352e0c0 0; pci 0:2 pin 1 func mask 1; bios irq: 11; gsi 22; config 0x02
+address 0x3ffff; pin 0; source 0xffffffff8352e210 0; pci 0:3 pin 1 func mask 1; bios irq: 11; gsi 23; config 0x02
+address 0x1fffff; pin 0; source 0xffffffff8352d8a0 0; pci 0:31 pin 1 func mask c; bios irq: 10; gsi 16; config 0x02
+PCI: [dom 0, bus  0] bus   0, device  0, function  0: vendor 8086, device 29c0, revision 00
+PCI:   class_base 06, class_function 00, class_api 00
+PCI:   vendor 8086: Intel Corporation
+PCI:   device 29c0: 82G33/G31/P35/P31 Express DRAM Controller (QEMU Virtual Machine)
+PCI:   info: Bridge (Host bridge)
+PCI:   line_size 00, latency 00, header_type 00, BIST 00
+PCI:   ROM base host 00000000, pci 00000000, size 00000000
+PCI:   cardbus_CIS 00000000, subsystem_id 1100, subsystem_vendor_id 1af4
+PCI:   interrupt_line ff, interrupt_pin 00, min_grant 00, max_latency 00
+PCI:   base reg 0: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 1: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 2: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 3: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 4: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 5: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   Capabilities: (not supported)
+PCI: [dom 0, bus  0] bus   0, device  1, function  0: vendor 1234, device 1111, revision 02
+PCI:   class_base 03, class_function 00, class_api 00
+PCI:   vendor 1234: Unknown
+PCI:   device 1111: Unknown
+PCI:   info: Display controller (VGA compatible controller, VGA controller)
+PCI:   line_size 00, latency 00, header_type 00, BIST 00
+PCI:   ROM base host ffff0000, pci ffff0000, size 00010000
+PCI:   cardbus_CIS 00000000, subsystem_id 1100, subsystem_vendor_id 1af4
+PCI:   interrupt_line ff, interrupt_pin 00, min_grant 00, max_latency 00
+PCI:   base reg 0: host c0000000, pci c0000000, size 01000000, flags 08
+PCI:   base reg 1: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 2: host c10a1000, pci c10a1000, size 00001000, flags 00
+PCI:   base reg 3: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 4: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 5: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   Capabilities: (not supported)
+PCI: [dom 0, bus  0] bus   0, device  2, function  0: vendor 1b36, device 000d, revision 01
+PCI:   class_base 0c, class_function 03, class_api 30
+PCI:   vendor 1b36: Red Hat, Inc.
+PCI:   device 000d: QEMU XHCI Host Controller
+PCI:   info: Serial bus controller (USB controller, XHCI)
+PCI:   line_size 00, latency 00, header_type 00, BIST 00
+PCI:   ROM base host 00000000, pci 00000000, size 00000000
+PCI:   cardbus_CIS 00000000, subsystem_id 1100, subsystem_vendor_id 1af4
+PCI:   interrupt_line 16, interrupt_pin 01, min_grant 00, max_latency 00
+PCI:   base reg 0: host 0000000800000000, pci 0000000800000000, size 00004000, flags 04 00
+PCI:   base reg 2: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 3: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 4: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 5: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   Capabilities: MSI-X, PCIe
+PCI:   Extended capabilities: (empty list)
+PCI: [dom 0, bus  0] bus   0, device  3, function  0: vendor 8086, device 100e, revision 03
+PCI:   class_base 02, class_function 00, class_api 00
+PCI:   vendor 8086: Intel Corporation
+PCI:   device 100e: 82540EM Gigabit Ethernet Controller (QEMU Virtual Machine)
+PCI:   info: Network controller (Ethernet controller)
+PCI:   line_size 00, latency 00, header_type 00, BIST 00
+PCI:   ROM base host fff80000, pci fff80000, size 00080000
+PCI:   cardbus_CIS 00000000, subsystem_id 1100, subsystem_vendor_id 1af4
+PCI:   interrupt_line 17, interrupt_pin 01, min_grant 00, max_latency 00
+PCI:   base reg 0: host c1080000, pci c1080000, size 00020000, flags 00
+PCI:   base reg 1: host 00006040, pci 00006040, size 00000040, flags 01
+PCI:   base reg 2: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 3: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 4: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 5: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   Capabilities: (not supported)
+PCI: [dom 0, bus  0] bus   0, device 31, function  0: vendor 8086, device 2918, revision 02
+PCI:   class_base 06, class_function 01, class_api 00
+PCI:   vendor 8086: Intel Corporation
+PCI:   device 2918: 82801IB (ICH9) LPC Interface Controller (QEMU Virtual Machine)
+PCI:   info: Bridge (ISA bridge)
+PCI:   line_size 00, latency 00, header_type 80, BIST 00
+PCI:   ROM base host 00000000, pci 00000000, size 00000000
+PCI:   cardbus_CIS 00000000, subsystem_id 1100, subsystem_vendor_id 1af4
+PCI:   interrupt_line ff, interrupt_pin 00, min_grant 00, max_latency 00
+PCI:   base reg 0: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 1: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 2: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 3: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 4: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 5: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   Capabilities: (not supported)
+PCI: [dom 0, bus  0] bus   0, device 31, function  2: vendor 8086, device 2922, revision 02
+PCI:   class_base 01, class_function 06, class_api 01
+PCI:   vendor 8086: Intel Corporation
+PCI:   device 2922: 82801IR/IO/IH (ICH9R/DO/DH) 6 port SATA Controller [AHCI mode] (QEMU Virtual Machine)
+PCI:   info: Mass storage controller (SATA controller, AHCI 1.0)
+PCI:   line_size 00, latency 00, header_type 80, BIST 00
+PCI:   ROM base host 00000000, pci 00000000, size 00000000
+PCI:   cardbus_CIS 00000000, subsystem_id 1100, subsystem_vendor_id 1af4
+PCI:   interrupt_line 10, interrupt_pin 01, min_grant 00, max_latency 00
+PCI:   base reg 0: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 1: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 2: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 3: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 4: host 00006080, pci 00006080, size 00000020, flags 01
+PCI:   base reg 5: host c10a0000, pci c10a0000, size 00001000, flags 00
+PCI:   Capabilities: MSI, SATA
+PCI: [dom 0, bus  0] bus   0, device 31, function  3: vendor 8086, device 2930, revision 02
+PCI:   class_base 0c, class_function 05, class_api 00
+PCI:   vendor 8086: Intel Corporation
+PCI:   device 2930: 82801I (ICH9 Family) SMBus Controller (QEMU Virtual Machine)
+PCI:   info: Serial bus controller (SMBus)
+PCI:   line_size 00, latency 00, header_type 80, BIST 00
+PCI:   ROM base host 00000000, pci 00000000, size 00000000
+PCI:   cardbus_CIS 00000000, subsystem_id 1100, subsystem_vendor_id 1af4
+PCI:   interrupt_line 10, interrupt_pin 01, min_grant 00, max_latency 00
+PCI:   base reg 0: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 1: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 2: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 3: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   base reg 4: host 00006000, pci 00006000, size 00000040, flags 01
+PCI:   base reg 5: host 00000000, pci 00000000, size 00000000, flags 00
+PCI:   Capabilities: (not supported)
+usb xhci -1: interface version: 0x0100
+usb xhci -1: structural parameters: 1:0x08001040 2:0x0000000f 3:0x00000000
+usb xhci -1: capability parameters: 0x00087001
+usb xhci -1: starting XHCI host controller
+usb xhci -1: successfully started the controller
+usb hub 2: port 0: device removed
+usb hub 2: port 1: device removed
+usb hub 2: port 2: device removed
+usb hub 2: port 3: device removed
+usb hub 2: port 4: new device connected
+usb hub 2: port 5: device removed
+usb hub 2: port 6: device removed
+usb hub 2: port 7: device removed
+get_boot_partitions(): boot volume message:
+KMessage: buffer: 0xffffffff826191e8 (size/capacity: 308/308), flags: 0xa
+  field: "partition offset"  (LLNG): 268455936 (0x10005000)
+  field: "packaged"          (BOOL): true
+  field: "boot method"       (LONG): 0 (0x0)
+  field: "disk identifier"   (RAWT): data at 0xffffffff82619298, 79 bytes
+  field: "_boot_efi smbiosv2root" (LLNG): 2140282880 (0x7f922000)
+get_boot_partitions(): boot method type: 0
+ahci: AHCI controller Intel ICH9 (AHCI mode) found!
+ahci: ahci_register_device
+ahci: ahci_init_driver
+ahci: ahci_sim_init_bus
+ahci: ahci_sim_init_bus: pciDevice 0xffffffff8356c170
+ahci: AHCIController::Init 0:31:2 vendor 8086, device 2922
+ahci: PCI SATA capability found at offset 0xa8
+ahci: satacr0 = 0x00100012, satacr1 = 0x00000048
+ahci: pcicmd old 0x0007
+ahci: pcicmd new 0x0006
+allocate_io_interrupt_vectors: allocated 1 vectors starting from 24
+msi_allocate_vectors: allocated 1 vectors starting from 24
+msi enabled: 0x0081
+ahci: using MSI vector 24
+ahci: registers at 0xc10a0000, size 0x1000
+ahci: mapping physical address 0xc10a0000 with 4096 bytes for AHCI HBA regs
+ahci: physical = 0xc10a0000, virtual = 0xffffffff82abf000, offset = 0, phyadr = 0xc10a0000, mapadr = 0xffffffff82abf000, size = 4096, area = 0x000000eb
+ahci: cap: Interface Speed Support: generation 1
+ahci: cap: Number of Command Slots: 32 (raw 0x1f)
+ahci: cap: Number of Ports: 6 (raw 0x5)
+ahci: cap: Supports Port Multiplier: no
+ahci: cap: Supports External SATA: no
+ahci: cap: Enclosure Management Supported: no
+ahci: cap: FIS-based Switching Control: no
+ahci: cap: Supports Command List Override: no
+ahci: cap: Supports Staggered Spin-up: no
+ahci: cap: Supports Mechanical Presence Switch: no
+ahci: cap: Supports 64-bit Addressing: yes
+ahci: cap: Supports Native Command Queuing: yes
+ahci: cap: Supports SNotification Register: no
+ahci: cap: Supports Command List Override: no
+ahci: cap: Supports AHCI mode only: yes
+ahci: ghc: AHCI Enable: yes
+ahci: Ports Implemented Mask: 0x00003f Number of Available Ports: 6
+ahci: AHCI Version 0001.00.00 Interrupt 24
+ahci: allocating 4096 bytes for AHCI port 0
+ahci: area = 236, size = 4096, virt = 0xffffffff80266000, phy = 0x16fc000
+ahci: allocating 4096 bytes for AHCI port 1
+ahci: area = 237, size = 4096, virt = 0xffffffff82ac0000, phy = 0x16fb000
+ahci: allocating 4096 bytes for AHCI port 2
+ahci: area = 238, size = 4096, virt = 0xffffffff80267000, phy = 0x16fa000
+ahci: allocating 4096 bytes for AHCI port 3
+ahci: area = 239, size = 4096, virt = 0xffffffff82ac1000, phy = 0x16dc000
+ahci: allocating 4096 bytes for AHCI port 4
+ahci: area = 240, size = 4096, virt = 0xffffffff80268000, phy = 0x16db000
+ahci: allocating 4096 bytes for AHCI port 5
+ahci: area = 241, size = 4096, virt = 0xffffffff82ac2000, phy = 0x16da000
+ahci: Probe: port 0 link speed 1.5Gb/s
+ahci: cookie = 0xffffffff83524600
+ahci: ahci_path_inquiry, cookie 0xffffffff83524600
+ahci: ahci_path_inquiry, cookie 0xffffffff83524600
+ahci: ahci_scan_bus, cookie 0xffffffff83524600
+ahci: sg_memcpy phyAddr 0x62f060, size 96
+ahci: ahci_get_restrictions, cookie 0xffffffff83524600
+publish device: node 0xffffffff83133200, path disk/scsi/0/0/0/raw, module drivers/disk/scsi/scsi_disk/device_v1
+ahci: sg_memcpy phyAddr 0x62f180, size 32
+vpd_page_get: 
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f080, size 7
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f210, size 8
+vpd_page_get: 
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f080, size 7
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f210, size 64
+periph_check_capacity: TRIM: Setting trim support to UNMAP
+DMAResource@0xffffffff831332a0: low/high 0/100000000, max segment count 32, align 2, boundary 65536, max transfer 130560, max segment size 33554432
+ahci: sg_memcpy phyAddr 0x62f340, size 32
+vpd_page_get: 
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f240, size 7
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f3d0, size 8
+vpd_page_get: 
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f240, size 7
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f3d0, size 64
+periph_check_capacity: TRIM: Setting trim support to UNMAP
+ahci: ahci_ioctl, cookie 0xffffffff83524600
+intel: Found GPT signature, ignoring.
+EFI header: EFI PART
+EFI revision: 10000
+header size: 92
+header CRC: 8e9b8e09
+absolute block: 1
+alternate block: 67108863
+first usable block: 34
+last usable block: 67108830
+disk GUID: d9953e2e-13ed-8448-86b1-016d5b7a7fb2
+entries block: 2
+entry size:  128
+entry count: 128
+entries CRC: da254e26
+EFI header: EFI PART
+EFI revision: 10000
+header size: 92
+header CRC: 9db7bf86
+absolute block: 67108863
+alternate block: 1
+first usable block: 34
+last usable block: 67108830
+disk GUID: d9953e2e-13ed-8448-86b1-016d5b7a7fb2
+entries block: 67108831
+entry size:  128
+entry count: 128
+entries CRC: da254e26
+[  0] partition type: c12a7328-f81f-11d2-ba4b-00a0c93ec93b
+      unique id: 2427e0f9-1a8f-da49-a036-a83ccb300064
+      start block: 40
+      end block: 524327
+      size: 255.999 MB
+      attributes: 0
+      name: ESP
+[  1] partition type: 42465331-3ba3-10f1-802a-4861696b7521
+      unique id: da7ff85c-9b69-6742-b9c8-55973491c779
+      start block: 524328
+      end block: 67106855
+      size: 32510.999 MB
+      attributes: 0
+      name: HaikuVM
+identify(0, 0xffffffff831cfe10)
+raw_command: 
+SCSI -- is_sg_list_dma_safe: S/G-entry above high address @100560000
+ahci: AHCIPort::ScsiExecuteRequest port 0 unsupported request opcode 0x43
+efi_gpt_scan_partition(cookie = 0xffffffff830a0380)
+identify(0, 0xffffffff831cff30)
+raw_command: 
+SCSI -- is_sg_list_dma_safe: S/G-entry above high address @10055e000
+ahci: AHCIPort::ScsiExecuteRequest port 0 unsupported request opcode 0x43
+identify(0, 0xffffffff8356d300)
+raw_command: 
+SCSI -- is_sg_list_dma_safe: S/G-entry above high address @10055c800
+ahci: AHCIPort::ScsiExecuteRequest port 0 unsupported request opcode 0x43
+device 0: /dev/disk/scsi/0/0/0/raw
+  media status:      No error
+  device flags:      2
+  offset:            0
+  size:              34359738368 (32768 MB)
+  content size:      34359738368
+  block size:        512
+  physical block size: 512
+  child count:       2
+  index:             -1
+  status:            0
+  flags:             5
+  volume:            -1
+  disk system:       partitioning_systems/efi_gpt/v1
+  name:              QEMU HARDDISK
+  content name:      <NULL>
+  type:              <NULL>
+  content type:      GUID Partition Map
+  params:            <NULL>
+  content params:    <NULL>
+  partition 1: /dev/disk/scsi/0/0/0/0
+    offset:            20480
+    size:              268435456 (256 MB)
+    content size:      268435456
+    block size:        512
+    physical block size: 512
+    child count:       0
+    index:             0
+    status:            0
+    flags:             2
+    volume:            -1
+    disk system:       file_systems/fat/v1
+    name:              ESP
+    content name:      esp
+    type:              EFI system data
+    content type:      FAT32 File System
+    params:            <NULL>
+    content params:    <NULL>
+  partition 2: /dev/disk/scsi/0/0/0/1
+    offset:            268455936
+    size:              34090254336 (32511 MB)
+    content size:      34090254336
+    block size:        2048
+    physical block size: 512
+    child count:       0
+    index:             1
+    status:            0
+    flags:             2
+    volume:            -1
+    disk system:       file_systems/bfs/v1
+    name:              HaikuVM
+    content name:      HaikuVM
+    type:              Be File System
+    content type:      Be File System
+    params:            <NULL>
+    content params:    <NULL>
+Identified boot partition by partition offset.
+ahci: sg_memcpy phyAddr 0x62f480, size 32
+vpd_page_get: 
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f380, size 7
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f510, size 8
+vpd_page_get: 
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f380, size 7
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f510, size 64
+periph_check_capacity: TRIM: Setting trim support to UNMAP
+ahci: sg_memcpy phyAddr 0x62f400, size 32
+vpd_page_get: 
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f300, size 7
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f490, size 8
+vpd_page_get: 
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f300, size 7
+vpd_page_inquiry: 
+ahci: sg_memcpy phyAddr 0x62f490, size 64
+periph_check_capacity: TRIM: Setting trim support to UNMAP
+bfs: mounted "HaikuVM" (root node at 524288, device = /dev/disk/scsi/0/0/0/1)
+Mounted boot partition: /dev/disk/scsi/0/0/0/1
+packagefs: [   17] Adding packages from "/boot/system/packages"
+slab memory manager: created area 0xffffffff81801000 (278)
+slab memory manager: created area 0xffffffff9d801000 (279)
+slab memory manager: created area 0xffffffff9e001000 (281)
+packagefs: [   17] StringPool usage:
+packagefs: [   17]   total unique strings:       30245,   561501 bytes, overhead: 483920 bytes + 524288 bytes
+packagefs: [   17]   total strings with dups:   146920,  2044725 bytes
+packagefs: [   17]   unshared strings:            1493
+packagefs: [   17]   bytes saved:               475016
+packagefs: [   17] Adding packages from "/boot/home/config/packages"
+packagefs: [   17] Failed to open packages activation file: No such file or directory
+packagefs: [   17] Loading packages from activation file failed. Loading all packages in packages directory.
+packagefs: [   17] StringPool usage:
+packagefs: [   17]   total unique strings:       30245,   561501 bytes, overhead: 483920 bytes + 524288 bytes
+packagefs: [   17]   total strings with dups:   146931,  2044790 bytes
+packagefs: [   17]   unshared strings:            1489
+packagefs: [   17]   bytes saved:               475081
+module_init_post_boot_device() failed to normalize path of module image 0xffffffff83521090, "fat"
+module: Search for file_cache/launch_speedup/v1 failed.
+publish device: node 0xffffffff8313fe60, path disk/virtual/ram/control, module drivers/disk/virtual/ram_disk/control/device_v1
+usb_modeswitch: init_hardware()
+usb_modeswitch: init_driver()
+usb_modeswitch: trying module bus_managers/usb/v3.1
+usb_modeswitch: publish_devices()
+usb_modeswitch: uninit_driver()
+loaded driver /boot/system/add-ons/kernel/drivers/dev/usb_modeswitch
+loaded driver /boot/system/add-ons/kernel/drivers/dev/pty
+loaded driver /boot/system/add-ons/kernel/drivers/dev/null
+loaded driver /boot/system/add-ons/kernel/drivers/dev/dprintf
+con_init: trying module console/frame_buffer/v1
+loaded driver /boot/system/add-ons/kernel/drivers/dev/console
+identify(4, 0xffffffff9dc70a50)
+raw_command: 
+ahci: AHCIPort::ScsiExecuteRequest port 0 unsupported request opcode 0x43
+mtrr: [cpu 0] MTRRs are enabled
+mtrr: [cpu 0] default type is 6 write-back
+mtrr: [cpu 0] fixed range MTRRs are enabled
+mtrr: [cpu 0] 0: base: 0xc0000000; length: 0x40000000; type: 0 uncacheable
+mtrr: [cpu 0] 1: base: 0xb0000000; length: 0x10000000; type: 0 uncacheable
+mtrr: [cpu 0] 2: base: 0x800000000; length: 0x800000000; type: 0 uncacheable
+ignoring MTRRs due to PAT support
+allocate_commpage_entry(4, 16) -> 0x0000000000000258
+no valid cpufreq module found
+no valid cpuidle module found
+ignoring MTRRs due to PAT support
+kernel debugger extension "debugger/run_on_exit/v1": loaded
+kernel debugger extension "debugger/usb_keyboard/v1": loaded
+kernel debugger extension "debugger/invalidate_on_exit/v1": loaded
+kernel debugger extension "debugger/hangman/v1": loaded
+kernel debugger extension "debugger/disasm/v1": loaded
+publish device: node 0xffffffff9de35fa8, path random, module bus_managers/random/device_v1
+publish device: node 0xffffffff9de35fa8, path urandom, module bus_managers/random/device_v1
+publish device: node 0xffffffff9de36188, path power/button/power_fixed, module drivers/power/acpi_button/device_v1
+slab memory manager: created area 0xffffffff9e801000 (3758)
+bt: bluetooth_std_ops: Connection Thread error
+register_domain(10, bluetooth)
+register_domain(9, unix)
+register_domain(5, internet6)
+register_domain(1, internet)
+unregister_domain(0xffffffff9e180180, 10, bluetooth)
+unregister_domain(0xffffffff9e180200, 9, unix)
+unregister_domain(0xffffffff9e180300, 1, internet)
+unregister_domain(0xffffffff9e180280, 5, internet6)
+register_domain(5, internet6)
+unregister_domain(0xffffffff9e180480, 5, internet6)
+Test: and [file_exists [/system/bin/FirstBootPrompt], or [not [file_exists [/boot/home/config/settings/Locale settings]], readonly ]] -> 0
+register_domain(4, link)
+unregister_domain(0xffffffff9e180b80, 4, link)
+register_domain(10, bluetooth)
+register_domain(9, unix)
+register_domain(5, internet6)
+register_domain(1, internet)
+unregister_domain(0xffffffff9e180d80, 10, bluetooth)
+unregister_domain(0xffffffff9e180e00, 9, unix)
+unregister_domain(0xffffffff9e180f00, 1, internet)
+package_daemon: [14981448:    40] unregister_domain(0xffffffff9e180e80, 5, internet6)
+root at "/boot" (device: 3, node: 524288) registered
+register_domain(5, internet6)
+package_daemon: [14995266:    40] unregister_domain(0xffffffff81f2f300, 5, internet6)
+volume at "/boot/system" registered
+register_domain(1, internet)
+package_daemon: [15013195:    40] volume at "/boot/home/config" registered
+register_domain(5, internet6)
+unregister_domain(0xffffffff9e181080, 1, internet)
+unregister_domain(0xffffffff9e181100, 5, internet6)
+register_domain(10, bluetooth)
+register_domain(9, unix)
+register_domain(5, internet6)
+register_domain(1, internet)
+unregister_domain(0xffffffff9e181200, 10, bluetooth)
+unregister_domain(0xffffffff9e181280, 9, unix)
+unregister_domain(0xffffffff9e181380, 1, internet)
+unregister_domain(0xffffffff9e181300, 5, internet6)
+register_domain(5, internet6)
+unregister_domain(0xffffffff9e181480, 5, internet6)
+register_domain(1, internet)
+unregister_domain(0xffffffff9e181500, 1, internet)
+register_domain(10, bluetooth)
+register_domain(9, unix)
+register_domain(5, internet6)
+register_domain(1, internet)
+unregister_domain(0xffffffff9e181600, 10, bluetooth)
+unregister_domain(0xffffffff9e181680, 9, unix)
+unregister_domain(0xffffffff9e181780, 1, internet)
+unregister_domain(0xffffffff9e181700, 5, internet6)
+register_domain(5, internet6)
+unregister_domain(0xffffffff9e181900, 5, internet6)
+register_domain(1, internet)
+register_domain(5, internet6)
+loaded driver /boot/system/add-ons/kernel/drivers/dev/net/usb_rndis
+[33musb_davicom:[0m00.15.592:init_driver::ver.0.9.5
+loaded driver /boot/system/add-ons/kernel/drivers/dev/net/usb_davicom
+etherpci: init_driver init_driver: etherpci not found
+pci_reserve_device(0, 3, 0, ipro1000)
+if_initname(0xffffffff9da7f000, em, 2)
+[ipro1000] ipro1000: /dev/net/ipro1000/0
+[ipro1000] (em) attach_pre capping queues at 1
+[ipro1000] (em) bus_alloc_resource(3, [16], 0x0, 0xffffffffffffffff, 0x1,0x2)
+[ipro1000] (em) bus_alloc_resource(4, [20], 0x0, 0xffffffffffffffff, 0x1,0x2)
+package_daemon: [16112128:    65] The latest volume state is also the currently active one
+package_daemon: [16120236:    65] Volume::InitialVerify((nil), (nil))
+package_daemon: [16145243:    65] Volume::InitialVerify(): volume at "/boot/system" is consistent
+package_daemon: [16154870:    65] Failed to open packages activation file /boot/home/config/packages/administrative/activated-packages: No such file or directory
+package_daemon: [16167971:    65] Failed to get activated packages info from activated packages file. Assuming all package files in package directory are activated.
+package_daemon: [16180970:    65] The latest volume state is also the currently active one
+package_daemon: [16190108:    65] Volume::InitialVerify(0x8ed2777200, (nil))
+package_daemon: [16202209:    65] Volume::InitialVerify(): volume at "/boot/home/config" is consistent
+[ipro1000] (em) Using 1024 TX descriptors and 1024 RX descriptors
+[ipro1000] (em) allocated for 1 tx_queues
+[ipro1000] (em) allocated for 1 rx_queues
+[ipro1000] (em) bus_alloc_resource(1, [0], 0x0, 0xffffffffffffffff, 0x1,0x6)
+if_attach 0xffffffff9e49d2f0
+ipro1000: init_driver(0xffffffff82b97bd0)
+loaded driver /boot/system/add-ons/kernel/drivers/dev/net/ipro1000
+S3: init_hardware() - no supported devices
+radeon_hd: init_hardware
+Radeon - init_hardware: Version: 5.1.6.0
+Radeon - Radeon_CardDetect: no supported devices found
+nvidia: CALLED init_hardware
+nvidia: init_hardware: no supported device found
+intel_extreme: CALLED status_t init_hardware()
+devfs: "intel_810" api_version missing
+i810: init_hardware() - no supported devices
+ati: init_hardware() - no supported devices
+vesa: init_hardware()
+framebuffer: init_hardware()
+framebuffer: init_driver()
+framebuffer: publish_devices()
+framebuffer: find_device()
+loaded driver /boot/system/add-ons/kernel/drivers/dev/graphics/framebuffer
+assuming memory type 20000000 for overlapping 0xc0000000, 0x1000000 area 7151 from existing 0xc0000000, 0x1000000 area 130
+framebuffer: framebuffer_init() completed successfully!
+framebuffer: acc: framebuffer.accelerant
+[net/ipro1000/0] compat_open(0x2)
+app_server: Finding best mode for 1024x768 (8, 60 Hz, strict) failed
+app_server: Finding best mode for 800x600 (8, 60 Hz) failed
+app_server: Use 2832x2119 (8) instead.
+/dev/net/ipro1000/0: link down, media 0x20 quality 1000 speed 0
+[ipro1000] (em) Link is up 1000 Mbps Full Duplex
+/dev/net/ipro1000/0: link up, media 0x900030 quality 1000 speed 1000000000
+register_domain(4, link)
+slab memory manager: created area 0xffffffff8b801000 (7546)
+loaded driver /boot/system/add-ons/kernel/drivers/dev/input/wacom
+loaded driver /boot/system/add-ons/kernel/drivers/dev/input/usb_hid
+ps2_hid: init_hardware
+ps2_hid: init_driver
+ps2_hid: publish_devices
+ps2_hid: uninit_driver
+loaded driver /boot/system/add-ons/kernel/drivers/dev/input/ps2_hid
+AddOnManager::_RegisterAddOn(): InitCheck() in "/boot/system/add-ons/input_server/devices/virtio" returned No such file or directory
+loaded driver /boot/system/add-ons/kernel/drivers/dev/bus/usb_raw
+sis7018:init_hardware:ver:2.0.2
+loaded driver /boot/system/add-ons/kernel/drivers/dev/audio/hmulti/usb_audio
+emuxki: init_hardware()
+echo3g: init_hardware()
+echo3g: no card found
+auvia: init_hardware()
+auich: init_hardware()
+ALPS not supported: 10 00 64
+ps2: probe_mouse Extended PS/2 mouse found
+ps2: devfs_publish_device input/mouse/ps2/intelli_0, status = 0x00000000
+ps2: devfs_publish_device input/keyboard/at/0, status = 0x00000000
+ps2: keyboard found
+K40-B5-BEGIN
+driver ".k40_identity_probe.partial" added
+k40_stage: B5_IDENTITY_READ_ONLY
+k40_os: host allocation bytes 4096, guest physical 0x1f5fa000; IOVA unverified
+k40_os: no K40c; B5 identity unavailable
+k40_os: FAIL status -2147459069
+nvmm: init_driver OK
+loaded driver /boot/system/add-ons/kernel/drivers/dev/misc/nvmm
+loaded driver /boot/system/add-ons/kernel/drivers/dev/misc/mem
+loaded driver /boot/system/add-ons/kernel/drivers/dev/misc/poke
+K40-B5-END
+driver ".k40_a7_stage.partial" added
+k40_stage: A7_ARM_ONLY_POST_WRITE
+k40_a7: REFUSED no matching PCI card before reservation
+k40_a7: FAIL prepare a=0x3 b=0x0
+k40_a7: FAIL client prepare

@@ -25,8 +25,8 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | Line | Code | Source | Status |
 |------|------|--------|--------|
 | `src/a7/NativePlatform.cpp:33` | `if(info.vendor_id==0x10de && info.device_id==0x1024){card_=info;++matches;}` | no source: software PCI identity comparison; KNOWN capture hardware/record.json:4. | SOURCE_ONLY |
-| `src/a7/NativePlatform.cpp:35` | `if(!terminated \|\| matches!=1 \|\| (card_.header_type&0x7f)!=0)return false;` | no source: software type-0-only guard; Haiku PCI.h lines 727,733 define the mask and type. | SOURCE_ONLY |
-| `src/a7/NativePlatform.cpp:47` | `if(!physical \|\| physical%B_PAGE_SIZE \|\| bytes_<0x800000 \|\| bytes_>0x1000000` | no source: software mapping ceiling, not a hardware aperture assertion. | SOURCE_ONLY |
+| `src/a7/NativePlatform.cpp:36` | `if(!terminated \|\| matches!=1 \|\| (card_.header_type&0x7f)!=0)return false;` | no source: software type-0-only guard; Haiku PCI.h lines 727,733 define the mask and type. | SOURCE_ONLY |
+| `src/a7/NativePlatform.cpp:48` | `if(!physical \|\| physical%B_PAGE_SIZE \|\| bytes_<0x800000 \|\| bytes_>0x1000000` | no source: software mapping ceiling, not a hardware aperture assertion. | SOURCE_ONLY |
 
 ## src/a7/Owner.cpp
 
@@ -424,8 +424,8 @@ The following constant lines have no source citation:
 - src/a7/ArmAuthority.cpp:16 (no source: continuation of the RFC 8032 subgroup order, not a hardware constant.)
 - src/a7/ArmAuthority.h:9 (no source: software request/grant frame sizes, not hardware packets.)
 - src/a7/NativePlatform.cpp:33 (no source: software PCI identity comparison; KNOWN capture hardware/record.json:4.)
-- src/a7/NativePlatform.cpp:35 (no source: software type-0-only guard; Haiku PCI.h lines 727,733 define the mask and type.)
-- src/a7/NativePlatform.cpp:47 (no source: software mapping ceiling, not a hardware aperture assertion.)
+- src/a7/NativePlatform.cpp:36 (no source: software type-0-only guard; Haiku PCI.h lines 727,733 define the mask and type.)
+- src/a7/NativePlatform.cpp:48 (no source: software mapping ceiling, not a hardware aperture assertion.)
 - src/a7/Owner.cpp:23 (no source: software identity comparison; KNOWN capture hardware/record.json:37.)
 - src/a7/Owner.cpp:68 (no source: ambiguous citation)
 - src/a7/Owner.cpp:69 (no source: ambiguous citation)

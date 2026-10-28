@@ -1,0 +1,4 @@
+python3 tools/check_repo.py
+FAIL: tools/provenance.py --check (run 1): docs/register-provenance.md is not what the tool generates
+check_repo: 1 failure(s)
+make: *** [Makefile:20: check] Error 1

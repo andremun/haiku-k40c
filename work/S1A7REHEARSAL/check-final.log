@@ -1,0 +1,141 @@
+python3 tools/check_repo.py
+check_repo: 0 failure(s)
+python3 tools/restore_verification_refs.py --check
+nouveau: clean adc218676eef25575469234709c2d87185ca223a
+envytools: clean f102b82381f3f11cee113d16374c87091db039d9
+haiku: clean 49a0af9585d80e42240af63ab66e31e9873f59b8
+open-gpu-doc: clean 9fdf5c4062007929d9f4e6cbad9c9771fe61b880
+mesa: clean f97d7dcca0e51d7e20ed4342bb5ea8afea7db7fa
+envytools (full, decoder): clean f102b82381f3f11cee113d16374c87091db039d9 /home/unimelb.edu.au/mariom1/haiku-cross/src/envytools
+python3 tools/devinit_trace_join.py --check
+python3 tools/load_trace.py --check
+python3 tools/dma_contract.py --check
+python3 tools/observer/pins.py --check
+A7 native boundary: 4129 checks pass (host mocks only)
+A7 actual client: 24 checks pass (host mocks only)
+D0 memory probe host lifecycle: 16 checks, 0 failures; no device evidence
+bootstrap operations: 78 checks, 0 failures (HOST_SIMULATION_ONLY)
+arm-only startup: 166 checks pass; no payload publication
+devinit interpreter: 33 checks, 0 failures (HOST_SIMULATION_ONLY)
+s1a_accept: 8 checks, 0 failed
+board helpers: 577 checks, 0 failures (HOST_ONLY)
+dedicated host I2C: 908 checks, 0 failures (SOURCE_ONLY)
+immutable POST parser: 37 checks, 0 failures (HOST_ONLY)
+memory ownership/publication: 44 checks, 0 failures (HOST_ONLY)
+S1 boundary regressions: 0 failures
+S1 controller: 58 checks, 0 failures (HOST_ONLY)
+test_registerio: 49 checks, 0 failures
+d1_accept: 57 checks, 0 failures
+test_pagetable: 31 checks, 0 failures
+d2_accept: 74 checks, 0 failures
+test_pushbuffer: 98 checks, 0 failures
+d3_accept: 74 checks, 0 failures
+test_launchdesc: 56 checks, 0 failures
+d5_accept: 101 checks, 0 failures
+ref_qmd: 10 checks, 0 failures
+r1_accept: 33 checks, 0 failures
+Haiku backend host fault injection: 78 checks, 0 failures; NOT native ABI evidence
+Identity probe host spies: 32 checks, 0 failures; NOT hardware evidence
+Haiku memory adapter: 146 checks, 0 failures (HOST_ONLY)
+native owner host contracts: 177 checks, 0 failures; NOT native load evidence
+owner probe host lifecycle: 13 checks, 0 failures; NOT native reload evidence
+test_compare_traces: 17 checks, 0 failures
+d4_accept: 38 checks, 0 failures
+r1_accept.py: 11 checks, 0 failures
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.039s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.010s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.010s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 4.226s
+
+OK
+...
+----------------------------------------------------------------------
+Ran 3 tests in 1.191s
+
+OK
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.008s
+
+OK
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.009s
+
+OK
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.002s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.047s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.569s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.614s
+
+OK
+A7 checks pass; no guest started; no run approval supplied by this check
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+OK
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.207s
+
+OK
+test_vm_tools.py: 32 checks, 0 failures
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.006s
+
+OK
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.826s
+
+OK
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.114s
+
+OK
+devinit inventory parser: all checks passed
+load trace: shifted-BAR/phase/anchor tests pass
+raw ROM preflight: roots, conditional calls, unknown opcode and bounds checks pass
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.014s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.006s
+
+OK
+offline ROM interpreter: 128 artificial scenarios, 0 failures; board helpers simulated, NO hardware evidence
+devinit timestamp join: interval/BAR/ambiguity tests pass

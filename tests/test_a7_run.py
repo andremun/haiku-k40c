@@ -125,7 +125,16 @@ class A7Tests(unittest.TestCase):
             for name in ("identity", "owner", "client"):
                 (folder / name).write_bytes(name.encode())
             kernel = b"synthetic kernel"
-            suite = {"kernel_sha256": hashlib.sha256(kernel).hexdigest()}
+            suite = {
+                "kernel_sha256": hashlib.sha256(kernel).hexdigest(),
+                "guest_artifacts": {
+                    name: dict(
+                        bytes=len(name),
+                        sha256=hashlib.sha256(name.encode()).hexdigest(),
+                    )
+                    for name in ("identity", "owner", "client")
+                },
+            }
             with run.exchange(folder, evidence, suite) as (port, ready):
 
                 def request(name, data=None):

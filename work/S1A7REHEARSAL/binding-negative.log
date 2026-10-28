@@ -1,0 +1,4 @@
+PASS: build validation refuses a different rendered guest job
+PASS: build validation refuses a changed owner binary hash
+PASS: build validation refuses missing rehearsal evidence
+PASS: unchanged package and rehearsal remain valid

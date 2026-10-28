@@ -1,0 +1,34 @@
+{
+  "binding": {
+    "guest_artifacts": {
+      "client": {
+        "bytes": 7552,
+        "sha256": "b99101a130a7b8a391b7f7e6e3ece6ce560e98ba897023dca56ab6cf726af44c"
+      },
+      "identity": {
+        "bytes": 8696,
+        "sha256": "8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f"
+      },
+      "owner": {
+        "bytes": 360624,
+        "sha256": "694ca685f555405158a58b0ac47d758420921f190be19726761c5fd5739f8baf"
+      }
+    },
+    "job_sha256": "5c17a22616237d60a4c1500abbe795c939463f5a8d91ef5b0640062a55ba631a",
+    "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62"
+  },
+  "capture_sha256": {
+    "environment.txt": "6fceaa9d8ef1adb95f3361a95a75113317ec281f58ec8d7214e87b19ff29bb41",
+    "http.log": "f1b190ef013fbdafa8a443aad9cb61e8156b77e4029efc9dded183de14bb2f40",
+    "job-output.txt": "dd862ec0de5ae41cb5fbc2ad91ea1af393374fe2c9278255756cefc5449eb58d",
+    "job.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "job.sh": "6059c4302938458e5569b69e3488bdf2c0b0ccc7a43af35c2da51d007ca6810d",
+    "kernel.sha256": "9da8819b72502746d3f1db5eb718c2febc3685799a4a9248d82b362282bb1f7c",
+    "launch.json": "1bffe36f24ca60d8a0e9251bbb4df9c33caa9e5ef9f28cc8457ba644b1e4debf",
+    "qemu.log": "5bb1f50e250bad119e955a698b77649e41ca82477a85c7bb4c06ed28e163316e",
+    "result.json": "216c07ad8cb640db36bff19a71e272e5f3d53ab2a3c7ceddd5cd9a9db8346eb9",
+    "serial.log": "9f7606eb5aaa47020f21a110cf075feedfcfbd5d58f840da5a4752028feaa5a8"
+  },
+  "folder": "results/20261028-134127-a7-rehearsal",
+  "status": "PASS_CARDLESS_NO_CARD"
+}

@@ -191,3 +191,31 @@ S1OWNERTEST's first prepared run passed in 52.57 seconds. Evidence is in
 `results/20261027-owner-reload/`. Both client uninit calls and the reload are
 recorded; lease 2 retains token 2, Failed state and one quarantine record.
 This validates the tested native owner lifetime, not DMA or GPU readiness.
+
+## Exact A7 installation rehearsal without a card
+
+After building the candidate A7 package, run:
+
+```sh
+export K40_VBIOS="$HOME/haiku-cross/vbios/k40c-0000_04_00_0-vbios-80.80.65.00.01.rom"
+python3 tools/a7/rehearse.py
+python3 tools/a7/rehearse.py --check
+python3 tools/a7/build.py --check
+```
+
+The rehearsal runs the production guest job generator and its exact owner,
+client and identity binaries in a disposable cardless KVM guest. It supplies
+no VFIO device, grant key, grant or card permit. It preserves serial, HTTP,
+shell, kernel-hash and command evidence under results/*-a7-rehearsal/.
+
+A pass requires three checked installations with unchanged rename inodes,
+device-node publication and the specific native no-card refusal before PCI
+reservation. Preparation occurs inside the open callback, so shell open must
+fail after entering that callback. A missing node or generic open error fails.
+The no-card identity-probe failure is expected. No POST or readiness runs.
+
+Build and physical-launcher checks require the saved matching rehearsal binding.
+Changed job bytes or binaries require another cardless rehearsal. Failed
+cardless rehearsals may be retried under the user's ESC-003 resolution.
+Physical A7 still requires Claude review and a separate explicit per-run yes.
+See docs/A7-REVIEW-PACKAGE.md and work/S1A7REHEARSAL/REVIEW-RESOLUTION.md.

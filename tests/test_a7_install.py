@@ -14,96 +14,51 @@ from tools.a7 import guest_job
 
 
 class InstallationTests(unittest.TestCase):
-    def test_complete_executable_published_once(self):
-        with tempfile.TemporaryDirectory() as d:
-            root = Path(d)
-            stage = root / "private"
-            stage.mkdir()
-            target = root / "live"
-            env = dict(
-                os.environ, stage=str(stage), target=str(target), host="http://inert"
-            )
-            script = (
-                """set -eu
-curl() {
-    printf partial > "$3"
-    test ! -e "$target"
-    printf complete >> "$3"
-}
-"""
-                + guest_job.INSTALL
-                + '\ninstall_artifact identity "$target"\n'
-            )
-            subprocess.run(["sh", "-c", script], env=env, check=True)
-            self.assertEqual(target.read_bytes(), b"partialcomplete")
-            self.assertEqual(
-                target.stat().st_ino, (stage / "identity" / "addon").stat().st_ino
-            )
-            self.assertTrue(target.stat().st_mode & 0o111)
+    def test_checked_rename_and_failures(self):
+        import hashlib
 
-    def test_no_publication_on_download_chmod_or_link_failure(self):
-        for failure in ("download", "chmod", "link", "existing"):
+        payload = b"complete binary"
+        digest = hashlib.sha256(payload).hexdigest()
+        for failure in (
+            None,
+            "download",
+            "size",
+            "hash",
+            "chmod",
+            "rename",
+            "copy",
+            "existing",
+        ):
             with self.subTest(failure=failure), tempfile.TemporaryDirectory() as d:
                 root = Path(d)
-                stage = root / "private"
-                stage.mkdir()
                 target = root / "live"
                 if failure == "existing":
-                    target.write_bytes(b"preserve me")
-                env = dict(
-                    os.environ,
-                    stage=str(stage),
-                    target=str(target),
-                    host="http://inert",
-                    failure=failure,
+                    target.write_bytes(b"preserve")
+                script = (
+                    'set -eu\nhost=http://inert\ncurl() { printf "complete binary" > "$3"; '
+                    + ("return 1;" if failure == "download" else "")
+                    + " }\n"
                 )
-                script = """set -eu
-curl() { printf partial > "$3"; test "$failure" != download; }
-"""
                 if failure == "chmod":
                     script += "chmod() { return 1; }\n"
-                if failure == "link":
-                    script += "ln() { return 1; }\n"
+                if failure == "rename":
+                    script += "mv() { return 1; }\n"
+                if failure == "copy":
+                    script += 'mv() { cp "$1" "$2"; rm "$1"; }\n'
+                script += guest_job.INSTALL
+                script += f'\ninstall_artifact identity "{target}" {1 if failure == "size" else len(payload)} {"0"*64 if failure == "hash" else digest}\n'
                 result = subprocess.run(
-                    [
-                        "sh",
-                        "-c",
-                        script
-                        + guest_job.INSTALL
-                        + '\ninstall_artifact identity "$target"\n',
-                    ],
-                    env=env,
-                    capture_output=True,
+                    ["sh", "-c", script], capture_output=True, text=True
                 )
-                self.assertNotEqual(result.returncode, 0)
-                if failure == "existing":
-                    self.assertEqual(target.read_bytes(), b"preserve me")
-                else:
+                self.assertEqual(result.returncode == 0, failure is None, result.stderr)
+                if failure is None:
+                    self.assertEqual(target.read_bytes(), payload)
+                    self.assertTrue(target.stat().st_mode & 0o111)
+                    self.assertIn("inode-before=", result.stdout)
+                elif failure == "existing":
+                    self.assertEqual(target.read_bytes(), b"preserve")
+                elif failure != "copy":
                     self.assertFalse(target.exists())
-
-    def test_second_install_cannot_truncate_a_published_inode(self):
-        with tempfile.TemporaryDirectory() as d:
-            root = Path(d)
-            stage = root / "private"
-            stage.mkdir()
-            target = root / "live"
-            calls = root / "calls"
-            env = dict(
-                os.environ,
-                stage=str(stage),
-                target=str(target),
-                calls=str(calls),
-                host="http://inert",
-            )
-            script = (
-                'set -eu\ncurl() { echo download >> "$calls"; printf complete > "$3"; }\n'
-                + guest_job.INSTALL
-                + '\ninstall_artifact identity "$target"\ninstall_artifact identity "$target"\n'
-            )
-            result = subprocess.run(["sh", "-c", script], env=env, capture_output=True)
-            self.assertNotEqual(result.returncode, 0)
-            self.assertEqual(calls.read_text().splitlines(), ["download"])
-            self.assertEqual(target.read_bytes(), b"complete")
 
     def test_publication_wait_is_bounded_and_does_not_open(self):
         for present in (False, True):
@@ -137,19 +92,61 @@ sleep() { echo delay >> "$calls"; }
                     result.stdout + result.stderr,
                 )
 
+    def test_rehearsal_requires_specific_refusal_and_matching_binding(self):
+        from tools.a7 import rehearse
+        import copy
+
+        artifacts = {
+            role: dict(bytes=1, sha256="a" * 64)
+            for role in ("identity", "owner", "client")
+        }
+        suite = dict(guest_artifacts=artifacts, kernel_sha256="b" * 64)
+        original = rehearse.binding(suite)
+        for role in artifacts:
+            altered = copy.deepcopy(suite)
+            altered["guest_artifacts"][role]["sha256"] = "c" * 64
+            self.assertNotEqual(original, rehearse.binding(altered))
+        with tempfile.TemporaryDirectory() as d:
+            folder = Path(d)
+            output = "".join(
+                f"A7-INSTALL {role} size=1 sha256={'a'*64} inode-before=7 inode-after=7\n"
+                for role in artifacts
+            )
+            output += "A7-DEVICE-PUBLISHED\nA7-OPEN-DEVICE\n"
+            (folder / "job-output.txt").write_text(output)
+            (folder / "job.exit").write_text("1\n")
+            (folder / "kernel.sha256").write_text("b" * 64 + "\n")
+            good = "k40_a7: REFUSED no matching PCI card before reservation\nk40_a7: FAIL client prepare\n"
+            (folder / "serial.log").write_text(good)
+            rehearse.capture_verdict(folder, suite)
+            for bad in ("", "k40_a7: FAIL client prepare\n", good + "k40_a7: PREPARED"):
+                (folder / "serial.log").write_text(bad)
+                with self.assertRaises(ValueError):
+                    rehearse.capture_verdict(folder, suite)
+
     def test_job_syntax_and_one_open_after_wait(self):
-        script = guest_job.job(12345)
+        script = guest_job.job(
+            12345,
+            {
+                role: dict(bytes=1, sha256="0" * 64)
+                for role in ("identity", "owner", "client")
+            },
+        )
         subprocess.run(["sh", "-n"], input=script, text=True, check=True)
         self.assertEqual(script.count("exec 3<>/dev/misc/k40_a7_stage"), 1)
         self.assertLess(script.index("\nwait_a7_node\n"), script.index("exec 3<>"))
         self.assertLess(
             script.index("echo K40-B5-BEGIN"), script.index("install_artifact identity")
         )
-        self.assertLess(
-            script.index('mkdir -p "$base"'), script.index('mkdir "$stage"')
-        )
-        self.assertNotIn("mv ", guest_job.INSTALL)
+        self.assertIn("base=/boot/system/non-packaged/add-ons/kernel", script)
+        self.assertNotIn("stage=", script)
+        self.assertNotIn("ln ", guest_job.INSTALL)
         self.assertNotIn("cp ", guest_job.INSTALL)
+        self.assertIn('test "$before" = "$after"', guest_job.INSTALL)
+        self.assertLess(
+            script.index("install_artifact owner"),
+            script.index("install_artifact client"),
+        )
 
 
 if __name__ == "__main__":

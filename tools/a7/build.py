@@ -29,9 +29,9 @@ import post_policy
 import probe_stage
 from board_trace import read_policy, ADR
 
-PACKAGE = ROOT / "build/a7/package-publication"
-PUBLIC = ROOT / "work/S1A7INSTALL/package.json"
-INVENTORY = ROOT / "work/S1A7INSTALL/write-inventory.json"
+PACKAGE = ROOT / "build/a7/package-rehearsed"
+PUBLIC = ROOT / "work/S1A7REHEARSAL/package.json"
+INVENTORY = ROOT / "work/S1A7REHEARSAL/write-inventory.json"
 ROM = Path(
     os.environ.get(
         "K40_VBIOS",
@@ -274,6 +274,7 @@ def source_names():
             *CLIENT,
             "tools/a7/build.py",
             "tools/a7/guest_job.py",
+            "tools/a7/rehearse.py",
             "tools/a7/install_sources.py",
             "tools/a7/run.py",
             "tools/a7/crypto_sources.py",
@@ -355,6 +356,12 @@ def manifest():
         public_key_hex=public.hex(),
         package_nonce_hex=nonce.hex(),
         kernel_sha256=identity["kernel_sha256"],
+        guest_artifacts={
+            name: dict(
+                bytes=ARTIFACTS[name].stat().st_size, sha256=sha(ARTIFACTS[name])
+            )
+            for name in ("identity", "owner", "client")
+        },
         artifacts={
             name: dict(path=str(path.resolve()), sha256=sha(path))
             for name, path in sorted(ARTIFACTS.items())
@@ -369,7 +376,7 @@ def manifest():
         ),
         config_sha256=sha(PACKAGE / "a7_config.h"),
         verifier=crypto,
-        host_check_sha256=sha(ROOT / "work/S1A7INSTALL/host-check.json"),
+        host_check_sha256=sha(ROOT / "work/S1A7REHEARSAL/host-check.json"),
         teardown_sources_sha256=sha(ROOT / "work/S1A7NATIVE/teardown-sources.json"),
         installation_sources_sha256=sha(install_sources.OUTPUT),
         inventory_sha256=hashlib.sha256(dump(inventory(data)).encode()).hexdigest(),
@@ -379,13 +386,18 @@ def manifest():
     )
 
 
-def validate():
+def validate(require_rehearsal=True):
     expected = dump(manifest())
     if not PUBLIC.is_file() or PUBLIC.read_text() != expected:
         raise ValueError("A7 suite differs; rebuild/review before approval")
     if INVENTORY.read_text() != dump(inventory(inputs()[0])):
         raise ValueError("A7 write inventory differs")
-    return json.loads(expected)
+    suite = json.loads(expected)
+    if require_rehearsal:
+        from tools.a7.rehearse import validate_evidence
+
+        validate_evidence(suite)
+    return suite
 
 
 def build():

@@ -1,0 +1,63 @@
+{
+  "args": [
+    "/usr/bin/qemu-system-x86_64",
+    "-name",
+    "k40-a7-cardless-rehearsal",
+    "-machine",
+    "q35",
+    "-accel",
+    "kvm",
+    "-cpu",
+    "host",
+    "-smp",
+    "2",
+    "-m",
+    "4096",
+    "-drive",
+    "if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd",
+    "-drive",
+    "if=pflash,format=raw,file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/a7/rehearsal-20261028-134127/vars.fd",
+    "-drive",
+    "file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/a7/rehearsal-20261028-134127/overlay.qcow2,format=qcow2,if=none,id=system",
+    "-device",
+    "ide-hd,drive=system,bus=ide.0,bootindex=1",
+    "-device",
+    "qemu-xhci",
+    "-device",
+    "usb-tablet",
+    "-vga",
+    "std",
+    "-netdev",
+    "user,id=n0",
+    "-device",
+    "e1000,netdev=n0",
+    "-display",
+    "none",
+    "-serial",
+    "file:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/results/20261028-134127-a7-rehearsal/serial.log",
+    "-monitor",
+    "unix:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/a7/rehearsal-20261028-134127/monitor.sock,server,nowait"
+  ],
+  "binding": {
+    "guest_artifacts": {
+      "client": {
+        "bytes": 7552,
+        "sha256": "b99101a130a7b8a391b7f7e6e3ece6ce560e98ba897023dca56ab6cf726af44c"
+      },
+      "identity": {
+        "bytes": 8696,
+        "sha256": "8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f"
+      },
+      "owner": {
+        "bytes": 360624,
+        "sha256": "694ca685f555405158a58b0ac47d758420921f190be19726761c5fd5739f8baf"
+      }
+    },
+    "job_sha256": "5c17a22616237d60a4c1500abbe795c939463f5a8d91ef5b0640062a55ba631a",
+    "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62"
+  },
+  "port": 43599,
+  "scope": "CARDLESS_KVM",
+  "source_commit": "f110ef32316c7fd3f47f9bd78249345312718d02",
+  "timeout_seconds": 600
+}

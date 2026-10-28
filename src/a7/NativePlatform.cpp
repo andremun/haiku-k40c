@@ -32,6 +32,7 @@ bool NativePlatform::initialize()
         if(pci_->get_nth_pci_info(index,&info)!=B_OK){terminated=true;break;}
         if(info.vendor_id==0x10de && info.device_id==0x1024){card_=info;++matches;} // no source: software PCI identity comparison; KNOWN capture hardware/record.json:4.
     }
+    if(terminated && matches==0) {dprintf("k40_a7: REFUSED no matching PCI card before reservation\n");return false;}
     if(!terminated || matches!=1 || (card_.header_type&0x7f)!=0)return false; // no source: software type-0-only guard; Haiku PCI.h lines 727,733 define the mask and type.
     // PCI.h:159-164 supplies a cooperative exclusive reservation. Keep it for
     // the module lifetime. Never take a device reserved by another guest driver.
