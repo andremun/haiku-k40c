@@ -45,14 +45,34 @@ SELECTED = re.compile(FILTER_PATTERN, re.I)
 COMMAND = Path("/sys/bus/pci/devices") / card_run.ALLOWED_BDF / "config"
 
 
+# The first VFIO open after a host boot enables the device from command 0
+# (results/20261029-a7-ba6a1a54/kernel-after.log:149). User decision 2026-10-29:
+# allow exactly this line, once, between QEMU start and the first guest output.
+ENABLE = re.compile(
+    r"^\[\s*[0-9]+\.[0-9]+\] \S+ kernel: vfio-pci "
+    + re.escape(card_run.ALLOWED_BDF)
+    + r": enabling device \([0-9a-f]{4} -> [0-9a-f]{4}\)$"
+)
+
+
 class StrictLog(KernelLog):
+    def open_start_window(self):
+        """Allow one device-enable line until close_start_window()."""
+        self.start_window = True
+
+    def close_start_window(self):
+        self.start_window = False
+
     def poll(self):
         previous = self.last
         data = super().poll()
-        if any(
-            SELECTED.search(line)
-            for line in data[len(previous) :].decode(errors="replace").splitlines()
-        ):
+        for line in data[len(previous) :].decode(errors="replace").splitlines():
+            if not SELECTED.search(line):
+                continue
+            allowed = getattr(self, "allowed", [])
+            if getattr(self, "start_window", False) and not allowed and ENABLE.match(line):
+                self.allowed = [line]
+                continue
             raise RuntimeError("new R5 selected-class line; stop without retry")
         return data
 
@@ -321,6 +341,8 @@ def monitor(child, folder, evidence, port, ready, host, kernel, suite):
             if (evidence / "serial.log").exists()
             else ""
         )
+        if serial:
+            kernel.close_start_window()
         # Panic and B5 failure are checked before the handshake is complete too.
         card_run.verdict(serial, None)
         if re.search(r"^k40_a7: FAIL\b", serial, re.M):
@@ -485,6 +507,7 @@ def run():
                 ):
                     raise ValueError("launch inputs changed")
                 kernel.poll()
+                kernel.open_start_window()
                 save_json(
                     build.PACKAGE / "consumed.json",
                     dict(
@@ -552,7 +575,8 @@ def run():
                     dma_publication=False,
                     payload_visibility=False,
                     S1_complete=False,
-                    kernel_scope="R5 selected classes only; any new selected-class line stops stage",
+                    kernel_scope="R5 selected classes only; any new selected-class line stops stage, except one device-enable line at QEMU start",
+                    allowed_kernel_lines=getattr(kernel, "allowed", []),
                 ),
             )
             print(evidence, flush=True)

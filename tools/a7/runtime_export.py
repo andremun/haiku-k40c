@@ -20,7 +20,7 @@ sys.path.insert(0, str(ROOT))
 from tools.haiku import cardless_run
 from tools.a7 import build
 
-OUTPUT = ROOT / "work/S1A7REHEARSAL2/runtime.json"
+OUTPUT = ROOT / "work/S1A7RUN5/runtime.json"
 LIBRARY = Path.home() / "haiku-cross/lib/libroot.so"
 
 

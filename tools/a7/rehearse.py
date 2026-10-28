@@ -27,7 +27,7 @@ from tools.a7.run import exchange
 from tools.haiku import card_run, cardless_run
 from tools.haiku.vm_guard import guest_lock, deadline
 
-BINDING = ROOT / "work/S1A7REHEARSAL2/rehearsal.json"
+BINDING = ROOT / "work/S1A7RUN5/rehearsal.json"
 
 
 RELOAD = "echo K40-A7-RELOAD-BEGIN > /dev/dprintf; touch /boot/system/non-packaged/add-ons/kernel/drivers/bin/k40_identity_probe /boot/system/non-packaged/add-ons/kernel/drivers/bin/k40_a7_stage; for pass in 1 2 3 4; do ls /dev/misc >/dev/null; sleep 1; done; echo K40-A7-RELOAD-END > /dev/dprintf"

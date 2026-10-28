@@ -1,21 +1,22 @@
-# A7 package after the second cardless rehearsal (2026-10-28)
+# A7 package S1A7RUN5 (2026-10-29)
 
-**Current status:** S1A7REHEARSAL2 is complete. The exact guest job and
-candidate binaries passed the cardless KVM rehearsal of
-`results/20261028-142613-a7-rehearsal/` in 79.31 seconds. The rehearsal of
-88678c4 (`results/20261028-134127-a7-rehearsal/`) is kept as a record only: Haiku
-loaded the `.partial` files there (serial lines 852 and 862), so it is not a gate.
-ESC-003 is RESOLVED. No fourth physical launch has occurred. It needs the user's
-explicit yes for one run of this package. S1 remains incomplete. D1 is unapproved.
+**Current status:** new single-use package `build/a7/package-run5/`, records in
+`work/S1A7RUN5/`. It adds the ADR 009 allowance: one
+`vfio-pci 0000:04:00.0: enabling device (...)` line between QEMU start and the
+first guest serial output does not stop the run. The approved fourth run
+(`results/20261029-a7-ba6a1a54/`) stopped on exactly that line after the host
+reboot, before the guest started. The exact package passed the cardless
+rehearsal `results/20261029-100317-a7-rehearsal/` in 79.64 s. No card run of
+this package has occurred. It needs the user's explicit yes for one run.
+S1 remains incomplete. D1 is unapproved.
 
-The review scope since the last reviewed package (commit 8974695) is
-`git diff 8974695..HEAD`. It includes 24fb578 and 0390b8b (FIFO and I2C preinit
-guards, reviewed by Claude Code on 2026-10-28) and S1A7REHEARSAL2. Earlier consumed
-markers and all three raw card captures remain unchanged. Hard links are gone.
+Earlier records: `work/S1A7RUN5/` and its rehearsal
+`results/20261028-142613-a7-rehearsal/` (consumed package `package-rehearsal2`).
+The review scope since commit 8974695 is `git diff 8974695..HEAD`.
 
 ## Exact inputs and commands
 
-`work/S1A7REHEARSAL2/package.json` is the generated artifact/source manifest.
+`work/S1A7RUN5/package.json` is the generated artifact/source manifest.
 `write-inventory.json` in that folder lists all 544 possible script-write
 locations from the exact ROM's structural preflight and independent access
 policy decoder. Each row gives the script PC, opcode, register, width and
@@ -26,7 +27,7 @@ separately in the same file. Private firmware and signing material stay in build
 
 | Artifact | SHA-256 |
 |---|---|
-| `k40_a7_owner_module` | `fc19c9ac698470aafa44826d50373e6133ec67538bdabdba9e80dd5ac129bca6` |
+| `k40_a7_owner_module` | `e031b8a3a3a5b8d1502c0554764c358e8f91df5b9f2316fceb479aafa2354751` |
 | `k40_a7_stage` | `d11b0d3773e8f1a206a98b79b85a1c6e7c73948dbe096001d472ef0ee66ee122` |
 | Open helper (`tools/a7/open_session.c`) | `58bec7c51730bf95f541c61c8ed9b8379b97f1c2b335702de0f9542698914977` |
 | Identity probe | `8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f` |
@@ -53,7 +54,7 @@ python3 tools/a7/run.py --run-approved-A7-once
 ```
 
 The execution option is an operator approval assertion; it does not obtain or
-replace human approval. The default and `--check` never start a guest. The new package directory is `build/a7/package-rehearsal2/`. The host
+replace human approval. The default and `--check` never start a guest. The new package directory is `build/a7/package-run5/`. The host
 signing key is a fresh per-package Ed25519 key, mode 0600. The launcher atomically
 creates a consumed marker before starting QEMU. Even a failed launch consumes
 the package. A retry requires reporting the stop, a new reviewed package and
@@ -152,7 +153,9 @@ The existing R5 command must be running when `--host-check` and the run begin:
 
 This is a user step from R5 in `docs/REQUESTS.md`; the agent must not run it.
 For A7, **any new selected-class line** stops the stage, including informational
-VFIO/DMAR and corrected AER messages. A stopped/replaced/truncated reader or
+VFIO/DMAR and corrected AER messages. The only exception (ADR 009) is one
+`vfio-pci 0000:04:00.0: enabling device (...)` line between QEMU start and the
+first guest serial output, recorded in `result.json`. A stopped/replaced/truncated reader or
 filter, panic, stage failure, bad kernel/identity, changed mapping, unknown
 observer record, partial cutoff, missing evidence or oversized log also stops.
 The native startup budget is 15 s; the host run budget is 570 s inside an
@@ -178,17 +181,17 @@ unmapped address should fault, but no negative DMA experiment is authorized.
 
 ## Validation and review focus
 
-`work/S1A7REHEARSAL2/host-check.json` records 32 ROM/strap scenarios (16 complete), 192 altered-frame
+`work/S1A7RUN5/host-check.json` records 32 ROM/strap scenarios (16 complete), 192 altered-frame
 rejections, seven correctly signed wrong-scope rejections, a noncanonical
 signature rejection and I2C/clock failures. The actual owner/controller execute
 against simulated registers; this is not card evidence. Actual NativePlatform
 and client source tests cover reservation and duplicate-device failure, no permit
 writes, DMA32 alignment/zeroing, partial allocation retention, partial stream
 input, copy errors and reload refusal. They pass with host OS mocks
-(counts in `work/S1A7REHEARSAL2/check-final.log`). Native compilation separately uses real Haiku headers and the matching
-kernel exports. `work/S1A7REHEARSAL2/native-build.log` records successful links.
+(counts in `work/S1A7RUN5/check-final.log`). Native compilation separately uses real Haiku headers and the matching
+kernel exports. `work/S1A7RUN5/native-build.log` records successful links.
 
-The complete `make check` passes. Its log is in `work/S1A7REHEARSAL2/check-final.log`.
+The complete `make check` passes. Its log is in `work/S1A7RUN5/check-final.log`.
 Review the explicit physical permit, request/grant signer, permanent retention,
 write allowlist, scratch reservation and teardown boundary before approving the
 fourth physical run. Native owner loading and the no-card refusal now have
@@ -251,14 +254,14 @@ in `prepare`, called by the one open. The job opens the device once, through the
 native helper `tools/a7/open_session.c`. The helper prints the raw Haiku status of
 `_kern_open` (bash misreports negative Haiku status values) and keeps the
 descriptor as fd 3 for the rest of the job. The helper's libroot link input was
-exported from the guest (`tools/a7/runtime_export.py`, `work/S1A7REHEARSAL2/runtime.json`).
+exported from the guest (`tools/a7/runtime_export.py`, `work/S1A7RUN5/runtime.json`).
 
 Expected cardless behaviour, from `docs/tasks/S1A7REHEARSAL2.md`: client init
 publishes `misc/k40_a7_stage` without starting hardware. The one open calls
 `prepare`. The PCI search finds no card before any reservation or BAR mapping.
 The owner enters the Failed state (3) and the open returns `B_ERROR`.
 
-KNOWN / cardless OS evidence, `results/20261028-142613-a7-rehearsal/`:
+KNOWN / cardless OS evidence, `results/20261028-142613-a7-rehearsal/` (repeated for this package in `results/20261029-100317-a7-rehearsal/`):
 - `job-output.txt`: four checked installs (identity, owner, client, helper), each
   with equal inodes, then `A7-DEVICE-PUBLISHED`, `A7-OPEN-DEVICE` and
   `A7-OPEN-RESULT status=0xffffffff` (`B_ERROR`).
@@ -275,7 +278,7 @@ This proves native installation, final-name loading, one-open entry and the
 one-shot owner state. It does not prove physical bring-up. No request, grant,
 arming, POST or readiness ran.
 
-`work/S1A7REHEARSAL2/rehearsal.json` binds the job (SHA-256 `9ba5fc89...`), the
+`work/S1A7RUN5/rehearsal.json` binds the job (SHA-256 `9ba5fc89...`), the
 four binary sizes and hashes, the guest kernel and the capture hashes.
 `build.py --check` and every physical launcher prerequisite require this
 matching passing record. A changed job or binary needs another rehearsal.

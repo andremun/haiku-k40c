@@ -29,9 +29,9 @@ import post_policy
 import probe_stage
 from board_trace import read_policy, ADR
 
-PACKAGE = ROOT / "build/a7/package-rehearsal2"
-PUBLIC = ROOT / "work/S1A7REHEARSAL2/package.json"
-INVENTORY = ROOT / "work/S1A7REHEARSAL2/write-inventory.json"
+PACKAGE = ROOT / "build/a7/package-run5"
+PUBLIC = ROOT / "work/S1A7RUN5/package.json"
+INVENTORY = ROOT / "work/S1A7RUN5/write-inventory.json"
 ROM = Path(
     os.environ.get(
         "K40_VBIOS",
@@ -382,7 +382,7 @@ def manifest():
         ),
         config_sha256=sha(PACKAGE / "a7_config.h"),
         verifier=crypto,
-        host_check_sha256=sha(ROOT / "work/S1A7REHEARSAL2/host-check.json"),
+        host_check_sha256=sha(ROOT / "work/S1A7RUN5/host-check.json"),
         teardown_sources_sha256=sha(ROOT / "work/S1A7NATIVE/teardown-sources.json"),
         installation_sources_sha256=sha(install_sources.OUTPUT),
         inventory_sha256=hashlib.sha256(dump(inventory(data)).encode()).hexdigest(),

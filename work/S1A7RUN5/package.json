@@ -1,0 +1,188 @@
+{
+  "approval": "explicit yes required for ONE run",
+  "artifacts": {
+    "client": {
+      "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_a7_stage",
+      "sha256": "d11b0d3773e8f1a206a98b79b85a1c6e7c73948dbe096001d472ef0ee66ee122"
+    },
+    "helper": {
+      "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_a7_open",
+      "sha256": "58bec7c51730bf95f541c61c8ed9b8379b97f1c2b335702de0f9542698914977"
+    },
+    "identity": {
+      "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_identity_probe",
+      "sha256": "8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f"
+    },
+    "license": {
+      "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/a7/package-run5/ed25519-license.txt",
+      "sha256": "f68d76b9c1c2271422e55134ea94cf71f2ac3fc3ed6a7ec6b83a1a0538753214"
+    },
+    "observer": {
+      "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/observer/strace-source/src/strace",
+      "sha256": "75b7aeed34785c8ac729d68cbca83d256434acb036e336d0adf5a4bdc30bc7a2"
+    },
+    "owner": {
+      "path": "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_a7_owner_module",
+      "sha256": "e031b8a3a3a5b8d1502c0554764c358e8f91df5b9f2316fceb479aafa2354751"
+    },
+    "qemu": {
+      "path": "/usr/bin/qemu-system-x86_64",
+      "sha256": "55862c768c21fa7d3e72ca1b24797d8ab5b406eb5ef4c9ab9c2280f4e0b8f330"
+    }
+  },
+  "config_sha256": "d7cd6f4d5d506d281a02dabe57cc913b0fa59ceadf43635d7b17c8636cb2a538",
+  "guest_artifacts": {
+    "client": {
+      "bytes": 7552,
+      "sha256": "d11b0d3773e8f1a206a98b79b85a1c6e7c73948dbe096001d472ef0ee66ee122"
+    },
+    "helper": {
+      "bytes": 3888,
+      "sha256": "58bec7c51730bf95f541c61c8ed9b8379b97f1c2b335702de0f9542698914977"
+    },
+    "identity": {
+      "bytes": 8696,
+      "sha256": "8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f"
+    },
+    "owner": {
+      "bytes": 361336,
+      "sha256": "e031b8a3a3a5b8d1502c0554764c358e8f91df5b9f2316fceb479aafa2354751"
+    }
+  },
+  "host_check_sha256": "a51492286b05b8168d7f6c26cf232986c2e7caa8b2c707775985271214a1fcb6",
+  "installation_sources_sha256": "fd8994d73dd85838525f05f9ebec4c6a5662b7965946bdf1537a9d3fd9fa87af",
+  "inventory_sha256": "ee91a914b414f310e94e0f90482a6b226f8d0cbee56d02fafaad1b9113063459",
+  "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+  "package_nonce_hex": "4452236a774e95907773ffa3766130aab7a1f4925f56c7dbc654cbe2716fa032",
+  "payload_visibility_claim": false,
+  "physical_run_completed": false,
+  "physical_vram_bytes": 12079595520,
+  "physical_vram_source": {
+    "field": "fb: Total: MiB",
+    "path": "reference/linux-run-debug/dmesg.txt.xz",
+    "sha256": "e15e44ac82d6172587fea176327e074e192e5c0138519e9a9716f312c7a9672b"
+  },
+  "production_dma_publication": false,
+  "public_key_hex": "b4be6f486e4ee500db5657a2d93f9750b8899ccaf270f78de31943b4f91c14ea",
+  "rom_sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
+  "runtime_export_sha256": "6025112a0568e7f8315d0fb00cb5d15f67a5e32231ddd2ed224940ad7c0ed4d3",
+  "runtime_library_sha256": "72a24e24b662651b8f29ad8512642ff0d8ed4c013db70eb35c58e3591898f407",
+  "source_sha256": {
+    "docs/decisions/004-board-operations-and-review.md": "0a5a318829217b89c1e06bb157f7f8d312c64ef934954502c1b460be44b44cd4",
+    "src/a7/ArmAuthority.cpp": "7f0556a448f71736c300ce8b6f2abb4e7d85f289f32a73c58ae938ae5d1b25a8",
+    "src/a7/ArmAuthority.h": "b1ee9b267e3434cb0e0c69337587833ee9247af0eb95cfb985ecf7fc031255dc",
+    "src/a7/ExecutionPermit.h": "edc7cf9e0d9e48f5a335128f84bd9cadf98c5980910bdf33cd60d83e3ede8541",
+    "src/a7/Module.cpp": "72147214ea402ce97d5df50ed08808468bcec4dbe7e6e11943e39ce33086cddf",
+    "src/a7/Module.h": "ea32b94d2c09f14a757510f214082a1fe752e05f28bc56bc50dafb475e88fa2c",
+    "src/a7/NativePlatform.cpp": "cb627294aebaa213a2b47c3df40c048642761a82e61371621f2f2ab7c3b5800b",
+    "src/a7/NativePlatform.h": "de6b3c59d06a82375c0cb5f0190c25ba12101c3f56581c2a755e231712eca344",
+    "src/a7/Owner.cpp": "c3ddeac095b9b3b0db5179c80b2f377a200b3bc30402cb6f14f8b173227161e1",
+    "src/a7/Owner.h": "5cf9ef2cd6447ac17f41521c1f56f765dcc7c78da4f7a60f5e45705f8ae33851",
+    "src/devinit/Board.h": "c8b2c9daca206854f059245d19c9280f80d4da31b50bb5a7b55f46d20ae897ce",
+    "src/devinit/BoardCore.cpp": "960b19e3a070c1c3ffb1d1bcb3f417c2539ed13e7d305d5b961358665194bb2a",
+    "src/devinit/BoardCore.h": "7ce223661bc6eacfd62a9bc917450c035c41770f5c6ff10631402f8ffaed8cdf",
+    "src/devinit/BoardPolicy.cpp": "902da09784c5dc807ca0c2bdff69382f6bc95a9b8f3f717f14f496e7b5206dbc",
+    "src/devinit/BoardPolicy.h": "69632ac56b9719600824bf0c35d14fa56a82e2d2a1a1f4f91a086a7c5d92e2ce",
+    "src/devinit/BoundPost.cpp": "3845812062148ea85160cc7a9a6aba105467ff5e008901031f090c294a73bcf3",
+    "src/devinit/BoundPost.h": "452a486a1f75b6473cb05d4e1ea859ffd556d2b26e4c2b97ab1bfb4142faebb1",
+    "src/devinit/I2c.cpp": "bd242139bd4018ca41e1257d6308660e97daddde9e5fa4d3e81f79b62c8adfe1",
+    "src/devinit/I2c.h": "a27f6b0ce8ca0b027cbaef952562fa63791bb940cfff50b6da0b4616d92c9d45",
+    "src/devinit/Interpreter.cpp": "5237c54ebe5c1bdb40c7904e0377877dc36374d10a63158dfe70aa2a49bd3559",
+    "src/devinit/Interpreter.h": "54a4b25cc34ff96afd6f39a48a71a803f0ec7ef2042fd01c9245b01ca0a54ce6",
+    "src/devinit/PostImage.cpp": "e1299da1b0c1f19b0e1f69f1cde132d589c9fd8e642a5213c100e5b0c0375976",
+    "src/devinit/PostImage.h": "196abf668dfe6fa31661cb8c9b3610ad81e38f0f4758944dcfc0b73c7273f974",
+    "src/devinit/Sha256.cpp": "3fe7912249a87e6b0cdec87da818a1a2f9ebfaf3145c40e7aa827df50554e19b",
+    "src/devinit/Sha256.h": "f4b1caa7558a5886ef7bc121ffef2ca65ec25bb89b18c62bc980e144bcc8ffbc",
+    "src/memory/ArmedReference.cpp": "db32bda8fc987a342c33fde8be8b699801f3a4cee1604e9b2a3e5a80403418cb",
+    "src/memory/ArmedReference.h": "a7c275ecc81ba20f23338ebe67b5da462829589d91580e404714c90b0c022e0f",
+    "src/memory/Memory.h": "c0dff96a930c571f9ff7bc65f847c6cffbfd31c6ffa1a0cd8e16a9a5980792d1",
+    "src/os/HaikuBackend.c": "7d3afdd37b8deed4106920dad8a48fcbc04994b3e5c34ff69c4dbaa3384f06d8",
+    "src/os/HaikuBackend.h": "1ad0cdba01d1ba72cdb62121a31c3972dd31242447fc98434c6236d6efc2667c",
+    "src/os/HaikuMemory.cpp": "ad8a93de49f0784293e5d004bc0aeacabf973a4fece457188a7f80928e7328a1",
+    "src/os/HaikuMemory.h": "b1d71c0d2c4764d192d9dbb04d2987cc22b7b6a9f8e7fcf6af7a0032b0329565",
+    "src/runtime/BootState.h": "9e2614ef3df7d74f357350e9bb6d644f6a5bf1a5cca22de60b31a8262d94b8c4",
+    "src/runtime/Bootstrap.cpp": "b66263b054c58ae8e7ce19c32949e2502c96105c5c01e10a958e92e5af5f3c89",
+    "src/runtime/Bootstrap.h": "97d4c8dc74347d1971684325180f5f5e78d837ac9a75a62604ce282e9c25c4f8",
+    "src/runtime/PreStart.cpp": "d83dc89ef6000404080fbf1fd701c8e80878584ea7cf90a20d5e8ddd2b4ad4de",
+    "src/runtime/PreStart.h": "ccc3a4f59c52a2e1bdab9c57f8ce136daf681241221f1cf8a68011beba0a3221",
+    "src/runtime/S1Experiment.h": "e264860c0cf26cb50240783b930870ecea85838244b37d6d67ae63b32d158366",
+    "tests/a7_owner_probe.cpp": "877671da80f1bc38d6685dd23ad5db8420c9770b2926199b8b09992e7813fdac",
+    "tests/a7_shim/Drivers.h": "51b362cd3549ca353ab3fca5e4f27bf1932f0c6b604d0e8573053103ba919374",
+    "tests/a7_shim/KernelExport.h": "bf3708f685d577f6e92d218144449a256b3c50f3e7bc157efa7a33adc2478b43",
+    "tests/a7_shim/PCI.h": "e3609ae3b060cf40841f3b93b7946f86da7b34f8d3512c97045f1f2116c3979b",
+    "tests/native_arm_gate.cpp": "9960507ae417ef15d8cfc817ee55273eca72332ff2fda77afeafd61ed39fb8d9",
+    "tests/os_shim/Drivers.h": "508c28c8827ee83929c1c233625e1959fef3b4155f6a24d35b5d769024e903c4",
+    "tests/os_shim/KernelExport.h": "b30aa0df0488cc6b2f47814234c3e9ce91cfe882a4fe73621acdccca65dc776b",
+    "tests/os_shim/PCI.h": "e1d0788b3a91b41330a66884d21fe664043d316eefc6034b1f2a735fdd140f12",
+    "tests/os_shim/module.h": "802de23e015605898c22d3bf25709f3319da8944861be0f6c14e7e59d605dfb9",
+    "tests/test_a7_client.cpp": "beb59ff2ac1afffae3e7f5140f349da1a7413c353098af03060bfb0fe292e3b3",
+    "tests/test_a7_install.py": "efb3edde0e7ec24580722b6a18a7d4a94efcc1b66658b8de3ca982c341686a75",
+    "tests/test_a7_native.cpp": "cdf71050d89d74b806b91cf38ddd45a7329d7690e2d0018275c1d16a26bdcf57",
+    "tests/test_a7_omissions.py": "0d05c858d142358425bc0209350be20093500a8deeea73209443abade224853c",
+    "tests/test_a7_run.py": "649493398ee538071c807184942c527c3ef26272b486e17d29556ed0dc10aa06",
+    "tools/a7/build.py": "a6055f8b13bc128a9fe3f59778c8cb9f00cfecdf04eb95a74473995b782b495e",
+    "tools/a7/crypto_sources.py": "9cdef459d9e1977d114509dfced371ada64e1c78913fb8215cf8aa109729ba34",
+    "tools/a7/guest_job.py": "1da2236cd7400adbcf37c9627dbdea82381f8f02f890dd003c1426c78dc7ab38",
+    "tools/a7/host_check.py": "82688d82c5988930c4c7a88d698d86406f3c3ef16ddbbfea74ce888373dc08da",
+    "tools/a7/install_sources.py": "113dfa873ff7e7676df5eb19b307f654ef6db5bcb0e585d0c009ae31694b1e16",
+    "tools/a7/omissions.py": "76a28037b9457b9ef64939698b25f83c1dfe259caa1886a570d36ec135c1e6f6",
+    "tools/a7/open_session.c": "de3224b59bb78ccf3cb2dae0bb5a039b0db1cc81e512ef69eeb1221fbe62a0ff",
+    "tools/a7/rehearse.py": "7f69d16f7da5cd40e3d813eb6b730a170d659491c847a8315fcdc01ba291bf79",
+    "tools/a7/run.py": "783a33dd8ff65e5a0d1f428c766a109b17a7594bfbe27d86d8d6bf903b2924f2",
+    "tools/a7/runtime_export.py": "f79ae9b7abe147b8735c674c0eb0dbc14915bf14b2a29970acc8cec9d9962c8e",
+    "tools/a7/teardown_sources.py": "813f4d3486db72edada1495768b7a0820fa059a5ca54007011315583f315ade0",
+    "tools/board_trace.py": "e65e1b2bbf8bcbbcd6d55cc3af7e32a086ddc1cbc55c74a145a3115d5f0916f2",
+    "tools/devinit_preflight.py": "00db2b30ed002e5dee633585f5806a5f77ccfb23ca0cc47fe22a92f2ea53bddb",
+    "tools/dma_model.py": "98183080e811e1b1a958098732a4019238d36e4aaaf3c44170a9857f72230f4a",
+    "tools/haiku/build-driver.sh": "4324a332a95ca39540365c7c5cbe36b370a176aed13c77340cb4c8dd9b4e4527",
+    "tools/haiku/card_run.py": "de92c0ad3ac917209270e2ab9dd9989eb29b25bc2c6aba7130860401e4da61f0",
+    "tools/haiku/config.sh": "01cee3bca207b135cccdd6468c9f8e7d4cdc85c572c90430ea11479e0f2d89b9",
+    "tools/haiku/d0_evidence.py": "1f2d27ca74ae24d412b4d09dd695b56a7be60c0e607b50e3927fe3e986c11097",
+    "tools/haiku/d0_kernel_log.py": "a6b792f5df1efcbcf46123df258a3321b092c8cbffb53ea52e0f189a0edd54f6",
+    "tools/haiku/d0_monitor.py": "d4ad9e66b8287d2652ac32b80f0e64009325a57c167bf0180a4615990a57785d",
+    "tools/haiku/d0_run.py": "a28ad4313ac9cf0aee157ff5e4460b27d781b097a3dd9cddc0df73c0f7d60cd1",
+    "tools/haiku/d0_topology.py": "7693687b9ad4128308e9bc832cc50b1d4eaf270aef6ac83001166ef206e799fc",
+    "tools/haiku/kcc": "b788c87c5644c11bb4d56105c5858d02f965fdab6bfd4e7581fcf2f434c1ca81",
+    "tools/haiku/probe_stage.py": "cea7e555287d8e398a67b207a5582991c25d7d7db5f0dc44b21f1e97bcf7ebec",
+    "tools/haiku/qemu_hmp.py": "4b97b24be316b7d19f2c26df45de846bb06285e8a0564ea206e21af245e519f4",
+    "tools/haiku/selftest/a7_client.cpp": "675764b57d555e67ddd921876998ac9d76580eac199a209aa3dd164aa6e87ac5",
+    "tools/haiku/vm_guard.py": "3a0c1af360106cd8bb0ae59da48f76facefefc57907c25bf7f4ccd562e925045",
+    "tools/observer/binding.py": "b794bd7f75217d19ce7ce7f359116615c112e1208a5dca8d8d31d4281288aee5",
+    "tools/observer/build.py": "5258754e859394e20c11dcf531ffeb0d69d46201193383462a5843a02d389423",
+    "tools/observer/normalize.py": "35503808d0f7a2da85d7857e4790c1f800a60c4ce438fd37ef4e33e6ba912bde",
+    "tools/observer/supervise.py": "4a854920c8d0a3f67d928fb8c5e58cec861649075b491369a72618dbe09442b4",
+    "tools/observer/task_proof.inc": "53c5b96dc4ea5c9b74c2ed86808d16dbdc3bc5f1c305d72ca34ebcb840401cfe",
+    "tools/observer/task_stream.py": "22878546bb0a9e34d08c5d34b34cac1ffccbf339d1bb3d9cdee0edb48d64c0ef",
+    "tools/observer/vfio_decode.inc": "b5b8ff720c35f123ba08c4537f5e603bf3bd168608385ca78d618792600a795a",
+    "tools/post_policy.py": "aab011670ef3169216a13427a2a5f3f71b563fbde311e84b8b29bbc3c261a7d6"
+  },
+  "stage": "A7_ARM_ONLY_POST_WRITE",
+  "teardown_sources_sha256": "3e44dd4298c9cfb7e51359726dbaa77b9142b11e3830f61e8f8b0fb35266008a",
+  "verifier": {
+    "commit": "b1f19fab4aebe607805620d25a5e42566ce46a0e",
+    "compiled_sources": [
+      "fe.c",
+      "ge.c",
+      "sc.c",
+      "sha512.c",
+      "verify.c"
+    ],
+    "license": "zlib; original source/notice retained in persistent pinned checkout",
+    "origin": "https://github.com/orlp/ed25519",
+    "sha256": {
+      "license.txt": "f68d76b9c1c2271422e55134ea94cf71f2ac3fc3ed6a7ec6b83a1a0538753214",
+      "src/ed25519.h": "8b09800605ac592c1f7d6e701f3526f84156db15bbd68904d39ad398e7d7c8ce",
+      "src/fe.c": "71082937da43def6ecaf7811c23410bd8ea763969dfec67383f8129b12b1926d",
+      "src/fe.h": "0476ae2ebb86978d1e0b9fbeb63dcddd7566d6b74806db47dda7688df74aaafb",
+      "src/fixedint.h": "451fd529865e7fc69156f4cbe7c548857704ae4913768ad9ed7103656efdfc17",
+      "src/ge.c": "c3bb834817edea83d843828a75af19867b93144d15140eadfd9784d40cf11409",
+      "src/ge.h": "b16be2ea1731d9212933e7beeaef6882145fdcdaebdff9996efb5cf97faa2651",
+      "src/precomp_data.h": "c7d63a8b7ecd7bc6a3ac2b826a540a69dee0fc7e8bf3b00ef5dd98ce00a7c224",
+      "src/sc.c": "c1bdb840416b34e79ceb7472d1a4ac4b1407c47b4c982cad981c72142ef42407",
+      "src/sc.h": "b0ef537b4d4dad7bd2910e2a663a02a7ac25b473511a929c3c609d82f9bdf87d",
+      "src/sha512.c": "b34128b950036777c299943d624bd830a234a65932c394fdf455e4948258fb6d",
+      "src/sha512.h": "647ed5784d4dcd682b9c42add2e39107582efb4df9e1362c8e5120613eb9a0ce",
+      "src/verify.c": "a2ca7197c5f6d193c9f526d432429dfb44a65853a7ec18e10a5761334bdcf48c"
+    }
+  }
+}

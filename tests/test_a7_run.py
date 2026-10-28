@@ -116,6 +116,37 @@ class A7Tests(unittest.TestCase):
                 with self.assertRaises(RuntimeError):
                     log.poll()
 
+    def test_start_window_allows_one_exact_enable_line(self):
+        enable = (
+            "[73969.466547] host.example kernel: vfio-pci 0000:04:00.0: "
+            "enabling device (0000 -> 0002)"
+        )
+
+        def poll(lines, window=True, allowed=None):
+            log = run.StrictLog.__new__(run.StrictLog)
+            log.last = b"baseline\n"
+            if allowed is not None:
+                log.allowed = allowed
+            if window:
+                log.open_start_window()
+            data = b"baseline\n" + "".join(x + "\n" for x in lines).encode()
+            with patch.object(run.KernelLog, "poll", return_value=data):
+                log.poll()
+            return log
+
+        self.assertEqual(poll([enable]).allowed, [enable])
+        rejected = (
+            ([enable], False, None),  # window closed
+            ([enable, enable], True, None),  # second enable line
+            ([enable], True, ["earlier"]),  # allowance already used
+            ([enable.replace("0000:04:00.0", "0000:03:00.0")], True, None),
+            ([enable.replace("enabling device", "BAR 0: can't reserve")], True, None),
+            ([enable, "[1.0] host kernel: DMAR: fault"], True, None),
+        )
+        for lines, window, allowed in rejected:
+            with self.assertRaises(RuntimeError):
+                poll(lines, window, allowed)
+
     def test_exchange_no_secret_or_arbitrary_path_and_write_once(self):
         with tempfile.TemporaryDirectory() as d:
             folder = Path(d) / "f"
@@ -234,6 +265,9 @@ class A7Tests(unittest.TestCase):
                     def poll(self):
                         if problem == "new-r5":
                             raise RuntimeError("new R5 selected-class line")
+
+                    def close_start_window(self):
+                        pass
 
                 class Ready:
                     called = False
