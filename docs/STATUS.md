@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7RUN (single approved A7 attempt and evidence).
-Task state: STOPPED before arm grant. The unchanged 8974695 package passed build/host checks and launched once under explicit user approval. The guest job failed after 107.88 s, before request upload or grant. POST/readiness were NOT_REACHED, not a verified POST failure. R5 delta is empty and host PCI command after exit is 0x0002 (mastering disabled). No retry authorized. Evidence: results/20261028-a7-post/. Next: host-only S1A7NITS, a new package. D1 is not approved. S1 remains incomplete.
+Current task: S1A7NITS (four review nits, host-only new package).
+Task state: S1A7NITS DONE (host-only new package), review and fresh one-run approval pending. Full make check, host fixtures and native links pass. Four nits are fixed, with bounded failure diagnostics. The first approved 8974695 launch is committed as 600d114 and STOPPED before request/grant after 107.88 s. POST/readiness were NOT_REACHED. R5 delta was empty and host command after exit was 0x0002. Original marker/evidence remain intact. New package: work/S1A7NITS/package.json, review: docs/A7-REVIEW-PACKAGE.md. No second launch or D1 is approved. S1 remains incomplete.
 Last updated: 2026-10-28
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -76,9 +76,11 @@ Older results and notes: `docs/history/` (do not read it for a task).
 
 | S1D0RETRY | PASS (structural mapping only) | 2026-10-28 | Retained 4096-byte page has complete map coverage at the cutoff. Task proofs and trace replay pass. No payload/coherency or S1 claim. See work/S1D0RETRY/RESULT.md. |
 
-| S1A7NATIVE | DONE (host/native-link package; review pending) | 2026-10-28 | ESC-002 resolved by Claude. Distinct arm-only native binding, authenticated fresh-witness bridge, permanent retention, readiness and closed one-run launcher. Host tests and cross-links pass. The first approved run is recorded separately as S1A7RUN. See docs/A7-REVIEW-PACKAGE.md. |
+| S1A7NATIVE | REVIEWED (initial package; run consumed) | 2026-10-28 | ESC-002 resolved by Claude. Distinct arm-only native binding, authenticated fresh-witness bridge, permanent retention, readiness and closed one-run launcher. Host tests and cross-links pass. The first approved run is recorded separately as S1A7RUN. See docs/A7-REVIEW-PACKAGE.md. |
 
 | S1A7RUN | STOPPED (before arm grant) | 2026-10-28 | One approved unchanged 8974695 launch. Guest job failed at 107.88 s before request/grant; POST/readiness not reached. R5 delta empty; host command 0x0002 after exit. No retry. See work/S1A7RUN/RESULT.md. |
+
+| S1A7NITS | DONE (host-only new package; review pending) | 2026-10-28 | Enforce FIFO bit-0x100 pairing and the selected I2C pin; persist pinned verifier; document Linux omissions. Add bounded failure diagnostics. Host/full checks and native links pass. No retry. See work/S1A7NITS/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

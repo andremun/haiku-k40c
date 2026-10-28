@@ -22,7 +22,7 @@ from tools.a7 import build
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 PROBE = ROOT / "build/tests/a7_owner_probe"
-OUTPUT = ROOT / "work/S1A7NATIVE/host-check.json"
+OUTPUT = ROOT / "work/S1A7NITS/host-check.json"
 # Public RFC 8032 TEST 1 seed. Never used by package creation or the live signer.
 TEST_SEED = bytes.fromhex(
     "9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60"

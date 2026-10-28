@@ -13,9 +13,9 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-CACHE = Path("/tmp/k40-a7-ed25519")
+CACHE = Path.home() / "haiku-cross/src/orlp-ed25519"
 COMMIT = "b1f19fab4aebe607805620d25a5e42566ce46a0e"
-OUTPUT = ROOT / "work/S1A7NATIVE/crypto-sources.json"
+OUTPUT = ROOT / "work/S1A7NITS/crypto-sources.json"
 SOURCES = ("fe.c", "ge.c", "sc.c", "sha512.c", "verify.c")
 
 
@@ -36,7 +36,7 @@ def validate():
     return dict(
         origin="https://github.com/orlp/ed25519",
         commit=COMMIT,
-        license="zlib; original source/notice retained in external cache",
+        license="zlib; original source/notice retained in persistent pinned checkout",
         compiled_sources=list(SOURCES),
         sha256={
             name: hashlib.sha256((CACHE / name).read_bytes()).hexdigest()

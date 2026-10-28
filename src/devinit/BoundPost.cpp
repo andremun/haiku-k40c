@@ -104,23 +104,30 @@ bool BoundPost::i2cWrite(const I2cBus& bus, uint8_t address, uint8_t reg, uint8_
     }
     return transferred && guard();
 }
+bool BoundPost::dedicatedBus(I2cBus& bus) const
+{
+    if(!image_.approved_)return false;
+    bus={}; bool found=false;
+    for (uint32_t i=0;i<image_.layout_.count();++i) {
+        const auto* inst=image_.layout_.at(i);
+        if (inst->opcode!=0x4d || !boardAllowed(approvedRomDigest(),inst->offset,inst->opcode)) continue; // bios/init.c:2246.
+        I2cBus candidate;
+        if (!BoardHelpers::resolveBus({image_.rom_.data(),approvedRomBytes},image_.rom_[inst->offset+1],candidate)) return false;
+        if (found && (bus.index!=candidate.index || bus.type!=candidate.type || bus.drive!=candidate.drive
+            || bus.share!=candidate.share || bus.aux!=candidate.aux)) return false;
+        bus=candidate; found=true;
+    }
+    if (!found || bus.type!=0x05 || bus.share!=0xff || bus.drive>15) return false; // include/nvkm/subdev/bios/i2c.h:8,12.
+    return true;
+}
 Error BoundPost::prepareI2c()
 {
     if (!executionAllowed()) return Error::HardwareDisabled;
     if (mode_!=PostI2c::DedicatedPins || !image_.approved_ || image_.attempted_
         || image_.i2cPreparationAttempted_) return Error::Input;
     image_.i2cPreparationAttempted_=true;
-    I2cBus bus{}; bool found=false;
-    for (uint32_t i=0;i<image_.layout_.count();++i) {
-        const auto* inst=image_.layout_.at(i);
-        if (inst->opcode!=0x4d || !boardAllowed(approvedRomDigest(),inst->offset,inst->opcode)) continue; // bios/init.c:2246.
-        I2cBus candidate;
-        if (!BoardHelpers::resolveBus({image_.rom_.data(),approvedRomBytes},image_.rom_[inst->offset+1],candidate)) return Error::Input;
-        if (found && (bus.index!=candidate.index || bus.type!=candidate.type || bus.drive!=candidate.drive
-            || bus.share!=candidate.share || bus.aux!=candidate.aux)) return Error::Input;
-        bus=candidate; found=true;
-    }
-    if (!found || bus.type!=0x05 || bus.share!=0xff || bus.drive>15) return Error::Input; // include/nvkm/subdev/bios/i2c.h:8,12.
+    I2cBus bus{};
+    if(!dedicatedBus(bus))return Error::Input;
     pin_=0x00d014+uint32_t(bus.drive)*0x20; // nvkm/subdev/i2c/busgf119.c:93.
     error_=Error::None; running_=preparing_=true; active_=false;
     started_=last_=registers_.nowUs();

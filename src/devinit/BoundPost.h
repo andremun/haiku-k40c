@@ -17,6 +17,7 @@ public:
     BoundPost& operator=(const BoundPost&) = delete;
     // Separate host preinit: derive the dedicated bus, then write its init value.
     // One preparation attempt per image, no retry or implicit init during POST.
+    bool dedicatedBus(I2cBus&) const; // Derive only from the immutable approved image.
     Error prepareI2c();
     I2cResult i2cResult() const { return i2c_.result(); }
     Result runPost(Limits limits = {}); // No caller root, table pointer, digest, or RAM index.

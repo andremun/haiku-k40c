@@ -36,6 +36,9 @@ struct Outcome {
     bool scratch=false;
 };
 class Owner {
+#ifndef _KERNEL_MODE
+    friend struct OwnerBoundaryProbe; // Host-only negative tests of the actual private boundary.
+#endif
 public:
     Owner(Platform&,memory::ArmStorage&,const uint8_t key[32],const uint8_t nonce[32],const uint8_t challenge[16],
           const uint8_t* rom,uint32_t bytes,uint64_t expectedVram);
@@ -52,6 +55,9 @@ public:
 private:
     class Transport final:public devinit::Backend,public devinit::BoardTransport,
                           public runtime::startup::Backend,public runtime::BootstrapPort {
+#ifndef _KERNEL_MODE
+        friend struct OwnerBoundaryProbe;
+#endif
     public:
         explicit Transport(Owner& owner):owner_(owner),helpers_(*this,*this) {}
         bool hostSimulation() const override { return false; }
@@ -88,7 +94,9 @@ private:
         Owner& owner_;
         runtime::startup::RegisterHelpers helpers_;
         Phase phase_=Phase::None;
-        uint32_t pc_=0,selector_=0;
+        uint32_t pc_=0,selector_=0,i2cPin_=0,fifoReadValue_=0;
+        unsigned fifoWrites_=0;
+        bool fifoRead_=false;
         unsigned armWrites_=0;
         bool romDone_=false,readback_=false,windowLocked_=false,scratchOwned_=false;
     };

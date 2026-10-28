@@ -16,7 +16,8 @@ status_t openDevice(const char*,uint32,void** out)
 {
     if(!out || attached.test_and_set())return B_BUSY;
     cookie={};module_info* info=nullptr;
-    if(get_module(K40_A7_OWNER_NAME,&info)!=B_OK) {attached.clear();return B_ERROR;}
+    const auto loaded=get_module(K40_A7_OWNER_NAME,&info);
+    if(loaded!=B_OK) {attached.clear();dprintf("k40_a7: FAIL client get_module status=%ld\n",long(loaded));return B_ERROR;}
     auto* api=reinterpret_cast<k40_a7_module*>(info);
     if(!api || !info->name || std::strcmp(info->name,K40_A7_OWNER_NAME) || !(info->flags&B_KEEP_LOADED)
         || api->abi!=1 || !api->prepare || !api->submit || !api->detach

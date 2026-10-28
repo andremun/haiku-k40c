@@ -38,7 +38,6 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/a7/Owner.cpp:68` | `case Phase::Interrupts:return (reg==0x140 \|\| reg==0x144) && (write \|\| reg==0x140);` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/a7/Owner.cpp:69` | `case Phase::Decision:return !write && reg==0x02240c;` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/a7/Owner.cpp:70` | `case Phase::Ring:return reg==0x122318 \|\| reg==0x12231c \|\| reg==0x122310 \|\| reg==0x122348 \|\| reg==0x1223b0 \|\| reg==0x122358;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/a7/Owner.cpp:71` | `case Phase::I2c:return write && reg>=0xd014 && reg<=0xd1f4 && (reg-0xd014)%0x20==0;` | nvkm/subdev/i2c/busgf119.c:69 | SOURCE_ONLY |
 | `src/a7/Owner.cpp:72` | `case Phase::Arm:return write && reg==0x100c10;` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/a7/Owner.cpp:73` | `case Phase::Fifo:return reg==0x200;` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/a7/Owner.cpp:74` | `case Phase::Readback:return !write && reg==0x100c10;` | no source: ambiguous citation | SOURCE_ONLY |
@@ -47,20 +46,22 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/a7/Owner.cpp:79` | `if(reg==0x070000)return true;` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/a7/Owner.cpp:80` | `if(scratchOwned_ && windowLocked_ && reg==0x1700)return write;` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/a7/Owner.cpp:81` | `if(scratchOwned_ && windowLocked_ && selector_==0 && reg>=0x740000 && reg<0x741000)return true;` | nvkm/subdev/fb/ramgf100.c:497 | SOURCE_ONLY |
-| `src/a7/Owner.cpp:93` | `if(phase_==Phase::Readiness && ((reg==0x1700 && value!=0) \|\| (reg==0x70000 && value!=1)))return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/a7/Owner.cpp:95` | `if(phase_==Phase::Readiness && reg==0x1700)selector_=value;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/a7/Owner.cpp:110` | `if(!read32(0,value) \|\| value!=0x0f1240a1)return false;` | no source: software identity comparison; KNOWN capture hardware/record.json:37. | SOURCE_ONLY |
-| `src/a7/Owner.cpp:135` | `phase_=Phase::Readback;readback_=read32(0x100c10,value);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/a7/Owner.cpp:144` | `if(!read32(0x9410,high) \|\| !read32(0x9400,low) \|\| !read32(0x9410,again))return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/a7/Owner.cpp:153` | `if(!read32(0x22438,parts) \|\| !read32(0x2243c,units) \|\| !read32(0x22554,disabled)` | nvkm/subdev/fb/ramgf100.c:477 | SOURCE_ONLY |
-| `src/a7/Owner.cpp:162` | `if(!read32(0x11020c+unit*0x1000,mib) \|\| !mib)return false;` | nvkm/subdev/fb/ramgf100.c:467 | SOURCE_ONLY |
-| `src/a7/Owner.cpp:172` | `return activeParts && total==owner_.expectedVram_ && total>0x40000+0x100000+4096;` | nvkm/subdev/fb/ramgf100.c:497 | SOURCE_ONLY |
-| `src/a7/Owner.cpp:177` | `if(!read32(0,identity) \|\| identity!=0x0f1240a1 \|\| !timer(result.timerBefore)` | no source: software identity comparison; KNOWN capture hardware/record.json:37. | SOURCE_ONLY |
-| `src/a7/Owner.cpp:179` | `\|\| !memorySize(result.vramBytes) \|\| !read32(0x100,result.pending) \|\| result.pending)return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/a7/Owner.cpp:186` | `const uint64_t offsets[]={0,0x100,0xffc};` | no source: software scratch sample offsets within our owned page. | SOURCE_ONLY |
-| `src/a7/Owner.cpp:187` | `result.scratch=runtime::checkOwnedScratch(*this,{{0x40000},4096},offsets,3,{2000000,100000});` | nvkm/subdev/fb/ramgf100.c:497 | SOURCE_ONLY |
-| `src/a7/Owner.cpp:188` | `if(!result.scratch \|\| !read32(0x100,result.pending) \|\| result.pending)return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/a7/Owner.cpp:189` | `owner_.platform_.log("",0x40000,4096);return true;` | nvkm/subdev/fb/ramgf100.c:497 | SOURCE_ONLY |
+| `src/a7/Owner.cpp:97` | `if(phase_==Phase::Readiness && ((reg==0x1700 && value!=0) \|\| (reg==0x70000 && value!=1)))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/a7/Owner.cpp:100` | `if(!fifoRead_ \|\| fifoWrites_>=2 \|\| value!=((fifoReadValue_&~0x100u)\|(fifoWrites_?0x100u:0)))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/a7/Owner.cpp:104` | `if(phase_==Phase::Readiness && reg==0x1700)selector_=value;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/a7/Owner.cpp:119` | `if(!read32(0,value) \|\| value!=0x0f1240a1)return false;` | no source: software identity comparison; KNOWN capture hardware/record.json:37. | SOURCE_ONLY |
+| `src/a7/Owner.cpp:131` | `i2cPin_=0x00d014+uint32_t(bus.drive)*0x20;` | nvkm/subdev/i2c/busgf119.c:93 | SOURCE_ONLY |
+| `src/a7/Owner.cpp:154` | `phase_=Phase::Readback;readback_=read32(0x100c10,value);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/a7/Owner.cpp:163` | `if(!read32(0x9410,high) \|\| !read32(0x9400,low) \|\| !read32(0x9410,again))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/a7/Owner.cpp:172` | `if(!read32(0x22438,parts) \|\| !read32(0x2243c,units) \|\| !read32(0x22554,disabled)` | nvkm/subdev/fb/ramgf100.c:477 | SOURCE_ONLY |
+| `src/a7/Owner.cpp:181` | `if(!read32(0x11020c+unit*0x1000,mib) \|\| !mib)return false;` | nvkm/subdev/fb/ramgf100.c:467 | SOURCE_ONLY |
+| `src/a7/Owner.cpp:191` | `return activeParts && total==owner_.expectedVram_ && total>0x40000+0x100000+4096;` | nvkm/subdev/fb/ramgf100.c:497 | SOURCE_ONLY |
+| `src/a7/Owner.cpp:196` | `if(!read32(0,identity) \|\| identity!=0x0f1240a1 \|\| !timer(result.timerBefore)` | no source: software identity comparison; KNOWN capture hardware/record.json:37. | SOURCE_ONLY |
+| `src/a7/Owner.cpp:198` | `\|\| !memorySize(result.vramBytes) \|\| !read32(0x100,result.pending) \|\| result.pending)return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/a7/Owner.cpp:205` | `const uint64_t offsets[]={0,0x100,0xffc};` | no source: software scratch sample offsets within our owned page. | SOURCE_ONLY |
+| `src/a7/Owner.cpp:206` | `result.scratch=runtime::checkOwnedScratch(*this,{{0x40000},4096},offsets,3,{2000000,100000});` | nvkm/subdev/fb/ramgf100.c:497 | SOURCE_ONLY |
+| `src/a7/Owner.cpp:207` | `if(!result.scratch \|\| !read32(0x100,result.pending) \|\| result.pending)return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/a7/Owner.cpp:208` | `owner_.platform_.log("",0x40000,4096);return true;` | nvkm/subdev/fb/ramgf100.c:497 | SOURCE_ONLY |
 
 ## src/compute/LaunchDesc.cpp
 
@@ -176,9 +177,9 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/devinit/BoundPost.cpp:45` | `if (inst->opcode==0x56) allowed=active_ && us==20000;` | nvkm/subdev/bios/init.c:1246 | SOURCE_ONLY |
 | `src/devinit/BoundPost.cpp:46` | `if (inst->opcode==0x74) {` | nvkm/subdev/bios/init.c:1769 | SOURCE_ONLY |
 | `src/devinit/BoundPost.cpp:79` | `if (!inst \|\| inst->opcode!=0x4d \|\| !boardAllowed(approvedRomDigest(),pc_,inst->opcode)) {` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
-| `src/devinit/BoundPost.cpp:116` | `if (inst->opcode!=0x4d \|\| !boardAllowed(approvedRomDigest(),inst->offset,inst->opcode)) continue;` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
-| `src/devinit/BoundPost.cpp:123` | `if (!found \|\| bus.type!=0x05 \|\| bus.share!=0xff \|\| bus.drive>15) return Error::Input;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/devinit/BoundPost.cpp:124` | `pin_=0x00d014+uint32_t(bus.drive)*0x20;` | nvkm/subdev/i2c/busgf119.c:93 | SOURCE_ONLY |
+| `src/devinit/BoundPost.cpp:113` | `if (inst->opcode!=0x4d \|\| !boardAllowed(approvedRomDigest(),inst->offset,inst->opcode)) continue;` | nvkm/subdev/bios/init.c:2246 | SOURCE_ONLY |
+| `src/devinit/BoundPost.cpp:120` | `if (!found \|\| bus.type!=0x05 \|\| bus.share!=0xff \|\| bus.drive>15) return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/devinit/BoundPost.cpp:131` | `pin_=0x00d014+uint32_t(bus.drive)*0x20;` | nvkm/subdev/i2c/busgf119.c:93 | SOURCE_ONLY |
 
 ## src/devinit/I2c.cpp
 
@@ -434,15 +435,16 @@ The following constant lines have no source citation:
 - src/a7/Owner.cpp:74 (no source: ambiguous citation)
 - src/a7/Owner.cpp:79 (no source: ambiguous citation)
 - src/a7/Owner.cpp:80 (no source: ambiguous citation)
-- src/a7/Owner.cpp:93 (no source: ambiguous citation)
-- src/a7/Owner.cpp:95 (no source: ambiguous citation)
-- src/a7/Owner.cpp:110 (no source: software identity comparison; KNOWN capture hardware/record.json:37.)
-- src/a7/Owner.cpp:135 (no source: ambiguous citation)
-- src/a7/Owner.cpp:144 (no source: ambiguous citation)
-- src/a7/Owner.cpp:177 (no source: software identity comparison; KNOWN capture hardware/record.json:37.)
-- src/a7/Owner.cpp:179 (no source: ambiguous citation)
-- src/a7/Owner.cpp:186 (no source: software scratch sample offsets within our owned page.)
-- src/a7/Owner.cpp:188 (no source: ambiguous citation)
+- src/a7/Owner.cpp:97 (no source: ambiguous citation)
+- src/a7/Owner.cpp:100 (no source: ambiguous citation)
+- src/a7/Owner.cpp:104 (no source: ambiguous citation)
+- src/a7/Owner.cpp:119 (no source: software identity comparison; KNOWN capture hardware/record.json:37.)
+- src/a7/Owner.cpp:154 (no source: ambiguous citation)
+- src/a7/Owner.cpp:163 (no source: ambiguous citation)
+- src/a7/Owner.cpp:196 (no source: software identity comparison; KNOWN capture hardware/record.json:37.)
+- src/a7/Owner.cpp:198 (no source: ambiguous citation)
+- src/a7/Owner.cpp:205 (no source: software scratch sample offsets within our owned page.)
+- src/a7/Owner.cpp:207 (no source: ambiguous citation)
 - src/compute/LaunchDesc.h:23 (no source: derived)
 - src/devinit/BoardCore.cpp:35 (no source: ambiguous citation)
 - src/devinit/BoardCore.cpp:41 (no source: ambiguous citation)
@@ -462,7 +464,7 @@ The following constant lines have no source citation:
 - src/devinit/BoardPolicy.cpp:11 (no source: software ROM permission identity/size from ADR 004 and reference/vbios/README.md.)
 - src/devinit/BoardPolicy.h:7 (no source: software exact-image permission size, ADR 004 and reference/vbios/README.md.)
 - src/devinit/BoundPost.cpp:41 (no source: ambiguous citation)
-- src/devinit/BoundPost.cpp:123 (no source: ambiguous citation)
+- src/devinit/BoundPost.cpp:120 (no source: ambiguous citation)
 - src/devinit/I2c.cpp:12 (no source: ambiguous citation)
 - src/devinit/PostImage.cpp:43 (no source: ambiguous citation)
 - src/devinit/PostImage.cpp:164 (no source: ambiguous citation)

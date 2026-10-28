@@ -68,7 +68,7 @@ bool Owner::Transport::allowed(uint32_t reg,unsigned width,bool write) const
     case Phase::Interrupts:return (reg==0x140 || reg==0x144) && (write || reg==0x140); // mc/nv04.c:87-90.
     case Phase::Decision:return !write && reg==0x02240c; // devinit/gf100.c:101.
     case Phase::Ring:return reg==0x122318 || reg==0x12231c || reg==0x122310 || reg==0x122348 || reg==0x1223b0 || reg==0x122358; // privring/gk104.c:103-109.
-    case Phase::I2c:return write && reg>=0xd014 && reg<=0xd1f4 && (reg-0xd014)%0x20==0; // i2c/busgf119.c:69,93; bios/i2c.h:12.
+    case Phase::I2c:return write && i2cPin_ && reg==i2cPin_; // i2c/busgf119.c:69,93; bios/i2c.h:12.
     case Phase::Arm:return write && reg==0x100c10; // fb/gf100.c:83.
     case Phase::Fifo:return reg==0x200; // mc/nv04.c:39,47,49; mc/gk104.c:28.
     case Phase::Readback:return !write && reg==0x100c10; // fb/gf100.c:83; ESC-002 adds readback.
@@ -84,14 +84,23 @@ bool Owner::Transport::allowed(uint32_t reg,unsigned width,bool write) const
     }
 }
 bool Owner::Transport::read32(uint32_t reg,uint32_t& value)
-{return allowed(reg,4,false) && owner_.platform_.read32(reg,value);}
+{
+    if(!allowed(reg,4,false) || !owner_.platform_.read32(reg,value))return false;
+    if(phase_==Phase::Fifo) {fifoReadValue_=value;fifoRead_=true;}
+    return true;
+}
 bool Owner::Transport::write32(uint32_t reg,uint32_t value)
 {
     if(!allowed(reg,4,true))return false;
     if(phase_==Phase::Interrupts && value)return false;
     if(phase_==Phase::I2c && value!=7)return false;
     if(phase_==Phase::Readiness && ((reg==0x1700 && value!=0) || (reg==0x70000 && value!=1)))return false; // instmem/nv50.c:68; bar/g84.c:29-40.
+    if(phase_==Phase::Fifo) {
+        // mc/nv04.c:39,47; mc/gk104.c:28. Only the paired FIFO bit may change.
+        if(!fifoRead_ || fifoWrites_>=2 || value!=((fifoReadValue_&~0x100u)|(fifoWrites_?0x100u:0)))return false;
+    }
     if(!owner_.platform_.write32(reg,value))return false;
+    if(phase_==Phase::Fifo) {fifoRead_=false;++fifoWrites_;}
     if(phase_==Phase::Readiness && reg==0x1700)selector_=value; // instmem/nv50.c:68.
     return true;
 }
@@ -115,14 +124,24 @@ bool Owner::Transport::unarmInterrupts(){phase_=Phase::Interrupts;return helpers
 bool Owner::Transport::postRequired(bool& required){phase_=Phase::Decision;return helpers_.postRequired(required);}
 bool Owner::Transport::unlockCrtc(){phase_=Phase::Crtc;return helpers_.unlockCrtc();}
 bool Owner::Transport::privateRing(){phase_=Phase::Ring;return helpers_.privateRing();}
-bool Owner::Transport::initializeI2c(){phase_=Phase::I2c;return owner_.post_.prepareI2c()==devinit::Error::None;}
+bool Owner::Transport::initializeI2c()
+{
+    devinit::I2cBus bus{};
+    if(!owner_.post_.dedicatedBus(bus))return false;
+    i2cPin_=0x00d014+uint32_t(bus.drive)*0x20; // i2c/busgf119.c:93.
+    phase_=Phase::I2c;return owner_.post_.prepareI2c()==devinit::Error::None;
+}
 bool Owner::Transport::programFlushPage(memory::DeviceIova address)
 {
     if(armWrites_>=2 || (armWrites_==1 && (!romDone_ || !readback_)))return false;
     phase_=Phase::Arm;owner_.platform_.log(armWrites_?"ARM_AFTER":"ARM_BEFORE",address.value,address.value>>8);
     ++armWrites_;return helpers_.programFlushPage(address);
 }
-bool Owner::Transport::resetFifoBeforePost(){phase_=Phase::Fifo;return helpers_.resetFifoBeforePost();}
+bool Owner::Transport::resetFifoBeforePost()
+{
+    phase_=Phase::Fifo;fifoWrites_=0;fifoRead_=false;
+    return helpers_.resetFifoBeforePost() && fifoWrites_==2;
+}
 bool Owner::Transport::executeRom()
 {
     phase_=Phase::Post;const auto result=owner_.post_.runPost();

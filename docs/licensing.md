@@ -331,3 +331,13 @@ read-only upstream Linux v6.8 VFIO teardown baseline is separately pinned in
 `work/S1A7NATIVE/teardown-sources.json` (GPL-2.0 kernel sources, not linked or
 copied). It is not represented as exact running Ubuntu source. The original
 ed25519 zlib notice is also copied into the private build package.
+
+## S1A7NITS source audit
+
+Reconsulted `nvkm/subdev/i2c/base.c`, `busgf119.c`, `pad.c`, `padg94.c`,
+`padgf119.c`, `gk104.c`, `gf119.c`, `nvkm/subdev/bios/i2c.c`, `dcb.c`,
+`shadowrom.c`, `shadowpci.c`, and `nvkm/subdev/pci/base.c`, `nv40.c`,
+`gf100.c`, `gk104.c` for the omission table and source-selected register path.
+The original board/table parser was refactored, not copied from Nouveau.
+No Linux pad, bus or shadow implementation block was copied or executed.
+The same zlib Ed25519 revision now lives in a persistent pinned external checkout.

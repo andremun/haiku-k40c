@@ -1,13 +1,16 @@
-# A7 arm-only POST package (2026-10-28)
+# A7 package after review nits (2026-10-28)
 
-This package implements Claude's ESC-002 resolution. It is prepared for review
-and one explicit per-run yes. **No A7 guest has run. S1 remains incomplete.**
+This is a new host-only package after the four supplied review nits.
+The single approved 8974695 package ran once and stopped before an arm request
+or grant. POST and readiness were not reached. See results/20261028-a7-post/.
+The original consumed marker remains at build/a7/package/consumed.json.
+**This new package has not run and has no run approval. S1 remains incomplete.**
 The review decision is recorded in
 `work/S1A7NATIVE/CLAUDE-ESC002-REVIEW.md`. ESC-002 is resolved; Q7 stays open.
 
 ## Exact inputs and commands
 
-`work/S1A7NATIVE/package.json` is the generated artifact/source manifest.
+`work/S1A7NITS/package.json` is the generated artifact/source manifest.
 `write-inventory.json` in that folder lists all 544 possible script-write
 locations from the exact ROM's structural preflight and independent access
 policy decoder. Each row gives the script PC, opcode, register, width and
@@ -18,8 +21,8 @@ separately in the same file. Private firmware and signing material stay in build
 
 | Artifact | SHA-256 |
 |---|---|
-| `k40_a7_owner_module` | `faef759d2f09e210ef3bf8c5646724980dfcaddaf58c83e19d768aaef262e13a` |
-| `k40_a7_stage` | `48ea12e83b9ed11ba592dc465be902dd2dc9f30f823e30d8afffd5e4164b3cfe` |
+| `k40_a7_owner_module` | `a31c23849f362c88992983368c9e4fb4a3a98e8293f6f62284d151259e132233` |
+| `k40_a7_stage` | `b99101a130a7b8a391b7f7e6e3ece6ce560e98ba897023dca56ab6cf726af44c` |
 | Identity probe | `8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f` |
 | Observer | `75b7aeed34785c8ac729d68cbca83d256434acb036e336d0adf5a4bdc30bc7a2` |
 | Guest kernel | `2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62` |
@@ -42,7 +45,7 @@ python3 tools/a7/run.py --run-approved-A7-once
 ```
 
 The execution option is an operator approval assertion; it does not obtain or
-replace human approval. The default and `--check` never start a guest. The host
+replace human approval. The default and `--check` never start a guest. The new package directory is `build/a7/package-review-nits/`. The host
 signing key is a fresh per-package Ed25519 key, mode 0600. The launcher atomically
 creates a consumed marker before starting QEMU. Even a failed launch consumes
 the package. A retry requires reporting the stop, a new reviewed package and
@@ -50,7 +53,7 @@ fresh approval. Do not remove the marker to rerun.
 
 Build-only reproduction (no guest) uses `python3 tools/a7/host_check.py`, followed
 by `python3 tools/a7/build.py`. Keep the exact verification-only dependency at
-`/tmp/k40-a7-ed25519`, revision recorded in `crypto-sources.json`. Recover it with
+`~/haiku-cross/src/orlp-ed25519`, revision recorded in `crypto-sources.json`. Recover it with
 a clean clone of https://github.com/orlp/ed25519 and checkout
 `b1f19fab4aebe607805620d25a5e42566ce46a0e`. The original zlib notice accompanies
 that checkout and the private package. The dependency is external original
@@ -167,18 +170,54 @@ unmapped address should fault, but no negative DMA experiment is authorized.
 
 ## Validation and review focus
 
-`host-check.json` records 32 ROM/strap scenarios (16 complete), 192 altered-frame
+`work/S1A7NITS/host-check.json` records 32 ROM/strap scenarios (16 complete), 192 altered-frame
 rejections, seven correctly signed wrong-scope rejections, a noncanonical
 signature rejection and I2C/clock failures. The actual owner/controller execute
 against simulated registers; this is not card evidence. Actual NativePlatform
 and client source tests cover reservation and duplicate-device failure, no permit
 writes, DMA32 alignment/zeroing, partial allocation retention, partial stream
-input, copy errors and reload refusal. They pass 4129 and 22 assertions with host
+input, copy errors and reload refusal. They pass 4129 and 24 assertions with host
 OS mocks. Native compilation separately uses real Haiku headers and the matching
-kernel exports. `native-build-final.log` records successful links.
+kernel exports. `work/S1A7NITS/native-build.log` records successful links.
 
-The complete `make check` passes. Its log is in `work/S1A7NATIVE/make-check-final.log`.
+The complete `make check` passes. Its log is in `work/S1A7NITS/check-final.log`.
 Review the explicit physical permit, request/grant signer, permanent retention,
 write allowlist, scratch reservation and teardown boundary before approving the
-first run. Native A7 module loading and real timer/memory/scratch behavior are
-UNKNOWN until execution. S2/S3 work remains conditional on actual S1 completion.
+first run. Native A7 owner loading and real timer/memory/scratch behavior remain
+UNKNOWN. The first run did not reach those checks. S2/S3 work remains conditional on actual S1 completion.
+
+## Review nits and deliberate Linux omissions
+
+FIFO preinit now requires a fresh successful read before each write to `0x200`.
+It admits exactly two writes: clear bit `0x100`, then set it. Each write must
+preserve every other bit from its paired read. It rejects a third write.
+I2C preinit derives the dedicated bus from the immutable image. For this ROM,
+the only preinit register is `0xd054`, with value 7. Other bus addresses fail.
+Host fixtures exercise the actual private transport under its active permit,
+including rejected addresses, values, missing reads and replay. Test access is
+absent from kernel builds.
+
+`write-inventory.json` now includes `deliberate_linux_preinit_omissions`, generated
+by tools/a7/omissions.py from the same ROM and pinned source facts. These are
+KNOWN / SOURCE_ONLY descriptions. They are not new captured hardware results.
+
+| Omitted Linux setup | Addresses and operation | Reason in this A7 scope |
+|---|---|---|
+| Four hybrid AUX pads | `0xe50c`, `0xe55c`, `0xe5ac`, `0xe5fc`: set masked bit 0 | A7 uses the unshared dedicated script bus. It has no display/AUX client. No full Linux-preinit equivalence is claimed. |
+| Seven other I2C buses | `0xd014`, `0xd034`, `0xd0b4`, `0xd0d4`, `0xd0f4`, `0xd114`, `0xd134`: write 7 | Both approved ZM_I2C_BYTE instructions select CCB bus 2. A7 initializes only its `0xd054` register. |
+| ROM shadow toggles | `0x88050`: clear/restore bit 0 | The immutable ROM comes from a checked file. A7 does not fetch it through the hardware PROM aperture. |
+
+Sources: Nouveau i2c/base.c:177-180, pad.c:77-81,102,
+padgf119.c:28-39, padg94.c:33-37, busgf119.c:65-69,93,
+bios/i2c.c:107-116, bios/shadowrom.c:41-55, pci/base.c:66-74,
+pci/nv40.c:41-44 and pci/gk104.c:208-210. The omissions preserve the earlier
+A7 scope. They do not prove that arbitrary display-related setup is harmless to
+omit, and they do not authorize new pad, bus or PCI writes.
+
+The new job also uploads bounded, write-once shell output before job.exit and
+marks its device-open step. The client logs get_module failure status. These
+changes add diagnostics without changing the register sequence. The first
+run's exact discovery/open cause remains UNKNOWN. No modified retry has run.
+The old owner/client/identity/observer artifacts remain in
+build/a7/approved-8974695/. The immutable original manifest and captures are in
+results/20261028-a7-post/. Fresh review and explicit one-run approval are required.

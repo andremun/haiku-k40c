@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-10-28: Fix the four A7 review nits: enforce FIFO bit changes and the selected I2C pin, persist the verifier checkout, and list omitted Linux setup. Prepare a new package with failure diagnostics. No retry runs.
 - 2026-10-28: The single approved A7 attempt stops before request/grant. POST and readiness are not reached. Evidence is preserved, mastering is disabled after exit, and no retry occurs.
 - 2026-10-28: Resolve ESC-002 and prepare the arm-only A7 native package with fresh-witness grants, retained storage and post-POST readback/re-arm. Host tests and cross-links pass. No A7 guest has run. Review and one-run approval remain required.
 - 2026-10-28: Native A7 prerequisite audit stops at ESC-002 for the flush-target arming/publication contract. No write entry point is added. D0 remains a structural result only.

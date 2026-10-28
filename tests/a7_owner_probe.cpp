@@ -15,6 +15,36 @@ static unsigned checks=0;
 static void require(bool value,const char* message){++checks;if(!value)throw std::runtime_error(message);}
 static const uint8_t key[32]={0xd7,0x5a,0x98,0x01,0x82,0xb1,0x0a,0xb7,0xd5,0x4b,0xfe,0xd3,0xc9,0x64,0x07,0x3a,
     0x0e,0xe1,0x72,0xf3,0xda,0xa6,0x23,0x25,0xaf,0x02,0x1a,0x68,0xf7,0x07,0x51,0x1a}; // RFC 8032 public TEST 1 key, never production.
+namespace k40::a7 {
+struct OwnerBoundaryProbe {
+    static void rejectOtherPreinitWrites(Owner& owner) {
+        auto& io=owner.io_;const auto saved=io.phase_;
+        io.phase_=Owner::Transport::Phase::I2c;
+        require(io.i2cPin_!=0,"missing derived pin");
+        require(io.allowed(io.i2cPin_,4,true),"derived pin denied");
+        for(unsigned bus=0;bus<16;++bus) {
+            const uint32_t at=0xd014+bus*0x20;
+            if(at!=io.i2cPin_)require(!io.write32(at,7),"unrelated I2C bus admitted");
+        }
+        require(!io.write32(io.i2cPin_,0),"wrong I2C init value admitted");
+        uint32_t old=0;require(!io.read32(io.i2cPin_,old),"I2C init read admitted");
+        io.phase_=Owner::Transport::Phase::Fifo;
+        require(!io.write32(0x200,0),"FIFO write without read admitted");
+        require(io.read32(0x200,old),"FIFO probe read denied");
+        require(!io.write32(0x200,(old&~0x100u)^2u),"FIFO changed an unrelated bit");
+        require(!io.write32(0x200,old|0x100u),"FIFO set before clear admitted");
+        require(!io.write32(0x204,0),"other FIFO register admitted");
+        io.fifoRead_=false;io.phase_=saved;
+    }
+    static void rejectThirdFifoWrite(Owner& owner) {
+        auto& io=owner.io_;const auto saved=io.phase_;uint32_t value=0;
+        io.phase_=Owner::Transport::Phase::Fifo;
+        require(io.read32(0x200,value),"FIFO final read denied");
+        require(!io.write32(0x200,value&~0x100u),"third FIFO write admitted");
+        io.phase_=saved;
+    }
+};
+}
 struct Storage:memory::ArmStorage {
     unsigned reserves=0,retains=0;std::vector<uint8_t> bytes;
     bool reserveZeroed(memory::ArmAllocation& out) override {++reserves;bytes.assign(4096,0);out={7,4096,{0x400000}};return true;}
@@ -60,7 +90,13 @@ struct Hardware:a7::Platform {
                 require(owner->detach(1)==a7::Status::Busy,"reentrant detach");++reentries;
             }
         }
-        if(name=="POST_RESULT") {post=false;if(first==0)registers[0x100c10]=0xdeadbeef;}
+        if(name=="ARM_BEFORE" && owner) {
+            const auto before=writes;a7::OwnerBoundaryProbe::rejectOtherPreinitWrites(*owner);
+            require(writes==before,"denied preinit writes reached hardware");
+        }
+        if(name=="POST_RESULT") {post=false;if(first==0)registers[0x100c10]=0xdeadbeef;
+            if(owner){const auto before=writes;a7::OwnerBoundaryProbe::rejectThirdFifoWrite(*owner);require(writes==before,"third FIFO write reached hardware");}}
+
         if(name=="PASS ARM_ONLY_POST")require(!writesAuthorized(),"permit survived execution");
     }
 };

@@ -86,8 +86,10 @@ def job(port):
             "#!/bin/sh",
             "set -eu",
             f"host={host}",
-            'finish() { code=$?; trap - EXIT; echo "$code" > /tmp/a7.exit; curl -fsS -T /tmp/a7.exit "$host/job.exit" || true; }',
+            'finish() { code=$?; trap - EXIT; curl -fsS -T /tmp/a7.output "$host/job-output.txt" || true; echo "$code" > /tmp/a7.exit; curl -fsS -T /tmp/a7.exit "$host/job.exit" || true; }',
             "trap finish EXIT",
+            "exec > /tmp/a7.output 2>&1",
+            "echo A7-JOB-START",
             "uname -a > /tmp/a7.environment",
             'curl -fsS -T /tmp/a7.environment "$host/environment.txt"',
             'curl -fsS -T /boot/system/kernel_x86_64 "$host/kernel_x86_64"',
@@ -104,7 +106,9 @@ def job(port):
             'chmod +x "$base/kernel/generic/k40c_a7_owner" "$base/kernel/drivers/bin/k40_a7_stage"',
             'ln -sf ../../bin/k40_a7_stage "$base/kernel/drivers/dev/misc/k40_a7_stage"',
             "ls /dev/misc >/dev/null",
+            "echo A7-OPEN-DEVICE",
             "exec 3<>/dev/misc/k40_a7_stage",
+            "echo A7-DEVICE-OPEN",
             "dd bs=128 count=1 <&3 > /tmp/a7.request",
             'curl -fsS -T /tmp/a7.request "$host/request.bin"',
             'poll=0; while [ "$poll" -lt 120 ]; do',
@@ -129,6 +133,7 @@ def exchange(folder, evidence, suite):
         "kernel_x86_64": 64 * 1024 * 1024,
         "request.bin": 128,
         "job.exit": 16,
+        "job-output.txt": 65536,
     }
 
     class Handler(BaseHTTPRequestHandler):

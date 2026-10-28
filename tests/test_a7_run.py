@@ -159,6 +159,11 @@ class A7Tests(unittest.TestCase):
                 ready.set()
                 self.assertEqual(request("grant.bin"), (200, b"synthetic grant"))
                 self.assertEqual(request("job.exit", b"x" * 17)[0], 413)
+                self.assertEqual(
+                    request("job-output.txt", b"A7-OPEN-DEVICE\nopen error\n")[0], 201
+                )
+                self.assertEqual(request("job-output.txt", b"replacement")[0], 409)
+                self.assertEqual(request("job-output.txt", b"x" * 65537)[0], 413)
 
     def test_fresh_mapping_cutoff_and_no_grant_on_stop(self):
         for problem in (
