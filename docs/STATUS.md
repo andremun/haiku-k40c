@@ -1,11 +1,13 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7RUN5 package ready. Next: one A7 card run, after the user's explicit yes.
-Task state: WAITING FOR USER. ADR 009 allows one VFIO device-enable line at
-QEMU start (the S1A7RUN4 stop). New package build/a7/package-run5/ (owner
-e031b8a3...) passed the cardless rehearsal results/20261029-100317-a7-rehearsal/.
-Review record docs/A7-REVIEW-PACKAGE.md. S1 remains incomplete. D1 is unapproved.
+Current task: S1A7RUN5 STOPPED (POST ran, I2C 0x4c write failed). Next: user decision.
+Task state: WAITING FOR USER (ADR 006). The approved fifth A7 run executed
+the card's start-up script under Haiku: 532 instructions, 38 skipped, including
+the IO helper, GPIO reset and the I2C 0x20 write. It stopped at 0xab8d (MAX6649
+I2C 0x4c) with Io. No R5 line; bus mastering off after exit. Cause UNKNOWN (no
+I2C error detail logged). See results/20261029-a7-508279eb/README.md.
+S1 remains incomplete. D1 is unapproved.
 Last updated: 2026-10-29
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -94,7 +96,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A7REHEARSAL | SUPERSEDED (REWORK by Claude review) | 2026-10-28 | Exact A7 job/binaries install and reach the no-card refusal in 52.34 s. ESC-003 resolved. No physical launch. |
 | S1A7REHEARSAL2 | DONE (cardless) | 2026-10-28 | Staging outside watched folders; final-name loads; one prepare; open B_ERROR; owner state kept on reload. 79.31 s. Records finished by Claude Code. See work/S1A7REHEARSAL2/RESULT.md. |
 | S1A7RUN4 | STOPPED (R5 rule at QEMU start) | 2026-10-29 | One approved run of package-rehearsal2. Stopped at 2.52 s on "vfio-pci 0000:04:00.0: enabling device (0000 -> 0002)" (first open after host reboot). Guest never started. No retry. See results/20261029-a7-ba6a1a54/README.md. |
-| S1A7RUN5 | READY (cardless) | 2026-10-29 | ADR 009 start-window allowance with tests; new package package-run5 rehearsed cardless in 79.64 s. No card run yet. See work/S1A7RUN5/RESULT.md. |
+| S1A7RUN5 | STOPPED (POST at 0xab8d, I2C Io) | 2026-10-29 | One approved run of package-run5. POST ran 532/38 instructions under Haiku, stopped at the MAX6649 I2C write (0xab8d) with Io. No R5 line. No retry. See results/20261029-a7-508279eb/README.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 
