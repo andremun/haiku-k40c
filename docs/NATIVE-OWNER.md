@@ -149,3 +149,16 @@ See docs/DMA-CONTRACT.md for the reconstructed Ubuntu QEMU source, address chain
 coherency obligations and proposed D0/D1 experiments. GPA-as-IOVA remains a
 conditional source inference. No live mapping, trusted evidence handoff or payload
 visibility was verified. ABI v1 and default-denied publication are unchanged.
+
+## Separate A7 arm-only owner (S1A7NATIVE)
+
+The regular generic/k40c_owner/v1 ABI and denied provider remain unchanged.
+A distinct generic/k40c_a7_owner/v1 KEEP_LOADED module owns the experimental
+physical POST path. Its stream client exposes only a fixed allocation request
+and authenticated single submission. The page is zeroed once and quarantined
+for the whole guest boot. No payload Buffer is published or pinned for submission.
+The owner holds the immutable image, physical platform, permit and one-shot
+state across client detach. Neither failure nor reload releases backing.
+See docs/A7-REVIEW-PACKAGE.md for fresh witness, both arming writes, readiness
+and the proposed reviewed host teardown boundary. Native linking and host
+fixtures pass. This separate module has not been loaded in a guest.

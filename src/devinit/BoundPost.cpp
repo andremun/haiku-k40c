@@ -5,7 +5,7 @@ namespace k40::devinit {
 bool BoundPost::guard()
 {
     if (error_ != Error::None) return false;
-    if (!running_ || !hostSimulation()) { error_=Error::HardwareDisabled; return false; }
+    if (!running_ || !executionAllowed()) { error_=Error::HardwareDisabled; return false; }
     const auto now=registers_.nowUs();
     if (now<last_) { error_=Error::Clock; return false; }
     last_=now;
@@ -106,7 +106,7 @@ bool BoundPost::i2cWrite(const I2cBus& bus, uint8_t address, uint8_t reg, uint8_
 }
 Error BoundPost::prepareI2c()
 {
-    if (!hostSimulation()) return Error::HardwareDisabled;
+    if (!executionAllowed()) return Error::HardwareDisabled;
     if (mode_!=PostI2c::DedicatedPins || !image_.approved_ || image_.attempted_
         || image_.i2cPreparationAttempted_) return Error::Input;
     image_.i2cPreparationAttempted_=true;
@@ -132,7 +132,7 @@ Error BoundPost::prepareI2c()
 }
 Result BoundPost::runPost(Limits limits)
 {
-    if (!hostSimulation()) return {Error::HardwareDisabled,0,0};
+    if (!executionAllowed()) return {Error::HardwareDisabled,0,0};
     if (mode_==PostI2c::DedicatedPins && !prepared_) return {Error::Input,0,0};
     if (!image_.approved_ || !image_.selected_) return {Error::Input,0,0};
     if (image_.attempted_ || !limits.steps || !limits.depth || !limits.timeoutUs) return {Error::Input,0,0};

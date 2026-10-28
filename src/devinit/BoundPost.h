@@ -5,7 +5,7 @@
 #include "devinit/I2c.h"
 namespace k40::devinit {
 enum class PostI2c { TransactionCallback, DedicatedPins };
-// Freestanding host-only executor adapter. Callers serialize
+// Freestanding executor adapter, gated by simulation or the resident A7 permit. Callers serialize
 // selection/execution, and keep the image and both transports alive throughout.
 class BoundPost final : private Backend, private BoardTransport {
 public:
@@ -22,6 +22,11 @@ public:
     Result runPost(Limits limits = {}); // No caller root, table pointer, digest, or RAM index.
 private:
     bool hostSimulation() const override { return registers_.hostSimulation() && ports_.hostSimulation(); }
+    const a7::ExecutionPermit* a7Permit() const override {
+        return !registers_.hostSimulation() && !ports_.hostSimulation()
+            && registers_.a7Permit()==ports_.a7Permit()?registers_.a7Permit():nullptr;
+    }
+    bool executionAllowed() const { return a7::permitted(hostSimulation(),a7Permit()); }
     uint64_t nowUs() override { return registers_.nowUs(); }
     bool delayUs(uint64_t) override;
     bool read32(uint32_t, uint32_t&) override;

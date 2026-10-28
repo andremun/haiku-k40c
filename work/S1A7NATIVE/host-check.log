@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/a7/host_check.py", line 95, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/a7/host_check.py", line 92, in main
+    expected=render()
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/a7/host_check.py", line 59, in render
+    if not successful:raise ValueError('no physical-permit owner fixture completed')
+ValueError: no physical-permit owner fixture completed

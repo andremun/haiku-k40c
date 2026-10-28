@@ -1,6 +1,7 @@
 // Copyright 2026 Mario Andrés Muñoz.
 // Distributed under the terms of the MIT License.
 #pragma once
+#include "a7/ExecutionPermit.h"
 #include <cstdint>
 
 namespace k40::devinit {
@@ -19,6 +20,8 @@ public:
     // This executor is not approved for hardware. A production backend must
     // not identify itself as a host simulation to bypass this gate.
     virtual bool hostSimulation() const = 0;
+    virtual const a7::ExecutionPermit* a7Permit() const { return nullptr; }
+    bool executionAllowed() const { return a7::permitted(hostSimulation(),a7Permit()); }
     virtual uint64_t nowUs() = 0;
     virtual bool delayUs(uint64_t) = 0; // Host-monotonic bounded implementation.
     // The backend must resolve encoded register helpers and enforce policy.

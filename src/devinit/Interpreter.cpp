@@ -58,7 +58,7 @@ Result Interpreter::run(uint32_t start,Limits limits,uint8_t flags)
     if (!rom_ || !size_ || !start || !limits.steps || !limits.depth || !limits.timeoutUs || (flags & ~7)) {
         result_.error=Error::Input; return result_;
     }
-    if (!backend_.hostSimulation()) { result_.error=Error::HardwareDisabled; return result_; }
+    if (!backend_.executionAllowed()) { result_.error=Error::HardwareDisabled; return result_; }
     started_=last_=backend_.nowUs();
     execute(start,1,false);
     return result_;

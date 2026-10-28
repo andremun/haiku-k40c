@@ -174,7 +174,8 @@ Error BoardHelpers::gpio(RomView rom, const uint8_t* instruction, uint32_t lengt
 
 Error BoardHelpers::execute(RomView rom, const uint8_t* bytes, uint32_t length, bool active)
 {
-    if (!registers_.hostSimulation() || !ports_.hostSimulation()) return Error::HardwareDisabled;
+    if (!a7::compatible(registers_.hostSimulation(),registers_.a7Permit(),
+                         ports_.hostSimulation(),ports_.a7Permit())) return Error::HardwareDisabled;
     if (!bytes || !length) return Error::Input;
     switch (bytes[0]) {
     case 0x69: return length == 5 ? io(bytes, active) : Error::Input; // nvkm/subdev/bios/init.c:2269.

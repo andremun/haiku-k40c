@@ -2,7 +2,7 @@
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
 Current task: S1A7NATIVE (native POST integration and A7 package).
-Task state: S1D0RETRY PASS in structural mapping scope, committed d217b6f. S1A7NATIVE prerequisite audit is STOPPED at ESC-002: resolve the arm-only flush-target contract versus the existing production publication prerequisite before native binding. D0 does not close Q7 or authorize a fresh A7 mapping. No native write entry point or runnable A7 package was added. Hardware gates remain closed. S1 is incomplete.
+Task state: S1A7NATIVE DONE (host/native-link package); Claude review and explicit one-run approval pending. Full make check passes. ESC-002 is resolved: retained arm-only reference, fresh same-run witness, pre-POST arm and post-POST readback/re-arm. Native owner/client cross-link and host checks pass. Review: docs/A7-REVIEW-PACKAGE.md. D1 stays after POST, Q7 remains open. No A7 guest or write run has occurred or been approved. S1 remains incomplete.
 Last updated: 2026-10-28
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -76,7 +76,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 
 | S1D0RETRY | PASS (structural mapping only) | 2026-10-28 | Retained 4096-byte page has complete map coverage at the cutoff. Task proofs and trace replay pass. No payload/coherency or S1 claim. See work/S1D0RETRY/RESULT.md. |
 
-| S1A7NATIVE | STOPPED (prerequisite audit only) | 2026-10-28 | ESC-002 asks how arm-only pre-POST references relate to the current publication prerequisite. Native binding/package not implemented. Hardware gates unchanged. |
+| S1A7NATIVE | DONE (host/native-link package; review pending) | 2026-10-28 | ESC-002 resolved by Claude. Distinct arm-only native binding, authenticated fresh-witness bridge, permanent retention, readiness and closed one-run launcher. Host tests and cross-links pass. No A7 run approved or performed. See docs/A7-REVIEW-PACKAGE.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

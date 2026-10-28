@@ -7,7 +7,7 @@ bool DedicatedI2c::initialize(const I2cBus& bus)
 {
     ready_ = false;
     result_ = {};
-    if (!hostSimulation()) { result_.primary = I2cError::HardwareDisabled; return false; }
+    if (!executionAllowed()) { result_.primary = I2cError::HardwareDisabled; return false; }
     // Reviewed dedicated NVIO descriptor only; shared pad modes are unsupported.
     if (bus.type != 0x05 || bus.share != 0xff || bus.drive > 15) { // include/nvkm/subdev/bios/i2c.h:8,12.
         result_.primary = I2cError::Input; return false;
@@ -92,7 +92,7 @@ bool DedicatedI2c::byte(uint8_t value)
 bool DedicatedI2c::i2cWrite(const I2cBus& bus, uint8_t address7, uint8_t reg, uint8_t value)
 {
     result_ = {};
-    if (!hostSimulation()) { result_.primary = I2cError::HardwareDisabled; return false; }
+    if (!executionAllowed()) { result_.primary = I2cError::HardwareDisabled; return false; }
     if (!ready_) { result_.primary = I2cError::NotInitialized; return false; }
     if (!timeout_ || address7 > 127 || bus.index != bus_.index || bus.type != bus_.type
         || bus.drive != bus_.drive || bus.share != bus_.share || bus.aux != bus_.aux) {

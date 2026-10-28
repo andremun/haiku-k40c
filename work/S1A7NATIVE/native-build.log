@@ -1,0 +1,45 @@
+src/devinit/BoundPost.cpp: In member function 'bool k40::devinit::BoundPost::guard()':
+src/devinit/BoundPost.cpp:8:23: error: reference to 'executionAllowed' is ambiguous
+    8 |     if (!running_ || !executionAllowed()) { error_=Error::HardwareDisabled; return false; }
+      |                       ^~~~~~~~~~~~~~~~
+In file included from src/devinit/I2c.h:4,
+                 from src/devinit/BoundPost.h:5,
+                 from src/devinit/BoundPost.cpp:3:
+src/devinit/BoardCore.h:24:10: note: candidates are: 'bool k40::devinit::BoardTransport::executionAllowed() const'
+   24 |     bool executionAllowed() const { return a7::permitted(hostSimulation(),a7Permit()); }
+      |          ^~~~~~~~~~~~~~~~
+In file included from src/devinit/PostImage.h:5,
+                 from src/devinit/BoundPost.h:4:
+src/devinit/Interpreter.h:24:10: note:                 'bool k40::devinit::Backend::executionAllowed() const'
+   24 |     bool executionAllowed() const { return a7::permitted(hostSimulation(),a7Permit()); }
+      |          ^~~~~~~~~~~~~~~~
+src/devinit/BoundPost.cpp: In member function 'k40::devinit::Error k40::devinit::BoundPost::prepareI2c()':
+src/devinit/BoundPost.cpp:109:10: error: reference to 'executionAllowed' is ambiguous
+  109 |     if (!executionAllowed()) return Error::HardwareDisabled;
+      |          ^~~~~~~~~~~~~~~~
+src/devinit/BoardCore.h:24:10: note: candidates are: 'bool k40::devinit::BoardTransport::executionAllowed() const'
+   24 |     bool executionAllowed() const { return a7::permitted(hostSimulation(),a7Permit()); }
+      |          ^~~~~~~~~~~~~~~~
+src/devinit/Interpreter.h:24:10: note:                 'bool k40::devinit::Backend::executionAllowed() const'
+   24 |     bool executionAllowed() const { return a7::permitted(hostSimulation(),a7Permit()); }
+      |          ^~~~~~~~~~~~~~~~
+src/devinit/BoundPost.cpp: In member function 'k40::devinit::Result k40::devinit::BoundPost::runPost(k40::devinit::Limits)':
+src/devinit/BoundPost.cpp:135:10: error: reference to 'executionAllowed' is ambiguous
+  135 |     if (!executionAllowed()) return {Error::HardwareDisabled,0,0};
+      |          ^~~~~~~~~~~~~~~~
+src/devinit/BoardCore.h:24:10: note: candidates are: 'bool k40::devinit::BoardTransport::executionAllowed() const'
+   24 |     bool executionAllowed() const { return a7::permitted(hostSimulation(),a7Permit()); }
+      |          ^~~~~~~~~~~~~~~~
+src/devinit/Interpreter.h:24:10: note:                 'bool k40::devinit::Backend::executionAllowed() const'
+   24 |     bool executionAllowed() const { return a7::permitted(hostSimulation(),a7Permit()); }
+      |          ^~~~~~~~~~~~~~~~
+Traceback (most recent call last):
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/a7/build.py", line 173, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/a7/build.py", line 171, in main
+    else:build()
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/a7/build.py", line 161, in build
+    subprocess.run(['bash','tools/haiku/build-driver.sh','k40_a7_owner_module',*sources],cwd=ROOT,env=env,check=True)
+  File "/usr/lib/python3.10/subprocess.py", line 526, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['bash', 'tools/haiku/build-driver.sh', 'k40_a7_owner_module', 'src/devinit/PostImage.cpp', 'src/devinit/BoardPolicy.cpp', 'src/devinit/Sha256.cpp', 'src/devinit/BoundPost.cpp', 'src/devinit/BoardCore.cpp', 'src/devinit/Interpreter.cpp', 'src/devinit/I2c.cpp', 'src/runtime/PreStart.cpp', 'src/runtime/Bootstrap.cpp', 'src/memory/ArmedReference.cpp', 'src/os/HaikuBackend.c', 'src/os/HaikuMemory.cpp', 'src/a7/ArmAuthority.cpp', 'src/a7/Owner.cpp', 'src/a7/NativePlatform.cpp', 'src/a7/Module.cpp', '/tmp/k40-a7-ed25519/src/fe.c', '/tmp/k40-a7-ed25519/src/ge.c', '/tmp/k40-a7-ed25519/src/sc.c', '/tmp/k40-a7-ed25519/src/sha512.c', '/tmp/k40-a7-ed25519/src/verify.c']' returned non-zero exit status 1.

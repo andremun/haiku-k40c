@@ -1,6 +1,7 @@
 // Copyright 2026 Mario Andres Munoz.
 // Distributed under the terms of the MIT License.
 #pragma once
+#include "a7/ExecutionPermit.h"
 #include "devinit/Interpreter.h"
 #include "devinit/BoardPolicy.h"
 #include <array>
@@ -19,6 +20,8 @@ class BoardTransport {
 public:
     virtual ~BoardTransport() = default;
     virtual bool hostSimulation() const = 0;
+    virtual const a7::ExecutionPermit* a7Permit() const { return nullptr; }
+    bool executionAllowed() const { return a7::permitted(hostSimulation(),a7Permit()); }
     // Callbacks must be bounded and return false on an unavailable bus or NACK.
     // Physical transports remain gated. DedicatedI2c supplies a host pin candidate.
     virtual bool read8(uint32_t address, uint8_t& value) = 0;

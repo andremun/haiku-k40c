@@ -1,0 +1,17 @@
+In file included from /home/unimelb.edu.au/mariom1/haiku-cross/haiku/headers/private/kernel/smp.h:13,
+                 from /home/unimelb.edu.au/mariom1/haiku-cross/haiku/headers/private/kernel/util/Random.h:12,
+                 from src/a7/Module.cpp:7:
+/home/unimelb.edu.au/mariom1/haiku-cross/haiku/headers/private/kernel/boot/kernel_args.h:18:10: fatal error: platform_kernel_args.h: No such file or directory
+   18 | #include <platform_kernel_args.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+Traceback (most recent call last):
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/a7/build.py", line 173, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/a7/build.py", line 171, in main
+    else:build()
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/a7/build.py", line 161, in build
+    subprocess.run(['bash','tools/haiku/build-driver.sh','k40_a7_owner_module',*sources],cwd=ROOT,env=env,check=True)
+  File "/usr/lib/python3.10/subprocess.py", line 526, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['bash', 'tools/haiku/build-driver.sh', 'k40_a7_owner_module', 'src/devinit/PostImage.cpp', 'src/devinit/BoardPolicy.cpp', 'src/devinit/Sha256.cpp', 'src/devinit/BoundPost.cpp', 'src/devinit/BoardCore.cpp', 'src/devinit/Interpreter.cpp', 'src/devinit/I2c.cpp', 'src/runtime/PreStart.cpp', 'src/runtime/Bootstrap.cpp', 'src/memory/ArmedReference.cpp', 'src/os/HaikuBackend.c', 'src/os/HaikuMemory.cpp', 'src/a7/ArmAuthority.cpp', 'src/a7/Owner.cpp', 'src/a7/NativePlatform.cpp', 'src/a7/Module.cpp', '/tmp/k40-a7-ed25519/src/fe.c', '/tmp/k40-a7-ed25519/src/ge.c', '/tmp/k40-a7-ed25519/src/sc.c', '/tmp/k40-a7-ed25519/src/sha512.c', '/tmp/k40-a7-ed25519/src/verify.c']' returned non-zero exit status 1.

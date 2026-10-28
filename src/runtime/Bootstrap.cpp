@@ -37,7 +37,7 @@ bool poll(BootstrapPort& port,uint32_t reg,uint32_t busy,PollLimit limits)
 }
 bool writeSlowWindow(BootstrapPort& port,OwnedVram owned,uint64_t offset,const uint32_t* data,size_t count)
 {
-    if(!port.hostSimulation() || !data || !range(owned,offset,count))return false;
+    if(!port.executionAllowed() || !data || !range(owned,offset,count))return false;
     Guard guard(port);if(!guard.held())return false;
     uint64_t selected=UINT64_MAX;
     for(size_t i=0;i<count;++i) {
@@ -53,7 +53,7 @@ bool writeSlowWindow(BootstrapPort& port,OwnedVram owned,uint64_t offset,const u
 }
 bool readSlowWindow(BootstrapPort& port,OwnedVram owned,uint64_t offset,uint32_t* data,size_t count)
 {
-    if(!port.hostSimulation() || !data || !range(owned,offset,count))return false;
+    if(!port.executionAllowed() || !data || !range(owned,offset,count))return false;
     Guard guard(port);if(!guard.held())return false;
     uint64_t selected=UINT64_MAX;
     for(size_t i=0;i<count;++i) {
@@ -69,13 +69,13 @@ bool readSlowWindow(BootstrapPort& port,OwnedVram owned,uint64_t offset,uint32_t
 }
 bool flushBar(BootstrapPort& port,PollLimit limits)
 {
-    if(!port.hostSimulation() || !limits.timeoutUs || !limits.attempts)return false;
+    if(!port.executionAllowed() || !limits.timeoutUs || !limits.attempts)return false;
     Guard guard(port);if(!guard.held())return false;
     return port.write32(0x070000,1) && poll(port,0x070000,2,limits); // subdev/bar/g84.c:29-40
 }
 bool checkOwnedScratch(BootstrapPort& port,OwnedVram owned,const uint64_t* offsets,size_t samples,PollLimit limits)
 {
-    if(!port.hostSimulation() || !offsets || samples<2 || samples>64 || !limits.timeoutUs || !limits.attempts)return false;
+    if(!port.executionAllowed() || !offsets || samples<2 || samples>64 || !limits.timeoutUs || !limits.attempts)return false;
     uint32_t patterns[64];
     for(size_t i=0;i<samples;++i) {
         if(!range(owned,offsets[i],1))return false;
@@ -109,7 +109,7 @@ bool commitRunlist(BootstrapPort& port,uint32_t id,uint64_t address,RunlistTarge
 {
     // ID width follows channel runlist mask, nvkm/engine/fifo/gk104.c:77; address/count fields
     // follow nvkm/engine/fifo/gk104.c:446-447. This does not infer available TOP routing IDs.
-    if(!port.hostSimulation() || id>15 || address>=(1ULL<<40) || (address&0xfff)
+    if(!port.executionAllowed() || id>15 || address>=(1ULL<<40) || (address&0xfff)
         || entries>0xfffff || !limits.timeoutUs || !limits.attempts)return false; // nvkm/engine/fifo/gk104.c:446-447
     if(target!=RunlistTarget::Vram && target!=RunlistTarget::NoncoherentHost)return false;
     uint32_t aperture=target==RunlistTarget::Vram ? 0 : 3; // nvkm/engine/fifo/gk104.c:438-440

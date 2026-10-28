@@ -1,0 +1,13 @@
+{
+  "scope": "upstream Linux v6.8 SOURCE_ONLY; not exact running Ubuntu source",
+  "sha256": {
+    "drivers/vfio/pci/vfio_pci_core.c": "162097bdb963b089a9f4395d2785da2e7cecabeddaf9b49732c967334de9f7ce",
+    "drivers/vfio/vfio_iommu_type1.c": "b51d88b911cbf8546b872ab72cfeccb4b56bfd77cdc26e670ce537b7fe0015d3",
+    "drivers/vfio/vfio_main.c": "6f54051829d92f0d9b8e9ddcceef5e85cb302d5f110c69bd00ff8a6df7182671"
+  },
+  "urls": {
+    "drivers/vfio/pci/vfio_pci_core.c": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/vfio/pci/vfio_pci_core.c",
+    "drivers/vfio/vfio_iommu_type1.c": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/vfio/vfio_iommu_type1.c",
+    "drivers/vfio/vfio_main.c": "https://raw.githubusercontent.com/torvalds/linux/v6.8/drivers/vfio/vfio_main.c"
+  }
+}

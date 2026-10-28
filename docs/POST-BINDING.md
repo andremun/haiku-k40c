@@ -1,10 +1,11 @@
 # Immutable POST binding and access policy (S1POST)
 
 The new binding owns the exact approved ROM, derives its execution inputs, and
-checks accesses against the current instruction. It remains a host simulation.
+checks accesses against the current instruction. S1POST tested it in host simulation.
 The snapshot, parser, policy, bound executor and board helpers are freestanding.
-Only the legacy PolicyBackend adapter retains hosted storage. No hardware backend or native owner integration is
-provided by this task.
+Only the legacy PolicyBackend adapter retains hosted storage. S1A7NATIVE now
+provides a separate gated physical adapter. See docs/A7-REVIEW-PACKAGE.md.
+No physical POST run has occurred.
 
 ## Owned inputs
 
@@ -162,3 +163,14 @@ still need separate integration and lifetime proof. Preserve the
 existing default-denied DMA contract. Verified IOVA/visibility, VRAM ownership,
 fault/readiness coverage and quiescence remain open. A7 still requires review and
 the user's explicit go-ahead. No write-stage package is ready from this task alone.
+
+## S1A7NATIVE arm-only package
+
+The separate A7 owner now binds the freestanding core to an explicit physical
+execution permit. The transport reports hostSimulation=false. Ordinary physical
+backends without that permit still fail closed. The latch and all callbacks live
+in the KEEP_LOADED owner. A fresh authenticated same-run mapping grant admits
+a retained arm-only reference without changing production publication or Q7.
+Both native artifacts cross-link. Host fixtures pass. Hardware execution and
+review remain pending. The complete write inventory and first-run approval
+package are in docs/A7-REVIEW-PACKAGE.md.

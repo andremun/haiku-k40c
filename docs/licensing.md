@@ -309,3 +309,25 @@ Reconsulted pinned Nouveau `nvkm/subdev/fb/base.c`, `fb/gf100.c`, `fb/gk110.c`,
 `include/nvkm/core/layout.h` for constructor, preinit and POST ordering. These
 are existing MIT reference sources. No source blocks were copied and no new
 hardware constant was introduced. ESC-002 records the source-only findings.
+
+## S1A7NATIVE arm-only implementation
+
+Reconsulted pinned Nouveau `fb/base.c`, `fb/gf100.c`, `fb/gk110.c`,
+`fb/ramgf100.c`, `fb/ramgf108.c`, `fb/ramgk104.c`, `timer/nv04.c`,
+`timer/nv41.c`, `timer/regsnv04.h`, and the previously listed preinit/board
+sources for original arm, topology and readiness code. No source blocks copied.
+Reconsulted Haiku nvidia driver BAR mechanics and `util/Random.h`/`Random.cpp`
+for the exported instance-challenge function, not an entropy guarantee.
+
+The verification-only dependency is orlp/ed25519 at the exact revision recorded
+by tools/a7/crypto_sources.py. Its original zlib notice stays in the external
+checkout. It is not attributed to this project's author. No key generation or
+signing source is linked into the native module. RFC 8032 supplies the canonical
+signature-scalar rule. Original wrapper, memory and stage code remain MIT.
+
+A7 also consults Haiku `headers/os/drivers/PCI.h:159-164,240,686` for
+cooperative reservation and read-only command-register interpretation. The
+read-only upstream Linux v6.8 VFIO teardown baseline is separately pinned in
+`work/S1A7NATIVE/teardown-sources.json` (GPL-2.0 kernel sources, not linked or
+copied). It is not represented as exact running Ubuntu source. The original
+ed25519 zlib notice is also copied into the private build package.

@@ -259,7 +259,7 @@ PostImage::PostImage(const uint8_t* rom, uint32_t size)
 }
 Error PostImage::selectRam(Backend& backend)
 {
-    if (!backend.hostSimulation()) return Error::HardwareDisabled;
+    if (!backend.executionAllowed()) return Error::HardwareDisabled;
     if (!approved_) return Error::Denied;
     if (selectionAttempted_) return Error::Input;
     selectionAttempted_=true;

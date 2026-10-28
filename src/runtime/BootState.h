@@ -4,12 +4,14 @@
 #include <atomic>
 #include <cstdint>
 namespace k40::os { class NativeOwner; }
+namespace k40::a7 { class Owner; }
 namespace k40::runtime::startup {
 enum class BootState : uint8_t { Fresh, Running, Complete, Failed };
 // The owner survives client recreation. There is no reset to Fresh.
 class OncePerBoot {
     friend class Controller;
     friend class k40::os::NativeOwner;
+    friend class k40::a7::Owner;
     std::atomic<BootState> state_{BootState::Fresh};
     bool begin() {
         auto expected = BootState::Fresh;

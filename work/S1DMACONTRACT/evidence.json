@@ -128,7 +128,7 @@
     "src/os/HaikuMemory.h": "b1d71c0d2c4764d192d9dbb04d2987cc22b7b6a9f8e7fcf6af7a0032b0329565",
     "src/os/NativeOwner.cpp": "7b103013f74ee828559f611c5c524399812cc5bb07406c031efad8012c480534",
     "src/os/NativeOwner.h": "8975226a5240fb4b1929e2904fdd84b7bebc137e4486116d30977624a1ccf484",
-    "src/runtime/PreStart.cpp": "7249b9c5699ad03f81bb7af93b7575ffa194e3089b5550bf7e8161110fd00f23",
+    "src/runtime/PreStart.cpp": "d83dc89ef6000404080fbf1fd701c8e80878584ea7cf90a20d5e8ddd2b4ad4de",
     "tools/dma_contract.py": "191d1ca19b7400e6108b4667be3a7a1d1a995b935f831da29ff0c29d8a97d21f",
     "tools/haiku/card_run.py": "de92c0ad3ac917209270e2ab9dd9989eb29b25bc2c6aba7130860401e4da61f0",
     "work/S1DMACONTRACT/host-inventory.log": "42395808a08f80340a5bf13f75f6553b9e3ebc57ee4c01c6413507c7901e314e"

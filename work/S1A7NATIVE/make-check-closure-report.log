@@ -1,0 +1,14 @@
+python3 tools/check_repo.py
+check_repo: 0 failure(s)
+python3 tools/restore_verification_refs.py --check
+nouveau: clean adc218676eef25575469234709c2d87185ca223a
+envytools: clean f102b82381f3f11cee113d16374c87091db039d9
+haiku: clean 49a0af9585d80e42240af63ab66e31e9873f59b8
+open-gpu-doc: clean 9fdf5c4062007929d9f4e6cbad9c9771fe61b880
+mesa: clean f97d7dcca0e51d7e20ed4342bb5ea8afea7db7fa
+envytools (full, decoder): clean f102b82381f3f11cee113d16374c87091db039d9 /home/unimelb.edu.au/mariom1/haiku-cross/src/envytools
+python3 tools/devinit_trace_join.py --check
+python3 tools/load_trace.py --check
+python3 tools/dma_contract.py --check
+python3 tools/observer/pins.py --check
+make: *** [Makefile:26: check] Error 1

@@ -1,6 +1,7 @@
 // Copyright 2026 Mario Andrés Muñoz.
 // Distributed under the terms of the MIT License.
 #pragma once
+#include "a7/ExecutionPermit.h"
 #include <cstddef>
 #include <cstdint>
 #include "memory/Memory.h"
@@ -10,6 +11,8 @@ class BootstrapPort {
 public:
     virtual ~BootstrapPort() = default;
     virtual bool hostSimulation() const = 0;
+    virtual const a7::ExecutionPermit* a7Permit() const { return nullptr; }
+    bool executionAllowed() const { return a7::permitted(hostSimulation(),a7Permit()); }
     virtual bool lock() = 0; // Must itself have a deadline; serializes selector+data.
     virtual void unlock() = 0;
     virtual uint64_t nowUs() = 0;

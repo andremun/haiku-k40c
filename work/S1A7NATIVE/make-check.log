@@ -1,0 +1,6 @@
+python3 tools/check_repo.py
+FAIL: src/: 21 of 298 lines with a hardware constant have no source: add `// path/file.c:LINE` on the line or in the comment above it, or `// no source: reason` for plain arithmetic. First: ['src/a7/ArmAuthority.cpp:8', 'src/a7/ArmAuthority.cpp:9', 'src/a7/ArmAuthority.cpp:15', 'src/a7/ArmAuthority.cpp:16', 'src/a7/ArmAuthority.h:9', 'src/a7/NativePlatform.cpp:33']
+FAIL: tools/provenance.py --check (run 1): docs/register-provenance.md is not what the tool generates
+FAIL: docs/register-provenance.md: 261 table rows that start with `src/...`; src/ has 298 constant lines
+check_repo: 3 failure(s)
+make: *** [Makefile:20: check] Error 1

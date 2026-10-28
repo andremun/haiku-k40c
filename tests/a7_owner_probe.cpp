@@ -1,0 +1,99 @@
+// Copyright 2026 Mario Andres Munoz.
+// Distributed under the terms of the MIT License.
+// Actual A7 owner/authentication/control path with simulated MMIO. No OS/GPU calls.
+#include "a7/Owner.h"
+#include "i2c_wire.h"
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <memory>
+#include <string>
+#include <vector>
+using namespace k40;
+static unsigned checks=0;
+static void require(bool value,const char* message){++checks;if(!value)throw std::runtime_error(message);}
+static const uint8_t key[32]={0xd7,0x5a,0x98,0x01,0x82,0xb1,0x0a,0xb7,0xd5,0x4b,0xfe,0xd3,0xc9,0x64,0x07,0x3a,
+    0x0e,0xe1,0x72,0xf3,0xda,0xa6,0x23,0x25,0xaf,0x02,0x1a,0x68,0xf7,0x07,0x51,0x1a}; // RFC 8032 public TEST 1 key, never production.
+struct Storage:memory::ArmStorage {
+    unsigned reserves=0,retains=0;std::vector<uint8_t> bytes;
+    bool reserveZeroed(memory::ArmAllocation& out) override {++reserves;bytes.assign(4096,0);out={7,4096,{0x400000}};return true;}
+    void retain(const memory::ArmAllocation&) override {++retains;}
+};
+struct Hardware:a7::Platform {
+    Wire wire;
+    std::map<uint32_t,uint32_t> registers;
+    a7::Owner* owner=nullptr;
+    uint32_t fallback=0,strap=0;
+    unsigned writes=0,arms=0,reentries=0;
+    bool post=false,failPins=false,denyClock=false;
+    bool initialize() override {return true;}
+    bool pciCommand(uint16_t& value) override {value=7;return true;}
+    uint64_t nowUs() override {return wire.nowUs();}
+    bool delayUs(uint64_t us) override {return wire.delayUs(us);}
+    bool read32(uint32_t at,uint32_t& value) override {
+        if(at==0xd054)return !failPins && wire.read32(at,value);
+        if(at==0){value=0x0f1240a1;return true;}
+        if(at==0x101000){value=strap<<2;return true;}
+        if(post){value=fallback;return true;}
+        if(at==0x9400){value=denyClock?0:uint32_t(wire.clock*32+1);return true;}
+        if(at==0x9410 || at==0x100 || at==0x22554 || at==0x70000){value=0;return true;}
+        if(at==0x22438 || at==0x2243c){value=6;return true;}
+        if(at>=0x11020c && at<=0x11520c && (at-0x11020c)%0x1000==0){value=1920;return true;}
+        value=registers[at];return true;
+    }
+    bool write32(uint32_t at,uint32_t value) override {
+        require(writesAuthorized(),"physical write escaped permit");++writes;
+        if(at==0xd054)return !failPins && wire.write32(at,value);
+        if(at==0x100c10){++arms;require(value==0x4000,"wrong arm encoding");}
+        registers[at]=value;return true;
+    }
+    bool read8(uint32_t at,uint8_t& value) override {value=uint8_t(registers[at]);return true;}
+    bool write8(uint32_t at,uint8_t value) override {require(writesAuthorized(),"byte write escaped permit");++writes;registers[at]=value;return true;}
+    void log(const char* event,uint64_t first,uint64_t=0) override {
+        const std::string name(event);
+        if(name=="SCRIPT_ACTIVE" || name=="SCRIPT_SKIPPED") {
+            post=true;
+            if(owner) {
+                uint64_t lease=0;uint8_t request[128];
+                require(owner->prepare(lease,request)==a7::Status::Busy,"reentrant prepare");
+                require(owner->detach(1)==a7::Status::Busy,"reentrant detach");++reentries;
+            }
+        }
+        if(name=="POST_RESULT") {post=false;if(first==0)registers[0x100c10]=0xdeadbeef;}
+        if(name=="PASS ARM_ONLY_POST")require(!writesAuthorized(),"permit survived execution");
+    }
+};
+int main(int argc,char** argv)
+try {
+    if(argc<3)return 2;
+    std::ifstream input(argv[1],std::ios::binary);
+    std::vector<uint8_t> rom((std::istreambuf_iterator<char>(input)),{});
+    uint8_t nonce[32],challenge[16];std::fill_n(nonce,32,0x51);std::fill_n(challenge,16,0x61);
+    const std::string mode(argv[2]);
+    Storage storage;Hardware hardware;
+    if(argc>3)hardware.fallback=std::stoul(argv[3])?UINT32_MAX:0;
+    if(argc>4)hardware.strap=std::stoul(argv[4]);
+    if(mode=="pins-fail")hardware.failPins=true;
+    if(mode=="clock-fail")hardware.denyClock=true;
+    auto owner=std::make_unique<a7::Owner>(hardware,storage,key,nonce,challenge,rom.data(),rom.size(),11520ULL<<20);
+    hardware.owner=owner.get();uint64_t lease=0;uint8_t request[128];
+    require(owner->prepare(lease,request)==a7::Status::Ok && lease==1,"prepare failed");
+    require(storage.reserves==1 && storage.retains==1 && !hardware.writes,"prepare effects");
+    if(mode=="request"){std::cout.write(reinterpret_cast<char*>(request),sizeof(request));return 0;}
+    uint8_t grant[192];std::cin.read(reinterpret_cast<char*>(grant),sizeof(grant));require(std::cin.gcount()==192,"grant framing");
+    const auto status=owner->submit(lease,grant,sizeof(grant));const auto result=owner->outcome();
+    const auto effects=hardware.writes;
+    require(owner->submit(lease,grant,sizeof(grant))==a7::Status::Retained && hardware.writes==effects,"startup replay");
+    require(owner->detach(lease)==a7::Status::Retained,"detach lost retention");
+    uint64_t next=0;require(owner->prepare(next,request)==a7::Status::Retained && !next,"reload bypass");
+    require(storage.retains==1 && storage.reserves==1 && std::all_of(storage.bytes.begin(),storage.bytes.end(),[](auto b){return b==0;}),"arm payload touched");
+    if(status==a7::Status::Ok) {
+        require(result.startup.armAttempts==2 && result.startup.flushReadback==0xdeadbeef,"arming/readback order");
+        require(hardware.arms==2 && hardware.registers[0x100c10]==0x4000 && result.scratch,"readiness failed");
+        require(owner->state()==runtime::startup::BootState::Complete && hardware.reentries>0,"one-shot completion");
+    } else require(owner->state()==runtime::startup::BootState::Failed,"failure lost latch");
+    std::cout<<"status "<<unsigned(status)<<" step "<<unsigned(result.startup.step)<<" error "<<unsigned(result.startup.error)
+             <<" arms "<<hardware.arms<<" writes "<<hardware.writes<<" checks "<<checks<<'\n';
+    return 0;
+} catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 1;}

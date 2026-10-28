@@ -13,10 +13,14 @@ public:
     DedicatedI2c(Backend& registers, BoardTransport& bytes) : registers_(registers), bytes_(bytes) {}
     bool initialize(const I2cBus&);
     bool hostSimulation() const override { return registers_.hostSimulation() && bytes_.hostSimulation(); }
-    bool read8(uint32_t at, uint8_t& value) override { return hostSimulation() && bytes_.read8(at, value); }
-    bool write8(uint32_t at, uint8_t value) override { return hostSimulation() && bytes_.write8(at, value); }
+    const a7::ExecutionPermit* a7Permit() const override {
+        return !registers_.hostSimulation() && !bytes_.hostSimulation()
+            && registers_.a7Permit()==bytes_.a7Permit()?registers_.a7Permit():nullptr;
+    }
+    bool read8(uint32_t at, uint8_t& value) override { return executionAllowed() && bytes_.read8(at, value); }
+    bool write8(uint32_t at, uint8_t value) override { return executionAllowed() && bytes_.write8(at, value); }
     bool i2cWrite(const I2cBus&, uint8_t address7, uint8_t reg, uint8_t value) override;
-    void audit(uint32_t at, uint8_t op, bool active, Error error) override { if (hostSimulation()) bytes_.audit(at, op, active, error); }
+    void audit(uint32_t at, uint8_t op, bool active, Error error) override { if (executionAllowed()) bytes_.audit(at, op, active, error); }
     I2cResult result() const { return result_; }
     // Software transaction deadline. Poll counts also bound a stalled clock.
     void timeoutUs(uint64_t value) { timeout_ = value; }

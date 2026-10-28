@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-10-28: Resolve ESC-002 and prepare the arm-only A7 native package with fresh-witness grants, retained storage and post-POST readback/re-arm. Host tests and cross-links pass. No A7 guest has run. Review and one-run approval remain required.
 - 2026-10-28: Native A7 prerequisite audit stops at ESC-002 for the flush-target arming/publication contract. No write entry point is added. D0 remains a structural result only.
 - 2026-10-28: The authorized D0 retry passes with syscall-stop task proof and retained allocation coverage. DMA publication stays denied. Native POST/A7 is next. S1 remains incomplete.
 - 2026-10-28: S1D0THREAD adds syscall-stop TGID and kernel FD-table proof to the private observer. Owned shared/private-table tests pass. D0 retry approval is limited to one run.

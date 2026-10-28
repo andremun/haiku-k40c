@@ -3,25 +3,22 @@
 #include "runtime/PreStart.h"
 
 namespace k40::runtime::startup {
-Result Controller::run(Backend& backend, memory::Buffer& page, uint64_t timeoutUs)
+Result Controller::run(Backend& backend, memory::ArmedReference& page, uint64_t timeoutUs)
 {
     Result result;
-    if (!backend.hostSimulation()) { result.error = Error::HardwareDisabled; return result; }
+    if (!backend.executionAllowed()) { result.error = Error::HardwareDisabled; return result; }
     if (!state_.begin()) {
         result.error = Error::AlreadyAttempted; return result;
     }
     auto fail = [&](Error error) {
+        page.fail();
         state_.finish(false);
         result.error = error;
         return result;
     };
     memory::DeviceIova address{0};
-    // no source: software minimum for the selected x86_64 host-page allocation.
-    const uint64_t pageBytes = 4096;
-    if (!timeoutUs || !backend.romPolicyReady() || page.bytes() < pageBytes
-        || !page.deviceAddress(address) || address.value % pageBytes
-        || (address.value >> 8) > UINT32_MAX || !page.pinForSubmission()) return fail(Error::Inputs);
-    result.flushPinned = true; // Caller retains this pin through all later hardware references.
+    if (!timeoutUs || !backend.romPolicyReady() || !page.beginArm(address))return fail(Error::Inputs);
+    result.referenceRetained = true;
     const uint64_t started = backend.nowUs();
     uint64_t last = started;
     auto deadline = [&]() {
@@ -38,7 +35,7 @@ Result Controller::run(Backend& backend, memory::Buffer& page, uint64_t timeoutU
         result.error = deadline();
         return result.error == Error::None;
     };
-    // Layout/preinit order: engine/device/base.c:2908-2916, core/layout.h:7-17,35.
+    // Source-backed preinit order: engine/device/base.c:2908-2916, core/layout.h:7-17,35.
     bool post = false;
     if (!call(Step::Identity, [&] { return backend.identity(); })
         || !call(Step::Interrupts, [&] { return backend.unarmInterrupts(); })
@@ -48,9 +45,11 @@ Result Controller::run(Backend& backend, memory::Buffer& page, uint64_t timeoutU
     if (!call(Step::Crtc, [&] { return backend.unlockCrtc(); })
         || !call(Step::PrivateRing, [&] { return backend.privateRing(); })
         || !call(Step::I2c, [&] { return backend.initializeI2c(); })
-        || !call(Step::FlushPage, [&] { return backend.programFlushPage(address); })
+        || !call(Step::FlushPage, [&] { ++result.armAttempts; return backend.programFlushPage(address); })
         || !call(Step::FifoReset, [&] { return backend.resetFifoBeforePost(); })
         || !call(Step::Rom, [&] { return backend.executeRom(); })
+        || !call(Step::FlushReadback, [&] { return backend.readFlushPage(result.flushReadback); })
+        || !call(Step::FlushRearm, [&] { ++result.armAttempts; return backend.programFlushPage(address); })
         || !call(Step::Readiness, [&] { return backend.independentReadiness(); })) return fail(result.error);
     result.step = Step::Complete;
     state_.finish(true);
@@ -112,6 +111,7 @@ bool RegisterHelpers::initializeDedicatedI2c(const devinit::I2cBus& bus)
     if (!allowed() || bus.type != 0x05 || bus.share != 0xff || bus.drive > 15) return false; // include/nvkm/subdev/bios/i2c.h:8,12.
     return registers_.write32(0x00d014 + uint32_t(bus.drive) * 0x20, 7); // nvkm/subdev/i2c/busgf119.c:69,93.
 }
+// Both arming writes: fb/base.c:227,204 and fb/gf100.c:83.
 bool RegisterHelpers::programFlushPage(memory::DeviceIova address)
 {
     if (!allowed() || address.value % 4096 || (address.value >> 8) > UINT32_MAX) return false;
