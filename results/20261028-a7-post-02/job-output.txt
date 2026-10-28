@@ -1,0 +1,3 @@
+A7-JOB-START
+A7-OPEN-DEVICE
+/tmp/a7-job.sh: line 25: /dev/misc/k40_a7_stage: Read-only file system

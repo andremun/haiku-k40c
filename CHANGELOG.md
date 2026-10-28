@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-10-28: The second individually approved A7 run stops at device open before request/grant. Shell diagnostics capture a read-only filesystem error. Evidence and both consumed markers remain. No retry occurs.
 - 2026-10-28: Fix the four A7 review nits: enforce FIFO bit changes and the selected I2C pin, persist the verifier checkout, and list omitted Linux setup. Prepare a new package with failure diagnostics. No retry runs.
 - 2026-10-28: The single approved A7 attempt stops before request/grant. POST and readiness are not reached. Evidence is preserved, mastering is disabled after exit, and no retry occurs.
 - 2026-10-28: Resolve ESC-002 and prepare the arm-only A7 native package with fresh-witness grants, retained storage and post-POST readback/re-arm. Host tests and cross-links pass. No A7 guest has run. Review and one-run approval remain required.

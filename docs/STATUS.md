@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7NITS (four review nits, host-only new package).
-Task state: S1A7NITS DONE (host-only new package), review and fresh one-run approval pending. Full make check, host fixtures and native links pass. Four nits are fixed, with bounded failure diagnostics. The first approved 8974695 launch is committed as 600d114 and STOPPED before request/grant after 107.88 s. POST/readiness were NOT_REACHED. R5 delta was empty and host command after exit was 0x0002. Original marker/evidence remain intact. New package: work/S1A7NITS/package.json, review: docs/A7-REVIEW-PACKAGE.md. No second launch or D1 is approved. S1 remains incomplete.
+Current task: S1A7RUN2 (second individually approved A7 attempt).
+Task state: STOPPED at device open, before request/grant. Unchanged 24fb578 passed build/host checks and launched once. Shell captured Read-only file system at /dev/misc/k40_a7_stage. Serial also shows a transient identity add-on Not an executable, followed by valid B5 identity reads. POST/readiness were NOT_REACHED. R5 delta is empty; host command after exit is 0x0002. No retry approved. Both consumed markers and earlier evidence remain. S1 is incomplete. Next is host-only loader/publication diagnosis.
 Last updated: 2026-10-28
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -81,6 +81,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A7RUN | STOPPED (before arm grant) | 2026-10-28 | One approved unchanged 8974695 launch. Guest job failed at 107.88 s before request/grant; POST/readiness not reached. R5 delta empty; host command 0x0002 after exit. No retry. See work/S1A7RUN/RESULT.md. |
 
 | S1A7NITS | DONE (host-only new package; review pending) | 2026-10-28 | Enforce FIFO bit-0x100 pairing and the selected I2C pin; persist pinned verifier; document Linux omissions. Add bounded failure diagnostics. Host/full checks and native links pass. No retry. See work/S1A7NITS/RESULT.md. |
+
+| S1A7RUN2 | STOPPED (device open) | 2026-10-28 | One individually approved unchanged 24fb578 launch. Shell open failed read-only filesystem at 95.26 s; no request/grant or POST. R5 delta empty, host mastering disabled. No retry. See work/S1A7RUN2/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 
