@@ -21,3 +21,6 @@ on 23 October 2026 with unchanged bytes. `hashes.txt` lists the file hashes.
 | `20261028-d0-mapping/` | First physical D0 attempt stopped on unproved second-task FD sharing. No extent/cutoff or probe output. | `work/S1D0RUN/RESULT.md` |
 
 | `20261028-d0-mapping-retry-01/` | D0 structural mapping cutoff passes for retained storage. No payload/coherency or S1 proof. | `work/S1D0RETRY/RESULT.md` |
+
+| `20261028-a7-post/` | First approved A7 run stopped before request/grant. POST/readiness not reached. Empty filtered R5 delta and host command 0x0002 after exit. | `work/S1A7RUN/RESULT.md`, `docs/STATUS.md` |
+| `20261028-a7-fad36717/` | Original immutable launcher evidence for the same single A7 launch. Canonical folder contains identical raw copies. | `results/20261028-a7-post/summary.json` |
