@@ -293,3 +293,13 @@ against the CPU and timed. That is the first moment the speed question of
 the whole project (whether a Haiku backend can beat the CPU) can be
 answered with a measurement, so it is the go / no-go point before the
 larger work of a kernel library and model coverage.
+
+## First-batch implementation handoff (2026-10-30)
+
+All six memory tasks are implemented on main. Native links, host checks and the
+exact combined cardless installer/open/reload rehearsal pass. The review package
+is [S1-BATCH1-IMPLEMENTATION-REVIEW.md](S1-BATCH1-IMPLEMENTATION-REVIEW.md).
+A7 run7 source/client bytes are preserved; the new memory stage selects BAR1 with
+gk104 tables and excludes BAR2 and G2/D1. G1 readback remains observational.
+No physical batch run has occurred. Claude acceptance, one explicit user yes and
+current live prerequisites are required. This does not complete S1 or Q7/Q11.

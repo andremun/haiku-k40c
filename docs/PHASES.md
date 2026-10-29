@@ -42,7 +42,7 @@ This index grants no implementation/run acceptance or hardware permission.
 | S1MEMARENA | Owned VRAM and address ledger | [Task](tasks/S1MEMARENA.md) |
 | S1MEMFAULTS | Scoped baselines and diagnostics | [Task](tasks/S1MEMFAULTS.md) |
 | S1MEMUPLOAD | Physical VRAM upload/readback | [Task](tasks/S1MEMUPLOAD.md) |
-| S1MEMMMU | BAR/MMU bootstrap and scoped witness | [Task](tasks/S1MEMMMU.md) |
+| S1MEMMMU | gk104 BAR1 bootstrap and scoped witness | [Task](tasks/S1MEMMMU.md) |
 | S1MEMPACKAGE | One reviewed experiment package | [Task](tasks/S1MEMPACKAGE.md) |
 
 ## Phase A: Ubuntu reference data
@@ -126,3 +126,7 @@ is prepared and not enabled.
 | ABC1 | User-directed cardless continuation across S1 tracks A/B/C | `docs/tasks/ABC1.md` |
 
 See `docs/S1-VERIFICATION.md` for results, remaining gates and external-input blockers.
+
+First-batch implementation is complete for host/native/cardless scope.
+Review: [implementation package](S1-BATCH1-IMPLEMENTATION-REVIEW.md).
+No physical batch run has occurred; review and one explicit launch approval remain.

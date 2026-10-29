@@ -18,7 +18,9 @@ BUILDDIR := ../build/tests
 OWNER_POST_CORE := ../src/devinit/PostImage.cpp ../src/devinit/BoardPolicy.cpp ../src/devinit/Sha256.cpp
 OWNER_POST_HEADERS := $(wildcard ../src/devinit/*.h)
 
-CXX_TESTS := test_mem_mmu:memstage+memory \
+CXX_TESTS := test_mem_experiment:memstage+memory \
+             test_mem_policy:memnative+memstage+memory \
+             test_mem_mmu:memstage+memory \
              test_mem_upload:memstage+memory \
              test_mem_faults:memstage+memory \
              test_vram_arena:memory \
@@ -34,13 +36,13 @@ CXX_TESTS := test_mem_mmu:memstage+memory \
              ref_qmd:compute+fifo r1_accept:compute+fifo+hw+mmu
 # The Python tests run once the tool of task D4 exists.
 PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard test_compare_traces.py accept/d4_accept.py)) \
-             accept/r1_accept.py test_dma_model.py test_observer.py test_observer_binding.py test_task_stream.py test_observer_supervisor.py test_d0_monitor.py test_d0_topology.py test_d0_evidence.py test_d0_kernel_log.py test_d0_run.py test_a7_run.py test_a7_omissions.py test_a7_install.py test_a7_i2c.py test_vm_tools.py test_owner_runner.py test_card_run.py test_board_tools.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_closure.py test_post_policy.py test_devinit_rom.py test_devinit_trace_join.py
+             accept/r1_accept.py test_memstage_tools.py test_dma_model.py test_observer.py test_observer_binding.py test_task_stream.py test_observer_supervisor.py test_d0_monitor.py test_d0_topology.py test_d0_evidence.py test_d0_kernel_log.py test_d0_run.py test_a7_run.py test_a7_omissions.py test_a7_install.py test_a7_i2c.py test_vm_tools.py test_owner_runner.py test_card_run.py test_board_tools.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_closure.py test_post_policy.py test_devinit_rom.py test_devinit_trace_join.py
 
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 
 .PHONY: all clean
-all: $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(BUILDDIR)/owner_post_probe $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
-	@for p in $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe; do $$p || exit 1; done
+all: $(BUILDDIR)/test_mem_client $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(BUILDDIR)/owner_post_probe $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
+	@for p in $(BUILDDIR)/test_mem_client $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe; do $$p || exit 1; done
 	@for t in $(PY_TESTS); do (cd .. && python3 tests/$$t) || exit 1; done
 
 $(BUILDDIR)/test_a7_diagnostics: ../src/a7/PostDiagnostics.h
@@ -100,3 +102,8 @@ $(BUILDDIR)/test_a7_native: test_a7_native.cpp ../src/a7/NativePlatform.cpp ../s
 
 $(BUILDDIR)/test_a7_client: test_a7_client.cpp ../tools/haiku/selftest/a7_client.cpp ../src/a7/Module.h $(wildcard a7_shim/*.h os_shim/*.h) | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) -Ia7_shim -Ios_shim test_a7_client.cpp ../tools/haiku/selftest/a7_client.cpp -o $@
+
+$(BUILDDIR)/test_mem_mmu $(BUILDDIR)/test_mem_policy $(BUILDDIR)/test_mem_experiment: memstage_device.h
+
+$(BUILDDIR)/test_mem_client: test_mem_client.cpp ../tools/haiku/selftest/memory_client.cpp ../src/memnative/Module.h $(wildcard a7_shim/*.h os_shim/*.h) | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -D_KERNEL_MODE -Ia7_shim -Ios_shim test_mem_client.cpp ../tools/haiku/selftest/memory_client.cpp -o $@

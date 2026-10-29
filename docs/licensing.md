@@ -412,3 +412,18 @@ fb/gf100.c:66-77; and fb/ramgk104.c:1703 for the selected RAM probe chain.
 Pure field encoders, scoped invalidation and BAR1 sequencing are original.
 The slow-window 44-bit mask is not a 44-bit PTE address claim; selected PTE
 addresses are restricted to 40 bits below VOL/target fields.
+
+## S1MEMPACKAGE source study (2026-10-30)
+
+Reconsulted the selected Nouveau slow-window, BAR, FB and gk104 MMU sources
+listed by the five memory tasks. New resident authority, value policy, controller
+and host composition are original. The unchanged A7 implementation is reused.
+Consulted Haiku KernelExport.h, PCI.h, module.h, Drivers.h, Errors.h, Random.h and
+x86/64/atomic.h for the exported APIs, raw status and explicit UC/ordering request.
+Local build/header hashes are recorded; full running kernel source identity is
+not established. Consulted QEMU v6.2.0 qapi/pci.json for fixed read-only query-pci
+fields and bridge nesting. Its content pin is in work/S1MEMPACKAGE/qmp-pci-source.json;
+it is an upstream schema baseline, not an exact Ubuntu source identity claim.
+No Nouveau/Haiku/QEMU implementation body was copied. The pinned verification-only
+orlp Ed25519 code remains unchanged under its separate zlib notice, included in
+the new package. No signing code or private key is included in a guest artifact.

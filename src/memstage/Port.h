@@ -13,9 +13,11 @@ public:
 };
 enum class Phase:uint8_t {Reset,Post,Physical,Tables,Mapped,Remapped,Restored,Disabled};
 enum class Error:uint8_t {None,Order,Read,Dirty,Clock,Budget,Overflow,Topology,Write,Profile,Bounds,Compare,Flush,Invalidate,Authority};
+enum class Operation:uint8_t {Read,Write,Poll,BulkWrite,BulkRead,Patch,Failure,Witness};
 struct Event {
     Phase phase=Phase::Reset;Error error=Error::None;
-    uint32_t offset=0,value=0,polls=0;uint64_t elapsed=0;
+    uint32_t offset=0;uint64_t value=0;uint32_t polls=0;uint64_t elapsed=0;
+    Operation operation=Operation::Read;uint8_t role=0,detail=0;
 };
 class Journal {
 public:

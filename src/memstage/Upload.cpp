@@ -6,7 +6,7 @@ using namespace memory::vram;
 bool Upload::fail(Error e,uint32_t offset,uint32_t value)
 {
     if(error_==Error::None)error_=e;
-    arena_.fail();journal_.append({phase_,error_,offset,value,0,last_>=start_?last_-start_:0});return false;
+    arena_.fail();journal_.append({phase_,error_,offset,value,0,last_>=start_?last_-start_:0,Operation::Failure});return false;
 }
 bool Upload::allowed()
 {
@@ -48,12 +48,14 @@ bool Upload::window(uint64_t physical,uint64_t& selected)
     const auto base=physical&~uint64_t(0xfffff); // instmem/nv50.c:62-63.
     if(base==selected)return true;
     if(!io_.write32(0x001700,uint32_t(base>>16)))return fail(Error::Write,0x001700); // instmem/nv50.c:68.
-    selected=base;return true;
+    selected=base;
+    return journal_.append({phase_,Error::None,0x001700,uint32_t(base>>16),0,last_-start_,Operation::Write}) || fail(Error::Overflow); // instmem/nv50.c:68.
 }
 bool Upload::flushLocked()
 {
     if(!allowed() || !io_.storeFence())return fail(Error::Profile);
-    if(!io_.write32(0x070000,1))return fail(Error::Write,0x070000); // bar/g84.c:33.
+    if(!io_.write32(0x070000,1))return fail(Error::Write,0x070000,1); // bar/g84.c:33.
+    if(!journal_.append({phase_,Error::None,0x070000,1,0,last_-start_,Operation::Write}))return fail(Error::Overflow); // bar/g84.c:33.
     uint64_t start;
     if(!io_.now(start) || start<last_)return fail(Error::Clock);
     last_=start;
@@ -66,7 +68,7 @@ bool Upload::flushLocked()
         if(last_-start>=2000000)return fail(Error::Flush); // bar/g84.c:34-37.
         if(!(value&2)) {
             if(!io_.loadFence())return fail(Error::Profile);
-            if(!journal_.append({phase_,Error::None,0x070000,value,poll+1,last_-start}))return fail(Error::Overflow); // bar/g84.c:35.
+            if(!journal_.append({phase_,Error::None,0x070000,value,poll+1,last_-start,Operation::Poll}))return fail(Error::Overflow); // bar/g84.c:35.
             return true;
         }
     }
@@ -91,7 +93,7 @@ bool Upload::transfer(Token token,Image image,bool write)
         if(!address(token,offset,physical) || !window(physical,selected))return false;
         const auto reg=0x700000+uint32_t(physical&0xfffff); // instmem/nv50.c:71,91.
         const auto expected=pattern(physical,image);
-        if(write){if(!io_.write32(reg,expected))return fail(Error::Write,reg);}
+        if(write){if(!io_.write32(reg,expected))return fail(Error::Write,reg,expected);}
         else {
             uint32_t value=0;
             if(!io_.read32(reg,value))return fail(Error::Read,reg);
@@ -99,6 +101,7 @@ bool Upload::transfer(Token token,Image image,bool write)
         }
         if(!tick(5000000))return false; // no source: software bulk-operation budget.
     }
+    if(!journal_.append({phase_,Error::None,0,r.bytes,0,last_-start_,write?Operation::BulkWrite:Operation::BulkRead,uint8_t(r.role),uint8_t(image)}))return fail(Error::Overflow);
     return true;
 }
 bool Upload::zero(Token token)
@@ -152,6 +155,7 @@ bool Upload::patch(Token token,uint64_t offset,uint64_t value,bool update)
         if(!io_.read32(reg,actual))return fail(Error::Read,reg);
         if(actual!=uint32_t(value>>(word*32)))return fail(Error::Compare,reg,actual);
     }
-    return arena_.staged(token);
+    if(!arena_.staged(token))return fail(Error::Bounds);
+    return journal_.append({phase_,Error::None,uint32_t(offset),value,0,last_-start_,Operation::Patch,uint8_t(r.role),0}) || fail(Error::Overflow);
 }
 }

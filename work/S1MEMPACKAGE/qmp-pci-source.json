@@ -1,0 +1,6 @@
+{
+  "fields": "qapi/pci.json:26-48,77-88,124-170; fixed query-pci; PCI bridge devices recursion",
+  "scope": "QEMU 6.2 upstream QAPI schema baseline, not exact Ubuntu source identity",
+  "sha256": "20d52b33b118f0c7104ad0fcffc07019effda84314c8922b941920ac1b957dca",
+  "url": "https://raw.githubusercontent.com/qemu/qemu/v6.2.0/qapi/pci.json"
+}

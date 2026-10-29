@@ -6,7 +6,7 @@ using namespace memory::vram;
 bool Mapper::fail(Error error,uint32_t offset,uint32_t value)
 {
     if(error_==Error::None)error_=error;
-    arena_.fail();journal_.append({phase_,error_,offset,value,0,last_>=start_?last_-start_:0});return false;
+    arena_.fail();journal_.append({phase_,error_,offset,value,0,last_>=start_?last_-start_:0,Operation::Failure});return false;
 }
 bool Mapper::tick()
 {
@@ -29,6 +29,7 @@ bool Mapper::write(uint32_t offset,uint32_t value)
 {
     if(!tick())return false;
     if(!io_.write32(offset,value))return fail(Error::Write,offset,value);
+    if(!journal_.append({phase_,Error::None,offset,value,0,last_-start_,Operation::Write}))return fail(Error::Overflow);
     return tick();
 }
 bool Mapper::preflight()
@@ -56,7 +57,7 @@ bool Mapper::poll(uint32_t mask)
         if(!read(0x100c80,value))return false; // vmmgf100.c:199-224 free-slot/queued status.
         if(last_-start>=2000000)return fail(Error::Invalidate); // vmmgf100.c:198,221 2000 ms.
         if(value&mask) {
-            if(!journal_.append({phase_,Error::None,0x100c80,value,i+1,last_-start}))return fail(Error::Overflow); // vmmgf100.c:199-224.
+            if(!journal_.append({phase_,Error::None,0x100c80,value,i+1,last_-start,Operation::Poll}))return fail(Error::Overflow); // vmmgf100.c:199-224.
             return true;
         }
     }
@@ -79,13 +80,16 @@ bool Mapper::witness(Token first,Token second)
     const Token tokens[]={first,second};
     for(unsigned page=0;page<2;++page) {
         Record r;if(!arena_.describe(tokens[page],r) || !r.staged || !r.referenced)return fail(Error::Bounds);
+        uint64_t fingerprint=0xcbf29ce484222325ULL; // no source: software FNV-1a evidence checksum.
         for(unsigned offset=0;offset<4096;offset+=4) { // no source: two-page finite witness extent.
             if(!tick())return false;
             uint32_t value;
             if(!io_.barRead32(uint64_t(page)*4096+offset,value))return fail(Error::Read);
             if(!tick())return false;
             if(value!=Upload::pattern(r.physical.value+offset,Image::Pattern))return fail(Error::Compare,offset,value);
+            for(unsigned byte=0;byte<4;++byte){fingerprint^=uint8_t(value>>(byte*8));fingerprint*=1099511628211ULL;} // no source: software FNV-1a, no device semantics.
         }
+        if(!journal_.append({phase_,Error::None,page*4096,fingerprint,0,last_-start_,Operation::Witness,uint8_t(r.role),uint8_t(Image::Pattern)}))return fail(Error::Overflow);
     }
     return true;
 }

@@ -1,0 +1,83 @@
+{
+  "claims": {
+    "DMA_publication": false,
+    "S1_complete": false,
+    "hardware_execution": false,
+    "native_execution": false
+  },
+  "compiled_exercises": {
+    "test_mem_client": "Memory actual client: 29 checks pass (host mocks only)",
+    "test_mem_experiment": "memory experiment: 12 production-controller stop/replay cases pass; HOST_ONLY",
+    "test_mem_faults": "memory faults: 25 bounded baseline/routing/clock cases pass; HOST_ONLY",
+    "test_mem_mmu": "memory MMU: 4096 independent encoding cases; 21 lifecycle/fault cases pass; HOST_ONLY",
+    "test_mem_policy": "memory policy: full controller path and independent denials pass; HOST_ONLY",
+    "test_mem_upload": "memory upload: 20 ordering/window/alias/failure cases pass; HOST_ONLY",
+    "test_vram_arena": "VRAM arena: 48 layout/oracle cases; stale/partial/capacity/retention checks pass; HOST_ONLY"
+  },
+  "crypto": {
+    "commit": "b1f19fab4aebe607805620d25a5e42566ce46a0e",
+    "compiled_sources": [
+      "fe.c",
+      "ge.c",
+      "sc.c",
+      "sha512.c",
+      "verify.c"
+    ],
+    "license": "zlib; original source/notice retained in persistent pinned checkout",
+    "origin": "https://github.com/orlp/ed25519",
+    "sha256": {
+      "license.txt": "f68d76b9c1c2271422e55134ea94cf71f2ac3fc3ed6a7ec6b83a1a0538753214",
+      "src/ed25519.h": "8b09800605ac592c1f7d6e701f3526f84156db15bbd68904d39ad398e7d7c8ce",
+      "src/fe.c": "71082937da43def6ecaf7811c23410bd8ea763969dfec67383f8129b12b1926d",
+      "src/fe.h": "0476ae2ebb86978d1e0b9fbeb63dcddd7566d6b74806db47dda7688df74aaafb",
+      "src/fixedint.h": "451fd529865e7fc69156f4cbe7c548857704ae4913768ad9ed7103656efdfc17",
+      "src/ge.c": "c3bb834817edea83d843828a75af19867b93144d15140eadfd9784d40cf11409",
+      "src/ge.h": "b16be2ea1731d9212933e7beeaef6882145fdcdaebdff9996efb5cf97faa2651",
+      "src/precomp_data.h": "c7d63a8b7ecd7bc6a3ac2b826a540a69dee0fc7e8bf3b00ef5dd98ce00a7c224",
+      "src/sc.c": "c1bdb840416b34e79ceb7472d1a4ac4b1407c47b4c982cad981c72142ef42407",
+      "src/sc.h": "b0ef537b4d4dad7bd2910e2a663a02a7ac25b473511a929c3c609d82f9bdf87d",
+      "src/sha512.c": "b34128b950036777c299943d624bd830a234a65932c394fdf455e4948258fb6d",
+      "src/sha512.h": "647ed5784d4dcd682b9c42add2e39107582efb4df9e1362c8e5120613eb9a0ce",
+      "src/verify.c": "a2ca7197c5f6d193c9f526d432429dfb44a65853a7ec18e10a5761334bdcf48c"
+    }
+  },
+  "scope": "HOST_ONLY actual crypto/session/client/value-policy/controller; public RFC test seed only",
+  "signature_cases": 36,
+  "source_sha256": {
+    "src/memauth/Session.cpp": "2aa424b72d0e395af76c65d3def6bc637bb1a21b8ea192680b8873de3dc786ea",
+    "src/memauth/Session.h": "c82ec64b8758291f124ea9154ae64a16f58d968b2631ebd321918de5e77ea6d1",
+    "src/memnative/Module.cpp": "6f584312dca8cf0841600e0d21e72717c43291cb9bab4e190466119ad7d60f56",
+    "src/memnative/Module.h": "26814314692ffc0ac3eb0302ad65939656c60f52c986418c7f8f920f889a9871",
+    "src/memnative/NativeIo.cpp": "cec77745c7daf32c2790941390e0df71b955b25035750edd43d323155f015d5c",
+    "src/memnative/NativeIo.h": "ff17b1125f4af4da5846d8199ea2dab1a8a80339d0573153668e93ff7f2fa714",
+    "src/memnative/NativeOwner.cpp": "3e59edffae518ccf5ed43ec88e64b7ec91e8dc112f327273ff6c3a4b097fa82a",
+    "src/memnative/NativeOwner.h": "6cd8022d13e9433c43e4fb409ef4aee5532ceba7d7f14f607a54ec28ddd19aa8",
+    "src/memnative/Policy.cpp": "ab2476140bb200fb1efd72d607ddb3e1ab64cf23606b0298f4e2dfddccceb3df",
+    "src/memnative/Policy.h": "db1cc9aa185b8337a6604be8ea9eba1dc6d067d47031440f6a941d2249630fb5",
+    "src/memory/VramArena.cpp": "5d5189a1e7b02000be1814c22f05a86fa237b17f8344d80efc727dd80a758a37",
+    "src/memory/VramArena.h": "d1e99970f869b38f1aab447621d86a6918727f9f559fcc1fda326be21cafb461",
+    "src/memstage/Experiment.cpp": "9e5d0c9ecb22c5e218c83b20b130c529bf1cb993f3580b5bc175567a9f1f5719",
+    "src/memstage/Experiment.h": "68d26c085632ce912b2ebdae9bcb54e1b9f06bcc4bcf20c701ecc8f7e65cdcd9",
+    "src/memstage/Faults.cpp": "8699fc95b096ee2014ef4d4d8d343fe66572bfc20c6026397349cdb5d7da9672",
+    "src/memstage/Faults.h": "b77aec14d12007e47b6dbd3e82428b778b0767abbf3cfb3263498778b3490958",
+    "src/memstage/Mapper.cpp": "e6c3fbfcde93f46da91f9f1bfa2e397f658cb373911d1c8c1dd3347c536c6aff",
+    "src/memstage/Mapper.h": "f6ab9ca078ae3feb7c4aa44d1d15ca75a55a18a613decb3fae5ffdb1d93d9267",
+    "src/memstage/Port.h": "e752e66cdadb53f42e1597f9c9b6f6fb2409dcea06fff275dc381f0f2f9d711c",
+    "src/memstage/Tables.cpp": "ee3f51f3996a2a378b5dc7fd2859d3f083b4d5fe17a14fa7cd607f628c36979b",
+    "src/memstage/Tables.h": "dd5c5524415e4ffae058a78626a09777e482841e156a0e57d30ce69da7b53d58",
+    "src/memstage/Upload.cpp": "7be26c471c7503c431108ef140db62a20b0e6defe4360b178893168d50fa5c5a",
+    "src/memstage/Upload.h": "d78d3cc13731996d7eae0abd4ed6add710fdf0dc6bfb714a3e6355423f38e01d",
+    "tests/mem_session_probe.cpp": "020eaca02da67c6ee4b5f034ea94d3581ae9bdb3cae69f0d7fd65e1d0d576aa9",
+    "tests/memstage_device.h": "e4a8d23988524e2670709b82d5014a6ea0156d637151df1e9aafa6dac8ddb7d8",
+    "tests/test_mem_client.cpp": "f869b5c74cbe27f0938a87e89521f7e9d4641db1ab52ba4fbf5408dec053c4d2",
+    "tests/test_mem_experiment.cpp": "24c7c45836eaec4533fed99b7b7dae675b846d629fc6e7c9a254d9d7485d678e",
+    "tests/test_mem_faults.cpp": "a1874fc39d8fbe463017e3c9acb618b1b6e765a925b6c57d639e40ddcf406345",
+    "tests/test_mem_mmu.cpp": "6a541f0561665df102277d84391baf21787d22ad4a12976d3d9f32dbba031fab",
+    "tests/test_mem_policy.cpp": "be37050225e56980d67f854f70a87d31103c4e26763636a3402a5647983bdae0",
+    "tests/test_mem_upload.cpp": "8de1d1532a1606e6c6cb8e7ba78ec400897bdaa7bd813becddc15fa005381e88",
+    "tests/test_vram_arena.cpp": "e289a3cc860937ef41de87b300d62fc56ed81a08d188a5daca1cf965bfd24d04",
+    "tools/haiku/selftest/memory_client.cpp": "cf0ec4bdbfe61a479a518d0c3da8c71ee0138d248856e343dd71d186ccfd2fb2",
+    "tools/haiku/selftest/memory_preflight.cpp": "0ac26fb3a72c5992d051a1778390af89b09dd2ec617d1148766abbc1c76977e7",
+    "tools/memstage/host_check.py": "a78547651f0c2c96bd8f777ae54d69e90e3d56fcb5163d9cc3d9ea37e8d5abdb"
+  }
+}

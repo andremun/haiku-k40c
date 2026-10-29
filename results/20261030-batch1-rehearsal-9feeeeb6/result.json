@@ -1,0 +1,11 @@
+{
+  "S1_complete": false,
+  "elapsed_seconds": 100.01,
+  "error": "",
+  "grants_issued": false,
+  "hardware_evidence": false,
+  "host_device_assigned": false,
+  "keys_read": false,
+  "scope": "CARDLESS_KVM",
+  "status": "PASS_CARDLESS_NO_CARD"
+}

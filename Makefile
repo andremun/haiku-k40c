@@ -40,6 +40,8 @@ check:
 	python3 tools/memstage/fault_report.py --check
 	python3 tools/memstage/upload_report.py --check
 	python3 tools/memstage/mmu_report.py --check
+	python3 tools/memstage/pci.py --check
+	python3 tools/memstage/host_check.py --check
 
 test:
 	@if [ -f tests/Makefile ]; then $(MAKE) -C tests; fi

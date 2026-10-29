@@ -2,13 +2,16 @@
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
 Current task: S1MEMPACKAGE (combined native/rehearsal package; task 6 of 6).
-Task state: IN PROGRESS. S1MEMMMU host/native-link checks pass; S1MEMUPLOAD committed as fd9ef5e. Claude accepted A7 dfb7cd8 and the batch plan with
-changes: BAR1/gk104 only, explicit guest BAR1 mapping, remove D1/G2, flush
-readback observational, freeze A7 run7 source. Q7/Q11 stay open.
-Implement six tasks sequentially, one commit each. No intermediate card run.
-Final package needs Claude review and explicit one-run user approval.
-Last physical result remains A7 pass; S1 incomplete. No current card approval.
-Last updated: 2026-10-29
+Task state: READY FOR CLAUDE REVIEW. All six first-batch tasks are implemented.
+Exact combined cardless rehearsal passes: results/20261030-batch1-rehearsal-9feeeeb6/.
+Native links, host failure tests, full make check and package/rehearsal checks pass.
+Review: docs/S1-BATCH1-IMPLEMENTATION-REVIEW.md.
+A7 run7 source bytes and client bytes are preserved. BAR1/gk104 only; no BAR2,
+G2/D1 or new flush-target operation. Q7/Q11 and S1 remain open.
+No physical batch run has occurred. Claude acceptance and one explicit user yes
+are required for the exact package, then live R5/VFIO/one-guest checks.
+No S2/S3 hardware-success preparation or push.
+Last updated: 2026-10-30
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
 
@@ -133,3 +136,5 @@ A cardless result is not K40c evidence.
 | S1MEMUPLOAD | DONE (host/native object) | 2026-10-29 | Owned physical-window transfers, sourced BAR protocol, 20 boundary/alias/failure cases. No VM/card. |
 
 | S1MEMMMU | DONE (host/native link) | 2026-10-29 | gk104 BAR1 tables and A/B remap/restore witness; 4096 encoding and 21 lifecycle/fault cases. Native core link. No VM/card. |
+
+| S1MEMPACKAGE | READY FOR REVIEW (host/native/cardless) | 2026-10-30 | Distinct combined authority and package; unchanged A7 child, owned BAR1 experiment; exact cardless install/open/reload pass, full checks pass. No card run or current physical approval. See docs/S1-BATCH1-IMPLEMENTATION-REVIEW.md. |

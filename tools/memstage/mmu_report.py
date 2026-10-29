@@ -11,6 +11,7 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[2]
 FILES = (
     "reference/nouveau/nvkm/subdev/mmu/gk104.c",
+    "src/memstage/Port.h",
     "src/memstage/Mapper.h",
     "src/memstage/Mapper.cpp",
     "src/memstage/Tables.h",
@@ -22,6 +23,7 @@ FILES = (
     "src/memory/VramArena.h",
     "src/memory/VramArena.cpp",
     "tests/test_mem_mmu.cpp",
+    "tests/memstage_device.h",
     "tools/memstage/mmu_report.py",
     "reference/nouveau/nvkm/subdev/mmu/vmmgk104.c",
     "reference/nouveau/nvkm/subdev/mmu/vmmgf100.c",

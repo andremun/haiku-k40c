@@ -1,0 +1,95 @@
+{
+  "a7_port": 35963,
+  "args": [
+    "/usr/bin/qemu-system-x86_64",
+    "-name",
+    "k40-batch1-cardless",
+    "-machine",
+    "q35",
+    "-accel",
+    "kvm",
+    "-cpu",
+    "host",
+    "-smp",
+    "2",
+    "-m",
+    "4096",
+    "-drive",
+    "if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd",
+    "-drive",
+    "if=pflash,format=raw,file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/mem/90ab2bdc/vars.fd",
+    "-drive",
+    "file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/mem/90ab2bdc/overlay.qcow2,format=qcow2,if=none,id=system",
+    "-device",
+    "ide-hd,drive=system,bus=ide.0,bootindex=1",
+    "-device",
+    "qemu-xhci",
+    "-device",
+    "usb-tablet",
+    "-vga",
+    "std",
+    "-netdev",
+    "user,id=n0",
+    "-device",
+    "e1000,netdev=n0",
+    "-display",
+    "none",
+    "-serial",
+    "file:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/results/20261030-batch1-rehearsal-90ab2bdc/serial.log",
+    "-monitor",
+    "unix:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/mem/90ab2bdc/monitor.sock,server,nowait",
+    "-qmp",
+    "unix:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/mem/90ab2bdc/qmp,server,nowait"
+  ],
+  "binding": {
+    "A7_artifacts": {
+      "client": {
+        "bytes": 7552,
+        "sha256": "d11b0d3773e8f1a206a98b79b85a1c6e7c73948dbe096001d472ef0ee66ee122"
+      },
+      "helper": {
+        "bytes": 3888,
+        "sha256": "58bec7c51730bf95f541c61c8ed9b8379b97f1c2b335702de0f9542698914977"
+      },
+      "identity": {
+        "bytes": 8696,
+        "sha256": "8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f"
+      },
+      "owner": {
+        "bytes": 368672,
+        "sha256": "e87cc4b99627ccf52ddcac0000795e419870a41356f5ffc666f6b50ef39f97ac"
+      }
+    },
+    "A7_job_sha256": "f78aaab555c4bfa2a8f3b34335e63a654ea87d9cacff9f932bbc03d536681c6e",
+    "guest_artifacts": {
+      "memory_client": {
+        "bytes": 7560,
+        "sha256": "04848c9711e9b373b55e70d1e9b9b8c7d8995b42f69a53c0cffad57d9750172e"
+      },
+      "memory_helper": {
+        "bytes": 3912,
+        "sha256": "bfcd73611a07737593597e7622f93d335455b73a6560f23caad9c450cbe00d3f"
+      },
+      "memory_owner": {
+        "bytes": 128416,
+        "sha256": "866ba4bea7e1372cf8652cb5c3629e4f9d6b3863c8331598afc4b7c9e6ed8928"
+      },
+      "preflight": {
+        "bytes": 6424,
+        "sha256": "e5df732100e12bc34778beee436dd50101bf6140e065d8fc2ca38c1fcbc83ab5"
+      },
+      "preflight_helper": {
+        "bytes": 3936,
+        "sha256": "55ade2fbc1bc0a695a4c5e32a7c33ba18c21fd5c3c4aea54ae4fedc35dcc59d1"
+      }
+    },
+    "job_sha256": "808307345bb5824ee2f98b10148e3a847242d6becce1e8cf30f0864eeb2e9f89",
+    "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+    "package_sha256": "d7d167abff030c86553e548a867bfc9d36aba6047ed07ca9fe3ee575c3003e78",
+    "plan_sha256": "13dfed793f9df8e1f1092f24357ab9c748ea9d17b08a71dcb59da1b56dceed46"
+  },
+  "port": 36195,
+  "scope": "CARDLESS_KVM",
+  "source_commit": "07eea1cf4d0a18702297030b65734d91dc44f7e6",
+  "timeout_seconds": 600
+}

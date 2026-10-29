@@ -5,7 +5,7 @@ namespace k40::memstage {
 bool Faults::stop(Error error)
 {
     if(error_==Error::None)error_=error;
-    journal_.append({phase_,error_,0,0,0,last_>=start_?last_-start_:0});
+    journal_.append({phase_,error_,0,0,0,last_>=start_?last_-start_:0,Operation::Failure});
     return false;
 }
 bool Faults::clock()
