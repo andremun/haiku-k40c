@@ -78,6 +78,7 @@ private:
         bool unlockCrtc() override;
         bool privateRing() override;
         bool initializeI2c() override;
+        void i2cAudit(uint32_t,uint8_t,uint8_t,uint8_t,const devinit::I2cResult&) override;
         bool programFlushPage(memory::DeviceIova) override;
         bool resetFifoBeforePost() override;
         bool executeRom() override;

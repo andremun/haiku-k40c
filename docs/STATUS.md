@@ -1,12 +1,12 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7RUN5 STOPPED (POST ran, I2C 0x4c write failed). Next: user decision.
-Task state: WAITING FOR USER (ADR 006). The approved fifth A7 run executed
-the card's start-up script under Haiku: 532 instructions, 38 skipped, including
-the IO helper, GPIO reset and the I2C 0x20 write. It stopped at 0xab8d (MAX6649
-I2C 0x4c) with Io. No R5 line; bus mastering off after exit. Cause UNKNOWN (no
-I2C error detail logged). See results/20261029-a7-508279eb/README.md.
+Current task: S1A7I2C (host diagnosis and next-package preparation).
+Task state: Linux trace proves eight sensor address NACKs with no payload.
+The user selected the exact bounded continuation policy (ADR 010). Diagnostics
+and scoped retries pass owner host cases. Fresh package-i2c passes exact cardless
+rehearsal in 78.34 s. Full make check passes. Package ready for Claude review.
+Run5 remains STOPPED/consumed. No further card run is approved.
 S1 remains incomplete. D1 is unapproved.
 Last updated: 2026-10-29
 
@@ -97,6 +97,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A7REHEARSAL2 | DONE (cardless) | 2026-10-28 | Staging outside watched folders; final-name loads; one prepare; open B_ERROR; owner state kept on reload. 79.31 s. Records finished by Claude Code. See work/S1A7REHEARSAL2/RESULT.md. |
 | S1A7RUN4 | STOPPED (R5 rule at QEMU start) | 2026-10-29 | One approved run of package-rehearsal2. Stopped at 2.52 s on "vfio-pci 0000:04:00.0: enabling device (0000 -> 0002)" (first open after host reboot). Guest never started. No retry. See results/20261029-a7-ba6a1a54/README.md. |
 | S1A7RUN5 | STOPPED (POST at 0xab8d, I2C Io) | 2026-10-29 | One approved run of package-run5. POST ran 532/38 instructions under Haiku, stopped at the MAX6649 I2C write (0xab8d) with Io. No R5 line. No retry. See results/20261029-a7-508279eb/README.md. |
+
+| S1A7I2C | DONE (host/cardless; review pending) | 2026-10-29 | Linux sensor address NACKs decoded/replayed. User-approved narrow policy and diagnostics. Exact package cardless pass in 78.34 s. No physical run. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

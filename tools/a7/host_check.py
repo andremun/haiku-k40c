@@ -22,7 +22,7 @@ from tools.a7 import build
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 PROBE = ROOT / "build/tests/a7_owner_probe"
-OUTPUT = ROOT / "work/S1A7RUN5/host-check.json"
+OUTPUT = ROOT / "work/S1A7I2C/host-check.json"
 # Public RFC 8032 TEST 1 seed. Never used by package creation or the live signer.
 TEST_SEED = bytes.fromhex(
     "9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60"
@@ -173,7 +173,28 @@ def render():
     }
     if any(value.startswith("status 0 ") for value in faults.values()):
         raise ValueError("fault fixture passed")
+    i2c_cases = {
+        name: run(name, valid, chosen["profile"], chosen["strap"]).decode().strip()
+        for name in (
+            "sensor-address-nack",
+            "sensor-register-nack",
+            "sensor-value-nack",
+            "sensor-stop-fail",
+            "sensor-stretch",
+            "sensor-timeout",
+            "other-address-nack",
+            "sensor-io",
+        )
+    }
+    if not i2c_cases["sensor-address-nack"].startswith("status 0 ") or any(
+        value.startswith("status 0 ")
+        for name, value in i2c_cases.items()
+        if name != "sensor-address-nack"
+    ):
+        raise ValueError("I2C policy fixture outcome differs")
     names = set(SOURCES) | {
+        "tests/i2c_wire.h",
+        "tests/board_fake.h",
         "tests/test_a7_native.cpp",
         "tests/test_a7_client.cpp",
         "src/a7/NativePlatform.cpp",
@@ -203,6 +224,7 @@ def render():
                 signed_scope_rejections=7,
                 noncanonical_signature_rejections=1,
                 faults=faults,
+                i2c_policy_cases=i2c_cases,
                 fixture_key="RFC 8032 public TEST 1; never a production key",
                 source_sha256={name: build.sha(ROOT / name) for name in sorted(names)},
                 probe_sha256=build.sha(PROBE),

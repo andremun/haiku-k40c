@@ -1,0 +1,207 @@
+{
+  "scope": "KNOWN Linux capture decode; NOT Haiku error classification",
+  "sources": {
+    "reference/linux-run-debug/dmesg.txt.xz": "e15e44ac82d6172587fea176327e074e192e5c0138519e9a9716f312c7a9672b",
+    "reference/linux-run-debug/mmiotrace.txt.xz": "3cee0731faadb7f4aacb53ba1d0d3ce7d5954430c31fc764a731ad029bd2f67b",
+    "reference/nouveau/nvkm/subdev/bios/init.c": "7af9d95f2fc4b61bb6320c7198505b19b2e7f88cbf3952f1770518f863c1811b",
+    "reference/nouveau/nvkm/subdev/i2c/busgf119.c": "24cdf28deab20486c48b4702c473375b6d91e4e6a0286475e5f9f48ca88a17f7",
+    "tools/a7/i2c_capture.py": "75b7ce8452b4b499755e4ff54fe6539a09a1981f0315135f1d139dd50b31c4a5"
+  },
+  "timing": {
+    "anchors": {
+      "3185": {
+        "text": "[   11.700316] nouveau 0000:00:03.0: devinit: 0x0000ab91[0]: \t[0x19] = 0x73",
+        "us": 11700316
+      },
+      "3186": {
+        "text": "[   11.800115] nouveau 0000:00:03.0: i2c: bus 0002: acquire",
+        "us": 11800115
+      },
+      "3189": {
+        "text": "[   11.806387] nouveau 0000:00:03.0: i2c: bus 0002: release",
+        "us": 11806387
+      },
+      "3193": {
+        "text": "[   11.807684] nouveau 0000:00:03.0: i2c: bus 0002: acquire",
+        "us": 11807684
+      },
+      "3196": {
+        "text": "[   11.816569] nouveau 0000:00:03.0: i2c: bus 0002: release",
+        "us": 11816569
+      }
+    },
+    "first_acquire_release_us": 6272,
+    "pre_acquire_gap_us": 99799,
+    "second_acquire_release_us": 8885
+  },
+  "transfers": [
+    {
+      "address7": "0x4c",
+      "frames": [
+        {
+          "acks": [
+            {
+              "ack": false,
+              "sample_lines": [
+                46598,
+                46599,
+                46600
+              ]
+            }
+          ],
+          "bytes": [
+            152
+          ],
+          "start_line": 46535,
+          "start_us": 11800188,
+          "stop_line": 46608,
+          "stop_us": 11801083
+        },
+        {
+          "acks": [
+            {
+              "ack": false,
+              "sample_lines": [
+                46673,
+                46674,
+                46675
+              ]
+            }
+          ],
+          "bytes": [
+            152
+          ],
+          "start_line": 46610,
+          "start_us": 11801301,
+          "stop_line": 46683,
+          "stop_us": 11802185
+        },
+        {
+          "acks": [
+            {
+              "ack": false,
+              "sample_lines": [
+                46748,
+                46749,
+                46750
+              ]
+            }
+          ],
+          "bytes": [
+            152
+          ],
+          "start_line": 46685,
+          "start_us": 11803543,
+          "stop_line": 46758,
+          "stop_us": 11804476
+        },
+        {
+          "acks": [
+            {
+              "ack": false,
+              "sample_lines": [
+                46823,
+                46824,
+                46825
+              ]
+            }
+          ],
+          "bytes": [
+            152
+          ],
+          "start_line": 46760,
+          "start_us": 11805518,
+          "stop_line": 46833,
+          "stop_us": 11806369
+        }
+      ],
+      "pc": "0xab8d",
+      "register": "0x19",
+      "value": "0x73"
+    },
+    {
+      "address7": "0x4c",
+      "frames": [
+        {
+          "acks": [
+            {
+              "ack": false,
+              "sample_lines": [
+                46898,
+                46899,
+                46900
+              ]
+            }
+          ],
+          "bytes": [
+            152
+          ],
+          "start_line": 46835,
+          "start_us": 11807725,
+          "stop_line": 46908,
+          "stop_us": 11808584
+        },
+        {
+          "acks": [
+            {
+              "ack": false,
+              "sample_lines": [
+                46973,
+                46974,
+                46975
+              ]
+            }
+          ],
+          "bytes": [
+            152
+          ],
+          "start_line": 46910,
+          "start_us": 11811618,
+          "stop_line": 46983,
+          "stop_us": 11812527
+        },
+        {
+          "acks": [
+            {
+              "ack": false,
+              "sample_lines": [
+                47048,
+                47049,
+                47050
+              ]
+            }
+          ],
+          "bytes": [
+            152
+          ],
+          "start_line": 46985,
+          "start_us": 11812683,
+          "stop_line": 47058,
+          "stop_us": 11813605
+        },
+        {
+          "acks": [
+            {
+              "ack": false,
+              "sample_lines": [
+                47123,
+                47124,
+                47125
+              ]
+            }
+          ],
+          "bytes": [
+            152
+          ],
+          "start_line": 47060,
+          "start_us": 11815587,
+          "stop_line": 47133,
+          "stop_us": 11816556
+        }
+      ],
+      "pc": "0xab8d",
+      "register": "0x0d",
+      "value": "0x73"
+    }
+  ]
+}

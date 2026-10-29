@@ -1,0 +1,15 @@
+{
+  "capture_sha256": "a11ec40c5afa9b4999af98a3a99714f7a99436457182cc9323d87f3bcfc9e8ff",
+  "output": "case 1 success 0 primary 5 cleanup 0 phase 2 bit 8 transmitted 1\ncase 2 success 0 primary 5 cleanup 0 phase 2 bit 8 transmitted 1\ncase 3 success 0 primary 5 cleanup 0 phase 2 bit 8 transmitted 1\ncase 4 success 0 primary 5 cleanup 0 phase 2 bit 8 transmitted 1\ncase 5 success 0 primary 5 cleanup 0 phase 2 bit 8 transmitted 1\ncase 6 success 0 primary 5 cleanup 0 phase 2 bit 8 transmitted 1\ncase 7 success 0 primary 5 cleanup 0 phase 2 bit 8 transmitted 1\ncase 8 success 0 primary 5 cleanup 0 phase 2 bit 8 transmitted 1\ncase 9 success 1 primary 0 cleanup 0 phase 4 bit 8 transmitted 3\n",
+  "probe_sha256": "414e8ffce797dd4c6991e8a46715c5beb69c6c442a19f0a60c5194dd7792348f",
+  "scope": "HOST captured slave-response replay, not cycle/timing equivalence or Haiku diagnosis",
+  "source_sha256": {
+    "src/devinit/I2c.cpp": "e67589ad38dabeebf67077880053d48954627c1aa9743d5e1c50c21e10120662",
+    "src/devinit/I2c.h": "cf2765ec72b7f6e6e6c46e02c14a091f0004d8b864b71c3859623b2f287378a6",
+    "tests/a7_i2c_replay.cpp": "cccc5c5bae748a5550fcee2897c67a224dfe313fb7da97ee44650825fb4f05d2",
+    "tests/board_fake.h": "177de1bd09395158c46a9513a17d465fdeb78e5e2bff8a49ea23b057c12d5d25",
+    "tests/i2c_wire.h": "b67838aa94c6881c162eb2c78452b084e8afcbf8a882381fe1c540995e7917f3",
+    "tools/a7/i2c_capture.py": "75b7ce8452b4b499755e4ff54fe6539a09a1981f0315135f1d139dd50b31c4a5",
+    "tools/a7/i2c_replay.py": "20e1587de805abc5bf1d959729b922a3750a9abb491e8b6cac84c1aabe99173b"
+  }
+}

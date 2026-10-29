@@ -50,8 +50,36 @@ struct Storage:memory::ArmStorage {
     bool reserveZeroed(memory::ArmAllocation& out) override {++reserves;bytes.assign(4096,0);out={7,4096,{0x400000}};return true;}
     void retain(const memory::ArmAllocation&) override {++retains;}
 };
+struct PolicyWire:Wire {
+    unsigned fault=0,frameBegin=0;
+    bool sawNack=false;
+    bool sensor() const {return decoded.size()>frameBegin && decoded[frameBegin]==0x98;}
+    bool read32(uint32_t at,uint32_t& out) override {
+        if(fault==6 && active && phase==9 && sensor())clock+=100001;
+        if(fault==8 && active && phase==9 && sensor())return false;
+        if(!Wire::read32(at,out))return false;
+        if(active && phase==9) {
+            const unsigned byte=unsigned(decoded.size())-frameBegin;
+            const bool target=sensor();
+            const bool nack=(target && ((fault==1 || fault==4) && byte==1))
+                || (target && fault==2 && byte==2) || (target && fault==3 && byte==3)
+                || (fault==7 && byte==1 && decoded[frameBegin]==0x40);
+            if(nack){out|=0x20;sawNack=true;}
+            if(target && fault==5)out&=~0x10u;
+        }
+        return true;
+    }
+    bool write32(uint32_t at,uint32_t value) override {
+        if(fault==4 && sawNack && active && phase==0 && sensor())return false;
+        const auto before=starts;
+        if(!Wire::write32(at,value))return false;
+        if(starts!=before){frameBegin=unsigned(decoded.size());sawNack=false;}
+        return true;
+    }
+};
 struct Hardware:a7::Platform {
-    Wire wire;
+    PolicyWire wire;
+    unsigned i2cAttempts=0,referenceNacks=0,retries=0,lastI2cPrimary=0,lastI2cCleanup=0;
     std::map<uint32_t,uint32_t> registers;
     a7::Owner* owner=nullptr;
     uint32_t fallback=0,strap=0;
@@ -80,8 +108,14 @@ struct Hardware:a7::Platform {
     }
     bool read8(uint32_t at,uint8_t& value) override {value=uint8_t(registers[at]);return true;}
     bool write8(uint32_t at,uint8_t value) override {require(writesAuthorized(),"byte write escaped permit");++writes;registers[at]=value;return true;}
-    void log(const char* event,uint64_t first,uint64_t=0) override {
+    void log(const char* event,uint64_t first,uint64_t second=0) override {
         const std::string name(event);
+        if(name=="I2C_REQUEST")++i2cAttempts;
+        if(name=="I2C_RESULT"){lastI2cPrimary=unsigned(first);lastI2cCleanup=unsigned(second);}
+        if(name=="I2C_DISPOSITION") {
+            if(second==unsigned(devinit::I2cDisposition::ReferenceNack))++referenceNacks;
+            if(second==unsigned(devinit::I2cDisposition::RetryAddress))++retries;
+        }
         if(name=="SCRIPT_ACTIVE" || name=="SCRIPT_SKIPPED") {
             post=true;
             if(owner) {
@@ -112,6 +146,8 @@ try {
     if(argc>4)hardware.strap=std::stoul(argv[4]);
     if(mode=="pins-fail")hardware.failPins=true;
     if(mode=="clock-fail")hardware.denyClock=true;
+    const char* faultNames[]={"sensor-address-nack","sensor-register-nack","sensor-value-nack","sensor-stop-fail","sensor-stretch","sensor-timeout","other-address-nack","sensor-io"};
+    for(unsigned i=0;i<8;++i)if(mode==faultNames[i])hardware.wire.fault=i+1;
     auto owner=std::make_unique<a7::Owner>(hardware,storage,key,nonce,challenge,rom.data(),rom.size(),11520ULL<<20);
     hardware.owner=owner.get();uint64_t lease=0;uint8_t request[128];
     require(owner->prepare(lease,request)==a7::Status::Ok && lease==1,"prepare failed");
@@ -129,7 +165,17 @@ try {
         require(hardware.arms==2 && hardware.registers[0x100c10]==0x4000 && result.scratch,"readiness failed");
         require(owner->state()==runtime::startup::BootState::Complete && hardware.reentries>0,"one-shot completion");
     } else require(owner->state()==runtime::startup::BootState::Failed,"failure lost latch");
+    if(hardware.wire.fault) {
+        if(hardware.wire.fault==1) {
+            require(status==a7::Status::Ok && hardware.i2cAttempts==9 && hardware.referenceNacks==2 && hardware.retries==6,"sensor NACK policy scope/count");
+        } else {
+            require(status!=a7::Status::Ok && !hardware.referenceNacks && !hardware.retries,"fatal I2C failure was tolerated");
+            const devinit::I2cError expected[]={devinit::I2cError::None,devinit::I2cError::Nack,devinit::I2cError::Nack,devinit::I2cError::Nack,devinit::I2cError::Nack,devinit::I2cError::Stretch,devinit::I2cError::Timeout,devinit::I2cError::Nack,devinit::I2cError::Io};
+            require(hardware.lastI2cPrimary==unsigned(expected[hardware.wire.fault]),"wrong native I2C error class");
+            if(hardware.wire.fault==4)require(hardware.lastI2cCleanup==unsigned(devinit::I2cError::Io),"STOP error was hidden");
+        }
+    }
     std::cout<<"status "<<unsigned(status)<<" step "<<unsigned(result.startup.step)<<" error "<<unsigned(result.startup.error)
-             <<" arms "<<hardware.arms<<" writes "<<hardware.writes<<" checks "<<checks<<'\n';
+             <<" arms "<<hardware.arms<<" writes "<<hardware.writes<<" checks "<<checks<<" i2c "<<hardware.i2cAttempts<<" reference-nacks "<<hardware.referenceNacks<<" retries "<<hardware.retries<<" primary "<<hardware.lastI2cPrimary<<" cleanup "<<hardware.lastI2cCleanup<<'\n';
     return 0;
 } catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 1;}

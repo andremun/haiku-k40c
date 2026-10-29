@@ -1,22 +1,70 @@
-# A7 package S1A7RUN5 (2026-10-29)
+# A7 sensor response package (2026-10-29)
 
-**Current status:** new single-use package `build/a7/package-run5/`, records in
-`work/S1A7RUN5/`. It adds the ADR 009 allowance: one
-`vfio-pci 0000:04:00.0: enabling device (...)` line between QEMU start and the
-first guest serial output does not stop the run. The approved fourth run
-(`results/20261029-a7-ba6a1a54/`) stopped on exactly that line after the host
-reboot, before the guest started. The exact package passed the cardless
-rehearsal `results/20261029-100317-a7-rehearsal/` in 79.64 s. No card run of
-this package has occurred. It needs the user's explicit yes for one run.
-S1 remains incomplete. D1 is unapproved.
+**Current status:** fresh, unconsumed `build/a7/package-i2c/`, records in
+`work/S1A7I2C/`. No card run is approved or performed. Run5 remains consumed
+and stopped at 0xab8d. S1 is incomplete. D1 is unapproved.
 
-Earlier records: `work/S1A7RUN5/` and its rehearsal
-`results/20261028-142613-a7-rehearsal/` (consumed package `package-rehearsal2`).
-The review scope since commit 8974695 is `git diff 8974695..HEAD`.
+Review scope: `git diff 3ac1176..HEAD` after this macro task is committed.
+This package adds precise I2C diagnostics and the user's ADR 010 response
+policy. No register address, DMA permission, readiness step or R5 rule expands.
+ADR 009's single startup enable-line allowance remains unchanged.
+The exact new binaries passed cardless rehearsal in 78.34 seconds at
+results/20261029-104357-a7-rehearsal/. This is installation/lifetime evidence.
+
+## Diagnosis and approved package scope
+
+KNOWN / TRACE_VERIFIED: Linux attempted both sensor pairs at 0xab8d. Each
+register (0x19 and 0x0d, intended value 0x73) has four address frames. Every
+frame sends 0x98 and receives NACK. No register/value bytes were sent.
+Nouveau bios/init.c:1033-1056 ignores the return and continues the script.
+Source-bound decoder: tools/a7/i2c_capture.py, work/S1A7I2C/linux-i2c.json.
+Eight captured slave responses replay through the actual DedicatedI2c code as
+address NACK with a clean STOP. An ACK-all control sends all three bytes.
+This is response replay, not a reproduction of Linux's timing or adapter code.
+
+INFERRED: a similar NACK may explain the Haiku stop. UNKNOWN: run5's actual
+I2C error class and which pair failed. The previous log cannot settle that.
+The 99.799 ms pre-acquire gap does not establish a required settle wait.
+Acquire/release intervals are 6.272 ms and 8.885 ms for two separate transfers.
+A pad mode log alone is not proof of a pad register write: dedicated-pad
+callbacks have no mode function. No guessed delay or pad write is added.
+
+ADR 010 records the user's explicit response-policy choice. Only the exact
+0xab8d pairs, on the immutable ROM/default bus/address 0x4c, get at most four
+attempts. An address NACK may retry after a successful bounded STOP. Four such
+NACKs may continue POST as ReferenceNack. An ACKed transfer completes normally.
+Payload NACK, IO, stretch, timeout, clock, budget and cleanup failures stop.
+Every other address/PC/pair remains fatal on error. Repeated or out-of-order
+sensor pairs are denied. No recovery pulses or implicit reinitialization occur.
+The existing 100 ms/20,000-guard-operation per-attempt, 10 s POST and 15 s startup
+bounds remain. STOP success means callbacks completed, not proof of bus recovery.
+
+The write inventory now lists this bounded policy explicitly. The data bytes
+remain the vendor ROM's approved values. This does not claim sensor presence or
+successful configuration after NACK. Ordinary physical backends stay gated.
+
+## Native I2C diagnostics
+
+Each attempted transaction emits a fixed six-line record:
+
+| Event | a | b |
+|---|---|---|
+| I2C_REQUEST | ROM PC | address7 << 16, register << 8, value |
+| I2C_DISPOSITION | attempt 1..4 | Fatal=0, Complete=1, RetryAddress=2, ReferenceNack=3 |
+| I2C_RESULT | primary error | STOP/cleanup error |
+| I2C_PHASE | transfer phase | bit 0..7 MSB first, 8=ACK |
+| I2C_TIME | transfer guard elapsed us | cleanup guard elapsed us |
+| I2C_WORK | guard-operation count | last pre-cleanup register read |
+
+I2cError values: None=0, HardwareDisabled=1, Input=2, NotInitialized=3,
+Io=4, Nack=5, Stretch=6, Timeout=7, Clock=8, Budget=9.
+Transfer phases: Idle=0, Start=1, Address=2, Register=3, Value=4.
+Diagnostics preserve both primary and cleanup failure. They add no MMIO reads.
+All records remain bounded by the fixed attempt count and existing deadlines.
 
 ## Exact inputs and commands
 
-`work/S1A7RUN5/package.json` is the generated artifact/source manifest.
+`work/S1A7I2C/package.json` is the generated artifact/source manifest.
 `write-inventory.json` in that folder lists all 544 possible script-write
 locations from the exact ROM's structural preflight and independent access
 policy decoder. Each row gives the script PC, opcode, register, width and
@@ -27,7 +75,7 @@ separately in the same file. Private firmware and signing material stay in build
 
 | Artifact | SHA-256 |
 |---|---|
-| `k40_a7_owner_module` | `e031b8a3a3a5b8d1502c0554764c358e8f91df5b9f2316fceb479aafa2354751` |
+| `k40_a7_owner_module` | `a14758b05384bf5669ac49795903709e1dd5a9c70beccc8a7cf46787c1c625c3` |
 | `k40_a7_stage` | `d11b0d3773e8f1a206a98b79b85a1c6e7c73948dbe096001d472ef0ee66ee122` |
 | Open helper (`tools/a7/open_session.c`) | `58bec7c51730bf95f541c61c8ed9b8379b97f1c2b335702de0f9542698914977` |
 | Identity probe | `8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f` |
@@ -42,6 +90,8 @@ export K40_VBIOS="$HOME/haiku-cross/vbios/k40c-0000_04_00_0-vbios-80.80.65.00.01
 python3 tools/a7/build.py --check
 python3 tools/a7/rehearse.py --check
 python3 tools/a7/host_check.py --check
+python3 tools/a7/i2c_capture.py --check
+python3 tools/a7/i2c_replay.py --check
 python3 tools/a7/run.py --check
 ```
 
@@ -54,13 +104,14 @@ python3 tools/a7/run.py --run-approved-A7-once
 ```
 
 The execution option is an operator approval assertion; it does not obtain or
-replace human approval. The default and `--check` never start a guest. The new package directory is `build/a7/package-run5/`. The host
+replace human approval. The default and `--check` never start a guest. The new package directory is `build/a7/package-i2c/`. The host
 signing key is a fresh per-package Ed25519 key, mode 0600. The launcher atomically
 creates a consumed marker before starting QEMU. Even a failed launch consumes
 the package. A retry requires reporting the stop, a new reviewed package and
 fresh approval. Do not remove the marker to rerun.
 
-Build-only reproduction (no guest) uses `python3 tools/a7/host_check.py`, followed
+Build-only reproduction (no guest) uses `python3 tools/a7/i2c_capture.py`,
+`python3 tools/a7/i2c_replay.py`, then `python3 tools/a7/host_check.py`, followed
 by `python3 tools/a7/build.py`. Keep the exact verification-only dependency at
 `~/haiku-cross/src/orlp-ed25519`, revision recorded in `crypto-sources.json`. Recover it with
 a clean clone of https://github.com/orlp/ed25519 and checkout
@@ -181,21 +232,21 @@ unmapped address should fault, but no negative DMA experiment is authorized.
 
 ## Validation and review focus
 
-`work/S1A7RUN5/host-check.json` records 32 ROM/strap scenarios (16 complete), 192 altered-frame
+`work/S1A7I2C/host-check.json` records 32 ROM/strap scenarios (16 complete), 192 altered-frame
 rejections, seven correctly signed wrong-scope rejections, a noncanonical
 signature rejection and I2C/clock failures. The actual owner/controller execute
 against simulated registers; this is not card evidence. Actual NativePlatform
 and client source tests cover reservation and duplicate-device failure, no permit
 writes, DMA32 alignment/zeroing, partial allocation retention, partial stream
 input, copy errors and reload refusal. They pass with host OS mocks
-(counts in `work/S1A7RUN5/check-final.log`). Native compilation separately uses real Haiku headers and the matching
-kernel exports. `work/S1A7RUN5/native-build.log` records successful links.
+(counts in `work/S1A7I2C/check-final.log`). Native compilation separately uses real Haiku headers and the matching
+kernel exports. `work/S1A7I2C/native-build.log` records successful links.
 
-The complete `make check` passes. Its log is in `work/S1A7RUN5/check-final.log`.
+The complete `make check` passes. Its log is in `work/S1A7I2C/check-final.log`.
 Review the explicit physical permit, request/grant signer, permanent retention,
 write allowlist, scratch reservation and teardown boundary before approving the
-fourth physical run. Native owner loading and the no-card refusal now have
-cardless evidence. Physical timer/memory/scratch behavior remains UNKNOWN. S2/S3 work remains conditional on actual S1 completion.
+next physical run. Native owner loading has both cardless and run5 evidence.
+The no-card refusal has cardless evidence. Physical timer/memory/scratch behavior remains UNKNOWN. S2/S3 work remains conditional on actual S1 completion.
 
 ## Review nits and deliberate Linux omissions
 
@@ -254,31 +305,28 @@ in `prepare`, called by the one open. The job opens the device once, through the
 native helper `tools/a7/open_session.c`. The helper prints the raw Haiku status of
 `_kern_open` (bash misreports negative Haiku status values) and keeps the
 descriptor as fd 3 for the rest of the job. The helper's libroot link input was
-exported from the guest (`tools/a7/runtime_export.py`, `work/S1A7RUN5/runtime.json`).
+exported from the guest (`tools/a7/runtime_export.py`, `work/S1A7REHEARSAL2/runtime.json`).
 
 Expected cardless behaviour, from `docs/tasks/S1A7REHEARSAL2.md`: client init
 publishes `misc/k40_a7_stage` without starting hardware. The one open calls
 `prepare`. The PCI search finds no card before any reservation or BAR mapping.
 The owner enters the Failed state (3) and the open returns `B_ERROR`.
 
-KNOWN / cardless OS evidence, `results/20261028-142613-a7-rehearsal/` (repeated for this package in `results/20261029-100317-a7-rehearsal/`):
-- `job-output.txt`: four checked installs (identity, owner, client, helper), each
-  with equal inodes, then `A7-DEVICE-PUBLISHED`, `A7-OPEN-DEVICE` and
-  `A7-OPEN-RESULT status=0xffffffff` (`B_ERROR`).
-- `serial.log`: no `partial` or staging name. `driver "k40_identity_probe" added`
-  (864) and `driver "k40_a7_stage" added` (880) use final names. `OWNER_LOAD` 1,
-  `CLIENT_LOAD` 1, `PREPARE_CALL` 1, then `REFUSED no matching PCI card before
-  reservation` and Failed state 3 (881-887).
-- Rehearsal-only reload (lines 888-898): the client reloads (`CLIENT_LOAD a=0x2
-  b=0x3`) with the owner still Failed and no second `PREPARE_CALL`. The reload
-  step exists only in the rehearsal command (`reload-command.txt`).
-- The identity probe's no-card failure is expected in a cardless guest.
+KNOWN / cardless OS evidence, `results/20261029-104357-a7-rehearsal/`:
+
+- Four installations pass size/hash/same-inode checks, then node publication
+  and the one open return status 0xffffffff (B_ERROR), as expected without a card.
+- All discovered/load names are final names. No partial or staging load appears.
+- Identity initializes three times, client twice, resident owner once.
+- Only one prepare occurs. The client reload sees the same Failed owner state.
+  The reload command is cardless-only and never opens again.
+- Identity's no-card failure is expected. No physical request/grant/POST occurs.
 
 This proves native installation, final-name loading, one-open entry and the
 one-shot owner state. It does not prove physical bring-up. No request, grant,
 arming, POST or readiness ran.
 
-`work/S1A7RUN5/rehearsal.json` binds the job (SHA-256 `9ba5fc89...`), the
+`work/S1A7I2C/rehearsal.json` binds the exact generated job, the
 four binary sizes and hashes, the guest kernel and the capture hashes.
 `build.py --check` and every physical launcher prerequisite require this
 matching passing record. A changed job or binary needs another rehearsal.
@@ -286,3 +334,19 @@ matching passing record. A changed job or binary needs another rehearsal.
 The original 8974695, 24fb578 and 0390b8b consumed markers and binary archives
 remain. After Claude Code's review of this record, the user may approve one new
 physical run.
+
+## Host policy checks and review gate
+
+The actual owner/controller host fixture completes after exactly nine I2C
+attempts: one 0x20 transaction and four for each sensor pair. It records six
+retries and two ReferenceNack continuations. Independent fatal fixtures verify
+register/value NACK, STOP failure, stretch, timeout, IO and other-address NACK,
+including their exact primary/cleanup error classes. These are host simulations.
+The existing native, authentication and lifetime checks remain in the package.
+
+Review the scope and failure classification against ADR 010 before offering
+this package for a physical run. A fresh explicit yes still covers one launch
+only. No execution command was run against the card during this task.
+The filtered R5 scope, fresh witness and all other containment rules remain.
+The ~/mediaflux network mount can affect default verification inputs. This task
+uses the existing exact-hash local ROM copy via the K40_VBIOS command above.

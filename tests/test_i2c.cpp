@@ -29,6 +29,8 @@ int main()
         CHECK(!i2c.i2cWrite(bus(), 0x4c, 0x19, 0x73));
         CHECK(i2c.result().primary == I2cError::Nack && i2c.result().cleanup == I2cError::None);
         CHECK(wire.decoded.size() == nack && wire.stops == 1);
+        CHECK(unsigned(i2c.result().phase)==unsigned(I2cPhase::Address)+nack-1);
+        CHECK(i2c.result().bit==8 && i2c.result().transferUs && i2c.result().cleanupUs && i2c.result().operations);
         const auto calls = wire.calls;
         CHECK(!i2c.i2cWrite(bus(), 1, 2, 3) && wire.calls == calls);
     }

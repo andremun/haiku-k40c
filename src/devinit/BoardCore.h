@@ -16,6 +16,7 @@ struct RomView {
 struct I2cBus {
     uint8_t index = 0, type = 0, drive = 0xff, share = 0xff, aux = 0xff; // include/nvkm/subdev/bios/i2c.h:12, unavailable bus-field sentinel.
 };
+struct I2cResult;
 class BoardTransport {
 public:
     virtual ~BoardTransport() = default;
@@ -27,6 +28,7 @@ public:
     virtual bool read8(uint32_t address, uint8_t& value) = 0;
     virtual bool write8(uint32_t address, uint8_t value) = 0;
     virtual bool i2cWrite(const I2cBus&, uint8_t address7, uint8_t reg, uint8_t value) = 0;
+    virtual void i2cAudit(uint32_t, uint8_t, uint8_t, uint8_t, const I2cResult&) {}
     virtual void audit(uint32_t, uint8_t, bool, Error) {}
 };
 

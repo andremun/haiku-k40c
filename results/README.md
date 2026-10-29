@@ -32,3 +32,5 @@ on 23 October 2026 with unchanged bytes. `hashes.txt` lists the file hashes.
 | `20261028-a7-c07e1db9/` | Original immutable launcher evidence for the same third approved launch. | `results/20261028-a7-post-03/summary.json` |
 
 | `20261028-134127-a7-rehearsal/` | Exact A7 job and binaries pass checked installs and node publication, then refuse inside open before PCI reservation. Cardless only. | `work/S1A7REHEARSAL/rehearsal.json` |
+
+| `20261029-104357-a7-rehearsal/` | Exact A7 sensor-policy package, cardless installation/reload PASS in 78.34 s. Final names, B_ERROR, one prepare, retained Failed state. No card. | `work/S1A7I2C/rehearsal.json` |

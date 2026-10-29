@@ -90,9 +90,34 @@ bool BoundPost::i2cWrite(const I2cBus& bus, uint8_t address, uint8_t reg, uint8_
     bool transferred = false;
     if (mode_==PostI2c::DedicatedPins) {
         if (!prepared_) { error_=Error::Input; return false; }
-        inI2c_=true;
-        transferred=i2c_.i2cWrite(bus,address,reg,value);
-        inI2c_=false;
+        // Exact-ROM response policy, approved by the user 2026-10-29.
+        // Linux bios/init.c:1033-1056 ignores the return value. The capture
+        // work/S1A7I2C/linux-i2c.json proves four address NACKs per sensor pair.
+        // These are software scope guards for opaque ROM fields, not register definitions.
+        // no source: software scope comparison; captured fields in work/S1A7I2C/linux-i2c.json.
+        const bool sensor=pc_==0xab8d && bytes[1]==0x80 && address==0x4c
+            && value==0x73 && (reg==0x19 || reg==0x0d); // no source: exact captured ROM transaction policy.
+        const unsigned pairBit=reg==0x19?1:2; // no source: software bitset index for the two captured ROM pairs.
+        if(sensor && sensorPairs_!=(pairBit==1?0u:1u)) {error_=Error::Denied;return false;}
+        const unsigned attempts=sensor?4:1; // no source: bounded retry count verified against the capture.
+        for(unsigned attempt=1;attempt<=attempts;++attempt) {
+            if(!guard())return false;
+            inI2c_=true;
+            transferred=i2c_.i2cWrite(bus,address,reg,value);
+            inI2c_=false;
+            auto detail=i2c_.result();detail.attempt=attempt;
+            const bool addressNack=!transferred && sensor && error_==Error::None
+                && detail.primary==I2cError::Nack && detail.cleanup==I2cError::None
+                && detail.phase==I2cPhase::Address && detail.bit==8;
+            if(addressNack && guard() && i2c_.retryAddressNack()) {
+                detail.disposition=attempt<attempts?I2cDisposition::RetryAddress:I2cDisposition::ReferenceNack;
+                ports_.i2cAudit(pc_,address,reg,value,detail);
+                if(attempt<attempts)continue;
+                transferred=true;
+            } else ports_.i2cAudit(pc_,address,reg,value,detail);
+            break;
+        }
+        if(transferred && sensor)sensorPairs_|=pairBit;
     } else transferred=ports_.i2cWrite(bus,address,reg,value);
     if (!transferred && error_==Error::None) {
         const auto result=i2c_.result();

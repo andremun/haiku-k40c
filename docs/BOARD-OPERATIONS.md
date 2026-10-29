@@ -56,7 +56,7 @@ family (`drivers/hwmon/lm90.c` of v6.12, which handles the MAX6649 as the
 `max6646` type): `0x19` is `LM90_REG_REMOTE_CRIT`, the remote critical
 (OVERT) limit; `0x0d` is the write address of `LM90_REG_REMOTE_HIGHH`
 (read address `0x07`, write address read + 6, `lm90_write_reg_addr`), the
-remote high limit. So the script sets both limits of the sensor's remote
+remote high limit. So the script attempts to set both limits of the sensor's remote
 channel (the GPU die) to 115 °C. The sensor's own power-on limits were not
 looked up. The board table also lists an INA3221 power monitor (table
 address `0x80`, 7-bit `0x40`), which the script does not touch. The device
@@ -126,3 +126,13 @@ Register effects of that helper (`init.c:1638-1650`), covered by ADR 004:
 bit 17 set then cleared, `0x614100` and `0x614900` (display registers)
 masked and written three times, two 10 ms waits.
 ADR 004 includes these effects as the fifth board-operation decision.
+
+## Sensor response correction, 2026-10-29
+
+KNOWN / TRACE_VERIFIED: work/S1A7I2C/linux-i2c.json decodes four address NACKs
+for each of the two intended 0x4c register writes. Only 0x98 was transmitted.
+No register/value bytes were sent in these Linux frames. Successful sensor
+configuration or even sensor presence is not established by the script log.
+Nouveau bios/init.c:1033-1056 continues without checking the helper's result.
+ADR 010 records the user's narrowly scoped response policy for the next package.
+The precise Haiku run5 I2C error remains UNKNOWN until native diagnostics exist.

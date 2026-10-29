@@ -1,0 +1,4 @@
+python3 tools/check_repo.py
+FAIL: src/: 1 of 302 lines with a hardware constant have no source: add `// path/file.c:LINE` on the line or in the comment above it, or `// no source: reason` for plain arithmetic. First: ['src/devinit/BoundPost.cpp:100']
+check_repo: 1 failure(s)
+make: *** [Makefile:20: check] Error 1

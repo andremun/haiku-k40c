@@ -46,6 +46,7 @@ private:
     DedicatedI2c i2c_;
     const PostI2c mode_;
     uint32_t pin_ = 0;
+    unsigned sensorPairs_ = 0;
     bool preparing_ = false, prepared_ = false, inI2c_ = false;
     uint32_t pc_ = 0;
     uint64_t started_ = 0, last_ = 0, timeout_ = 0;

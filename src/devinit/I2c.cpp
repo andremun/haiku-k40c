@@ -19,6 +19,14 @@ bool DedicatedI2c::initialize(const I2cBus& bus)
     return true;
 }
 
+bool DedicatedI2c::retryAddressNack()
+{
+    // Only BoundPost can reopen the engine, after its exact-ROM sensor policy.
+    if(!executionAllowed() || ready_ || result_.primary!=I2cError::Nack
+        || result_.cleanup!=I2cError::None || result_.phase!=I2cPhase::Address || result_.bit!=8)return false;
+    ready_=true;return true;
+}
+
 bool DedicatedI2c::guard()
 {
     if (error_ != I2cError::None) return false;
@@ -32,7 +40,8 @@ bool DedicatedI2c::guard()
 }
 bool DedicatedI2c::read(uint32_t& value)
 {
-    return guard() && (registers_.read32(address_, value) || fail(I2cError::Io));
+    if (!guard() || !(registers_.read32(address_, value) || fail(I2cError::Io))) return false;
+    lastRead_=value; return true;
 }
 bool DedicatedI2c::drive(uint32_t mask, bool high)
 {
@@ -79,10 +88,12 @@ bool DedicatedI2c::stop()
 bool DedicatedI2c::byte(uint8_t value)
 {
     for (int bit = 7; bit >= 0; --bit) {
+        bit_=unsigned(7-bit);
         // bit.c:115-129: transmit MSB first, with 1 us setup and 5 us holds.
         if (!drive(2, (value >> bit) & 1) || !delay(1) || !raise()
             || !delay(5) || !drive(1, false) || !delay(5)) return false;
     }
+    bit_=8;
     bool nack = false;
     // bit.c:133-150,169-173: release SDA, sample ACK, then lower SCL.
     if (!drive(2, true) || !delay(1) || !raise() || !delay(5)
@@ -102,13 +113,23 @@ bool DedicatedI2c::i2cWrite(const I2cBus& bus, uint8_t address7, uint8_t reg, ui
     error_ = I2cError::None;
     started_ = last_ = registers_.nowUs();
     // Address byte and two payload bytes: bios/init.c:294-299; i2c/bit.c:177-183.
-    const bool transferred = start() && byte(uint8_t(address7 << 1)) && byte(reg) && byte(value);
+    phase_=I2cPhase::Start;bit_=0;lastRead_=0;
+    auto send=[&](I2cPhase phase,uint8_t data) { phase_=phase;return byte(data); };
+    const bool transferred = start() && send(I2cPhase::Address,uint8_t(address7 << 1))
+        && send(I2cPhase::Register,reg) && send(I2cPhase::Value,value);
     result_.primary = error_;
+    result_.phase=phase_;result_.bit=bit_;result_.levels=lastRead_;
+    result_.transferUs=last_>=started_?last_-started_:0;
+    const auto cleanupStart=last_;
     // Source always attempts STOP. Preserve the primary error and use the same
     // deadline/budget for cleanup. No retry, extra pulses, or implicit reinit.
     error_ = I2cError::None;
+    phase_=I2cPhase::Stop;
     const bool stopped = stop();
     result_.cleanup = error_;
+    result_.operations=operations_;
+    result_.cleanupUs=last_>=cleanupStart?last_-cleanupStart:0;
+    result_.disposition=transferred && stopped?I2cDisposition::Complete:I2cDisposition::Fatal;
     if (!transferred || !stopped) ready_ = false;
     return transferred && stopped;
 }

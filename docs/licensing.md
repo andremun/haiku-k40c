@@ -352,3 +352,14 @@ as a baseline before obtaining the exact reference revision. Source records
 separate that evidence from the unestablished running-kernel source identity.
 The new shell installation and publication-wait functions are original code.
 No Haiku implementation blocks were copied. No additional Nouveau file was used.
+
+
+## S1A7I2C diagnosis (2026-10-29)
+
+Consulted pinned Nouveau nvkm/subdev/bios/init.c:1033-1056 (unchecked I2C return),
+i2c/bit.c (internal bit framing and STOP), i2c/busgf119.c:37-69 (drive/sense),
+i2c/bus.c:138-150,230-245 (bus acquisition and algorithm selection),
+i2c/pad.c:27-33,55-70 (mode logging/callback dispatch),
+i2c/padgf119.c:43-48 and i2c/base.c:285-295 (dedicated-pad selection).
+All carry the existing MIT notices. Only semantic facts were used. No function
+bodies were copied. Response decoder, telemetry and scoped policy are original.

@@ -130,6 +130,15 @@ bool Owner::Transport::unarmInterrupts(){phase_=Phase::Interrupts;return helpers
 bool Owner::Transport::postRequired(bool& required){phase_=Phase::Decision;return helpers_.postRequired(required);}
 bool Owner::Transport::unlockCrtc(){phase_=Phase::Crtc;return helpers_.unlockCrtc();}
 bool Owner::Transport::privateRing(){phase_=Phase::Ring;return helpers_.privateRing();}
+void Owner::Transport::i2cAudit(uint32_t pc,uint8_t address,uint8_t reg,uint8_t value,const devinit::I2cResult& result)
+{
+    owner_.platform_.log("I2C_REQUEST",pc,(uint32_t(address)<<16)|(uint32_t(reg)<<8)|value);
+    owner_.platform_.log("I2C_DISPOSITION",result.attempt,unsigned(result.disposition));
+    owner_.platform_.log("I2C_RESULT",unsigned(result.primary),unsigned(result.cleanup));
+    owner_.platform_.log("I2C_PHASE",unsigned(result.phase),result.bit);
+    owner_.platform_.log("I2C_TIME",result.transferUs,result.cleanupUs);
+    owner_.platform_.log("I2C_WORK",result.operations,result.levels);
+}
 bool Owner::Transport::initializeI2c()
 {
     devinit::I2cBus bus{};

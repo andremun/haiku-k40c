@@ -23,15 +23,22 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 sys.path.insert(0, str(ROOT / "tools/haiku"))
-from tools.a7 import crypto_sources, omissions, install_sources, runtime_export
+from tools.a7 import (
+    crypto_sources,
+    omissions,
+    install_sources,
+    runtime_export,
+    i2c_capture,
+    i2c_replay,
+)
 import devinit_preflight
 import post_policy
 import probe_stage
 from board_trace import read_policy, ADR
 
-PACKAGE = ROOT / "build/a7/package-run5"
-PUBLIC = ROOT / "work/S1A7RUN5/package.json"
-INVENTORY = ROOT / "work/S1A7RUN5/write-inventory.json"
+PACKAGE = ROOT / "build/a7/package-i2c"
+PUBLIC = ROOT / "work/S1A7I2C/package.json"
+INVENTORY = ROOT / "work/S1A7I2C/write-inventory.json"
 ROM = Path(
     os.environ.get(
         "K40_VBIOS",
@@ -256,7 +263,19 @@ def inventory(data):
     driver[7][
         "values"
     ] = "pattern = uint32((VRAM_address >> 2) xor (VRAM_address >> 34)) * 0x9e3779b9 modulo 2^32; second pass complements every word"
+    sensor_policy = dict(
+        pc="0xab8d",
+        address7="0x4c",
+        registers=["0x19", "0x0d"],
+        value="0x73",
+        max_attempts_per_pair=4,
+        continue_only="address-phase NACK on all four attempts, with clean STOP each time",
+        fatal="all other errors or cleanup failures",
+        source="reference/nouveau/nvkm/subdev/bios/init.c:1033-1056; work/S1A7I2C/linux-i2c.json",
+        payload_sent_on_address_nack=False,
+    )
     return dict(
+        sensor_address_nack_policy=sensor_policy,
         rom_sha256=devinit_preflight.EXPECTED,
         scope="conservative possible writes, not an executed path",
         script=script,
@@ -275,6 +294,12 @@ def source_names():
             *CLIENT,
             "tools/a7/build.py",
             "tools/a7/guest_job.py",
+            "tools/a7/i2c_capture.py",
+            "tools/a7/i2c_replay.py",
+            "tests/a7_i2c_replay.cpp",
+            "tests/test_a7_i2c.py",
+            "tests/i2c_wire.h",
+            "tests/board_fake.h",
             "tools/a7/open_session.c",
             "tools/a7/runtime_export.py",
             "tools/a7/rehearse.py",
@@ -329,6 +354,11 @@ def manifest():
     data, total, capture = inputs()
     if install_sources.OUTPUT.read_text() != install_sources.render():
         raise ValueError("installation source record differs")
+    if (
+        i2c_capture.OUTPUT.read_text() != i2c_capture.render()
+        or i2c_replay.OUTPUT.read_text() != i2c_replay.render()
+    ):
+        raise ValueError("I2C capture/replay evidence differs")
     public, nonce = key_inputs()
     crypto = crypto_sources.validate()
     if (PACKAGE / "a7_config.h").read_text() != config(data, public, nonce, total):
@@ -355,6 +385,8 @@ def manifest():
     ):
         raise ValueError("forbidden owner artifact capability")
     return dict(
+        linux_i2c_sha256=sha(i2c_capture.OUTPUT),
+        i2c_replay_sha256=sha(i2c_replay.OUTPUT),
         runtime_library_sha256=sha(runtime_export.LIBRARY),
         runtime_export_sha256=sha(runtime_export.OUTPUT),
         stage="A7_ARM_ONLY_POST_WRITE",
@@ -382,7 +414,7 @@ def manifest():
         ),
         config_sha256=sha(PACKAGE / "a7_config.h"),
         verifier=crypto,
-        host_check_sha256=sha(ROOT / "work/S1A7RUN5/host-check.json"),
+        host_check_sha256=sha(ROOT / "work/S1A7I2C/host-check.json"),
         teardown_sources_sha256=sha(ROOT / "work/S1A7NATIVE/teardown-sources.json"),
         installation_sources_sha256=sha(install_sources.OUTPUT),
         inventory_sha256=hashlib.sha256(dump(inventory(data)).encode()).hexdigest(),
