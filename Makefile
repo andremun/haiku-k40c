@@ -35,6 +35,10 @@ check:
 		python3 tools/owner_post_check.py --check; \
 	fi
 	@if [ -f tests/Makefile ]; then $(MAKE) -s -C tests; fi
+	python3 tools/memstage/contract.py --check
+	python3 tools/memstage/arena_report.py --check
+	python3 tools/memstage/fault_report.py --check
+	python3 tools/memstage/upload_report.py --check
 
 test:
 	@if [ -f tests/Makefile ]; then $(MAKE) -C tests; fi

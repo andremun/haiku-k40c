@@ -383,6 +383,20 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 |------|------|--------|--------|
 | `src/memstage/Port.h:22` | `static constexpr unsigned capacity=4096;` | no source: resident diagnostic capacity. | SOURCE_ONLY |
 
+## src/memstage/Upload.cpp
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/memstage/Upload.cpp:37` | `const auto word=uint32_t(physical>>2)^uint32_t(physical>>32)^0xa53c9e71;` | no source: software address-dependent test pattern. | SOURCE_ONLY |
+| `src/memstage/Upload.cpp:48` | `const auto base=physical&~uint64_t(0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Upload.cpp:50` | `if(!io_.write32(0x001700,uint32_t(base>>16)))return fail(Error::Write,0x001700);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Upload.cpp:56` | `if(!io_.write32(0x070000,1))return fail(Error::Write,0x070000);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Upload.cpp:64` | `if(!io_.read32(0x070000,value))return fail(Error::Read,0x070000);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Upload.cpp:69` | `if(!journal_.append({phase_,Error::None,0x070000,value,poll+1,last_-start}))return fail(Error::Overflow);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Upload.cpp:92` | `const auto reg=0x700000+uint32_t(physical&0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Upload.cpp:143` | `const auto reg=0x700000+uint32_t(physical&0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Upload.cpp:151` | `const auto reg=0x700000+uint32_t(physical&0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
+
 ## src/mmu/PageTable.cpp
 
 | Line | Code | Source | Status |
@@ -552,6 +566,15 @@ The following constant lines have no source citation:
 - src/memstage/Faults.cpp:93 (no source: ambiguous citation)
 - src/memstage/Faults.cpp:94 (no source: ambiguous citation)
 - src/memstage/Port.h:22 (no source: resident diagnostic capacity.)
+- src/memstage/Upload.cpp:37 (no source: software address-dependent test pattern.)
+- src/memstage/Upload.cpp:48 (no source: ambiguous citation)
+- src/memstage/Upload.cpp:50 (no source: ambiguous citation)
+- src/memstage/Upload.cpp:56 (no source: ambiguous citation)
+- src/memstage/Upload.cpp:64 (no source: ambiguous citation)
+- src/memstage/Upload.cpp:69 (no source: ambiguous citation)
+- src/memstage/Upload.cpp:92 (no source: ambiguous citation)
+- src/memstage/Upload.cpp:143 (no source: ambiguous citation)
+- src/memstage/Upload.cpp:151 (no source: ambiguous citation)
 - src/os/HaikuMemory.h:39 (no source: software ownership-record capacity, not a GPU limit.)
 - src/runtime/Bootstrap.cpp:45 (no source: ambiguous citation)
 - src/runtime/Bootstrap.cpp:47 (no source: ambiguous citation)

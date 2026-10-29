@@ -18,7 +18,8 @@ BUILDDIR := ../build/tests
 OWNER_POST_CORE := ../src/devinit/PostImage.cpp ../src/devinit/BoardPolicy.cpp ../src/devinit/Sha256.cpp
 OWNER_POST_HEADERS := $(wildcard ../src/devinit/*.h)
 
-CXX_TESTS := test_mem_faults:memstage+memory \
+CXX_TESTS := test_mem_upload:memstage+memory \
+             test_mem_faults:memstage+memory \
              test_vram_arena:memory \
              test_a7_diagnostics:devinit \
              test_bootstrap:runtime+memory test_prestart:runtime+memory \

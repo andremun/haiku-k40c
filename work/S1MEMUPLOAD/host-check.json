@@ -1,0 +1,29 @@
+{
+  "bounds": {
+    "bulk_us": 5000000,
+    "flush_us": 2000000,
+    "poll_count": 100000
+  },
+  "claim": "scoped staged/readback only; no DMA payload publication, GPU-VA or channel proof",
+  "protocol": [
+    "explicit UC profile and active private native gate",
+    "owned token validation and window transaction lock",
+    "selector 0x1700 and data 0x700000 + physical low 20 bits",
+    "CPU store fence, BAR flush 0x70000=1, busy bit 2 clear, CPU load fence",
+    "write both full pages, verify both; repeat complement then original"
+  ],
+  "scope": "SOURCE_ONLY protocol; HOST_ONLY independent physical-storage oracle",
+  "source_sha256": {
+    "reference/nouveau/nvkm/subdev/bar/g84.c": "28fb3702c0ab41c1ab4ee5840f57d3c809b93ae9a779b2a57115164426c0f6ae",
+    "reference/nouveau/nvkm/subdev/instmem/nv50.c": "0fd5655d95638a3df042c8e42d064e15be8cf44bb5211f4585dd4491f60c1b96",
+    "src/memory/VramArena.cpp": "5d5189a1e7b02000be1814c22f05a86fa237b17f8344d80efc727dd80a758a37",
+    "src/memory/VramArena.h": "d1e99970f869b38f1aab447621d86a6918727f9f559fcc1fda326be21cafb461",
+    "src/memstage/Faults.h": "b77aec14d12007e47b6dbd3e82428b778b0767abbf3cfb3263498778b3490958",
+    "src/memstage/Port.h": "d84e288352fa66346bb7ed7b4c889b041bce51d8eea11f7eb9b89d4d4f2bd94b",
+    "src/memstage/Upload.cpp": "37cb5ab020ac2461567f90c110795f9b8e757865202e7a8595e0c419d124a3a2",
+    "src/memstage/Upload.h": "d78d3cc13731996d7eae0abd4ed6add710fdf0dc6bfb714a3e6355423f38e01d",
+    "tests/test_mem_upload.cpp": "8de1d1532a1606e6c6cb8e7ba78ec400897bdaa7bd813becddc15fa005381e88",
+    "tools/memstage/upload_report.py": "c7025cd11afac5f42a5d3aef8845ed76018ba314fa4364f1d954ee34770056bc"
+  },
+  "tests": "memory upload: 20 ordering/window/alias/failure cases pass; HOST_ONLY"
+}
