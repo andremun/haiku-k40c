@@ -1,5 +1,15 @@
 # Plan for milestone S1
 
+## Current position (2026-10-29)
+
+A7 POST/readiness now passes on this card under Haiku (S1A7RUN7). S1 itself is
+incomplete. The proposed first memory/translation batch is in
+[S1-BATCH1-REVIEW.md](S1-BATCH1-REVIEW.md), with six implementation task texts.
+Review that design together with the A7 result before proceeding. The dated
+reviews/tables below are historical planning context; current results are in
+STATUS. No consumed A7 approval carries into the new batch. D1 alone cannot
+prove host-payload visibility; Q7 remains open.
+
 First draft by the scaffold 2026-10-13. Rewritten 2026-10-16 to record the
 plan as it now stands, after the external reviews and the five research
 documents in `docs/external/`, and after reading the `haiku-k40c-llm`

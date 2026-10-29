@@ -29,6 +29,22 @@ Linux with Nouveau and Mesa (task C5, in a Linux guest with the card
 passed through: `docs/PASSTHROUGH.md`). If it does not run there, there
 is no reference for S3 and the project stops at S2.
 
+## Current S1 memory/translation batch (proposed)
+
+A7 now passes under Haiku; see STATUS. The proposed first-batch design and A7
+result are reviewed together in [S1-BATCH1-REVIEW.md](S1-BATCH1-REVIEW.md).
+This index grants no implementation/run acceptance or hardware permission.
+
+| Task | Purpose | Text |
+|---|---|---|
+| S1BATCH1PLAN | Prepare combined A7/first-batch design review | [Task](tasks/S1BATCH1PLAN.md) |
+| S1MEMCONTRACT | Evidence and operation contract | [Task](tasks/S1MEMCONTRACT.md) |
+| S1MEMARENA | Owned VRAM and address ledger | [Task](tasks/S1MEMARENA.md) |
+| S1MEMFAULTS | Scoped baselines and diagnostics | [Task](tasks/S1MEMFAULTS.md) |
+| S1MEMUPLOAD | Physical VRAM upload/readback | [Task](tasks/S1MEMUPLOAD.md) |
+| S1MEMMMU | BAR/MMU bootstrap and scoped witness | [Task](tasks/S1MEMMMU.md) |
+| S1MEMPACKAGE | One reviewed experiment package | [Task](tasks/S1MEMPACKAGE.md) |
+
 ## Phase A: Ubuntu reference data
 
 | Task | Title | Text |

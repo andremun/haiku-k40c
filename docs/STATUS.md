@@ -1,18 +1,17 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7RUN7 (one directly user-approved buffered A7 run).
-Task state: PASS (A7 POST/readiness, hardware scope only; result review pending).
-One directly user-approved package-buffer launch completed in 134.02 s. POST
-88,805 us; deferred diagnostics 21,694,572 us. Native 537 active/38 skipped exactly
-match Linux after removing 23 synthetic REPEAT markers. Sensor pairs produce
-four address NACKs each and continue under ADR 010. Timer, 11520 MiB and sampled
-scratch checks pass. Post-POST 0x100c10 readback is zero; re-arm completes.
-R5 unchanged, no allowance; host command 0x0002/master off. No QEMU remains.
-Package-buffer is consumed. Full make check and result report check pass.
-No retry or D1 approval. S1 remains incomplete.
-See results/20261029-a7-069cb71b/README.md and work/S1A7RUN7/report.json.
-Next gate: D1 after POST; Q7 remains open. No payload/coherency claim.
+Current task: S1BATCH1PLAN (A7 result plus first-batch design review).
+Task state: DONE (review plan prepared; acceptance pending). No batch implementation
+or hardware run in this task. See work/S1BATCH1PLAN/RESULT.md.
+A7 POST/readiness passes on this card under Haiku (dfb7cd8). Its approval is
+consumed. S1 remains incomplete; D1/new combined batch is not authorized.
+Review entry: docs/S1-BATCH1-REVIEW.md. Six bounded host implementation tasks
+propose native memory/translation, then one fully reviewed immutable experiment.
+General host DMA visibility stays unverified; D1 alone cannot close Q7. Flush
+readback semantics are open (Q11). No scheduler/channel/NOP in the first batch.
+Last physical result: run7, 88,805 us POST, 21,694,572 us drain; normalized Linux
+path matches, readiness passes, R5 unchanged, mastering off, no QEMU left.
 Last updated: 2026-10-29
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -112,6 +111,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A7BUFFER | DONE (prepared; review/one-run yes pending) | 2026-10-29 | Native logger measurements and exact package rehearsal pass after approved cardless continuation. Source/host/full checks pass. Fresh package-buffer unconsumed. No physical run. |
 
 | S1A7RUN7 | PASS (POST/readiness on this card under Haiku) | 2026-10-29 | One directly approved unchanged buffered package launch. 89 ms POST, 21.7 s drain, normalized Linux instruction path matches. Both sensor NACK outcomes expected. R5 unchanged, mastering off. S1 incomplete; D1 unapproved. |
+
+| S1BATCH1PLAN | DONE (A7 result + first-batch design review prepared) | 2026-10-29 | Six bounded implementation tasks, one proposed memory/translation experiment, explicit evidence/authority/phase gates. No runtime change or run approval. See docs/S1-BATCH1-REVIEW.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

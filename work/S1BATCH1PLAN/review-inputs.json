@@ -1,0 +1,180 @@
+{
+  "a7": {
+    "approval": "direct user go-ahead for this minor change; no independent Claude ACCEPT claimed",
+    "diagnostic_drain_us": 21694572,
+    "flush": {
+      "after_encoded_write": "0x16d20",
+      "after_post_readback": "0x0",
+      "after_rearm_readback": "NOT_RECORDED",
+      "before_encoded_write": "0x16d20",
+      "candidate_gpa": "0x16d2000",
+      "candidate_iova": "0x16d2000",
+      "mapping_scope": "same-run structural API coverage; IOVA=GPA INFERRED; no payload visibility or coherency claim",
+      "programming_callback_success": "INFERRED from subsequent guarded execution and PASS; no initial/final register readback",
+      "reason_for_zero_readback": "UNKNOWN"
+    },
+    "folder": "results/20261029-a7-069cb71b",
+    "instruction_selection": {
+      "exact_normalized_pc_active_sequence_match": true,
+      "limitation": "instruction selection, not MMIO value or helper timing equivalence",
+      "linux_raw_active": 560,
+      "linux_raw_skipped": 38,
+      "native_active": 537,
+      "native_opcodes_match_rom": true,
+      "native_skipped": 38,
+      "normalization_source": "analysis/devinit_inventory.md:60; Nouveau bios/init.c:658-677,724-733",
+      "normalized_count": 575,
+      "synthetic_offset_zero_repeat_markers": 23
+    },
+    "kernel": {
+      "after_bytes": 15998,
+      "allowed_lines": [],
+      "before_bytes": 15998,
+      "delta_bytes": 0,
+      "scope": "R5 selected classes only; any new selected-class line stops stage, except one device-enable line at QEMU start",
+      "unchanged": true
+    },
+    "post_wall_us": 88805,
+    "prior_approval_available": false,
+    "readiness": {
+      "pending_evidence": "INFERRED from Owner.cpp guarded PASS; not separately logged",
+      "pending_register_value": 0,
+      "reserved_bytes": 4096,
+      "retained_state": 2,
+      "retained_token": 1,
+      "scratch_base": "0x40000",
+      "scratch_scope": "three sampled dwords, pattern/complement passes and BAR flush; not entire-page coverage or DMA",
+      "timer_after": "0x551fb20",
+      "timer_before": "0x5418360",
+      "vram_bytes": 12079595520,
+      "vram_mib": 11520
+    },
+    "scope": "KNOWN/HARDWARE_VERIFIED reported POST/readiness on 0000:04:00.0 under Haiku only; not S1 or DMA payload visibility",
+    "teardown": {
+      "bus_master_enable": false,
+      "claim": "owned QEMU/tracer exited; read-only host PCI command bit 2 clear; no manual reset",
+      "host_pci_command_after": 2
+    }
+  },
+  "a7_implementation_commits": [
+    "0b450b16648f11b3bb3df5fa9573bad435b71586",
+    "210e5eec69c51f19d4fbb3f728dec470b19db3d7",
+    "b0c24e44c06291d15da71de3940d0188ff890e7c"
+  ],
+  "a7_result_commit": "dfb7cd81997192d99c21ebd91d7c8c985a16cd34",
+  "future_run_gate": "complete source gates, implementation review, exact package and explicit one-run yes",
+  "general_host_dma_visibility_verified": false,
+  "hardware_authorized": false,
+  "implementation_ready": false,
+  "input_sha256": {
+    "AGENTS.md": "7089a4b96afb70d295ca92ff7d7e57eb8772efb38b34a3b683f6413cd88a432f",
+    "REVIEW.md": "dce3d22e0f0292b8d8dd885d450cef55d8dcbc23fbb97e15de389d323edb149a",
+    "docs/DMA-CONTRACT.md": "ac7172afc9a6b1b9a490e52437cb4a06b6575f09ea4ca820d9328faa2aac6e38",
+    "docs/MEMORY-CONTRACT.md": "e820f96e712ede9cb32accbfad2d4793f154358c1063ea20cb829bee6e9b400a",
+    "docs/OPEN_QUESTIONS.md": "74d2c72c2add3dfd5bcf6da47904ca87a5c945ffeb16e0386a9e931059c45705",
+    "docs/PHASES.md": "2f2f060c2a49d97a8c516a685ebd73b446d0f3defeaf14528b9dcfffa22a829d",
+    "docs/S1-BATCH1-REVIEW.md": "9545e9d919740c0d7f3fa9b7ba213fec1f504d5da0c22b21ad6330e90ff4d952",
+    "docs/S1-INTEGRATION-CHOICES.md": "78915e93473a488dfe4623d2c1fd3f378ec6329b4f64f72273396b666c8392c2",
+    "docs/S1-PLAN.md": "03f38b808084160505242a7b159be5739ce6a152a040d659e96bdf0ce08f9f2b",
+    "docs/S1-RECIPE.md": "9e00413f72a9cc46e48348548fbe71934a6e8c281f47bf7f4b944382aa63ea5b",
+    "docs/decisions/005-single-branch-macro-reviews-passthrough.md": "074a0ff69e8dd15890aae0058d94d6a30f62eb001883e3add623bc7a6ff476b8",
+    "docs/decisions/006-approval-after-launcher-stop.md": "e061517a026b75eaf9a5e139b5d2c47a3a81ef81908128f88ad6c1ee9a7e93ff",
+    "docs/decisions/007-batch-sequential-host-tasks.md": "e3ed03c6b2754f27dd1c74333431dcf7ee07cb73980b49bcfd345422cd7bee4a",
+    "docs/decisions/008-s1-hardware-approval.md": "9ceadf40a01b102e92eee24cce12b1c6d83bb14feec378014f2722b4cca54dea",
+    "docs/decisions/009-allow-vfio-enable-line.md": "2847e692edeea6ac8f408897d744714c263628c7365375f87a43480deab917f8",
+    "docs/decisions/010-a7-sensor-address-nack.md": "542c8cfe401c4b6aa05a2806d1451b0fa85d682a35496267eb2b67f46e89b0fe",
+    "docs/tasks/S1A7RUN7.md": "e462530ec35838b12914a3f1293211610c514cd7bbabd04f5ba64b00166aeace",
+    "docs/tasks/S1BATCH1PLAN.md": "7bb497b6419102eec87cc3e73459176cce05bb0d0cab1f6af51f82d51696886a",
+    "docs/tasks/S1MEMARENA.md": "24e5e62d47d347575e0cbb165d7da79c6f8e83445c0f73716f4d43c9d51ad30b",
+    "docs/tasks/S1MEMCONTRACT.md": "0042a231cc19b946507455b3834ed843e227b63f9a605e3f93d1b4cef0921864",
+    "docs/tasks/S1MEMFAULTS.md": "79d9e4e7566f81813160ec0b5267fdb67d7eda114ad67ca5bf0f7a1c9854f094",
+    "docs/tasks/S1MEMMMU.md": "cfec4bda2107850e3f2ed33c1398d73b5e5877648f0aba0dcd285d460435b7cf",
+    "docs/tasks/S1MEMPACKAGE.md": "37bd61efa16ce2f1baf478f48b3e0522f4fc4b9f3ac38948de8062139e36e6ca",
+    "docs/tasks/S1MEMUPLOAD.md": "7bbce118f91c81723c56799485fe8eca4ca0b94c733e35324e6573f7de3858f4",
+    "results/20261029-a7-069cb71b/README.md": "5a116ec242feea91d72b5c55ed0aad275030db2b4f4e149965edfa576d4e82fc",
+    "src/a7/ExecutionPermit.h": "edc7cf9e0d9e48f5a335128f84bd9cadf98c5980910bdf33cd60d83e3ede8541",
+    "src/a7/Owner.h": "429ced6b9f96c105b7da07ec525386b6a43881309a8320b70fa32985dd6e52dd",
+    "src/memory/ArmedReference.h": "a7c275ecc81ba20f23338ebe67b5da462829589d91580e404714c90b0c022e0f",
+    "src/memory/Memory.h": "c0dff96a930c571f9ff7bc65f847c6cffbfd31c6ffa1a0cd8e16a9a5980792d1",
+    "src/mmu/PageTable.h": "d079f4099c9653b3ba9404de3f2c044c330b99d81c025469f375e63c96c82c8c",
+    "src/os/HaikuMemory.h": "b1d71c0d2c4764d192d9dbb04d2987cc22b7b6a9f8e7fcf6af7a0032b0329565",
+    "src/os/NativeOwner.h": "8975226a5240fb4b1929e2904fdd84b7bebc137e4486116d30977624a1ccf484",
+    "src/runtime/Bootstrap.h": "97d4c8dc74347d1971684325180f5f5e78d837ac9a75a62604ce282e9c25c4f8",
+    "src/runtime/S1Experiment.h": "e264860c0cf26cb50240783b930870ecea85838244b37d6d67ae63b32d158366",
+    "tools/a7/result_report.py": "5b48def3fa3edc1f0190fc5f5642e96de78659289b8a28fc163acfb3f28da819",
+    "tools/batch1_review.py": "62113e453f996333fe9034eabf7d18890671489a28840fbc00305fe9af3c330f",
+    "work/S1A7BUFFER/package.json": "a4b47b8a3e8f56d533170b0bccad3e3f037ed03e627b1d16e017248f0b244bdd",
+    "work/S1A7RUN7/RESULT.md": "c254065e248e98c5c0450039abd6f39d185f7cbebcd51395caf3108c611ed00d",
+    "work/S1A7RUN7/report.json": "688dcf351193ad04a3735468018fef79098678b929acfe206c867e9adff398f7"
+  },
+  "planned_tasks": [
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [],
+      "hardware_run": false,
+      "id": "S1MEMCONTRACT",
+      "path": "docs/tasks/S1MEMCONTRACT.md",
+      "role": "Evidence and operation contract"
+    },
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [
+        "S1MEMCONTRACT"
+      ],
+      "hardware_run": false,
+      "id": "S1MEMARENA",
+      "path": "docs/tasks/S1MEMARENA.md",
+      "role": "Owned VRAM and address ledger"
+    },
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [
+        "S1MEMCONTRACT"
+      ],
+      "hardware_run": false,
+      "id": "S1MEMFAULTS",
+      "path": "docs/tasks/S1MEMFAULTS.md",
+      "role": "Scoped baselines and diagnostics"
+    },
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [
+        "S1MEMARENA",
+        "S1MEMFAULTS"
+      ],
+      "hardware_run": false,
+      "id": "S1MEMUPLOAD",
+      "path": "docs/tasks/S1MEMUPLOAD.md",
+      "role": "Physical VRAM upload/readback"
+    },
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [
+        "S1MEMUPLOAD",
+        "S1MEMFAULTS"
+      ],
+      "hardware_run": false,
+      "id": "S1MEMMMU",
+      "path": "docs/tasks/S1MEMMMU.md",
+      "role": "BAR/MMU bootstrap and witness"
+    },
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [
+        "S1MEMMMU"
+      ],
+      "hardware_run": false,
+      "id": "S1MEMPACKAGE",
+      "path": "docs/tasks/S1MEMPACKAGE.md",
+      "role": "Reviewed immutable experiment package"
+    }
+  ],
+  "proposed_stage": "S1_MEMORY_BOOTSTRAP (design label only)",
+  "review_entry": "docs/S1-BATCH1-REVIEW.md",
+  "s1_complete": false,
+  "scope": "HOST_ONLY planning/review preparation; batch not implemented or authorized",
+  "separate_verdicts": [
+    "A7 result evidence",
+    "First-batch design"
+  ]
+}
