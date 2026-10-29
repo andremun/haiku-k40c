@@ -377,6 +377,30 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/memstage/Faults.cpp:93` | `if(!details(priv0,0x122120,hubs,8) \|\| !details(priv0,0x124120,rops,16)` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/memstage/Faults.cpp:94` | `\|\| !details(priv1,0x128120,gpcs,0))return false;` | no source: ambiguous citation | SOURCE_ONLY |
 
+## src/memstage/Mapper.cpp
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/memstage/Mapper.cpp:41` | `if(!read(0x001704,context))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:42` | `if(context&0x80000000)return fail(Error::Dirty,0x001704,context);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:56` | `if(!read(0x100c80,value))return false;` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:59` | `if(!journal_.append({phase_,Error::None,0x100c80,value,i+1,last_-start}))return fail(Error::Overflow);` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:71` | `if(!poll(0x00ff0000))return false;` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:72` | `return write(0x100cb8,uint32_t(selector))` | nvkm/subdev/mmu/vmmgf100.c:185 | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:73` | `&& write(0x100cbc,0x80000005)` | nvkm/subdev/mmu/vmmgf100.c:221 | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:74` | `&& poll(0x00008000);` | nvkm/subdev/mmu/vmmgf100.c:224 | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:110` | `if(!read(0x001704,current))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:111` | `if(current&0x80000000)return fail(Error::Dirty,0x001704,current);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:128` | `\|\| !upload_.patch(instance_,0x200,base) \|\| !upload_.patch(instance_,0x208,limit))return fail(upload_.error());` | nvkm/subdev/mmu/vmmgf100.c:358 | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:133` | `if(!read(0x100c80,mode) \|\| !write(0x100c80,mode&~uint32_t(1)) \|\| !read(0x100c80,mode))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:134` | `if(mode&1)return fail(Error::Profile,0x100c80,mode);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:138` | `enabled_=0x80000000\|uint32_t(inst);closure_=Closure::RetainedUnknown;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:139` | `if(!write(0x001704,enabled_) \|\| !upload_.flush() \|\| !upload_.flush())return fail(upload_.error()==Error::None?Error::Write:upload_.error());` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:146` | `if(!read(0x001704,current))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:147` | `if(current!=enabled_)return fail(Error::Dirty,0x001704,current);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:148` | `if(!write(0x001704,enabled_&0x7fffffff) \|\| !read(0x001704,current))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Mapper.cpp:149` | `if(current!=(enabled_&0x7fffffff))return fail(Error::Compare,0x001704,current);` | no source: ambiguous citation | SOURCE_ONLY |
+
 ## src/memstage/Port.h
 
 | Line | Code | Source | Status |
@@ -565,6 +589,18 @@ The following constant lines have no source citation:
 - src/memstage/Faults.cpp:90 (no source: ambiguous citation)
 - src/memstage/Faults.cpp:93 (no source: ambiguous citation)
 - src/memstage/Faults.cpp:94 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:41 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:42 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:110 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:111 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:133 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:134 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:138 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:139 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:146 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:147 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:148 (no source: ambiguous citation)
+- src/memstage/Mapper.cpp:149 (no source: ambiguous citation)
 - src/memstage/Port.h:22 (no source: resident diagnostic capacity.)
 - src/memstage/Upload.cpp:37 (no source: software address-dependent test pattern.)
 - src/memstage/Upload.cpp:48 (no source: ambiguous citation)

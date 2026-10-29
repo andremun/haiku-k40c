@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1MEMMMU (gk104 BAR1 translation witness; task 5 of 6).
-Task state: READY. S1MEMUPLOAD host/native-object checks pass; S1MEMFAULTS committed as f86fe60. Claude accepted A7 dfb7cd8 and the batch plan with
+Current task: S1MEMPACKAGE (combined native/rehearsal package; task 6 of 6).
+Task state: IN PROGRESS. S1MEMMMU host/native-link checks pass; S1MEMUPLOAD committed as fd9ef5e. Claude accepted A7 dfb7cd8 and the batch plan with
 changes: BAR1/gk104 only, explicit guest BAR1 mapping, remove D1/G2, flush
 readback observational, freeze A7 run7 source. Q7/Q11 stay open.
 Implement six tasks sequentially, one commit each. No intermediate card run.
@@ -131,3 +131,5 @@ A cardless result is not K40c evidence.
 | S1MEMFAULTS | DONE (host/native object) | 2026-10-29 | Source-bound fault catalog, raw snapshots, bounded routing and 25 failure/clock cases. No clears or card run. |
 
 | S1MEMUPLOAD | DONE (host/native object) | 2026-10-29 | Owned physical-window transfers, sourced BAR protocol, 20 boundary/alias/failure cases. No VM/card. |
+
+| S1MEMMMU | DONE (host/native link) | 2026-10-29 | gk104 BAR1 tables and A/B remap/restore witness; 4096 encoding and 21 lifecycle/fault cases. Native core link. No VM/card. |

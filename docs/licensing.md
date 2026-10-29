@@ -403,3 +403,12 @@ Reconsulted Nouveau engine/fifo/gf100.c:699-729, gk104.c:634-703;
 subdev/privring/gk104.c:28-94; fb/gf100.c:37; and top/gk104.c:37-106.
 Raw-read formats and bounded topology semantics only; no source bodies copied.
 No interrupt acknowledgement, fault clear, PBDMA probe or scheduler write added.
+
+## S1MEMMMU source study (2026-10-29)
+
+Reconsulted Nouveau subdev/mmu/gk104.c:29, vmmgk104.c:39-78,
+vmmgf100.c:35,105-143,180-233,314-360; bar/gf100.c:38-58,93-109;
+fb/gf100.c:66-77; and fb/ramgk104.c:1703 for the selected RAM probe chain.
+Pure field encoders, scoped invalidation and BAR1 sequencing are original.
+The slow-window 44-bit mask is not a 44-bit PTE address claim; selected PTE
+addresses are restricted to 40 bits below VOL/target fields.

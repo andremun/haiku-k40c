@@ -1,0 +1,74 @@
+{
+  "effects": [
+    {
+      "register": "0x100c80",
+      "source": "fb/gf100.c:66-77",
+      "value": "old & ~1, verify bit 0 clear"
+    },
+    {
+      "register": "0x100cb8",
+      "source": "mmu/vmmgf100.c:180-218",
+      "value": "owned PGD physical >> 8, uint32 fit, VRAM target 0"
+    },
+    {
+      "register": "0x100cbc",
+      "source": "mmu/vmmgf100.c:221-233",
+      "value": "0x80000005 PAGE_ALL | HUB_ONLY; never ALL_PDB"
+    },
+    {
+      "register": "0x001704",
+      "source": "bar/gf100.c:46-58",
+      "value": "0x80000000 | owned instance physical >> 12; clear bit 31 only after all witnesses pass"
+    },
+    {
+      "register": "0x070000",
+      "source": "bar/g84.c:29-39; bar/gf100.c:38-44",
+      "value": "1, busy mask 2 clear; twice after enable"
+    }
+  ],
+  "exclusions": [
+    "BAR2/0x1714",
+    "host DMA payload proof",
+    "channel translation/PBDMA fetch",
+    "Q11 echo test",
+    "unknown-pointer rollback"
+  ],
+  "geometry": {
+    "directory_index_bits": 13,
+    "entry_bytes": 8,
+    "small_index_bits": 15,
+    "small_page_shift": 12,
+    "virtual_bits": 40
+  },
+  "guest_mapping": "explicit UC read-only 8192-byte BAR1 prefix; discovered full aperture bounds VMM",
+  "scope": "SOURCE_ONLY gk104 17/12 BAR1 experiment; HOST_ONLY tests, native objects only",
+  "source_sha256": {
+    "reference/nouveau/nvkm/subdev/bar/g84.c": "28fb3702c0ab41c1ab4ee5840f57d3c809b93ae9a779b2a57115164426c0f6ae",
+    "reference/nouveau/nvkm/subdev/bar/gf100.c": "25ec34ce7c71da1ada414114af4f5d9045c5b6b5c2d75917edd86f4566b802c8",
+    "reference/nouveau/nvkm/subdev/fb/gf100.c": "b0d9f8d6fa7f6b7b0c86e7c1773c8c4b77fecc4d0c23a68463be488c50dc95cf",
+    "reference/nouveau/nvkm/subdev/fb/ramgk104.c": "99aa20855f0029918873fe0e598b341a91ad5049834df4b98033f34012fffa45",
+    "reference/nouveau/nvkm/subdev/mmu/gk104.c": "0a00f096c8a9f95a6f72a87d72d3868f31b22284823b842e57b83845da88492d",
+    "reference/nouveau/nvkm/subdev/mmu/vmmgf100.c": "8485236819c37bfcbfae9824c4b03b767314b6e07156c3ed2e203f2447ad89ea",
+    "reference/nouveau/nvkm/subdev/mmu/vmmgk104.c": "3f77d94f4f08546da6361e474c94fe13af23d41758ad5a1fd48b0e5a50ccdd97",
+    "src/memory/VramArena.cpp": "5d5189a1e7b02000be1814c22f05a86fa237b17f8344d80efc727dd80a758a37",
+    "src/memory/VramArena.h": "d1e99970f869b38f1aab447621d86a6918727f9f559fcc1fda326be21cafb461",
+    "src/memstage/Faults.cpp": "285307a9b56568b1b42c486348aad3edecd4256fcd81f464501f4e8f1095574e",
+    "src/memstage/Faults.h": "b77aec14d12007e47b6dbd3e82428b778b0767abbf3cfb3263498778b3490958",
+    "src/memstage/Mapper.cpp": "a0c9f2097869bde1f36df3b0112c2e815bfb336b7146bb74d68ce0b4d852b47d",
+    "src/memstage/Mapper.h": "f6ab9ca078ae3feb7c4aa44d1d15ca75a55a18a613decb3fae5ffdb1d93d9267",
+    "src/memstage/Tables.cpp": "ee3f51f3996a2a378b5dc7fd2859d3f083b4d5fe17a14fa7cd607f628c36979b",
+    "src/memstage/Tables.h": "dd5c5524415e4ffae058a78626a09777e482841e156a0e57d30ce69da7b53d58",
+    "src/memstage/Upload.cpp": "37cb5ab020ac2461567f90c110795f9b8e757865202e7a8595e0c419d124a3a2",
+    "src/memstage/Upload.h": "d78d3cc13731996d7eae0abd4ed6add710fdf0dc6bfb714a3e6355423f38e01d",
+    "tests/test_mem_mmu.cpp": "4d4fde19753a0aa7f743c2e531265ba36e00f822ab875e92873e80a925f9a84b",
+    "tools/memstage/mmu_report.py": "9d368e0fd4ea0b4865749923e71a7003c27a5dda6a6434c755d1f847e64ba2de"
+  },
+  "table_profile": "VRAM, read-only data PTEs, kind 0, no VOL/compression/large table",
+  "tests": "memory MMU: 4096 independent encoding cases; 21 lifecycle/fault cases pass; HOST_ONLY",
+  "witness": [
+    "VA0=A,VA1=B",
+    "SPTE0=B; staged readback; this-PDB invalidation; VA0=B,VA1=B",
+    "SPTE0=A; same protocol; VA0=A,VA1=B",
+    "disable owned BAR1; raw final faults; retain all"
+  ]
+}
