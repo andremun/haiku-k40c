@@ -1,0 +1,60 @@
+{
+  "haiku_revision": "49a0af9585d80e42240af63ab66e31e9873f59b8",
+  "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+  "scope": "SOURCE_ONLY; exact running Haiku source identity unestablished. QEMU v6.2.0 upstream baseline, not Ubuntu patch proof.",
+  "serial_disassembly_sha256": "0f79ff942559a5f38bef908be95cb871ecc566ff1e16ce885f9a3fd3bc5f54c1",
+  "sources": {
+    "haiku/docs/user/drivers/KernelExport.dox": {
+      "sha256": "79cd3a7f808057b7a85e5f10d990d1c46dbe49b6ca4526e9656fc90586120e17",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/docs/user/drivers/KernelExport.dox"
+    },
+    "haiku/headers/os/kernel/OS.h": {
+      "sha256": "8c48c634130eb2897e49c37a35eceebb9e9f7e7b74ef335e7421b8d057ed7fd7",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/headers/os/kernel/OS.h"
+    },
+    "haiku/src/add-ons/kernel/bus_managers/pci/pci.cpp": {
+      "sha256": "2809b4764b12507c284879dd2c5069516ef76b8ecbdc30764c0427db99101a16",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/add-ons/kernel/bus_managers/pci/pci.cpp"
+    },
+    "haiku/src/add-ons/kernel/drivers/graphics/nvidia/driver.c": {
+      "sha256": "6d88f2106a66b3cf3bba1866939bb20ca0d7dbc39cae5d6293cf2d10045d8682",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/add-ons/kernel/drivers/graphics/nvidia/driver.c"
+    },
+    "haiku/src/system/kernel/arch/x86/arch_debug_console.cpp": {
+      "sha256": "d400908933818c4aa86d85748f303640c9f517957a6ad93209e4a12186f3a5b2",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/system/kernel/arch/x86/arch_debug_console.cpp"
+    },
+    "haiku/src/system/kernel/debug/debug.cpp": {
+      "sha256": "f462e1e10f3645b87711c7d8d280e89b31d28b6bc907e39ce344780d7d0906ee",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/system/kernel/debug/debug.cpp"
+    },
+    "haiku/src/system/kernel/device_manager/legacy_drivers.cpp": {
+      "sha256": "e1e72821eacd9fb7639af6926bcc3beff27cc3e371d62723dc5f7f9b8c8d066c",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/system/kernel/device_manager/legacy_drivers.cpp"
+    },
+    "haiku/src/system/kernel/thread.cpp": {
+      "sha256": "dbbd682be41beb4ce02baad465288d55b10d6d5c09d21a782c070a25d9897714",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/system/kernel/thread.cpp"
+    },
+    "haiku/src/system/kernel/timer.cpp": {
+      "sha256": "4a9c23783ef350a7a9ae767cabd1e9853a77a00a1a53328b1535bdb789dfd44e",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/system/kernel/timer.cpp"
+    },
+    "qemu/accel/kvm/kvm-all.c": {
+      "sha256": "69371e6d563304a4fe02c90004a99cc61dd31633780f8b28e73e6051863635ba",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/v6.2.0/accel/kvm/kvm-all.c"
+    },
+    "qemu/chardev/char-fd.c": {
+      "sha256": "909ab4f0962ee6f6e9aceb94198a00483e928b0bbef995fcce877c8b12a3432e",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/v6.2.0/chardev/char-fd.c"
+    },
+    "qemu/hw/char/serial.c": {
+      "sha256": "aac94a3792c6cf2c6add5b717031038d5c86b35e89c4de6d3a55f9bd72d30937",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/v6.2.0/hw/char/serial.c"
+    },
+    "qemu/io/channel-file.c": {
+      "sha256": "7fbaa03f50eca85c2e7434f9476a01becf60dfce26dd170745d3821cee78da4c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/v6.2.0/io/channel-file.c"
+    }
+  }
+}

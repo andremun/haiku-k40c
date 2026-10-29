@@ -1,0 +1,74 @@
+{
+  "bytes": 20837,
+  "daemonize_flag_omitted": true,
+  "observer_filter_matches_supervise": true,
+  "repeats": 3,
+  "scenarios": [
+    {
+      "chunk": 1,
+      "extra_inert_syscalls_per_write": 0,
+      "name": "traced-0-chunk-1-extra-0",
+      "samples": [
+        "traced-0-chunk-1-extra-0-0",
+        "traced-0-chunk-1-extra-0-1",
+        "traced-0-chunk-1-extra-0-2"
+      ],
+      "traced": false
+    },
+    {
+      "chunk": 1,
+      "extra_inert_syscalls_per_write": 0,
+      "name": "traced-1-chunk-1-extra-0",
+      "samples": [
+        "traced-1-chunk-1-extra-0-0",
+        "traced-1-chunk-1-extra-0-1",
+        "traced-1-chunk-1-extra-0-2"
+      ],
+      "traced": true
+    },
+    {
+      "chunk": 4096,
+      "extra_inert_syscalls_per_write": 0,
+      "name": "traced-0-chunk-4096-extra-0",
+      "samples": [
+        "traced-0-chunk-4096-extra-0-0",
+        "traced-0-chunk-4096-extra-0-1",
+        "traced-0-chunk-4096-extra-0-2"
+      ],
+      "traced": false
+    },
+    {
+      "chunk": 4096,
+      "extra_inert_syscalls_per_write": 0,
+      "name": "traced-1-chunk-4096-extra-0",
+      "samples": [
+        "traced-1-chunk-4096-extra-0-0",
+        "traced-1-chunk-4096-extra-0-1",
+        "traced-1-chunk-4096-extra-0-2"
+      ],
+      "traced": true
+    },
+    {
+      "chunk": 1,
+      "extra_inert_syscalls_per_write": 2,
+      "name": "traced-0-chunk-1-extra-2",
+      "samples": [
+        "traced-0-chunk-1-extra-2-0",
+        "traced-0-chunk-1-extra-2-1",
+        "traced-0-chunk-1-extra-2-2"
+      ],
+      "traced": false
+    },
+    {
+      "chunk": 1,
+      "extra_inert_syscalls_per_write": 2,
+      "name": "traced-1-chunk-1-extra-2",
+      "samples": [
+        "traced-1-chunk-1-extra-2-0",
+        "traced-1-chunk-1-extra-2-1",
+        "traced-1-chunk-1-extra-2-2"
+      ],
+      "traced": true
+    }
+  ]
+}

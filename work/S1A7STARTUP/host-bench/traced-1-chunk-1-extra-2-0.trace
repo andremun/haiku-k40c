@@ -1,0 +1,4 @@
+1003739 execve("/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/tests/a7_startup_bench", ["/home/unimelb.edu.au/mariom1/Doc"..., "/home/unimelb.edu.au/mariom1/Doc"..., "20837", "1", "2"], 0x7ffef94b2020 /* 81 vars */) = 0
+1003739 close(K40_TASK{tgid=1003739, files=0} 3</etc/ld.so.cache>) = 0
+1003739 close(K40_TASK{tgid=1003739, files=0} 3</usr/lib/x86_64-linux-gnu/libc.so.6>) = 0
+1003739 close(K40_TASK{tgid=1003739, files=0} 3</home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/work/S1A7STARTUP/host-bench/traced-1-chunk-1-extra-2-0.data>) = 0

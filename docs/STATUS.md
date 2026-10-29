@@ -1,14 +1,15 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7RUN6 (one approved run of reviewed package-i2c).
-Task state: STOPPED after 144.8 s with POST Timeout at 0x85d6. There are 490
-active and 38 skipped trace entries. I2C 0x20 succeeded. The 0xab8d sensor
-operation and post-POST/readiness checks were NOT_REACHED. R5 delta empty,
-allowed lines empty, host command 0x0002 after exit. No QEMU remains. Failed
-owner/reference retained. Package-i2c is consumed. Full make check passes.
-No retry is authorized.
-S1 remains incomplete. D1 is unapproved. See results/20261029-a7-2aadfd99/README.md.
+Current task: S1A7STARTUP (host-only timeout/startup investigation).
+Task state: DONE (diagnosis; review pending). Haiku lifecycle sources fit the
+existing open/write design. Synchronous serial/VM/observer cost is an INFERRED
+contributor to our 10 s POST limit; condition poll counts and time attribution
+remain UNKNOWN. Host mechanism measurements and source/path checks recorded.
+See docs/A7-STARTUP-DIAGNOSIS.md. No guest/card/reset or production change. Full make check and analysis checks pass.
+Last physical result remains run6 STOPPED at 0x85d6 (490 active, 38 skipped).
+Package-i2c remains consumed; no retry authorized. R5 unchanged, mastering off
+at exit. S1 incomplete. D1 unapproved.
 Last updated: 2026-10-29
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -102,6 +103,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A7I2C | ACCEPT (Claude review supplied by user) | 2026-10-29 | Linux sensor address NACKs decoded/replayed. User-approved narrow policy and diagnostics. Exact package cardless pass in 78.34 s. No physical run. |
 
 | S1A7RUN6 | STOPPED (POST Timeout at 0x85d6) | 2026-10-29 | One approved package-i2c launch. 490/38 trace entries; 0x20 succeeds, sensor not reached. R5 unchanged, mastering off. No retry. |
+
+| S1A7STARTUP | DONE (host diagnosis; review pending) | 2026-10-29 | Haiku hooks/debug path, ROM waits and inert observer benchmark. Logging overhead likely contributes; poll/time attribution UNKNOWN. No production change or guest. See work/S1A7STARTUP/RESULT.md. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

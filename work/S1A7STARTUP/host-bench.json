@@ -1,0 +1,160 @@
+{
+  "observer_sha256": "75b7aeed34785c8ac729d68cbca83d256434acb036e336d0adf5a4bdc30bc7a2",
+  "parameters": {
+    "bytes": 20837,
+    "daemonize_flag_omitted": true,
+    "observer_filter_matches_supervise": true,
+    "repeats": 3,
+    "scenarios": [
+      {
+        "chunk": 1,
+        "extra_inert_syscalls_per_write": 0,
+        "name": "traced-0-chunk-1-extra-0",
+        "samples": [
+          "traced-0-chunk-1-extra-0-0",
+          "traced-0-chunk-1-extra-0-1",
+          "traced-0-chunk-1-extra-0-2"
+        ],
+        "traced": false
+      },
+      {
+        "chunk": 1,
+        "extra_inert_syscalls_per_write": 0,
+        "name": "traced-1-chunk-1-extra-0",
+        "samples": [
+          "traced-1-chunk-1-extra-0-0",
+          "traced-1-chunk-1-extra-0-1",
+          "traced-1-chunk-1-extra-0-2"
+        ],
+        "traced": true
+      },
+      {
+        "chunk": 4096,
+        "extra_inert_syscalls_per_write": 0,
+        "name": "traced-0-chunk-4096-extra-0",
+        "samples": [
+          "traced-0-chunk-4096-extra-0-0",
+          "traced-0-chunk-4096-extra-0-1",
+          "traced-0-chunk-4096-extra-0-2"
+        ],
+        "traced": false
+      },
+      {
+        "chunk": 4096,
+        "extra_inert_syscalls_per_write": 0,
+        "name": "traced-1-chunk-4096-extra-0",
+        "samples": [
+          "traced-1-chunk-4096-extra-0-0",
+          "traced-1-chunk-4096-extra-0-1",
+          "traced-1-chunk-4096-extra-0-2"
+        ],
+        "traced": true
+      },
+      {
+        "chunk": 1,
+        "extra_inert_syscalls_per_write": 2,
+        "name": "traced-0-chunk-1-extra-2",
+        "samples": [
+          "traced-0-chunk-1-extra-2-0",
+          "traced-0-chunk-1-extra-2-1",
+          "traced-0-chunk-1-extra-2-2"
+        ],
+        "traced": false
+      },
+      {
+        "chunk": 1,
+        "extra_inert_syscalls_per_write": 2,
+        "name": "traced-1-chunk-1-extra-2",
+        "samples": [
+          "traced-1-chunk-1-extra-2-0",
+          "traced-1-chunk-1-extra-2-1",
+          "traced-1-chunk-1-extra-2-2"
+        ],
+        "traced": true
+      }
+    ]
+  },
+  "probe_sha256": "1b4fa070ffa3abf8f3ff859d1d50f2ea6ba9d6a00182296abb61cfeee65bdf93",
+  "results": [
+    {
+      "median_seconds": 0.329011946,
+      "name": "traced-0-chunk-1-extra-0",
+      "seconds": [
+        0.294736284,
+        0.329011946,
+        0.339990889
+      ]
+    },
+    {
+      "median_seconds": 2.659426254,
+      "name": "traced-1-chunk-1-extra-0",
+      "seconds": [
+        2.69415185,
+        2.248802207,
+        2.659426254
+      ]
+    },
+    {
+      "median_seconds": 0.000170977,
+      "name": "traced-0-chunk-4096-extra-0",
+      "seconds": [
+        0.000207296,
+        0.000170977,
+        0.000140247
+      ]
+    },
+    {
+      "median_seconds": 0.000620282,
+      "name": "traced-1-chunk-4096-extra-0",
+      "seconds": [
+        0.000543105,
+        0.000695993,
+        0.000620282
+      ]
+    },
+    {
+      "median_seconds": 0.336993896,
+      "name": "traced-0-chunk-1-extra-2",
+      "seconds": [
+        0.339667094,
+        0.336993896,
+        0.325835874
+      ]
+    },
+    {
+      "median_seconds": 5.991663402,
+      "name": "traced-1-chunk-1-extra-2",
+      "seconds": [
+        7.860217322,
+        5.991663402,
+        5.041443964
+      ]
+    }
+  ],
+  "sample_sha256": {
+    "traced-0-chunk-1-extra-0-0.out": "e30065eac24ca44ca856382d52cedc8d6f8fac570bdc95acc07c74a763f69030",
+    "traced-0-chunk-1-extra-0-1.out": "a1bd6fa09340219937e5abdff29af90579f531d428183d367c64994a090dbf0e",
+    "traced-0-chunk-1-extra-0-2.out": "9804d743a69ab9a94c6d96eb5356825babc603780d308a9bf55cc6d33c7990e3",
+    "traced-0-chunk-1-extra-2-0.out": "a21ee872d8264bfca2be94af0cc51d9d0d9cb263890c69c91e1ef86a35437649",
+    "traced-0-chunk-1-extra-2-1.out": "2d5e10310d421c3511d389f4964be9ca16537986e9817c73c153c3a6bd0bed51",
+    "traced-0-chunk-1-extra-2-2.out": "c6b44df960c89ef2dd3c1fe00bf6f76390a414bfbe42f9cf8a0c4f2b37428883",
+    "traced-0-chunk-4096-extra-0-0.out": "a9c64b69a2992bebe3d1184351905d24ce6ebaf77933c506a52a819421c4fcef",
+    "traced-0-chunk-4096-extra-0-1.out": "54e4e29e39e515872a2c09f4326cc96c620e66f8f0ed329f6e3779c1fb5af559",
+    "traced-0-chunk-4096-extra-0-2.out": "a9bada6e0208b88bda4d570206cf73b81080e46c349eecbfe4fca01b7d3f8643",
+    "traced-1-chunk-1-extra-0-0.out": "357e4cc2f9270ad6883c9f5b1dbf7992856fb14c8857cf74db3b2a144ab93c14",
+    "traced-1-chunk-1-extra-0-1.out": "245d5013a9958848e57da8f8b565563fcca4173a0887f458503a0f9a590c714d",
+    "traced-1-chunk-1-extra-0-2.out": "332ea549fdcf26c15a3da7bbd97240088d3b288ed3910a2751b4ad92e317b363",
+    "traced-1-chunk-1-extra-2-0.out": "7e9d0d25973573ee2c24f6e682081ff9771aa379cd5ca4199515fa6d6f999dc5",
+    "traced-1-chunk-1-extra-2-1.out": "f2ed27e826f5c4331ba68375f49b2354bfca09b46eb0a7aaa4cfed8a411ade65",
+    "traced-1-chunk-1-extra-2-2.out": "cd4048d125384d239128279c8aba62d38a32d49713b0ea196fe319adcdb5222a",
+    "traced-1-chunk-4096-extra-0-0.out": "00e9e25315f57a51f1c49abd45d0b1334c2563282d951e016e1f38afd5df8e48",
+    "traced-1-chunk-4096-extra-0-1.out": "f0c129952ee5d789ff0b6dd063d5e39186d798175207d9e2771f8686a66288e9",
+    "traced-1-chunk-4096-extra-0-2.out": "b6222c7b9dc9763e202600b6d7ae20a3903c5162d79a53c39a661ed91f00eab1"
+  },
+  "scope": "HOST inert syscall/regular-file mechanism measurement; NOT guest attribution",
+  "source_sha256": {
+    "tests/a7_startup_bench.c": "e91710a20a884e20b2ca03e0023555cd75fd7bc010192f3ac1d0142de3b0c9bf",
+    "tools/a7/startup_bench.py": "6e0d715a8c60177226a05522d03a9c1e4023f6cd15abb6972445137064068536",
+    "tools/observer/supervise.py": "4a854920c8d0a3f67d928fb8c5e58cec861649075b491369a72618dbe09442b4"
+  }
+}

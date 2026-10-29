@@ -1,0 +1,297 @@
+{
+  "common_prefix_entries": 528,
+  "rom_sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
+  "run6_is_exact_run5_prefix": true,
+  "runs": [
+    {
+      "active": 532,
+      "all_serial_bytes_during_post": 22268,
+      "condition_time": [
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 11,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x8ecb",
+          "pc": "0x8ec8"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 7,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x8b32",
+          "pc": "0x8b2f"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 9,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x8b36",
+          "pc": "0x8b33"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 8,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x8c4a",
+          "pc": "0x8c47"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 10,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x8c4e",
+          "pc": "0x8c4b"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 0,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x858b",
+          "pc": "0x8588"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 1,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x85a5",
+          "pc": "0x85a2"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 17,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x9b69",
+          "pc": "0x9b66"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 19,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x9ba1",
+          "pc": "0x9b9e"
+        }
+      ],
+      "conditional_wait_conservative_max_us": 18000000,
+      "fixed_time_io_us": 22421,
+      "fixed_waits": [
+        {
+          "active": "ACTIVE",
+          "pc": "0x8506",
+          "us": 20000
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0x8708",
+          "us": 1
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa261",
+          "us": 100
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa288",
+          "us": 200
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa335",
+          "us": 20
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa486",
+          "us": 1000
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa59a",
+          "us": 100
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa5cd",
+          "us": 1000
+        }
+      ],
+      "physical_uart_8n1_scenarios_seconds": {
+        "115200": 1.932986111111111,
+        "19200": 11.597916666666666
+      },
+      "run": "20261029-a7-508279eb",
+      "script_serial_bytes": 22268,
+      "serial_sha256": "09eb05a0fde3334e5508d10a814883a4489b3eefe9642e48b542c45ae492d1db",
+      "skipped": 38,
+      "uart_scenario_warning": "Not a QEMU lower bound or a measured guest baud rate"
+    },
+    {
+      "active": 490,
+      "all_serial_bytes_during_post": 20837,
+      "condition_time": [
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 11,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x8ecb",
+          "pc": "0x8ec8"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 7,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x8b32",
+          "pc": "0x8b2f"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 9,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x8b36",
+          "pc": "0x8b33"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 8,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x8c4a",
+          "pc": "0x8c47"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 10,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x8c4e",
+          "pc": "0x8c4b"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 0,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x858b",
+          "pc": "0x8588"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 1,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x85a5",
+          "pc": "0x85a2"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 17,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x9b69",
+          "pc": "0x9b66"
+        },
+        {
+          "actual_poll_count": "UNKNOWN",
+          "adjacent": true,
+          "condition": 19,
+          "max_samples": 100,
+          "next_active": "ACTIVE",
+          "next_pc": "0x9ba1",
+          "pc": "0x9b9e"
+        }
+      ],
+      "conditional_wait_conservative_max_us": 18000000,
+      "fixed_time_io_us": 22421,
+      "fixed_waits": [
+        {
+          "active": "ACTIVE",
+          "pc": "0x8506",
+          "us": 20000
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0x8708",
+          "us": 1
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa261",
+          "us": 100
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa288",
+          "us": 200
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa335",
+          "us": 20
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa486",
+          "us": 1000
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa59a",
+          "us": 100
+        },
+        {
+          "active": "ACTIVE",
+          "pc": "0xa5cd",
+          "us": 1000
+        }
+      ],
+      "physical_uart_8n1_scenarios_seconds": {
+        "115200": 1.808767361111111,
+        "19200": 10.852604166666667
+      },
+      "run": "20261029-a7-2aadfd99",
+      "script_serial_bytes": 20630,
+      "serial_sha256": "d877a05608f4bbb02e2715c84d81ac4e4bde3588c8fabc5ae1c9ae6906fef759",
+      "skipped": 38,
+      "uart_scenario_warning": "Not a QEMU lower bound or a measured guest baud rate"
+    }
+  ],
+  "scope": "KNOWN saved traces and source arithmetic; runtime attribution UNKNOWN",
+  "source_sha256": {
+    "src/a7/NativePlatform.cpp": "cb627294aebaa213a2b47c3df40c048642761a82e61371621f2f2ab7c3b5800b",
+    "src/a7/Owner.cpp": "0b3f3f81b3c7d9a4de3c97e831dcc8794ea05a37ec3cf49c1e91bb5b4486e3da",
+    "src/devinit/BoundPost.cpp": "3fda598a20a1cb67c15a69a315d5ebfb0557fd1bea5a2b2836d64342f912743e",
+    "src/devinit/Interpreter.cpp": "5237c54ebe5c1bdb40c7904e0377877dc36374d10a63158dfe70aa2a49bd3559",
+    "src/devinit/Interpreter.h": "54a4b25cc34ff96afd6f39a48a71a803f0ec7ef2042fd01c9245b01ca0a54ce6",
+    "tools/a7/startup_audit.py": "03ead7417e1c832d8f743d20ee03542e9a51e9c04bec0858a07d30542cc77239",
+    "tools/observer/supervise.py": "4a854920c8d0a3f67d928fb8c5e58cec861649075b491369a72618dbe09442b4"
+  }
+}

@@ -363,3 +363,18 @@ i2c/pad.c:27-33,55-70 (mode logging/callback dispatch),
 i2c/padgf119.c:43-48 and i2c/base.c:285-295 (dedicated-pad selection).
 All carry the existing MIT notices. Only semantic facts were used. No function
 bodies were copied. Response decoder, telemetry and scoped policy are original.
+
+## S1A7STARTUP diagnosis (2026-10-29)
+
+Consulted Haiku Book driver introduction/functions and pinned Haiku
+49a0af9585d80e42240af63ab66e31e9873f59b8 KernelExport.dox, OS.h,
+kernel debug.cpp, arch_debug_console.cpp, timer.cpp, thread.cpp,
+legacy_drivers.cpp, PCI pci.cpp and graphics/nvidia/driver.c.
+Consulted QEMU v6.2.0 serial.c, char-fd.c, channel-file.c and kvm-all.c as an
+explicit upstream baseline, and the existing strace primary manual's
+seccomp-BPF/filter description. Source URLs and SHA-256 records are saved in
+work/S1A7STARTUP/source-pins.json; external files stay in ignored build cache.
+Haiku MIT and QEMU/strace GPL sources were used for semantic diagnosis only.
+No implementation bodies were copied. Host benchmark and analysis are original.
+No additional Nouveau source was used beyond the already recorded interpreter
+and I2C references.
