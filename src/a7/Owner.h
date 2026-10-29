@@ -2,6 +2,7 @@
 // Distributed under the terms of the MIT License.
 #pragma once
 #include "a7/ArmAuthority.h"
+#include "a7/PostDiagnostics.h"
 #include "devinit/BoundPost.h"
 #include "runtime/PreStart.h"
 #include "runtime/Bootstrap.h"
@@ -71,6 +72,8 @@ private:
         bool write8(uint32_t,uint8_t) override;
         bool i2cWrite(const devinit::I2cBus&,uint8_t,uint8_t,uint8_t) override { return false; }
         void trace(uint32_t,uint8_t,bool) override;
+        bool diagnosticsHealthy() const override {return owner_.diagnostics_.healthy();}
+        void pollSample(uint32_t,uint8_t,uint32_t,bool) override;
         bool romPolicyReady() const override { return owner_.image_.approved(); }
         bool identity() override;
         bool unarmInterrupts() override;
@@ -91,6 +94,7 @@ private:
                            Arm, Fifo, Post, Readback, Readiness };
         bool allowed(uint32_t,unsigned,bool) const;
         bool active() const;
+        void emit(const char*,uint64_t,uint64_t=0);
         bool timer(uint64_t&);
         bool memorySize(uint64_t&);
         Owner& owner_;
@@ -116,6 +120,7 @@ private:
     runtime::startup::Controller controller_{once_};
     const uint64_t expectedVram_;
     Outcome outcome_;
+    PostDiagnostics diagnostics_;
     std::atomic_flag lock_=ATOMIC_FLAG_INIT;
     uint64_t clientLoads_=0;
     bool prepared_=false,attached_=false,submitted_=false;

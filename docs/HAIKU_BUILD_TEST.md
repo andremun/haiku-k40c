@@ -219,3 +219,20 @@ Changed job bytes or binaries require another cardless rehearsal. Failed
 cardless rehearsals may be retried under the user's ESC-003 resolution.
 Physical A7 still requires Claude review and a separate explicit per-run yes.
 See docs/A7-REVIEW-PACKAGE.md and work/S1A7REHEARSAL/REVIEW-RESOLUTION.md.
+
+## Cardless A7 diagnostic-output measurement
+
+`python3 tools/a7/logging_bench.py` builds the inert
+`CARDLESS_A7_LOGGING_ONLY` probe and measures the saved instruction-log volume
+in two cardless KVM guests, plain and observed. It does not enumerate PCI,
+load the A7 owner, read a grant key or obtain a card permit. The cardless runner's
+`--logging-observer` flag accepts only this probe role; QEMU options remain fixed
+and contain no host device. The existing observer uses the same syscall/path
+filters as A7, with no device assigned to the guest.
+
+The probe compares live formatting/output with recording into the owner-resident
+buffer, then measures draining separately. Reported times cover logging mechanics,
+not GPU POST or condition polling. `logging_bench.py --check` checks saved sources,
+probe/kernel hashes and exact evidence without a guest. A stopped measurement is
+reported under ADR 006 before another launch. Exact A7 package rehearsal remains
+a separate requirement.

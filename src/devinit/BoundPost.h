@@ -37,6 +37,10 @@ private:
     bool i2cWrite(const I2cBus&, uint8_t, uint8_t, uint8_t) override;
     bool board(uint8_t, uint32_t, const uint8_t*, uint32_t, bool) override;
     void trace(uint32_t, uint8_t, bool) override;
+    bool diagnosticsHealthy() const override {return registers_.diagnosticsHealthy();}
+    void pollSample(uint32_t pc,uint8_t index,uint32_t value,bool met) override {
+        registers_.pollSample(pc,index,value,met);
+    }
     bool guard();
     bool permission(uint32_t reg, unsigned width, bool write);
     PostImage& image_;

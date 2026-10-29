@@ -7,6 +7,7 @@ Boots an overlay of the existing cardless application guest. It never modifies
 that base disk or accepts additional QEMU arguments. Serial and HTTP results
 are saved incrementally in ignored build/cardless/RUN/. Requires no sudo/KVM.
 """
+from contextlib import ExitStack
 import argparse
 import hashlib
 import re
@@ -118,14 +119,14 @@ def guest_commands(port, driver, owner=False):
     return '\n'.join(commands)+'\n'
 
 
-def run(base,driver,seconds,cpus=1,kvm=False,owner_module=None):
+def run(base,driver,seconds,cpus=1,kvm=False,owner_module=None,logging_observer=False):
     from vm_guard import guest_lock
 
     with guest_lock(base.parent):
-        return _run(base,driver,seconds,cpus,kvm,owner_module)
+        return _run(base,driver,seconds,cpus,kvm,owner_module,logging_observer)
 
 
-def _run(base,driver,seconds,cpus=1,kvm=False,owner_module=None):
+def _run(base,driver,seconds,cpus=1,kvm=False,owner_module=None,logging_observer=False):
     if not 30<=seconds<=600:raise ValueError('timeout must be 30..600 seconds')
     if cpus not in (1,2):raise ValueError('cardless CPU count must be one or two')
     if kvm and not os.access('/dev/kvm',os.R_OK|os.W_OK):raise ValueError('KVM unavailable to this user; no sudo attempted')
@@ -133,7 +134,13 @@ def _run(base,driver,seconds,cpus=1,kvm=False,owner_module=None):
     if driver is not None and not driver.is_file():raise ValueError('missing driver binary')
     if owner_module is None and driver is not None and b'CARDLESS_OWNER_ONLY' in driver.read_bytes():
         raise ValueError('owner client requires --owner-module and strict reload validation')
+    if logging_observer and (owner_module is not None or driver is None
+        or b'CARDLESS_A7_LOGGING_ONLY' not in driver.read_bytes()):
+        raise ValueError('logging observer requires the fixed inert logging probe')
     expected_kernel = None
+    if logging_observer or (driver is not None and b'CARDLESS_A7_LOGGING_ONLY' in driver.read_bytes()):
+        kernel=Path(os.environ.get('HAIKU_CROSS',Path.home()/'haiku-cross'))/'lib/kernel_x86_64'
+        expected_kernel=hashlib.sha256(kernel.read_bytes()).hexdigest()
     if owner_module is not None:
         validate_owner_pair(driver,owner_module)
         kernel=Path(os.environ.get('HAIKU_CROSS',Path.home()/'haiku-cross'))/'lib/kernel_x86_64'
@@ -183,19 +190,31 @@ def _run(base,driver,seconds,cpus=1,kvm=False,owner_module=None):
     commit=subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip()
     (folder/'launch.json').write_text(json.dumps(dict(args=args,base=str(base),timeout_seconds=seconds,
         scope='CARDLESS_KVM' if kvm else 'CARDLESS_TCG',artifacts_sha256=artifacts,
-        kernel_sha256=expected_kernel,source_commit=commit,owner_reload=owner_module is not None),indent=2)+'\n')
+        kernel_sha256=expected_kernel,source_commit=commit,owner_reload=owner_module is not None,logging_observer=logging_observer),indent=2)+'\n')
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     process=None;watchdog=None;start=time.monotonic();status='failed'
     def hmp(mode,text):
         subprocess.run(['python3',str(HMP),str(monitor),mode,text],check=True,timeout=30,stdout=subprocess.DEVNULL)
     try:
-        with (folder/'qemu.log').open('wb') as log:
-            process=subprocess.Popen(args,stdout=log,stderr=log)
+        with ExitStack() as stack:
+            log=stack.enter_context((folder/'qemu.log').open('wb'))
+            child=None
+            if logging_observer:
+                import sys
+                sys.path.insert(0,str(ROOT))
+                from tools.observer.supervise import observed_child
+                child=stack.enter_context(observed_child(
+                    ROOT/'build/observer/strace-source/src/strace',[str(Path(shutil.which(args[0])).resolve()),*args[1:]],
+                    folder/'observer.trace',log,seconds,folder/'observer-watchdog.json',
+                    ['/dev/vfio/vfio','/dev/vfio/23']))
+                process=child.process
+            else:process=subprocess.Popen(args,stdout=log,stderr=log)
             def timeout():
                 if process.poll() is None:process.kill()
             watchdog=threading.Timer(seconds,timeout);watchdog.daemon=True;watchdog.start()
             launched=False
             while time.monotonic()-start<seconds and process.poll() is None:
+                if child:child.check()
                 serial=(folder/'serial.log').read_text(errors='replace') if (folder/'serial.log').is_file() else ''
                 if 'PANIC:' in serial:raise RuntimeError('kernel panic; see incremental serial log')
                 if driver is not None:probe_complete(serial)
@@ -235,5 +254,6 @@ def main():
     parser.add_argument('--timeout',type=int,default=600)
     parser.add_argument('--cpus',type=int,choices=(1,2),default=1)
     parser.add_argument('--kvm',action='store_true',help='explicit cardless acceleration; requires existing user access to /dev/kvm')
-    args=parser.parse_args();run(args.base,args.driver,args.timeout,args.cpus,args.kvm,args.owner_module)
+    parser.add_argument('--logging-observer',action='store_true',help='observe only the inert native logging probe; no host devices')
+    args=parser.parse_args();run(args.base,args.driver,args.timeout,args.cpus,args.kvm,args.owner_module,args.logging_observer)
 if __name__=='__main__':main()

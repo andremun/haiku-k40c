@@ -17,6 +17,11 @@ static const uint8_t key[32]={0xd7,0x5a,0x98,0x01,0x82,0xb1,0x0a,0xb7,0xd5,0x4b,
     0x0e,0xe1,0x72,0xf3,0xda,0xa6,0x23,0x25,0xaf,0x02,0x1a,0x68,0xf7,0x07,0x51,0x1a}; // RFC 8032 public TEST 1 key, never production.
 namespace k40::a7 {
 struct OwnerBoundaryProbe {
+    static void overflow(Owner& owner) {
+        for(unsigned i=0;i<=PostDiagnostics::capacity;++i)
+            owner.diagnostics_.record("synthetic overflow",0,0,owner.platform_.nowUs());
+    }
+    static bool posting(const Owner& owner) {return owner.io_.phase_==Owner::Transport::Phase::Post;}
     static void rejectOtherPreinitWrites(Owner& owner) {
         auto& io=owner.io_;const auto saved=io.phase_;
         io.phase_=Owner::Transport::Phase::I2c;
@@ -84,7 +89,7 @@ struct Hardware:a7::Platform {
     a7::Owner* owner=nullptr;
     uint32_t fallback=0,strap=0;
     unsigned writes=0,arms=0,reentries=0;
-    bool post=false,failPins=false,denyClock=false;
+    bool post=false,failPins=false,denyClock=false,overflow=false;
     bool initialize() override {return true;}
     bool pciCommand(uint16_t& value) override {value=7;return true;}
     uint64_t nowUs() override {return wire.nowUs();}
@@ -93,7 +98,14 @@ struct Hardware:a7::Platform {
         if(at==0xd054)return !failPins && wire.read32(at,value);
         if(at==0){value=0x0f1240a1;return true;}
         if(at==0x101000){value=strap<<2;return true;}
-        if(post){value=fallback;return true;}
+        if(owner && a7::OwnerBoundaryProbe::posting(*owner)){
+            if(overflow){overflow=false;a7::OwnerBoundaryProbe::overflow(*owner);}
+            value=fallback;return true;
+        }
+        if(at==0x100c10 && arms==1){
+            if(owner){const auto before=writes;a7::OwnerBoundaryProbe::rejectThirdFifoWrite(*owner);require(writes==before,"third FIFO write reached hardware");}
+            value=0xdeadbeef;return true;
+        }
         if(at==0x9400){value=denyClock?0:uint32_t(wire.clock*32+1);return true;}
         if(at==0x9410 || at==0x100 || at==0x22554 || at==0x70000){value=0;return true;}
         if(at==0x22438 || at==0x2243c){value=6;return true;}
@@ -128,10 +140,9 @@ struct Hardware:a7::Platform {
             const auto before=writes;a7::OwnerBoundaryProbe::rejectOtherPreinitWrites(*owner);
             require(writes==before,"denied preinit writes reached hardware");
         }
-        if(name=="POST_RESULT") {post=false;if(first==0)registers[0x100c10]=0xdeadbeef;
-            if(owner){const auto before=writes;a7::OwnerBoundaryProbe::rejectThirdFifoWrite(*owner);require(writes==before,"third FIFO write reached hardware");}}
 
-        if(name=="PASS ARM_ONLY_POST")require(!writesAuthorized(),"permit survived execution");
+
+        if(name=="TRACE_BEGIN" || name=="PASS ARM_ONLY_POST")require(!writesAuthorized(),"permit survived execution");
     }
 };
 int main(int argc,char** argv)
@@ -146,6 +157,7 @@ try {
     if(argc>4)hardware.strap=std::stoul(argv[4]);
     if(mode=="pins-fail")hardware.failPins=true;
     if(mode=="clock-fail")hardware.denyClock=true;
+    if(mode=="trace-overflow")hardware.overflow=true;
     const char* faultNames[]={"sensor-address-nack","sensor-register-nack","sensor-value-nack","sensor-stop-fail","sensor-stretch","sensor-timeout","other-address-nack","sensor-io"};
     for(unsigned i=0;i<8;++i)if(mode==faultNames[i])hardware.wire.fault=i+1;
     auto owner=std::make_unique<a7::Owner>(hardware,storage,key,nonce,challenge,rom.data(),rom.size(),11520ULL<<20);
@@ -165,6 +177,7 @@ try {
         require(hardware.arms==2 && hardware.registers[0x100c10]==0x4000 && result.scratch,"readiness failed");
         require(owner->state()==runtime::startup::BootState::Complete && hardware.reentries>0,"one-shot completion");
     } else require(owner->state()==runtime::startup::BootState::Failed,"failure lost latch");
+    if(mode=="trace-overflow")require(status!=a7::Status::Ok && hardware.arms==1,"overflow reached rearm");
     if(hardware.wire.fault) {
         if(hardware.wire.fault==1) {
             require(status==a7::Status::Ok && hardware.i2cAttempts==9 && hardware.referenceNacks==2 && hardware.retries==6,"sensor NACK policy scope/count");

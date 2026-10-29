@@ -1,15 +1,14 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7STARTUP (host-only timeout/startup investigation).
-Task state: DONE (diagnosis; review pending). Haiku lifecycle sources fit the
-existing open/write design. Synchronous serial/VM/observer cost is an INFERRED
-contributor to our 10 s POST limit; condition poll counts and time attribution
-remain UNKNOWN. Host mechanism measurements and source/path checks recorded.
-See docs/A7-STARTUP-DIAGNOSIS.md. No guest/card/reset or production change. Full make check and analysis checks pass.
+Current task: S1A7BUFFER (buffer diagnostics, native measurements, new package).
+Task state: IN PROGRESS. Full make check and owner/buffer tests pass; write counts match.
+Plain native logging test passed. Observed case stopped before QEMU launch on
+an executable-path error. Fix prepared; ADR 006 permission requested before
+resuming cardless measurement/rehearsal. No physical run. Package review pending.
 Last physical result remains run6 STOPPED at 0x85d6 (490 active, 38 skipped).
-Package-i2c remains consumed; no retry authorized. R5 unchanged, mastering off
-at exit. S1 incomplete. D1 unapproved.
+Package-i2c remains consumed; no physical retry authorized. S1 incomplete;
+D1 unapproved. See docs/A7-BUFFER-REVIEW.md and work/S1A7BUFFER/FINDINGS.md.
 Last updated: 2026-10-29
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -105,6 +104,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A7RUN6 | STOPPED (POST Timeout at 0x85d6) | 2026-10-29 | One approved package-i2c launch. 490/38 trace entries; 0x20 succeeds, sensor not reached. R5 unchanged, mastering off. No retry. |
 
 | S1A7STARTUP | DONE (host diagnosis; review pending) | 2026-10-29 | Haiku hooks/debug path, ROM waits and inert observer benchmark. Logging overhead likely contributes; poll/time attribution UNKNOWN. No production change or guest. See work/S1A7STARTUP/RESULT.md. |
+
+| S1A7BUFFER | IN PROGRESS (cardless continuation permission pending) | 2026-10-29 | Buffered resident diagnostics and timing; host tests pass. First observed benchmark stopped before QEMU on path resolution. Fix ready; no further guest or physical run. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

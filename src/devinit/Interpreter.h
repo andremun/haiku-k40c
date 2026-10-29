@@ -32,6 +32,8 @@ public:
     // to replay blindly. IO may have MMIO effects even beyond legacy ports.
     virtual bool board(uint8_t, uint32_t, const uint8_t*, uint32_t, bool) { return false; }
     virtual void trace(uint32_t, uint8_t, bool) {}
+    virtual bool diagnosticsHealthy() const { return true; }
+    virtual void pollSample(uint32_t, uint8_t, uint32_t, bool) {}
 };
 class Interpreter {
 public:
@@ -47,7 +49,7 @@ private:
     bool read(uint32_t reg, uint32_t& value);
     bool write(uint32_t reg, uint32_t value);
     bool masked(uint32_t reg, uint32_t keep, uint32_t value);
-    bool condition(uint8_t index, bool& met);
+    bool condition(uint8_t index, bool& met, uint32_t* observed=nullptr);
     bool deadline();
     Stop execute(uint32_t& pc, uint32_t depth, bool repeatBody);
     const uint8_t* rom_;

@@ -23,6 +23,17 @@ K40-CARDLESS-END
 
 
 class OwnerRunnerTests(unittest.TestCase):
+    def test_logging_role_refused_before_launch(self):
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            base, probe = root/'disk', root/'probe'
+            base.touch(); probe.write_bytes(b'\\x7fELF other probe')
+            with patch.object(runner.subprocess, 'Popen') as launch:
+                for driver, owner in ((None, None), (probe, None), (probe, probe)):
+                    with self.assertRaises(ValueError):
+                        runner._run(base, driver, 30, owner_module=owner, logging_observer=True)
+                launch.assert_not_called()
+
     def test_complete_lifetime(self):
         self.assertTrue(runner.owner_complete(GOOD))
         extra = GOOD.replace('K40-CARDLESS-END\n','') + GOOD[GOOD.index('k40_owner_test: phase2'):].replace('lease=2','lease=3')

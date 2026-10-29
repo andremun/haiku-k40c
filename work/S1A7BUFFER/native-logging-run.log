@@ -1,0 +1,25 @@
+built /home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/haiku/k40_a7_logging
+/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/cardless/20261029-172328
+/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/cardless/20261029-172432
+Traceback (most recent call last):
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/a7/logging_bench.py", line 213, in <module>
+    main()
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/a7/logging_bench.py", line 180, in main
+    folder = cardless_run.run(
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/cardless_run.py", line 126, in run
+    return _run(base,driver,seconds,cpus,kvm,owner_module,logging_observer)
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/haiku/cardless_run.py", line 206, in _run
+    child=stack.enter_context(observed_child(
+  File "/usr/lib/python3.10/contextlib.py", line 492, in enter_context
+    result = _cm_type.__enter__(cm)
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/observer/supervise.py", line 71, in observed_child
+    observer=Path(observer).resolve(strict=True);target=Path(argv[0]).resolve(strict=True)
+  File "/usr/lib/python3.10/pathlib.py", line 1077, in resolve
+    s = self._accessor.realpath(self, strict=strict)
+  File "/usr/lib/python3.10/posixpath.py", line 393, in realpath
+    path, ok = _joinrealpath(filename[:0], filename, strict, {})
+  File "/usr/lib/python3.10/posixpath.py", line 428, in _joinrealpath
+    st = os.lstat(newpath)
+FileNotFoundError: [Errno 2] No such file or directory: 'qemu-system-x86_64'

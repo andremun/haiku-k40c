@@ -46,6 +46,13 @@ Status Owner::submit(uint64_t lease,const uint8_t* grant,size_t bytes)
     struct End {Owner& owner;~End(){owner.permit_.active_=false;}} end{*this};
     outcome_.startup=controller_.run(io_,arm_,15000000); // no source: fixed software execution budget.
     permit_.active_=false;
+    if(diagnostics_.recording()) {
+        const auto before=platform_.nowUs();diagnostics_.flush(platform_);
+        platform_.log("TRACE_DUMP_US",platform_.nowUs()-before);
+    }
+    if(!diagnostics_.healthy()) {
+        failed();platform_.log("FAIL diagnostics",unsigned(devinit::Error::Budget));return Status::Post;
+    }
     if(outcome_.startup.error!=runtime::startup::Error::None) {
         failed();platform_.log("FAIL startup",unsigned(outcome_.startup.error),unsigned(outcome_.startup.step));return Status::Post;
     }
@@ -62,7 +69,7 @@ Status Owner::detach(uint64_t lease)
     return Status::Retained;
 }
 bool Owner::Transport::active() const
-{ return owner_.permit_.active() && owner_.once_.state()==runtime::startup::BootState::Running; }
+{ return owner_.diagnostics_.healthy() && owner_.permit_.active() && owner_.once_.state()==runtime::startup::BootState::Running; }
 bool Owner::Transport::allowed(uint32_t reg,unsigned width,bool write) const
 {
     if(!active())return false;
@@ -91,7 +98,9 @@ bool Owner::Transport::allowed(uint32_t reg,unsigned width,bool write) const
 }
 bool Owner::Transport::read32(uint32_t reg,uint32_t& value)
 {
-    if(!allowed(reg,4,false) || !owner_.platform_.read32(reg,value))return false;
+    if(!allowed(reg,4,false))return false;
+    const auto before=nowUs();const bool ok=owner_.platform_.read32(reg,value);
+    owner_.diagnostics_.mmio(before,nowUs());if(!ok)return false;
     if(phase_==Phase::Fifo) {fifoReadValue_=value;fifoRead_=true;}
     return true;
 }
@@ -105,25 +114,45 @@ bool Owner::Transport::write32(uint32_t reg,uint32_t value)
         // mc/nv04.c:39,47; mc/gk104.c:28. Only the paired FIFO bit may change.
         if(!fifoRead_ || fifoWrites_>=2 || value!=((fifoReadValue_&~0x100u)|(fifoWrites_?0x100u:0)))return false;
     }
-    if(!owner_.platform_.write32(reg,value))return false;
+    const auto before=nowUs();const bool ok=owner_.platform_.write32(reg,value);
+    owner_.diagnostics_.mmio(before,nowUs());if(!ok)return false;
     if(phase_==Phase::Fifo) {fifoRead_=false;++fifoWrites_;}
     if(phase_==Phase::Readiness && reg==0x1700)selector_=value; // instmem/nv50.c:68.
     return true;
 }
 bool Owner::Transport::read8(uint32_t reg,uint8_t& value)
-{return allowed(reg,1,false) && owner_.platform_.read8(reg,value);}
+{
+    if(!allowed(reg,1,false))return false;
+    const auto before=nowUs();const bool ok=owner_.platform_.read8(reg,value);
+    owner_.diagnostics_.mmio(before,nowUs());return ok;
+}
 bool Owner::Transport::write8(uint32_t reg,uint8_t value)
-{return allowed(reg,1,true) && owner_.platform_.write8(reg,value);}
+{
+    if(!allowed(reg,1,true))return false;
+    const auto before=nowUs();const bool ok=owner_.platform_.write8(reg,value);
+    owner_.diagnostics_.mmio(before,nowUs());return ok;
+}
 bool Owner::Transport::delayUs(uint64_t us)
-{return active() && us<=1000000 && owner_.platform_.delayUs(us);}
+{
+    if(!active() || us>1000000)return false;
+    const auto before=nowUs();const bool ok=owner_.platform_.delayUs(us);
+    owner_.diagnostics_.delay(us,before,nowUs());return ok;
+}
 void Owner::Transport::trace(uint32_t pc,uint8_t opcode,bool activeInstruction)
-{pc_=pc;owner_.platform_.log(activeInstruction?"SCRIPT_ACTIVE":"SCRIPT_SKIPPED",pc,opcode);}
+{pc_=pc;emit(activeInstruction?"SCRIPT_ACTIVE":"SCRIPT_SKIPPED",pc,opcode);}
+void Owner::Transport::emit(const char* name,uint64_t first,uint64_t second)
+{
+    if(owner_.diagnostics_.recording())owner_.diagnostics_.record(name,first,second,nowUs());
+    else owner_.platform_.log(name,first,second);
+}
+void Owner::Transport::pollSample(uint32_t pc,uint8_t index,uint32_t value,bool met)
+{owner_.diagnostics_.poll(pc,index,value,met,nowUs());}
 bool Owner::Transport::identity()
 {
     phase_=Phase::Identity;uint32_t value=0;
-    owner_.platform_.log("PCI_COMMAND",owner_.outcome_.pciBefore);
+    emit("PCI_COMMAND",owner_.outcome_.pciBefore);
     if(!read32(0,value) || value!=0x0f1240a1)return false; // no source: software identity comparison; KNOWN capture hardware/record.json:37.
-    owner_.platform_.log("IDENTITY",value);
+    emit("IDENTITY",value);
     return owner_.image_.selectRam(*this)==devinit::Error::None;
 }
 bool Owner::Transport::unarmInterrupts(){phase_=Phase::Interrupts;return helpers_.unarmInterrupts();}
@@ -132,12 +161,12 @@ bool Owner::Transport::unlockCrtc(){phase_=Phase::Crtc;return helpers_.unlockCrt
 bool Owner::Transport::privateRing(){phase_=Phase::Ring;return helpers_.privateRing();}
 void Owner::Transport::i2cAudit(uint32_t pc,uint8_t address,uint8_t reg,uint8_t value,const devinit::I2cResult& result)
 {
-    owner_.platform_.log("I2C_REQUEST",pc,(uint32_t(address)<<16)|(uint32_t(reg)<<8)|value);
-    owner_.platform_.log("I2C_DISPOSITION",result.attempt,unsigned(result.disposition));
-    owner_.platform_.log("I2C_RESULT",unsigned(result.primary),unsigned(result.cleanup));
-    owner_.platform_.log("I2C_PHASE",unsigned(result.phase),result.bit);
-    owner_.platform_.log("I2C_TIME",result.transferUs,result.cleanupUs);
-    owner_.platform_.log("I2C_WORK",result.operations,result.levels);
+    emit("I2C_REQUEST",pc,(uint32_t(address)<<16)|(uint32_t(reg)<<8)|value);
+    emit("I2C_DISPOSITION",result.attempt,unsigned(result.disposition));
+    emit("I2C_RESULT",unsigned(result.primary),unsigned(result.cleanup));
+    emit("I2C_PHASE",unsigned(result.phase),result.bit);
+    emit("I2C_TIME",result.transferUs,result.cleanupUs);
+    emit("I2C_WORK",result.operations,result.levels);
 }
 bool Owner::Transport::initializeI2c()
 {
@@ -149,7 +178,7 @@ bool Owner::Transport::initializeI2c()
 bool Owner::Transport::programFlushPage(memory::DeviceIova address)
 {
     if(armWrites_>=2 || (armWrites_==1 && (!romDone_ || !readback_)))return false;
-    phase_=Phase::Arm;owner_.platform_.log(armWrites_?"ARM_AFTER":"ARM_BEFORE",address.value,address.value>>8);
+    phase_=Phase::Arm;emit(armWrites_?"ARM_AFTER":"ARM_BEFORE",address.value,address.value>>8);
     ++armWrites_;return helpers_.programFlushPage(address);
 }
 bool Owner::Transport::resetFifoBeforePost()
@@ -159,16 +188,17 @@ bool Owner::Transport::resetFifoBeforePost()
 }
 bool Owner::Transport::executeRom()
 {
-    phase_=Phase::Post;const auto result=owner_.post_.runPost();
-    owner_.platform_.log("POST_RESULT",unsigned(result.error),result.offset);
-    romDone_=result.error==devinit::Error::None;return romDone_;
+    phase_=Phase::Post;owner_.diagnostics_.begin(nowUs());
+    const auto result=owner_.post_.runPost();owner_.diagnostics_.finishPost(nowUs());
+    emit("POST_RESULT",unsigned(result.error),result.offset);
+    romDone_=result.error==devinit::Error::None && diagnosticsHealthy();return romDone_;
 }
 bool Owner::Transport::readFlushPage(uint32_t& value)
 {
     if(!romDone_ || armWrites_!=1)return false;
     phase_=Phase::Readback;readback_=read32(0x100c10,value); // fb/gf100.c:83; ESC-002 adds readback.
-    if(readback_)owner_.platform_.log("ARM_READBACK",value);
-    return readback_;
+    if(readback_)emit("ARM_READBACK",value);
+    return readback_ && diagnosticsHealthy();
 }
 bool Owner::Transport::timer(uint64_t& value)
 {
@@ -211,8 +241,8 @@ bool Owner::Transport::independentReadiness()
     if(!read32(0,identity) || identity!=0x0f1240a1 || !timer(result.timerBefore) // no source: software identity comparison; KNOWN capture hardware/record.json:37.
         || !delayUs(1000) || !timer(result.timerAfter) || result.timerAfter<=result.timerBefore
         || !memorySize(result.vramBytes) || !read32(0x100,result.pending) || result.pending)return false; // fb/gf100.c:37.
-    owner_.platform_.log("TIMER",result.timerBefore,result.timerAfter);
-    owner_.platform_.log("VRAM_BYTES",result.vramBytes);
+    emit("TIMER",result.timerBefore,result.timerAfter);
+    emit("VRAM_BYTES",result.vramBytes);
     // Sole driver reservation: first page of the source-derived normal heap.
     // ramgf100.c:497-498,555-558 excludes VGA head and VBIOS tail. No other A7
     // VRAM consumer exists. Keep this reservation for the whole module lifetime.
@@ -220,6 +250,6 @@ bool Owner::Transport::independentReadiness()
     const uint64_t offsets[]={0,0x100,0xffc}; // no source: software scratch sample offsets within our owned page.
     result.scratch=runtime::checkOwnedScratch(*this,{{0x40000},4096},offsets,3,{2000000,100000}); // fb/ramgf100.c:497,555-558; software page size and time budgets.
     if(!result.scratch || !read32(0x100,result.pending) || result.pending)return false; // fb/gf100.c:37.
-    owner_.platform_.log("SCRATCH_PASS",0x40000,4096);return true; // fb/ramgf100.c:497,555-558; software scratch page reservation.
+    emit("SCRATCH_PASS",0x40000,4096);return diagnosticsHealthy(); // fb/ramgf100.c:497,555-558; software scratch page reservation.
 }
 }

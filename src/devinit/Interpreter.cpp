@@ -33,7 +33,7 @@ bool Interpreter::masked(uint32_t reg,uint32_t keep,uint32_t value)
     uint32_t old=0;
     return read(reg,old) && write(reg,(old & keep) | value);
 }
-bool Interpreter::condition(uint8_t index,bool& met)
+bool Interpreter::condition(uint8_t index,bool& met,uint32_t* observed)
 {
     met=false;
     if (!tables_.conditions) return true;
@@ -41,11 +41,13 @@ bool Interpreter::condition(uint8_t index,bool& met)
     if (!span(entry,12)) return false;
     uint32_t value=0;
     if (!read(word(entry,4),value)) return false;
+    if(observed)*observed=value;
     met=(value & word(entry+4,4))==word(entry+8,4);
     return true;
 }
 bool Interpreter::deadline()
 {
+    if (!backend_.diagnosticsHealthy()) {result_.error=Error::Budget;return false;}
     uint64_t now=backend_.nowUs();
     if (now<last_) { result_.error=Error::Clock; return false; }
     last_=now;
@@ -141,7 +143,9 @@ Interpreter::Stop Interpreter::execute(uint32_t& pc,uint32_t depth,bool repeatBo
                 if (attempts>100) attempts=100;
                 bool met=false;
                 for (uint32_t i=0;i<attempts;++i) {
-                    if (!deadline() || !condition(rom_[pc+1],met)) return Stop::Failed;
+                    uint32_t observed=0;
+                    if (!deadline() || !condition(rom_[pc+1],met,&observed)) return Stop::Failed;
+                    backend_.pollSample(pc,rom_[pc+1],observed,met);
                     if (met) break;
                     if (!backend_.delayUs(20000)) { result_.error=Error::Io; return Stop::Failed; }
                 }

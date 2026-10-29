@@ -16,7 +16,8 @@ BUILDDIR := ../build/tests
 OWNER_POST_CORE := ../src/devinit/PostImage.cpp ../src/devinit/BoardPolicy.cpp ../src/devinit/Sha256.cpp
 OWNER_POST_HEADERS := $(wildcard ../src/devinit/*.h)
 
-CXX_TESTS := test_bootstrap:runtime+memory test_prestart:runtime+memory \
+CXX_TESTS := test_a7_diagnostics:devinit \
+             test_bootstrap:runtime+memory test_prestart:runtime+memory \
              test_devinit:devinit s1a_accept:devinit test_board:devinit test_i2c:devinit test_post_image:devinit \
              test_memory:memory \
              test_s1_boundaries:fifo+hw+mmu test_s1_experiment:runtime+memory \
@@ -30,6 +31,8 @@ PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard tes
              accept/r1_accept.py test_dma_model.py test_observer.py test_observer_binding.py test_task_stream.py test_observer_supervisor.py test_d0_monitor.py test_d0_topology.py test_d0_evidence.py test_d0_kernel_log.py test_d0_run.py test_a7_run.py test_a7_omissions.py test_a7_install.py test_a7_i2c.py test_vm_tools.py test_owner_runner.py test_card_run.py test_board_tools.py test_devinit_inventory.py test_load_trace.py test_devinit_preflight.py test_devinit_closure.py test_post_policy.py test_devinit_rom.py test_devinit_trace_join.py
 
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
+
+$(BUILDDIR)/test_a7_diagnostics: ../src/a7/PostDiagnostics.h
 
 .PHONY: all clean
 all: $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(BUILDDIR)/owner_post_probe $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe

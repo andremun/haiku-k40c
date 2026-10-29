@@ -5,6 +5,7 @@ namespace k40::devinit {
 bool BoundPost::guard()
 {
     if (error_ != Error::None) return false;
+    if (!diagnosticsHealthy()) {error_=Error::Budget;return false;}
     if (!running_ || !executionAllowed()) { error_=Error::HardwareDisabled; return false; }
     const auto now=registers_.nowUs();
     if (now<last_) { error_=Error::Clock; return false; }

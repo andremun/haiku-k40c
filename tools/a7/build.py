@@ -36,9 +36,9 @@ import post_policy
 import probe_stage
 from board_trace import read_policy, ADR
 
-PACKAGE = ROOT / "build/a7/package-i2c"
-PUBLIC = ROOT / "work/S1A7I2C/package.json"
-INVENTORY = ROOT / "work/S1A7I2C/write-inventory.json"
+PACKAGE = ROOT / "build/a7/package-buffer"
+PUBLIC = ROOT / "work/S1A7BUFFER/package.json"
+INVENTORY = ROOT / "work/S1A7BUFFER/write-inventory.json"
 ROM = Path(
     os.environ.get(
         "K40_VBIOS",
@@ -310,6 +310,11 @@ def source_names():
             "tools/a7/teardown_sources.py",
             "tools/a7/host_check.py",
             "tests/a7_owner_probe.cpp",
+            "tests/test_a7_diagnostics.cpp",
+            "tests/test_owner_runner.py",
+            "tools/a7/logging_bench.py",
+            "tools/haiku/selftest/a7_logging.cpp",
+            "tools/haiku/cardless_run.py",
             "tests/native_arm_gate.cpp",
             "tests/test_a7_native.cpp",
             "tests/test_a7_client.cpp",
@@ -351,6 +356,9 @@ def source_names():
 
 
 def manifest():
+    from tools.a7 import logging_bench
+
+    logging_bench.validate()
     data, total, capture = inputs()
     if install_sources.OUTPUT.read_text() != install_sources.render():
         raise ValueError("installation source record differs")
@@ -385,6 +393,7 @@ def manifest():
     ):
         raise ValueError("forbidden owner artifact capability")
     return dict(
+        native_logging_sha256=sha(logging_bench.OUTPUT),
         linux_i2c_sha256=sha(i2c_capture.OUTPUT),
         i2c_replay_sha256=sha(i2c_replay.OUTPUT),
         runtime_library_sha256=sha(runtime_export.LIBRARY),
@@ -414,7 +423,7 @@ def manifest():
         ),
         config_sha256=sha(PACKAGE / "a7_config.h"),
         verifier=crypto,
-        host_check_sha256=sha(ROOT / "work/S1A7I2C/host-check.json"),
+        host_check_sha256=sha(ROOT / "work/S1A7BUFFER/host-check.json"),
         teardown_sources_sha256=sha(ROOT / "work/S1A7NATIVE/teardown-sources.json"),
         installation_sources_sha256=sha(install_sources.OUTPUT),
         inventory_sha256=hashlib.sha256(dump(inventory(data)).encode()).hexdigest(),
