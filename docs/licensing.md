@@ -390,3 +390,9 @@ body was copied. Haiku KernelExport.h and x86 atomic.h at the project pin,
 plus separately pinned vm.cpp/arch_vm.cpp, define the candidate explicit UC
 mapping and CPU-ordering API. Full running source identity remains unestablished.
 The new combined stage is not a modification of run7's A7 source.
+
+## S1MEMARENA source study (2026-10-29)
+
+Reconsulted Nouveau subdev/fb/ramgf108.c:30-44 for per-FBP amount grouping
+and its one-LTC-per-FBP result, and ramgf100.c for the normal-heap test and
+head/tail reservations. The ledger and independent interval oracle are original.

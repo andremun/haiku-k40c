@@ -350,6 +350,12 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/fifo/PushBuffer.h:27` | `constexpr unsigned kUserdGpPut = 0x8c;` | nouveau_dma.c:92 | SOURCE_ONLY |
 | `src/fifo/PushBuffer.h:30` | `constexpr unsigned kGpEntryBytes = 8;` | nouveau_dma.c:82 | SOURCE_ONLY |
 
+## src/memory/VramArena.h
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/memory/VramArena.h:22` | `static constexpr unsigned capacity=16;` | no source: software ledger capacity. | SOURCE_ONLY |
+
 ## src/mmu/PageTable.cpp
 
 | Line | Code | Source | Status |
@@ -501,6 +507,7 @@ The following constant lines have no source citation:
 - src/fifo/PushBuffer.cpp:33 (no source: 0x7ffc is max 13-bit value aligned to 4; nvc0_winsys.h shifts mthd >> 2)
 - src/fifo/PushBuffer.cpp:39 (no source: 0x1fff is max 13-bit value for the count field;    nvc0_winsys.h uses (size << 16) with 13-bit field)
 - src/fifo/PushBuffer.cpp:269 (no source: 0xff is just 8-bit mask for address upper bits)
+- src/memory/VramArena.h:22 (no source: software ledger capacity.)
 - src/os/HaikuMemory.h:39 (no source: software ownership-record capacity, not a GPU limit.)
 - src/runtime/Bootstrap.cpp:45 (no source: ambiguous citation)
 - src/runtime/Bootstrap.cpp:47 (no source: ambiguous citation)

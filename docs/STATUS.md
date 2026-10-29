@@ -1,8 +1,8 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1MEMCONTRACT (first task of accepted memory/BAR1 batch).
-Task state: CONTRACT COMPLETE (host/source scope). Claude accepted A7 dfb7cd8 and the batch plan with
+Current task: S1MEMFAULTS (scoped fault baselines; task 3 of 6).
+Task state: READY. S1MEMARENA host/native-object checks pass; S1MEMCONTRACT committed as 259dfb6. Claude accepted A7 dfb7cd8 and the batch plan with
 changes: BAR1/gk104 only, explicit guest BAR1 mapping, remove D1/G2, flush
 readback observational, freeze A7 run7 source. Q7/Q11 stay open.
 Implement six tasks sequentially, one commit each. No intermediate card run.
@@ -125,3 +125,5 @@ Older results and notes: `docs/history/` (do not read it for a task).
 The driver links and loads on a cardless KVM Haiku guest (ESC-001, resolved 2026-10-18).
 `escalations/ESC-001.md` ("Resolution") and `docs/ABC-CARDLESS-OUTCOME.md` give the commands.
 A cardless result is not K40c evidence.
+
+| S1MEMARENA | DONE (host/native object) | 2026-10-29 | Uniform-FBP append-only ledger, 48 independent layout oracles, token/retention guards, deterministic report. No VM/card. |

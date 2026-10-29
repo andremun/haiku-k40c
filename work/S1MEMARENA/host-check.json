@@ -1,0 +1,16 @@
+{
+  "checks": "VRAM arena: 48 layout/oracle cases; stale/partial/capacity/retention checks pass; HOST_ONLY",
+  "profile": "uniform FBP only; head/tail/A7 scratch excluded; no DMA visibility claim",
+  "release": "no release API; failed or referenced records retained",
+  "scope": "HOST_ONLY; native object compilation is not hardware evidence",
+  "source_sha256": {
+    "reference/nouveau/nvkm/subdev/fb/gf100.c": "b0d9f8d6fa7f6b7b0c86e7c1773c8c4b77fecc4d0c23a68463be488c50dc95cf",
+    "reference/nouveau/nvkm/subdev/fb/ramgf100.c": "770a57692580c709223bd235dd07ee13899ff1c6ad29751c52dedef42383a57f",
+    "reference/nouveau/nvkm/subdev/fb/ramgf108.c": "1a59d714e34b6977ba4e551216810721e234f9e0653f9c36563fd022007471d2",
+    "reference/nouveau/nvkm/subdev/mmu/vmmgk104.c": "3f77d94f4f08546da6361e474c94fe13af23d41758ad5a1fd48b0e5a50ccdd97",
+    "src/memory/VramArena.cpp": "5d5189a1e7b02000be1814c22f05a86fa237b17f8344d80efc727dd80a758a37",
+    "src/memory/VramArena.h": "d1e99970f869b38f1aab447621d86a6918727f9f559fcc1fda326be21cafb461",
+    "tests/test_vram_arena.cpp": "e289a3cc860937ef41de87b300d62fc56ed81a08d188a5daca1cf965bfd24d04",
+    "tools/memstage/arena_report.py": "17217f10f8971adc291473619025f6fd1dc0d73830e35cf16223e8f5b9da44c2"
+  }
+}
