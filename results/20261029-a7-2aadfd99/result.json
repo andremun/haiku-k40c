@@ -1,0 +1,11 @@
+{
+  "S1_complete": false,
+  "allowed_kernel_lines": [],
+  "dma_publication": false,
+  "elapsed_seconds": 144.8,
+  "error": "native A7 failure",
+  "kernel_scope": "R5 selected classes only; any new selected-class line stops stage, except one device-enable line at QEMU start",
+  "payload_visibility": false,
+  "stage": "A7_ARM_ONLY_POST_WRITE",
+  "status": "failed"
+}

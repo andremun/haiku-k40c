@@ -34,3 +34,5 @@ on 23 October 2026 with unchanged bytes. `hashes.txt` lists the file hashes.
 | `20261028-134127-a7-rehearsal/` | Exact A7 job and binaries pass checked installs and node publication, then refuse inside open before PCI reservation. Cardless only. | `work/S1A7REHEARSAL/rehearsal.json` |
 
 | `20261029-104357-a7-rehearsal/` | Exact A7 sensor-policy package, cardless installation/reload PASS in 78.34 s. Final names, B_ERROR, one prepare, retained Failed state. No card. | `work/S1A7I2C/rehearsal.json` |
+
+| `20261029-a7-2aadfd99/` | Sixth approved A7 attempt: POST Timeout at 0x85d6, 490/38 trace entries. I2C 0x20 succeeds; sensor/readiness not reached. R5 unchanged, mastering disabled, no retry. | `work/S1A7RUN6/RESULT.md` |

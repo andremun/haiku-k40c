@@ -1,13 +1,14 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7I2C (host diagnosis and next-package preparation).
-Task state: Linux trace proves eight sensor address NACKs with no payload.
-The user selected the exact bounded continuation policy (ADR 010). Diagnostics
-and scoped retries pass owner host cases. Fresh package-i2c passes exact cardless
-rehearsal in 78.34 s. Full make check passes. Package ready for Claude review.
-Run5 remains STOPPED/consumed. No further card run is approved.
-S1 remains incomplete. D1 is unapproved.
+Current task: S1A7RUN6 (one approved run of reviewed package-i2c).
+Task state: STOPPED after 144.8 s with POST Timeout at 0x85d6. There are 490
+active and 38 skipped trace entries. I2C 0x20 succeeded. The 0xab8d sensor
+operation and post-POST/readiness checks were NOT_REACHED. R5 delta empty,
+allowed lines empty, host command 0x0002 after exit. No QEMU remains. Failed
+owner/reference retained. Package-i2c is consumed. Full make check passes.
+No retry is authorized.
+S1 remains incomplete. D1 is unapproved. See results/20261029-a7-2aadfd99/README.md.
 Last updated: 2026-10-29
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -98,7 +99,9 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A7RUN4 | STOPPED (R5 rule at QEMU start) | 2026-10-29 | One approved run of package-rehearsal2. Stopped at 2.52 s on "vfio-pci 0000:04:00.0: enabling device (0000 -> 0002)" (first open after host reboot). Guest never started. No retry. See results/20261029-a7-ba6a1a54/README.md. |
 | S1A7RUN5 | STOPPED (POST at 0xab8d, I2C Io) | 2026-10-29 | One approved run of package-run5. POST ran 532/38 instructions under Haiku, stopped at the MAX6649 I2C write (0xab8d) with Io. No R5 line. No retry. See results/20261029-a7-508279eb/README.md. |
 
-| S1A7I2C | DONE (host/cardless; review pending) | 2026-10-29 | Linux sensor address NACKs decoded/replayed. User-approved narrow policy and diagnostics. Exact package cardless pass in 78.34 s. No physical run. |
+| S1A7I2C | ACCEPT (Claude review supplied by user) | 2026-10-29 | Linux sensor address NACKs decoded/replayed. User-approved narrow policy and diagnostics. Exact package cardless pass in 78.34 s. No physical run. |
+
+| S1A7RUN6 | STOPPED (POST Timeout at 0x85d6) | 2026-10-29 | One approved package-i2c launch. 490/38 trace entries; 0x20 succeeds, sensor not reached. R5 unchanged, mastering off. No retry. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

@@ -1,8 +1,10 @@
 # A7 sensor response package (2026-10-29)
 
-**Current status:** fresh, unconsumed `build/a7/package-i2c/`, records in
-`work/S1A7I2C/`. No card run is approved or performed. Run5 remains consumed
-and stopped at 0xab8d. S1 is incomplete. D1 is unapproved.
+**Current status:** Claude accepted commit 2818763 and the user approved one
+run of `build/a7/package-i2c/`. It launched once and stopped at POST Timeout,
+0x85d6, before the sensor operation. The package is consumed. No retry is
+approved. See results/20261029-a7-2aadfd99/README.md. S1 remains incomplete.
+D1 is unapproved. The preparation/review record below is historical.
 
 Review scope: `git diff 3ac1176..HEAD` after this macro task is committed.
 This package adds precise I2C diagnostics and the user's ADR 010 response
