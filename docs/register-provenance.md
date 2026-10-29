@@ -356,6 +356,33 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 |------|------|--------|--------|
 | `src/memory/VramArena.h:22` | `static constexpr unsigned capacity=16;` | no source: software ledger capacity. | SOURCE_ONLY |
 
+## src/memstage/Faults.cpp
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/memstage/Faults.cpp:33` | `if(!read(base+i*0x800+word*4,value))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:43` | `if(!read(0x022700+i*4,word))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:47` | `current.instance=(word&0x3c000000)>>26;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:48` | `current.address=word&0x00fff000;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:49` | `if(word&4){current.fault=(word&0x000003f8)>>3;current.hasFault=true;}` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:52` | `if(word&0x20){current.engine=(word&0x3c000000)>>26;current.hasEngine=true;}` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:53` | `if(word&0x10){current.runlist=(word&0x01e00000)>>21;current.hasRunlist=true;}` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:55` | `case 3:current.type=(word&0x7ffffffc)>>2;hasType=true;break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:57` | `continuation=(word&0x80000000)!=0;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:75` | `if(!read(0x000100,mc))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:81` | `if(!read(0x002100,fifo) \|\| !read(0x00259c,mask))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:85` | `if(!read(0x002800+unit*16+word*4,value))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:89` | `if(!read(0x120058,priv0) \|\| !read(0x12005c,priv1)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:90` | `\|\| !read(0x120070,hubs) \|\| !read(0x120074,rops) \|\| !read(0x120078,gpcs))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:93` | `if(!details(priv0,0x122120,hubs,8) \|\| !details(priv0,0x124120,rops,16)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Faults.cpp:94` | `\|\| !details(priv1,0x128120,gpcs,0))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+
+## src/memstage/Port.h
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/memstage/Port.h:22` | `static constexpr unsigned capacity=4096;` | no source: resident diagnostic capacity. | SOURCE_ONLY |
+
 ## src/mmu/PageTable.cpp
 
 | Line | Code | Source | Status |
@@ -508,6 +535,23 @@ The following constant lines have no source citation:
 - src/fifo/PushBuffer.cpp:39 (no source: 0x1fff is max 13-bit value for the count field;    nvc0_winsys.h uses (size << 16) with 13-bit field)
 - src/fifo/PushBuffer.cpp:269 (no source: 0xff is just 8-bit mask for address upper bits)
 - src/memory/VramArena.h:22 (no source: software ledger capacity.)
+- src/memstage/Faults.cpp:33 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:43 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:47 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:48 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:49 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:52 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:53 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:55 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:57 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:75 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:81 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:85 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:89 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:90 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:93 (no source: ambiguous citation)
+- src/memstage/Faults.cpp:94 (no source: ambiguous citation)
+- src/memstage/Port.h:22 (no source: resident diagnostic capacity.)
 - src/os/HaikuMemory.h:39 (no source: software ownership-record capacity, not a GPU limit.)
 - src/runtime/Bootstrap.cpp:45 (no source: ambiguous citation)
 - src/runtime/Bootstrap.cpp:47 (no source: ambiguous citation)

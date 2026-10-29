@@ -396,3 +396,10 @@ The new combined stage is not a modification of run7's A7 source.
 Reconsulted Nouveau subdev/fb/ramgf108.c:30-44 for per-FBP amount grouping
 and its one-LTC-per-FBP result, and ramgf100.c for the normal-heap test and
 head/tail reservations. The ledger and independent interval oracle are original.
+
+## S1MEMFAULTS source study (2026-10-29)
+
+Reconsulted Nouveau engine/fifo/gf100.c:699-729, gk104.c:634-703;
+subdev/privring/gk104.c:28-94; fb/gf100.c:37; and top/gk104.c:37-106.
+Raw-read formats and bounded topology semantics only; no source bodies copied.
+No interrupt acknowledgement, fault clear, PBDMA probe or scheduler write added.

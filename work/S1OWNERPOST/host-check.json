@@ -33,7 +33,7 @@
     "src/os/OwnerClient.h": "6ceaf1c91038bdc759b171eecd20efabc89bc56e4b0921ea55ba6467798fa923",
     "src/os/OwnerPostSimulation.cpp": "97c68da9bc1e784c12d7801df4e7a34aa9f70d2d5bb130bbb081c977f75c402f",
     "src/runtime/BootState.h": "9e2614ef3df7d74f357350e9bb6d644f6a5bf1a5cca22de60b31a8262d94b8c4",
-    "tests/Makefile": "50c156e0bd7acd0a47796f5ffd6bf9028beb692474ba54a2fea905f960ded3f0",
+    "tests/Makefile": "40921580f94f5ec277b488a933c90cb998ccadcbc79ffb50f19abefdcd864b23",
     "tests/board_fake.h": "177de1bd09395158c46a9513a17d465fdeb78e5e2bff8a49ea23b057c12d5d25",
     "tests/i2c_wire.h": "b67838aa94c6881c162eb2c78452b084e8afcbf8a882381fe1c540995e7917f3",
     "tests/native_owner_post_gate.cpp": "747d1a40c53a39a873368cadfae28d428fc5ad13baf697c802e6ae0ac366fe82",

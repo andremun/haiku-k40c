@@ -1,0 +1,81 @@
+{
+  "catalog": [
+    {
+      "access": "read-only; no read-to-clear behavior in reference",
+      "expression": "0x000100",
+      "phase": "reset and post-A7",
+      "rule": "raw MC aggregate; all nonzero values stop",
+      "source": "fb/gf100.c:37"
+    },
+    {
+      "access": "read-only; no read-to-clear behavior in reference",
+      "expression": "0x002100",
+      "phase": "post-A7",
+      "rule": "raw FIFO aggregate; read without interrupt-enable mask; nonzero stops",
+      "source": "fifo/gk104.c:658"
+    },
+    {
+      "access": "read-only; no read-to-clear behavior in reference",
+      "expression": "0x00259c",
+      "phase": "post-A7",
+      "rule": "pending MMU units; nonzero stops; W1C acknowledgement omitted",
+      "source": "fifo/gf100.c:723-729"
+    },
+    {
+      "access": "read-only; no read-to-clear behavior in reference",
+      "expression": "0x002800 + unit*16 + word*4",
+      "phase": "post-A7, pending unit only",
+      "rule": "unit 0..31, word 0..3; raw instance/address/type; no writes",
+      "source": "fifo/gf100.c:699-702"
+    },
+    {
+      "access": "read-only; no read-to-clear behavior in reference",
+      "expression": "0x120058,0x12005c",
+      "phase": "post-A7",
+      "rule": "raw privring pending; nonzero stops; 0x12004c acknowledgement omitted",
+      "source": "privring/gk104.c:62-63"
+    },
+    {
+      "access": "read-only; no read-to-clear behavior in reference",
+      "expression": "0x120070,0x120074,0x120078",
+      "phase": "post-A7",
+      "rule": "hub/ROP/GPC detail bounds; reject >8/16/32",
+      "source": "privring/gk104.c:64-66"
+    },
+    {
+      "access": "read-only; no read-to-clear behavior in reference",
+      "expression": "0x122120/0x124120/0x128120 + i*0x800 + word*4",
+      "phase": "post-A7, pending unit only",
+      "rule": "three raw words per bounded pending unit; no clears",
+      "source": "privring/gk104.c:28-55"
+    },
+    {
+      "access": "read-only; no read-to-clear behavior in reference",
+      "expression": "0x022700 + i*4",
+      "phase": "once after A7",
+      "rule": "64 raw topology words; bounded descriptor grouping; no runlist-zero assumption",
+      "source": "top/gk104.c:37-75"
+    }
+  ],
+  "coverage": "MC/FIFO/MMU/privring and bounded TOP; not whole-chip fault coverage; no PBDMA count probe",
+  "host_tests": "memory faults: 25 bounded baseline/routing/clock cases pass; HOST_ONLY",
+  "reset_profile": "MC only; raw read has no clear in reference; applicability before POST is INFERRED",
+  "scope": "KNOWN/SOURCE_ONLY read semantics; HOST_ONLY tests; no observed card values",
+  "source_sha256": {
+    "reference/nouveau/nvkm/engine/fifo/gf100.c": "049a0ff8c473d28c40b97f6482c47f974338f3df2660e8bb2dd70bfb29e49371",
+    "reference/nouveau/nvkm/engine/fifo/gk104.c": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+    "reference/nouveau/nvkm/subdev/fb/gf100.c": "b0d9f8d6fa7f6b7b0c86e7c1773c8c4b77fecc4d0c23a68463be488c50dc95cf",
+    "reference/nouveau/nvkm/subdev/privring/gk104.c": "31a036910540e89008201ac25ae18895b406236f5e704aba5ddc138482aa8735",
+    "reference/nouveau/nvkm/subdev/top/gk104.c": "834dcf42fee7cb42442d5a60315f4bf8ab401add3ea2e0845af5b34566843b99",
+    "src/memstage/Faults.cpp": "285307a9b56568b1b42c486348aad3edecd4256fcd81f464501f4e8f1095574e",
+    "src/memstage/Faults.h": "b77aec14d12007e47b6dbd3e82428b778b0767abbf3cfb3263498778b3490958",
+    "src/memstage/Port.h": "d84e288352fa66346bb7ed7b4c889b041bce51d8eea11f7eb9b89d4d4f2bd94b",
+    "tests/test_mem_faults.cpp": "a1874fc39d8fbe463017e3c9acb618b1b6e765a925b6c57d639e40ddcf406345",
+    "tools/memstage/fault_report.py": "0eea5e6ae4fdeac8dab1af3d3f60dca0a0895fb31d70de690364c6c965906ed5"
+  },
+  "storage": {
+    "diagnostic_budget_us": 2000000,
+    "events": 4096,
+    "routing": 64
+  }
+}
