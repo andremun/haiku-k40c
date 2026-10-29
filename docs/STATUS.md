@@ -1,17 +1,13 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1BATCH1PLAN (A7 result plus first-batch design review).
-Task state: DONE (review plan prepared; acceptance pending). No batch implementation
-or hardware run in this task. See work/S1BATCH1PLAN/RESULT.md.
-A7 POST/readiness passes on this card under Haiku (dfb7cd8). Its approval is
-consumed. S1 remains incomplete; D1/new combined batch is not authorized.
-Review entry: docs/S1-BATCH1-REVIEW.md. Six bounded host implementation tasks
-propose native memory/translation, then one fully reviewed immutable experiment.
-General host DMA visibility stays unverified; D1 alone cannot close Q7. Flush
-readback semantics are open (Q11). No scheduler/channel/NOP in the first batch.
-Last physical result: run7, 88,805 us POST, 21,694,572 us drain; normalized Linux
-path matches, readiness passes, R5 unchanged, mastering off, no QEMU left.
+Current task: S1MEMCONTRACT (first task of accepted memory/BAR1 batch).
+Task state: CONTRACT COMPLETE (host/source scope). Claude accepted A7 dfb7cd8 and the batch plan with
+changes: BAR1/gk104 only, explicit guest BAR1 mapping, remove D1/G2, flush
+readback observational, freeze A7 run7 source. Q7/Q11 stay open.
+Implement six tasks sequentially, one commit each. No intermediate card run.
+Final package needs Claude review and explicit one-run user approval.
+Last physical result remains A7 pass; S1 incomplete. No current card approval.
 Last updated: 2026-10-29
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -113,6 +109,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A7RUN7 | PASS (POST/readiness on this card under Haiku) | 2026-10-29 | One directly approved unchanged buffered package launch. 89 ms POST, 21.7 s drain, normalized Linux instruction path matches. Both sensor NACK outcomes expected. R5 unchanged, mastering off. S1 incomplete; D1 unapproved. |
 
 | S1BATCH1PLAN | DONE (A7 result + first-batch design review prepared) | 2026-10-29 | Six bounded implementation tasks, one proposed memory/translation experiment, explicit evidence/authority/phase gates. No runtime change or run approval. See docs/S1-BATCH1-REVIEW.md. |
+
+| S1MEMCONTRACT | DONE (source contract; runtime pending) | 2026-10-29 | BAR1/gk104 only, strict UC request profile, scoped witness, separate authority and run7 A7 source freeze. No card/VM. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

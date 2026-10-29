@@ -29,10 +29,10 @@ Linux with Nouveau and Mesa (task C5, in a Linux guest with the card
 passed through: `docs/PASSTHROUGH.md`). If it does not run there, there
 is no reference for S3 and the project stops at S2.
 
-## Current S1 memory/translation batch (proposed)
+## Current S1 memory/translation batch (accepted with changes)
 
-A7 now passes under Haiku; see STATUS. The proposed first-batch design and A7
-result are reviewed together in [S1-BATCH1-REVIEW.md](S1-BATCH1-REVIEW.md).
+A7 now passes under Haiku; see STATUS. Claude accepted the first-batch design with BAR1-only changes and the A7
+result in [S1-BATCH1-REVIEW.md](S1-BATCH1-REVIEW.md).
 This index grants no implementation/run acceptance or hardware permission.
 
 | Task | Purpose | Text |

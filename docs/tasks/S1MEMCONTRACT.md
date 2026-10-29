@@ -28,8 +28,9 @@ Do not read unrelated tasks, tools/check_repo.py or tests/accept/.
 Separate host arm-only references from physical VRAM, BAR virtual and future
 channel GPU-VA objects. Decide the smallest scoped VRAM bootstrap/publication
 profile supported by source. Do not set a general host-DMA provider verified.
-D1 completion/readback alone cannot close Q7. Resolve what a flush-target readback
-can mean before requiring an address echo. Zero after POST does not prove clearing.
+Claude's accepted changes remove the separate D1/G2 step. G1 only records
+post-POST flush readback; Q11 remains open, with no echo requirement. BAR1 uses
+gk104 VMM/0x1704; BAR2 is excluded. Freeze run7 A7 sources byte-for-byte.
 Specify relevant faults, phase deadlines/poll counts, CPU ordering, retained
 references and reviewed guest-end termination. Resolve the selected FB/MMU debug
 allocations and BAR bootstrap dependencies without importing another chip's path.

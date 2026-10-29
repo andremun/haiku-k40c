@@ -1,6 +1,7 @@
 # Review: A7 result and first memory/translation batch plan
 
-2026-10-29. Status: **prepared for review**. No batch implementation or run is
+2026-10-29. Status: **ACCEPT with changes (Claude Code, 2026-10-29)**.
+See work/S1MEMCONTRACT/CLAUDE-REVIEW.md for the supplied review. No batch implementation or run is
 claimed. The user requested this plan before implementation. Current state is
 in [STATUS](STATUS.md). This file does not extend any hardware authorization.
 
@@ -49,8 +50,8 @@ entry is the frozen preparation snapshot, not current run status.
 ## First-batch target
 
 Build one native memory/translation experiment after fresh A7 startup. On a
-successful run, it should establish owned physical-VRAM access and the selected
-BAR-context mapping/update path, with complete scoped fault and lifetime evidence.
+successful run, it should establish owned physical-VRAM access and the selected BAR1/gk104
+VMM mapping/update path, with complete scoped fault and lifetime evidence.
 It will not create a channel, start a runlist, submit a NOP or claim S1.
 
 Proposed stage name: `S1_MEMORY_BOOTSTRAP`. This is a design label, not an existing
@@ -58,9 +59,9 @@ CLI command or approved stage. Its signed scope must include inherited A7 writes
 and every new substep. It must not reuse a consumed package or broaden the A7
 permit into arbitrary memory/scheduler access.
 
-General host-RAM DMA visibility is not the first batch's promised result. D1
-here retains its limited meaning: observe the selected owned flush-target/BAR
-protocol after POST. No defined host-page payload response is currently known.
+General host-RAM DMA visibility is not the first batch's promised result.
+The separate D1 gate is removed by review. G1 records the post-POST flush-target
+readback as an observation only. Q11 stays open; no address-echo criterion is added.
 The contract task must establish a supported, scoped VRAM publication/bootstrap
 protocol or stop that branch. A BAR flush, CPU echo or IOMMU coverage alone must
 not set general `published`, `visible` or `mappingVerified` claims.
@@ -125,14 +126,22 @@ No deadline increase or auto-retry is part of this plan.
 | Gate | Required observation before proceeding |
 |---|---|
 | G0: preflight/reset baseline | Exact artifacts/configuration, only 04:00.0, exclusive VFIO group, live observer/R5, source-defined safe pre-write fault snapshot |
-| G1: fresh A7 | Same-run witness and owned flush page; complete POST/readiness under existing policies; post-POST scoped fault baseline |
-| G2: limited D1 observation | Retained target, recorded readback semantics, reviewed bounded BAR protocol and scoped fault comparison; no payload-visibility promotion |
+| G1: fresh A7 | Same-run witness and owned flush page; complete POST/readiness with run7 phase sources unchanged; record flush readback only as an observation; post-POST scoped fault baseline |
 | G3: physical-VRAM test | Source-backed ownership ledger and aperture profile; zero/upload/readback, two-pattern and alias checks over the declared extents |
-| G4: MMU/BAR bootstrap | Selected geometry and owned initialized tables/instances; slow-window bootstrap; source-derived context enable and targeted invalidation |
+| G4: MMU/BAR bootstrap | Selected geometry and owned initialized tables/instances; slow-window bootstrap; BAR1/gk104 VMM context enable and targeted invalidation; BAR2 excluded |
 | G5: scoped mapping witness | Known patterns in distinct owned physical pages, checked through the selected BAR mapping; reviewed remap/invalidation control if supported |
 | G6: closure | Final faults and source-backed reference-removal observations; conservative retention through the reviewed guest/VFIO termination path |
 
-A successful BAR test is limited to that aperture, context, extents, generation
+Guest BAR1 PCI MMIO mapping is an explicit stage effect: discover its address
+and aperture size, request the supported uncached mapping, restrict CPU access
+to the declared test prefix and retain the mapping for the stage lifetime.
+BAR1 uses the selected gk104 VMM format and context register 0x1704
+(reference/nouveau/nvkm/subdev/bar/gf100.c:52-58). BAR2 mapping/context programming
+is excluded unless a later S1 dependency is established and reviewed separately.
+All A7 phase sources remain byte-identical to run7. Any change to them gets
+its own review; new stage code cannot modify A7's allowlist, latch or grant logic.
+
+A successful BAR1 test is limited to that aperture, context, extents, generation
 and method. Do not probe an unmapped address or free/unmap live backing as a
 negative control. Use safe positive controls on distinct owned pages. The
 specific remap sequence must be sourced before becoming runnable.

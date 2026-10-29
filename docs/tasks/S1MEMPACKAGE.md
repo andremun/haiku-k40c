@@ -19,7 +19,10 @@ Do not infer approval from acceptance of this plan or from A7's consumed run.
 ## Work and prerequisites
 
 Include fresh A7 in the combined scope: own page and same-run signed mapping
-witness, both programming events, readback and retained lifetime. Never reuse
+witness, both programming events, observational readback and retained lifetime.
+Freeze run7 A7 phase source bytes; changes need a separate review. Remove D1/G2.
+Include the discovered guest BAR1 MMIO mapping and BAR1/gk104 context scope;
+BAR2 is excluded. Never reuse
 an ended run's witness, driver state or consumed package/key permission.
 Do not widen the old A7 role or let the client supply callbacks, addresses,
 register ranges or verification flags. Bind all phases and limits into the new

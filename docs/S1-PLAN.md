@@ -5,7 +5,9 @@
 A7 POST/readiness now passes on this card under Haiku (S1A7RUN7). S1 itself is
 incomplete. The proposed first memory/translation batch is in
 [S1-BATCH1-REVIEW.md](S1-BATCH1-REVIEW.md), with six implementation task texts.
-Review that design together with the A7 result before proceeding. The dated
+Claude accepted that design with changes on 2026-10-29: BAR1/gk104 only, no
+separate D1/G2, observational flush readback, frozen A7 source. Six host tasks
+are authorized; the final package still needs review and one-run user approval. The dated
 reviews/tables below are historical planning context; current results are in
 STATUS. No consumed A7 approval carries into the new batch. D1 alone cannot
 prove host-payload visibility; Q7 remains open.

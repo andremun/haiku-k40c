@@ -378,3 +378,15 @@ Haiku MIT and QEMU/strace GPL sources were used for semantic diagnosis only.
 No implementation bodies were copied. Host benchmark and analysis are original.
 No additional Nouveau source was used beyond the already recorded interpreter
 and I2C references.
+
+## S1MEMCONTRACT source study (2026-10-29)
+
+Reconsulted Nouveau engine/device/base.c; core/memory.c;
+subdev/instmem/base.c,nv50.c; subdev/fb/base.c,gf100.c,gk110.c,ram.c,ramgf100.c;
+subdev/bar/gf100.c,g84.c; subdev/mmu/gf100.c,gk104.c,vmmgf100.c,vmmgk104.c;
+engine/fifo/gf100.c,gk104.c; and subdev/privring/gk104.c.
+Used semantic facts, formats and register references only; no implementation
+body was copied. Haiku KernelExport.h and x86 atomic.h at the project pin,
+plus separately pinned vm.cpp/arch_vm.cpp, define the candidate explicit UC
+mapping and CPU-ordering API. Full running source identity remains unestablished.
+The new combined stage is not a modification of run7's A7 source.

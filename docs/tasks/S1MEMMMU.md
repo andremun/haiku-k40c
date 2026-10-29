@@ -1,4 +1,4 @@
-# S1MEMMMU: native table/BAR bootstrap and scoped translation test
+# S1MEMMMU: native gk104 table/BAR1 bootstrap and scoped translation test
 
 ## Why and inputs
 
@@ -24,7 +24,10 @@ and preserve invalid large-entry semantics. Verify mode against hardware in the
 future stage; a model setting does not program the device.
 
 Build owned instances/tables through the physical bootstrap path. Fast mapping
-must not be required to build itself. Separate BAR contexts; discover aperture
+must not be required to build itself. Use BAR1 only with the gk104 VMM format reusable by the future channel VMM.
+Context register 0x1704 is selected by bar/gf100.c:52-58. Explicitly include the
+bounded guest BAR1 MMIO mapping in the stage effects. Exclude BAR2 unless S1
+is shown to require it and a separate change is reviewed. Discover aperture
 bounds. Order bootstrap/enable/flush/waits from selected source. Serialize the
 whole PDB-specific invalidation; completion is not global quiescence or data proof.
 

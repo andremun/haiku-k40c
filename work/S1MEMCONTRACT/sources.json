@@ -1,0 +1,94 @@
+{
+  "code_source_sha256": "a3c5e8874d0bbeeee347f0f047a728f96994f3994f9bb4f48f2e3a66ad2b69f2",
+  "contract_sha256": "277a1c14ea61a2d34f2a46f5c2fa1260cc3fc8e0d13c289d5443c0bb26809262",
+  "haiku_revision": "49a0af9585d80e42240af63ab66e31e9873f59b8",
+  "profile": "explicit strong UC request; mapping error stops; effective host-RAM DMA coherency unclaimed",
+  "selection": {
+    "bar": "BAR1",
+    "bar2": false,
+    "context_source": "nvkm/subdev/bar/gf100.c:52-58",
+    "flush_readback": "observation only; Q11 open",
+    "separate_d1_gate": false,
+    "vmm": "gk104"
+  },
+  "sources": {
+    "build/memstage/sources/haiku/src/system/kernel/arch/x86/arch_vm.cpp": {
+      "kind": "KNOWN/SOURCE_ONLY; full running-kernel source identity unestablished",
+      "sha256": "a7bf00396963338329b32096ebccdf34bafedde24f80951f14537b423b0bbd8c",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/system/kernel/arch/x86/arch_vm.cpp"
+    },
+    "build/memstage/sources/haiku/src/system/kernel/vm/vm.cpp": {
+      "kind": "KNOWN/SOURCE_ONLY; full running-kernel source identity unestablished",
+      "sha256": "dec556cf6beab908275718dfd386dab9d96ea1f70e3525a721086c2a6b0d5340",
+      "url": "https://raw.githubusercontent.com/haiku/haiku/49a0af9585d80e42240af63ab66e31e9873f59b8/src/system/kernel/vm/vm.cpp"
+    },
+    "reference/nouveau/nvkm/core/memory.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "6b9e64de84c6d91a8eac576679dff989a4745304f61e2ebac43bfdf913cc532e"
+    },
+    "reference/nouveau/nvkm/engine/device/base.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "ac7eb1bbffb41b43b336cc59eaca86b7317632a0b353805b4359af78b70ef7ab"
+    },
+    "reference/nouveau/nvkm/engine/fifo/gf100.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "049a0ff8c473d28c40b97f6482c47f974338f3df2660e8bb2dd70bfb29e49371"
+    },
+    "reference/nouveau/nvkm/engine/fifo/gk104.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae"
+    },
+    "reference/nouveau/nvkm/subdev/bar/g84.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "28fb3702c0ab41c1ab4ee5840f57d3c809b93ae9a779b2a57115164426c0f6ae"
+    },
+    "reference/nouveau/nvkm/subdev/bar/gf100.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "25ec34ce7c71da1ada414114af4f5d9045c5b6b5c2d75917edd86f4566b802c8"
+    },
+    "reference/nouveau/nvkm/subdev/fb/base.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "0c0e5748c7502a266137703ec53a5614ce8897d066fd614416ba7b0cbca83f76"
+    },
+    "reference/nouveau/nvkm/subdev/fb/gf100.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "b0d9f8d6fa7f6b7b0c86e7c1773c8c4b77fecc4d0c23a68463be488c50dc95cf"
+    },
+    "reference/nouveau/nvkm/subdev/fb/gk110.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "b63023562a128a6a2e6c641c1b870b2240fd419c7def1f86214a33883b77b3be"
+    },
+    "reference/nouveau/nvkm/subdev/fb/ram.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "a0d8b25ed1e8ed7b731bfb54d1db9fd4de5506750c1fb2274c951a21a4df3a8d"
+    },
+    "reference/nouveau/nvkm/subdev/fb/ramgf100.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "770a57692580c709223bd235dd07ee13899ff1c6ad29751c52dedef42383a57f"
+    },
+    "reference/nouveau/nvkm/subdev/instmem/base.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "271c451d5900675e99b3c8b0fe52b978d8fdec74225d3ed25f21d7e3f22a2b08"
+    },
+    "reference/nouveau/nvkm/subdev/instmem/nv50.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "0fd5655d95638a3df042c8e42d064e15be8cf44bb5211f4585dd4491f60c1b96"
+    },
+    "reference/nouveau/nvkm/subdev/mmu/gk104.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "0a00f096c8a9f95a6f72a87d72d3868f31b22284823b842e57b83845da88492d"
+    },
+    "reference/nouveau/nvkm/subdev/mmu/vmmgf100.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "8485236819c37bfcbfae9824c4b03b767314b6e07156c3ed2e203f2447ad89ea"
+    },
+    "reference/nouveau/nvkm/subdev/mmu/vmmgk104.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "3f77d94f4f08546da6361e474c94fe13af23d41758ad5a1fd48b0e5a50ccdd97"
+    },
+    "reference/nouveau/nvkm/subdev/privring/gk104.c": {
+      "kind": "KNOWN/SOURCE_ONLY",
+      "sha256": "31a036910540e89008201ac25ae18895b406236f5e704aba5ddc138482aa8735"
+    }
+  }
+}
