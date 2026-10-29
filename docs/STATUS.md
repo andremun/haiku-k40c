@@ -1,17 +1,18 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1A7BUFFER (buffer diagnostics, native measurements, new package).
-Task state: DONE (prepared; Claude review and explicit one-run approval pending).
-Fresh native plain/observed logger tests pass: observed live output median 8.170 s,
-buffer insertion 25.5 us. These are cardless logging mechanics, not GPU timings.
-Exact package rehearsal passes in 78.50 s. Full make check, package/source and
-benchmark/rehearsal checks pass. Read-only live host check passes. No physical run.
-Current fresh package: build/a7/package-buffer, owner 944bdaf4... . See
-docs/A7-REVIEW-PACKAGE.md and docs/A7-BUFFER-REVIEW.md.
-Last physical result remains run6 STOPPED at 0x85d6 (490 active, 38 skipped).
-Package-i2c remains consumed; no physical retry authorized. S1 incomplete;
-D1 unapproved. See docs/A7-BUFFER-REVIEW.md and work/S1A7BUFFER/FINDINGS.md.
+Current task: S1A7RUN7 (one directly user-approved buffered A7 run).
+Task state: PASS (A7 POST/readiness, hardware scope only; result review pending).
+One directly user-approved package-buffer launch completed in 134.02 s. POST
+88,805 us; deferred diagnostics 21,694,572 us. Native 537 active/38 skipped exactly
+match Linux after removing 23 synthetic REPEAT markers. Sensor pairs produce
+four address NACKs each and continue under ADR 010. Timer, 11520 MiB and sampled
+scratch checks pass. Post-POST 0x100c10 readback is zero; re-arm completes.
+R5 unchanged, no allowance; host command 0x0002/master off. No QEMU remains.
+Package-buffer is consumed. Full make check and result report check pass.
+No retry or D1 approval. S1 remains incomplete.
+See results/20261029-a7-069cb71b/README.md and work/S1A7RUN7/report.json.
+Next gate: D1 after POST; Q7 remains open. No payload/coherency claim.
 Last updated: 2026-10-29
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -109,6 +110,8 @@ Older results and notes: `docs/history/` (do not read it for a task).
 | S1A7STARTUP | DONE (host diagnosis; review pending) | 2026-10-29 | Haiku hooks/debug path, ROM waits and inert observer benchmark. Logging overhead likely contributes; poll/time attribution UNKNOWN. No production change or guest. See work/S1A7STARTUP/RESULT.md. |
 
 | S1A7BUFFER | DONE (prepared; review/one-run yes pending) | 2026-10-29 | Native logger measurements and exact package rehearsal pass after approved cardless continuation. Source/host/full checks pass. Fresh package-buffer unconsumed. No physical run. |
+
+| S1A7RUN7 | PASS (POST/readiness on this card under Haiku) | 2026-10-29 | One directly approved unchanged buffered package launch. 89 ms POST, 21.7 s drain, normalized Linux instruction path matches. Both sensor NACK outcomes expected. R5 unchanged, mastering off. S1 incomplete; D1 unapproved. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

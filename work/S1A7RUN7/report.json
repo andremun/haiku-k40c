@@ -1,0 +1,350 @@
+{
+  "approval": "direct user go-ahead for this minor change; no independent Claude ACCEPT claimed",
+  "artifacts": {
+    "client": {
+      "bytes": 7552,
+      "sha256": "d11b0d3773e8f1a206a98b79b85a1c6e7c73948dbe096001d472ef0ee66ee122"
+    },
+    "helper": {
+      "bytes": 3888,
+      "sha256": "58bec7c51730bf95f541c61c8ed9b8379b97f1c2b335702de0f9542698914977"
+    },
+    "identity": {
+      "bytes": 8696,
+      "sha256": "8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f"
+    },
+    "owner": {
+      "bytes": 368672,
+      "sha256": "944bdaf424789914a7b8a8b8fe3af272ea1f4d93d387e931d336aa084ce4c087"
+    }
+  },
+  "captures_sha256": {
+    "cutoff.json": "86a4e6e53d4b70df36d3de1b7cf53ea2f9214a0bda288371ba5406bc9720b9f2",
+    "environment.txt": "6fceaa9d8ef1adb95f3361a95a75113317ec281f58ec8d7214e87b19ff29bb41",
+    "grant.bin": "93c1f1b74f7ba066f702105a2c9db8bcca8cc806bc9a4a7c684ea983763f9aa5",
+    "http.log": "d93d87ee25c13eb1ea8f9b8e09d740012a31f8810f94edc4015c3ae64ae96865",
+    "job-output.txt": "369a3e33d41c123cd46c0a9d5ee506779d523ec6402c4aee545c70cf0d12511b",
+    "job.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "kernel-after.log": "9dc4666025a56bf64316345dae8a163a6b3a34d50c98854642dd977522912b71",
+    "kernel-before.log": "9dc4666025a56bf64316345dae8a163a6b3a34d50c98854642dd977522912b71",
+    "kernel.sha256": "9da8819b72502746d3f1db5eb718c2febc3685799a4a9248d82b362282bb1f7c",
+    "launch.json": "2ed474d12a0313320bbb0aab7c28d7573da6e9740242a223d16c964e6cc448e6",
+    "mtree.txt": "76a9da43a0e11c9ee42b7262e2a782ff3e295a89ac2474358680e20a87979e74",
+    "processes.json": "f39642561e2d0f42412399f87e1f7affcc07737a111859c993f11ae7ffc33138",
+    "qemu.log": "223351ae6fe9754d6e5f96d5a217707bcf72595b1d99edd286bc395feb90cc02",
+    "qtree.txt": "ae69f290718baa0bc56e06c82b451fe31784aa27423455ab68734b47ede79a87",
+    "ramblock.txt": "add85d6fd3b0c50623398f7bd3987c03fae0c29a0be697e23deb46000c0635bc",
+    "request.bin": "3d7d6177625650fb088ce876ef6cd5ee3fac342c4ca21a418eca8999db335c21",
+    "result.json": "d3729b48b5f94789b840b09e1ebd46162e52b2d22e21ff0df849625b6516ba75",
+    "serial.log": "021ea39eb22a5309834539910670a099d8c19491a07c268fd9d6374035fe3256",
+    "task-proofs.jsonl": "1c14056367e21481aacdd299e4d7db80c51de5cbd03531e9a1a08e1bf402af4a",
+    "teardown.json": "29150542438140615797f14fb58c0d048f48f9e65f09bebd36fd66ae4c8fea21",
+    "trace.log": "73586ae14251aa0e0b71c9e71ae0709f0d6ce3b3e34eea3fcc248e2ca0631f8f"
+  },
+  "command": "K40_VBIOS=\"$HOME/haiku-cross/vbios/k40c-0000_04_00_0-vbios-80.80.65.00.01.rom\" python3 tools/a7/run.py --run-approved-A7-once",
+  "flush": {
+    "after_encoded_write": "0x16d20",
+    "after_post_readback": "0x0",
+    "after_rearm_readback": "NOT_RECORDED",
+    "before_encoded_write": "0x16d20",
+    "candidate_gpa": "0x16d2000",
+    "candidate_iova": "0x16d2000",
+    "mapping_scope": "same-run structural API coverage; IOVA=GPA INFERRED; no payload visibility or coherency claim",
+    "programming_callback_success": "INFERRED from subsequent guarded execution and PASS; no initial/final register readback",
+    "reason_for_zero_readback": "UNKNOWN"
+  },
+  "folder": "results/20261029-a7-069cb71b",
+  "i2c": [
+    {
+      "address7": "0x20",
+      "attempt": 1,
+      "bit": 8,
+      "cleanup": 0,
+      "cleanup_us": 35,
+      "disposition": 1,
+      "guard_operations": 432,
+      "intended_register": "0xdd",
+      "intended_value": "0x3",
+      "last_levels": "0x17",
+      "pc": "0x862f",
+      "phase": 4,
+      "primary": 0,
+      "transfer_us": 1034
+    },
+    {
+      "address7": "0x4c",
+      "attempt": 1,
+      "bit": 8,
+      "cleanup": 0,
+      "cleanup_us": 20,
+      "disposition": 2,
+      "guard_operations": 160,
+      "intended_register": "0x19",
+      "intended_value": "0x73",
+      "last_levels": "0x37",
+      "pc": "0xab8d",
+      "phase": 2,
+      "primary": 5,
+      "transfer_us": 209
+    },
+    {
+      "address7": "0x4c",
+      "attempt": 2,
+      "bit": 8,
+      "cleanup": 0,
+      "cleanup_us": 20,
+      "disposition": 2,
+      "guard_operations": 160,
+      "intended_register": "0x19",
+      "intended_value": "0x73",
+      "last_levels": "0x37",
+      "pc": "0xab8d",
+      "phase": 2,
+      "primary": 5,
+      "transfer_us": 200
+    },
+    {
+      "address7": "0x4c",
+      "attempt": 3,
+      "bit": 8,
+      "cleanup": 0,
+      "cleanup_us": 20,
+      "disposition": 2,
+      "guard_operations": 160,
+      "intended_register": "0x19",
+      "intended_value": "0x73",
+      "last_levels": "0x37",
+      "pc": "0xab8d",
+      "phase": 2,
+      "primary": 5,
+      "transfer_us": 200
+    },
+    {
+      "address7": "0x4c",
+      "attempt": 4,
+      "bit": 8,
+      "cleanup": 0,
+      "cleanup_us": 21,
+      "disposition": 3,
+      "guard_operations": 160,
+      "intended_register": "0x19",
+      "intended_value": "0x73",
+      "last_levels": "0x37",
+      "pc": "0xab8d",
+      "phase": 2,
+      "primary": 5,
+      "transfer_us": 214
+    },
+    {
+      "address7": "0x4c",
+      "attempt": 1,
+      "bit": 8,
+      "cleanup": 0,
+      "cleanup_us": 20,
+      "disposition": 2,
+      "guard_operations": 160,
+      "intended_register": "0xd",
+      "intended_value": "0x73",
+      "last_levels": "0x37",
+      "pc": "0xab8d",
+      "phase": 2,
+      "primary": 5,
+      "transfer_us": 207
+    },
+    {
+      "address7": "0x4c",
+      "attempt": 2,
+      "bit": 8,
+      "cleanup": 0,
+      "cleanup_us": 21,
+      "disposition": 2,
+      "guard_operations": 160,
+      "intended_register": "0xd",
+      "intended_value": "0x73",
+      "last_levels": "0x37",
+      "pc": "0xab8d",
+      "phase": 2,
+      "primary": 5,
+      "transfer_us": 227
+    },
+    {
+      "address7": "0x4c",
+      "attempt": 3,
+      "bit": 8,
+      "cleanup": 0,
+      "cleanup_us": 20,
+      "disposition": 2,
+      "guard_operations": 160,
+      "intended_register": "0xd",
+      "intended_value": "0x73",
+      "last_levels": "0x37",
+      "pc": "0xab8d",
+      "phase": 2,
+      "primary": 5,
+      "transfer_us": 200
+    },
+    {
+      "address7": "0x4c",
+      "attempt": 4,
+      "bit": 8,
+      "cleanup": 0,
+      "cleanup_us": 20,
+      "disposition": 3,
+      "guard_operations": 160,
+      "intended_register": "0xd",
+      "intended_value": "0x73",
+      "last_levels": "0x37",
+      "pc": "0xab8d",
+      "phase": 2,
+      "primary": 5,
+      "transfer_us": 218
+    }
+  ],
+  "instruction_selection": {
+    "exact_normalized_pc_active_sequence_match": true,
+    "limitation": "instruction selection, not MMIO value or helper timing equivalence",
+    "linux_raw_active": 560,
+    "linux_raw_skipped": 38,
+    "native_active": 537,
+    "native_opcodes_match_rom": true,
+    "native_skipped": 38,
+    "normalization_source": "analysis/devinit_inventory.md:60; Nouveau bios/init.c:658-677,724-733",
+    "normalized_count": 575,
+    "synthetic_offset_zero_repeat_markers": 23
+  },
+  "kernel": {
+    "after_bytes": 15998,
+    "allowed_lines": [],
+    "before_bytes": 15998,
+    "delta_bytes": 0,
+    "scope": "R5 selected classes only; any new selected-class line stops stage, except one device-enable line at QEMU start",
+    "unchanged": true
+  },
+  "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+  "linux_capture_sha256": "e15e44ac82d6172587fea176327e074e192e5c0138519e9a9716f312c7a9672b",
+  "polls": [
+    {
+      "first_us": 22244,
+      "last_us": 42416,
+      "last_value": "0x0",
+      "pc": "0x8ec8",
+      "samples": 2
+    },
+    {
+      "first_us": 42436,
+      "last_us": 42436,
+      "last_value": "0x1010000",
+      "pc": "0x8b2f",
+      "samples": 1
+    },
+    {
+      "first_us": 42441,
+      "last_us": 42441,
+      "last_value": "0x1010000",
+      "pc": "0x8b33",
+      "samples": 1
+    },
+    {
+      "first_us": 42550,
+      "last_us": 42550,
+      "last_value": "0x1030001",
+      "pc": "0x8c47",
+      "samples": 1
+    },
+    {
+      "first_us": 42555,
+      "last_us": 42555,
+      "last_value": "0x1030001",
+      "pc": "0x8c4b",
+      "samples": 1
+    },
+    {
+      "first_us": 42889,
+      "last_us": 42889,
+      "last_value": "0x80000000",
+      "pc": "0x8588",
+      "samples": 1
+    },
+    {
+      "first_us": 42898,
+      "last_us": 63046,
+      "last_value": "0x80000220",
+      "pc": "0x85a2",
+      "samples": 2
+    },
+    {
+      "first_us": 63456,
+      "last_us": 63456,
+      "last_value": "0x20010000",
+      "pc": "0x9b66",
+      "samples": 1
+    },
+    {
+      "first_us": 63479,
+      "last_us": 83569,
+      "last_value": "0x20030001",
+      "pc": "0x9b9e",
+      "samples": 2
+    }
+  ],
+  "readiness": {
+    "pending_evidence": "INFERRED from Owner.cpp guarded PASS; not separately logged",
+    "pending_register_value": 0,
+    "reserved_bytes": 4096,
+    "retained_state": 2,
+    "retained_token": 1,
+    "scratch_base": "0x40000",
+    "scratch_scope": "three sampled dwords, pattern/complement passes and BAR flush; not entire-page coverage or DMA",
+    "timer_after": "0x551fb20",
+    "timer_before": "0x5418360",
+    "vram_bytes": 12079595520,
+    "vram_mib": 11520
+  },
+  "result": {
+    "S1_complete": false,
+    "allowed_kernel_lines": [],
+    "dma_publication": false,
+    "elapsed_seconds": 134.02,
+    "error": "",
+    "kernel_scope": "R5 selected classes only; any new selected-class line stops stage, except one device-enable line at QEMU start",
+    "payload_visibility": false,
+    "stage": "A7_ARM_ONLY_POST_WRITE",
+    "status": "pass"
+  },
+  "rom_sha256": "aecb0b5fa466f64e2651a551a3cad57cccbdedd929e3996f542201af06ff1f54",
+  "scope": "KNOWN/HARDWARE_VERIFIED reported POST/readiness on 0000:04:00.0 under Haiku only; not S1 or DMA payload visibility",
+  "source_commit": "b0c24e44c06291d15da71de3940d0188ff890e7c",
+  "sources_sha256": {
+    "src/a7/NativePlatform.cpp": "cb627294aebaa213a2b47c3df40c048642761a82e61371621f2f2ab7c3b5800b",
+    "src/a7/Owner.cpp": "1648945688932072158fbd5f6405af3e2ced00c1e48b514e5464714680bb25c3",
+    "src/a7/PostDiagnostics.h": "59a6095bf607ccd5828f416d9b16e01dd75a155457d7e60674f77d4b04ee469c",
+    "src/devinit/BoundPost.cpp": "32ec1650b316bd941b132ff15de8a2eb9e70c925cdef09b3863c19fcc468e5af",
+    "src/devinit/Interpreter.cpp": "9f380732dc6b195d7ad84d0a280681fc896955b3a4b46d6385704b7e6d7a32d8",
+    "src/runtime/Bootstrap.cpp": "b66263b054c58ae8e7ce19c32949e2502c96105c5c01e10a958e92e5af5f3c89",
+    "src/runtime/PreStart.cpp": "d83dc89ef6000404080fbf1fd701c8e80878584ea7cf90a20d5e8ddd2b4ad4de",
+    "tools/a7/result_report.py": "5b48def3fa3edc1f0190fc5f5642e96de78659289b8a28fc163acfb3f28da819",
+    "tools/devinit_inventory.py": "1b482ccccea88a25213bdfb59db557b61186bfeda1a89fd685edf1180a9e8628"
+  },
+  "suite_sha256": "a4b47b8a3e8f56d533170b0bccad3e3f037ed03e627b1d16e017248f0b244bdd",
+  "teardown": {
+    "bus_master_enable": false,
+    "claim": "owned QEMU/tracer exited; read-only host PCI command bit 2 clear; no manual reset",
+    "host_pci_command_after": 2
+  },
+  "telemetry": {
+    "actual_delay_us": 84847,
+    "delay_calls": 453,
+    "diagnostic_drain_us": 21694572,
+    "identity": "0xf1240a1",
+    "mmio_calls": 1654,
+    "mmio_max_us": 104,
+    "mmio_total_us": 2256,
+    "pci_command": "0x7",
+    "post_error": 0,
+    "post_final_pc": "0xac0c",
+    "post_wall_us": 88805,
+    "requested_delay_us": 83798,
+    "trace_last_us": 89952,
+    "trace_records": 635
+  }
+}
