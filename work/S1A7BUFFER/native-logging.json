@@ -1,0 +1,130 @@
+{
+  "capture_sha256": "d877a05608f4bbb02e2715c84d81ac4e4bde3588c8fabc5ae1c9ae6906fef759",
+  "input_sha256": "5d4038667eccba1ac8c3b21fa4e2c42354e76d52399b3ce3aec5fa6f7b22b019",
+  "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+  "observer_sha256": "75b7aeed34785c8ac729d68cbca83d256434acb036e336d0adf5a4bdc30bc7a2",
+  "probe_sha256": "5c1fd5c4fadfff2967a179cde06c2735e6ba8652ea556b44b7fc6369e06a8230",
+  "runs": [
+    {
+      "files_sha256": {
+        "environment.txt": "6fceaa9d8ef1adb95f3361a95a75113317ec281f58ec8d7214e87b19ff29bb41",
+        "job.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "kernel_x86_64": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+        "launch.json": "9b0bbcbb36bcb351d5c37431dbc18e78beedf3f000eeaf4fadc830b93dac864d",
+        "probe": "5c1fd5c4fadfff2967a179cde06c2735e6ba8652ea556b44b7fc6369e06a8230",
+        "result.json": "3b5f4784b00ea6975ec5061dec6fd79875a0726b931a804adecc51fcaa0d5283",
+        "serial.log": "5ff92f97860808aa81363723dee0549e25ea6b4e20bc42ed8abc57d2bfd5c04b"
+      },
+      "folder": "results/20261029-174802-a7-logging-plain",
+      "logging_observer": false,
+      "medians_us": {
+        "buffered_us": 20.0,
+        "drain_us": 1684176.0,
+        "live_us": 900671.0
+      },
+      "samples": [
+        {
+          "buffered_us": 24,
+          "drain_us": 1643663,
+          "index": 0,
+          "live_us": 904864
+        },
+        {
+          "buffered_us": 16,
+          "drain_us": 1686967,
+          "index": 1,
+          "live_us": 883641
+        },
+        {
+          "buffered_us": 16,
+          "drain_us": 1626291,
+          "index": 2,
+          "live_us": 889919
+        },
+        {
+          "buffered_us": 37,
+          "drain_us": 1701311,
+          "index": 0,
+          "live_us": 897453
+        },
+        {
+          "buffered_us": 26,
+          "drain_us": 1681385,
+          "index": 1,
+          "live_us": 903889
+        },
+        {
+          "buffered_us": 16,
+          "drain_us": 1714178,
+          "index": 2,
+          "live_us": 976371
+        }
+      ]
+    },
+    {
+      "files_sha256": {
+        "environment.txt": "6fceaa9d8ef1adb95f3361a95a75113317ec281f58ec8d7214e87b19ff29bb41",
+        "job.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "kernel_x86_64": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+        "launch.json": "d3d89dc481731c11b0267544cc32b7cec5129ddb40196fbfc0a34d0715ea55e7",
+        "observer.trace": "510da8a0524aa851e84f32bb04951433ef71031b7141992cd466be20ec843de6",
+        "probe": "5c1fd5c4fadfff2967a179cde06c2735e6ba8652ea556b44b7fc6369e06a8230",
+        "result.json": "4f9640df07d583afb0523b6e11102b0170d473bec776426ec4d26038fe17e44f",
+        "serial.log": "caa35c23c2124376a0343a46879f10e308dcefbee723d97566b3e674ec73e97b"
+      },
+      "folder": "results/20261029-175152-a7-logging-observed",
+      "logging_observer": true,
+      "medians_us": {
+        "buffered_us": 25.5,
+        "drain_us": 14996946.0,
+        "live_us": 8169705.0
+      },
+      "samples": [
+        {
+          "buffered_us": 63,
+          "drain_us": 15054421,
+          "index": 0,
+          "live_us": 8119453
+        },
+        {
+          "buffered_us": 17,
+          "drain_us": 14812778,
+          "index": 1,
+          "live_us": 8253480
+        },
+        {
+          "buffered_us": 24,
+          "drain_us": 15038315,
+          "index": 2,
+          "live_us": 8123981
+        },
+        {
+          "buffered_us": 27,
+          "drain_us": 15031022,
+          "index": 0,
+          "live_us": 8276399
+        },
+        {
+          "buffered_us": 27,
+          "drain_us": 14962870,
+          "index": 1,
+          "live_us": 8215429
+        },
+        {
+          "buffered_us": 14,
+          "drain_us": 14662410,
+          "index": 2,
+          "live_us": 8115434
+        }
+      ]
+    }
+  ],
+  "scope": "CARDLESS native logging mechanics only; not GPU POST timing",
+  "source_sha256": {
+    "src/a7/PostDiagnostics.h": "59a6095bf607ccd5828f416d9b16e01dd75a155457d7e60674f77d4b04ee469c",
+    "tools/a7/logging_bench.py": "6c311470dd0b4aaae25209adeb342bd8179f71f156a6a2c54ecbb30d7dea9dc1",
+    "tools/haiku/cardless_run.py": "32e66210afa2b5a90b9a18c3a4f3bf6febec278569681a4e9738ffbc22f088a0",
+    "tools/haiku/selftest/a7_logging.cpp": "53e3df8f4f1558d1981f3886ed70fcbad90e66fd08e900ab89da0b9ed5ae4c45",
+    "tools/observer/supervise.py": "4a854920c8d0a3f67d928fb8c5e58cec861649075b491369a72618dbe09442b4"
+  }
+}

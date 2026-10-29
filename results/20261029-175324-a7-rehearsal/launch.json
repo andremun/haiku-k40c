@@ -1,0 +1,67 @@
+{
+  "args": [
+    "/usr/bin/qemu-system-x86_64",
+    "-name",
+    "k40-a7-cardless-rehearsal",
+    "-machine",
+    "q35",
+    "-accel",
+    "kvm",
+    "-cpu",
+    "host",
+    "-smp",
+    "2",
+    "-m",
+    "4096",
+    "-drive",
+    "if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd",
+    "-drive",
+    "if=pflash,format=raw,file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/a7/rehearsal-20261029-175324/vars.fd",
+    "-drive",
+    "file=/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/a7/rehearsal-20261029-175324/overlay.qcow2,format=qcow2,if=none,id=system",
+    "-device",
+    "ide-hd,drive=system,bus=ide.0,bootindex=1",
+    "-device",
+    "qemu-xhci",
+    "-device",
+    "usb-tablet",
+    "-vga",
+    "std",
+    "-netdev",
+    "user,id=n0",
+    "-device",
+    "e1000,netdev=n0",
+    "-display",
+    "none",
+    "-serial",
+    "file:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/results/20261029-175324-a7-rehearsal/serial.log",
+    "-monitor",
+    "unix:/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/build/a7/rehearsal-20261029-175324/monitor.sock,server,nowait"
+  ],
+  "binding": {
+    "guest_artifacts": {
+      "client": {
+        "bytes": 7552,
+        "sha256": "d11b0d3773e8f1a206a98b79b85a1c6e7c73948dbe096001d472ef0ee66ee122"
+      },
+      "helper": {
+        "bytes": 3888,
+        "sha256": "58bec7c51730bf95f541c61c8ed9b8379b97f1c2b335702de0f9542698914977"
+      },
+      "identity": {
+        "bytes": 8696,
+        "sha256": "8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f"
+      },
+      "owner": {
+        "bytes": 368672,
+        "sha256": "944bdaf424789914a7b8a8b8fe3af272ea1f4d93d387e931d336aa084ce4c087"
+      }
+    },
+    "job_sha256": "7fc7672eb0fd1fdb78e0c5437ee4da9c0e010be18a9d19ad33f35d5c4f686966",
+    "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62"
+  },
+  "port": 38387,
+  "scope": "CARDLESS_KVM",
+  "source_commit": "210e5eec69c51f19d4fbb3f728dec470b19db3d7",
+  "timeout_seconds": 600
+}

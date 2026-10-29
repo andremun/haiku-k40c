@@ -2,10 +2,13 @@
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
 Current task: S1A7BUFFER (buffer diagnostics, native measurements, new package).
-Task state: IN PROGRESS. Full make check and owner/buffer tests pass; write counts match.
-Plain native logging test passed. Observed case stopped before QEMU launch on
-an executable-path error. Fix prepared; ADR 006 permission requested before
-resuming cardless measurement/rehearsal. No physical run. Package review pending.
+Task state: DONE (prepared; Claude review and explicit one-run approval pending).
+Fresh native plain/observed logger tests pass: observed live output median 8.170 s,
+buffer insertion 25.5 us. These are cardless logging mechanics, not GPU timings.
+Exact package rehearsal passes in 78.50 s. Full make check, package/source and
+benchmark/rehearsal checks pass. Read-only live host check passes. No physical run.
+Current fresh package: build/a7/package-buffer, owner 944bdaf4... . See
+docs/A7-REVIEW-PACKAGE.md and docs/A7-BUFFER-REVIEW.md.
 Last physical result remains run6 STOPPED at 0x85d6 (490 active, 38 skipped).
 Package-i2c remains consumed; no physical retry authorized. S1 incomplete;
 D1 unapproved. See docs/A7-BUFFER-REVIEW.md and work/S1A7BUFFER/FINDINGS.md.
@@ -105,7 +108,7 @@ Older results and notes: `docs/history/` (do not read it for a task).
 
 | S1A7STARTUP | DONE (host diagnosis; review pending) | 2026-10-29 | Haiku hooks/debug path, ROM waits and inert observer benchmark. Logging overhead likely contributes; poll/time attribution UNKNOWN. No production change or guest. See work/S1A7STARTUP/RESULT.md. |
 
-| S1A7BUFFER | IN PROGRESS (cardless continuation permission pending) | 2026-10-29 | Buffered resident diagnostics and timing; host tests pass. First observed benchmark stopped before QEMU on path resolution. Fix ready; no further guest or physical run. |
+| S1A7BUFFER | DONE (prepared; review/one-run yes pending) | 2026-10-29 | Native logger measurements and exact package rehearsal pass after approved cardless continuation. Source/host/full checks pass. Fresh package-buffer unconsumed. No physical run. |
 
 ## Steps for the T7610 after the alignment (2026-10-23)
 

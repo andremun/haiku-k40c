@@ -6,6 +6,8 @@
 # several directories joined by +, for example compute+fifo), or the
 # script path in PY_TESTS. `make -s -C tests` exits 0 only when all pass.
 
+.DEFAULT_GOAL := all
+
 CXX      := g++
 # -fsanitize=undefined: an overflowing shift or similar stops the test
 # (task R1; the external review found two that the tests did not see).
@@ -32,12 +34,12 @@ PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard tes
 
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 
-$(BUILDDIR)/test_a7_diagnostics: ../src/a7/PostDiagnostics.h
-
 .PHONY: all clean
 all: $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(BUILDDIR)/owner_post_probe $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
 	@for p in $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe; do $$p || exit 1; done
 	@for t in $(PY_TESTS); do (cd .. && python3 tests/$$t) || exit 1; done
+
+$(BUILDDIR)/test_a7_diagnostics: ../src/a7/PostDiagnostics.h
 
 define RULE
 $(BUILDDIR)/$(1): $(firstword $(wildcard $(1).cpp accept/$(1).cpp)) $(foreach d,$(subst +, ,$(2)),$(wildcard ../src/$(d)/*.cpp ../src/$(d)/*.h)) | $(BUILDDIR)

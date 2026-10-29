@@ -1,6 +1,7 @@
 # A7 buffered diagnostics package
 
-S1A7BUFFER, 2026-10-29. Preparation in progress. No physical run is authorized.
+S1A7BUFFER, 2026-10-29. Preparation complete. Claude review and explicit one-run approval are pending.
+No physical run is authorized.
 
 ## Change for review
 
@@ -39,12 +40,27 @@ overflow, reversed diagnostic clock, deferred result order and permit revocation
 before drain. All 32 RAM/profile scenarios retain the old reviewed write counts.
 These are simulated results, not physical execution evidence.
 
-Native cardless logging measurement, final package hashes, exact package
-rehearsal, full repository checks and approval are recorded below when complete.
-A first observed logging measurement stopped before QEMU launch because the
-observer received a relative executable name. The path was corrected; no guest
-or card was started by that failed attempt. ADR 006 permission to continue was
-requested. The earlier plain measurement is retained as preliminary evidence.
+The user approved resuming cardless validation after the preserved pre-launch
+path failure. Fresh measurements use the final buffer header. Six samples in
+each mode give these medians:
+
+| Native cardless mode | Live output us | Buffer insertion us | Deferred drain us |
+|---|---:|---:|---:|
+| Plain | 900,671 | 20.0 | 1,684,176 |
+| Observed | 8,169,705 | 25.5 | 14,996,946 |
+
+These replay the 528 run6 instruction records in init_driver context. They are
+not a POST or authenticated-write timing measurement. Host workload was not
+isolated. Brief retained host/I2C checks overlapped the observed guest. All raw
+samples are saved in work/S1A7BUFFER/native-logging.json and its two result folders.
+No additional GPU read, grant, owner module or VFIO device was used.
+
+The exact fresh package passed rehearsal in 78.50 s at
+results/20261029-175324-a7-rehearsal/. Native identity/client/owner load counts
+and one preparation are recorded in work/S1A7BUFFER/rehearsal.json. The raw open
+returned B_ERROR (0xffffffff) after the expected no-card refusal, with no
+request/grant or POST. The prior failed attempt and preliminary plain capture
+remain immutable and are not bound to this fresh package.
 
 The removal of synchronous I2C audit output also removes incidental serial-output
 gaps between attempts. No protocol delay was removed or added. Hardware timing
@@ -53,5 +69,19 @@ as reviewed in ADR 010. Cardless logging measurements cannot validate those
 physical timing effects.
 
 Full make check, host authentication/boundary checks, provenance and diff checks
-pass for this committed implementation. Fresh native measurement and exact
-package rehearsal remain pending. This is not yet an eligible physical package.
+pass. Package, benchmark and rehearsal --check modes pass. The live read-only
+host check passes at preparation time. Prerequisites must be rechecked immediately
+before any approved launch. See docs/A7-REVIEW-PACKAGE.md for complete artifact
+hashes, write inventory, commands and stop conditions.
+
+Review the implementation commits 0b450b1 and 210e5ee, plus the package-completion
+commit containing this document. S1 is incomplete. D1 remains unapproved.
+
+A test-dispatch error was found during completion. A header dependency had
+preceded all and changed the default target. The dependency now follows all,
+and .DEFAULT_GOAL explicitly selects all. The complete suite passed via
+make -s -C tests all, followed by the final make check. The source-bound host
+report and package metadata were rebuilt. Guest binaries, kernel, ROM and job
+remain byte-identical to the passing rehearsal, verified by --check.
+The earlier incomplete-dispatch logs remain preserved and are not the final
+validation record. Use host-all-tests.log and check-final.log for full coverage.

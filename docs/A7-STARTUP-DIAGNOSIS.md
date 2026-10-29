@@ -164,6 +164,10 @@ and an explicit one-run approval. S1 remains incomplete; D1 remains unapproved.
 
 ## Reproduce this analysis without hardware
 
+This diagnosis binds to commit c06f9d5. Its source-bound checks detect later
+source changes, including S1A7BUFFER, and must be interpreted at that recorded
+revision. The current package checks are in docs/A7-REVIEW-PACKAGE.md.
+
 Run `python3 tools/a7/startup_sources.py --check`,
 `python3 tools/a7/startup_audit.py --check` and
 `python3 tools/a7/startup_bench.py --check`. These compare saved records without
