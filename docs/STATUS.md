@@ -1,15 +1,17 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1MEMPACKAGE (combined native/rehearsal package; task 6 of 6).
-Task state: READY FOR CLAUDE REVIEW. All six first-batch tasks are implemented.
-Exact combined cardless rehearsal passes: results/20261030-batch1-rehearsal-9feeeeb6/.
-Native links, host failure tests, full make check and package/rehearsal checks pass.
-Review: docs/S1-BATCH1-IMPLEMENTATION-REVIEW.md.
-A7 run7 source bytes and client bytes are preserved. BAR1/gk104 only; no BAR2,
-G2/D1 or new flush-target operation. Q7/Q11 and S1 remain open.
-No physical batch run has occurred. Claude acceptance and one explicit user yes
-are required for the exact package, then live R5/VFIO/one-guest checks.
+Current task: S1BATCH1RUN (one approved combined A7/BAR1 run).
+Task state: PASS, finite hardware scope under Haiku; S1 is incomplete.
+Claude accepted package acb2aca; the user explicitly approved one launch.
+The run passed in 148.54 seconds: A7 POST/readiness, owned VRAM transfers,
+BAR1/gk104 initial mapping, remap, restore and owned-context disable.
+Evidence: results/20261030-batch1-a7-bar1-ec8db47d/.
+Review: docs/S1-BATCH1-RUN-REVIEW.md; offline report/signatures/replay pass.
+R5 selected stream unchanged, no allowed lines; host PCI command 0x0002 after exit.
+A7 post-POST 0x100c10 readback remains zero (observation only). Q7/Q11 remain open.
+No channel translation, PBDMA fetch, submission or host DMA visibility claim.
+Approval is consumed; marker retained. No second launch or current write approval.
 No S2/S3 hardware-success preparation or push.
 Last updated: 2026-10-30
 
@@ -137,4 +139,6 @@ A cardless result is not K40c evidence.
 
 | S1MEMMMU | DONE (host/native link) | 2026-10-29 | gk104 BAR1 tables and A/B remap/restore witness; 4096 encoding and 21 lifecycle/fault cases. Native core link. No VM/card. |
 
-| S1MEMPACKAGE | READY FOR REVIEW (host/native/cardless) | 2026-10-30 | Distinct combined authority and package; unchanged A7 child, owned BAR1 experiment; exact cardless install/open/reload pass, full checks pass. No card run or current physical approval. See docs/S1-BATCH1-IMPLEMENTATION-REVIEW.md. |
+| S1MEMPACKAGE | ACCEPT (Claude review supplied by user) | 2026-10-30 | Reviewed acb2aca package; unchanged A7 child, distinct owned BAR1 experiment; exact cardless rehearsal and full checks pass. Physical result recorded as S1BATCH1RUN. |
+
+| S1BATCH1RUN | PASS (finite A7/BAR1 scope under Haiku) | 2026-10-30 | One explicitly approved acb2aca launch, 148.54 s. POST/readiness and BAR1 mapping/remap/restore pass; R5 unchanged, bus mastering off. S1/Q7/Q11 remain open. See docs/S1-BATCH1-RUN-REVIEW.md. |

@@ -301,5 +301,9 @@ exact combined cardless installer/open/reload rehearsal pass. The review package
 is [S1-BATCH1-IMPLEMENTATION-REVIEW.md](S1-BATCH1-IMPLEMENTATION-REVIEW.md).
 A7 run7 source/client bytes are preserved; the new memory stage selects BAR1 with
 gk104 tables and excludes BAR2 and G2/D1. G1 readback remains observational.
-No physical batch run has occurred. Claude acceptance, one explicit user yes and
-current live prerequisites are required. This does not complete S1 or Q7/Q11.
+Claude accepted acb2aca and the user approved one physical launch. It passed in
+148.54 seconds: A7 POST/readiness and the finite BAR1 initial/remap/restore path.
+The selected R5 stream was unchanged; host bus mastering was off after exit.
+See [S1-BATCH1-RUN-REVIEW.md](S1-BATCH1-RUN-REVIEW.md). Approval is consumed.
+Channel translation, PBDMA fetch and submission remain unverified. This result
+does not complete S1 or Q7/Q11; it does not satisfy S2/S3 prerequisites.

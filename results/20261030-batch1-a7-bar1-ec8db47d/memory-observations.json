@@ -1,0 +1,64 @@
+{
+  "S1_complete": false,
+  "allocations": [
+    {
+      "bytes": 131072,
+      "generation": 1,
+      "id": 1,
+      "physical": 266240,
+      "role": 1
+    },
+    {
+      "bytes": 131072,
+      "generation": 1,
+      "id": 2,
+      "physical": 397312,
+      "role": 2
+    },
+    {
+      "bytes": 4096,
+      "generation": 3,
+      "id": 3,
+      "physical": 528384,
+      "role": 6
+    },
+    {
+      "bytes": 4096,
+      "generation": 3,
+      "id": 4,
+      "physical": 532480,
+      "role": 7
+    },
+    {
+      "bytes": 65536,
+      "generation": 2,
+      "id": 5,
+      "physical": 536576,
+      "role": 3
+    },
+    {
+      "bytes": 262144,
+      "generation": 5,
+      "id": 6,
+      "physical": 602112,
+      "role": 4
+    },
+    {
+      "bytes": 4096,
+      "generation": 3,
+      "id": 7,
+      "physical": 864256,
+      "role": 5
+    }
+  ],
+  "bar1_context_writes": [
+    2147483859,
+    211
+  ],
+  "bar_flush_count": 17,
+  "closure": "owned BAR1 disabled; all storage retained until reviewed guest/VFIO end",
+  "events": 241,
+  "invalidation_count": 3,
+  "owner": 3212821974719833121,
+  "scope": "same-context BAR1 positive mapping/update observations only; no channel/DMA payload proof"
+}

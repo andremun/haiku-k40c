@@ -1,0 +1,235 @@
+{
+  "A7": {
+    "arm_after": [
+      22880256,
+      89376
+    ],
+    "arm_before": [
+      22880256,
+      89376
+    ],
+    "post": [
+      0,
+      44044
+    ],
+    "post_readback": [
+      0,
+      0
+    ],
+    "scratch": [
+      262144,
+      4096
+    ],
+    "timer": [
+      87676672,
+      88747232
+    ],
+    "vram_bytes": [
+      12079595520,
+      0
+    ]
+  },
+  "bounds": {
+    "DMA_payload_visibility": false,
+    "PBDMA_fetch": false,
+    "Q11": "open",
+    "Q7": "open",
+    "S1_complete": false,
+    "UC_effective_type_measured": false,
+    "channel_translation": false
+  },
+  "capture_sha256": {
+    "README.md": "141398becb9aba9d8787b8c44d59fadc7fd1477dde183ac388b8fffdc82bb8dd",
+    "a7-serial-prefix.txt": "1a7e355e0923b8c6cebd5845190c58193f92eb1fb285c5499494b97e6e7d8f40",
+    "a7/cutoff.json": "968542c04420c8631d37a3d0fea45985f9e7b908fa97ff072c61f3077ea75126",
+    "a7/environment.txt": "6fceaa9d8ef1adb95f3361a95a75113317ec281f58ec8d7214e87b19ff29bb41",
+    "a7/grant.bin": "ff6a149db8da37eaf16885e9db80e56a69213c1c1960c8113700eea1c5be4fd0",
+    "a7/http.log": "d93d87ee25c13eb1ea8f9b8e09d740012a31f8810f94edc4015c3ae64ae96865",
+    "a7/job-output.txt": "72f0178f711537f8886eb0ff0dba2234f5ce6b1d6a443c1f174bd9ef68d92acf",
+    "a7/job.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "a7/job.sh": "53868bea5a358d41ed12f1d1990aefe9d5f1748ec9a79624dff44dd573499111",
+    "a7/kernel.sha256": "9da8819b72502746d3f1db5eb718c2febc3685799a4a9248d82b362282bb1f7c",
+    "a7/mtree.txt": "121e965772c608013a46d4fb3dcd36d1e76905b417d4e6c1f3d2558b4856aafa",
+    "a7/qtree.txt": "ae69f290718baa0bc56e06c82b451fe31784aa27423455ab68734b47ede79a87",
+    "a7/ramblock.txt": "add85d6fd3b0c50623398f7bd3987c03fae0c29a0be697e23deb46000c0635bc",
+    "a7/request.bin": "1b1bc88f42cd1bf0668f2b64f4b7a5aeb9199da18658f5fb9612b6c1b1c7fb2b",
+    "a7/serial.log": "8fb76188e00062c166e6c12b33d0b244a17c2777d41d1121a04234329a45fe59",
+    "child-result.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "grant.bin": "01366b013e66c33a5a6ef37c49ddce71b6a7ccc4000a741294873ad106754c14",
+    "http.log": "251213339889b1db96a2cc478575d1c8418663337ec41959dd26f6ab6ffe8d6d",
+    "job-output.txt": "398a744ceac120409b9ea70b16436a8f9d45e62b6d9a204d6d91d60c583e23ea",
+    "job.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "job.sh": "9c964da8e7bd5c9104ca24484e166eb283a6cd3bdd70b306e31f225bd6de9e84",
+    "kernel-after.log": "9dc4666025a56bf64316345dae8a163a6b3a34d50c98854642dd977522912b71",
+    "kernel-before.log": "9dc4666025a56bf64316345dae8a163a6b3a34d50c98854642dd977522912b71",
+    "launch.json": "b790ebf7df341eabf7e543f1fce04b33b4369b04ad7a40d5587a75a711a8b555",
+    "memory-attestation.json": "709a270c03ba4496d0464d22d2e1ef714c76f5178eb501c39911e771fd679ecc",
+    "memory-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "memory-install.txt": "8b6fb74cc908b991f71398984b786f692778a5673b982676fb99b0b79df0e91f",
+    "memory-observations.json": "dba99a5f2d94cc28f7d9664d51664959de13b49e364b9890272a710b70e57ff4",
+    "memory-output.txt": "a7507eba1cc621a161cac8ea5f429eab0739b909a9766fdc3bdc125637bfd96d",
+    "pci-after.json": "52413ad89ee3569a4d0bea6e9e34e439e36bdc450af4bb973d045e347d4de5df",
+    "pci-before.json": "52413ad89ee3569a4d0bea6e9e34e439e36bdc450af4bb973d045e347d4de5df",
+    "preflight-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "preflight-install.txt": "f745abb58d66053e0c25b8e150b72d8e2a26f7b299e0b67a0f8122434dab5acf",
+    "preflight-output.txt": "bbf505b116d001a565c66895e31ba2e5a83b4cabdea76448b1b2ec632e75d930",
+    "processes.json": "ad3403991769fbbbcefdb08a9e460acca9c3d6125f65fb6ebe195a1b75815f18",
+    "qemu.log": "93660d7d58bad2d3349bf9444fcb1dcb0220cf9592215030f38b63f86e94aabe",
+    "request.bin": "f4f45387dce3e29ae8f9c92c26bf4e31561e784dbe6a144de8a903b06580c2d0",
+    "result.json": "c8e43d2b924ed529915407e9049477264e9432480505e654195fb25b2b917166",
+    "serial.log": "8fb76188e00062c166e6c12b33d0b244a17c2777d41d1121a04234329a45fe59",
+    "task-proofs.jsonl": "88728d48d2264b70523c9dc0ff78a05efe84d0ba9b94480ed83378fc9b165326",
+    "teardown.json": "47ce1232a79d791b87c89086be590bd92cb3dbba89afc8095f2b09ca6136d9fe",
+    "trace.log": "18eaa9b98d762f4b1069088fd24986c3e5ec27d2320d2c42072ff3043aceaa28"
+  },
+  "command": "python3 tools/memstage/run.py --run-approved-batch1-once",
+  "consumed_receipt_sha256": "60253d54d988133124f10935be2bb436568f15e48661937608a9e1b7da3fac1f",
+  "elapsed_seconds": 148.54,
+  "kernel": {
+    "after_bytes": 15998,
+    "allowed_kernel_lines": [],
+    "before_bytes": 15998,
+    "delta_bytes": 0,
+    "scope": "R5 selected classes only; not full kernel log cleanliness",
+    "sha256": "9dc4666025a56bf64316345dae8a163a6b3a34d50c98854642dd977522912b71"
+  },
+  "mapping_requests": [
+    "bar=0 base=c1000000 resource=16777216 mapped=8388608 flags=explicit-UC status=19635",
+    "bar=1 base=800000000 resource=268435456 mapped=8192 flags=explicit-UC read-only status=19636"
+  ],
+  "memory": {
+    "S1_complete": false,
+    "allocations": [
+      {
+        "bytes": 131072,
+        "generation": 1,
+        "id": 1,
+        "physical": 266240,
+        "role": 1
+      },
+      {
+        "bytes": 131072,
+        "generation": 1,
+        "id": 2,
+        "physical": 397312,
+        "role": 2
+      },
+      {
+        "bytes": 4096,
+        "generation": 3,
+        "id": 3,
+        "physical": 528384,
+        "role": 6
+      },
+      {
+        "bytes": 4096,
+        "generation": 3,
+        "id": 4,
+        "physical": 532480,
+        "role": 7
+      },
+      {
+        "bytes": 65536,
+        "generation": 2,
+        "id": 5,
+        "physical": 536576,
+        "role": 3
+      },
+      {
+        "bytes": 262144,
+        "generation": 5,
+        "id": 6,
+        "physical": 602112,
+        "role": 4
+      },
+      {
+        "bytes": 4096,
+        "generation": 3,
+        "id": 7,
+        "physical": 864256,
+        "role": 5
+      }
+    ],
+    "bar1_context_writes": [
+      2147483859,
+      211
+    ],
+    "bar_flush_count": 17,
+    "closure": "owned BAR1 disabled; all storage retained until reviewed guest/VFIO end",
+    "events": 241,
+    "invalidation_count": 3,
+    "owner": 3212821974719833121,
+    "scope": "same-context BAR1 positive mapping/update observations only; no channel/DMA payload proof"
+  },
+  "package_sha256": "e184660225599a55f982d4c07219d49375938d5673af44aa0887757190619bf9",
+  "pci": {
+    "bars": {
+      "0": {
+        "address": 3238002688,
+        "bytes": 16777216,
+        "mem_type_64": false
+      },
+      "1": {
+        "address": 34359738368,
+        "bytes": 268435456,
+        "mem_type_64": true
+      }
+    },
+    "bus": 0,
+    "function": 0,
+    "slot": 3
+  },
+  "source_commit": "acb2aca3cca9f168ae0927ba0269042cc652ad59",
+  "source_sha256": "cb01cda22c4f6a61b1eeb00c5cefd762957b280db5c57d52a78c709333fc18da",
+  "status": "PASS",
+  "teardown": {
+    "bus_master_enable": false,
+    "claim": "owned QEMU/tracer exited; read-only host command bit 2 clear; no manual reset",
+    "host_pci_command_after": 2
+  },
+  "verification": "KNOWN / HARDWARE_VERIFIED on 04:00.0 under Haiku for the finite A7/BAR1 scope",
+  "witness_records": [
+    {
+      "elapsed_us": 267306,
+      "fingerprint": 1745192716043876901,
+      "phase": 3,
+      "role": 6,
+      "virtual": 0
+    },
+    {
+      "elapsed_us": 268673,
+      "fingerprint": 3802521193761334821,
+      "phase": 3,
+      "role": 7,
+      "virtual": 4096
+    },
+    {
+      "elapsed_us": 270033,
+      "fingerprint": 3802521193761334821,
+      "phase": 5,
+      "role": 7,
+      "virtual": 0
+    },
+    {
+      "elapsed_us": 271381,
+      "fingerprint": 3802521193761334821,
+      "phase": 5,
+      "role": 7,
+      "virtual": 4096
+    },
+    {
+      "elapsed_us": 272740,
+      "fingerprint": 1745192716043876901,
+      "phase": 6,
+      "role": 6,
+      "virtual": 0
+    },
+    {
+      "elapsed_us": 274085,
+      "fingerprint": 3802521193761334821,
+      "phase": 6,
+      "role": 7,
+      "virtual": 4096
+    }
+  ]
+}

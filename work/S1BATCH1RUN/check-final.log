@@ -1,0 +1,165 @@
+python3 tools/check_repo.py
+check_repo: 0 failure(s)
+python3 tools/restore_verification_refs.py --check
+nouveau: clean adc218676eef25575469234709c2d87185ca223a
+envytools: clean f102b82381f3f11cee113d16374c87091db039d9
+haiku: clean 49a0af9585d80e42240af63ab66e31e9873f59b8
+open-gpu-doc: clean 9fdf5c4062007929d9f4e6cbad9c9771fe61b880
+mesa: clean f97d7dcca0e51d7e20ed4342bb5ea8afea7db7fa
+envytools (full, decoder): clean f102b82381f3f11cee113d16374c87091db039d9 /home/unimelb.edu.au/mariom1/haiku-cross/src/envytools
+python3 tools/devinit_trace_join.py --check
+python3 tools/load_trace.py --check
+python3 tools/dma_contract.py --check
+python3 tools/observer/pins.py --check
+Memory actual client: 29 checks pass (host mocks only)
+A7 native boundary: 4129 checks pass (host mocks only)
+A7 actual client: 29 checks pass (host mocks only)
+D0 memory probe host lifecycle: 16 checks, 0 failures; no device evidence
+memory experiment: 12 production-controller stop/replay cases pass; HOST_ONLY
+memory policy: full controller path and independent denials pass; HOST_ONLY
+memory MMU: 4096 independent encoding cases; 21 lifecycle/fault cases pass; HOST_ONLY
+memory upload: 20 ordering/window/alias/failure cases pass; HOST_ONLY
+memory faults: 25 bounded baseline/routing/clock cases pass; HOST_ONLY
+VRAM arena: 48 layout/oracle cases; stale/partial/capacity/retention checks pass; HOST_ONLY
+bootstrap operations: 78 checks, 0 failures (HOST_SIMULATION_ONLY)
+arm-only startup: 166 checks pass; no payload publication
+devinit interpreter: 33 checks, 0 failures (HOST_SIMULATION_ONLY)
+s1a_accept: 8 checks, 0 failed
+board helpers: 577 checks, 0 failures (HOST_ONLY)
+dedicated host I2C: 914 checks, 0 failures (SOURCE_ONLY)
+immutable POST parser: 37 checks, 0 failures (HOST_ONLY)
+memory ownership/publication: 44 checks, 0 failures (HOST_ONLY)
+S1 boundary regressions: 0 failures
+S1 controller: 58 checks, 0 failures (HOST_ONLY)
+test_registerio: 49 checks, 0 failures
+d1_accept: 57 checks, 0 failures
+test_pagetable: 31 checks, 0 failures
+d2_accept: 74 checks, 0 failures
+test_pushbuffer: 98 checks, 0 failures
+d3_accept: 74 checks, 0 failures
+test_launchdesc: 56 checks, 0 failures
+d5_accept: 101 checks, 0 failures
+ref_qmd: 10 checks, 0 failures
+r1_accept: 33 checks, 0 failures
+Haiku backend host fault injection: 78 checks, 0 failures; NOT native ABI evidence
+Identity probe host spies: 32 checks, 0 failures; NOT hardware evidence
+Haiku memory adapter: 146 checks, 0 failures (HOST_ONLY)
+native owner host contracts: 177 checks, 0 failures; NOT native load evidence
+owner probe host lifecycle: 13 checks, 0 failures; NOT native reload evidence
+test_compare_traces: 17 checks, 0 failures
+d4_accept: 38 checks, 0 failures
+r1_accept.py: 11 checks, 0 failures
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.910s
+
+OK
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.040s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.011s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.010s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 4.243s
+
+OK
+...
+----------------------------------------------------------------------
+Ran 3 tests in 1.189s
+
+OK
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.007s
+
+OK
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.009s
+
+OK
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.002s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.048s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.571s
+
+OK
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.606s
+
+OK
+A7 checks pass; no guest started; no run approval supplied by this check
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.359s
+
+OK
+..
+----------------------------------------------------------------------
+Ran 2 tests in 2.499s
+
+OK
+test_vm_tools.py: 32 checks, 0 failures
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.006s
+
+OK
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.825s
+
+OK
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.118s
+
+OK
+devinit inventory parser: all checks passed
+load trace: shifted-BAR/phase/anchor tests pass
+raw ROM preflight: roots, conditional calls, unknown opcode and bounds checks pass
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.016s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.006s
+
+OK
+offline ROM interpreter: 128 artificial scenarios, 0 failures; board helpers simulated, NO hardware evidence
+devinit timestamp join: interval/BAR/ambiguity tests pass
+python3 tools/memstage/contract.py --check
+python3 tools/memstage/arena_report.py --check
+python3 tools/memstage/fault_report.py --check
+python3 tools/memstage/upload_report.py --check
+python3 tools/memstage/mmu_report.py --check
+python3 tools/memstage/pci.py --check
+python3 tools/memstage/host_check.py --check

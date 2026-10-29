@@ -1,0 +1,5 @@
+PASS: rejected altered A7 signature
+PASS: rejected altered memory signature
+PASS: rejected changed selected kernel stream
+PASS: rejected truncated observer line
+PASS: unchanged capture accepted

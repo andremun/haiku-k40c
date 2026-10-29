@@ -129,4 +129,7 @@ See `docs/S1-VERIFICATION.md` for results, remaining gates and external-input bl
 
 First-batch implementation is complete for host/native/cardless scope.
 Review: [implementation package](S1-BATCH1-IMPLEMENTATION-REVIEW.md).
-No physical batch run has occurred; review and one explicit launch approval remain.
+Claude accepted acb2aca; one explicitly approved physical run passed its finite
+A7/BAR1 scope. S1 and Q7/Q11 remain open. See
+[run review](S1-BATCH1-RUN-REVIEW.md) and
+[run task](tasks/S1BATCH1RUN.md). Approval is consumed.
