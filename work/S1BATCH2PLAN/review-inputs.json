@@ -1,0 +1,525 @@
+{
+  "S1_complete": false,
+  "batch1": {
+    "approval_available": false,
+    "approval_consumed": true,
+    "bounds": {
+      "DMA_payload_visibility": false,
+      "PBDMA_fetch": false,
+      "Q11": "open",
+      "Q7": "open",
+      "S1_complete": false,
+      "UC_effective_type_measured": false,
+      "channel_translation": false
+    },
+    "capture_sha256": {
+      "README.md": "141398becb9aba9d8787b8c44d59fadc7fd1477dde183ac388b8fffdc82bb8dd",
+      "a7-serial-prefix.txt": "1a7e355e0923b8c6cebd5845190c58193f92eb1fb285c5499494b97e6e7d8f40",
+      "a7/cutoff.json": "968542c04420c8631d37a3d0fea45985f9e7b908fa97ff072c61f3077ea75126",
+      "a7/environment.txt": "6fceaa9d8ef1adb95f3361a95a75113317ec281f58ec8d7214e87b19ff29bb41",
+      "a7/grant.bin": "ff6a149db8da37eaf16885e9db80e56a69213c1c1960c8113700eea1c5be4fd0",
+      "a7/http.log": "d93d87ee25c13eb1ea8f9b8e09d740012a31f8810f94edc4015c3ae64ae96865",
+      "a7/job-output.txt": "72f0178f711537f8886eb0ff0dba2234f5ce6b1d6a443c1f174bd9ef68d92acf",
+      "a7/job.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "a7/job.sh": "53868bea5a358d41ed12f1d1990aefe9d5f1748ec9a79624dff44dd573499111",
+      "a7/kernel.sha256": "9da8819b72502746d3f1db5eb718c2febc3685799a4a9248d82b362282bb1f7c",
+      "a7/mtree.txt": "121e965772c608013a46d4fb3dcd36d1e76905b417d4e6c1f3d2558b4856aafa",
+      "a7/qtree.txt": "ae69f290718baa0bc56e06c82b451fe31784aa27423455ab68734b47ede79a87",
+      "a7/ramblock.txt": "add85d6fd3b0c50623398f7bd3987c03fae0c29a0be697e23deb46000c0635bc",
+      "a7/request.bin": "1b1bc88f42cd1bf0668f2b64f4b7a5aeb9199da18658f5fb9612b6c1b1c7fb2b",
+      "a7/serial.log": "8fb76188e00062c166e6c12b33d0b244a17c2777d41d1121a04234329a45fe59",
+      "child-result.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "grant.bin": "01366b013e66c33a5a6ef37c49ddce71b6a7ccc4000a741294873ad106754c14",
+      "http.log": "251213339889b1db96a2cc478575d1c8418663337ec41959dd26f6ab6ffe8d6d",
+      "job-output.txt": "398a744ceac120409b9ea70b16436a8f9d45e62b6d9a204d6d91d60c583e23ea",
+      "job.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "job.sh": "9c964da8e7bd5c9104ca24484e166eb283a6cd3bdd70b306e31f225bd6de9e84",
+      "kernel-after.log": "9dc4666025a56bf64316345dae8a163a6b3a34d50c98854642dd977522912b71",
+      "kernel-before.log": "9dc4666025a56bf64316345dae8a163a6b3a34d50c98854642dd977522912b71",
+      "launch.json": "b790ebf7df341eabf7e543f1fce04b33b4369b04ad7a40d5587a75a711a8b555",
+      "memory-attestation.json": "709a270c03ba4496d0464d22d2e1ef714c76f5178eb501c39911e771fd679ecc",
+      "memory-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "memory-install.txt": "8b6fb74cc908b991f71398984b786f692778a5673b982676fb99b0b79df0e91f",
+      "memory-observations.json": "dba99a5f2d94cc28f7d9664d51664959de13b49e364b9890272a710b70e57ff4",
+      "memory-output.txt": "a7507eba1cc621a161cac8ea5f429eab0739b909a9766fdc3bdc125637bfd96d",
+      "pci-after.json": "52413ad89ee3569a4d0bea6e9e34e439e36bdc450af4bb973d045e347d4de5df",
+      "pci-before.json": "52413ad89ee3569a4d0bea6e9e34e439e36bdc450af4bb973d045e347d4de5df",
+      "preflight-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "preflight-install.txt": "f745abb58d66053e0c25b8e150b72d8e2a26f7b299e0b67a0f8122434dab5acf",
+      "preflight-output.txt": "bbf505b116d001a565c66895e31ba2e5a83b4cabdea76448b1b2ec632e75d930",
+      "processes.json": "ad3403991769fbbbcefdb08a9e460acca9c3d6125f65fb6ebe195a1b75815f18",
+      "qemu.log": "93660d7d58bad2d3349bf9444fcb1dcb0220cf9592215030f38b63f86e94aabe",
+      "request.bin": "f4f45387dce3e29ae8f9c92c26bf4e31561e784dbe6a144de8a903b06580c2d0",
+      "result.json": "c8e43d2b924ed529915407e9049477264e9432480505e654195fb25b2b917166",
+      "serial.log": "8fb76188e00062c166e6c12b33d0b244a17c2777d41d1121a04234329a45fe59",
+      "task-proofs.jsonl": "88728d48d2264b70523c9dc0ff78a05efe84d0ba9b94480ed83378fc9b165326",
+      "teardown.json": "47ce1232a79d791b87c89086be590bd92cb3dbba89afc8095f2b09ca6136d9fe",
+      "trace.log": "18eaa9b98d762f4b1069088fd24986c3e5ec27d2320d2c42072ff3043aceaa28"
+    },
+    "package_sha256": "e184660225599a55f982d4c07219d49375938d5673af44aa0887757190619bf9",
+    "source_commit": "acb2aca3cca9f168ae0927ba0269042cc652ad59"
+  },
+  "hardware_authorized": false,
+  "implementation_ready": false,
+  "input_sha256": {
+    "AGENTS.md": "7089a4b96afb70d295ca92ff7d7e57eb8772efb38b34a3b683f6413cd88a432f",
+    "REVIEW.md": "dce3d22e0f0292b8d8dd885d450cef55d8dcbc23fbb97e15de389d323edb149a",
+    "docs/OPEN_QUESTIONS.md": "43b90486b4351c1a6f46a2a13ba6de92791dbd652cff55c3225be6073ad4a590",
+    "docs/PHASES.md": "d8cd6954a865a6aac0375b971eca2be4ff70d75f9e89d6bfde97e1403bcd7dcb",
+    "docs/S1-BATCH1-RUN-REVIEW.md": "857bfaeb3cb0cb28b6c913f503d3f3a47a8067ac8a588d93726c759d788613ee",
+    "docs/S1-BATCH2-REVIEW.md": "c1d5cb0eb2daa302eb9af47ccef8f0b95757c81025434c596816cb094a84f75d",
+    "docs/S1-INTEGRATION-CHOICES.md": "78915e93473a488dfe4623d2c1fd3f378ec6329b4f64f72273396b666c8392c2",
+    "docs/S1-MEMORY-CONTRACT.md": "277a1c14ea61a2d34f2a46f5c2fa1260cc3fc8e0d13c289d5443c0bb26809262",
+    "docs/S1-PLAN.md": "fb3f724b5fb5311baff1f4809bd04409fd551e53b22702e978a77939c4ba0cd9",
+    "docs/S1-RECIPE.md": "9e00413f72a9cc46e48348548fbe71934a6e8c281f47bf7f4b944382aa63ea5b",
+    "docs/STATUS.md": "b5e823b3f23149ec2e29fd7d7d8b780a8caeaea3cdf5ba09e5b05c8032775772",
+    "docs/licensing.md": "7c1163762914d6462648edd72cf41de94e159c9ed58df62008b2dc79636274e4",
+    "docs/tasks/S1BATCH2PLAN.md": "22895d6dd7bb912bc674bab8d04347d8d78b32839b306f103e23f43b6a6d653c",
+    "docs/tasks/S1CHANCLOSE.md": "085b2db1eeeb0cf680d9c33864b818a4fe45443b26a6edf75b7ab64d70ccbaf4",
+    "docs/tasks/S1CHANCONTRACT.md": "ebb90fb6e79c7d1c351cbb71f7495a17bab3a08eb38bc82046ff0eead245f960",
+    "docs/tasks/S1CHANMEM.md": "a1f68504b0f8bc36c3332d1cec44e6bfb83d03a7811c685200e10595c7849fb4",
+    "docs/tasks/S1CHANPACKAGE.md": "d2c3864acd44b0ff9ce352e7b745068b0618e8a1f749c0b80b745281708d7a19",
+    "docs/tasks/S1CHANSCHED.md": "dc0c4bcd6261a7f216a5494b8a4dfdcaa67e8a9ffe3864650256c19b77eb8a67",
+    "docs/tasks/S1CHANSUBMIT.md": "fabf34c8b0e4cbb50edaac62da3bd15c15b04654e88f3396e06e56e66d5d92ea",
+    "reference/MANIFEST.md": "abcc807f28f0a4f3cba6cfebe85d1f95419fa4b1c4f8b5cef96806d02ce669d9",
+    "src/fifo/PushBuffer.cpp": "cfefbca7eb4f370f340570355f8d78316674b35f230b5fc620a2e12c34c53306",
+    "src/fifo/PushBuffer.h": "b23b20f73c3a6c8f9ce37eb2e51983ea924bf40be8c7161381ccfb0b7ed6224f",
+    "src/memnative/NativeOwner.h": "6cd8022d13e9433c43e4fb409ef4aee5532ceba7d7f14f607a54ec28ddd19aa8",
+    "src/memory/VramArena.h": "d1e99970f869b38f1aab447621d86a6918727f9f559fcc1fda326be21cafb461",
+    "src/memstage/Experiment.cpp": "9e5d0c9ecb22c5e218c83b20b130c529bf1cb993f3580b5bc175567a9f1f5719",
+    "src/memstage/Mapper.cpp": "e6c3fbfcde93f46da91f9f1bfa2e397f658cb373911d1c8c1dd3347c536c6aff",
+    "src/memstage/Mapper.h": "f6ab9ca078ae3feb7c4aa44d1d15ca75a55a18a613decb3fae5ffdb1d93d9267",
+    "src/runtime/S1Experiment.cpp": "81d4baeecf906b448b8f54d7379dd3415a4d6e3bd841091e090408fd9df440f1",
+    "src/runtime/S1Experiment.h": "e264860c0cf26cb50240783b930870ecea85838244b37d6d67ae63b32d158366",
+    "tools/batch1_result.py": "cb01cda22c4f6a61b1eeb00c5cefd762957b280db5c57d52a78c709333fc18da",
+    "tools/batch2_review.py": "24ac890df656fff9905a5e3dc2697e5269c7c4986b74b2965374c0419b595b5b",
+    "work/S1BATCH1RUN/RESULT.md": "0d36eca5a74fddb5d97871a397bffdb0938103eb5f56e483ee1ddc403f0cb558",
+    "work/S1BATCH1RUN/consumed.json": "60253d54d988133124f10935be2bb436568f15e48661937608a9e1b7da3fac1f",
+    "work/S1BATCH1RUN/report.json": "ffb167fb30c84570dd6c1f04f0dad1d7d11d1ec8def38fe5ce22c7c118278496",
+    "work/S1MEMCONTRACT/a7-freeze.json": "904cae7c76e16fc67dadd21603c3ff8485dedb318d5109b605b409ea72925afd"
+  },
+  "open_gates": [
+    "channel publication/address contract",
+    "polling interrupt deviation",
+    "GR-free scheduling",
+    "finite teardown predicates",
+    "immutable rehearsal/package"
+  ],
+  "planned_tasks": [
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [],
+      "id": "S1CHANCONTRACT",
+      "path": "docs/tasks/S1CHANCONTRACT.md",
+      "purpose": "Channel evidence and operation contract"
+    },
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [
+        "S1CHANCONTRACT"
+      ],
+      "id": "S1CHANMEM",
+      "path": "docs/tasks/S1CHANMEM.md",
+      "purpose": "Owned channel images and USERD mapping"
+    },
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [
+        "S1CHANMEM"
+      ],
+      "id": "S1CHANSCHED",
+      "path": "docs/tasks/S1CHANSCHED.md",
+      "purpose": "Polling-only scheduler and routing"
+    },
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [
+        "S1CHANSCHED"
+      ],
+      "id": "S1CHANCLOSE",
+      "path": "docs/tasks/S1CHANCLOSE.md",
+      "purpose": "Finite detach and guest-end retention"
+    },
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [
+        "S1CHANCLOSE"
+      ],
+      "id": "S1CHANSUBMIT",
+      "path": "docs/tasks/S1CHANSUBMIT.md",
+      "purpose": "Single host-NOP composition"
+    },
+    {
+      "commit_policy": "one task per commit",
+      "depends_on": [
+        "S1CHANSUBMIT"
+      ],
+      "id": "S1CHANPACKAGE",
+      "path": "docs/tasks/S1CHANPACKAGE.md",
+      "purpose": "Immutable package and cardless rehearsal"
+    }
+  ],
+  "prior_result_commit": "bf674659e2c48d885a446df30b19bc04a9dbdec4",
+  "proposed_success": "fresh A7/memory gates, one channel GP_GET advance, fault-free finite detach and host closure",
+  "requested_verdicts": [
+    "batch-1 result evidence",
+    "second-batch design"
+  ],
+  "review_entry": "docs/S1-BATCH2-REVIEW.md",
+  "scope": "HOST_ONLY design preparation. No runnable channel package or run approval.",
+  "source_spans": [
+    {
+      "anchor": "0x800000",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+      "first_line": 40,
+      "id": "channel_controls",
+      "last_line": 79,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk104.c",
+      "span_sha256": "09041454d752e80c80d800976ffbc0954e954a305be5a919e9dcd188f4b10f6f",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "4096",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+      "first_line": 801,
+      "id": "channel_count",
+      "last_line": 805,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk104.c",
+      "span_sha256": "d55522005735eef706c1ac12eb2234e88ba27e1dbaf6ed5ed0d26a8bad61d9f2",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "devm = BIT(0)",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "068d2f6d47845951b6538c21cfbd8a3e34748575f4ae7bef61d02021ece7cd80",
+      "first_line": 302,
+      "id": "channel_device_mask",
+      "last_line": 307,
+      "path": "reference/nouveau/nouveau_chan.c",
+      "span_sha256": "9d8958c5dee049a630f4b2278d49de1192f857995fa6766566a32f59d101ecf3",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x0208",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "8485236819c37bfcbfae9824c4b03b767314b6e07156c3ed2e203f2447ad89ea",
+      "first_line": 337,
+      "id": "channel_join",
+      "last_line": 367,
+      "path": "reference/nouveau/nvkm/subdev/mmu/vmmgf100.c",
+      "span_sha256": "655f58df033d99017281758da184ad210dbdf1d79c3941b92c3a0024888c7947",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "gf100_chan_preempt",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "581d835a89d4be2a4f1a4383efb56dc02b81f66d055020f744654968b724a9cf",
+      "first_line": 35,
+      "id": "channel_selection",
+      "last_line": 58,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk110.c",
+      "span_sha256": "844b7a78eec56c9b27b4a492aa016635a5340226863de5ab4ece171682b396f1",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "gk110_fifo_new",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "ac7eb1bbffb41b43b336cc59eaca86b7317632a0b353805b4359af78b70ef7ab",
+      "first_line": 1777,
+      "id": "chip_dispatch",
+      "last_line": 1805,
+      "path": "reference/nouveau/nvkm/engine/device/base.c",
+      "span_sha256": "3d4f973b1735a7ff6041649f98939b21c713455a7d863413c70659e9fd7bfc10",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x002640",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+      "first_line": 190,
+      "id": "engine_status",
+      "last_line": 267,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk104.c",
+      "span_sha256": "67ac2a1ab6a6b9364c11a75516824160cb9a6c607ab669dd7876e3acc0c43765",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "KEPLER_CHANNEL_GPFIFO_B",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "581d835a89d4be2a4f1a4383efb56dc02b81f66d055020f744654968b724a9cf",
+      "first_line": 107,
+      "id": "fifo_dispatch",
+      "last_line": 128,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk110.c",
+      "span_sha256": "638b2627a2fd6b290f0f511c4de37d33d85bfb35bd50c2f420a085cdf0cf8d7e",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "init_pbdmas",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d97c42d94685b974e0bd1b3c572623fb858242a324c38c866730d7a1f700c3a3",
+      "first_line": 138,
+      "id": "fifo_init_order",
+      "last_line": 160,
+      "path": "reference/nouveau/nvkm/engine/fifo/base.c",
+      "span_sha256": "f031396e906a9ebaf5bc95cbddff684cbe62223c5474afd7731945f241426fb9",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "gk104_vmm_desc_17_12",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "3f77d94f4f08546da6361e474c94fe13af23d41758ad5a1fd48b0e5a50ccdd97",
+      "first_line": 25,
+      "id": "gk104_geometry",
+      "last_line": 78,
+      "path": "reference/nouveau/nvkm/subdev/mmu/vmmgk104.c",
+      "span_sha256": "43ba151729c2bc4b35ec32b187bed623e9e64dc70bcc5b40cd11317717030b30",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x8c",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "2bf585c916cde08ef2b99370c8d63e5b19d49b716c8591a476382fe17f2c7d11",
+      "first_line": 74,
+      "id": "gp_put_get",
+      "last_line": 119,
+      "path": "reference/nouveau/nouveau_dma.c",
+      "span_sha256": "b677d2cbd71adace042fc95d1635ea97a110b17568fe48ca7f41d98f75a7b613",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "NVA16F_GP_ENTRY1_LENGTH",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "a54306e5563564d8834172c7ac160ed0bce173aac4331eb18b3cfa57e5067fce",
+      "first_line": 150,
+      "id": "gpfifo_fields",
+      "last_line": 165,
+      "path": "reference/open-gpu-doc/classes/host/cla16f.h",
+      "span_sha256": "072b0db5d3ec433a21db7f1e85a3e2974da9e70f1e50a5b85f71ab53eee9762a",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x04014c",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+      "first_line": 379,
+      "id": "hce_init",
+      "last_line": 386,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk104.c",
+      "span_sha256": "6a320a0fa4cf8ff8c0626def4ef426480216546ad5ff656544f7e1dca7f9f56b",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "NVA16F_DMA_INCR_OPCODE_VALUE",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "a54306e5563564d8834172c7ac160ed0bce173aac4331eb18b3cfa57e5067fce",
+      "first_line": 196,
+      "id": "nop_packet",
+      "last_line": 201,
+      "path": "reference/open-gpu-doc/classes/host/cla16f.h",
+      "span_sha256": "ee28f5249a0dfb813f8811741ed393c2c55a7d0b9335f7c0a8ddb673093bcd7c",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "NVA16F_NOP",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "a54306e5563564d8834172c7ac160ed0bce173aac4331eb18b3cfa57e5067fce",
+      "first_line": 42,
+      "id": "nop_userd",
+      "last_line": 75,
+      "path": "reference/open-gpu-doc/classes/host/cla16f.h",
+      "span_sha256": "2a564056bf2dc59621e16f203dd9987fccbd6aa7a73d4e91e536ac46295437d5",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x60",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "068d2f6d47845951b6538c21cfbd8a3e34748575f4ae7bef61d02021ece7cd80",
+      "first_line": 447,
+      "id": "payload_get",
+      "last_line": 450,
+      "path": "reference/nouveau/nouveau_chan.c",
+      "span_sha256": "27410ead3e7966309aa44f42b7fc8a9f4a2e170fb074360c199a8116215ededd",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "chan->user_get_hi",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "2bf585c916cde08ef2b99370c8d63e5b19d49b716c8591a476382fe17f2c7d11",
+      "first_line": 41,
+      "id": "payload_reads",
+      "last_line": 69,
+      "path": "reference/nouveau/nouveau_dma.c",
+      "span_sha256": "483eb345848e73aa96b88f57c9c4a4b790040062451311871f0dae13f213f615",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x000204",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "049a0ff8c473d28c40b97f6482c47f974338f3df2660e8bb2dd70bfb29e49371",
+      "first_line": 927,
+      "id": "pbdma_discovery",
+      "last_line": 936,
+      "path": "reference/nouveau/nvkm/engine/fifo/gf100.c",
+      "span_sha256": "aa07c5060dc37f454b988e261a61cbdf446c51a6133588185a92436e63d89e5c",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x002254",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+      "first_line": 735,
+      "id": "pbdma_init",
+      "last_line": 753,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk104.c",
+      "span_sha256": "4231f2179706fe2c6acfc75d8c8de6996d4fb42a6de6bfaed02cddfe5e234148",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x002390",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+      "first_line": 389,
+      "id": "pbdma_runlist_mask",
+      "last_line": 393,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk104.c",
+      "span_sha256": "404aab38f804fd6284cdfb53d42940a8973b1ebd77bc6f79c85b0a17ba086164",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "HUB_ONLY",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "8485236819c37bfcbfae9824c4b03b767314b6e07156c3ed2e203f2447ad89ea",
+      "first_line": 188,
+      "id": "pdb_invalidate",
+      "last_line": 233,
+      "path": "reference/nouveau/nvkm/subdev/mmu/vmmgf100.c",
+      "span_sha256": "e6f6490eeaf711eadbe617fcc7e798d02102515dcc5912f1374682dec6e7c462",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x00100000",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "049a0ff8c473d28c40b97f6482c47f974338f3df2660e8bb2dd70bfb29e49371",
+      "first_line": 370,
+      "id": "preempt_pending",
+      "last_line": 373,
+      "path": "reference/nouveau/nvkm/engine/fifo/gf100.c",
+      "span_sha256": "038361f54f299dc3ee91af4f643d4365724cf1b718cb4b167d461f3cb17f80d1",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "nvkm_runl_update_locked",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "a85c3ed9aee6f578523a5a427d2214453d71d7ec2960684a07f3ee2157840bc6",
+      "first_line": 135,
+      "id": "preempt_remove",
+      "last_line": 192,
+      "path": "reference/nouveau/nvkm/engine/fifo/chan.c",
+      "span_sha256": "59d81def3aa2f912ee2f5a9df511f4c937a3eeb7d28cd37c95e492c891d70d7c",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x002634",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "049a0ff8c473d28c40b97f6482c47f974338f3df2660e8bb2dd70bfb29e49371",
+      "first_line": 42,
+      "id": "preempt_request",
+      "last_line": 46,
+      "path": "reference/nouveau/nvkm/engine/fifo/gf100.c",
+      "span_sha256": "acbecdb9a81cd7ae87fbca90a4209e2eb6e99892436a0219443f0898662b864f",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x0000e000",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+      "first_line": 288,
+      "id": "queue_idle",
+      "last_line": 294,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk104.c",
+      "span_sha256": "efaa44df69db09bd33b79f2121377648b595f8dea83fddc082de044932d084af",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0xfffffeff",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "049a0ff8c473d28c40b97f6482c47f974338f3df2660e8bb2dd70bfb29e49371",
+      "first_line": 351,
+      "id": "queue_init",
+      "last_line": 359,
+      "path": "reference/nouveau/nvkm/engine/fifo/gf100.c",
+      "span_sha256": "d0ed7089b32c787bf306457063bd7a2f2c5e12924a499eadd285d4820722937e",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x0000face",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+      "first_line": 82,
+      "id": "ramfc_userd",
+      "last_line": 118,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk104.c",
+      "span_sha256": "bf011792bb1470f250174b1788ef2c2a0836e0dc23486036dbf2802e0ea025e9",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "runl->func->preempt",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "ff0b89d720769d341363739e0073187bab39635f272f30b4daa3f899163de51b",
+      "first_line": 86,
+      "id": "recovery_idle_limit",
+      "last_line": 100,
+      "path": "reference/nouveau/nvkm/engine/fifo/runl.c",
+      "span_sha256": "13a91f4d399bbe6cf2aa96b8d94330de55c12b66dea77bb2ef1e82a1501dcb32",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "gk104_runq_runm",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+      "first_line": 756,
+      "id": "routing",
+      "last_line": 800,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk104.c",
+      "span_sha256": "a9111d9d5df07e091fb9a76bdf02872fc9d151fb7c49258277e2aa1bb7f8f5a8",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "BIT(runl->id)",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d9ce2a7495358c75e5cefae2ceae099d3e161ee960cba2415ba24b5c08374dae",
+      "first_line": 410,
+      "id": "runlist",
+      "last_line": 457,
+      "path": "reference/nouveau/nvkm/engine/fifo/gk104.c",
+      "span_sha256": "068889b18d80d976801de7d1946048db156ba1ef45c8a8dc81cdb0b52ebcff36",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "fifo->chid->nr",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "d97c42d94685b974e0bd1b3c572623fb858242a324c38c866730d7a1f700c3a3",
+      "first_line": 306,
+      "id": "userd_allocation",
+      "last_line": 320,
+      "path": "reference/nouveau/nvkm/engine/fifo/base.c",
+      "span_sha256": "d2a1dd6127b78b4ef6f2fdc6c83e2e1ffa92bdd47970516e03aadb46c5c66fa8",
+      "verification": "SOURCE_ONLY"
+    },
+    {
+      "anchor": "0x088",
+      "claim": "KNOWN in pinned source",
+      "file_sha256": "049a0ff8c473d28c40b97f6482c47f974338f3df2660e8bb2dd70bfb29e49371",
+      "first_line": 118,
+      "id": "userd_clear_instance",
+      "last_line": 145,
+      "path": "reference/nouveau/nvkm/engine/fifo/gf100.c",
+      "span_sha256": "c6270a5973f8f873b57c2937ab9014cfede71f487c52809207aa52c9eae106c4",
+      "verification": "SOURCE_ONLY"
+    }
+  ],
+  "stage": "S1_CHANNEL_NOP (design label only)"
+}

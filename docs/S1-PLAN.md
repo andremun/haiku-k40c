@@ -1,16 +1,15 @@
 # Plan for milestone S1
 
-## Current position (2026-10-29)
+## Current position (2026-10-30)
 
-A7 POST/readiness now passes on this card under Haiku (S1A7RUN7). S1 itself is
-incomplete. The proposed first memory/translation batch is in
-[S1-BATCH1-REVIEW.md](S1-BATCH1-REVIEW.md), with six implementation task texts.
-Claude accepted that design with changes on 2026-10-29: BAR1/gk104 only, no
-separate D1/G2, observational flush readback, frozen A7 source. Six host tasks
-are authorized; the final package still needs review and one-run user approval. The dated
-reviews/tables below are historical planning context; current results are in
-STATUS. No consumed A7 approval carries into the new batch. D1 alone cannot
-prove host-payload visibility; Q7 remains open.
+Batch 1 passes on this card under Haiku: fresh A7 POST/readiness and the finite
+physical/BAR1 initial/remap/restore experiment. Result commit: bf67465.
+S1 remains incomplete. The next channel/scheduler/NOP design is in
+[S1-BATCH2-REVIEW.md](S1-BATCH2-REVIEW.md), with six implementation tasks.
+It requests separate review of the batch-1 result and the second-batch design.
+No channel runtime/package or new write approval exists. Q7/Q11 remain open.
+The dated reviews/tables below are historical planning context. Current results
+are in STATUS. Consumed approvals never carry into a new combined package.
 
 First draft by the scaffold 2026-10-13. Rewritten 2026-10-16 to record the
 plan as it now stands, after the external reviews and the five research

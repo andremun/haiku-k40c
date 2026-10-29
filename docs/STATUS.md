@@ -1,17 +1,17 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1BATCH1RUN (one approved combined A7/BAR1 run).
-Task state: PASS, finite hardware scope under Haiku; S1 is incomplete.
-Claude accepted package acb2aca; the user explicitly approved one launch.
-The run passed in 148.54 seconds: A7 POST/readiness, owned VRAM transfers,
-BAR1/gk104 initial mapping, remap, restore and owned-context disable.
-Evidence: results/20261030-batch1-a7-bar1-ec8db47d/.
-Review: docs/S1-BATCH1-RUN-REVIEW.md; offline report/signatures/replay pass.
-R5 selected stream unchanged, no allowed lines; host PCI command 0x0002 after exit.
-A7 post-POST 0x100c10 readback remains zero (observation only). Q7/Q11 remain open.
-No channel translation, PBDMA fetch, submission or host DMA visibility claim.
-Approval is consumed; marker retained. No second launch or current write approval.
+Current task: S1BATCH2PLAN (channel/scheduler/NOP design package).
+Task state: READY FOR CLAUDE REVIEW. Six implementation tasks are specified.
+Review: docs/S1-BATCH2-REVIEW.md (batch-1 result and batch-2 design verdicts).
+Batch 1 passed in 148.54 seconds: A7 POST/readiness and finite owned BAR1
+initial/remap/restore. Evidence: results/20261030-batch1-a7-bar1-ec8db47d/.
+R5 selected stream unchanged; host PCI command 0x0002 after exit. Result bf67465.
+The next design covers channel VMM, USERD, polling-only scheduler, one NOP and
+bounded detach. Source contract, interrupt and teardown gates precede implementation.
+No batch-2 runtime/package, VM launch or new hardware evidence exists.
+S1 remains incomplete. Q7/Q11 and GR-free scheduling remain open.
+Batch-1 approval is consumed; marker retained. No current write-stage approval.
 No S2/S3 hardware-success preparation or push.
 Last updated: 2026-10-30
 
@@ -142,3 +142,5 @@ A cardless result is not K40c evidence.
 | S1MEMPACKAGE | ACCEPT (Claude review supplied by user) | 2026-10-30 | Reviewed acb2aca package; unchanged A7 child, distinct owned BAR1 experiment; exact cardless rehearsal and full checks pass. Physical result recorded as S1BATCH1RUN. |
 
 | S1BATCH1RUN | PASS (finite A7/BAR1 scope under Haiku) | 2026-10-30 | One explicitly approved acb2aca launch, 148.54 s. POST/readiness and BAR1 mapping/remap/restore pass; R5 unchanged, bus mastering off. S1/Q7/Q11 remain open. See docs/S1-BATCH1-RUN-REVIEW.md. |
+
+| S1BATCH2PLAN | READY FOR REVIEW (host-only design) | 2026-10-30 | Batch-1 result plus six channel/scheduler/NOP implementation tasks, source anchors and explicit progress/teardown/authority gates. No runtime/package or new launch. See docs/S1-BATCH2-REVIEW.md. |

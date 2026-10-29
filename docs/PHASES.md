@@ -133,3 +133,18 @@ Claude accepted acb2aca; one explicitly approved physical run passed its finite
 A7/BAR1 scope. S1 and Q7/Q11 remain open. See
 [run review](S1-BATCH1-RUN-REVIEW.md) and
 [run task](tasks/S1BATCH1RUN.md). Approval is consumed.
+
+## Second-batch design preparation (2026-10-30)
+
+Review [batch-1 result and batch-2 design](S1-BATCH2-REVIEW.md).
+No second-batch runtime/package or hardware approval exists.
+
+| Task | Title | Text |
+|---|---|---|
+| S1BATCH2PLAN | Prepare channel/scheduler/NOP design | `docs/tasks/S1BATCH2PLAN.md` |
+| S1CHANCONTRACT | Channel progress and finite closure contract | `docs/tasks/S1CHANCONTRACT.md` |
+| S1CHANMEM | Owned channel images and USERD mapping | `docs/tasks/S1CHANMEM.md` |
+| S1CHANSCHED | Polling-only scheduler and discovery | `docs/tasks/S1CHANSCHED.md` |
+| S1CHANCLOSE | Finite detach and retention | `docs/tasks/S1CHANCLOSE.md` |
+| S1CHANSUBMIT | One native host-NOP experiment | `docs/tasks/S1CHANSUBMIT.md` |
+| S1CHANPACKAGE | Immutable package and cardless rehearsal | `docs/tasks/S1CHANPACKAGE.md` |

@@ -427,3 +427,19 @@ it is an upstream schema baseline, not an exact Ubuntu source identity claim.
 No Nouveau/Haiku/QEMU implementation body was copied. The pinned verification-only
 orlp Ed25519 code remains unchanged under its separate zlib notice, included in
 the new package. No signing code or private key is included in a guest artifact.
+
+## S1BATCH2PLAN source study (2026-10-30)
+
+Consulted Nouveau engine/device/base.c:1777-1805; engine/fifo/gk110.c:35-128;
+gk104.c:40-165,180-465,735-810; gf100.c:35-165,310-395,910-955;
+base.c:136-160,306-324; chan.c:135-192,350-485; runl.c:70-105;
+subdev/mmu/gk104.c:23-41, vmmgk104.c:23-78 and
+vmmgf100.c:180-235,310-375; nouveau_dma.c:35-125;
+nouveau_dma.h PUT definitions and nouveau_chan.c:295-315,430-460;
+engine/fifo/uchan.c:259-270 and include/nvif/if0020.h:1-24;
+include/nvif/class.h channel class definition. Reconsulted
+subdev/mc/gk104.c and nv04.c reset/interrupt definitions.
+Consulted open-gpu-doc classes/host/cla16f.h:24-215 and cla06f.h NOP/packet
+fields, and envytools rnndb/fifo/nv_object.xml NOP entries.
+Only source anchors, field facts and design consequences enter this package.
+No Nouveau implementation body was copied and no runtime code changed.
