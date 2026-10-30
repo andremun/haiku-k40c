@@ -17,7 +17,7 @@ bool Policy::physical(uint32_t reg,Record& out,uint64_t& offset) const
 }
 bool Policy::read(uint32_t reg,bool window) const
 {
-    if(reg&3)return false;
+    if((reg&3) || reg>bar0View-4)return false; // Never beyond the mapped BAR0 view.
     // fb/gf100.c:37; fifo/gk104.c:658; fifo/gf100.c:723; privring/gk104.c:62-66.
     if(reg==0x100 || reg==0x2100 || reg==0x259c || reg==0x120058 || reg==0x12005c
         || reg==0x120070 || reg==0x120074 || reg==0x120078)return true; // privring/gk104.c:62-66.
@@ -111,7 +111,7 @@ bool Policy::dataValue(const Record& r,uint64_t offset,uint32_t value) const
 }
 bool Policy::write(uint32_t reg,uint32_t value,bool window,bool mmu)
 {
-    if(!arena_.healthy() || !faults_.ready() || (reg&3))return false;
+    if(!arena_.healthy() || !faults_.ready() || (reg&3) || reg>bar0View-4)return false; // Mapped BAR0 view only.
     if(channelActive() && reg!=0x1700 && reg!=0x70000 && (reg<0x700000 || reg>=0x800000)) // instmem/nv50.c:62-71 window; bar/g84.c:33.
         return mmu && channelWrite(reg,value);
     if(faults_.completed(Phase::Disabled))return false;

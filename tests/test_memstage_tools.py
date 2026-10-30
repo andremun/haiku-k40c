@@ -75,7 +75,7 @@ def frame():
         plan_sha256=(bytes([2]) * 32).hex(),
         plan=dict(vram_bytes=11520 * 1048576),
     )
-    serial = "k40_mem: MAP bar=0 base=10000000 resource=16777216 mapped=8388608 flags=explicit-UC status=3\n"
+    serial = "k40_mem: MAP bar=0 base=10000000 resource=16777216 mapped=16777216 flags=explicit-UC status=3\n"
     serial += "k40_mem: MAP bar=1 base=20000000 resource=268435456 mapped=8192 flags=explicit-UC read-write status=4\n"
     serial += "k40_mem: PREPARED owner=2 epoch=2 bar0=10000000 bar1=20000000\n"
     return bytes(raw), suite, serial

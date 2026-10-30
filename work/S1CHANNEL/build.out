@@ -1,1 +1,8 @@
-Combined package built; no card run approved or performed.
+Traceback (most recent call last):
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/memstage/build.py", line 640, in <module>
+    main()
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/memstage/build.py", line 636, in main
+    build()
+  File "/home/unimelb.edu.au/mariom1/Documents/packages/haiku-k40c/tools/memstage/build.py", line 398, in build
+    raise ValueError("consumed package must be preserved")
+ValueError: consumed package must be preserved

@@ -1,11 +1,11 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1CHANNEL run 1 STOPPED (BAR0 view too small). Next: fixed package, then the user's yes.
-Task state: WAITING FOR USER (ADR 006). A7 and the batch-1 gates passed again;
-the channel phase ran steps 0-10, then the 8 MiB BAR0 view refused the
-channel register 0x800008 before any bind. No channel ran. R5 clean, bus
-mastering off. See results/20261031-batch1-a7-bar1-3f33bd37/README.md.
+Current task: S1CHANNEL2 fixed package ready. Next: one card run after the user's explicit yes.
+Task state: WAITING FOR USER (ADR 006). Run 1 stopped at the 8 MiB BAR0 view
+before any bind. Fix: BAR0 mapped whole (16 MiB), Policy refuses beyond it.
+Package build/memstage/package-s1b/ rehearsed cardless; make check passes.
+Review: docs/S1-CHANNEL-REVIEW.md, work/S1CHANNEL2/RESULT.md.
 Last updated: 2026-10-31
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.

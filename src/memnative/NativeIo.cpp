@@ -35,12 +35,12 @@ status_t NativeIo::initialize()
     // resource. Slot 2 is BAR1's possible upper word, not NVIDIA BAR2.
     if((card_.u.h0.base_register_flags[0]&PCI_address_type)==PCI_address_type_64
         || !resource(0,bar0_,bar0Bytes_) || !resource(1,bar1_,bar1Bytes_))return B_BAD_DATA;
-    if(bar0Bytes_<8388608 || bar0Bytes_>16777216 || bar1Bytes_<8192
+    if(bar0Bytes_<bar0View || bar0Bytes_>16777216 || bar1Bytes_<8192
         || bar1Bytes_>(uint64_t(1)<<40) || (bar0_<bar1_+bar1Bytes_ && bar1_<bar0_+bar0Bytes_))return B_BAD_DATA; // no source: finite aperture software profile.
     void* address=nullptr;
-    area0_=map_physical_memory("k40 memory BAR0 UC",bar0_,8388608,
+    area0_=map_physical_memory("k40 memory BAR0 UC",bar0_,bar0View,
         B_ANY_KERNEL_ADDRESS|B_UNCACHED_MEMORY,B_KERNEL_READ_AREA|B_KERNEL_WRITE_AREA,&address);
-    dprintf("k40_mem: MAP bar=0 base=%llx resource=%llu mapped=8388608 flags=explicit-UC status=%ld\n",
+    dprintf("k40_mem: MAP bar=0 base=%llx resource=%llu mapped=16777216 flags=explicit-UC status=%ld\n",
         (unsigned long long)bar0_,(unsigned long long)bar0Bytes_,long(area0_));
     if(area0_<0)return area0_;
     view0_=static_cast<volatile uint8_t*>(address);address=nullptr;
@@ -80,12 +80,12 @@ void NativeIo::release(memstage::Lock lock)
 {const auto index=unsigned(lock);if(index<2 && held_[index]){held_[index]=false;locks_[index].clear(std::memory_order_release);}}
 bool NativeIo::read32(uint32_t offset,uint32_t& value)
 {
-    value=0;if(!active() || !view0_ || offset>8388608-4 || !policy_->read(offset,held_[0]))return deny(2,offset); // no source: explicit BAR0 mapping extent.
+    value=0;if(!active() || !view0_ || offset>bar0View-4 || !policy_->read(offset,held_[0]))return deny(2,offset); // no source: explicit BAR0 mapping extent.
     value=*reinterpret_cast<volatile uint32_t*>(view0_+offset);policy_->observed(offset,value);return true;
 }
 bool NativeIo::write32(uint32_t offset,uint32_t value)
 {
-    if(!active() || !view0_ || offset>8388608-4 || !policy_->write(offset,value,held_[0],held_[1]))return deny(3,offset,value); // no source: explicit BAR0 mapping extent.
+    if(!active() || !view0_ || offset>bar0View-4 || !policy_->write(offset,value,held_[0],held_[1]))return deny(3,offset,value); // no source: explicit BAR0 mapping extent.
     *reinterpret_cast<volatile uint32_t*>(view0_+offset)=value;return true;
 }
 bool NativeIo::barRead32(uint64_t offset,uint32_t& value)

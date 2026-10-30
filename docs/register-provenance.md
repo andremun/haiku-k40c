@@ -454,6 +454,12 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/memnative/Policy.cpp:280` | `case 22: ok=reg==0x001704 && expectedContext_ && context_==expectedContext_` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/memnative/Policy.cpp:281` | `&& value==(expectedContext_&0x7fffffff);break;` | no source: ambiguous citation | SOURCE_ONLY |
 
+## src/memnative/Policy.h
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/memnative/Policy.h:8` | `constexpr uint32_t bar0View=16777216;` | no source: ambiguous citation | SOURCE_ONLY |
+
 ## src/memory/VramArena.h
 
 | Line | Code | Source | Status |
@@ -828,6 +834,7 @@ The following constant lines have no source citation:
 - src/memnative/Policy.cpp:276 (no source: ambiguous citation)
 - src/memnative/Policy.cpp:280 (no source: ambiguous citation)
 - src/memnative/Policy.cpp:281 (no source: ambiguous citation)
+- src/memnative/Policy.h:8 (no source: ambiguous citation)
 - src/memory/VramArena.h:23 (no source: software ledger capacity.)
 - src/memstage/Channel.cpp:8 (no source: ambiguous citation)
 - src/memstage/Channel.cpp:10 (no source: software allocation order of the channel roles.)

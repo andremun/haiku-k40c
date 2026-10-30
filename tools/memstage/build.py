@@ -23,10 +23,10 @@ from tools.memstage import contract, pci
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
-PACKAGE = ROOT / "build/memstage/package-s1"
-PUBLIC = ROOT / "work/S1CHANNEL/package.json"
-PLAN = ROOT / "work/S1CHANNEL/phase-plan.json"
-INVENTORY = ROOT / "work/S1CHANNEL/write-inventory.json"
+PACKAGE = ROOT / "build/memstage/package-s1b"
+PUBLIC = ROOT / "work/S1CHANNEL2/package.json"
+PLAN = ROOT / "work/S1CHANNEL2/phase-plan.json"
+INVENTORY = ROOT / "work/S1CHANNEL2/write-inventory.json"
 STAGE = "BATCH1_A7_BAR1_VRAM"
 ROM = Path(
     os.environ.get(
@@ -324,7 +324,7 @@ def plan(child, sources):
             "owned BAR1 disable, retained guest/VFIO termination",
         ],
         mappings=dict(
-            BAR0=dict(bytes=8388608, access="kernel read/write explicit UC"),
+            BAR0=dict(bytes=16777216, access="kernel read/write explicit UC"),
             BAR1=dict(
                 bytes=8192,
                 access="kernel read-only explicit UC",

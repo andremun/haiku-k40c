@@ -91,6 +91,7 @@ static bool scenario(bool stall,bool mmuFault,k40::memstage::ChannelReport& repo
     for(uint32_t reg:{0x2140u,0x2100u,0x40108u,0x4010cu,0x800000u,0x800010u,0x1714u,0x100c10u})
         assert(!policy.write(reg,0xffffffff,true,true));
     assert(!policy.barWrite(ch::gpPut,1,true) && !policy.barWrite(0,1,true));
+    assert(!policy.read(bar0View,false) && !policy.write(bar0View,0,true,true)); // beyond the BAR0 view
     report=channel.report();step=policy.channelStep();denials=io.denials;
     assert(mapper.closure()==Closure::OwnedDisabled);
     if(dump) { // Same line formats as memnative/NativeOwner.cpp.

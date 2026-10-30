@@ -3,7 +3,7 @@
 Task S1CHANNEL (`docs/tasks/S1CHANNEL.md`). Lean implementation of the batch-2
 design (`docs/S1-BATCH2-REVIEW.md`, "Claude Code review and final design
 decisions"): one host NOP on one copy-engine (CE0) channel, polling only.
-**No card run has occurred. It needs the user's explicit yes for one run.**
+**Run 1 stopped at the 8 MiB BAR0 view before any bind (results/20261031-batch1-a7-bar1-3f33bd37/). The fixed package is S1CHANNEL2 (work/S1CHANNEL2/RESULT.md): BAR0 mapped whole, 16 MiB. It needs the user's explicit yes for one run.**
 
 ## What runs
 
@@ -19,15 +19,15 @@ python3 tools/memstage/run.py --run-approved-batch1-once
 ```
 
 The R5 stream and `/dev/vfio/23` access are needed as before. One launch
-consumes `build/memstage/package-s1/`. After any stop: report, no retry (ADR 006).
+consumes `build/memstage/package-s1b/`. After any stop: report, no retry (ADR 006).
 
 | Artifact | SHA-256 |
 |---|---|
-| Package manifest `work/S1CHANNEL/package.json` | `0ef5c3f4ba77cd4c9aee9f770f6958d53c41c936a263134c033f51aa77a4412d` |
+| Package manifest `work/S1CHANNEL2/package.json` | `4be2edd3a012c11c082738b1c29bb026a2a30bac3057bb339a0c52a9f326ae6e` |
 | Plan | `de1b97187f1aa7d8fe39ff773db69da6759ec524fb692e7307b2cc0da89b78af` |
-| memory_owner (new channel code) | `6c4752568cad9d1a8fcf51c98d361a6d4e924ba95ff8be7bea6a3a314543c556` |
+| memory_owner (channel code, 16 MiB BAR0) | `0e2473d0341297cdbb7b4946dd04ef8ce9cb60ca178f2efbecdd1507c0aa9c17` |
 | memory_client / memory_helper (unchanged) | `04848c97...` / `bfcd7361...` |
-| A7 owner (frozen sources, new key/nonce) | `87227024814f84b13db138a75fbeca6b7700eac756a778a67c6600d7a2f20698` |
+| A7 owner (frozen sources, new key/nonce) | `3d460faac0657fee72aa15bb0fbe8132b97df039cb64e6ce52f48e6858c5682b` |
 | A7 client / helper / identity (unchanged) | `d11b0d37...` / `58bec7c5...` / `8c45ec7b...` |
 | Guest kernel / ROM | `2da9a5b9...` / `aecb0b5f...` |
 

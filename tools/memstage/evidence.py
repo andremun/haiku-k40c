@@ -176,7 +176,7 @@ def request_fields(raw, suite, serial, resources):
     if prepared != [(str(owner), str(epoch), f"{bar0:x}", f"{bar1:x}")]:
         raise ValueError("resident request identity differs")
     map0 = re.findall(
-        r"^k40_mem: MAP bar=0 base=([0-9a-f]+) resource=(\d+) mapped=8388608 flags=explicit-UC status=(\d+)\r?$",
+        r"^k40_mem: MAP bar=0 base=([0-9a-f]+) resource=(\d+) mapped=16777216 flags=explicit-UC status=(\d+)\r?$",
         serial,
         re.M,
     )

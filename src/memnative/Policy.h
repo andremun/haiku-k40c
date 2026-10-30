@@ -3,6 +3,9 @@
 #pragma once
 #include "memstage/Mapper.h"
 namespace k40::memnative {
+// The whole K40c BAR0 (16 MiB; mmiotrace MAP 0xc1000000 size 0x1000000). The
+// channel registers start at 0x800000 (fifo/gk104.c:44-77), beyond 8 MiB.
+constexpr uint32_t bar0View=16777216; // no source: PCI resource size, captured in reference/linux-run-debug.
 class NativeIo;
 class Policy {
 public:
