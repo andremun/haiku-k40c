@@ -1,0 +1,4 @@
+MEM-OPEN-RESULT role=memory status=0x00000000
+1+0 records in
+1+0 records out
+256 bytes copied, 0.003333 s, 76.8 kB/s

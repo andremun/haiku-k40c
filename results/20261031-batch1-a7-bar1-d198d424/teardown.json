@@ -1,0 +1,5 @@
+{
+  "bus_master_enable": false,
+  "claim": "owned QEMU/tracer exited; read-only host command bit 2 clear; no manual reset",
+  "host_pci_command_after": 2
+}

@@ -1,11 +1,12 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1CHANNEL3 package ready (post-POST unit enable added). Next: one card run after the user's explicit yes.
-Task state: WAITING FOR USER (ADR 006). The S1CHANNEL2 run ran every channel
-step and teardown, GP_GET stayed 0. Fix: 0x200 = 0xffffffff (mc/nv04.c:120).
-Package build/memstage/package-s1c/ rehearsed; make check passes. Third S1
-channel package: a third failure triggers the AGENTS escalation.
+Current task: none. S1 PASSED on the card (2026-10-31). Next: user decision (archive, or S2/S3).
+Task state: S1 COMPLETE. A native Haiku driver brought up the K40c (A7 POST),
+mapped VRAM through BAR1, and one channel on the CE0 runlist consumed one host
+NOP: GP_GET 0 -> 1 in 10 us, no fault, clean teardown. Evidence:
+results/20261031-batch1-a7-bar1-d198d424/ (HARDWARE_VERIFIED under Haiku).
+Q7 and Q11 stay open. No compute job yet (S3).
 Last updated: 2026-10-31
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -140,4 +141,5 @@ A cardless result is not K40c evidence.
 | S1CHANNEL | READY (cardless) | 2026-10-31 | Lean batch 2: CE0 channel, Policy script, independent validator, cardless rehearsal pass. No card run. See work/S1CHANNEL/RESULT.md. |
 | S1CHANNEL run 1 | STOPPED (8 MiB BAR0 view) | 2026-10-31 | One approved run. A7, batch-1 and channel steps 0-10 passed; read of 0x800008 refused by the BAR0 view; no bind. No retry. |
 | S1CHANNEL2 run | STOPPED (NOP not consumed) | 2026-10-31 | All channel steps and teardown ran; GP_GET 0, GP_PUT 1; no fault. Likely missing post-POST unit enable (mc/nv04.c:120). No retry. |
+| S1CHANNEL3 run | **S1 PASS** | 2026-10-31 | GP_GET 0->1 in 10 us on channel 1, runlist 4 (CE0), PBDMA 2; no fault; clean teardown; validator accepted. See results/20261031-batch1-a7-bar1-d198d424/README.md. |
 

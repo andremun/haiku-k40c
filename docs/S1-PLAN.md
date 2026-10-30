@@ -1,5 +1,7 @@
 # Plan for milestone S1
 
+**S1 PASSED on 2026-10-31**: results/20261031-batch1-a7-bar1-d198d424/ (one host NOP consumed, GP_GET 0 -> 1, no fault, clean teardown). This plan is now a record.
+
 ## Current position (2026-10-30)
 
 Batch 1 passes on this card under Haiku: fresh A7 POST/readiness and the finite

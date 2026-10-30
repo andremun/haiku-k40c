@@ -29,3 +29,4 @@ One line for each milestone, task group or layout change. The task log in
 - 2026-10-13: Phases C and D closed (C5c, D6). Gate review package. External reviews and research received. S1 plan.
 - 2026-10-11 to 2026-10-12: Phases B, C and D tasks (register database, firmware manifest, subsystem models, page tables, push buffer, launch descriptor).
 - 2026-10-05 to 2026-10-08: Phase A (hardware record, root captures) and phase B start.
+- 2026-10-31: S1 passed on the K40c under Haiku: one host NOP consumed on one CE0-runlist channel, no fault, clean teardown.
