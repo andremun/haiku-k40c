@@ -1,11 +1,10 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1CHANNEL2 fixed package ready. Next: one card run after the user's explicit yes.
-Task state: WAITING FOR USER (ADR 006). Run 1 stopped at the 8 MiB BAR0 view
-before any bind. Fix: BAR0 mapped whole (16 MiB), Policy refuses beyond it.
-Package build/memstage/package-s1b/ rehearsed cardless; make check passes.
-Review: docs/S1-CHANNEL-REVIEW.md, work/S1CHANNEL2/RESULT.md.
+Current task: S1CHANNEL2 run STOPPED (channel ran, NOP not consumed). Next: fixed package, then the user's yes.
+Task state: WAITING FOR USER (ADR 006). All 24 channel steps ran, teardown
+clean; GP_GET stayed 0. Likely cause: units not enabled after POST (Linux
+writes 0x200 = 0xffffffff, mc/nv04.c:120). See results/20261031-batch1-a7-bar1-c261b19b/README.md.
 Last updated: 2026-10-31
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -139,4 +138,5 @@ A cardless result is not K40c evidence.
 | S1BATCH2PLAN | READY FOR REVIEW (host-only design) | 2026-10-30 | Batch-1 result plus six channel/scheduler/NOP implementation tasks, source anchors and explicit progress/teardown/authority gates. No runtime/package or new launch. See docs/S1-BATCH2-REVIEW.md. |
 | S1CHANNEL | READY (cardless) | 2026-10-31 | Lean batch 2: CE0 channel, Policy script, independent validator, cardless rehearsal pass. No card run. See work/S1CHANNEL/RESULT.md. |
 | S1CHANNEL run 1 | STOPPED (8 MiB BAR0 view) | 2026-10-31 | One approved run. A7, batch-1 and channel steps 0-10 passed; read of 0x800008 refused by the BAR0 view; no bind. No retry. |
+| S1CHANNEL2 run | STOPPED (NOP not consumed) | 2026-10-31 | All channel steps and teardown ran; GP_GET 0, GP_PUT 1; no fault. Likely missing post-POST unit enable (mc/nv04.c:120). No retry. |
 

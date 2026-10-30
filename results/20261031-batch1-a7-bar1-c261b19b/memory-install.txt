@@ -1,0 +1,9 @@
+BATCH-JOB-START
+MEM-INSTALL preflight_helper size=3936 sha256=55ade2fbc1bc0a695a4c5e32a7c33ba18c21fd5c3c4aea54ae4fedc35dcc59d1 inode-before=2621579 inode-after=2621579
+MEM-INSTALL preflight size=6424 sha256=e5df732100e12bc34778beee436dd50101bf6140e065d8fc2ca38c1fcbc83ab5 inode-before=2687336 inode-after=2687336
+MEM-NODE k40_mem_preflight
+MEM-OPEN-RESULT role=preflight status=0x00000000
+MEM-INSTALL memory_owner size=147992 sha256=0e2473d0341297cdbb7b4946dd04ef8ce9cb60ca178f2efbecdd1507c0aa9c17 inode-before=2687361 inode-after=2687361
+MEM-INSTALL memory_client size=7560 sha256=04848c9711e9b373b55e70d1e9b9b8c7d8995b42f69a53c0cffad57d9750172e inode-before=2687362 inode-after=2687362
+MEM-INSTALL memory_helper size=3912 sha256=bfcd73611a07737593597e7622f93d335455b73a6560f23caad9c450cbe00d3f inode-before=2687363 inode-after=2687363
+MEM-NODE k40_mem_stage
