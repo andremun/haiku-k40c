@@ -1,0 +1,13 @@
+{
+  "DMA_payload_visibility": false,
+  "Q11": "open; A7 G1 observation only",
+  "Q7": "open",
+  "S1_complete": false,
+  "allowed_kernel_lines": [],
+  "elapsed_seconds": 160.05,
+  "error": "native phase failure; stop without retry",
+  "kernel_scope": "R5 selected classes; not a clean full kernel log",
+  "stage": "BATCH1_A7_BAR1_VRAM",
+  "status": "failed",
+  "verification": "HARDWARE_VERIFIED under Haiku for this finite card/context only if status=pass"
+}

@@ -1,12 +1,11 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1CHANNEL package ready (lean batch 2). Next: one card run after the user's explicit yes.
-Task state: WAITING FOR USER. One host NOP on one CE0-runlist channel after the
-unchanged A7 and batch-1 gates, copied from the Linux kernel CE channel.
-Package build/memstage/package-s1/ (memory owner 6c475256...) passed the
-cardless rehearsal results/20261031-batch1-rehearsal-8779e475/; make check
-passes. Review: docs/S1-CHANNEL-REVIEW.md. No card run yet. S1 not yet shown.
+Current task: S1CHANNEL run 1 STOPPED (BAR0 view too small). Next: fixed package, then the user's yes.
+Task state: WAITING FOR USER (ADR 006). A7 and the batch-1 gates passed again;
+the channel phase ran steps 0-10, then the 8 MiB BAR0 view refused the
+channel register 0x800008 before any bind. No channel ran. R5 clean, bus
+mastering off. See results/20261031-batch1-a7-bar1-3f33bd37/README.md.
 Last updated: 2026-10-31
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -139,4 +138,5 @@ A cardless result is not K40c evidence.
 
 | S1BATCH2PLAN | READY FOR REVIEW (host-only design) | 2026-10-30 | Batch-1 result plus six channel/scheduler/NOP implementation tasks, source anchors and explicit progress/teardown/authority gates. No runtime/package or new launch. See docs/S1-BATCH2-REVIEW.md. |
 | S1CHANNEL | READY (cardless) | 2026-10-31 | Lean batch 2: CE0 channel, Policy script, independent validator, cardless rehearsal pass. No card run. See work/S1CHANNEL/RESULT.md. |
+| S1CHANNEL run 1 | STOPPED (8 MiB BAR0 view) | 2026-10-31 | One approved run. A7, batch-1 and channel steps 0-10 passed; read of 0x800008 refused by the BAR0 view; no bind. No retry. |
 

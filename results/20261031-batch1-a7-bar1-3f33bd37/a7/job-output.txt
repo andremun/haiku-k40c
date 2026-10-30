@@ -1,0 +1,11 @@
+A7-JOB-START
+A7-INSTALL identity size=8696 sha256=8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f inode-before=2687352 inode-after=2687352
+A7-INSTALL owner size=368672 sha256=87227024814f84b13db138a75fbeca6b7700eac756a778a67c6600d7a2f20698 inode-before=2687353 inode-after=2687353
+A7-INSTALL client size=7552 sha256=d11b0d3773e8f1a206a98b79b85a1c6e7c73948dbe096001d472ef0ee66ee122 inode-before=2687354 inode-after=2687354
+A7-DEVICE-PUBLISHED
+A7-INSTALL helper size=3888 sha256=58bec7c51730bf95f541c61c8ed9b8379b97f1c2b335702de0f9542698914977 inode-before=2687355 inode-after=2687355
+A7-OPEN-DEVICE
+A7-OPEN-RESULT status=0x00000000
+1+0 records in
+1+0 records out
+128 bytes copied, 0.001662 s, 77.0 kB/s
