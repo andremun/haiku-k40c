@@ -15,7 +15,8 @@ namespace ch=k40::memstage::channel;
 struct Fifo:Device {
     Policy* policy=nullptr;unsigned denials=0;bool stall=false,mmuFault=false;
     std::map<uint32_t,uint32_t> regs{{0x2390,0x1},{0x2394,0x6e},{0x2398,0x10},{0x2a04,0x800003ff}, // trace 230517-230519, 560973.
-        {0x4013c,0xffffffff},{0x4213c,0xffffffff},{0x4413c,0xffffffff},{0x204,0x7}};
+        {0x4013c,0xffffffff},{0x4213c,0xffffffff},{0x4413c,0xffffffff},{0x204,0x7},
+        {0x200,0xe011212d}}; // trace 46125: unit enables left by the start-up script.
     uint32_t present=0x7;bool committed=false;uint32_t committedEntries=0,runlistBase=0;
     uint64_t walk(uint64_t instance,uint64_t va) const { // gk104 17/12: PDE va>>27, SPT (va>>12)&32767.
         const auto directory=word64(instance+0x200);assert(directory%4096==0 && word64(instance+0x208)==(uint64_t(1)<<40)-1);
@@ -62,7 +63,8 @@ struct Fifo:Device {
         if(!policy->barWrite(offset,value,locks[1])){++denials;return false;}
         const auto slot=bar(offset,true)-0x8c;ram.at((slot+0x8c)/4)=value; // cla16f.h:63 GP_PUT within the slot.
         const auto inst=uint64_t(regs[0x800000+ch::chid*8]&0x7fffffff)*4096;
-        if(stall || !committed || committedEntries!=1 || !(regs[0x800000+ch::chid*8]&0x80000000))return true;
+        // Run 2 on the card: no progress without the post-POST unit enable (mc/nv04.c:120).
+        if(stall || regs[0x200]!=0xffffffff || !committed || committedEntries!=1 || !(regs[0x800000+ch::chid*8]&0x80000000))return true;
         assert(ram.at(uint64_t(runlistBase)*4096/4)==ch::chid && word64(inst+8)==slot); // gk104.c:454; RAMFC USERD slot.
         const auto gp=word64(inst+0x48)&0xffffffffffULL;assert(((word64(inst+0x48)>>48)&31)==9);
         const auto entry=word64(walk(inst,gp));assert(((entry>>42)&0x1fffff)==2); // GP_ENTRY1 bits 30:10: two words.
@@ -120,10 +122,10 @@ int main(int argc,char**)
     if(argc>1)return scenario(false,false,r,step,denials,true)?0:1;
     assert(scenario(false,false,r,step,denials));
     assert(r.progress==k40::memstage::Progress::Consumed && r.getAfter==1 && r.putAfter==1 && r.closed);
-    assert(r.runlist==4 && r.pbdma==2 && r.pbdmaMask==7 && step==23 && denials==0);
+    assert(r.runlist==4 && r.pbdma==2 && r.pbdmaMask==7 && step==24 && denials==0);
     assert(!scenario(true,false,r,step,denials));
-    assert(r.progress==k40::memstage::Progress::Stalled && r.getAfter==0 && r.closed && step==23 && denials==0);
+    assert(r.progress==k40::memstage::Progress::Stalled && r.getAfter==0 && r.closed && step==24 && denials==0);
     assert(!scenario(false,true,r,step,denials));
-    assert(r.progress==k40::memstage::Progress::Consumed && r.mmuPending && r.closed && step==23);
+    assert(r.progress==k40::memstage::Progress::Consumed && r.mmuPending && r.closed && step==24);
     std::puts("memory channel: S1 NOP path, stall teardown and fault refusal pass through Policy; HOST_ONLY");
 }

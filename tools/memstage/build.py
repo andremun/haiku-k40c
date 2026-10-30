@@ -23,10 +23,10 @@ from tools.memstage import contract, pci
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
-PACKAGE = ROOT / "build/memstage/package-s1b"
-PUBLIC = ROOT / "work/S1CHANNEL2/package.json"
-PLAN = ROOT / "work/S1CHANNEL2/phase-plan.json"
-INVENTORY = ROOT / "work/S1CHANNEL2/write-inventory.json"
+PACKAGE = ROOT / "build/memstage/package-s1c"
+PUBLIC = ROOT / "work/S1CHANNEL3/package.json"
+PLAN = ROOT / "work/S1CHANNEL3/phase-plan.json"
+INVENTORY = ROOT / "work/S1CHANNEL3/write-inventory.json"
 STAGE = "BATCH1_A7_BAR1_VRAM"
 ROM = Path(
     os.environ.get(

@@ -3,7 +3,7 @@
 Task S1CHANNEL (`docs/tasks/S1CHANNEL.md`). Lean implementation of the batch-2
 design (`docs/S1-BATCH2-REVIEW.md`, "Claude Code review and final design
 decisions"): one host NOP on one copy-engine (CE0) channel, polling only.
-**Run 1 stopped at the 8 MiB BAR0 view before any bind (results/20261031-batch1-a7-bar1-3f33bd37/). The fixed package is S1CHANNEL2 (work/S1CHANNEL2/RESULT.md): BAR0 mapped whole, 16 MiB. It needs the user's explicit yes for one run.**
+**Run 1 stopped at the 8 MiB BAR0 view before any bind (results/20261031-batch1-a7-bar1-3f33bd37/). The S1CHANNEL2 run ran every step but GP_GET stayed 0 (results/20261031-batch1-a7-bar1-c261b19b/). Current package: S1CHANNEL3 (work/S1CHANNEL3/RESULT.md), adding the post-POST unit enable. It needs the user's explicit yes for one run.**
 
 ## What runs
 
@@ -19,15 +19,15 @@ python3 tools/memstage/run.py --run-approved-batch1-once
 ```
 
 The R5 stream and `/dev/vfio/23` access are needed as before. One launch
-consumes `build/memstage/package-s1b/`. After any stop: report, no retry (ADR 006).
+consumes `build/memstage/package-s1c/`. After any stop: report, no retry (ADR 006).
 
 | Artifact | SHA-256 |
 |---|---|
-| Package manifest `work/S1CHANNEL2/package.json` | `4be2edd3a012c11c082738b1c29bb026a2a30bac3057bb339a0c52a9f326ae6e` |
+| Package manifest `work/S1CHANNEL3/package.json` | `1c7d71d55a314a90a9907fb6910771a729dc76ca9b620b121f55f8b26b17f0a4` |
 | Plan | `de1b97187f1aa7d8fe39ff773db69da6759ec524fb692e7307b2cc0da89b78af` |
-| memory_owner (channel code, 16 MiB BAR0) | `0e2473d0341297cdbb7b4946dd04ef8ce9cb60ca178f2efbecdd1507c0aa9c17` |
+| memory_owner (channel code, 16 MiB BAR0, unit enable) | `4454fd0f8cffb252a31592ffdedd60834245ba4da6b85fae2f8ef48bbe4a6118` |
 | memory_client / memory_helper (unchanged) | `04848c97...` / `bfcd7361...` |
-| A7 owner (frozen sources, new key/nonce) | `3d460faac0657fee72aa15bb0fbe8132b97df039cb64e6ce52f48e6858c5682b` |
+| A7 owner (frozen sources, new key/nonce) | `b4f73dcfbe24062b00f2a7cb2cff3c29d7a3e21a86e51bdfb9b1fd7fa635ccab` |
 | A7 client / helper / identity (unchanged) | `d11b0d37...` / `58bec7c5...` / `8c45ec7b...` |
 | Guest kernel / ROM | `2da9a5b9...` / `aecb0b5f...` |
 
@@ -67,7 +67,8 @@ read. Any other write is refused.
 | 2 | BAR1 SPT entry 0 = writable USERD page (VRAM) | `mmu/vmmgf100.c:313-316` |
 | 3-4 | `0x100cb8` = BAR1 PDB, `0x100cbc = 0x80000005` | as batch 1 |
 | 5 | `0x1704 = 0x80000000 \| inst>>12` (batch-1 BAR1 context), two BAR flushes | `bar/gf100.c:38-58` |
-| 6-7 | `0x204 = 0xffffffff`, then `0x204` = present mask read back | `fifo/gf100.c:927-934`, `fifo/gk104.c:739` |
+| 6 | `0x200 = 0xffffffff` (every unit enabled, as Linux after POST) | `mc/nv04.c:120`, trace 47330 |
+| 7-8 | `0x204 = 0xffffffff`, then `0x204` = present mask read back | `fifo/gf100.c:927-934`, `fifo/gk104.c:739` |
 | 8 | `0x2a04 = read \| 0xbfffffff` | `fifo/gk104.c:740` |
 | 9 | `0x4013c+p*0x2000 = read & ~0x10000100` (selected PBDMA only) | `fifo/gf100.c:357` |
 | 10 | `0x2254 = 0x10000000` | `fifo/gk104.c:749`, trace 560992 |

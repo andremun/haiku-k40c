@@ -253,7 +253,7 @@ def channel_image(byrole):
 def channel_phase(serial, events, byrole):
     """Validate phases 8-14: exact write order, NOP progress, faults, teardown."""
     line = re.findall(
-        r"^k40_mem: CHANNEL runlist=(\d+) pbdma=(\d+) mask=([0-9a-f]+) runm=([0-9a-f]+) bound=1 closed=1 progress=1 error=0 step=23\r?$",
+        r"^k40_mem: CHANNEL runlist=(\d+) pbdma=(\d+) mask=([0-9a-f]+) runm=([0-9a-f]+) bound=1 closed=1 progress=1 error=0 step=24\r?$",
         serial,
         re.M,
     )
@@ -302,6 +302,7 @@ def channel_phase(serial, events, byrole):
         (10, PDB, lambda r: (byrole[3] >> 12) << 4),
         (10, INVALIDATE, lambda r: 0x80000005),
         (10, CONTEXT, lambda r: context),
+        (11, 0x200, lambda r: 0xFFFFFFFF),  # mc/nv04.c:120; trace line 47330.
         (11, 0x204, lambda r: 0xFFFFFFFF),  # gf100.c:927-934.
         (11, 0x204, lambda r: r[0x204]),  # gk104.c:739 present mask.
         (11, 0x2A04, lambda r: r[0x2A04] | 0xBFFFFFFF),  # gk104.c:740.

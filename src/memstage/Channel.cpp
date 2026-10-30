@@ -108,6 +108,8 @@ bool Channel::fifo()
     LockGuard lock(io_,Lock::Mmu);
     if(!lock.held())return fail(Error::Budget);
     uint32_t value,mask;
+    // mc/nv04.c:120: Linux enables every unit after POST (trace line 47330).
+    if(!write(0x000200,0xffffffff) || !read(0x000200,value))return false;
     // fifo/gf100.c:927-934 PBDMA discovery, then fifo/gk104.c:739-740 enable mask.
     if(!read(0x000204,value) || !write(0x000204,0xffffffff) || !read(0x000204,mask))return false;
     if(!mask || mask>0xff)return fail(Error::Routing,0x000204,mask); // no source: software unit bound.
@@ -151,7 +153,7 @@ bool Channel::submit()
     if(!journal_.append({phase_,Error::None,gpPut,1,0,last_-start_,Operation::Write,uint8_t(Role::Userd),1}))return fail(Error::Overflow);
     const auto start=last_;
     report_.progress=Progress::Stalled;
-    for(unsigned i=0;i<100000;++i) { // no source: software poll-count bound.
+    for(unsigned i=0;i<20000000;++i) { // no source: software poll-count bound above the 2 s time bound.
         if(!tick() || !io_.loadFence() || !io_.barRead32(gpGet,report_.getAfter))return fail(Error::Read,gpGet);
         if(!tick())return false;
         report_.polls=i+1;report_.progressUs=last_-start;

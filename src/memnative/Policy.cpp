@@ -59,10 +59,10 @@ void Policy::observed(uint32_t reg,uint32_t value)
     if(!channelActive())return;
     using memstage::channel::chid;
     if(reg==0x100c80 && waitQueued_ && (value&0x8000))chanQueued_=true; // vmmgf100.c:224.
-    if(reg==0x000204 && step_==7){mask_=value;probed_=true;} // fifo/gf100.c:927-934 present units.
+    if(reg==0x000204 && step_==8){mask_=value;probed_=true;} // fifo/gf100.c:927-934 present units.
     if(reg>=0x002390 && reg<0x0023b0)runm_[(reg-0x002390)/4]=value; // fifo/gk104.c:392.
-    if(reg==0x002a04 && step_==8){value2a04_=value;read2a04_=true;} // fifo/gk104.c:740.
-    if(reg>=0x04013c && reg<0x04013c+8*0x2000 && (reg-0x04013c)%0x2000==0 && step_==9){control_=value;readControl_=true;} // fifo/gf100.c:357.
+    if(reg==0x002a04 && step_==9){value2a04_=value;read2a04_=true;} // fifo/gk104.c:740.
+    if(reg>=0x04013c && reg<0x04013c+8*0x2000 && (reg-0x04013c)%0x2000==0 && step_==10){control_=value;readControl_=true;} // fifo/gf100.c:357.
     if(reg==0x800004+chid*8){state_=value;readState_=true;} // fifo/gk104.c:44-77.
     if(reg==0x800000+chid*8){inst_=value;readInst_=true;} // fifo/gk104.c:60-68.
     if(reg>=0x002284 && reg<0x002284+16*8 && (reg-0x002284)%8==0)runlistClear_=!(value&0x00100000); // fifo/gk104.c:426.
@@ -158,7 +158,7 @@ bool Policy::write(uint32_t reg,uint32_t value,bool window,bool mmu)
 bool Policy::barRead(uint64_t offset,bool mmu) const
 {
     if(channelActive()) // cla16f.h:62-63 GP_GET/GP_PUT of the selected USERD slot only.
-        return mmu && step_>=6 && step_<=22 && (offset==memstage::channel::gpGet || offset==memstage::channel::gpPut);
+        return mmu && step_>=6 && step_<=23 && (offset==memstage::channel::gpGet || offset==memstage::channel::gpPut);
     return mmu && queued_ && expectedContext_ && commands_>=1 && commands_<=3
         && offset<8192 && !(offset&3) && (faults_.completed(Phase::Tables)
             || faults_.completed(Phase::Mapped) || faults_.completed(Phase::Remapped));
@@ -194,7 +194,7 @@ bool Policy::channelAddresses(Record out[7]) const
 bool Policy::channelRead(uint32_t reg) const
 {
     if(!channelActive())return false;
-    if(reg==0x000204 || reg==0x002a04 || reg==0x002634 || reg==0x800000+chid*8 || reg==0x800004+chid*8)return true; // fifo/gf100.c:927-934; fifo/gk104.c:44-77,740; fifo/gf100.c:372.
+    if(reg==0x000200 || reg==0x000204 || reg==0x002a04 || reg==0x002634 || reg==0x800000+chid*8 || reg==0x800004+chid*8)return true; // fifo/gf100.c:927-934; fifo/gk104.c:44-77,740; fifo/gf100.c:372.
     if(reg>=0x002390 && reg<0x0023b0)return true; // fifo/gk104.c:392, eight PBDMAs.
     if(reg>=0x002284 && reg<0x002284+16*8 && (reg-0x002284)%8==0)return true; // fifo/gk104.c:426.
     for(unsigned p=0;p<8;++p) {
@@ -232,8 +232,8 @@ bool Policy::channelWrite(uint32_t reg,uint32_t value)
     // Teardown jumps: a selected/bound channel must be stopped; an exposed but
     // unselected BAR1 context must be disabled. Nothing else may be skipped.
     // fifo/gk104.c:44 stop; bar/gf100.c:46-49 context disable.
-    if(step_>=12 && step_<=16 && reg==chanState && readState_ && value==(state_|0x800))step_=17;
-    if(step_>=6 && step_<=11 && reg==0x001704)step_=22; // bar/gf100.c:46-49.
+    if(step_>=13 && step_<=17 && reg==chanState && readState_ && value==(state_|0x800))step_=18;
+    if(step_>=6 && step_<=12 && reg==0x001704)step_=23; // bar/gf100.c:46-49.
     bool ok=false;
     switch(step_) {
     case 0: ok=reg==0x100cb8 && (status_&0x00ff0000) && value==uint32_t((roles[0].physical.value>>12)<<4); // vmmgf100.c:199,216.
@@ -253,31 +253,32 @@ bool Policy::channelWrite(uint32_t reg,uint32_t value)
     case 5: ok=reg==0x001704 && chanQueued_ && expectedContext_ && context_==(expectedContext_&0x7fffffff) // bar/gf100.c:46-58.
             && value==expectedContext_; // bar/gf100.c:52-58 owned BAR1 context only.
         break;
-    case 6: ok=reg==0x000204 && value==0xffffffff;break; // fifo/gf100.c:927-934.
-    case 7: ok=reg==0x000204 && probed_ && mask_ && mask_<=0xff && value==mask_;break; // fifo/gk104.c:739.
-    case 8: ok=reg==0x002a04 && read2a04_ && value==(value2a04_|0xbfffffff);break; // fifo/gk104.c:740.
-    case 9: ok=pbdma(p) && reg==0x04013c+p*0x2000 && readControl_ && value==(control_&~0x10000100u);break; // fifo/gf100.c:357.
-    case 10: ok=reg==0x002254 && value==0x10000000;break; // fifo/gk104.c:749; trace 560992.
-    case 11: ok=reg==chanState && readState_ && readInst_ && !state_ && !inst_
+    case 6: ok=reg==0x000200 && value==0xffffffff;break; // mc/nv04.c:120 every unit enabled; trace line 47330.
+    case 7: ok=reg==0x000204 && value==0xffffffff;break; // fifo/gf100.c:927-934.
+    case 8: ok=reg==0x000204 && probed_ && mask_ && mask_<=0xff && value==mask_;break; // fifo/gk104.c:739.
+    case 9: ok=reg==0x002a04 && read2a04_ && value==(value2a04_|0xbfffffff);break; // fifo/gk104.c:740.
+    case 10: ok=pbdma(p) && reg==0x04013c+p*0x2000 && readControl_ && value==(control_&~0x10000100u);break; // fifo/gf100.c:357.
+    case 11: ok=reg==0x002254 && value==0x10000000;break; // fifo/gk104.c:749; trace 560992.
+    case 12: ok=reg==chanState && readState_ && readInst_ && !state_ && !inst_
             && value==((state_&~0x000f0000u)|(rl<<16));break; // fifo/gk104.c:77; trace 562288-562289.
-    case 12: ok=reg==chanReg && value==(0x80000000|uint32_t(roles[2].physical.value>>12)); // fifo/gk104.c:68.
+    case 13: ok=reg==chanReg && value==(0x80000000|uint32_t(roles[2].physical.value>>12)); // fifo/gk104.c:68.
         if(ok)readState_=false;
         break; // fifo/gk104.c:68.
-    case 13: ok=reg==chanState && readState_ && value==(state_|0x400);break; // fifo/gk104.c:52.
-    case 14: ok=reg==0x002270 && value==runlistBase;break; // fifo/gk104.c:446 VRAM target 0.
-    case 15: ok=reg==0x002274 && value==((rl<<20)|1); // fifo/gk104.c:447.
+    case 14: ok=reg==chanState && readState_ && value==(state_|0x400);break; // fifo/gk104.c:52.
+    case 15: ok=reg==0x002270 && value==runlistBase;break; // fifo/gk104.c:446 VRAM target 0.
+    case 16: ok=reg==0x002274 && value==((rl<<20)|1); // fifo/gk104.c:447.
         if(ok)runlistClear_=false;
         break;
-    case 17: ok=reg==chanState && readState_ && value==(state_|0x800);break; // fifo/gk104.c:44.
-    case 18: ok=reg==0x002634 && value==chid; // fifo/gf100.c:43.
+    case 18: ok=reg==chanState && readState_ && value==(state_|0x800);break; // fifo/gk104.c:44.
+    case 19: ok=reg==0x002634 && value==chid; // fifo/gf100.c:43.
         if(ok)preemptClear_=false;
         break;
-    case 19: ok=reg==0x002270 && preemptClear_ && value==runlistBase;break; // fifo/gk104.c:446.
-    case 20: ok=reg==0x002274 && value==(rl<<20); // fifo/gk104.c:447 empty list.
+    case 20: ok=reg==0x002270 && preemptClear_ && value==runlistBase;break; // fifo/gk104.c:446.
+    case 21: ok=reg==0x002274 && value==(rl<<20); // fifo/gk104.c:447 empty list.
         if(ok)runlistClear_=false;
         break;
-    case 21: ok=reg==chanReg && runlistClear_ && value==0;break; // fifo/gk104.c:60.
-    case 22: ok=reg==0x001704 && expectedContext_ && context_==expectedContext_ // bar/gf100.c:46-49.
+    case 22: ok=reg==chanReg && runlistClear_ && value==0;break; // fifo/gk104.c:60.
+    case 23: ok=reg==0x001704 && expectedContext_ && context_==expectedContext_ // bar/gf100.c:46-49.
             && value==(expectedContext_&0x7fffffff);break; // bar/gf100.c:46-49.
     default: ok=false;
     }
@@ -287,7 +288,7 @@ bool Policy::channelWrite(uint32_t reg,uint32_t value)
 bool Policy::barWrite(uint64_t offset,uint32_t value,bool mmu)
 {
     // nouveau_dma.c:92 GP_PUT, once, after the runlist commit completed.
-    if(!channelActive() || !mmu || step_!=16 || !runlistClear_ || offset!=memstage::channel::gpPut || value!=1)return false;
+    if(!channelActive() || !mmu || step_!=17 || !runlistClear_ || offset!=memstage::channel::gpPut || value!=1)return false;
     ++step_;return true;
 }
 }

@@ -1,10 +1,11 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1CHANNEL2 run STOPPED (channel ran, NOP not consumed). Next: fixed package, then the user's yes.
-Task state: WAITING FOR USER (ADR 006). All 24 channel steps ran, teardown
-clean; GP_GET stayed 0. Likely cause: units not enabled after POST (Linux
-writes 0x200 = 0xffffffff, mc/nv04.c:120). See results/20261031-batch1-a7-bar1-c261b19b/README.md.
+Current task: S1CHANNEL3 package ready (post-POST unit enable added). Next: one card run after the user's explicit yes.
+Task state: WAITING FOR USER (ADR 006). The S1CHANNEL2 run ran every channel
+step and teardown, GP_GET stayed 0. Fix: 0x200 = 0xffffffff (mc/nv04.c:120).
+Package build/memstage/package-s1c/ rehearsed; make check passes. Third S1
+channel package: a third failure triggers the AGENTS escalation.
 Last updated: 2026-10-31
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
