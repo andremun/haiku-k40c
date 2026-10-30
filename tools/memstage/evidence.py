@@ -181,7 +181,7 @@ def request_fields(raw, suite, serial, resources):
         re.M,
     )
     map1 = re.findall(
-        r"^k40_mem: MAP bar=1 base=([0-9a-f]+) resource=(\d+) mapped=8192 flags=explicit-UC read-only status=(\d+)\r?$",
+        r"^k40_mem: MAP bar=1 base=([0-9a-f]+) resource=(\d+) mapped=8192 flags=explicit-UC read-write status=(\d+)\r?$",
         serial,
         re.M,
     )
@@ -206,8 +206,141 @@ def request_fields(raw, suite, serial, resources):
     )
 
 
+CHID = 1  # memstage/ChannelImage.h; trace line 562290.
+GP_GET, GP_PUT = 0x288, 0x28C  # cla16f.h:62-63 in USERD slot CHID*0x200.
+GPFIFO_VA, PUSH_VA = 0x10000000, 0x10001000  # software channel VA layout.
+PB_ROLES = (8, 9, 10, 11, 12, 13, 14)  # ChanDirectory..Runlist, VramArena.h.
+
+
+def pte(physical, writable=False):
+    # vmmgf100.c:313-316 valid, RO bit 2 unless writable; VRAM, kind 0.
+    return (physical >> 8) | (1 if writable else 5)
+
+
+def channel_image(byrole):
+    """Independent re-encoding of memstage/ChannelImage.cpp from pinned sources."""
+    userd = byrole[11] + CHID * 0x200  # fifo/gk104.c:84,88-89,117.
+    ramfc = [
+        (0x08, userd),
+        (0x10, 0xFACE),  # fifo/gk104.c:90.
+        (0x30, 0xFFFFF902),  # fifo/gk104.c:91.
+        (0x48, (GPFIFO_VA & 0xFFFFFFFF) | (((GPFIFO_VA >> 32) | (9 << 16)) << 32)),  # gk104.c:85,92-93.
+        (0x80, 0x20400000 << 32),  # gk104.c:94.
+        (0x90, 0x30000001 << 32),  # gk104.c:95; devm 1, trace 562278.
+        (0x98, 0x100 << 32),  # gk104.c:96.
+        (0xA8, 0x1F << 32),  # gk104.c:97.
+        (0xB8, 0xF8000000),  # gk104.c:100.
+        (0xE0, 0x20 << 32),  # gk104.c:98.
+        (0xE8, CHID),  # gk104.c:99.
+        (0xF8, 0x10003080 | (0x10000010 << 32)),  # gk104.c:101-102.
+        (0x200, byrole[8]),  # vmmgf100.c:346-360.
+        (0x208, (1 << 40) - 1),
+    ]
+    return {
+        8: [((GPFIFO_VA >> 27) * 8, (byrole[9] << 24) | (1 << 32))],  # vmmgf100.c:129-140.
+        9: [
+            (((GPFIFO_VA >> 12) & 32767) * 8, pte(byrole[12])),
+            (((PUSH_VA >> 12) & 32767) * 8, pte(byrole[13])),
+        ],
+        10: ramfc,
+        11: [],
+        12: [(0, (PUSH_VA & 0xFFFFFFFF) | (((PUSH_VA >> 32) | (8 << 8)) << 32))],  # nouveau_dma.c:83-84.
+        13: [(0, (1 << 29) | (1 << 16) | (0x08 >> 2))],  # dma-pusher.rst:417; cla16f.h:74.
+        14: [(0, CHID)],  # fifo/gk104.c:454-455.
+    }
+
+
+def channel_phase(serial, events, byrole):
+    """Validate phases 8-14: exact write order, NOP progress, faults, teardown."""
+    line = re.findall(
+        r"^k40_mem: CHANNEL runlist=(\d+) pbdma=(\d+) mask=([0-9a-f]+) runm=([0-9a-f]+) bound=1 closed=1 progress=1 error=0 step=23\r?$",
+        serial,
+        re.M,
+    )
+    if len(line) != 1:
+        raise ValueError("channel report missing or not consumed/closed")
+    rl, pb, mask = int(line[0][0]), int(line[0][1]), int(line[0][2], 16)
+    routes = re.findall(
+        r"^k40_mem: ROUTE type=1 instance=0 address=[0-9a-f]+ fault=\S+ runlist=1/(\d+) ", serial, re.M
+    )
+    if routes != [str(rl)] or not mask & (1 << pb) or rl > 15:
+        raise ValueError("CE0 runlist/PBDMA route differs")  # top/gk104.c:79; gk104.c:392.
+    if serial.count("k40_mem: CHANNEL_GET before=0/0 after=1/1 ") != 1:
+        raise ValueError("GP_GET did not advance from 0 to GP_PUT 1")
+    status = re.findall(
+        r"^k40_mem: CHANNEL_STATUS mc=([0-9a-f]+) fifo=([0-9a-f]+) mmu=0 pbdma=0 hce=0 state=([0-9a-f]+)\r?$",
+        serial,
+        re.M,
+    )
+    if len(status) != 1 or int(status[0][1], 16) & 0x3FFFFFFF:
+        raise ValueError("channel fault/status")  # gk104.c:654-718.
+    chan = [e for e in events if e[0] >= 8]
+    if [e[3] for e in chan if e[0] == 8 and e[2] == MC and e[6] == 0] != [0]:
+        raise ValueError("channel baseline MC dirty")
+    image = channel_image(byrole)
+    patches = [(e[0], e[7], e[2], e[3]) for e in chan if e[6] == 5]
+    expected = [(9, role, offset, value) for role in PB_ROLES for offset, value in image[role]]
+    expected.append((10, 4, 0, pte(byrole[11], True)))  # BAR1 VA 0 -> USERD page.
+    if patches != expected:
+        raise ValueError("channel image serialization differs")
+    bulk = [(e[6], e[7], e[8], e[3]) for e in chan if e[6] in (3, 4)]
+    sizes = {8: 65536, 9: 262144}
+    if bulk != [(op, role, 0, sizes.get(role, 4096)) for role in PB_ROLES for op in (3, 4)]:
+        raise ValueError("channel zeroing protocol differs")
+    last, writes = {}, []
+    for e in chan:
+        if e[6] == 0:
+            last[e[2]] = e[3]
+        elif e[6] == 1 and e[2] not in (WINDOW, FLUSH):
+            writes.append((e[0], e[2], e[3], dict(last)))
+    state, reg = 0x800004 + CHID * 8, 0x800000 + CHID * 8  # fifo/gk104.c:44-77.
+    context = 0x80000000 | (byrole[5] >> 12)  # bar/gf100.c:56-58.
+    control = 0x04013C + pb * 0x2000  # gf100.c:357.
+    plan = [
+        (9, PDB, lambda r: (byrole[8] >> 12) << 4),  # vmmgf100.c:216.
+        (9, INVALIDATE, lambda r: 0x80000001),  # vmmgf100.c:221,230 PAGE_ALL.
+        (10, PDB, lambda r: (byrole[3] >> 12) << 4),
+        (10, INVALIDATE, lambda r: 0x80000005),
+        (10, CONTEXT, lambda r: context),
+        (11, 0x204, lambda r: 0xFFFFFFFF),  # gf100.c:927-934.
+        (11, 0x204, lambda r: r[0x204]),  # gk104.c:739 present mask.
+        (11, 0x2A04, lambda r: r[0x2A04] | 0xBFFFFFFF),  # gk104.c:740.
+        (11, control, lambda r: r[control] & ~0x10000100 & 0xFFFFFFFF),
+        (11, 0x2254, lambda r: 0x10000000),  # gk104.c:749.
+        (12, state, lambda r: rl << 16),  # gk104.c:77 from inactive 0.
+        (12, reg, lambda r: 0x80000000 | (byrole[10] >> 12)),  # gk104.c:68.
+        (12, state, lambda r: r[state] | 0x400),  # gk104.c:52.
+        (12, 0x2270, lambda r: byrole[14] >> 12),  # gk104.c:446.
+        (12, 0x2274, lambda r: (rl << 20) | 1),  # gk104.c:447.
+        (13, GP_PUT, lambda r: 1),  # nouveau_dma.c:92.
+        (14, state, lambda r: r[state] | 0x800),  # gk104.c:44.
+        (14, 0x2634, lambda r: CHID),  # gf100.c:43.
+        (14, 0x2270, lambda r: byrole[14] >> 12),
+        (14, 0x2274, lambda r: rl << 20),
+        (14, reg, lambda r: 0),  # gk104.c:60.
+        (14, CONTEXT, lambda r: context & 0x7FFFFFFF),  # bar/gf100.c:46-49.
+    ]
+    if len(writes) != len(plan):
+        raise ValueError("channel register write count differs")
+    for (phase, address, value, reads), (wantPhase, wantAddress, rule) in zip(writes, plan):
+        if (phase, address) != (wantPhase, wantAddress) or value != rule(reads):
+            raise ValueError(f"channel write {address:x} differs")
+    if reads_of(chan, state, 12) != [0] or reads_of(chan, reg, 12) != [0]:
+        raise ValueError("selected channel was not inactive before bind")
+    if not any(e[6] == 2 and e[0] == 13 and e[2] == GP_GET and e[3] == 1 for e in chan):
+        raise ValueError("GP_GET progress poll missing")
+    for phase, address in ((12, 0x2284 + rl * 8), (14, 0x2634), (14, 0x2284 + rl * 8)):
+        if not any(e[6] == 2 and e[0] == phase and e[2] == address and not e[3] & 0x100000 for e in chan):
+            raise ValueError("runlist/preempt completion poll missing")  # gk104.c:426; gf100.c:372.
+    return dict(runlist=rl, pbdma=pb, pbdma_mask=mask, writes=len(writes))
+
+
+def reads_of(events, address, phase):
+    return [e[3] for e in events if e[6] == 0 and e[0] == phase and e[2] == address][:1]
+
+
 def memory_final(serial, suite, request):
-    marker = "k40_mem: PASS BAR1_SCOPED faults=0 upload=0 mapper=0 closure=2 allocations=7 journal_overflow=0"
+    marker = "k40_mem: PASS S1_CHANNEL_NOP faults=0 upload=0 mapper=0 closure=2 allocations=14 journal_overflow=0"
     if serial.count(marker) != 1 or serial.count("K40-MEM-END") != 1:
         raise ValueError("memory final pass/closure missing or repeated")
     owner = struct.unpack_from("<Q", request, 104)[0]
@@ -236,12 +369,14 @@ def memory_final(serial, suite, request):
         allocations.append(
             tuple(int(x, 16 if i == 2 else 10) for i, x in enumerate(values))
         )
-    sizes = {1: 131072, 2: 131072, 3: 65536, 4: 262144, 5: 4096, 6: 4096, 7: 4096}
-    generations = {1: 1, 2: 1, 3: 2, 4: 5, 5: 3, 6: 3, 7: 3}
-    roles = (1, 2, 6, 7, 3, 4, 5)
+    sizes = {1: 131072, 2: 131072, 3: 65536, 4: 262144, 5: 4096, 6: 4096, 7: 4096,
+             8: 65536, 9: 262144, 10: 4096, 11: 4096, 12: 4096, 13: 4096, 14: 4096}
+    generations = {1: 1, 2: 1, 3: 2, 4: 6, 5: 3, 6: 3, 7: 3,
+                   8: 2, 9: 3, 10: 15, 11: 1, 12: 2, 13: 2, 14: 2}
+    roles = (1, 2, 6, 7, 3, 4, 5, *PB_ROLES)
     cursor = 256 * 1024 + 4096
     byrole = {}
-    if len(allocations) != 7:
+    if len(allocations) != 14:
         raise ValueError("allocation ledger incomplete")
     for index, record in enumerate(allocations, 1):
         ident, role, address, size, generation, staged, referenced, retained = record
@@ -263,7 +398,7 @@ def memory_final(serial, suite, request):
             int(value, 16 if index in (2, 3) else 10)
             for index, value in enumerate(match.groups())
         )
-        if event[1] or event[0] > 7 or event[6] > 7:
+        if event[1] or event[0] > 14 or event[6] > 7:
             raise ValueError("memory error/unknown diagnostic event")
         events.append(event)
     if not events or len(events) > 4096:
@@ -273,7 +408,8 @@ def memory_final(serial, suite, request):
             0
         ]:
             raise ValueError("raw per-phase MC baseline missing/dirty")
-    writes = [(e[0], e[2], e[3]) for e in events if e[6] == 1]
+    batch1 = [e for e in events if e[0] <= 7]
+    writes = [(e[0], e[2], e[3]) for e in batch1 if e[6] == 1]
     allowed = {WINDOW, FLUSH, MODE, PDB, INVALIDATE, CONTEXT}
     if any(reg not in allowed for _, reg, _ in writes):
         raise ValueError("unexpected register write record")
@@ -291,7 +427,7 @@ def memory_final(serial, suite, request):
     pte = (
         lambda physical: (physical >> 8) | 5
     )  # vmmgf100.c:35,314-319 valid + RO, VRAM.
-    patches = [(e[0], e[7], e[2], e[3]) for e in events if e[6] == 5]
+    patches = [(e[0], e[7], e[2], e[3]) for e in batch1 if e[6] == 5]
     expected = [
         (3, 3, 0, (byrole[4] << 24) | (1 << 32)),
         (3, 4, 0, pte(byrole[6])),
@@ -308,7 +444,7 @@ def memory_final(serial, suite, request):
     ]
     if patches != expected:
         raise ValueError("table/instance/remap serialization differs")
-    bulk = [(e[6], e[7], e[8], e[3]) for e in events if e[6] in (3, 4)]
+    bulk = [(e[6], e[7], e[8], e[3]) for e in batch1 if e[6] in (3, 4)]
     expectedBulk = []
     for role in (1, 2):
         expectedBulk.extend((operation, role, 0, sizes[role]) for operation in (3, 4))
@@ -332,7 +468,7 @@ def memory_final(serial, suite, request):
                 value = ((value ^ byte) * 1099511628211) & (2**64 - 1)
         return value
 
-    witnesses = [(e[0], e[2], e[7], e[3], e[8]) for e in events if e[6] == 7]
+    witnesses = [(e[0], e[2], e[7], e[3], e[8]) for e in batch1 if e[6] == 7]
     expectedWitness = [
         (phase, virtual, role, fingerprint(byrole[role]), 1)
         for phase, first, second in ((3, 6, 7), (5, 7, 7), (6, 6, 7))
@@ -341,8 +477,10 @@ def memory_final(serial, suite, request):
     if witnesses != expectedWitness:
         raise ValueError("BAR1 page/remap/readback witnesses differ")
 
+    channel = channel_phase(serial, events, byrole)
     return dict(
-        scope="same-context BAR1 positive mapping/update observations only; no channel/DMA payload proof",
+        scope="S1: one host NOP consumed on one CE0-runlist channel (GP_GET 0->1), no fault, clean teardown; no DMA payload proof",
+        channel=channel,
         owner=owner,
         allocations=[
             dict(id=r[0], role=r[1], physical=r[2], bytes=r[3], generation=r[4])
@@ -352,6 +490,6 @@ def memory_final(serial, suite, request):
         bar1_context_writes=values(CONTEXT),
         invalidation_count=3,
         bar_flush_count=17,
-        closure="owned BAR1 disabled; all storage retained until reviewed guest/VFIO end",
-        S1_complete=False,
+        closure="owned BAR1 disabled; channel unbound; all storage retained until reviewed guest/VFIO end",
+        S1_complete=True,
     )

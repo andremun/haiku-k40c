@@ -1,13 +1,12 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1BATCH2PLAN reviewed by Claude Code (ACCEPT with changes). Next: implement the six batch-2 tasks.
-Task state: Design final (docs/S1-BATCH2-REVIEW.md, "Claude Code review and final
-design decisions"). Required change: target a copy-engine runlist, which needs no
-engine context (fifo/gk104.c:134-141,281-287), not the GR runlist. Batch 1 passed
-(bf67465). No batch-2 code or package exists; no card run. The 2026-10-31 approval
-of one trial was not used: a finished package needs a fresh yes.
-S1 remains incomplete. Q7/Q11 open.
+Current task: S1CHANNEL package ready (lean batch 2). Next: one card run after the user's explicit yes.
+Task state: WAITING FOR USER. One host NOP on one CE0-runlist channel after the
+unchanged A7 and batch-1 gates, copied from the Linux kernel CE channel.
+Package build/memstage/package-s1/ (memory owner 6c475256...) passed the
+cardless rehearsal results/20261031-batch1-rehearsal-8779e475/; make check
+passes. Review: docs/S1-CHANNEL-REVIEW.md. No card run yet. S1 not yet shown.
 Last updated: 2026-10-31
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
@@ -139,3 +138,5 @@ A cardless result is not K40c evidence.
 | S1BATCH1RUN | PASS (finite A7/BAR1 scope under Haiku) | 2026-10-30 | One explicitly approved acb2aca launch, 148.54 s. POST/readiness and BAR1 mapping/remap/restore pass; R5 unchanged, bus mastering off. S1/Q7/Q11 remain open. See docs/S1-BATCH1-RUN-REVIEW.md. |
 
 | S1BATCH2PLAN | READY FOR REVIEW (host-only design) | 2026-10-30 | Batch-1 result plus six channel/scheduler/NOP implementation tasks, source anchors and explicit progress/teardown/authority gates. No runtime/package or new launch. See docs/S1-BATCH2-REVIEW.md. |
+| S1CHANNEL | READY (cardless) | 2026-10-31 | Lean batch 2: CE0 channel, Policy script, independent validator, cardless rehearsal pass. No card run. See work/S1CHANNEL/RESULT.md. |
+

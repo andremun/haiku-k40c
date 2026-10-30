@@ -22,6 +22,7 @@ public:
     bool storeFence() override;
     bool loadFence() override;
     bool barRead32(uint64_t,uint32_t&) override;
+    bool barWrite32(uint64_t,uint32_t) override;
     unsigned denialKind() const{return denial_;}
     uint32_t denialOffset() const{return denialOffset_;}uint32_t denialValue() const{return denialValue_;}
     uint64_t bar0() const{return bar0_;}uint64_t bar1() const{return bar1_;}
@@ -31,7 +32,7 @@ private:
     void activate();void revoke();bool deny(unsigned kind=1,uint32_t offset=0,uint32_t value=0);
     Policy* policy_=nullptr;pci_module_info* pci_=nullptr;pci_info card_{};
     uint64_t bar0_=0,bar1_=0,bar0Bytes_=0,bar1Bytes_=0,start_=0;
-    area_id area0_=-1,area1_=-1;volatile uint8_t* view0_=nullptr;const volatile uint8_t* view1_=nullptr;
+    area_id area0_=-1,area1_=-1;volatile uint8_t* view0_=nullptr;volatile uint8_t* view1_=nullptr;
     std::atomic_flag locks_[2]={ATOMIC_FLAG_INIT,ATOMIC_FLAG_INIT};bool held_[2]{};
     bool attempted_=false,live_=false,profile_=false;
     unsigned denial_=0;uint32_t denialOffset_=0,denialValue_=0;

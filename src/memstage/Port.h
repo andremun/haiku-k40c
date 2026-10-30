@@ -11,8 +11,10 @@ public:
     virtual bool read32(uint32_t offset,uint32_t& value)=0;
     virtual bool now(uint64_t& microseconds)=0;
 };
-enum class Phase:uint8_t {Reset,Post,Physical,Tables,Mapped,Remapped,Restored,Disabled};
-enum class Error:uint8_t {None,Order,Read,Dirty,Clock,Budget,Overflow,Topology,Write,Profile,Bounds,Compare,Flush,Invalidate,Authority};
+enum class Phase:uint8_t {Reset,Post,Physical,Tables,Mapped,Remapped,Restored,Disabled,
+    ChannelBase,ChannelMemory,ChannelBar,ChannelFifo,ChannelBound,ChannelSubmit,ChannelClosed};
+enum class Error:uint8_t {None,Order,Read,Dirty,Clock,Budget,Overflow,Topology,Write,Profile,Bounds,Compare,Flush,Invalidate,Authority,
+    Routing,Runlist,Preempt};
 enum class Operation:uint8_t {Read,Write,Poll,BulkWrite,BulkRead,Patch,Failure,Witness};
 struct Event {
     Phase phase=Phase::Reset;Error error=Error::None;

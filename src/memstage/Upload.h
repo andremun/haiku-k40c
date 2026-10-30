@@ -16,6 +16,7 @@ public:
     virtual bool storeFence()=0;
     virtual bool loadFence()=0;
     virtual bool barRead32(uint64_t offset,uint32_t& value)=0; // Read-only BAR1 prefix.
+    virtual bool barWrite32(uint64_t offset,uint32_t value)=0; // Only the reviewed GP_PUT word.
 };
 class LockGuard {
 public:
@@ -38,6 +39,7 @@ public:
     static uint32_t pattern(uint64_t physical,Image);
 private:
     friend class Mapper;
+    friend class Channel;
     bool fail(Error,uint32_t=0,uint32_t=0);
     bool allowed();
     bool begin();

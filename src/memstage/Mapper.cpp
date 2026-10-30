@@ -1,6 +1,7 @@
 // Copyright 2026 Mario Andres Munoz.
 // Distributed under the terms of the MIT License.
 #include "memstage/Mapper.h"
+#include "memstage/ChannelImage.h"
 namespace k40::memstage {
 using namespace memory::vram;
 bool Mapper::fail(Error error,uint32_t offset,uint32_t value)
@@ -99,6 +100,37 @@ bool Mapper::update(Token target)
     if(!arena_.describe(target,r) || !r.staged || !r.referenced || !tables::pte(r.physical,entry))return fail(Error::Bounds);
     if(!arena_.tableDirty(small_) || !upload_.patch(small_,0,entry,true))return fail(upload_.error()==Error::None?Error::Bounds:upload_.error());
     return invalidate();
+}
+bool Mapper::exposeUserd(Token userd,Phase phase)
+{
+    if(closure_!=Closure::OwnedDisabled || error_!=Error::None)return fail(Error::Order);
+    phase_=upload_.phase_=phase;
+    Record r;uint64_t entry;
+    if(!arena_.describe(userd,r) || r.role!=Role::Userd || !r.staged || !r.referenced
+        || !channel::userdPte(r.physical.value,entry))return fail(Error::Bounds);
+    LockGuard lock(io_,Lock::Mmu);
+    if(!lock.held())return fail(Error::Budget);
+    if(!arena_.tableDirty(small_) || !upload_.patch(small_,0,entry,true))return fail(upload_.error()==Error::None?Error::Bounds:upload_.error());
+    if(!invalidate())return false;
+    uint32_t current;
+    if(!read(0x001704,current))return false; // bar/gf100.c:46-58 owned context only.
+    if(current!=(enabled_&0x7fffffff))return fail(Error::Dirty,0x001704,current); // bar/gf100.c:46-49.
+    closure_=Closure::RetainedUnknown;
+    if(!write(0x001704,enabled_) || !upload_.flush() || !upload_.flush())return fail(upload_.error()==Error::None?Error::Write:upload_.error()); // bar/gf100.c:38-44,58.
+    return true;
+}
+bool Mapper::closeUserd(Phase phase)
+{
+    phase_=upload_.phase_=phase;
+    if(closure_!=Closure::RetainedUnknown || !enabled_)return fail(Error::Order);
+    LockGuard lock(io_,Lock::Mmu);
+    if(!lock.held())return fail(Error::Budget);
+    uint32_t current;
+    if(!read(0x001704,current))return false; // bar/gf100.c:46-49.
+    if(current!=enabled_)return fail(Error::Dirty,0x001704,current); // bar/gf100.c:46-58.
+    if(!write(0x001704,enabled_&0x7fffffff) || !read(0x001704,current))return false; // bar/gf100.c:46-49 clear only enable.
+    if(current!=(enabled_&0x7fffffff))return fail(Error::Compare,0x001704,current); // bar/gf100.c:46-49.
+    closure_=Closure::OwnedDisabled;return true;
 }
 bool Mapper::run(uint64_t aperture,Token a,Token b)
 {

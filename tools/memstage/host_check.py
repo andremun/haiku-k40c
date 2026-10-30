@@ -17,13 +17,14 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
 PROBE = ROOT / "build/tests/mem_session_probe"
-OUTPUT = ROOT / "work/S1MEMPACKAGE/host-check.json"
+OUTPUT = ROOT / "work/S1CHANNEL/host-check.json"
 TEST_SEED = bytes.fromhex(
     "9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60"
 )
 TESTS = (
     "test_mem_client",
     "test_mem_policy",
+    "test_mem_channel",
     "test_mem_experiment",
     "test_mem_mmu",
     "test_mem_upload",

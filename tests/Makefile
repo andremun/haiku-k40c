@@ -20,6 +20,7 @@ OWNER_POST_HEADERS := $(wildcard ../src/devinit/*.h)
 
 CXX_TESTS := test_mem_experiment:memstage+memory \
              test_mem_policy:memnative+memstage+memory \
+             test_mem_channel:memnative+memstage+memory \
              test_mem_mmu:memstage+memory \
              test_mem_upload:memstage+memory \
              test_mem_faults:memstage+memory \
@@ -103,7 +104,7 @@ $(BUILDDIR)/test_a7_native: test_a7_native.cpp ../src/a7/NativePlatform.cpp ../s
 $(BUILDDIR)/test_a7_client: test_a7_client.cpp ../tools/haiku/selftest/a7_client.cpp ../src/a7/Module.h $(wildcard a7_shim/*.h os_shim/*.h) | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) -Ia7_shim -Ios_shim test_a7_client.cpp ../tools/haiku/selftest/a7_client.cpp -o $@
 
-$(BUILDDIR)/test_mem_mmu $(BUILDDIR)/test_mem_policy $(BUILDDIR)/test_mem_experiment: memstage_device.h
+$(BUILDDIR)/test_mem_mmu $(BUILDDIR)/test_mem_policy $(BUILDDIR)/test_mem_experiment $(BUILDDIR)/test_mem_channel: memstage_device.h
 
 $(BUILDDIR)/test_mem_client: test_mem_client.cpp ../tools/haiku/selftest/memory_client.cpp ../src/memnative/Module.h $(wildcard a7_shim/*.h os_shim/*.h) | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) -D_KERNEL_MODE -Ia7_shim -Ios_shim test_mem_client.cpp ../tools/haiku/selftest/memory_client.cpp -o $@

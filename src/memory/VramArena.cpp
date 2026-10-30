@@ -34,6 +34,11 @@ uint64_t Arena::requiredBytes(Role role)
     case Role::SmallTable:return uint64_t(1)<<18; // mmu/vmmgk104.c:40-41, 32768 eight-byte SPTEs.
     case Role::Instance:return 4096; // bar/gf100.c:93.
     case Role::DataA:case Role::DataB:return 4096; // no source: software test-page extent, matching small-page mode.
+    case Role::ChanDirectory:return uint64_t(1)<<16; // mmu/vmmgk104.c:41-42, channel VMM PDB.
+    case Role::ChanSmall:return uint64_t(1)<<18; // mmu/vmmgk104.c:40-41, channel VMM SPT.
+    case Role::ChanInstance:return 4096; // fifo/gf100.c:142-143 gf100_chan_inst, 0x1000 bytes.
+    case Role::Userd:return 4096; // fifo/gk104.c:117 0x200 slots; no source: one page for channels 0-7.
+    case Role::Gpfifo:case Role::Push:case Role::Runlist:return 4096; // no source: one small page each.
     default:return 0;
     }
 }

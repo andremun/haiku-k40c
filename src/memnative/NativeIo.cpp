@@ -44,9 +44,10 @@ status_t NativeIo::initialize()
         (unsigned long long)bar0_,(unsigned long long)bar0Bytes_,long(area0_));
     if(area0_<0)return area0_;
     view0_=static_cast<volatile uint8_t*>(address);address=nullptr;
-    area1_=map_physical_memory("k40 memory BAR1 UC read-only",bar1_,8192,
-        B_ANY_KERNEL_ADDRESS|B_UNCACHED_MEMORY,B_KERNEL_READ_AREA,&address);
-    dprintf("k40_mem: MAP bar=1 base=%llx resource=%llu mapped=8192 flags=explicit-UC read-only status=%ld\n",
+    // Writable for the single policy-checked GP_PUT word (Policy::barWrite).
+    area1_=map_physical_memory("k40 memory BAR1 UC",bar1_,8192,
+        B_ANY_KERNEL_ADDRESS|B_UNCACHED_MEMORY,B_KERNEL_READ_AREA|B_KERNEL_WRITE_AREA,&address);
+    dprintf("k40_mem: MAP bar=1 base=%llx resource=%llu mapped=8192 flags=explicit-UC read-write status=%ld\n",
         (unsigned long long)bar1_,(unsigned long long)bar1Bytes_,long(area1_));
     if(area1_<0)return area1_;
     view1_=static_cast<volatile uint8_t*>(address);profile_=true;policy_->aperture(bar1Bytes_);return B_OK;
@@ -90,7 +91,12 @@ bool NativeIo::write32(uint32_t offset,uint32_t value)
 bool NativeIo::barRead32(uint64_t offset,uint32_t& value)
 {
     value=0;if(!active() || !view1_ || !policy_->barRead(offset,held_[1]))return deny(4,uint32_t(offset));
-    value=*reinterpret_cast<const volatile uint32_t*>(view1_+offset);return true;
+    value=*reinterpret_cast<volatile uint32_t*>(view1_+offset);return true;
+}
+bool NativeIo::barWrite32(uint64_t offset,uint32_t value)
+{
+    if(!active() || !view1_ || offset>8192-4 || !policy_->barWrite(offset,value,held_[1]))return deny(5,uint32_t(offset),value);
+    *reinterpret_cast<volatile uint32_t*>(view1_+offset)=value;return true;
 }
 bool NativeIo::storeFence(){if(!active())return deny();asm volatile("sfence":::"memory");return true;} // atomic.h:17-26 x86 ordering.
 bool NativeIo::loadFence(){if(!active())return deny();asm volatile("mfence; lfence":::"memory");return true;} // atomic.h:17-26 x86 ordering.

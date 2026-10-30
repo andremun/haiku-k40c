@@ -133,7 +133,9 @@ bool Upload::patch(Token token,uint64_t offset,uint64_t value,bool update)
     if(!begin())return false;
     Record r;
     if(!arena_.describe(token,r) || r.staged==update || (offset&7) || offset>r.bytes || r.bytes-offset<8
-        || (r.role!=Role::Directory && r.role!=Role::SmallTable && r.role!=Role::Instance))return fail(Error::Bounds);
+        || (r.role!=Role::Directory && r.role!=Role::SmallTable && r.role!=Role::Instance
+            && r.role!=Role::ChanDirectory && r.role!=Role::ChanSmall && r.role!=Role::ChanInstance
+            && r.role!=Role::Gpfifo && r.role!=Role::Push && r.role!=Role::Runlist))return fail(Error::Bounds);
     if(update) {
         if(r.role!=Role::SmallTable || !r.referenced || !r.writeGeneration)return fail(Error::Bounds);
     } else if(!arena_.dirty(token))return fail(Error::Bounds);

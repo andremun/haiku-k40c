@@ -9,7 +9,8 @@ struct BarVirtual {uint64_t value=0;};
 struct Probe {uint32_t parts=0,units=0,disabled=0,mib[32]{};};
 struct Layout {uint64_t bytes=0;uint32_t activeParts=0;};
 bool normalLayout(const Probe&,uint64_t expectedBytes,Layout&);
-enum class Role:uint8_t {None,DebugRead,DebugWrite,Directory,SmallTable,Instance,DataA,DataB};
+enum class Role:uint8_t {None,DebugRead,DebugWrite,Directory,SmallTable,Instance,DataA,DataB,
+    ChanDirectory,ChanSmall,ChanInstance,Userd,Gpfifo,Push,Runlist};
 struct Token {uint64_t owner=0,epoch=0,id=0;};
 struct Record {
     Token token{};Role role=Role::None;VramPhysical physical{0};uint64_t bytes=0,alignment=0;

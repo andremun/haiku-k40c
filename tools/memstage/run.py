@@ -299,7 +299,7 @@ def run():
                         error=error,
                         stage=build.STAGE,
                         elapsed_seconds=round(time.monotonic() - start, 2),
-                        S1_complete=False,
+                        S1_complete=status == "pass",  # evidence.memory_final S1 predicate.
                         DMA_payload_visibility=False,
                         Q7="open",
                         Q11="open; A7 G1 observation only",
@@ -311,7 +311,7 @@ def run():
             )
             save(
                 captures / "README.md",
-                f"# Combined first-batch run\n\nStatus: {status}. {error}\n\nCommand: `python3 tools/memstage/run.py --run-approved-batch1-once`.\nPackage SHA-256: `{build.sha(build.PUBLIC)}`. See launch.json for commands,\nhashes and kernel identity, a7/ for the fresh arm witness and unchanged A7\nphase, memory-attestation.json and memory-observations.json for the BAR1 phase.\nRaw serial, R5 before/after, trace and teardown are retained.\n\nA pass is HARDWARE_VERIFIED under Haiku only for this finite card/context.\nIt is not S1 success, host payload visibility, channel/PBDMA proof or Q11 closure.\nApproval is consumed. After any stop, report and request a new yes; no retry.\n",
+                f"# Combined S1 channel run\n\nStatus: {status}. {error}\n\nCommand: `python3 tools/memstage/run.py --run-approved-batch1-once`.\nPackage SHA-256: `{build.sha(build.PUBLIC)}`. See launch.json for commands,\nhashes and kernel identity, a7/ for the fresh arm witness and unchanged A7\nphase, memory-attestation.json and memory-observations.json for the BAR1 phase.\nRaw serial, R5 before/after, trace and teardown are retained.\n\nA pass is HARDWARE_VERIFIED under Haiku only for this finite card/context.\nA pass is S1: one host NOP consumed (GP_GET 0->1) on one CE0-runlist channel,\nno fault, clean teardown. It is not host payload visibility or Q11 closure.\nApproval is consumed. After any stop, report and request a new yes; no retry.\n",
             )
             print(captures, flush=True)
 

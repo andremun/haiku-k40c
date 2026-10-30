@@ -76,7 +76,7 @@ def frame():
         plan=dict(vram_bytes=11520 * 1048576),
     )
     serial = "k40_mem: MAP bar=0 base=10000000 resource=16777216 mapped=8388608 flags=explicit-UC status=3\n"
-    serial += "k40_mem: MAP bar=1 base=20000000 resource=268435456 mapped=8192 flags=explicit-UC read-only status=4\n"
+    serial += "k40_mem: MAP bar=1 base=20000000 resource=268435456 mapped=8192 flags=explicit-UC read-write status=4\n"
     serial += "k40_mem: PREPARED owner=2 epoch=2 bar0=10000000 bar1=20000000\n"
     return bytes(raw), suite, serial
 
@@ -162,21 +162,28 @@ class Tests(unittest.TestCase):
                 evidence.request_fields(bytes(changed), suite, serial, resources)
         with self.assertRaises(ValueError):
             evidence.request_fields(
-                raw, suite, serial.replace("read-only", "writeable"), resources
+                raw, suite, serial.replace("read-write", "writeable"), resources
             )
 
     def test_production_trace_and_mutations(self):
         raw, suite, unused = frame()
         suite["plan"]["A7_guest_artifacts"] = {}
         serial = subprocess.check_output(
-            [str(ROOT / "build/tests/test_mem_policy"), "--dump"], text=True, timeout=30
+            [str(ROOT / "build/tests/test_mem_channel"), "--dump"], text=True, timeout=30
         )
         result = evidence.memory_final(serial, suite, raw)
         self.assertEqual(result["bar_flush_count"], 17)
         mutations = [
             serial.replace("closure=2", "closure=1"),
             serial.replace("retained=1", "retained=0", 1),
-            serial.replace("generation=5", "generation=4"),
+            serial.replace("generation=6", "generation=5"),
+            serial.replace("generation=15", "generation=14"),
+            serial.replace("after=1/1", "after=0/1"),
+            serial.replace("mmu=0", "mmu=1"),
+            serial.replace("runlist=1/4", "runlist=1/3"),
+            serial.replace("value=3000000100000000", "value=3000000f00000000"),
+            serial.replace("value=80000001", "value=80000003"),
+            serial.replace("value=20010002", "value=20010003"),
             serial.replace("operation=7", "operation=0", 1),
             serial.replace("value=80000005", "value=80000007", 1),
             serial.replace("staged=1", "staged=0", 1),

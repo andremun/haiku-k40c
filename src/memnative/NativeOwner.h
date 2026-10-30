@@ -5,6 +5,7 @@
 #include "memnative/NativeIo.h"
 #include "memauth/Session.h"
 #include "memstage/Experiment.h"
+#include "memstage/Channel.h"
 #include "a7/Module.h"
 namespace k40::memnative {
 class NativeOwner final:public memauth::Runtime {
@@ -20,6 +21,7 @@ private:
     void drain();
     memory::vram::Arena arena_;memstage::Journal journal_;NativeIo io_;
     memstage::Faults faults_;Policy policy_;memstage::Upload upload_;memstage::Mapper mapper_;
+    memstage::Channel channel_;
     memauth::Binding binding_;alignas(memauth::Session) uint8_t sessionStorage_[sizeof(memauth::Session)]{};
     memauth::Session* session_=nullptr;k40_a7_module* a7_=nullptr;
     alignas(memstage::Experiment) uint8_t experimentStorage_[sizeof(memstage::Experiment)]{};

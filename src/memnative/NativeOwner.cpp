@@ -7,7 +7,8 @@
 namespace k40::memnative {
 using namespace memory::vram;
 NativeOwner::NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram)
-    :faults_(io_,journal_,epoch),policy_(arena_,faults_),upload_(io_,faults_,journal_,arena_),mapper_(io_,faults_,journal_,arena_,upload_,epoch)
+    :faults_(io_,journal_,epoch),policy_(arena_,faults_),upload_(io_,faults_,journal_,arena_),mapper_(io_,faults_,journal_,arena_,upload_,epoch),
+     channel_(io_,faults_,journal_,arena_,upload_,mapper_,epoch)
 {
     io_.policy_=&policy_;
     std::memcpy(binding_.key,key,32);std::memcpy(binding_.nonce,nonce,32);std::memcpy(binding_.plan,plan,32);std::memcpy(binding_.challenge,challenge,16);
@@ -50,7 +51,10 @@ status_t NativeOwner::detach(uint64 lease)
     dprintf("k40_mem: RETAINED owner=%llu state=%u\n",(unsigned long long)lease,unsigned(session_->state()));return B_OK;
 }
 bool NativeOwner::work()
-{return experiment_ && experiment_->run();}
+{
+    // S1: the unchanged batch-1 memory/BAR1 gates first, then one channel.
+    return experiment_ && experiment_->run() && channel_.run();
+}
 void NativeOwner::drain()
 {
     const auto& probe_=experiment_->probe();const auto probeKnown_=experiment_->known();
@@ -69,6 +73,13 @@ void NativeOwner::drain()
             (unsigned long long)r.token.id,unsigned(r.role),(unsigned long long)r.physical.value,(unsigned long long)r.bytes,
             (unsigned long long)r.writeGeneration,r.staged,r.referenced,r.retained);
     }
+    const auto& c=channel_.report();
+    dprintf("k40_mem: CHANNEL runlist=%u pbdma=%u mask=%x runm=%x bound=%u closed=%u progress=%u error=%u step=%u\n",
+        c.runlist,c.pbdma,c.pbdmaMask,c.runm,c.bound,c.closed,unsigned(c.progress),unsigned(channel_.error()),policy_.channelStep());
+    dprintf("k40_mem: CHANNEL_GET before=%u/%u after=%u/%u polls=%u us=%llu\n",c.getBefore,c.putBefore,
+        c.getAfter,c.putAfter,c.polls,(unsigned long long)c.progressUs);
+    dprintf("k40_mem: CHANNEL_STATUS mc=%x fifo=%x mmu=%x pbdma=%x hce=%x state=%x\n",
+        c.mc,c.fifoIntr,c.mmuPending,c.pbdmaIntr,c.pbdmaHce,c.state);
     dprintf("k40_mem: ROUTES count=%u\n",faults_.routeCount());
     for(unsigned i=0;i<faults_.routeCount();++i) {
         memstage::Routing r;if(!faults_.route(i,r))continue;
@@ -84,7 +95,7 @@ bool NativeOwner::execute()
     if(!passed)arena_.fail();
     drain();
     dprintf("k40_mem: %s faults=%u upload=%u mapper=%u closure=%u allocations=%u journal_overflow=%u\n",
-        passed?"PASS BAR1_SCOPED":"FAIL",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
+        passed?"PASS S1_CHANNEL_NOP":"FAIL",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
         unsigned(mapper_.closure()),arena_.count(),journal_.overflow());return passed;
 }
 }

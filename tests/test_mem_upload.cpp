@@ -19,6 +19,7 @@ struct Bus final:Io {
     bool storeFence() override{assert(held);++stores;return !fenceFail;}
     bool loadFence() override{assert(held);++loads;return !fenceFail;}
     bool barRead32(uint64_t,uint32_t&) override{return false;}
+    bool barWrite32(uint64_t,uint32_t) override{return false;}
     uint64_t physical(uint32_t reg) const {auto a=base+reg-0x700000;return alias?(0x200000+(a&4095)):a;}
     bool write32(uint32_t reg,uint32_t value) override {
         assert(held);++writes;if(writes==failWrite)return false;

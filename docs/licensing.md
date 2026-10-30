@@ -443,3 +443,16 @@ Consulted open-gpu-doc classes/host/cla16f.h:24-215 and cla06f.h NOP/packet
 fields, and envytools rnndb/fifo/nv_object.xml NOP entries.
 Only source anchors, field facts and design consequences enter this package.
 No Nouveau implementation body was copied and no runtime code changed.
+
+## S1CHANNEL (2026-10-31)
+
+| Source file consulted | License | Used for | Copied material |
+|---|---|---|---|
+| `reference/nouveau/nvkm/engine/fifo/gk104.c` | MIT notice in file | Channel bind/start/stop, RAMFC, runlist, PBDMA init, USERD BAR1 base, interrupt bits | Semantic facts only |
+| `reference/nouveau/nvkm/engine/fifo/gf100.c` | MIT notice in file | PBDMA discovery, runq init, preempt | Semantic facts only |
+| `reference/nouveau/nvkm/engine/fifo/gk110.c` | MIT notice in file | GK110 channel/preempt selection | Semantic facts only |
+| `reference/nouveau/nvkm/subdev/top/gk104.c` | MIT notice in file | TOP engine types | Semantic facts only |
+| `reference/nouveau/nvkm/subdev/mmu/vmmgf100.c` | MIT notice in file | PTE bits, invalidate type | Semantic facts only |
+| `reference/nouveau/nouveau_dma.c` | MIT notice in file | GPFIFO entry, GP_PUT | Semantic facts only |
+| `reference/open-gpu-doc/classes/host/cla16f.h` | MIT notice in file | USERD layout, NOP method | Facts only |
+| `reference/envytools/docs/hw/fifo/dma-pusher.rst`, `rnndb/fifo/gf100_pfifo.xml` | MIT | Method header format, BAR1_BASE | Facts only |

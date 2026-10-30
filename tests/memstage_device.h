@@ -45,6 +45,7 @@ struct Device:Io {
         else cached[0]=cached[1]=0;
         context=value;return true;
     }
+    bool barWrite32(uint64_t,uint32_t) override{return false;}
     bool barRead32(uint64_t offset,uint32_t& value) override {
         assert(locks[1] && !locks[0]);if(!(context&0x80000000) || offset>=8192 || (offset%4))return false;
         unsigned page=unsigned(offset/4096);if(alias)page=0;

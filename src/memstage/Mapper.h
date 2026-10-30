@@ -11,6 +11,10 @@ public:
         :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),epoch_(epoch){}
     bool preflight(); // Required before any memory-stage VRAM write.
     bool run(uint64_t bar1Bytes,memory::vram::Token a,memory::vram::Token b);
+    // Channel phase: map the USERD page at BAR1 VA 0, writable, and enable the
+    // owned context again (fifo/gk104.c:745-746 USERD in BAR1). Then disable it.
+    bool exposeUserd(memory::vram::Token userd,Phase phase);
+    bool closeUserd(Phase phase);
     Error error() const{return error_;}
     Closure closure() const{return closure_;}
 private:
