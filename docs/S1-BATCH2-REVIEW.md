@@ -197,3 +197,34 @@ On actual S1 success, record its finite evidence first, then prepare S2 and S3 s
 Reproduce the plan binding with `python3 tools/batch2_review.py --check`.
 The generated review-inputs records source spans, exact inputs, task dependencies
 and the batch-1 capture hashes. No VM or card is accessed by that command.
+
+## Claude Code review and final design decisions (2026-10-31)
+
+**Batch-1 result (bf67465): ACCEPT** as scoped in
+results/20261030-batch1-a7-bar1-ec8db47d/: A7 POST/readiness and the owned BAR1
+initial/remap/restore witness on this card under Haiku. Not channel translation.
+
+**Batch-2 design: ACCEPT with one required change and three clarifications.**
+
+1. **Target a copy-engine runlist, not the GR runlist (required).** KNOWN /
+   SOURCE_ONLY: a GR channel needs an engine context; `gk104_ectx_bind` writes the
+   GR context pointer at instance offset 0x0210 (fifo/gk104.c:134-141), and that
+   context depends on GR setup and its context-switch microcode, which this batch
+   excludes. The copy-engine function table `gk104_engn_ce` has no ctor and no
+   bind (fifo/gk104.c:281-287): a CE-runlist channel needs no engine context.
+   The chip lists CE0, CE1 and CE2 in TOP (fifo/gk104.c:494-499). Select one CE
+   runlist from the current TOP data and its associated PBDMA (gk104.c:756-800).
+   INFERRED: the host NOP (method 0x08, cla16f.h) is executed by the PBDMA and
+   needs no engine work. This replaces the "GR-free scheduling" hypothesis: a
+   CE-runlist pass shows host-channel scheduling, not GR scheduling. The GR runlist
+   stays out of scope until GR setup exists.
+2. **Instance block:** write no engine-context pointer for the CE channel. Every
+   other RAMFC word stays sourced from fifo/gk104.c:82-118.
+3. **Interrupts stay masked; progress is polled.** No INTREN write. Fault and
+   status snapshots are raw reads only, as already specified.
+4. **One combined package and one run.** Keep the A7 and memory phases frozen.
+   The run needs the user's explicit yes for that exact package (ADR 008).
+
+Status of the user's 2026-10-31 approval of "one trial": no batch-2 package
+exists yet, so no card run took place. The approval is not used and does not
+carry over to a later package; the finished package needs a fresh yes.

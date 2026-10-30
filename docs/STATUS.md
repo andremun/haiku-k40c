@@ -1,19 +1,14 @@
 # Status
 
 Current phase: S1 preparation (plan: docs/S1-PLAN.md)
-Current task: S1BATCH2PLAN (channel/scheduler/NOP design package).
-Task state: READY FOR CLAUDE REVIEW. Six implementation tasks are specified.
-Review: docs/S1-BATCH2-REVIEW.md (batch-1 result and batch-2 design verdicts).
-Batch 1 passed in 148.54 seconds: A7 POST/readiness and finite owned BAR1
-initial/remap/restore. Evidence: results/20261030-batch1-a7-bar1-ec8db47d/.
-R5 selected stream unchanged; host PCI command 0x0002 after exit. Result bf67465.
-The next design covers channel VMM, USERD, polling-only scheduler, one NOP and
-bounded detach. Source contract, interrupt and teardown gates precede implementation.
-No batch-2 runtime/package, VM launch or new hardware evidence exists.
-S1 remains incomplete. Q7/Q11 and GR-free scheduling remain open.
-Batch-1 approval is consumed; marker retained. No current write-stage approval.
-No S2/S3 hardware-success preparation or push.
-Last updated: 2026-10-30
+Current task: S1BATCH2PLAN reviewed by Claude Code (ACCEPT with changes). Next: implement the six batch-2 tasks.
+Task state: Design final (docs/S1-BATCH2-REVIEW.md, "Claude Code review and final
+design decisions"). Required change: target a copy-engine runlist, which needs no
+engine context (fifo/gk104.c:134-141,281-287), not the GR runlist. Batch 1 passed
+(bf67465). No batch-2 code or package exists; no card run. The 2026-10-31 approval
+of one trial was not used: a finished package needs a fresh yes.
+S1 remains incomplete. Q7/Q11 open.
+Last updated: 2026-10-31
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
 
