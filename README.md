@@ -103,7 +103,7 @@ this repository on real hardware without checking its source.
 
 | Card | Use |
 |---|---|
-| K40c 0000:04:00.0 | The driver: captures, passthrough (`docs/PASSTHROUGH.md`), hardware tests. No model process. |
+| K40c 0000:04:00.0 | The driver: captures, passthrough (`docs/PASSTHROUGH.md`), hardware tests. During the hold it returns to `llm-server` (decision 011). |
 | K40c 0000:03:00.0 | `llm-server` in mode `one`, for `optima-agent-bench`. Not for driver work. |
 
 ## Working with Claude Code or Codex
