@@ -3,6 +3,8 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-10-31: The project is on hold after S1 (decision 011). No task is active and no card run is approved.
+- 2026-10-31: S1 passed on the K40c under Haiku: one host NOP consumed on one CE0-runlist channel, no fault, clean teardown.
 - 2026-10-28: The third approved A7 run stops at hard-link publication before probe loading. Record evidence and open ESC-003 under the three-attempt installation rule. No fourth package or launch is attempted.
 - 2026-10-28: Correct A7 guest add-on publication: stage complete executable files outside watched directories, publish atomic hard links, and wait for the character device before one open. Prepare a new package without a guest run.
 - 2026-10-28: The second individually approved A7 run stops at device open before request/grant. Shell diagnostics capture a read-only filesystem error. Evidence and both consumed markers remain. No retry occurs.
@@ -29,4 +31,3 @@ One line for each milestone, task group or layout change. The task log in
 - 2026-10-13: Phases C and D closed (C5c, D6). Gate review package. External reviews and research received. S1 plan.
 - 2026-10-11 to 2026-10-12: Phases B, C and D tasks (register database, firmware manifest, subsystem models, page tables, push buffer, launch descriptor).
 - 2026-10-05 to 2026-10-08: Phase A (hardware record, root captures) and phase B start.
-- 2026-10-31: S1 passed on the K40c under Haiku: one host NOP consumed on one CE0-runlist channel, no fault, clean teardown.
