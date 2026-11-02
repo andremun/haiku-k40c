@@ -30,6 +30,15 @@ jobs:
               url = f"https://raw.githubusercontent.com/haiku/haiku/{c.REV}/{name}"
               path.write_bytes(urllib.request.urlopen(url, timeout=30).read())
           PY
+      - name: Fetch the pinned QEMU PCI schema for the PCI source check
+        run: |
+          python3 - <<'PY'
+          import sys, urllib.request
+          sys.path.insert(0, "tools/memstage")
+          import pci
+          pci.SOURCE.parent.mkdir(parents=True, exist_ok=True)
+          pci.SOURCE.write_bytes(urllib.request.urlopen(pci.URL, timeout=30).read(200000))
+          PY
       # The VBIOS image of the card is private and not in CI. Task A3 checks need it,
       # and tests/test_devinit_rom.py reports NOT RUN when K40_CI_NO_VBIOS=1.
       - run: echo A3 > .check-skip
