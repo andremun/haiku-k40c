@@ -9,11 +9,16 @@ Reads a clean exact checkout. Generates a deterministic source/notice record.
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-CACHE = Path.home() / "haiku-cross/src/orlp-ed25519"
+CACHE = Path(
+    os.environ.get(
+        "K40_ED25519_SOURCE", Path.home() / "haiku-cross/src/orlp-ed25519"
+    )
+).expanduser()
 COMMIT = "b1f19fab4aebe607805620d25a5e42566ce46a0e"
 OUTPUT = ROOT / "work/S1A7NITS/crypto-sources.json"
 SOURCES = ("fe.c", "ge.c", "sc.c", "sha512.c", "verify.c")

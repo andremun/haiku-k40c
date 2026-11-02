@@ -84,6 +84,6 @@
     "tests/test_vram_arena.cpp": "e289a3cc860937ef41de87b300d62fc56ed81a08d188a5daca1cf965bfd24d04",
     "tools/haiku/selftest/memory_client.cpp": "cf0ec4bdbfe61a479a518d0c3da8c71ee0138d248856e343dd71d186ccfd2fb2",
     "tools/haiku/selftest/memory_preflight.cpp": "0ac26fb3a72c5992d051a1778390af89b09dd2ec617d1148766abbc1c76977e7",
-    "tools/memstage/host_check.py": "d43b45b1423ca7141822994ed16fcacf8631fd74b84752062cbba3b077d4e6e6"
+    "tools/memstage/host_check.py": "128a9ec12ae76e908af57b26fae108ef13db6b65823f26ebb5a79c5629fb028d"
   }
 }

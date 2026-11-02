@@ -39,10 +39,18 @@ jobs:
           pci.SOURCE.parent.mkdir(parents=True, exist_ok=True)
           pci.SOURCE.write_bytes(urllib.request.urlopen(pci.URL, timeout=30).read(200000))
           PY
+      - name: Fetch the pinned Ed25519 source for the memory host check
+        run: |
+          pin=$(python3 -c "import sys; sys.path.insert(0, 'tools'); from a7 import crypto_sources; print(crypto_sources.COMMIT)")
+          git init -q "$RUNNER_TEMP/ed25519"
+          git -C "$RUNNER_TEMP/ed25519" remote add origin https://github.com/orlp/ed25519.git
+          git -C "$RUNNER_TEMP/ed25519" fetch -q --depth=1 origin "$pin"
+          git -C "$RUNNER_TEMP/ed25519" checkout -q --detach FETCH_HEAD
       # The VBIOS image of the card is private and not in CI. Task A3 checks need it,
       # and tests/test_devinit_rom.py reports NOT RUN when K40_CI_NO_VBIOS=1.
       - run: echo A3 > .check-skip
       - run: K40_ENVYTOOLS_FULL="$RUNNER_TEMP/envytools" make check
         env:
           K40_CI_NO_VBIOS: "1"
+          K40_ED25519_SOURCE: ${{ runner.temp }}/ed25519
       - run: make vm-tools-test
