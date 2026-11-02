@@ -8,7 +8,7 @@ consumed one host NOP: GP_GET 0 -> 1 in 10 us, no fault, clean teardown. Evidenc
 results/20261031-batch1-a7-bar1-d198d424/ (HARDWARE_VERIFIED under Haiku).
 Not done: S2 (copy) and S3 (compute). Q7 and Q11 stay open.
 To resume: read decision 011, "To resume".
-Last updated: 2026-10-31
+Last updated: 2026-11-02
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
 
@@ -143,4 +143,4 @@ A cardless result is not K40c evidence.
 | S1CHANNEL run 1 | STOPPED (8 MiB BAR0 view) | 2026-10-31 | One approved run. A7, batch-1 and channel steps 0-10 passed; read of 0x800008 refused by the BAR0 view; no bind. No retry. |
 | S1CHANNEL2 run | STOPPED (NOP not consumed) | 2026-10-31 | All channel steps and teardown ran; GP_GET 0, GP_PUT 1; no fault. Likely missing post-POST unit enable (mc/nv04.c:120). No retry. |
 | S1CHANNEL3 run | **S1 PASS** | 2026-10-31 | GP_GET 0->1 in 10 us on channel 1, runlist 4 (CE0), PBDMA 2; no fault; clean teardown; validator accepted. See results/20261031-batch1-a7-bar1-d198d424/README.md. |
-
+| CI-CHECK | INCOMPLETE (local full check blocked) | 2026-11-02 | The missing memory host probe is built during `--check`; Actions fetches its pinned Ed25519 source. Targeted check passes. Local `make check` could not restore Mesa because GitLab was unreachable. New Actions runs require approval and have no jobs. See work/CI-CHECK/RESULT.md. |

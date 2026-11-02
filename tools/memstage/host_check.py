@@ -61,6 +61,7 @@ def sources():
 
 def compile_probe():
     crypto_sources.validate()
+    PROBE.parent.mkdir(parents=True, exist_ok=True)
     folder = ROOT / "build/memstage/crypto-host"
     folder.mkdir(parents=True, exist_ok=True)
     objects = []
@@ -213,8 +214,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    if not args.check:
-        compile_probe()
+    compile_probe()
     text = json.dumps(report(), indent=2, sort_keys=True) + "\n"
     if args.check:
         if OUTPUT.read_text() != text:
