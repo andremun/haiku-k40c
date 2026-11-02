@@ -18,6 +18,18 @@ jobs:
           git -C "$RUNNER_TEMP/envytools" checkout -q --detach "$pin"
       - name: Restore the pinned reference sources
         run: K40_REFS="$RUNNER_TEMP/refs" K40_ENVYTOOLS_FULL="$RUNNER_TEMP/envytools" make refs
+      - name: Fetch the pinned Haiku sources for the memory contract check
+        run: |
+          python3 - <<'PY'
+          import sys, urllib.request
+          sys.path.insert(0, "tools/memstage")
+          import contract as c
+          for name in c.HAIKU:
+              path = c.CACHE / "haiku" / name
+              path.parent.mkdir(parents=True, exist_ok=True)
+              url = f"https://raw.githubusercontent.com/haiku/haiku/{c.REV}/{name}"
+              path.write_bytes(urllib.request.urlopen(url, timeout=30).read())
+          PY
       # The VBIOS image of the card is private and not in CI. Task A3 checks need it,
       # and tests/test_devinit_rom.py reports NOT RUN when K40_CI_NO_VBIOS=1.
       - run: echo A3 > .check-skip
