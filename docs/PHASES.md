@@ -148,3 +148,14 @@ No second-batch runtime/package or hardware approval exists.
 | S1CHANCLOSE | Finite detach and retention | `docs/tasks/S1CHANCLOSE.md` |
 | S1CHANSUBMIT | One native host-NOP experiment | `docs/tasks/S1CHANSUBMIT.md` |
 | S1CHANPACKAGE | Immutable package and cardless rehearsal | `docs/tasks/S1CHANPACKAGE.md` |
+
+## S2 and S3 (resumed 2026-11-12, decision 012)
+
+| Task | Title | Text |
+|---|---|---|
+| S2COPY | One copy between two VRAM buffers on the S1 channel | `docs/tasks/S2COPY.md` |
+| S3GR | Start the GR engine and its two microcode programs | `docs/tasks/S3GR.md` |
+| S3CTX | Golden context, GR context of one channel, GR runlist | `docs/tasks/S3CTX.md` |
+| S3LAUNCH | One compute job, then one timed matrix product | `docs/tasks/S3LAUNCH.md` |
+| RTIOCTL | The first user interface of the driver | `docs/tasks/RTIOCTL.md` |
+| LADDER | Packages, rehearsals and the run sheet for 2026-11-16 | `docs/tasks/LADDER.md` |

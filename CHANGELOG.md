@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-11-12: Project resumed for S2 and S3 (decision 012). Run ladder for 2026-11-16, cloud work branch, tasks S2COPY, S3GR, S3CTX, S3LAUNCH, RTIOCTL and LADDER.
 - 2026-10-31: The project is on hold after S1 (decision 011). No task is active and no card run is approved.
 - 2026-10-31: S1 passed on the K40c under Haiku: one host NOP consumed on one CE0-runlist channel, no fault, clean teardown.
 - 2026-10-28: The third approved A7 run stops at hard-link publication before probe loading. Record evidence and open ESC-003 under the three-attempt installation rule. No fourth package or launch is attempted.
