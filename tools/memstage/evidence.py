@@ -210,6 +210,31 @@ CHID = 1  # memstage/ChannelImage.h; trace line 562290.
 GP_GET, GP_PUT = 0x288, 0x28C  # cla16f.h:62-63 in USERD slot CHID*0x200.
 GPFIFO_VA, PUSH_VA = 0x10000000, 0x10001000  # software channel VA layout.
 PB_ROLES = (8, 9, 10, 11, 12, 13, 14)  # ChanDirectory..Runlist, VramArena.h.
+# S2 (stage S2_A7_BAR1_CHANNEL_COPY): CopySource and CopyDest, one copy as
+# nouveau_boa0b5.c:37-71 on subchannel 4 (include/nvif/push906f.h:19).
+COPY_STAGE = "S2_A7_BAR1_CHANNEL_COPY"
+COPY_ROLES = (15, 16)
+SOURCE_VA, DEST_VA = 0x10002000, 0x10003000  # software channel VA layout.
+COPY_BYTES = 4096  # one small page; nouveau_boa0b5.c:57-59 PAGE_SIZE.
+CE_INTR, CE_LAUNCHERR = 0x104908, 0x104F14  # ce/gk104.c:52,64-65, CE0.
+
+
+def header(op, count, subchannel, method):
+    # include/nvhw/class/cl906f.h:54-70: SEC_OP 31:29, count 28:16, subchannel 15:13, method/4 11:0.
+    return (op << 29) | (count << 16) | (subchannel << 13) | (method >> 2)
+
+
+def copy_words():
+    """The twelve 32-bit words of the copy sequence, from the class headers."""
+    launch = 2 | (1 << 2) | (1 << 7) | (1 << 8) | (1 << 9)  # cla0b5.h:38-61; nouveau_boa0b5.c:61-71.
+    return [
+        header(1, 1, 4, 0x0000), 0xA0B5,  # nouveau_boa0b5.c:85; nouveau_bo.c:937.
+        header(1, 8, 4, 0x0400),  # cla0b5.h:94 OFFSET_IN_UPPER.
+        (SOURCE_VA >> 32) & 0xFF, SOURCE_VA & 0xFFFFFFFF,  # cla0b5.h:94-97.
+        (DEST_VA >> 32) & 0xFF, DEST_VA & 0xFFFFFFFF,  # cla0b5.h:98-101.
+        COPY_BYTES, COPY_BYTES, COPY_BYTES, 1,  # cla0b5.h:102-109 pitches, line length, line count.
+        header(4, launch, 4, 0x0300),  # cla0b5.h:37 LAUNCH_DMA, immediate.
+    ]
 
 
 def pte(physical, writable=False):
@@ -217,7 +242,7 @@ def pte(physical, writable=False):
     return (physical >> 8) | (1 if writable else 5)
 
 
-def channel_image(byrole):
+def channel_image(byrole, copy=False):
     """Independent re-encoding of memstage/ChannelImage.cpp from pinned sources."""
     userd = byrole[11] + CHID * 0x200  # fifo/gk104.c:84,88-89,117.
     ramfc = [
@@ -236,6 +261,31 @@ def channel_image(byrole):
         (0x200, byrole[8]),  # vmmgf100.c:346-360.
         (0x208, (1 << 40) - 1),
     ]
+    if copy:
+        words = [(1 << 29) | (1 << 16) | (0x08 >> 2), 0, *copy_words()]
+        push = [
+            (index * 4, words[index] | (words[index + 1] << 32))
+            for index in range(0, len(words), 2)
+            if words[index] or words[index + 1]
+        ]
+        second = PUSH_VA + 8  # after the NOP.
+        return {
+            8: [((GPFIFO_VA >> 27) * 8, (byrole[9] << 24) | (1 << 32))],
+            9: [
+                (((GPFIFO_VA >> 12) & 32767) * 8, pte(byrole[12])),
+                (((PUSH_VA >> 12) & 32767) * 8, pte(byrole[13])),
+                (((SOURCE_VA >> 12) & 32767) * 8, pte(byrole[15])),
+                (((DEST_VA >> 12) & 32767) * 8, pte(byrole[16], True)),  # destination writable.
+            ],
+            10: ramfc,
+            11: [],
+            12: [
+                (0, (PUSH_VA & 0xFFFFFFFF) | (((PUSH_VA >> 32) | (8 << 8)) << 32)),
+                (8, (second & 0xFFFFFFFF) | (((second >> 32) | (48 << 8)) << 32)),  # nouveau_dma.c:83-84.
+            ],
+            13: push,
+            14: [(0, CHID)],
+        }
     return {
         8: [((GPFIFO_VA >> 27) * 8, (byrole[9] << 24) | (1 << 32))],  # vmmgf100.c:129-140.
         9: [
@@ -250,7 +300,34 @@ def channel_image(byrole):
     }
 
 
-def channel_phase(serial, events, byrole):
+def copy_phase(serial, chan, engine):
+    """S2: second entry consumed, engine idle, no launch error, destination compared."""
+    line = re.findall(
+        r"^k40_mem: COPY engine=(\d+) submitted=1 get=2/2 polls=\d+ us=\d+ copied=1\r?$", serial, re.M
+    )
+    status = re.findall(
+        r"^k40_mem: COPY_STATUS engine=([0-9a-f]+) idle_polls=\d+ idle_us=\d+ ce_intr=([0-9a-f]+) launcherr=([0-9a-f]+)\r?$",
+        serial,
+        re.M,
+    )
+    if len(line) != 1 or len(status) != 1 or int(line[0]) != engine:
+        raise ValueError("copy report missing, repeated or not complete")
+    busy, intr, error = (int(x, 16) for x in status[0])
+    if busy & 0x80000000 or intr & 4 or error & 15:
+        raise ValueError("copy engine busy or launch error")  # fifo/gk104.c:208; ce/gk104.c:52,76.
+    register = 0x2640 + engine * 8  # fifo/gk104.c:206.
+    if not any(e[6] == 2 and e[0] == 13 and e[2] == GP_GET and e[3] == 2 for e in chan):
+        raise ValueError("GP_GET poll for the copy entry missing")
+    if not any(e[6] == 2 and e[0] == 13 and e[2] == register and not e[3] & 0x80000000 for e in chan):
+        raise ValueError("engine idle poll missing")
+    for address, mask in ((CE_INTR, 4), (CE_LAUNCHERR, 15)):
+        values = [e[3] for e in chan if e[6] == 0 and e[0] == 13 and e[2] == address]
+        if len(values) != 1 or values[0] & mask:
+            raise ValueError("copy-engine status read missing or in error")
+    return dict(engine=engine, bytes=COPY_BYTES, source_va=SOURCE_VA, dest_va=DEST_VA)
+
+
+def channel_phase(serial, events, byrole, copy=False):
     """Validate phases 8-14: exact write order, NOP progress, faults, teardown."""
     line = re.findall(
         r"^k40_mem: CHANNEL runlist=(\d+) pbdma=(\d+) mask=([0-9a-f]+) runm=([0-9a-f]+) bound=1 closed=1 progress=1 error=0 step=24\r?$",
@@ -277,7 +354,7 @@ def channel_phase(serial, events, byrole):
     chan = [e for e in events if e[0] >= 8]
     if [e[3] for e in chan if e[0] == 8 and e[2] == MC and e[6] == 0] != [0]:
         raise ValueError("channel baseline MC dirty")
-    image = channel_image(byrole)
+    image = channel_image(byrole, copy)
     patches = [(e[0], e[7], e[2], e[3]) for e in chan if e[6] == 5]
     expected = [(9, role, offset, value) for role in PB_ROLES for offset, value in image[role]]
     expected.append((10, 4, 0, pte(byrole[11], True)))  # BAR1 VA 0 -> USERD page.
@@ -285,8 +362,19 @@ def channel_phase(serial, events, byrole):
         raise ValueError("channel image serialization differs")
     bulk = [(e[6], e[7], e[8], e[3]) for e in chan if e[6] in (3, 4)]
     sizes = {8: 65536, 9: 262144}
-    if bulk != [(op, role, 0, sizes.get(role, 4096)) for role in PB_ROLES for op in (3, 4)]:
-        raise ValueError("channel zeroing protocol differs")
+    zeroed = PB_ROLES + (COPY_ROLES if copy else ())
+    expectedBulk = [(op, role, 0, sizes.get(role, 4096)) for role in zeroed for op in (3, 4)]
+    if copy:
+        # Source pattern written and verified before the bind; destination
+        # compared with the source pattern after the copy (image 1, Upload.cpp).
+        expectedBulk += [(3, 15, 1, COPY_BYTES), (4, 15, 1, COPY_BYTES), (4, 16, 1, COPY_BYTES)]
+    if bulk != expectedBulk:
+        raise ValueError("channel zeroing/pattern/compare protocol differs")
+    if copy:
+        final = [i for i, e in enumerate(chan) if e[6] == 4 and e[7] == 16 and e[8] == 1]
+        put = [i for i, e in enumerate(chan) if e[6] == 1 and e[2] == GP_PUT and e[3] == 2]
+        if len(final) != 1 or len(put) != 1 or final[0] < put[0]:
+            raise ValueError("destination compare is not after the copy submission")
     last, writes = {}, []
     for e in chan:
         if e[6] == 0:
@@ -314,6 +402,7 @@ def channel_phase(serial, events, byrole):
         (12, 0x2270, lambda r: byrole[14] >> 12),  # gk104.c:446.
         (12, 0x2274, lambda r: (rl << 20) | 1),  # gk104.c:447.
         (13, GP_PUT, lambda r: 1),  # nouveau_dma.c:92.
+        *([(13, GP_PUT, lambda r: 2)] if copy else []),  # second entry, S2 only.
         (14, state, lambda r: r[state] | 0x800),  # gk104.c:44.
         (14, 0x2634, lambda r: CHID),  # gf100.c:43.
         (14, 0x2270, lambda r: byrole[14] >> 12),
@@ -333,7 +422,17 @@ def channel_phase(serial, events, byrole):
     for phase, address in ((12, 0x2284 + rl * 8), (14, 0x2634), (14, 0x2284 + rl * 8)):
         if not any(e[6] == 2 and e[0] == phase and e[2] == address and not e[3] & 0x100000 for e in chan):
             raise ValueError("runlist/preempt completion poll missing")  # gk104.c:426; gf100.c:372.
-    return dict(runlist=rl, pbdma=pb, pbdma_mask=mask, writes=len(writes))
+    result = dict(runlist=rl, pbdma=pb, pbdma_mask=mask, writes=len(writes))
+    if copy:
+        engines = re.findall(
+            r"^k40_mem: ROUTE type=1 instance=0 address=[0-9a-f]+ fault=\S+ runlist=\S+ engine=1/(\d+)\r?$", serial, re.M
+        )
+        if len(engines) != 1:
+            raise ValueError("CE0 engine ID missing")  # top/gk104.c:55-56.
+        result["copy"] = copy_phase(serial, chan, int(engines[0]))
+    elif "k40_mem: COPY" in serial:
+        raise ValueError("copy report in an S1 run")
+    return result
 
 
 def reads_of(events, address, phase):
@@ -341,7 +440,14 @@ def reads_of(events, address, phase):
 
 
 def memory_final(serial, suite, request):
-    marker = "k40_mem: PASS S1_CHANNEL_NOP faults=0 upload=0 mapper=0 closure=2 allocations=14 journal_overflow=0"
+    copy = suite.get("stage") == COPY_STAGE
+    marker = (
+        "k40_mem: PASS S2_COPY faults=0 upload=0 mapper=0 closure=2 allocations=16 journal_overflow=0"
+        if copy
+        else "k40_mem: PASS S1_CHANNEL_NOP faults=0 upload=0 mapper=0 closure=2 allocations=14 journal_overflow=0"
+    )
+    if serial.count("k40_mem: PASS ") != 1:
+        raise ValueError("pass marker of another stage or repeated")
     if serial.count(marker) != 1 or serial.count("K40-MEM-END") != 1:
         raise ValueError("memory final pass/closure missing or repeated")
     owner = struct.unpack_from("<Q", request, 104)[0]
@@ -375,9 +481,15 @@ def memory_final(serial, suite, request):
     generations = {1: 1, 2: 1, 3: 2, 4: 6, 5: 3, 6: 3, 7: 3,
                    8: 2, 9: 3, 10: 15, 11: 1, 12: 2, 13: 2, 14: 2}
     roles = (1, 2, 6, 7, 3, 4, 5, *PB_ROLES)
+    if copy:
+        # Two more table entries, one more GPFIFO entry, six more push words;
+        # source: zero then pattern; destination: zero only (never written by the host again).
+        roles += COPY_ROLES
+        sizes.update({15: 4096, 16: 4096})
+        generations.update({9: 5, 12: 3, 13: 8, 15: 2, 16: 1})
     cursor = 256 * 1024 + 4096
     byrole = {}
-    if len(allocations) != 14:
+    if len(allocations) != len(roles):
         raise ValueError("allocation ledger incomplete")
     for index, record in enumerate(allocations, 1):
         ident, role, address, size, generation, staged, referenced, retained = record
@@ -478,9 +590,15 @@ def memory_final(serial, suite, request):
     if witnesses != expectedWitness:
         raise ValueError("BAR1 page/remap/readback witnesses differ")
 
-    channel = channel_phase(serial, events, byrole)
+    channel = channel_phase(serial, events, byrole, copy)
     return dict(
-        scope="S1: one host NOP consumed on one CE0-runlist channel (GP_GET 0->1), no fault, clean teardown; no DMA payload proof",
+        scope=(
+            "S2: after the S1 NOP, one 4096-byte copy between two owned VRAM pages on the same CE0-runlist channel, "
+            "destination equal to source by slow-window readback, no fault, clean teardown; no host DMA payload proof"
+            if copy
+            else "S1: one host NOP consumed on one CE0-runlist channel (GP_GET 0->1), no fault, clean teardown; no DMA payload proof"
+        ),
+        S2_complete=copy,
         channel=channel,
         owner=owner,
         allocations=[

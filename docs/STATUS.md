@@ -1,7 +1,7 @@
 # Status
 
 Current phase: S2 and S3 preparation, resumed 2026-11-12 (docs/decisions/012-resume-s2-s3.md).
-Current task: S2COPY (docs/tasks/S2COPY.md). No card run before the ladder of 2026-11-16.
+Current task: S3GR (docs/tasks/S3GR.md). No card run before the ladder of 2026-11-16.
 Last result: S1 PASSED on the card (2026-10-31). A native Haiku driver brought up
 the K40c (A7 POST), mapped VRAM through BAR1, and one channel on the CE0 runlist
 consumed one host NOP: GP_GET 0 -> 1 in 10 us, no fault, clean teardown. Evidence:
@@ -144,3 +144,4 @@ A cardless result is not K40c evidence.
 | S1CHANNEL2 run | STOPPED (NOP not consumed) | 2026-10-31 | All channel steps and teardown ran; GP_GET 0, GP_PUT 1; no fault. Likely missing post-POST unit enable (mc/nv04.c:120). No retry. |
 | S1CHANNEL3 run | **S1 PASS** | 2026-10-31 | GP_GET 0->1 in 10 us on channel 1, runlist 4 (CE0), PBDMA 2; no fault; clean teardown; validator accepted. See results/20261031-batch1-a7-bar1-d198d424/README.md. |
 | CI-CHECK | INCOMPLETE (local full check blocked) | 2026-11-02 | The missing memory host probe is built during `--check`; Actions fetches its pinned Ed25519 source. Targeted check passes. Local `make check` could not restore Mesa because GitLab was unreachable. New Actions runs require approval and have no jobs. See work/CI-CHECK/RESULT.md. |
+| S2COPY | DONE (host only; native build, package and review pending) | 2026-11-12 | Copy sequence of `nouveau_boa0b5.c` on the S1 channel, second GPFIFO entry, slow-window compare. Host test with independent copy-engine simulation, 4 source and 14 report mutations refused. No card run. See work/S2COPY/RESULT.md. |

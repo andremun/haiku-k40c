@@ -424,36 +424,38 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/memnative/Policy.cpp:148` | `if(expectedContext_ \|\| context_&0x80000000 \|\| phase!=0 \|\| commands_!=1 \|\| !queued_` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/memnative/Policy.cpp:150` | `\|\| value!=(0x80000000\|uint32_t(r.physical.value>>12)))return false;` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/memnative/Policy.cpp:154` | `&& context_==expectedContext_ && value==(expectedContext_&0x7fffffff);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:197` | `if(reg==0x000200 \|\| reg==0x000204 \|\| reg==0x002a04 \|\| reg==0x002634 \|\| reg==0x800000+chid*8 \|\| reg==0x800004+chid*8)return true;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:198` | `if(reg>=0x002390 && reg<0x0023b0)return true;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:199` | `if(reg>=0x002284 && reg<0x002284+16*8 && (reg-0x002284)%8==0)return true;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:201` | `const auto base=p*0x2000;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:202` | `if(reg==0x04013c+base \|\| reg==0x040108+base \|\| reg==0x040148+base)return true;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:230` | `const auto chanState=0x800004+chid*8,chanReg=0x800000+chid*8;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:235` | `if(step_>=13 && step_<=17 && reg==chanState && readState_ && value==(state_\|0x800))step_=18;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:236` | `if(step_>=6 && step_<=12 && reg==0x001704)step_=23;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:239` | `case 0: ok=reg==0x100cb8 && (status_&0x00ff0000) && value==uint32_t((roles[0].physical.value>>12)<<4);` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:241` | `case 1: ok=reg==0x100cbc && value==0x80000001;` | nvkm/subdev/mmu/vmmgf100.c:221 | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:246` | `ok=reg==0x100cb8 && (status_&0x00ff0000) && record(Role::Directory,bar)` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:250` | `case 4: ok=reg==0x100cbc && value==0x80000005;` | nvkm/subdev/mmu/vmmgf100.c:221 | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:253` | `case 5: ok=reg==0x001704 && chanQueued_ && expectedContext_ && context_==(expectedContext_&0x7fffffff)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:256` | `case 6: ok=reg==0x000200 && value==0xffffffff;break;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:257` | `case 7: ok=reg==0x000204 && value==0xffffffff;break;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:258` | `case 8: ok=reg==0x000204 && probed_ && mask_ && mask_<=0xff && value==mask_;break;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:259` | `case 9: ok=reg==0x002a04 && read2a04_ && value==(value2a04_\|0xbfffffff);break;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:260` | `case 10: ok=pbdma(p) && reg==0x04013c+p*0x2000 && readControl_ && value==(control_&~0x10000100u);break;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:261` | `case 11: ok=reg==0x002254 && value==0x10000000;break;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:263` | `&& value==((state_&~0x000f0000u)\|(rl<<16));break;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:264` | `case 13: ok=reg==chanReg && value==(0x80000000\|uint32_t(roles[2].physical.value>>12));` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:267` | `case 14: ok=reg==chanState && readState_ && value==(state_\|0x400);break;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:268` | `case 15: ok=reg==0x002270 && value==runlistBase;break;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:269` | `case 16: ok=reg==0x002274 && value==((rl<<20)\|1);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:272` | `case 18: ok=reg==chanState && readState_ && value==(state_\|0x800);break;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:273` | `case 19: ok=reg==0x002634 && value==chid;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:276` | `case 20: ok=reg==0x002270 && preemptClear_ && value==runlistBase;break;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:277` | `case 21: ok=reg==0x002274 && value==(rl<<20);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:281` | `case 23: ok=reg==0x001704 && expectedContext_ && context_==expectedContext_` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memnative/Policy.cpp:282` | `&& value==(expectedContext_&0x7fffffff);break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:210` | `if(reg==0x000200 \|\| reg==0x000204 \|\| reg==0x002a04 \|\| reg==0x002634 \|\| reg==0x800000+chid*8 \|\| reg==0x800004+chid*8)return true;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:211` | `if(reg>=0x002390 && reg<0x0023b0)return true;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:212` | `if(reg>=0x002284 && reg<0x002284+16*8 && (reg-0x002284)%8==0)return true;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:214` | `const auto base=p*0x2000;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:215` | `if(reg==0x04013c+base \|\| reg==0x040108+base \|\| reg==0x040148+base)return true;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:219` | `if(reg==0x104908 \|\| reg==0x104f14)return true;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:220` | `if(engine(id) && reg==0x002640+id*8)return true;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:253` | `const auto chanState=0x800004+chid*8,chanReg=0x800000+chid*8;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:258` | `if(step_>=13 && step_<=17 && reg==chanState && readState_ && value==(state_\|0x800))step_=18;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:259` | `if(step_>=6 && step_<=12 && reg==0x001704)step_=23;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:262` | `case 0: ok=reg==0x100cb8 && (status_&0x00ff0000) && value==uint32_t((roles[0].physical.value>>12)<<4);` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:264` | `case 1: ok=reg==0x100cbc && value==0x80000001;` | nvkm/subdev/mmu/vmmgf100.c:221 | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:269` | `ok=reg==0x100cb8 && (status_&0x00ff0000) && record(Role::Directory,bar)` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:273` | `case 4: ok=reg==0x100cbc && value==0x80000005;` | nvkm/subdev/mmu/vmmgf100.c:221 | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:276` | `case 5: ok=reg==0x001704 && chanQueued_ && expectedContext_ && context_==(expectedContext_&0x7fffffff)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:279` | `case 6: ok=reg==0x000200 && value==0xffffffff;break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:280` | `case 7: ok=reg==0x000204 && value==0xffffffff;break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:281` | `case 8: ok=reg==0x000204 && probed_ && mask_ && mask_<=0xff && value==mask_;break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:282` | `case 9: ok=reg==0x002a04 && read2a04_ && value==(value2a04_\|0xbfffffff);break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:283` | `case 10: ok=pbdma(p) && reg==0x04013c+p*0x2000 && readControl_ && value==(control_&~0x10000100u);break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:284` | `case 11: ok=reg==0x002254 && value==0x10000000;break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:286` | `&& value==((state_&~0x000f0000u)\|(rl<<16));break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:287` | `case 13: ok=reg==chanReg && value==(0x80000000\|uint32_t(roles[2].physical.value>>12));` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:290` | `case 14: ok=reg==chanState && readState_ && value==(state_\|0x400);break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:291` | `case 15: ok=reg==0x002270 && value==runlistBase;break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:292` | `case 16: ok=reg==0x002274 && value==((rl<<20)\|1);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:295` | `case 18: ok=reg==chanState && readState_ && value==(state_\|0x800);break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:296` | `case 19: ok=reg==0x002634 && value==chid;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:299` | `case 20: ok=reg==0x002270 && preemptClear_ && value==runlistBase;break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:300` | `case 21: ok=reg==0x002274 && value==(rl<<20);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:304` | `case 23: ok=reg==0x001704 && expectedContext_ && context_==expectedContext_` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memnative/Policy.cpp:305` | `&& value==(expectedContext_&0x7fffffff);break;` | no source: ambiguous citation | SOURCE_ONLY |
 
 ## src/memnative/Policy.h
 
@@ -472,56 +474,63 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | Line | Code | Source | Status |
 |------|------|--------|--------|
 | `src/memstage/Channel.cpp:8` | `constexpr uint32_t chanReg=0x800000+chid*8,chanState=0x800004+chid*8;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:10` | `constexpr Role roles[7]={Role::ChanDirectory,Role::ChanSmall,Role::ChanInstance,Role::Userd,Role::Gpfifo,Role::Push,Role::Runlist};` | no source: software allocation order of the channel roles. | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:92` | `if(i>=100000 \|\| !read(0x100c80,status))return fail(Error::Invalidate);` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:93` | `if(status&0x00ff0000)break;` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:96` | `if(!write(0x100cb8,uint32_t((addresses_.directory>>12)<<4))` | nvkm/subdev/mmu/vmmgf100.c:216 | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:97` | `\|\| !write(0x100cbc,0x80000001))return false;` | nvkm/subdev/mmu/vmmgf100.c:221 | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:100` | `if(i>=100000 \|\| !read(0x100c80,status))return fail(Error::Invalidate);` | nvkm/subdev/mmu/vmmgf100.c:224 | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:101` | `if(status&0x00008000)return true;` | nvkm/subdev/mmu/vmmgf100.c:224 | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:112` | `if(!write(0x000200,0xffffffff) \|\| !read(0x000200,value))return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:114` | `if(!read(0x000204,value) \|\| !write(0x000204,0xffffffff) \|\| !read(0x000204,mask))return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:115` | `if(!mask \|\| mask>0xff)return fail(Error::Routing,0x000204,mask);` | no source: software unit bound. | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:116` | `if(!write(0x000204,mask))return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:120` | `if(!read(0x002390+p*4,runm))return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:123` | `if(matches!=1)return fail(Error::Routing,0x002390,matches);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:124` | `if(!read(0x002a04,value) \|\| !write(0x002a04,value\|0xbfffffff))return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:125` | `const auto control=0x04013c+report_.pbdma*0x2000;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:126` | `if(!read(control,value) \|\| !write(control,value&~0x10000100u))return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:127` | `return write(0x002254,0x10000000);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:138` | `if(!write(chanState,(state&~0x000f0000u)\|(report_.runlist<<16))` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:139` | `\|\| !write(chanReg,0x80000000\|uint32_t(addresses_.instance>>12))` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:140` | `\|\| !read(chanState,state) \|\| !write(chanState,state\|0x400)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:141` | `\|\| !write(0x002270,uint32_t(addresses_.runlist>>12))` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:142` | `\|\| !write(0x002274,(report_.runlist<<20)\|1))return false;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:143` | `return waitClear(0x002284+report_.runlist*8,0x00100000,Error::Runlist);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:170` | `const auto pb=report_.pbdma*0x2000;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:171` | `return read(0x000100,report_.mc) && read(0x002100,report_.fifoIntr) && read(0x00259c,report_.mmuPending)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:172` | `&& read(0x040108+pb,report_.pbdmaIntr) && read(0x040148+pb,report_.pbdmaHce)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:182` | `if(!read(chanState,state) \|\| !write(chanState,state\|0x800)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:183` | `\|\| !write(0x002634,chid) \|\| !waitClear(0x002634,0x00100000,Error::Preempt)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:184` | `\|\| !write(0x002270,uint32_t(addresses_.runlist>>12)) \|\| !write(0x002274,report_.runlist<<20)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:185` | `\|\| !waitClear(0x002284+report_.runlist*8,0x00100000,Error::Runlist)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:211` | `&& !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&0x3fffffff);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:10` | `constexpr Role roles[9]={Role::ChanDirectory,Role::ChanSmall,Role::ChanInstance,Role::Userd,Role::Gpfifo,Role::Push,Role::Runlist,` | no source: software allocation order of the channel roles. | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:101` | `if(i>=100000 \|\| !read(0x100c80,status))return fail(Error::Invalidate);` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:102` | `if(status&0x00ff0000)break;` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:105` | `if(!write(0x100cb8,uint32_t((addresses_.directory>>12)<<4))` | nvkm/subdev/mmu/vmmgf100.c:216 | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:106` | `\|\| !write(0x100cbc,0x80000001))return false;` | nvkm/subdev/mmu/vmmgf100.c:221 | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:109` | `if(i>=100000 \|\| !read(0x100c80,status))return fail(Error::Invalidate);` | nvkm/subdev/mmu/vmmgf100.c:224 | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:110` | `if(status&0x00008000)return true;` | nvkm/subdev/mmu/vmmgf100.c:224 | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:121` | `if(!write(0x000200,0xffffffff) \|\| !read(0x000200,value))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:123` | `if(!read(0x000204,value) \|\| !write(0x000204,0xffffffff) \|\| !read(0x000204,mask))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:124` | `if(!mask \|\| mask>0xff)return fail(Error::Routing,0x000204,mask);` | no source: software unit bound. | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:125` | `if(!write(0x000204,mask))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:129` | `if(!read(0x002390+p*4,runm))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:132` | `if(matches!=1)return fail(Error::Routing,0x002390,matches);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:133` | `if(!read(0x002a04,value) \|\| !write(0x002a04,value\|0xbfffffff))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:134` | `const auto control=0x04013c+report_.pbdma*0x2000;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:135` | `if(!read(control,value) \|\| !write(control,value&~0x10000100u))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:136` | `return write(0x002254,0x10000000);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:147` | `if(!write(chanState,(state&~0x000f0000u)\|(report_.runlist<<16))` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:148` | `\|\| !write(chanReg,0x80000000\|uint32_t(addresses_.instance>>12))` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:149` | `\|\| !read(chanState,state) \|\| !write(chanState,state\|0x400)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:150` | `\|\| !write(0x002270,uint32_t(addresses_.runlist>>12))` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:151` | `\|\| !write(0x002274,(report_.runlist<<20)\|1))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:152` | `return waitClear(0x002284+report_.runlist*8,0x00100000,Error::Runlist);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:199` | `const auto status=0x002640+report_.engine*8;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:205` | `if(!(report_.engineStatus&0x80000000) \|\| report_.idleUs>=2000000)break;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:209` | `return read(0x104908,report_.ceIntr) && read(0x104f14,report_.ceLaunchErr);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:221` | `const auto pb=report_.pbdma*0x2000;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:222` | `return read(0x000100,report_.mc) && read(0x002100,report_.fifoIntr) && read(0x00259c,report_.mmuPending)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:223` | `&& read(0x040108+pb,report_.pbdmaIntr) && read(0x040148+pb,report_.pbdmaHce)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:233` | `if(!read(chanState,state) \|\| !write(chanState,state\|0x800)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:234` | `\|\| !write(0x002634,chid) \|\| !waitClear(0x002634,0x00100000,Error::Preempt)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:235` | `\|\| !write(0x002270,uint32_t(addresses_.runlist>>12)) \|\| !write(0x002274,report_.runlist<<20)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:236` | `\|\| !waitClear(0x002284+report_.runlist*8,0x00100000,Error::Runlist)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:263` | `&& !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&0x3fffffff);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:267` | `return s1 && report_.copyGet==2 && report_.copyPut==2 && !(report_.engineStatus&0x80000000)` | no source: ambiguous citation | SOURCE_ONLY |
 
 ## src/memstage/ChannelImage.cpp
 
 | Line | Code | Source | Status |
 |------|------|--------|--------|
-| `src/memstage/ChannelImage.cpp:50` | `add(0x08,userd);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:51` | `add(0x10,0x0000face);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:52` | `add(0x30,0xfffff902);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:54` | `add(0x48,(gpfifoVa&0xffffffff)\|((uint64_t(gpfifoVa>>32)\|(limit2<<16))<<32));` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:55` | `add(0x80,uint64_t(0x20400000)<<32);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:56` | `add(0x90,uint64_t(0x30000001)<<32);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:57` | `add(0x98,uint64_t(0x00000100)<<32);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:58` | `add(0xa8,uint64_t(0x0000001f)<<32);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:59` | `add(0xb8,0xf8000000);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:60` | `add(0xe0,uint64_t(0x00000020)<<32);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:61` | `add(0xe8,chid);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:62` | `add(0xf8,0x10003080\|(uint64_t(0x10000010)<<32));` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:64` | `add(0x200,base);add(0x208,limit);break;` | nvkm/subdev/mmu/vmmgf100.c:346 | SOURCE_ONLY |
-| `src/memstage/ChannelImage.cpp:67` | `add(0,(pushVa&0xffffffff)\|((uint64_t(pushVa>>32)\|(8u<<8))<<32));break;` | nouveau_dma.c:83 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:60` | `add(0x08,userd);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:61` | `add(0x10,0x0000face);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:62` | `add(0x30,0xfffff902);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:64` | `add(0x48,(gpfifoVa&0xffffffff)\|((uint64_t(gpfifoVa>>32)\|(limit2<<16))<<32));` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:65` | `add(0x80,uint64_t(0x20400000)<<32);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:66` | `add(0x90,uint64_t(0x30000001)<<32);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:67` | `add(0x98,uint64_t(0x00000100)<<32);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:68` | `add(0xa8,uint64_t(0x0000001f)<<32);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:69` | `add(0xb8,0xf8000000);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:70` | `add(0xe0,uint64_t(0x00000020)<<32);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:71` | `add(0xe8,chid);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:72` | `add(0xf8,0x10003080\|(uint64_t(0x10000010)<<32));` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:74` | `add(0x200,base);add(0x208,limit);break;` | nvkm/subdev/mmu/vmmgf100.c:346 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:77` | `add(0,(pushVa&0xffffffff)\|((uint64_t(pushVa>>32)\|(8u<<8))<<32));` | nouveau_dma.c:83 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:80` | `add(8,(va&0xffffffff)\|((uint64_t(va>>32)\|(copyPushBytes<<8))<<32));` | nouveau_dma.c:83 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:89` | `add(16,pair(methodHeader(1,8,copySubchannel,copyOffsetIn),uint32_t(sourceVa>>32)&0xff));` | include/nvhw/class/cla0b5.h:95 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.cpp:90` | `add(24,pair(uint32_t(sourceVa),uint32_t(destVa>>32)&0xff));` | include/nvhw/class/cla0b5.h:96 | SOURCE_ONLY |
 
 ## src/memstage/ChannelImage.h
 
@@ -534,6 +543,15 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/memstage/ChannelImage.h:12` | `constexpr uint32_t userdSlot=chid*0x200;` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/memstage/ChannelImage.h:13` | `constexpr uint32_t gpGet=userdSlot+0x88,gpPut=userdSlot+0x8c;` | nouveau_dma.c:92 | SOURCE_ONLY |
 | `src/memstage/ChannelImage.h:14` | `constexpr uint32_t nopHeader=0x20010002;` | no source: in the checked trees; envytools dma-pusher.rst line 417 header, open-gpu-doc cla16f.h line 74 NOP 0x08. | SOURCE_ONLY |
+| `src/memstage/ChannelImage.h:16` | `constexpr uint64_t sourceVa=0x10002000,destVa=0x10003000;` | nouveau_boa0b5.c:37 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.h:17` | `constexpr uint32_t copyBytes=4096;` | nouveau_boa0b5.c:57 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.h:18` | `constexpr uint32_t copySubchannel=4;` | include/nvif/push906f.h:19 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.h:19` | `constexpr uint32_t copyClass=0xa0b5;` | nouveau_bo.c:937 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.h:20` | `constexpr uint32_t copyOffsetIn=0x400;` | include/nvhw/class/cla0b5.h:94 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.h:21` | `constexpr uint32_t copyLaunchMethod=0x300;` | include/nvhw/class/cla0b5.h:37 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.h:24` | `constexpr uint32_t copyLaunch=0x00000386;` | include/nvhw/class/cla0b5.h:38 | SOURCE_ONLY |
+| `src/memstage/ChannelImage.h:25` | `constexpr uint32_t copyPushOffset=8,copyPushBytes=48;` | no source: after the NOP; 12 words, see image(). | SOURCE_ONLY |
+| `src/memstage/ChannelImage.h:28` | `constexpr uint32_t methodHeader(uint32_t op,uint32_t count,uint32_t subchannel,uint32_t method)` | include/nvif/push906f.h:22 | SOURCE_ONLY |
 
 ## src/memstage/Experiment.cpp
 
@@ -615,9 +633,9 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/memstage/Upload.cpp:58` | `if(!journal_.append({phase_,Error::None,0x070000,1,0,last_-start_,Operation::Write}))return fail(Error::Overflow);` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/memstage/Upload.cpp:66` | `if(!io_.read32(0x070000,value))return fail(Error::Read,0x070000);` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/memstage/Upload.cpp:71` | `if(!journal_.append({phase_,Error::None,0x070000,value,poll+1,last_-start,Operation::Poll}))return fail(Error::Overflow);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Upload.cpp:94` | `const auto reg=0x700000+uint32_t(physical&0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Upload.cpp:148` | `const auto reg=0x700000+uint32_t(physical&0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Upload.cpp:156` | `const auto reg=0x700000+uint32_t(physical&0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Upload.cpp:96` | `const auto reg=0x700000+uint32_t(physical&0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Upload.cpp:174` | `const auto reg=0x700000+uint32_t(physical&0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Upload.cpp:182` | `const auto reg=0x700000+uint32_t(physical&0xfffff);` | no source: ambiguous citation | SOURCE_ONLY |
 
 ## src/mmu/PageTable.cpp
 
@@ -811,78 +829,85 @@ The following constant lines have no source citation:
 - src/memnative/Policy.cpp:148 (no source: ambiguous citation)
 - src/memnative/Policy.cpp:150 (no source: ambiguous citation)
 - src/memnative/Policy.cpp:154 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:197 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:198 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:199 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:201 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:202 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:230 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:235 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:236 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:210 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:211 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:212 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:214 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:215 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:219 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:220 (no source: ambiguous citation)
 - src/memnative/Policy.cpp:253 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:256 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:257 (no source: ambiguous citation)
 - src/memnative/Policy.cpp:258 (no source: ambiguous citation)
 - src/memnative/Policy.cpp:259 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:260 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:261 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:263 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:264 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:267 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:268 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:269 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:272 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:273 (no source: ambiguous citation)
 - src/memnative/Policy.cpp:276 (no source: ambiguous citation)
-- src/memnative/Policy.cpp:277 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:279 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:280 (no source: ambiguous citation)
 - src/memnative/Policy.cpp:281 (no source: ambiguous citation)
 - src/memnative/Policy.cpp:282 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:283 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:284 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:286 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:287 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:290 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:291 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:292 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:295 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:296 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:299 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:300 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:304 (no source: ambiguous citation)
+- src/memnative/Policy.cpp:305 (no source: ambiguous citation)
 - src/memnative/Policy.h:8 (no source: ambiguous citation)
 - src/memory/VramArena.h:23 (no source: software ledger capacity.)
 - src/memstage/Channel.cpp:8 (no source: ambiguous citation)
 - src/memstage/Channel.cpp:10 (no source: software allocation order of the channel roles.)
-- src/memstage/Channel.cpp:112 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:114 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:115 (no source: software unit bound.)
-- src/memstage/Channel.cpp:116 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:120 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:121 (no source: ambiguous citation)
 - src/memstage/Channel.cpp:123 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:124 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:124 (no source: software unit bound.)
 - src/memstage/Channel.cpp:125 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:126 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:127 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:138 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:139 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:140 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:141 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:142 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:143 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:170 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:171 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:172 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:182 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:183 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:184 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:185 (no source: ambiguous citation)
-- src/memstage/Channel.cpp:211 (no source: ambiguous citation)
-- src/memstage/ChannelImage.cpp:50 (no source: ambiguous citation)
-- src/memstage/ChannelImage.cpp:51 (no source: ambiguous citation)
-- src/memstage/ChannelImage.cpp:52 (no source: ambiguous citation)
-- src/memstage/ChannelImage.cpp:54 (no source: ambiguous citation)
-- src/memstage/ChannelImage.cpp:55 (no source: ambiguous citation)
-- src/memstage/ChannelImage.cpp:56 (no source: ambiguous citation)
-- src/memstage/ChannelImage.cpp:57 (no source: ambiguous citation)
-- src/memstage/ChannelImage.cpp:58 (no source: ambiguous citation)
-- src/memstage/ChannelImage.cpp:59 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:129 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:132 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:133 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:134 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:135 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:136 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:147 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:148 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:149 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:150 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:151 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:152 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:199 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:205 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:209 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:221 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:222 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:223 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:233 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:234 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:235 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:236 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:263 (no source: ambiguous citation)
+- src/memstage/Channel.cpp:267 (no source: ambiguous citation)
 - src/memstage/ChannelImage.cpp:60 (no source: ambiguous citation)
 - src/memstage/ChannelImage.cpp:61 (no source: ambiguous citation)
 - src/memstage/ChannelImage.cpp:62 (no source: ambiguous citation)
+- src/memstage/ChannelImage.cpp:64 (no source: ambiguous citation)
+- src/memstage/ChannelImage.cpp:65 (no source: ambiguous citation)
+- src/memstage/ChannelImage.cpp:66 (no source: ambiguous citation)
+- src/memstage/ChannelImage.cpp:67 (no source: ambiguous citation)
+- src/memstage/ChannelImage.cpp:68 (no source: ambiguous citation)
+- src/memstage/ChannelImage.cpp:69 (no source: ambiguous citation)
+- src/memstage/ChannelImage.cpp:70 (no source: ambiguous citation)
+- src/memstage/ChannelImage.cpp:71 (no source: ambiguous citation)
+- src/memstage/ChannelImage.cpp:72 (no source: ambiguous citation)
 - src/memstage/ChannelImage.h:8 (no source: software choice, the ID of the Linux CE channel (mmiotrace line 562290).)
 - src/memstage/ChannelImage.h:9 (no source: software channel VA, distinct from physical and BAR VA.)
 - src/memstage/ChannelImage.h:10 (no source: next small page in the same SPT.)
 - src/memstage/ChannelImage.h:11 (no source: one small page of 8-byte entries.)
 - src/memstage/ChannelImage.h:12 (no source: ambiguous citation)
 - src/memstage/ChannelImage.h:14 (no source: in the checked trees; envytools dma-pusher.rst line 417 header, open-gpu-doc cla16f.h line 74 NOP 0x08.)
+- src/memstage/ChannelImage.h:25 (no source: after the NOP; 12 words, see image().)
 - src/memstage/Faults.cpp:33 (no source: ambiguous citation)
 - src/memstage/Faults.cpp:43 (no source: ambiguous citation)
 - src/memstage/Faults.cpp:47 (no source: ambiguous citation)
@@ -928,9 +953,9 @@ The following constant lines have no source citation:
 - src/memstage/Upload.cpp:58 (no source: ambiguous citation)
 - src/memstage/Upload.cpp:66 (no source: ambiguous citation)
 - src/memstage/Upload.cpp:71 (no source: ambiguous citation)
-- src/memstage/Upload.cpp:94 (no source: ambiguous citation)
-- src/memstage/Upload.cpp:148 (no source: ambiguous citation)
-- src/memstage/Upload.cpp:156 (no source: ambiguous citation)
+- src/memstage/Upload.cpp:96 (no source: ambiguous citation)
+- src/memstage/Upload.cpp:174 (no source: ambiguous citation)
+- src/memstage/Upload.cpp:182 (no source: ambiguous citation)
 - src/os/HaikuMemory.h:39 (no source: software ownership-record capacity, not a GPU limit.)
 - src/runtime/Bootstrap.cpp:45 (no source: ambiguous citation)
 - src/runtime/Bootstrap.cpp:47 (no source: ambiguous citation)

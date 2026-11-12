@@ -19,15 +19,18 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools/haiku"))
 from tools.a7 import build as a7, crypto_sources, runtime_export
 from tools.a7.guest_job import job as a7_job
-from tools.memstage import contract, pci
+from tools.memstage import contract, pci, stage
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
-PACKAGE = ROOT / "build/memstage/package-s1c"
-PUBLIC = ROOT / "work/S1CHANNEL3/package.json"
-PLAN = ROOT / "work/S1CHANNEL3/phase-plan.json"
-INVENTORY = ROOT / "work/S1CHANNEL3/write-inventory.json"
-STAGE = "BATCH1_A7_BAR1_VRAM"
+# K40_MEM_STAGE selects the stage (tools/memstage/stage.py). Each stage has its
+# own package, key, nonce and records. The S1 names stay as they were.
+PACKAGE = ROOT / "build/memstage" / stage.CURRENT["package"]
+WORK = ROOT / "work" / stage.CURRENT["work"]
+PUBLIC = WORK / "package.json"
+PLAN = WORK / "phase-plan.json"
+INVENTORY = WORK / "write-inventory.json"
+STAGE = "BATCH1_A7_BAR1_VRAM" if stage.NAME == "s1" else "S2_A7_BAR1_CHANNEL_COPY"
 ROM = Path(
     os.environ.get(
         "K40_VBIOS",
@@ -371,6 +374,7 @@ def config(public, nonce, digest, vram):
         + array("memoryNonce", nonce)
         + array("memoryPlan", digest)
         + f"static const uint64_t memoryVram={vram}ULL;\n"
+        + f"static const bool memoryCopy={'true' if stage.CURRENT['copy'] else 'false'};\n"
     )
 
 

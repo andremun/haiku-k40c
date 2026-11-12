@@ -456,3 +456,16 @@ No Nouveau implementation body was copied and no runtime code changed.
 | `reference/nouveau/nouveau_dma.c` | MIT notice in file | GPFIFO entry, GP_PUT | Semantic facts only |
 | `reference/open-gpu-doc/classes/host/cla16f.h` | MIT notice in file | USERD layout, NOP method | Facts only |
 | `reference/envytools/docs/hw/fifo/dma-pusher.rst`, `rnndb/fifo/gf100_pfifo.xml` | MIT | Method header format, BAR1_BASE | Facts only |
+
+## S2COPY (2026-11-12)
+
+| Source file consulted | License | Used for | Copied material |
+|---|---|---|---|
+| `reference/nouveau/nouveau_boa0b5.c` | MIT notice in file | Copy method sequence and launch flags | Semantic facts only |
+| `reference/nouveau/nouveau_bo.c` | MIT notice in file | Copy class, subchannel and object handle | Semantic facts only |
+| `reference/nouveau/include/nvhw/class/cla0b5.h` | MIT notice in file (NVIDIA) | Method offsets and LAUNCH_DMA fields | Facts only |
+| `reference/nouveau/include/nvhw/class/cl906f.h` | MIT notice in file (NVIDIA) | Method header fields | Facts only |
+| `reference/nouveau/include/nvif/push906f.h` | MIT | Subchannel of the copy class, header macros | Facts only |
+| `reference/nouveau/nvkm/engine/ce/gk104.c` | MIT notice in file | Interrupt status, launch error code | Semantic facts only |
+| `reference/nouveau/nvkm/engine/fifo/gk104.c` | MIT notice in file | Engine status register, copy-engine functions without context | Semantic facts only |
+

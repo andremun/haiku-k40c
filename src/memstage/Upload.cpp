@@ -80,11 +80,13 @@ bool Upload::flush()
     LockGuard lock(io_,Lock::Window);
     return lock.held()?flushLocked():fail(Error::Budget);
 }
-bool Upload::transfer(Token token,Image image,bool write)
+bool Upload::transfer(Token token,Image image,bool write,const Record* like)
 {
     Record r;
     if(!arena_.describe(token,r) || !arena_.healthy())return fail(Error::Bounds);
-    if(image!=Image::Zero && r.role!=Role::DataA && r.role!=Role::DataB)return fail(Error::Bounds);
+    if(image!=Image::Zero && r.role!=Role::DataA && r.role!=Role::DataB && r.role!=Role::CopySource
+        && !(like && !write && r.role==Role::CopyDest))return fail(Error::Bounds);
+    if(like && (write || like->role!=Role::CopySource || like->bytes!=r.bytes))return fail(Error::Bounds);
     if(write && !arena_.dirty(token))return fail(Error::Bounds);
     uint64_t selected=UINT64_MAX;
     for(uint64_t offset=0;offset<r.bytes;offset+=4) {
@@ -92,12 +94,17 @@ bool Upload::transfer(Token token,Image image,bool write)
         uint64_t physical;
         if(!address(token,offset,physical) || !window(physical,selected))return false;
         const auto reg=0x700000+uint32_t(physical&0xfffff); // instmem/nv50.c:71,91.
-        const auto expected=pattern(physical,image);
+        const auto expected=pattern(like?like->physical.value+offset:physical,image);
         if(write){if(!io_.write32(reg,expected))return fail(Error::Write,reg,expected);}
         else {
             uint32_t value=0;
             if(!io_.read32(reg,value))return fail(Error::Read,reg);
-            if(value!=expected)return fail(Error::Compare,reg,value);
+            if(value!=expected) {
+                if(!like)return fail(Error::Compare,reg,value);
+                // Copy result differs: record it. No error latch: teardown must still run.
+                journal_.append({phase_,Error::Compare,reg,value,0,last_-start_,Operation::Failure,uint8_t(r.role),uint8_t(image)});
+                return false;
+            }
         }
         if(!tick(5000000))return false; // no source: software bulk-operation budget.
     }
@@ -127,6 +134,25 @@ bool Upload::exercise(Token a,Token b)
             || !transfer(a,image,false) || !transfer(b,image,false))return false;
     }
     return arena_.staged(a) && arena_.staged(b);
+}
+bool Upload::fill(Token source)
+{
+    if(!begin())return false;
+    Record r;
+    if(!arena_.describe(source,r) || r.role!=Role::CopySource || r.referenced)return fail(Error::Bounds);
+    LockGuard lock(io_,Lock::Window);
+    if(!lock.held())return fail(Error::Budget);
+    return transfer(source,Image::Pattern,true) && flushLocked()
+        && transfer(source,Image::Pattern,false) && arena_.staged(source);
+}
+bool Upload::matches(Token dest,Token source)
+{
+    if(!begin())return false;
+    Record d,s;
+    if(!arena_.describe(dest,d) || !arena_.describe(source,s) || d.role!=Role::CopyDest || s.role!=Role::CopySource)return fail(Error::Bounds);
+    LockGuard lock(io_,Lock::Window);
+    if(!lock.held())return fail(Error::Budget);
+    return transfer(dest,Image::Pattern,false,&s);
 }
 bool Upload::patch(Token token,uint64_t offset,uint64_t value,bool update)
 {

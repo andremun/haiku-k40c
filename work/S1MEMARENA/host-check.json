@@ -8,8 +8,8 @@
     "reference/nouveau/nvkm/subdev/fb/ramgf100.c": "770a57692580c709223bd235dd07ee13899ff1c6ad29751c52dedef42383a57f",
     "reference/nouveau/nvkm/subdev/fb/ramgf108.c": "1a59d714e34b6977ba4e551216810721e234f9e0653f9c36563fd022007471d2",
     "reference/nouveau/nvkm/subdev/mmu/vmmgk104.c": "3f77d94f4f08546da6361e474c94fe13af23d41758ad5a1fd48b0e5a50ccdd97",
-    "src/memory/VramArena.cpp": "d59bee5f395ffdcf7746a28a0b83a442cd11e3c591489385a7311d63683a525a",
-    "src/memory/VramArena.h": "4acefd0582505cb5584c7b27a99704737e62c6b7f71f0705256c615047675a62",
+    "src/memory/VramArena.cpp": "60d8e4154088b4028b272e1a27d4af3638e01e881924a590c10842175389fec7",
+    "src/memory/VramArena.h": "bc95d13c1c9fa308755df9b6694079dd2edaacba594205918621286ea82a50ba",
     "tests/test_vram_arena.cpp": "e289a3cc860937ef41de87b300d62fc56ed81a08d188a5daca1cf965bfd24d04",
     "tools/memstage/arena_report.py": "17217f10f8971adc291473619025f6fd1dc0d73830e35cf16223e8f5b9da44c2"
   }

@@ -6,9 +6,9 @@
 #include <new>
 namespace k40::memnative {
 using namespace memory::vram;
-NativeOwner::NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram)
+NativeOwner::NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram,bool copy)
     :faults_(io_,journal_,epoch),policy_(arena_,faults_),upload_(io_,faults_,journal_,arena_),mapper_(io_,faults_,journal_,arena_,upload_,epoch),
-     channel_(io_,faults_,journal_,arena_,upload_,mapper_,epoch)
+     channel_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,copy)
 {
     io_.policy_=&policy_;
     std::memcpy(binding_.key,key,32);std::memcpy(binding_.nonce,nonce,32);std::memcpy(binding_.plan,plan,32);std::memcpy(binding_.challenge,challenge,16);
@@ -52,7 +52,8 @@ status_t NativeOwner::detach(uint64 lease)
 }
 bool NativeOwner::work()
 {
-    // S1: the unchanged batch-1 memory/BAR1 gates first, then one channel.
+    // The unchanged batch-1 memory/BAR1 gates first, then one channel: S1 (host
+    // NOP), or S2 (NOP, then one copy) when the package was built for the copy stage.
     return experiment_ && experiment_->run() && channel_.run();
 }
 void NativeOwner::drain()
@@ -80,6 +81,12 @@ void NativeOwner::drain()
         c.getAfter,c.putAfter,c.polls,(unsigned long long)c.progressUs);
     dprintf("k40_mem: CHANNEL_STATUS mc=%x fifo=%x mmu=%x pbdma=%x hce=%x state=%x\n",
         c.mc,c.fifoIntr,c.mmuPending,c.pbdmaIntr,c.pbdmaHce,c.state);
+    if(channel_.copy()) {
+        dprintf("k40_mem: COPY engine=%u submitted=%u get=%u/%u polls=%u us=%llu copied=%u\n",c.engine,c.copySubmitted,
+            c.copyGet,c.copyPut,c.copyPolls,(unsigned long long)c.copyUs,c.copied);
+        dprintf("k40_mem: COPY_STATUS engine=%x idle_polls=%u idle_us=%llu ce_intr=%x launcherr=%x\n",c.engineStatus,
+            c.idlePolls,(unsigned long long)c.idleUs,c.ceIntr,c.ceLaunchErr);
+    }
     dprintf("k40_mem: ROUTES count=%u\n",faults_.routeCount());
     for(unsigned i=0;i<faults_.routeCount();++i) {
         memstage::Routing r;if(!faults_.route(i,r))continue;
@@ -95,7 +102,7 @@ bool NativeOwner::execute()
     if(!passed)arena_.fail();
     drain();
     dprintf("k40_mem: %s faults=%u upload=%u mapper=%u closure=%u allocations=%u journal_overflow=%u\n",
-        passed?"PASS S1_CHANNEL_NOP":"FAIL",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
+        passed?(channel_.copy()?"PASS S2_COPY":"PASS S1_CHANNEL_NOP"):"FAIL",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
         unsigned(mapper_.closure()),arena_.count(),journal_.overflow());return passed;
 }
 }

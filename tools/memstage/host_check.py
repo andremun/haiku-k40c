@@ -17,7 +17,9 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
 PROBE = ROOT / "build/tests/mem_session_probe"
-OUTPUT = ROOT / "work/S1CHANNEL3/host-check.json"
+# The report follows the current sources. The S1 run kept its own copy in
+# work/S1CHANNEL3/host-check.json (a record, not checked again).
+OUTPUT = ROOT / "work/S2COPY/host-check.json"
 TEST_SEED = bytes.fromhex(
     "9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60"
 )
@@ -25,6 +27,7 @@ TESTS = (
     "test_mem_client",
     "test_mem_policy",
     "test_mem_channel",
+    "test_mem_copy",
     "test_mem_experiment",
     "test_mem_mmu",
     "test_mem_upload",
@@ -47,6 +50,7 @@ def sources():
             "src/memory/VramArena.cpp",
             "tests/mem_session_probe.cpp",
             "tests/memstage_device.h",
+            "tests/memstage_fifo.h",
             "tools/haiku/selftest/memory_client.cpp",
             "tools/haiku/selftest/memory_preflight.cpp",
             "tools/memstage/host_check.py",

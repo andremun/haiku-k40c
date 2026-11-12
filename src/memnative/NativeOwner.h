@@ -10,7 +10,7 @@
 namespace k40::memnative {
 class NativeOwner final:public memauth::Runtime {
 public:
-    NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram);
+    NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram,bool copy);
     status_t prepare(uint64*,uint8_t*);
     status_t submit(uint64,const uint8_t*,size_t);
     status_t detach(uint64);

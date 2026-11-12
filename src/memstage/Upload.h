@@ -33,6 +33,11 @@ public:
         :io_(io),faults_(faults),journal_(journal),arena_(arena){}
     bool zero(memory::vram::Token);
     bool exercise(memory::vram::Token a,memory::vram::Token b);
+    // S2: write and verify the address-dependent pattern of the copy source.
+    bool fill(memory::vram::Token source);
+    // S2: read every word of dest; true only if it equals the pattern of source.
+    // A difference is journaled as a Compare event and latches no error: teardown still runs.
+    bool matches(memory::vram::Token dest,memory::vram::Token source);
     bool flush();
     bool healthy() const{return error_==Error::None && arena_.healthy() && faults_.ready();}
     Error error() const{return error_;}
@@ -45,7 +50,7 @@ private:
     bool begin();
     bool tick(uint64_t budget);
     bool address(memory::vram::Token,uint64_t,uint64_t&);
-    bool transfer(memory::vram::Token,Image,bool write);
+    bool transfer(memory::vram::Token,Image,bool write,const memory::vram::Record* like=nullptr);
     bool window(uint64_t physical,uint64_t& selected);
     bool flushLocked();
     bool patch(memory::vram::Token,uint64_t offset,uint64_t value,bool update=false);

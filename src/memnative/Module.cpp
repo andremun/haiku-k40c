@@ -19,7 +19,7 @@ status_t standard(int32 op,...)
     for(unsigned i=0;i<4;++i){const auto random=secure_random_value();for(unsigned j=0;j<4;++j)challenge[i*4+j]=uint8(random>>(j*8));}
     for(unsigned i=0;i<8;++i)epoch|=uint64(challenge[i])<<(i*8);
     if(!epoch)epoch=1; // no source: nonzero software epoch; PRNG not claimed cryptographic entropy.
-    owner=new(storage) NativeOwner(memoryPublicKey,memoryNonce,memoryPlan,challenge,epoch,memoryVram);
+    owner=new(storage) NativeOwner(memoryPublicKey,memoryNonce,memoryPlan,challenge,epoch,memoryVram,memoryCopy);
     dprintf("k40_mem: OWNER_LOAD epoch=%llu\n",(unsigned long long)epoch);return B_OK;
 }
 status_t prepare(uint64* lease,uint8 request[256]){Guard g;return g.held&&owner?owner->prepare(lease,request):B_BUSY;}

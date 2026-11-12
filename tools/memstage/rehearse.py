@@ -25,7 +25,7 @@ from tools.a7.guest_job import job as a7_job
 from tools.haiku import card_run, d0_run
 from tools.haiku.vm_guard import guest_lock, deadline
 
-OUTPUT = ROOT / "work/S1CHANNEL3/rehearsal.json"
+OUTPUT = build.WORK / "rehearsal.json"
 RELOAD = "echo K40-BATCH-RELOAD-BEGIN > /dev/dprintf; touch /boot/system/non-packaged/add-ons/kernel/drivers/bin/k40_identity_probe /boot/system/non-packaged/add-ons/kernel/drivers/bin/k40_a7_stage /boot/system/non-packaged/add-ons/kernel/drivers/bin/k40_mem_stage; for pass in 1 2 3 4; do ls /dev/misc >/dev/null; sleep 1; done; echo K40-BATCH-RELOAD-END > /dev/dprintf"
 
 

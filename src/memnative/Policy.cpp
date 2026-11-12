@@ -185,11 +185,24 @@ bool Policy::pbdma(uint32_t& out) const
     for(unsigned p=0;p<8;++p)if((mask_&(1u<<p)) && (runm_[p]&(1u<<rl))){out=p;++matches;} // fifo/gk104.c:392,770-777.
     return matches==1;
 }
-bool Policy::channelAddresses(Record out[7]) const
+bool Policy::channelAddresses(Record out[9],bool& copy) const
 {
-    const Role roles[7]={Role::ChanDirectory,Role::ChanSmall,Role::ChanInstance,Role::Userd,Role::Gpfifo,Role::Push,Role::Runlist};
+    const Role roles[9]={Role::ChanDirectory,Role::ChanSmall,Role::ChanInstance,Role::Userd,Role::Gpfifo,Role::Push,Role::Runlist,
+        Role::CopySource,Role::CopyDest};
     for(unsigned i=0;i<7;++i)if(!record(roles[i],out[i]))return false;
-    return true;
+    // S2: both copy pages or none. Their presence in the owned ledger selects the copy script.
+    const bool source=record(roles[7],out[7]),dest=record(roles[8],out[8]);
+    copy=source;return source==dest;
+}
+bool Policy::engine(uint32_t& out) const
+{
+    // The TOP engine ID of CE0 (top/gk104.c:55-56,79), independent of the Channel's own route.
+    unsigned matches=0;out=0;
+    for(unsigned i=0;i<faults_.routeCount();++i) {
+        memstage::Routing r;if(!faults_.route(i,r))return false;
+        if(r.type==1 && r.instance==0 && r.hasEngine){out=r.engine;++matches;}
+    }
+    return matches==1 && out<32; // no source: software bound of the status array.
 }
 bool Policy::channelRead(uint32_t reg) const
 {
@@ -201,31 +214,41 @@ bool Policy::channelRead(uint32_t reg) const
         const auto base=p*0x2000; // fifo/gf100.c:357 PBDMA stride.
         if(reg==0x04013c+base || reg==0x040108+base || reg==0x040148+base)return true; // fifo/gf100.c:357-358; fifo/gk104.c:378 status reads.
     }
+    Record source;uint32_t id;
+    if(record(Role::CopySource,source)) { // S2 status reads only.
+        if(reg==0x104908 || reg==0x104f14)return true; // ce/gk104.c:52,64-65 CE0 interrupt status and launch error.
+        if(engine(id) && reg==0x002640+id*8)return true; // fifo/gk104.c:206 engine status.
+    }
     return false;
 }
 bool Policy::channelData(const Record& r,uint64_t offset,uint32_t value)
 {
-    Record roles[7];
+    Record roles[9];bool copy=false;
     if(!r.writeGeneration || r.staged)return false;
     if(r.role==Role::SmallTable) { // BAR1 SPT entry 0 -> writable USERD page (Mapper::exposeUserd).
         uint64_t entry;
-        if(step_!=2 || !chanQueued_ || !r.referenced || offset>=8 || !channelAddresses(roles)
+        if(step_!=2 || !chanQueued_ || !r.referenced || offset>=8 || !channelAddresses(roles,copy)
             || !memstage::channel::userdPte(roles[3].physical.value,entry))return false;
         if(value!=uint32_t(entry>>((offset%8)*8)))return false;
         if(++sptWords_==2)step_=3;
         return true;
     }
     uint32_t expected;
-    if(step_!=0 || r.referenced || !channelAddresses(roles)
-        || !memstage::channel::expected(r.role,{roles[0].physical.value,roles[1].physical.value,roles[2].physical.value,
-            roles[3].physical.value,roles[4].physical.value,roles[5].physical.value,roles[6].physical.value},offset,expected))return false;
+    if(step_!=0 || r.referenced || !channelAddresses(roles,copy))return false;
+    // S2 pages: zero, then for the source only its address-dependent pattern (Upload::fill).
+    if(r.role==Role::CopyDest)return copy && value==0;
+    if(r.role==Role::CopySource)
+        return copy && (value==0 || value==memstage::Upload::pattern(r.physical.value+offset,memstage::Image::Pattern));
+    if(!memstage::channel::expected(r.role,{roles[0].physical.value,roles[1].physical.value,roles[2].physical.value,
+            roles[3].physical.value,roles[4].physical.value,roles[5].physical.value,roles[6].physical.value,
+            copy?roles[7].physical.value:0,copy?roles[8].physical.value:0,copy},offset,expected))return false;
     return value==0 || value==expected; // zeroing pass, then the exact image word.
 }
 bool Policy::channelWrite(uint32_t reg,uint32_t value)
 {
-    Record roles[7];uint32_t rl,p;
-    if(!channelAddresses(roles) || !runlist(rl))return false;
-    for(const auto& r:roles)if(!r.staged || (step_>0 && !r.referenced))return false;
+    Record roles[9];uint32_t rl,p;bool copy=false;
+    if(!channelAddresses(roles,copy) || !runlist(rl))return false;
+    for(unsigned i=0;i<(copy?9u:7u);++i)if(!roles[i].staged || (step_>0 && !roles[i].referenced))return false;
     if(step_==0 && !roles[0].referenced)return false;
     const auto chanState=0x800004+chid*8,chanReg=0x800000+chid*8; // fifo/gk104.c:44-77.
     const auto runlistBase=uint32_t(roles[6].physical.value>>12);
@@ -288,7 +311,11 @@ bool Policy::channelWrite(uint32_t reg,uint32_t value)
 bool Policy::barWrite(uint64_t offset,uint32_t value,bool mmu)
 {
     // nouveau_dma.c:92 GP_PUT, once, after the runlist commit completed.
-    if(!channelActive() || !mmu || step_!=17 || !runlistClear_ || offset!=memstage::channel::gpPut || value!=1)return false;
-    ++step_;return true;
+    if(!channelActive() || !mmu || offset!=memstage::channel::gpPut)return false;
+    if(step_==17 && runlistClear_ && value==1){++step_;return true;}
+    // S2: the second entry, once, after the first GP_PUT and before the stop.
+    Record source;
+    if(step_==18 && !put2_ && value==2 && record(Role::CopySource,source)){put2_=true;return true;}
+    return false;
 }
 }

@@ -7,7 +7,8 @@ using namespace channel;
 namespace {
 constexpr uint32_t chanReg=0x800000+chid*8,chanState=0x800004+chid*8; // fifo/gk104.c:44-77.
 // no source: software allocation order of the channel roles.
-constexpr Role roles[7]={Role::ChanDirectory,Role::ChanSmall,Role::ChanInstance,Role::Userd,Role::Gpfifo,Role::Push,Role::Runlist};
+constexpr Role roles[9]={Role::ChanDirectory,Role::ChanSmall,Role::ChanInstance,Role::Userd,Role::Gpfifo,Role::Push,Role::Runlist,
+    Role::CopySource,Role::CopyDest};
 }
 bool Channel::fail(Error e,uint32_t offset,uint32_t value)
 {
@@ -61,7 +62,12 @@ bool Channel::route()
     unsigned matches=0;
     for(unsigned i=0;i<faults_.routeCount();++i) {
         Routing r;if(!faults_.route(i,r))return fail(Error::Routing);
-        if(r.type==1 && r.instance==0 && r.hasRunlist){report_.runlist=r.runlist;++matches;}
+        if(r.type==1 && r.instance==0 && r.hasRunlist) {
+            report_.runlist=r.runlist;++matches;
+            // S2 reads the status of this engine: its TOP engine ID (top/gk104.c:55-56) selects 0x002640 + id*8.
+            if(copy_ && (!r.hasEngine || r.engine>31))return fail(Error::Routing); // no source: software bound of the status array.
+            report_.engine=r.engine;
+        }
     }
     if(matches!=1 || report_.runlist>15)return fail(Error::Routing); // fifo/gk104.c:77 four-bit field.
     return true;
@@ -69,16 +75,19 @@ bool Channel::route()
 bool Channel::memory()
 {
     phase(Phase::ChannelMemory);
-    for(unsigned i=0;i<7;++i)
+    roleCount_=copy_?9:7;
+    for(unsigned i=0;i<roleCount_;++i)
         if(!arena_.allocate(roles[i],Arena::requiredBytes(roles[i]),4096,tokens_[i]))return fail(Error::Bounds); // vmmgk104.c:41-42 alignment.
-    if(!resolve(arena_,addresses_))return fail(Error::Bounds);
-    for(auto token:tokens_)if(!upload_.zero(token))return fail(upload_.error());
+    if(!resolve(arena_,addresses_) || addresses_.copy!=copy_)return fail(Error::Bounds);
+    for(unsigned i=0;i<roleCount_;++i)if(!upload_.zero(tokens_[i]))return fail(upload_.error());
     for(unsigned i=0;i<7;++i) {
         Word words[16];const auto n=image(roles[i],addresses_,words,16);
         if(n>16 || (!n && roles[i]!=Role::Userd))return fail(Error::Bounds);
         for(unsigned w=0;w<n;++w)if(!upload_.patch(tokens_[i],words[w].offset,words[w].value))return fail(upload_.error());
     }
-    for(auto token:tokens_)if(!arena_.reference(token))return fail(Error::Bounds);
+    // S2: the source holds the address-dependent pattern; the destination stays zero (verified by zero()).
+    if(copy_ && !upload_.fill(tokens_[7]))return fail(upload_.error());
+    for(unsigned i=0;i<roleCount_;++i)if(!arena_.reference(tokens_[i]))return fail(Error::Bounds);
     return true;
 }
 bool Channel::invalidate()
@@ -165,6 +174,48 @@ bool Channel::submit()
     if(report_.getAfter==1 && report_.putAfter==1)report_.progress=Progress::Consumed;
     return true;
 }
+bool Channel::submitCopy()
+{
+    // Second GPFIFO entry: bind KEPLER_DMA_COPY_A on subchannel 4 and copy one page
+    // (ChannelImage.cpp, nouveau_boa0b5.c:37-71,85). Only after the NOP was consumed.
+    if(report_.progress!=Progress::Consumed)return true;
+    LockGuard lock(io_,Lock::Mmu);
+    if(!lock.held())return fail(Error::Budget);
+    if(!io_.storeFence() || !io_.barWrite32(gpPut,2))return fail(Error::Write,gpPut,2); // nouveau_dma.c:88-92.
+    if(!journal_.append({phase_,Error::None,gpPut,2,0,last_-start_,Operation::Write,uint8_t(Role::Userd),2}))return fail(Error::Overflow);
+    report_.copySubmitted=true;
+    auto start=last_;
+    for(unsigned i=0;i<20000000;++i) { // no source: software poll-count bound above the 2 s time bound.
+        if(!tick() || !io_.loadFence() || !io_.barRead32(gpGet,report_.copyGet))return fail(Error::Read,gpGet);
+        if(!tick())return false;
+        report_.copyPolls=i+1;report_.copyUs=last_-start;
+        if(report_.copyGet==2 || report_.copyUs>=2000000)break; // no source: 2 s progress bound.
+    }
+    if(!io_.barRead32(gpPut,report_.copyPut))return fail(Error::Read,gpPut);
+    if(!journal_.append({phase_,Error::None,gpGet,report_.copyGet,report_.copyPolls,report_.copyUs,Operation::Poll,uint8_t(Role::Userd),2}))return fail(Error::Overflow);
+    // The entry is fetched; the copy itself ends when the engine is not busy
+    // (fifo/gk104.c:206-208 status bit 31). A stall here is recorded, not fatal:
+    // the compare decides, and teardown runs in every case.
+    const auto status=0x002640+report_.engine*8; // fifo/gk104.c:206.
+    start=last_;
+    for(unsigned i=0;i<100000;++i) { // no source: software poll-count bound.
+        if(!tick() || !io_.read32(status,report_.engineStatus))return fail(Error::Read,status);
+        if(!tick())return false;
+        report_.idlePolls=i+1;report_.idleUs=last_-start;
+        if(!(report_.engineStatus&0x80000000) || report_.idleUs>=2000000)break; // fifo/gk104.c:208; no source: 2 s bound.
+    }
+    if(!journal_.append({phase_,Error::None,status,report_.engineStatus,report_.idlePolls,report_.idleUs,Operation::Poll}))return fail(Error::Overflow);
+    // ce/gk104.c:64-65 interrupt status (read only, no enable, no clear); ce/gk104.c:52 launch error.
+    return read(0x104908,report_.ceIntr) && read(0x104f14,report_.ceLaunchErr); // CE0: subdev instance 0, base 0 (ce/gk104.c:62).
+}
+bool Channel::verifyCopy()
+{
+    // Slow-window read of every destination word against the source pattern.
+    // No MMU lock is held: the upload path takes the window lock itself.
+    if(!report_.copySubmitted || report_.copyGet!=2)return true;
+    report_.copied=upload_.matches(tokens_[8],tokens_[7]);
+    return report_.copied || upload_.error()==Error::None || fail(upload_.error());
+}
 bool Channel::snapshot()
 {
     const auto pb=report_.pbdma*0x2000; // fifo/gf100.c:357 PBDMA stride.
@@ -200,6 +251,7 @@ bool Channel::run()
     if(!mapper_.exposeUserd(tokens_[3],Phase::ChannelBar))return fail(mapper_.error());
     exposed_=true;
     bool ok=fifo() && bind() && submit();
+    if(ok && copy_)ok=submitCopy() && verifyCopy();
     closing_=true;
     const bool sampled=snapshot();
     if(report_.bound)ok=teardown() && ok; // Teardown after any bind, also after a stall.
@@ -207,7 +259,12 @@ bool Channel::run()
     if(!sampled || !ok)return false;
     // S1 predicate: entry consumed, no MMU fault or PBDMA interrupt, only the
     // runlist (bit 30) and non-stall (bit 31) FIFO events (fifo/gk104.c:654-718).
-    return report_.progress==Progress::Consumed && report_.closed && !report_.mmuPending
+    const bool s1=report_.progress==Progress::Consumed && report_.closed && !report_.mmuPending
         && !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&0x3fffffff); // fifo/gk104.c:654-718.
+    if(!copy_)return s1;
+    // S2 predicate: second entry consumed, engine not busy, no launch error
+    // (ce/gk104.c:52,76 bit 2 and the error code), destination equal to source.
+    return s1 && report_.copyGet==2 && report_.copyPut==2 && !(report_.engineStatus&0x80000000) // fifo/gk104.c:208.
+        && !(report_.ceIntr&4) && !(report_.ceLaunchErr&15) && report_.copied; // ce/gk104.c:52,76.
 }
 }

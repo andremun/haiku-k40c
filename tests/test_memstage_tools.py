@@ -195,6 +195,47 @@ class Tests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 evidence.memory_final(changed, suite, raw)
 
+    def test_copy_trace_and_mutations(self):
+        raw, suite, unused = frame()
+        suite["plan"]["A7_guest_artifacts"] = {}
+        serial = subprocess.check_output(
+            [str(ROOT / "build/tests/test_mem_copy"), "--dump"], text=True, timeout=30
+        )
+        # An S2 report is refused as S1, and the S1 report as S2.
+        with self.assertRaises(ValueError):
+            evidence.memory_final(serial, suite, raw)
+        s1 = subprocess.check_output(
+            [str(ROOT / "build/tests/test_mem_channel"), "--dump"], text=True, timeout=30
+        )
+        suite["stage"] = evidence.COPY_STAGE
+        with self.assertRaises(ValueError):
+            evidence.memory_final(s1, suite, raw)
+        result = evidence.memory_final(serial, suite, raw)
+        self.assertTrue(result["S2_complete"])
+        self.assertEqual(result["channel"]["copy"]["engine"], 4)
+        self.assertEqual(len(result["allocations"]), 16)
+        mutations = [
+            serial.replace("copied=1", "copied=0"),
+            serial.replace("get=2/2", "get=1/2"),
+            serial.replace("launcherr=0", "launcherr=2"),
+            serial.replace("ce_intr=0", "ce_intr=4"),
+            serial.replace("COPY_STATUS engine=0", "COPY_STATUS engine=80000000"),
+            serial.replace("engine=1/4", "engine=1/5"),
+            serial.replace("offset=28c value=2", "offset=28c value=3"),
+            serial.replace("operation=4 role=16 detail=1", "operation=4 role=16 detail=0"),
+            serial.replace("operation=3 role=15 detail=1", "operation=3 role=15 detail=2"),
+            serial.replace("value=a0b520018000", "value=a0b520018001"),  # object bind header.
+            serial.replace("value=838680c000000001", "value=838280c000000001"),  # launch without FLUSH.
+            serial.replace("value=100000001000", "value=100000000ffc"),  # pitch or line length.
+            serial.replace("generation=8", "generation=7"),
+            serial.replace("allocations=16", "allocations=14"),
+        ]
+        for index, changed in enumerate(mutations):
+            with self.subTest(index=index):
+                self.assertNotEqual(changed, serial)
+                with self.assertRaises(ValueError):
+                    evidence.memory_final(changed, suite, raw)
+
     def test_cardless_cannot_sign(self):
         with tempfile.TemporaryDirectory() as directory:
             folder = Path(directory)

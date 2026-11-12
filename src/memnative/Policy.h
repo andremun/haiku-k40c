@@ -31,7 +31,8 @@ private:
     bool channelRead(uint32_t) const;
     bool channelWrite(uint32_t,uint32_t);
     bool channelData(const memory::vram::Record&,uint64_t,uint32_t);
-    bool channelAddresses(memory::vram::Record roles[7]) const;
+    bool channelAddresses(memory::vram::Record roles[9],bool& copy) const;
+    bool engine(uint32_t&) const;
     bool runlist(uint32_t&) const;
     bool pbdma(uint32_t&) const;
     memory::vram::Arena& arena_;memstage::Faults& faults_;
@@ -42,6 +43,6 @@ private:
     unsigned step_=0,sptWords_=0;
     uint32_t mask_=0,runm_[8]{},value2a04_=0,control_=0,state_=0,inst_=0;
     bool probed_=false,read2a04_=false,readControl_=false,readState_=false,readInst_=false;
-    bool waitQueued_=false,chanQueued_=false,runlistClear_=false,preemptClear_=false;
+    bool waitQueued_=false,chanQueued_=false,runlistClear_=false,preemptClear_=false,put2_=false;
 };
 }

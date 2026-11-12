@@ -39,6 +39,7 @@ uint64_t Arena::requiredBytes(Role role)
     case Role::ChanInstance:return 4096; // fifo/gf100.c:142-143 gf100_chan_inst, 0x1000 bytes.
     case Role::Userd:return 4096; // fifo/gk104.c:117 0x200 slots; no source: one page for channels 0-7.
     case Role::Gpfifo:case Role::Push:case Role::Runlist:return 4096; // no source: one small page each.
+    case Role::CopySource:case Role::CopyDest:return 4096; // no source: one small page each, the S2 copy extent.
     default:return 0;
     }
 }
