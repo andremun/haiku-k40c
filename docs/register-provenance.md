@@ -385,7 +385,7 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/gr/Guard.cpp:77` | `if(invalidations_>=2 \|\| value!=(invalidations_==0?0x80000001u:0x80000005u))return false;` | nvkm/subdev/mmu/vmmgf100.c:221 | SOURCE_ONLY |
 | `src/gr/Guard.cpp:80` | `if(reg==0x001704) {` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/gr/Guard.cpp:84` | `if(value==(context&0x7fffffff) && exposeStep_==1 && closeStep_==0){closeStep_=1;return true;}` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Guard.cpp:91` | `if(reg==0x100cb8 \|\| reg==0x100cbc \|\| reg==0x001704)return special(reg,value);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Guard.cpp:91` | `if(reg==0x100cb8 \|\| reg==0x100cbc \|\| reg==0x001704)return special(reg,value);` | nvkm/subdev/mmu/vmmgf100.c:216 | SOURCE_ONLY |
 | `src/gr/Guard.cpp:110` | `if(reg>=0x400000 && reg<0x528000)return true;` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/gr/Guard.cpp:111` | `if(reg==0x000200 \|\| reg==0x000204 \|\| reg==0x002a04 \|\| reg==0x002634 \|\| reg==0x002640)return true;` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/gr/Guard.cpp:112` | `if(reg>=0x002390 && reg<0x0023b0)return true;` | no source: ambiguous citation | SOURCE_ONLY |
@@ -890,7 +890,6 @@ The following constant lines have no source citation:
 - src/gr/Guard.cpp:9 (no source: indexes in sequence.)
 - src/gr/Guard.cpp:80 (no source: ambiguous citation)
 - src/gr/Guard.cpp:84 (no source: ambiguous citation)
-- src/gr/Guard.cpp:91 (no source: ambiguous citation)
 - src/gr/Guard.cpp:110 (no source: ambiguous citation)
 - src/gr/Guard.cpp:111 (no source: ambiguous citation)
 - src/gr/Guard.cpp:112 (no source: ambiguous citation)
