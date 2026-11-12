@@ -6,9 +6,10 @@
 #include <new>
 namespace k40::memnative {
 using namespace memory::vram;
-NativeOwner::NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram,bool copy)
+NativeOwner::NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram,unsigned stage)
     :faults_(io_,journal_,epoch),policy_(arena_,faults_),upload_(io_,faults_,journal_,arena_),mapper_(io_,faults_,journal_,arena_,upload_,epoch),
-     channel_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,copy)
+     channel_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,stage==1),stage_(stage),guard_(arena_,policy_),
+     compute_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,stage==3)
 {
     io_.policy_=&policy_;
     std::memcpy(binding_.key,key,32);std::memcpy(binding_.nonce,nonce,32);std::memcpy(binding_.plan,plan,32);std::memcpy(binding_.challenge,challenge,16);
@@ -54,7 +55,13 @@ bool NativeOwner::work()
 {
     // The unchanged batch-1 memory/BAR1 gates first, then one channel: S1 (host
     // NOP), or S2 (NOP, then one copy) when the package was built for the copy stage.
-    return experiment_ && experiment_->run() && channel_.run();
+    // S3 (stages 2 and 3): the compute stage replaces the CE0 channel, and its
+    // guard decides the channel-phase accesses (gr/Guard.h).
+    if(!experiment_ || !experiment_->run())return false;
+    if(stage_<2)return channel_.run();
+    if(stage_>3)return false;
+    policy_.extend(&guard_);
+    return compute_.run();
 }
 void NativeOwner::drain()
 {
@@ -73,6 +80,20 @@ void NativeOwner::drain()
         dprintf("k40_mem: ALLOCATION id=%llu role=%u physical=%llx bytes=%llu generation=%llu staged=%u referenced=%u retained=%u\n",
             (unsigned long long)r.token.id,unsigned(r.role),(unsigned long long)r.physical.value,(unsigned long long)r.bytes,
             (unsigned long long)r.writeGeneration,r.staged,r.referenced,r.retained);
+    }
+    if(stage_>=2) {
+        const auto& g=compute_.report();
+        dprintf("k40_mem: GR step=%u error=%u bound=%u started=%u golden=%u attached=%u submitted=%u consumed=%u computed=%u closed=%u\n",
+            unsigned(g.step),unsigned(g.error),g.bound,g.started,g.golden,g.attached,g.submitted,g.consumed,g.computed,g.closed);
+        dprintf("k40_mem: GR_PROGRAM ops=%u reads=%u writes=%u guard=%u/%u total_us=%llu\n",g.ops,g.reads,g.writes,
+            guard_.stage(),guard_.index(),(unsigned long long)g.totalUs);
+        dprintf("k40_mem: GR_FAILURE runner=%u index=%u addr=%x value=%x expected=%x closing=%u closing_index=%u\n",unsigned(g.runner.error),
+            g.runner.index,g.runner.addr,g.runner.value,g.runner.expected,unsigned(g.closing.error),g.closing.index);
+        dprintf("k40_mem: GR_GET after=%u/%u polls=%u us=%llu result_polls=%u result_us=%llu wrong=%u first=%u value=%x\n",g.getAfter,g.putAfter,
+            g.polls,(unsigned long long)g.progressUs,g.resultPolls,(unsigned long long)g.resultUs,g.wrong,g.firstWrong,g.firstValue);
+        dprintf("k40_mem: GR_STATUS mc=%x fifo=%x mmu=%x pbdma=%x hce=%x state=%x gr=%x trap=%x fecs=%x engine=%x\n",g.mc,g.fifoIntr,
+            g.mmuPending,g.pbdmaIntr,g.pbdmaHce,g.state,g.grIntr,g.grTrap,g.fecsIntr,g.engineStatus);
+        dprintf("k40_mem: GR_IMAGE %x %x %x %x %x %x %x %x\n",g.image[0],g.image[1],g.image[2],g.image[3],g.image[4],g.image[5],g.image[6],g.image[7]);
     }
     const auto& c=channel_.report();
     dprintf("k40_mem: CHANNEL runlist=%u pbdma=%u mask=%x runm=%x bound=%u closed=%u progress=%u error=%u step=%u\n",
@@ -102,7 +123,7 @@ bool NativeOwner::execute()
     if(!passed)arena_.fail();
     drain();
     dprintf("k40_mem: %s faults=%u upload=%u mapper=%u closure=%u allocations=%u journal_overflow=%u\n",
-        passed?(channel_.copy()?"PASS S2_COPY":"PASS S1_CHANNEL_NOP"):"FAIL",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
+        !passed?"FAIL":stage_==3?"PASS S3_COMPUTE":stage_==2?"PASS S3_GOLDEN":stage_==1?"PASS S2_COPY":"PASS S1_CHANNEL_NOP",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
         unsigned(mapper_.closure()),arena_.count(),journal_.overflow());return passed;
 }
 }

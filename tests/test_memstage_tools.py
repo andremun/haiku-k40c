@@ -236,6 +236,48 @@ class Tests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     evidence.memory_final(changed, suite, raw)
 
+    def test_gr_trace_and_mutations(self):
+        raw, suite, unused = frame()
+        suite["plan"]["A7_guest_artifacts"] = {}
+        binary, fixture = str(ROOT / "build/tests/test_gr_compute"), str(ROOT / "build/tests/gr/gr_trace.txt")
+        compute = subprocess.check_output([binary, fixture, "--report"], text=True, timeout=300)
+        golden = subprocess.check_output([binary, fixture, "--report", "nolaunch"], text=True, timeout=300)
+        with self.assertRaises(ValueError):  # an S3 report is not an S1 report
+            evidence.memory_final(compute, suite, raw)
+        suite["stage"] = "S3B_A7_BAR1_GR_COMPUTE"
+        result = evidence.memory_final(compute, suite, raw)
+        self.assertTrue(result["S3_complete"])
+        self.assertEqual(len(result["allocations"]), 26)
+        with self.assertRaises(ValueError):  # a golden-only report is not a compute report
+            evidence.memory_final(golden, suite, raw)
+        mutations = [
+            compute.replace("computed=1", "computed=0"),
+            compute.replace("wrong=0", "wrong=1"),
+            compute.replace("after=1/1", "after=0/1"),
+            compute.replace("trap=0", "trap=1"),
+            compute.replace("fecs=0", "fecs=4"),
+            compute.replace("gr=0", "gr=100000"),
+            compute.replace("guard=6/", "guard=5/"),
+            compute.replace("golden=1", "golden=0"),
+            compute.replace("closing=0", "closing=1"),
+            compute.replace("offset=28c value=1", "offset=28c value=2"),
+            compute.replace("operation=8 role=0 detail=1", "operation=8 role=0 detail=0", 1),
+            compute.replace("role=23 physical", "role=22 physical"),
+            compute.replace("allocations=26", "allocations=14"),
+            compute.replace("PASS S3_COMPUTE", "PASS S3_GOLDEN"),
+        ]
+        for index, changed in enumerate(mutations):
+            with self.subTest(index=index):
+                self.assertNotEqual(changed, compute)
+                with self.assertRaises(ValueError):
+                    evidence.memory_final(changed, suite, raw)
+        suite["stage"] = "S3A_A7_BAR1_GR_GOLDEN"
+        result = evidence.memory_final(golden, suite, raw)
+        self.assertTrue(result["S3_golden_complete"])
+        self.assertFalse(result["S3_complete"])
+        with self.assertRaises(ValueError):
+            evidence.memory_final(compute, suite, raw)
+
     def test_cardless_cannot_sign(self):
         with tempfile.TemporaryDirectory() as directory:
             folder = Path(directory)

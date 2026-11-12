@@ -61,7 +61,7 @@ def prepare(suite, cardless):
         ROOT
         / "results"
         / (stamp + (("-batch1-rehearsal-" if cardless else "-batch1-a7-bar1-") if stage.NAME == "s1"
-                    else ("-s2-rehearsal-" if cardless else "-s2-copy-")) + ident)
+                    else (f"-{stage.NAME}-rehearsal-" if cardless else f"-{stage.NAME}-run-")) + ident)
     )
     evidence.mkdir(mode=0o700, exist_ok=False)
     (evidence / "a7").mkdir(mode=0o700)
@@ -300,8 +300,11 @@ def run():
                         error=error,
                         stage=build.STAGE,
                         elapsed_seconds=round(time.monotonic() - start, 2),
-                        S1_complete=status == "pass",  # evidence.memory_final S1 predicate (part of S2 too).
-                        S2_complete=status == "pass" and stage.CURRENT["copy"],  # evidence.memory_final S2 predicate.
+                        # evidence.memory_final predicates of the selected stage.
+                        S1_complete=status == "pass" and stage.NAME in ("s1", "s2"),
+                        S2_complete=status == "pass" and stage.NAME == "s2",
+                        S3_golden_complete=status == "pass" and stage.NAME in ("s3a", "s3b"),
+                        S3_complete=status == "pass" and stage.NAME == "s3b",
                         DMA_payload_visibility=False,
                         Q7="open",
                         Q11="open; A7 G1 observation only",

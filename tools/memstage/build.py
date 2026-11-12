@@ -30,7 +30,8 @@ WORK = ROOT / "work" / stage.CURRENT["work"]
 PUBLIC = WORK / "package.json"
 PLAN = WORK / "phase-plan.json"
 INVENTORY = WORK / "write-inventory.json"
-STAGE = "BATCH1_A7_BAR1_VRAM" if stage.NAME == "s1" else "S2_A7_BAR1_CHANNEL_COPY"
+STAGE = dict(s1="BATCH1_A7_BAR1_VRAM", s2="S2_A7_BAR1_CHANNEL_COPY", s3a="S3A_A7_BAR1_GR_GOLDEN",
+             s3b="S3B_A7_BAR1_GR_COMPUTE")[stage.NAME]
 ROM = Path(
     os.environ.get(
         "K40_VBIOS",
@@ -43,9 +44,13 @@ CORE = tuple(
     p.relative_to(ROOT).as_posix()
     for p in sorted((ROOT / "src/memstage").glob("*.cpp"))
 )
+# The S3 stage: runner, guard and stage sources. The op tables and launch images
+# (ProgramData.cpp) are generated into the package folder by tools/gr/program.py.
+GR = tuple(p.relative_to(ROOT).as_posix() for p in sorted((ROOT / "src/gr").glob("*.cpp")))
 OWNER = (
     "src/memory/VramArena.cpp",
     *CORE,
+    *GR,
     "src/memauth/Session.cpp",
     "src/memnative/Policy.cpp",
     "src/memnative/NativeIo.cpp",
@@ -124,12 +129,14 @@ def source_names():
         for p in (ROOT / "tests").glob("*mem*")
         if p.suffix in (".cpp", ".h", ".py")
     )
-    for directory in ("src/memory", "src/memauth", "src/memnative", "src/memstage"):
+    for directory in ("src/memory", "src/memauth", "src/memnative", "src/memstage", "src/gr"):
         names.update(
             p.relative_to(ROOT).as_posix()
             for p in (ROOT / directory).glob("*")
             if p.suffix in (".h", ".cpp")
         )
+    names.update(p.relative_to(ROOT).as_posix() for p in (ROOT / "tools/gr").glob("*.py"))
+    names.update(("firmware/compute_add1.bin", "analysis/linux_run_shader.json", "reference/linux-run/mmiotrace.txt.xz"))
     names.update(
         p.relative_to(ROOT).as_posix()
         for p in (ROOT / "tools/memstage").glob("*")
@@ -374,7 +381,7 @@ def config(public, nonce, digest, vram):
         + array("memoryNonce", nonce)
         + array("memoryPlan", digest)
         + f"static const uint64_t memoryVram={vram}ULL;\n"
-        + f"static const bool memoryCopy={'true' if stage.CURRENT['copy'] else 'false'};\n"
+        + f"static const unsigned memoryStage={stage.CURRENT['number']};\n"
     )
 
 
@@ -448,8 +455,13 @@ def build():
     (PACKAGE / "mem_config.h").write_text(
         config(memoryPublic, memoryNonce, digest, total)
     )
+    # The GR program: generated from the pinned Nouveau and Mesa trees and checked
+    # against the reference trace by the generator itself, on every build.
+    subprocess.run([sys.executable, "tools/gr/program.py", "--output", str(PACKAGE / "gr")], cwd=ROOT, check=True)
     paths = dict(
-        memory_owner=compile_driver("k40_batch_mem_owner", [*OWNER, *crypto], PACKAGE),
+        memory_owner=compile_driver(
+            "k40_batch_mem_owner", [*OWNER, str(PACKAGE / "gr/ProgramData.cpp"), *crypto], PACKAGE
+        ),
         memory_client=compile_driver(
             "k40_batch_mem_stage", ["tools/haiku/selftest/memory_client.cpp"], PACKAGE
         ),

@@ -172,7 +172,7 @@ static std::vector<Access> load(const char* path)
     return rows;
 }
 struct Result {gr::Report report;unsigned denials=0,stage=0,index=0;bool mismatch=false,closed=false,launched=false;size_t next=0;};
-static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bool dump=false)
+static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bool dump=false,bool report=false)
 {
     using namespace k40::memstage;
     Arena arena;Journal journal;Card io;io.fault=fault;io.trace=trace;io.arena=&arena;
@@ -199,12 +199,35 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
         std::printf("allocations=%u journal=%u reads=%u writes=%u ops=%u total_us=%llu wrong=%u get=%u/%u\n",arena.count(),journal.count(),
             r.reads,r.writes,r.ops,(unsigned long long)r.totalUs,r.wrong,r.getAfter,r.putAfter);
     }
+    if(report) { // The line formats of memnative/NativeOwner.cpp, for tools/memstage/evidence.py.
+        const auto& g=out.report;
+        std::puts("k40_mem: IO_REJECT kind=0 offset=0 value=0");
+        for(unsigned i=0;i<journal.count();++i){const auto* e=journal.at(i);
+            std::printf("k40_mem: EVENT phase=%u error=%u offset=%x value=%llx polls=%u elapsed=%llu operation=%u role=%u detail=%u\n",
+                unsigned(e->phase),unsigned(e->error),e->offset,(unsigned long long)e->value,e->polls,(unsigned long long)e->elapsed,unsigned(e->operation),e->role,e->detail);}
+        for(unsigned i=0;i<arena.count();++i){Record r;assert(arena.at(i,r));std::printf("k40_mem: ALLOCATION id=%llu role=%u physical=%llx bytes=%llu generation=%llu staged=%u referenced=%u retained=%u\n",
+            (unsigned long long)r.token.id,unsigned(r.role),(unsigned long long)r.physical.value,(unsigned long long)r.bytes,(unsigned long long)r.writeGeneration,r.staged,r.referenced,r.retained);}
+        std::printf("k40_mem: GR step=%u error=%u bound=%u started=%u golden=%u attached=%u submitted=%u consumed=%u computed=%u closed=%u\n",
+            unsigned(g.step),unsigned(g.error),g.bound,g.started,g.golden,g.attached,g.submitted,g.consumed,g.computed,g.closed);
+        std::printf("k40_mem: GR_PROGRAM ops=%u reads=%u writes=%u guard=%u/%u total_us=%llu\n",g.ops,g.reads,g.writes,guard.stage(),guard.index(),(unsigned long long)g.totalUs);
+        std::printf("k40_mem: GR_FAILURE runner=%u index=%u addr=%x value=%x expected=%x closing=%u closing_index=%u\n",unsigned(g.runner.error),
+            g.runner.index,g.runner.addr,g.runner.value,g.runner.expected,unsigned(g.closing.error),g.closing.index);
+        std::printf("k40_mem: GR_GET after=%u/%u polls=%u us=%llu result_polls=%u result_us=%llu wrong=%u first=%u value=%x\n",g.getAfter,g.putAfter,
+            g.polls,(unsigned long long)g.progressUs,g.resultPolls,(unsigned long long)g.resultUs,g.wrong,g.firstWrong,g.firstValue);
+        std::printf("k40_mem: GR_STATUS mc=%x fifo=%x mmu=%x pbdma=%x hce=%x state=%x gr=%x trap=%x fecs=%x engine=%x\n",g.mc,g.fifoIntr,
+            g.mmuPending,g.pbdmaIntr,g.pbdmaHce,g.state,g.grIntr,g.grTrap,g.fecsIntr,g.engineStatus);
+        std::printf("k40_mem: GR_IMAGE %x %x %x %x %x %x %x %x\n",g.image[0],g.image[1],g.image[2],g.image[3],g.image[4],g.image[5],g.image[6],g.image[7]);
+        std::printf("k40_mem: %s faults=0 upload=0 mapper=0 closure=2 allocations=%u journal_overflow=0\n",
+            !passed?"FAIL":fault==NoLaunch?"PASS S3_GOLDEN":"PASS S3_COMPUTE",arena.count());
+        std::puts("k40_mem: SUBMIT result=0 state=3\nk40_mem: RETAINED owner=2 state=3\nK40-MEM-END");
+    }
     return passed;
 }
 int main(int argc,char** argv)
 {
     assert(argc>=2);setvbuf(stdout,nullptr,_IONBF,0);
     const auto trace=load(argv[1]);Result r;
+    if(argc>2 && std::string(argv[2])=="--report")return scenario(trace,argc>3?NoLaunch:None,r,false,true)?0:1;
     const bool first=scenario(trace,None,r,argc>2);
     assert(first);
     assert(r.report.golden && r.report.attached && r.report.consumed && r.report.computed && r.report.closed && r.closed);
