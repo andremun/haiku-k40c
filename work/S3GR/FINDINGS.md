@@ -31,3 +31,27 @@ to require zero unexplained differences.
   and its copies). S3CTX decodes them.
 - Whether kernel 6.8 (trace) and 6.12 (source pin) differ in the GR path. The
   oracle answers this.
+
+## First oracle result (2026-11-12, KNOWN, TRACE_VERIFIED for the table data)
+
+`tools/gr/tables.py` reads 232 register tables and 68 packs from
+`nvkm/engine/gr/*.c`. The expansion of `gk110b_gr_pack_mmio` gives 153 writes.
+They equal trace lines 616569-616721 in address, value and order: 0 differences.
+The kernel of the trace (6.8) and the source pin (6.12) agree for this pack.
+
+The trace around it follows `gf100_gr_init` (`gf100.c:2342-2463`) line by line:
+
+| Trace lines | Source | Content |
+|---|---|---|
+| 616297-616416 | `gf100_gr_oneinit` area, `subdev/pmu/gk110.c`, `mc` | Unit reset through 0x000200, power gating off (0x10a78c, 0x0206b4, 0x020520-0x020530), twice |
+| 616417-616433 | `gf100_gr_oneinit`, `gf100_gr_rops` | 0x409604 = 0x60005; per GPC 0x2608, 0x0c30, 0x0c34 |
+| 616554-616557 | `gf100_gr_init_ctxctl` set-up | Falcon capability reads 0x40912c, 0x409108, 0x41a12c, 0x41a108 |
+| 616558-616568 | `gf100.c:2347-2349`, `gf100_gr_init_gpc_mmu` | 0x400500, 0x418880-0x4188b8 |
+| 616569-616721 | `gf100_gr_mmio` | The 153 table writes |
+| 616722-616725 | `gf100_gr_wait_idle` | 0x400700, 0x000200, 0x002640, 0x40060c |
+| 616726-616753 | init hooks | vsc stream master, zcull, active LTCs, ROP active FBPs |
+| 616754 onward | `gf100.c:2385` onward | Enables, exceptions per GPC and TPC, then the microcode load |
+
+Card topology read from the trace (KNOWN for 0000:04:00.0): 0x409604 = 0x60005
+(5 GPCs, 6 ROPs by `gf100_gr_oneinit`), 3 TPCs in each GPC (0x2608 = 0x40003),
+15 TPCs in total (0x500910 = 0x4000f).
