@@ -24,9 +24,13 @@ TIMER = (0x9400, 0x9410)  # timer/nv04.c read by nvkm_msec wait loops.
 # Blocks of the reference run (work/S3GR/FINDINGS.md).
 ONEINIT = (616417, 616433)
 START = (616554, 618711)
+GOLDEN = (619424, 730273)
+# Accesses of the golden block that belong to the model. Other BAR0 accesses in
+# these lines are instance-memory work (BAR flush, TLB invalidate), not GR.
+OTHER = (0x000260, 0x000200, 0x002640, 0x17E91C, 0x17E920)
 
 
-def accesses(first, last):
+def accesses(first, last, gr_only=False):
     rows = []
     with lzma.open(TRACE, "rt") as trace:
         for number, line in enumerate(trace, 1):
@@ -37,6 +41,8 @@ def accesses(first, last):
             part = line.split()
             if part and part[0] in ("R", "W") and len(part) >= 6:
                 address = int(part[4], 16) - BAR0
+                if gr_only and not (0x400000 <= address < 0x600000 or address in OTHER):
+                    continue
                 if 0 <= address < 0x1000000 and address not in TIMER:
                     rows.append((number, part[0], address, int(part[5], 16)))
     return rows
@@ -64,6 +70,15 @@ class Replay:
     def wr(self, addr, value):
         self.step("W", addr, value & 0xFFFFFFFF)
 
+    def patch(self, addr, value):
+        self.wr(addr, value)  # Context generation: chan->mmio is not set (ctxgf100.c:997-1000).
+
+    def delay(self, microseconds):
+        pass
+
+    def context_pointer(self):
+        pass  # Instance-memory write, not in BAR0.
+
     def done(self):
         if self.index != len(self.rows):
             number, op, addr, value = self.rows[self.index]
@@ -85,9 +100,17 @@ def run():
     model.init(start, topology, inits, packs, by[0x4188B4] << 8, by[0x4188B8] << 8)
     size = model.ctxctl(start, inits, packs)
     start.done()
+    started = len(one.rows) + len(rows)
+    rows = accesses(*GOLDEN, gr_only=True)
+    golden = Replay(rows)
+    run_data = {addr: value for _, op, addr, value in rows if op == "W" and addr in (0x409500, 0x40800C, 0x408004, 0x418810)}
+    model.generate(golden, topology, inits, packs, (run_data[0x409500] & 0x7FFFFFFF) << 12,
+                   run_data[0x40800C] << 8, run_data[0x408004] << 8, (run_data[0x418810] & 0x7FFFFFFF) << 12)
+    golden.done()
     return dict(
+        golden=len(rows),
         gpc=topology.gpc_nr, tpc=topology.tpc_nr, rop=topology.rop_nr, ppc_mask=topology.ppc_mask,
-        accesses=len(one.rows) + len(rows), context_bytes=size,
+        accesses=started, context_bytes=size,
     )
 
 
@@ -96,6 +119,7 @@ def main():
     parser.add_argument("--check", action="store_true")
     parser.parse_args()
     result = run()
+    print(f"GR golden context: {result['golden']} trace accesses reproduced, 0 differences; HOST_ONLY")
     print(f"GR engine start: {result['accesses']} trace accesses reproduced, 0 differences; "
           f"{result['gpc']} GPC, TPC {result['tpc']}, {result['rop']} ROP, context image {result['context_bytes']} bytes; HOST_ONLY")
 

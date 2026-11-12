@@ -79,3 +79,26 @@ Result: trace lines 616417-616433 and 616554-618711, 2,166 accesses, 0 differenc
   (trace 616297-616416, 616434-616553). Next step.
 - One error found by the oracle on the way: the TPC count register 0x2608 reads
   0x40003; the kernel keeps the low byte (`gf100.h:107`, u8).
+
+## Golden context reproduced (2026-11-12, HOST_ONLY, TRACE_VERIFIED for the sequence)
+
+`model.generate` follows `gf100_grctx_generate` and `gf100_grctx_generate_main`
+with the hooks of `gk110b_grctx`. Trace lines 619424-730273, GR accesses and the
+five other registers the functions touch: 4,095 accesses, 0 differences.
+
+- During generation the per-context values (page pool, bundle buffer, attribute
+  buffer, LTC patch) are direct register writes, because the channel has no mmio
+  list yet (`ctxgf100.c:997-1000`, `gf100.c:440-456`). For each later channel the
+  same pairs go into its mmio list (`gf100.c:469-479`).
+- The addresses of the instance block, page pool, bundle buffer and attribute
+  buffer are run data: the oracle takes them from the trace.
+- `gf100_gr_icmd` runs a second time with an empty list and writes only its two
+  bracket words (trace 728803-728804).
+- KNOWN: the context unload at the end (0x409b04, 0x409000 = 0x100, poll of
+  0x409b00) completed in the reference run.
+- Two oracle findings on the way: the fifth GPC lies at 0x520000 and above (the
+  first filter cut it); PPC masks read 5 and 2 (3 TPCs: two on PPC 0, one on PPC 1).
+
+Still not modelled: instance-memory work of the stage (context memory mapping,
+words 0x210 and 0x214, read of the golden image, per-channel context copy and
+mmio list, engine context pointer), and the prelude before the engine start.
