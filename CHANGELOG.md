@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-11-12: S2 and S3 host work. Copy stage on the S1 channel. GR bring-up modelled from Nouveau and reproduced against the Linux trace (6,333 accesses), recorded as an op program with a native runner. Compute stage with write guard, packages s2, s3a, s3b, validators and run sheet. No link, rehearsal or card run yet.
 - 2026-11-12: Project resumed for S2 and S3 (decision 012). Run ladder for 2026-11-16, cloud work branch, tasks S2COPY, S3GR, S3CTX, S3LAUNCH, RTIOCTL and LADDER.
 - 2026-10-31: The project is on hold after S1 (decision 011). No task is active and no card run is approved.
 - 2026-10-31: S1 passed on the K40c under Haiku: one host NOP consumed on one CE0-runlist channel, no fault, clean teardown.

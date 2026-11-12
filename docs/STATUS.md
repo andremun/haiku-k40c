@@ -1,7 +1,7 @@
 # Status
 
 Current phase: S2 and S3 preparation, resumed 2026-11-12 (docs/decisions/012-resume-s2-s3.md).
-Current task: S3GR (docs/tasks/S3GR.md). No card run before the ladder of 2026-11-16.
+Current task: LADDER (docs/tasks/LADDER.md, docs/LADDER-RUN-SHEET.md). No card run before the ladder of 2026-11-16.
 Last result: S1 PASSED on the card (2026-10-31). A native Haiku driver brought up
 the K40c (A7 POST), mapped VRAM through BAR1, and one channel on the CE0 runlist
 consumed one host NOP: GP_GET 0 -> 1 in 10 us, no fault, clean teardown. Evidence:
@@ -145,5 +145,5 @@ A cardless result is not K40c evidence.
 | S1CHANNEL3 run | **S1 PASS** | 2026-10-31 | GP_GET 0->1 in 10 us on channel 1, runlist 4 (CE0), PBDMA 2; no fault; clean teardown; validator accepted. See results/20261031-batch1-a7-bar1-d198d424/README.md. |
 | CI-CHECK | INCOMPLETE (local full check blocked) | 2026-11-02 | The missing memory host probe is built during `--check`; Actions fetches its pinned Ed25519 source. Targeted check passes. Local `make check` could not restore Mesa because GitLab was unreachable. New Actions runs require approval and have no jobs. See work/CI-CHECK/RESULT.md. |
 | S2COPY | DONE (host only; native build, package and review pending) | 2026-11-12 | Copy sequence of `nouveau_boa0b5.c` on the S1 channel, second GPFIFO entry, slow-window compare. Host test with independent copy-engine simulation, 4 source and 14 report mutations refused. No card run. See work/S2COPY/RESULT.md. |
-| S3GR | IN PROGRESS (host model and oracle) | 2026-11-12 | `tools/gr/` reads the Nouveau tables and microcode; the host model reproduces the engine start (2,166 trace accesses) and the golden context (4,095) with 0 differences. Prelude, instance-memory part, native code and Policy ranges are open. See work/S3GR/FINDINGS.md. |
-| S3LAUNCH | IN PROGRESS (host stage and test) | 2026-11-12 | Launch images from Mesa (descriptor equals the reference run in 154 of 155 fields). Native stage `src/gr/Compute.cpp` with op-by-op write guard. Host test: trace-exact bring-up through Policy and Guard, independent decode of the launch, five scenarios, four mutations refused. Native owner integration, validator, packages and rehearsal are open. See work/S3LAUNCH/FINDINGS.md. |
+| S3GR, S3CTX | DONE (host only; link, package and review pending) | 2026-11-12 | Host model of power gating, engine start and golden context reproduces the reference trace (6,333 accesses, 0 differences); recorded op program and native runner. See work/S3GR/RESULT.md. |
+| S3LAUNCH | DONE for rungs 4 and 5 (host only; link, package, rehearsal and review pending) | 2026-11-12 | Launch images from Mesa, native stage with op-by-op guard, owner stages s3a and s3b, validator. Compute sequence SOURCE_ONLY. Rung 6 not prepared. See work/S3LAUNCH/RESULT.md. |
