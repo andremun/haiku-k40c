@@ -22,6 +22,7 @@ TRACE = ROOT / "reference/linux-run/mmiotrace.txt.xz"
 BAR0 = 0xC1000000  # mmiotrace line 10: MAP of 16 MiB.
 TIMER = (0x9400, 0x9410)  # timer/nv04.c read by nvkm_msec wait loops.
 # Blocks of the reference run (work/S3GR/FINDINGS.md).
+PGOB = ((616297, 616416), (616434, 616553))  # gk110_pmu_pgob, run twice in the reference run.
 ONEINIT = (616417, 616433)
 START = (616554, 618711)
 GOLDEN = (619424, 730273)
@@ -87,6 +88,12 @@ class Replay:
 
 def run():
     inits, packs = tables.parse()
+    gating = 0
+    for block in PGOB:
+        replay = Replay(accesses(*block))
+        model.pgob(replay)
+        replay.done()
+        gating += len(replay.rows)
     one = Replay(accesses(*ONEINIT))
     topology = model.Topology(one)
     one.done()
@@ -108,7 +115,7 @@ def run():
                    run_data[0x40800C] << 8, run_data[0x408004] << 8, (run_data[0x418810] & 0x7FFFFFFF) << 12)
     golden.done()
     return dict(
-        golden=len(rows),
+        golden=len(rows), gating=gating,
         gpc=topology.gpc_nr, tpc=topology.tpc_nr, rop=topology.rop_nr, ppc_mask=topology.ppc_mask,
         accesses=started, context_bytes=size,
     )
@@ -119,6 +126,7 @@ def main():
     parser.add_argument("--check", action="store_true")
     parser.parse_args()
     result = run()
+    print(f"GR power gating off: {result['gating']} trace accesses reproduced (two runs), 0 differences; HOST_ONLY")
     print(f"GR golden context: {result['golden']} trace accesses reproduced, 0 differences; HOST_ONLY")
     print(f"GR engine start: {result['accesses']} trace accesses reproduced, 0 differences; "
           f"{result['gpc']} GPC, TPC {result['tpc']}, {result['rop']} ROP, context image {result['context_bytes']} bytes; HOST_ONLY")

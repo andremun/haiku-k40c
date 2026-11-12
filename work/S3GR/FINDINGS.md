@@ -102,3 +102,30 @@ five other registers the functions touch: 4,095 accesses, 0 differences.
 Still not modelled: instance-memory work of the stage (context memory mapping,
 words 0x210 and 0x214, read of the golden image, per-channel context copy and
 mmio list, engine context pointer), and the prelude before the engine start.
+
+## Power gating, recorded program and native runner (2026-11-12, HOST_ONLY)
+
+- `model.pgob` follows `gk110_pmu_pgob` (`pmu/gk110.c:32-82`). Both runs of the
+  reference trace (616297-616416, 616434-616553) match: 144 accesses, 0 differences.
+- `tools/gr/program.py` records the model as 6,253 ops in three stages (gating,
+  start, golden) with 52 slots and a 36-entry per-channel patch list. Values that
+  only the driver knows are slots: instance block, page pool, bundle buffer,
+  attribute buffer and the two MMU fault pages. The recorded program reproduces
+  6,333 trace accesses with 0 differences.
+- The program expects the unit counts, Falcon capabilities and context size that
+  the reference run read on this card (KNOWN). Another answer stops the stage
+  before any engine write.
+- `src/gr/Runner.cpp` runs the ops. `tests/test_gr_runner` replays the same
+  6,333 trace accesses through it with 0 differences and tests expect, poll, idle,
+  hook and slot failures. Runner and generated data compile for Haiku kernel mode
+  (data object about 100 KB).
+- The generated op tables are build output and are not stored in the repository.
+
+Design choice: one verified description (the Python model), one mechanical
+recording, one small interpreter. There is no second hand-written copy of the
+6,000 accesses in C++.
+
+Open for the native stage: Port adapter over NativeIo with the write policy
+(the program itself is the allow-list: op index, address, value), instance-memory
+work (context memory, words 0x210 and 0x214, golden image read, channel context
+copy, patch list, engine context pointer), the GR runlist, and a larger ledger.

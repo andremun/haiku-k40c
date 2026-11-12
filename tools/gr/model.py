@@ -109,11 +109,56 @@ class Topology:
         self.tile = self.tile[: max(self.tpc_total, len(self.tile))]
 
 
+def poll(io, addr, bits, want, what):
+    """A kernel wait loop (nvkm_msec, 2000 ms): read until (value & bits) == want."""
+    if hasattr(io, "poll"):
+        return io.poll(addr, bits, want)
+    for _ in range(100000):
+        if io.rd(addr) & bits == want:
+            return
+    raise RuntimeError(what)
+
+
 def mask(io, addr, clear, value):
     """nvkm_mask: read, then always write (trace lines 616784-616799)."""
+    if hasattr(io, "mask"):
+        return io.mask(addr, clear, value)
     old = io.rd(addr)
     io.wr(addr, (old & ~clear & 0xFFFFFFFF) | value)
     return old
+
+
+PGOB = (  # pmu/gk110.c:38-54, in order.
+    (0x020520, 0xFFFFFFFC), (0x020524, 0xFFFFFFFE), (0x020524, 0xFFFFFFFC), (0x020524, 0xFFFFFFF8),
+    (0x020524, 0xFFFFFFE0), (0x020530, 0xFFFFFFFE), (0x02052C, 0xFFFFFFFA), (0x02052C, 0xFFFFFFF0),
+    (0x02052C, 0xFFFFFFC0), (0x02052C, 0xFFFFFF00), (0x02052C, 0xFFFFFC00), (0x02052C, 0xFFFCFC00),
+    (0x02052C, 0xFFF0FC00), (0x02052C, 0xFF80FC00), (0x020528, 0xFFFFFFFE), (0x020528, 0xFFFFFFFC),
+)
+
+
+def pgob(io):
+    """gk110_pmu_pgob (pmu/gk110.c:32-82): power gating of the GR engine off.
+
+    The GR unit (0x000200 bit 12) is disabled during the sequence and enabled
+    at its end. gf100_gr_oneinit calls it before the first engine use (gf100.c:2006).
+    """
+    mask(io, 0x000200, 0x00001000, 0x00000000)
+    io.rd(0x000200)
+    mask(io, 0x000200, 0x08000000, 0x08000000)
+    io.delay(50000)  # pmu/gk110.c:61 msleep(50).
+    mask(io, 0x10A78C, 0x00000002, 0x00000002)
+    mask(io, 0x10A78C, 0x00000001, 0x00000001)
+    mask(io, 0x10A78C, 0x00000001, 0x00000000)
+    mask(io, 0x0206B4, 0x00000000, 0x00000000)
+    for addr, data in PGOB:
+        io.wr(addr, data)
+        poll(io, addr, 0x80000000, 0, "power gating step did not end")  # pmu/gk110.c:70-73.
+    mask(io, 0x10A78C, 0x00000002, 0x00000000)
+    mask(io, 0x10A78C, 0x00000001, 0x00000001)
+    mask(io, 0x10A78C, 0x00000001, 0x00000000)
+    mask(io, 0x000200, 0x08000000, 0x00000000)
+    mask(io, 0x000200, 0x00001000, 0x00001000)
+    io.rd(0x000200)
 
 
 def csdata(io, writes, falcon, starstar, base):
@@ -196,12 +241,7 @@ def init(io, t, inits, packs, mmu_wr, mmu_rd):
     io.wr(0x4188B8, mmu_rd >> 8)  # gf100.c:2278.
     for addr, data, _ in tables.expand("gk110b_gr_pack_mmio", inits, packs):
         io.wr(addr, data)  # gf100.c:2360.
-    io.rd(0x400700)  # gf100.c:1061 wait_idle.
-    enabled = io.rd(0x000200) & 0x1000
-    io.rd(0x002640)  # nvkm_fifo_ctxsw_in_progress, the GR engine status (fifo/gk104.c:206).
-    busy = io.rd(0x40060C) & 1
-    if enabled and busy:
-        raise RuntimeError("GR busy at wait_idle")
+    wait_idle(io)  # gf100.c:2363.
     io.wr(gpc_unit(0, 0x3018), 0x00000001)  # gk104.c:433 vsc_stream_master.
     bank = [0] * 32
     tile_nr = (t.tpc_total + 31) & ~31  # gf117.c:129.
@@ -283,11 +323,7 @@ def ctxctl(io, inits, packs):
     csdata(io, rows("gk110_grctx_pack_ppc"), 0x41A000, 0x008, 0x41BE00)
     io.wr(0x40910C, 0x00000000)  # gf100.c:1867.
     io.wr(0x409100, 0x00000002)
-    for _ in range(100000):  # gf100.c:1869-1872, 2000 ms in the kernel.
-        if io.rd(0x409800) & 0x80000000:
-            break
-    else:
-        raise RuntimeError("FECS did not report ready")
+    poll(io, 0x409800, 0x80000000, 0x80000000, "FECS did not report ready")  # gf100.c:1869-1872.
     return io.rd(0x409804)  # gf100.c:1878.
 
 
@@ -304,6 +340,8 @@ def attrib_cb_size(t):
 
 def wait_idle(io):
     """gf100_gr_wait_idle (gf100.c:1049-1075)."""
+    if hasattr(io, "wait_idle"):
+        return io.wait_idle()
     for _ in range(100000):
         io.rd(0x400700)
         enabled = io.rd(0x000200) & 0x1000
@@ -335,11 +373,7 @@ def icmd(io, inits, packs, pack):
                 io.wr(0x400200, addr)
                 if addr & 0xFFFF == 0xE100:
                     wait_idle(io)
-                for _ in range(100000):  # gf100.c:1123-1126.
-                    if not io.rd(0x400700) & 0x00000004:
-                        break
-                else:
-                    raise RuntimeError("icmd not accepted")
+                poll(io, 0x400700, 0x00000004, 0, "icmd not accepted")  # gf100.c:1123-1126.
     io.wr(0x400208, 0x00000000)
 
 
@@ -480,28 +514,20 @@ def generate(io, t, inits, packs, instance, pagepool, bundle, attrib):
     after the SCC RAM step (ctxgf100.c:1483-1487): io.context_pointer().
     """
     io.wr(0x404170, 0x00000012)  # ctxgf100.c:1450 FE power mode force on.
-    for _ in range(100000):
-        if not io.rd(0x404170) & 0x00000010:
-            break
+    poll(io, 0x404170, 0x00000010, 0, "FE power mode")
     io.wr(0x409614, 0x00000070)  # gf100.c:2470-2478 FECS reset.
     io.delay(10)
     mask(io, 0x409614, 0x00000700, 0x00000700)
     io.delay(10)
     io.rd(0x409614)
     io.wr(0x404170, 0x00000010)  # ctxgf100.c:1465 auto.
-    for _ in range(100000):
-        if not io.rd(0x404170) & 0x00000010:
-            break
+    poll(io, 0x404170, 0x00000010, 0, "FE power mode")
     io.wr(0x40802C, 0x00000001)  # ctxgf100.c:1471 SCC RAM.
     io.context_pointer()
     io.wr(0x409840, 0x80000000)  # ctxgf100.c:1504-1510 make the channel current.
     io.wr(0x409500, 0x80000000 | (instance >> 12))
     io.wr(0x409504, 0x00000001)
-    for _ in range(100000):
-        if io.rd(0x409800) & 0x80000000:
-            break
-    else:
-        raise RuntimeError("FECS did not accept the channel")
+    poll(io, 0x409800, 0x80000000, 0x80000000, "FECS did not accept the channel")
     io.wr(0x000260, 0)  # gf100_grctx_generate_main, ctxgf100.c:1349.
     for pack in ("gk110_grctx_pack_hub", "gk110_grctx_pack_gpc_0", "gf100_grctx_pack_zcull",
                  "gk110_grctx_pack_gpc_1", "gk110b_grctx_pack_tpc", "gk110_grctx_pack_ppc"):
@@ -526,8 +552,4 @@ def generate(io, t, inits, packs, instance, pagepool, bundle, attrib):
     wait_idle(io)
     mask(io, 0x409B04, 0x80000000, 0x00000000)  # ctxgf100.c:1518-1526 context unload.
     io.wr(0x409000, 0x00000100)
-    for _ in range(100000):
-        if not io.rd(0x409B00) & 0x80000000:
-            break
-    else:
-        raise RuntimeError("context unload did not end")
+    poll(io, 0x409B00, 0x80000000, 0, "context unload did not end")

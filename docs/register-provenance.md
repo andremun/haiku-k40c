@@ -350,6 +350,26 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/fifo/PushBuffer.h:27` | `constexpr unsigned kUserdGpPut = 0x8c;` | nouveau_dma.c:92 | SOURCE_ONLY |
 | `src/fifo/PushBuffer.h:30` | `constexpr unsigned kGpEntryBytes = 8;` | nouveau_dma.c:82 | SOURCE_ONLY |
 
+## src/gr/Program.h
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/gr/Program.h:25` | `constexpr uint8_t noSlot=0xff;` | no source: software marker for "". | SOURCE_ONLY |
+| `src/gr/Program.h:26` | `constexpr unsigned maxSlots=64;` | no source: software bound; program.py refuses more. | SOURCE_ONLY |
+| `src/gr/Program.h:27` | `constexpr uint32_t contextPointerHook=1;` | nvkm/engine/gr/ctxgf100.c:1483 | SOURCE_ONLY |
+
+## src/gr/Runner.cpp
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/gr/Runner.cpp:6` | `constexpr uint64_t waitUs=2000000;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Runner.cpp:7` | `constexpr uint32_t maxPolls=20000000;` | no source: software poll-count bound above the time bound. | SOURCE_ONLY |
+| `src/gr/Runner.cpp:45` | `if(!read(index,0x400700,unused) \|\| !read(index,0x000200,enable)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Runner.cpp:46` | `\|\| !read(index,0x002640,status) \|\| !read(index,0x40060c,busy))return false;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Runner.cpp:47` | `const bool enabled=enable&0x1000;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Runner.cpp:48` | `const bool switching=(status&0x80000000) && (status&0x00008000);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Runner.cpp:51` | `if(now-start>=waitUs)return fail(Error::Idle,index,0x40060c,busy);` | no source: ambiguous citation | SOURCE_ONLY |
+
 ## src/memauth/Session.cpp
 
 | Line | Code | Source | Status |
@@ -788,6 +808,15 @@ The following constant lines have no source citation:
 - src/fifo/PushBuffer.cpp:33 (no source: 0x7ffc is max 13-bit value aligned to 4; nvc0_winsys.h shifts mthd >> 2)
 - src/fifo/PushBuffer.cpp:39 (no source: 0x1fff is max 13-bit value for the count field;    nvc0_winsys.h uses (size << 16) with 13-bit field)
 - src/fifo/PushBuffer.cpp:269 (no source: 0xff is just 8-bit mask for address upper bits)
+- src/gr/Program.h:25 (no source: software marker for "".)
+- src/gr/Program.h:26 (no source: software bound; program.py refuses more.)
+- src/gr/Runner.cpp:6 (no source: ambiguous citation)
+- src/gr/Runner.cpp:7 (no source: software poll-count bound above the time bound.)
+- src/gr/Runner.cpp:45 (no source: ambiguous citation)
+- src/gr/Runner.cpp:46 (no source: ambiguous citation)
+- src/gr/Runner.cpp:47 (no source: ambiguous citation)
+- src/gr/Runner.cpp:48 (no source: ambiguous citation)
+- src/gr/Runner.cpp:51 (no source: ambiguous citation)
 - src/memauth/Session.cpp:8 (no source: memory role/version framing.)
 - src/memauth/Session.cpp:9 (no source: separate signed role/version framing.)
 - src/memauth/Session.cpp:14 (no source: RFC 8032 subgroup order, signature canonicality.)
