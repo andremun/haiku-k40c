@@ -15,7 +15,7 @@ enum class Phase:uint8_t {Reset,Post,Physical,Tables,Mapped,Remapped,Restored,Di
     ChannelBase,ChannelMemory,ChannelBar,ChannelFifo,ChannelBound,ChannelSubmit,ChannelClosed};
 enum class Error:uint8_t {None,Order,Read,Dirty,Clock,Budget,Overflow,Topology,Write,Profile,Bounds,Compare,Flush,Invalidate,Authority,
     Routing,Runlist,Preempt};
-enum class Operation:uint8_t {Read,Write,Poll,BulkWrite,BulkRead,Patch,Failure,Witness};
+enum class Operation:uint8_t {Read,Write,Poll,BulkWrite,BulkRead,Patch,Failure,Witness,Stage};
 struct Event {
     Phase phase=Phase::Reset;Error error=Error::None;
     uint32_t offset=0;uint64_t value=0;uint32_t polls=0;uint64_t elapsed=0;

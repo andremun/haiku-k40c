@@ -135,6 +135,49 @@ bool Upload::exercise(Token a,Token b)
     }
     return arena_.staged(a) && arena_.staged(b);
 }
+bool Upload::store(Token token,uint64_t offset,uint32_t count,const WordSource& source,bool update)
+{
+    if(!begin())return false;
+    Record r;
+    if(!arena_.describe(token,r) || (offset&3) || !count || offset>r.bytes || uint64_t(count)*4>r.bytes-offset)return fail(Error::Bounds);
+    if(update?!arena_.update(token):!arena_.dirty(token))return fail(Error::Bounds);
+    LockGuard lock(io_,Lock::Window);
+    if(!lock.held())return fail(Error::Budget);
+    for(unsigned pass=0;pass<2;++pass) { // write all, flush, then read all
+        uint64_t selected=UINT64_MAX;
+        for(uint32_t i=0;i<count;++i) {
+            uint64_t physical;
+            if(!tick(5000000) || !address(token,offset+uint64_t(i)*4,physical) || !window(physical,selected))return false; // no source: software bulk-operation budget.
+            const auto reg=0x700000+uint32_t(physical&0xfffff); // instmem/nv50.c:71,91.
+            const auto word=source.at(i);
+            if(!pass){if(!io_.write32(reg,word))return fail(Error::Write,reg,word);}
+            else {
+                uint32_t actual=0;
+                if(!io_.read32(reg,actual))return fail(Error::Read,reg);
+                if(actual!=word)return fail(Error::Compare,reg,actual);
+            }
+        }
+        if(!pass && !flushLocked())return false;
+    }
+    if(!arena_.staged(token))return fail(Error::Bounds);
+    return journal_.append({phase_,Error::None,uint32_t(offset),uint64_t(count)*4,0,last_-start_,Operation::BulkWrite,uint8_t(r.role),uint8_t(update?2:1)}) || fail(Error::Overflow);
+}
+bool Upload::load(Token token,uint64_t offset,uint32_t count,uint32_t* out)
+{
+    if(!begin())return false;
+    Record r;
+    if(!out || !arena_.describe(token,r) || (offset&3) || !count || offset>r.bytes || uint64_t(count)*4>r.bytes-offset)return fail(Error::Bounds);
+    LockGuard lock(io_,Lock::Window);
+    if(!lock.held())return fail(Error::Budget);
+    uint64_t selected=UINT64_MAX;
+    for(uint32_t i=0;i<count;++i) {
+        uint64_t physical;
+        if(!tick(5000000) || !address(token,offset+uint64_t(i)*4,physical) || !window(physical,selected))return false; // no source: software bulk-operation budget.
+        const auto reg=0x700000+uint32_t(physical&0xfffff); // instmem/nv50.c:91.
+        if(!io_.read32(reg,out[i]))return fail(Error::Read,reg);
+    }
+    return journal_.append({phase_,Error::None,uint32_t(offset),uint64_t(count)*4,0,last_-start_,Operation::BulkRead,uint8_t(r.role),1}) || fail(Error::Overflow);
+}
 bool Upload::fill(Token source)
 {
     if(!begin())return false;

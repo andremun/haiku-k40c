@@ -20,3 +20,41 @@ zeroed in 21 to 124 ms and read back in about 100 ms; one 8-byte patch with flus
 and readback takes about 6 us. Consequence: zeroing the 847,872-byte context
 memory and writing about 16,000 page-table entries fit in well under one second
 each when the entries are written in bulk with one flush.
+
+## Native compute stage, host result (2026-11-12, HOST_ONLY)
+
+New code: `src/gr/Compute.{h,cpp}` (the stage of PLAN.md), `src/gr/Guard.{h,cpp}`
+(write rules), `memnative::Extension` (the Policy asks the Guard in the channel
+phase), ledger capacity 32 with twelve S3 records, `Upload::store` and `load`.
+The channel sequences on the GR runlist (fifo, bind, attach, teardown) are ops of
+the generated program, like the GR stages.
+
+Write rules of the Guard:
+- A register write is accepted only as the next writing op of the program, at
+  that address, with the value the Guard computes from the owned ledger and from
+  the values the card returned. The Runner and the Guard share the op tables only.
+- Outside the program: the two TLB invalidations and the BAR1 context enable and
+  disable of S1, each once, with exact values. GP_PUT = 1 once, after the attach.
+- After a failure the only accepted continuation is the teardown sequence.
+- Data writes: owned records of the stage before the first program write; later
+  only the context pointer words of the instance block and the two list words
+  of the context image. The value of image words is not checked (weaker than S1,
+  where every data word had an expected value).
+
+`tests/test_gr_compute` (simulated card): the GR registers answer from the Linux
+trace and refuse any access that is not the next trace access, so the whole
+bring-up runs trace-exact through Policy and Guard (6,333 accesses). On GP_PUT
+the simulation decodes page tables, instance block, context words, register
+list, push buffer, descriptor and constant buffer 7 on its own and computes
+out[i] = in[i] + 1 through the page tables. Scenarios: pass, no launch (rung 4),
+FECS never ready (stops, teardown completes), one wrong output element, entry
+never fetched. Four source mutations make the test fail (context pointer bit,
+push length, launch value, guard value rule).
+
+Native: Compute, Guard, Runner and the generated data compile for Haiku kernel
+mode with the package flags. No link here.
+
+Open: NativeOwner integration and report lines, validator and package tools for
+stages s3a and s3b, T7610 build and rehearsal, review. The test does not prove
+that the compute class sequence is right for the card: it checks our own images
+against Mesa's sources and against an independent decode.

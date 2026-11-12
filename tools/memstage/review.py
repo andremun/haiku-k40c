@@ -89,7 +89,7 @@ A7; G0 before A7 is the separate preflight. Internal diagnostic phase 2 means
 physical VRAM work, not the removed G2/D1 gate. R5 and the original mapping
 witness remain supervised through completion. The guest deadline is 600 s;
 memory work 30 s; bulk work 5 s; polls 2 s/100000, whichever limit occurs first.
-The resident journal has 4096 records and the arena 16 records.
+The resident journal has 4096 records and the arena 32 records.
 
 ## Artifacts
 

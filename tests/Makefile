@@ -43,9 +43,10 @@ PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard tes
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 
 .PHONY: all clean
-all: $(BUILDDIR)/test_gr_runner $(BUILDDIR)/test_mem_client $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(BUILDDIR)/owner_post_probe $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
+all: $(BUILDDIR)/test_gr_runner $(BUILDDIR)/test_gr_compute $(BUILDDIR)/test_mem_client $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(BUILDDIR)/owner_post_probe $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
 	@for p in $(BUILDDIR)/test_mem_client $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe; do $$p || exit 1; done
 	@$(BUILDDIR)/test_gr_runner $(BUILDDIR)/gr/gr_trace.txt
+	@$(BUILDDIR)/test_gr_compute $(BUILDDIR)/gr/gr_trace.txt
 	@for t in $(PY_TESTS); do (cd .. && python3 tests/$$t) || exit 1; done
 
 $(BUILDDIR)/test_a7_diagnostics: ../src/a7/PostDiagnostics.h
@@ -64,6 +65,9 @@ $(BUILDDIR):
 GR_TOOLS := $(wildcard ../tools/gr/*.py)
 $(BUILDDIR)/gr/ProgramData.cpp: $(GR_TOOLS) | $(BUILDDIR)
 	cd .. && python3 tools/gr/program.py --output build/tests/gr >/dev/null
+GR_STAGE := ../src/gr/Compute.cpp ../src/gr/Guard.cpp ../src/gr/Runner.cpp $(wildcard ../src/memnative/Policy.cpp ../src/memstage/*.cpp ../src/memory/*.cpp)
+$(BUILDDIR)/test_gr_compute: test_gr_compute.cpp memstage_device.h $(GR_STAGE) $(wildcard ../src/gr/*.h ../src/memstage/*.h ../src/memnative/Policy.h ../src/memory/*.h) $(BUILDDIR)/gr/ProgramData.cpp | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -O1 test_gr_compute.cpp $(GR_STAGE) $(BUILDDIR)/gr/ProgramData.cpp -o $@
 $(BUILDDIR)/test_gr_runner: test_gr_runner.cpp ../src/gr/Runner.cpp ../src/gr/Runner.h ../src/gr/Program.h $(BUILDDIR)/gr/ProgramData.cpp | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) test_gr_runner.cpp ../src/gr/Runner.cpp $(BUILDDIR)/gr/ProgramData.cpp -o $@
 

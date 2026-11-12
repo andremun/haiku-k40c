@@ -20,15 +20,26 @@ enum class Kind:uint8_t {
 };
 struct Op {Kind kind;uint8_t slot,shift;uint32_t addr,a,b;};
 struct Stage {const Op* ops;uint32_t count;};
-// Run data that the driver supplies before a stage that uses it. Addresses in bytes.
-enum Input:uint8_t {Instance,PagePool,Bundle,Attrib,MmuWrite,MmuRead,InputCount};
+// Run data that the driver supplies before a stage that uses it. Addresses in
+// bytes: channel addresses for PagePool, Bundle and Attrib; physical VRAM
+// addresses for Instance, the two MMU fault pages and Runlist.
+enum Input:uint8_t {Instance,PagePool,Bundle,Attrib,MmuWrite,MmuRead,Runlist,InputCount};
 constexpr uint8_t noSlot=0xff; // no source: software marker for "no slot".
 constexpr unsigned maxSlots=64; // no source: software bound; program.py refuses more.
 constexpr uint32_t contextPointerHook=1; // no source: hook number of program.py; engine/gr/ctxgf100.c:1483-1487.
+constexpr uint32_t attachHook=2; // no source: hook number of program.py; fifo/gk104.c:134-170.
 // One entry of the per-channel register list (engine/gr/gf100.c:469-479): the value is
 // ((slot >> shift) & a) | b, or b alone when slot is noSlot.
 struct Patch {uint32_t addr;uint8_t slot,shift;uint32_t a,b;};
-extern const Stage gating,start,golden;
+// One owned record of the compute stage and its place in the channel address space.
+struct Region {uint8_t role;uint32_t bytes;uint64_t va;bool writable,zero;};
+// Constant words of one record, written before the channel is bound.
+struct Blob {uint8_t role;uint32_t offset;const uint32_t* words;uint32_t count;};
+// GR stages (verified against the trace), then the channel sequences on the GR runlist.
+extern const Stage gating,start,golden,fifo,bind,attach,teardown;
 extern const Patch patchList[];
-extern const unsigned patchCount,slotCount;
+extern const Region regions[];
+extern const Blob blobs[];
+extern const unsigned patchCount,slotCount,regionCount,blobCount,chid,pushBytes,elements;
+extern const uint32_t inputMultiplier;
 }

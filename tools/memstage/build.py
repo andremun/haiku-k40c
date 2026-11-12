@@ -341,7 +341,7 @@ def plan(child, sources):
             poll_us=2000000,
             polls=100000,
             events=4096,
-            arena_records=16,
+            arena_records=32,
         ),
         exclusions=[
             "BAR2",

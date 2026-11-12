@@ -40,6 +40,15 @@ uint64_t Arena::requiredBytes(Role role)
     case Role::Userd:return 4096; // fifo/gk104.c:117 0x200 slots; no source: one page for channels 0-7.
     case Role::Gpfifo:case Role::Push:case Role::Runlist:return 4096; // no source: one small page each.
     case Role::CopySource:case Role::CopyDest:return 4096; // no source: one small page each, the S2 copy extent.
+    // S3 sizes: tools/gr/launch.py layout() gives the same values with their Mesa and Nouveau sources.
+    case Role::GrText:return 0x80000; // no source: software; code offset 0x7f100 of the reference run plus spare.
+    case Role::GrTls:return 0x3c80000; // nvc0_screen.c:648-668 formula for 15 units.
+    case Role::GrTxc:return 0x20000; // nvc0_screen.c:1098.
+    case Role::GrAux:case Role::GrQmd:case Role::GrInput:case Role::GrOutput:case Role::GrMmioList:return 4096; // no source: one small page each.
+    case Role::GrPagePool:return 0x8000; // ctxgk110b.c:88.
+    case Role::GrBundle:return 0x3000; // ctxgk110b.c:84.
+    case Role::GrAttrib:return 0x14f000; // engine/gr/ctxgf100.c:1067 for 15 TPCs, page aligned.
+    case Role::GrContext:return 0xcf000; // engine/gr/ctxgf100.c:1436,1474: 0x80000 + image 0x4ea00, page aligned.
     default:return 0;
     }
 }
@@ -105,6 +114,13 @@ bool Arena::staged(Token token)
 {auto* r=find(token);if(!healthy() || !r || !r->writeGeneration)return false;r->staged=true;return true;}
 bool Arena::reference(Token token)
 {auto* r=find(token);if(!healthy() || !r || !r->staged)return false;r->referenced=r->retained=true;return true;}
+bool Arena::update(Token token)
+{
+    auto* r=find(token);
+    if(!healthy() || !r || !r->referenced || (r->role!=Role::ChanInstance && r->role!=Role::GrContext))return false;
+    if(r->writeGeneration==UINT64_MAX){fail();return false;}
+    ++r->writeGeneration;r->staged=false;return true;
+}
 bool Arena::candidateBar(Token token,BarVirtual address)
 {
     auto* r=find(token);if(!healthy() || !r || (address.value&4095))return false; // mmu/vmmgk104.c:41 small-page alignment.

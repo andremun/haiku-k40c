@@ -57,6 +57,7 @@ void Policy::observed(uint32_t reg,uint32_t value)
     case 0x1704:context_=value;break; // bar/gf100.c:46-58 ownership readback.
     }
     if(!channelActive())return;
+    if(extension_){extension_->observed(reg,value);return;}
     using memstage::channel::chid;
     if(reg==0x100c80 && waitQueued_ && (value&0x8000))chanQueued_=true; // vmmgf100.c:224.
     if(reg==0x000204 && step_==8){mask_=value;probed_=true;} // fifo/gf100.c:927-934 present units.
@@ -157,6 +158,7 @@ bool Policy::write(uint32_t reg,uint32_t value,bool window,bool mmu)
 }
 bool Policy::barRead(uint64_t offset,bool mmu) const
 {
+    if(channelActive() && extension_)return mmu && extension_->barRead(offset);
     if(channelActive()) // cla16f.h:62-63 GP_GET/GP_PUT of the selected USERD slot only.
         return mmu && step_>=6 && step_<=23 && (offset==memstage::channel::gpGet || offset==memstage::channel::gpPut);
     return mmu && queued_ && expectedContext_ && commands_>=1 && commands_<=3
@@ -207,6 +209,7 @@ bool Policy::engine(uint32_t& out) const
 bool Policy::channelRead(uint32_t reg) const
 {
     if(!channelActive())return false;
+    if(extension_)return extension_->read(reg);
     if(reg==0x000200 || reg==0x000204 || reg==0x002a04 || reg==0x002634 || reg==0x800000+chid*8 || reg==0x800004+chid*8)return true; // fifo/gf100.c:927-934; fifo/gk104.c:44-77,740; fifo/gf100.c:372.
     if(reg>=0x002390 && reg<0x0023b0)return true; // fifo/gk104.c:392, eight PBDMAs.
     if(reg>=0x002284 && reg<0x002284+16*8 && (reg-0x002284)%8==0)return true; // fifo/gk104.c:426.
@@ -225,6 +228,7 @@ bool Policy::channelData(const Record& r,uint64_t offset,uint32_t value)
 {
     Record roles[9];bool copy=false;
     if(!r.writeGeneration || r.staged)return false;
+    if(extension_)return extension_->data(r,offset,value);
     if(r.role==Role::SmallTable) { // BAR1 SPT entry 0 -> writable USERD page (Mapper::exposeUserd).
         uint64_t entry;
         if(step_!=2 || !chanQueued_ || !r.referenced || offset>=8 || !channelAddresses(roles,copy)
@@ -247,6 +251,7 @@ bool Policy::channelData(const Record& r,uint64_t offset,uint32_t value)
 bool Policy::channelWrite(uint32_t reg,uint32_t value)
 {
     Record roles[9];uint32_t rl,p;bool copy=false;
+    if(extension_)return extension_->write(reg,value);
     if(!channelAddresses(roles,copy) || !runlist(rl))return false;
     for(unsigned i=0;i<(copy?9u:7u);++i)if(!roles[i].staged || (step_>0 && !roles[i].referenced))return false;
     if(step_==0 && !roles[0].referenced)return false;
@@ -311,6 +316,7 @@ bool Policy::channelWrite(uint32_t reg,uint32_t value)
 bool Policy::barWrite(uint64_t offset,uint32_t value,bool mmu)
 {
     // nouveau_dma.c:92 GP_PUT, once, after the runlist commit completed.
+    if(channelActive() && extension_)return mmu && extension_->barWrite(offset,value);
     if(!channelActive() || !mmu || offset!=memstage::channel::gpPut)return false;
     if(step_==17 && runlistClear_ && value==1){++step_;return true;}
     // S2: the second entry, once, after the first GP_PUT and before the stop.

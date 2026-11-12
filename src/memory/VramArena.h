@@ -10,7 +10,9 @@ struct Probe {uint32_t parts=0,units=0,disabled=0,mib[32]{};};
 struct Layout {uint64_t bytes=0;uint32_t activeParts=0;};
 bool normalLayout(const Probe&,uint64_t expectedBytes,Layout&);
 enum class Role:uint8_t {None,DebugRead,DebugWrite,Directory,SmallTable,Instance,DataA,DataB,
-    ChanDirectory,ChanSmall,ChanInstance,Userd,Gpfifo,Push,Runlist,CopySource,CopyDest};
+    ChanDirectory,ChanSmall,ChanInstance,Userd,Gpfifo,Push,Runlist,CopySource,CopyDest,
+    // S3 records, in the order of tools/gr/launch.py layout().
+    GrText,GrTls,GrTxc,GrAux,GrQmd,GrInput,GrOutput,GrPagePool,GrBundle,GrAttrib,GrContext,GrMmioList};
 struct Token {uint64_t owner=0,epoch=0,id=0;};
 struct Record {
     Token token{};Role role=Role::None;VramPhysical physical{0};uint64_t bytes=0,alignment=0;
@@ -20,7 +22,7 @@ struct Record {
 };
 class Arena {
 public:
-    static constexpr unsigned capacity=16; // no source: software ledger capacity.
+    static constexpr unsigned capacity=32; // no source: software ledger capacity (S3 uses 26 records).
     Arena()=default;Arena(const Arena&)=delete;Arena& operator=(const Arena&)=delete;
     bool configure(const Probe&,uint64_t expectedBytes,uint64_t owner,uint64_t epoch,unsigned limit=capacity);
     bool allocate(Role,uint64_t bytes,uint64_t alignment,Token&);
@@ -30,6 +32,8 @@ public:
     bool dirty(Token); // Before attempting any write, including a possibly partial write.
     bool staged(Token); // Only the scoped upload/readback/flush protocol, never visibility.
     bool reference(Token);
+    // S3: a later write by the owning stage into a referenced instance or context record.
+    bool update(Token);
     bool candidateBar(Token,BarVirtual); // Metadata only; never a translation proof.
     void fail();
     bool healthy() const {return configured_ && !failed_;}
