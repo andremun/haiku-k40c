@@ -55,3 +55,27 @@ The trace around it follows `gf100_gr_init` (`gf100.c:2342-2463`) line by line:
 Card topology read from the trace (KNOWN for 0000:04:00.0): 0x409604 = 0x60005
 (5 GPCs, 6 ROPs by `gf100_gr_oneinit`), 3 TPCs in each GPC (0x2608 = 0x40003),
 15 TPCs in total (0x500910 = 0x4000f).
+
+## Engine start reproduced (2026-11-12, HOST_ONLY, TRACE_VERIFIED for the sequence)
+
+`tools/gr/model.py` is a host model of `gf100_gr_oneinit` (unit counts, tile map),
+`gf100_gr_init` with the hooks of `gk110b_gr`, the ZBC set-up with its LTC part,
+the load of the four microcode arrays and `gf100_gr_init_ctxctl_int`.
+`tools/gr/oracle.py` runs it against the trace: every model access must be the
+next trace access (timer reads of kernel wait loops excluded).
+
+Result: trace lines 616417-616433 and 616554-618711, 2,166 accesses, 0 differences.
+
+- KNOWN: FECS reports ready (0x409800 bit 31) after four polls in the reference run.
+- KNOWN: context image size 0x409804 = 0x4ea00 (322,048 bytes).
+- KNOWN: the microcode arrays of the 6.12 pin are the ones the 6.8 kernel loaded
+  (every data and code word is compared).
+- The two MMU fault page addresses (0x4188b4, 0x4188b8) are run data. The oracle
+  takes them from the trace. The native driver must supply its own pages
+  (`gf100.c:2277-2278`, `fb->mmu_wr`, `fb->mmu_rd`): to source in S3GR native work.
+- Not in the model, by decision: the interrupt enable that follows (0x000640,
+  trace 618712-618713). The driver polls and enables no interrupt.
+- Not yet in the model: the reset and power-gating sequence before the start
+  (trace 616297-616416, 616434-616553). Next step.
+- One error found by the oracle on the way: the TPC count register 0x2608 reads
+  0x40003; the kernel keeps the low byte (`gf100.h:107`, u8).

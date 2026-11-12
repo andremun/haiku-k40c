@@ -469,3 +469,14 @@ No Nouveau implementation body was copied and no runtime code changed.
 | `reference/nouveau/nvkm/engine/ce/gk104.c` | MIT notice in file | Interrupt status, launch error code | Semantic facts only |
 | `reference/nouveau/nvkm/engine/fifo/gk104.c` | MIT notice in file | Engine status register, copy-engine functions without context | Semantic facts only |
 
+## S3GR (2026-11-12)
+
+| Source file consulted | License | Used for | Copied material |
+|---|---|---|---|
+| `reference/nouveau/nvkm/engine/gr/gf100.c`, `gf100.h` | MIT notice in file | Order of engine start, hooks, ZBC, context-control start, unit address macros | Semantic facts only |
+| `reference/nouveau/nvkm/engine/gr/gk104.c`, `gk110.c`, `gk110b.c`, `gf117.c` | MIT notice in file | GK110B hook functions and function table | Semantic facts only |
+| `reference/nouveau/nvkm/engine/gr/*.c` register tables | MIT notice in files | Register address and value tables, read at run time by `tools/gr/tables.py` | None in this repository: the tool reads the pinned tree |
+| `reference/nouveau/nvkm/engine/gr/fuc/hubgk110.fuc3.h`, `gpcgk110.fuc3.h` | MIT (Red Hat) | The four microcode arrays, read at run time by `tools/gr/model.py` | None yet; the native build will embed them with their notice |
+| `reference/nouveau/nvkm/falcon/v1.c` | MIT notice in file | Data and code load protocol | Semantic facts only |
+| `reference/nouveau/nvkm/subdev/ltc/gf100.c` | MIT notice in file | ZBC table registers | Semantic facts only |
+
