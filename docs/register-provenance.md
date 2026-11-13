@@ -799,6 +799,12 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/runtime/PreStart.cpp:126` | `&& masked(0x000200, 0x00000100, 0x00000100)` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/runtime/PreStart.cpp:127` | `&& registers_.read32(0x000200, drain);` | no source: ambiguous citation | SOURCE_ONLY |
 
+## src/runtime/k40_ioctl.h
+
+| Line | Code | Source | Status |
+|------|------|--------|--------|
+| `src/runtime/k40_ioctl.h:16` | `#define K40_IOCTL_BASE 0x4b343000u` | no source: software choice, 'K40' << 8 | SOURCE_ONLY |
+
 ## Open
 
 The following constant lines have no source citation:
@@ -1110,5 +1116,6 @@ The following constant lines have no source citation:
 - src/runtime/PreStart.cpp:125 (no source: ambiguous citation)
 - src/runtime/PreStart.cpp:126 (no source: ambiguous citation)
 - src/runtime/PreStart.cpp:127 (no source: ambiguous citation)
+- src/runtime/k40_ioctl.h:16 (no source: software choice, 'K40' << 8)
 
 These constants may be verified by a mmiotrace in task C5.
