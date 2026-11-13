@@ -11,7 +11,7 @@ namespace k40::memnative {struct PolicyProbe {static void aperture(Policy& p,uin
 using k40::memstage::Progress;
 struct Result {k40::memstage::ChannelReport report;unsigned step=0,denials=0,copies=0,allocations=0;bool closed=false;};
 enum Fault {None,Stall,LaunchError,WrongWord,Busy,NopStall,MmuFault};
-static bool scenario(Fault fault,Result& out,bool dump=false)
+static bool scenario(Fault fault,Result& out,bool dump=false,bool requireIdle=true)
 {
     using namespace k40::memstage;
     Arena arena;Journal journal;Fifo io;
@@ -20,7 +20,7 @@ static bool scenario(Fault fault,Result& out,bool dump=false)
     Faults faults(io,journal,2);Policy policy(arena,faults);io.policy=&policy;
     PolicyProbe::aperture(policy,256*1048576);Upload upload(io,faults,journal,arena);Mapper mapper(io,faults,journal,arena,upload,2);
     Experiment experiment(io,faults,arena,upload,mapper,2,2,11520ULL*1048576,256*1048576);
-    Channel channel(io,faults,journal,arena,upload,mapper,2,true);
+    Channel channel(io,faults,journal,arena,upload,mapper,2,true,requireIdle);
     assert(experiment.run());
     const bool passed=channel.run();
     // Still forbidden: interrupt enables and clears of FIFO and copy engine, a third entry, other USERD words.
@@ -53,6 +53,9 @@ int main(int argc,char**)
     assert(r.report.copyGet==2 && !r.report.copied && r.copies==1 && r.step==24 && r.denials==0 && r.closed);
     assert(!scenario(Busy,r)); // data equal, engine still busy after the bound: refused
     assert(r.report.copied && (r.report.engineStatus&0x80000000) && r.step==24 && r.closed);
+    assert(scenario(Busy,r,false,false)); // diagnostic variant: the same run passes, the busy bit is recorded
+    assert(r.report.copied && (r.report.engineStatus&0x80000000) && r.step==24 && r.closed);
+    assert(!scenario(WrongWord,r,false,false)); // and it still refuses wrong data
     assert(!scenario(NopStall,r)); // S1 part stalls: the copy is never submitted
     assert(r.report.progress==Progress::Stalled && !r.report.copySubmitted && r.copies==0 && r.step==24 && r.closed);
     assert(!scenario(MmuFault,r));

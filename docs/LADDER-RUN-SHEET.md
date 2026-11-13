@@ -8,7 +8,7 @@ needs the T7610. This sheet is a draft until the rehearsals pass.
 
 1. Merge or check out the branch `ccr-5d33feda-7ni61l` of `haiku-k40c`.
 2. `make refs`, then `make check` without `.check-skip` (full scope, with the VBIOS).
-3. For each stage NAME in `s1`, `s2`, `s3a`, `s3b`:
+3. For each stage NAME in `s1`, `s2`, `s2d`, `s3a`, `s3b`:
 
    ```sh
    K40_MEM_STAGE=NAME python3 tools/memstage/build.py            # package
@@ -43,8 +43,14 @@ at a time. A new guest for every run: the stages do not reset the GR engine.
 | 6 | Timed matrix product | Not prepared yet | Result equal to the CPU, time recorded | - |
 
 After a stop: decision 012 allows one run of the prebuilt diagnostic variant of
-that rung. No diagnostic variant exists yet (2026-11-12). Until one exists, a stop
-ends the rung: report and ask.
+that rung.
+
+| Rung | Diagnostic variant | Use it when |
+|---|---|---|
+| 3 | Stage `s2d` (`PASS S2_COPY_DIAGNOSTIC`): the same run, the copy-engine busy bit is recorded and not part of the pass rule | The `s2` report shows `copied=1`, `launcherr=0` and only the engine status bit 31 set |
+| 2, 4, 5 | None | A stop ends the rung: report and ask |
+
+Build and rehearse `s2d` with the other stages (preparation step 3).
 
 ## What each pass would establish
 

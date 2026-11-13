@@ -24,7 +24,8 @@ private:
     memory::vram::Arena arena_;memstage::Journal journal_;NativeIo io_;
     memstage::Faults faults_;Policy policy_;memstage::Upload upload_;memstage::Mapper mapper_;
     memstage::Channel channel_;
-    // Stage of the package (tools/memstage/stage.py): 0 S1, 1 S2 copy, 2 S3 golden context, 3 S3 compute.
+    // Stage of the package (tools/memstage/stage.py): 0 S1, 1 S2 copy, 2 S3 golden context, 3 S3 compute,
+    // 4 S2 copy diagnostic (engine busy bit recorded only).
     unsigned stage_=0;gr::Guard guard_;gr::Compute compute_;
     memauth::Binding binding_;alignas(memauth::Session) uint8_t sessionStorage_[sizeof(memauth::Session)]{};
     memauth::Session* session_=nullptr;k40_a7_module* a7_=nullptr;

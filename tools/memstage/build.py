@@ -30,7 +30,7 @@ WORK = ROOT / "work" / stage.CURRENT["work"]
 PUBLIC = WORK / "package.json"
 PLAN = WORK / "phase-plan.json"
 INVENTORY = WORK / "write-inventory.json"
-STAGE = dict(s1="BATCH1_A7_BAR1_VRAM", s2="S2_A7_BAR1_CHANNEL_COPY", s3a="S3A_A7_BAR1_GR_GOLDEN",
+STAGE = dict(s1="BATCH1_A7_BAR1_VRAM", s2="S2_A7_BAR1_CHANNEL_COPY", s2d="S2D_A7_BAR1_CHANNEL_COPY_DIAGNOSTIC", s3a="S3A_A7_BAR1_GR_GOLDEN",
              s3b="S3B_A7_BAR1_GR_COMPUTE")[stage.NAME]
 ROM = Path(
     os.environ.get(
@@ -525,6 +525,7 @@ def build():
         or contract.frozen() != frozen
     ):
         raise ValueError("sources changed during build")
+    WORK.mkdir(parents=True, exist_ok=True)
     PUBLIC.write_text(dump(suite))
     PLAN.write_text(dump(compiledPlan))
     INVENTORY.write_text(dump(generated_inventory(data)))

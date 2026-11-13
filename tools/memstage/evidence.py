@@ -213,6 +213,7 @@ PB_ROLES = (8, 9, 10, 11, 12, 13, 14)  # ChanDirectory..Runlist, VramArena.h.
 # S2 (stage S2_A7_BAR1_CHANNEL_COPY): CopySource and CopyDest, one copy as
 # nouveau_boa0b5.c:37-71 on subchannel 4 (include/nvif/push906f.h:19).
 COPY_STAGE = "S2_A7_BAR1_CHANNEL_COPY"
+COPY_DIAGNOSTIC = "S2D_A7_BAR1_CHANNEL_COPY_DIAGNOSTIC"  # busy bit recorded only.
 COPY_ROLES = (15, 16)
 SOURCE_VA, DEST_VA = 0x10002000, 0x10003000  # software channel VA layout.
 COPY_BYTES = 4096  # one small page; nouveau_boa0b5.c:57-59 PAGE_SIZE.
@@ -300,7 +301,7 @@ def channel_image(byrole, copy=False):
     }
 
 
-def copy_phase(serial, chan, engine):
+def copy_phase(serial, chan, engine, require_idle=True):
     """S2: second entry consumed, engine idle, no launch error, destination compared."""
     line = re.findall(
         r"^k40_mem: COPY engine=(\d+) submitted=1 get=2/2 polls=\d+ us=\d+ copied=1\r?$", serial, re.M
@@ -313,12 +314,12 @@ def copy_phase(serial, chan, engine):
     if len(line) != 1 or len(status) != 1 or int(line[0]) != engine:
         raise ValueError("copy report missing, repeated or not complete")
     busy, intr, error = (int(x, 16) for x in status[0])
-    if busy & 0x80000000 or intr & 4 or error & 15:
+    if (busy & 0x80000000 and require_idle) or intr & 4 or error & 15:
         raise ValueError("copy engine busy or launch error")  # fifo/gk104.c:208; ce/gk104.c:52,76.
     register = 0x2640 + engine * 8  # fifo/gk104.c:206.
     if not any(e[6] == 2 and e[0] == 13 and e[2] == GP_GET and e[3] == 2 for e in chan):
         raise ValueError("GP_GET poll for the copy entry missing")
-    if not any(e[6] == 2 and e[0] == 13 and e[2] == register and not e[3] & 0x80000000 for e in chan):
+    if not any(e[6] == 2 and e[0] == 13 and e[2] == register and (not e[3] & 0x80000000 or not require_idle) for e in chan):
         raise ValueError("engine idle poll missing")
     for address, mask in ((CE_INTR, 4), (CE_LAUNCHERR, 15)):
         values = [e[3] for e in chan if e[6] == 0 and e[0] == 13 and e[2] == address]
@@ -401,7 +402,7 @@ def gr_phase(serial, events, byrole, launch):
     )
 
 
-def channel_phase(serial, events, byrole, copy=False):
+def channel_phase(serial, events, byrole, copy=False, require_idle=True):
     """Validate phases 8-14: exact write order, NOP progress, faults, teardown."""
     line = re.findall(
         r"^k40_mem: CHANNEL runlist=(\d+) pbdma=(\d+) mask=([0-9a-f]+) runm=([0-9a-f]+) bound=1 closed=1 progress=1 error=0 step=24\r?$",
@@ -503,7 +504,8 @@ def channel_phase(serial, events, byrole, copy=False):
         )
         if len(engines) != 1:
             raise ValueError("CE0 engine ID missing")  # top/gk104.c:55-56.
-        result["copy"] = copy_phase(serial, chan, int(engines[0]))
+        result["copy"] = copy_phase(serial, chan, int(engines[0]), require_idle)
+        result["copy"]["engine_idle_required"] = require_idle
     elif "k40_mem: COPY" in serial:
         raise ValueError("copy report in an S1 run")
     return result
@@ -514,11 +516,12 @@ def reads_of(events, address, phase):
 
 
 def memory_final(serial, suite, request):
-    copy = suite.get("stage") == COPY_STAGE
+    diagnostic = suite.get("stage") == COPY_DIAGNOSTIC
+    copy = suite.get("stage") == COPY_STAGE or diagnostic
     gr = suite.get("stage") in GR_STAGES
     launch = GR_STAGES.get(suite.get("stage"), False)
     marker = (
-        "k40_mem: PASS S2_COPY faults=0 upload=0 mapper=0 closure=2 allocations=16 journal_overflow=0"
+        f"k40_mem: PASS {'S2_COPY_DIAGNOSTIC' if diagnostic else 'S2_COPY'} faults=0 upload=0 mapper=0 closure=2 allocations=16 journal_overflow=0"
         if copy
         else "k40_mem: PASS S1_CHANNEL_NOP faults=0 upload=0 mapper=0 closure=2 allocations=14 journal_overflow=0"
     )
@@ -703,7 +706,7 @@ def memory_final(serial, suite, request):
         )
     if "k40_mem: GR" in serial:
         raise ValueError("GR report in an S1 or S2 run")
-    channel = channel_phase(serial, events, byrole, copy)
+    channel = channel_phase(serial, events, byrole, copy, not diagnostic)
     return dict(
         scope=(
             "S2: after the S1 NOP, one 4096-byte copy between two owned VRAM pages on the same CE0-runlist channel, "
@@ -711,7 +714,8 @@ def memory_final(serial, suite, request):
             if copy
             else "S1: one host NOP consumed on one CE0-runlist channel (GP_GET 0->1), no fault, clean teardown; no DMA payload proof"
         ),
-        S2_complete=copy,
+        S2_complete=copy and not diagnostic,
+        S2_diagnostic_complete=diagnostic,
         channel=channel,
         owner=owner,
         allocations=[

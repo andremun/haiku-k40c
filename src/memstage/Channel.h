@@ -23,8 +23,8 @@ struct ChannelReport {
 // Every register write passes the resident Policy. No interrupt is enabled.
 class Channel {
 public:
-    Channel(Io& io,Faults& faults,Journal& journal,memory::vram::Arena& arena,Upload& upload,Mapper& mapper,uint64_t epoch,bool copy=false)
-        :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),mapper_(mapper),epoch_(epoch),copy_(copy){}
+    Channel(Io& io,Faults& faults,Journal& journal,memory::vram::Arena& arena,Upload& upload,Mapper& mapper,uint64_t epoch,bool copy=false,bool requireIdle=true)
+        :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),mapper_(mapper),epoch_(epoch),copy_(copy),requireIdle_(requireIdle){}
     // True only for S1: GP_GET reached GP_PUT, no fault, clean teardown. With
     // copy: also the second entry consumed, no copy-engine error, destination equal to source.
     bool run();
@@ -50,7 +50,9 @@ private:
     void phase(Phase p){phase_=p;upload_.phase_=p;}
     Io& io_;Faults& faults_;Journal& journal_;memory::vram::Arena& arena_;Upload& upload_;Mapper& mapper_;
     uint64_t epoch_=0,start_=0,last_=0;
-    memory::vram::Token tokens_[9]{};unsigned roleCount_=7;bool copy_=false;channel::Addresses addresses_{};
+    memory::vram::Token tokens_[9]{};unsigned roleCount_=7;bool copy_=false;
+    // Diagnostic variant of S2: the engine busy bit is recorded and not part of the predicate.
+    bool requireIdle_=true;channel::Addresses addresses_{};
     ChannelReport report_{};Error error_=Error::None;Phase phase_=Phase::ChannelBase;
     bool attempted_=false,exposed_=false,closing_=false;
 };

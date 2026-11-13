@@ -595,7 +595,7 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/memstage/Channel.cpp:235` | `\|\| !write(0x002270,uint32_t(addresses_.runlist>>12)) \|\| !write(0x002274,report_.runlist<<20)` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/memstage/Channel.cpp:236` | `\|\| !waitClear(0x002284+report_.runlist*8,0x00100000,Error::Runlist)` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/memstage/Channel.cpp:263` | `&& !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&0x3fffffff);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/memstage/Channel.cpp:267` | `return s1 && report_.copyGet==2 && report_.copyPut==2 && !(report_.engineStatus&0x80000000)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/memstage/Channel.cpp:267` | `const bool idle=!(report_.engineStatus&0x80000000) \|\| !requireIdle_;` | no source: ambiguous citation | SOURCE_ONLY |
 
 ## src/memstage/ChannelImage.cpp
 

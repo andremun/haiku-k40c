@@ -8,7 +8,7 @@ namespace k40::memnative {
 using namespace memory::vram;
 NativeOwner::NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram,unsigned stage)
     :faults_(io_,journal_,epoch),policy_(arena_,faults_),upload_(io_,faults_,journal_,arena_),mapper_(io_,faults_,journal_,arena_,upload_,epoch),
-     channel_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,stage==1),stage_(stage),guard_(arena_,policy_),
+     channel_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,stage==1 || stage==4,stage!=4),stage_(stage),guard_(arena_,policy_),
      compute_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,stage==3)
 {
     io_.policy_=&policy_;
@@ -58,7 +58,7 @@ bool NativeOwner::work()
     // S3 (stages 2 and 3): the compute stage replaces the CE0 channel, and its
     // guard decides the channel-phase accesses (gr/Guard.h).
     if(!experiment_ || !experiment_->run())return false;
-    if(stage_<2)return channel_.run();
+    if(stage_<2 || stage_==4)return channel_.run();
     if(stage_>3)return false;
     policy_.extend(&guard_);
     return compute_.run();
@@ -81,7 +81,7 @@ void NativeOwner::drain()
             (unsigned long long)r.token.id,unsigned(r.role),(unsigned long long)r.physical.value,(unsigned long long)r.bytes,
             (unsigned long long)r.writeGeneration,r.staged,r.referenced,r.retained);
     }
-    if(stage_>=2) {
+    if(stage_==2 || stage_==3) {
         const auto& g=compute_.report();
         dprintf("k40_mem: GR step=%u error=%u bound=%u started=%u golden=%u attached=%u submitted=%u consumed=%u computed=%u closed=%u\n",
             unsigned(g.step),unsigned(g.error),g.bound,g.started,g.golden,g.attached,g.submitted,g.consumed,g.computed,g.closed);
@@ -123,7 +123,7 @@ bool NativeOwner::execute()
     if(!passed)arena_.fail();
     drain();
     dprintf("k40_mem: %s faults=%u upload=%u mapper=%u closure=%u allocations=%u journal_overflow=%u\n",
-        !passed?"FAIL":stage_==3?"PASS S3_COMPUTE":stage_==2?"PASS S3_GOLDEN":stage_==1?"PASS S2_COPY":"PASS S1_CHANNEL_NOP",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
+        !passed?"FAIL":stage_==3?"PASS S3_COMPUTE":stage_==2?"PASS S3_GOLDEN":stage_==1?"PASS S2_COPY":stage_==4?"PASS S2_COPY_DIAGNOSTIC":"PASS S1_CHANNEL_NOP",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
         unsigned(mapper_.closure()),arena_.count(),journal_.overflow());return passed;
 }
 }

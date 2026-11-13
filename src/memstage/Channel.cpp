@@ -264,7 +264,8 @@ bool Channel::run()
     if(!copy_)return s1;
     // S2 predicate: second entry consumed, engine not busy, no launch error
     // (ce/gk104.c:52,76 bit 2 and the error code), destination equal to source.
-    return s1 && report_.copyGet==2 && report_.copyPut==2 && !(report_.engineStatus&0x80000000) // fifo/gk104.c:208.
+    const bool idle=!(report_.engineStatus&0x80000000) || !requireIdle_; // fifo/gk104.c:208.
+    return s1 && report_.copyGet==2 && report_.copyPut==2 && idle
         && !(report_.ceIntr&4) && !(report_.ceLaunchErr&15) && report_.copied; // ce/gk104.c:52,76.
 }
 }

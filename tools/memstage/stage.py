@@ -2,7 +2,8 @@
 # Distributed under the terms of the MIT License.
 """Stage of the combined memory package: S1 (host NOP) or S2 (NOP, then one copy).
 
-The environment variable K40_MEM_STAGE selects it: "s1" (default), "s2", "s3a"
+The environment variable K40_MEM_STAGE selects it: "s1" (default), "s2", "s2d"
+(the diagnostic variant of s2), "s3a"
 (GR engine start and golden context) or "s3b" (also one compute job).
 One stage has one package folder, one work folder and one pass marker. The
 native owner receives the choice through the generated mem_config.h.
@@ -30,6 +31,16 @@ STAGES = {
         title="Combined S2 copy run",
         scope="S2: after the S1 NOP, one 4096-byte copy between two owned VRAM pages on the same CE0-runlist channel, destination equal to source, no fault, clean teardown; no host DMA payload proof",
     ),
+    "s2d": dict(
+        package="package-s2d",
+        work="S2COPY/diagnostic",
+        copy=True,
+        number=4,
+        marker="PASS S2_COPY_DIAGNOSTIC",
+        allocations=16,
+        title="Combined S2 copy run, diagnostic variant",
+        scope="S2 diagnostic: as S2, but the copy-engine busy bit is recorded and not part of the pass rule; destination equal to source by slow-window readback",
+    ),
     "s3a": dict(
         package="package-s3a",
         work="S3GR",
@@ -53,5 +64,5 @@ STAGES = {
 }
 NAME = os.environ.get("K40_MEM_STAGE", "s1")
 if NAME not in STAGES:
-    raise ValueError("K40_MEM_STAGE must be s1, s2, s3a or s3b")
+    raise ValueError("K40_MEM_STAGE must be s1, s2, s2d, s3a or s3b")
 CURRENT = STAGES[NAME]

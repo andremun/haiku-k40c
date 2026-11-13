@@ -301,8 +301,9 @@ def run():
                         stage=build.STAGE,
                         elapsed_seconds=round(time.monotonic() - start, 2),
                         # evidence.memory_final predicates of the selected stage.
-                        S1_complete=status == "pass" and stage.NAME in ("s1", "s2"),
+                        S1_complete=status == "pass" and stage.NAME in ("s1", "s2", "s2d"),
                         S2_complete=status == "pass" and stage.NAME == "s2",
+                        S2_diagnostic_complete=status == "pass" and stage.NAME == "s2d",
                         S3_golden_complete=status == "pass" and stage.NAME in ("s3a", "s3b"),
                         S3_complete=status == "pass" and stage.NAME == "s3b",
                         DMA_payload_visibility=False,
