@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 # Copyright (c) 2026 Mario Andres Munoz
 # Distributed under the terms of the MIT License. See LICENSE.
-# Run in the Linux guest. Builds and runs the reference compute job and
-# writes the logs to ./out (copy them to reference/linux-run/ on the host).
+# Run in the Linux guest. Builds and runs the reference compute job and the
+# rung 1 ladder jobs (ladder_jobs.c: copy, add_f32, mul_mat_vec_q8_0, timed
+# FP32 matrix product) and writes the logs to ./out (copy them to
+# reference/linux-run/ on the host).
 #   ./run_test.sh           software renderer, or Nouveau if it is loaded
 #   ./run_test.sh --k40c    load Nouveau under mmiotrace first, then run
+# MATMUL_N sets the matrix size of the timed product (default 1024).
 set -uo pipefail
 mkdir -p out
 cc -O2 -o compute_test compute_test.c -lEGL -lGLESv2 -lgbm || exit 2
+cc -O2 -o ladder_jobs ladder_jobs.c -lEGL -lGLESv2 -lgbm -lm || exit 2
 if [ "${1:-}" = "--k40c" ]; then
     lspci -nn -d 10de: | tee out/lspci.txt
     [ -s out/lspci.txt ] || { echo "No NVIDIA device in this guest: start it with --gpu." | tee out/RESULT.txt; exit 2; }
@@ -39,9 +43,15 @@ fi
 # NV50_PROG_CHIPSET must be set (to the real chipset, 0xf1 = GK110B) or
 # Mesa does not print the code words (nvc0_program.c, nvc0_program_dump).
 sudo env "${env_dbg[@]}" NV50_PROG_DEBUG=1 NV50_PROG_CHIPSET=0xf1 NV50_PROG_DEBUG_NO_COLORS=1 ./compute_test > out/compute_test.log 2>&1; rc=$?
-if [ "${1:-}" = "--k40c" ] && ! grep -qiE '^renderer:.*(NV|nouveau)' out/compute_test.log; then
-    echo "FAIL: the job did not run on the K40c (renderer: $(grep '^renderer' out/compute_test.log))" >> out/compute_test.log
-    rc=3
+sudo env "${env_dbg[@]}" NV50_PROG_DEBUG=1 NV50_PROG_CHIPSET=0xf1 NV50_PROG_DEBUG_NO_COLORS=1 ./ladder_jobs "${MATMUL_N:-1024}" > out/ladder_jobs.log 2>&1; lrc=$?
+[ "$rc" -eq 0 ] && rc=$lrc
+if [ "${1:-}" = "--k40c" ]; then
+    for log in out/compute_test.log out/ladder_jobs.log; do
+        if ! grep -qiE '^renderer:.*(NV|nouveau)' "$log"; then
+            echo "FAIL: the job did not run on the K40c (renderer: $(grep '^renderer' "$log"))" >> "$log"
+            rc=3
+        fi
+    done
 fi
 if [ -n "${tp:-}" ]; then
     echo "MARK compute_test end" | sudo tee /sys/kernel/tracing/trace_marker >/dev/null
@@ -51,6 +61,8 @@ if [ -n "${tp:-}" ]; then
     xz -f -T0 out/mmiotrace.txt
 fi
 { grep -E '^(device|renderer|version|elements|PASS|FAIL)' out/compute_test.log
-  grep -c '^shader binary code' out/compute_test.log | sed 's/^/code dumps: /'; cat out/mesa-build.txt; uname -r
+  grep -c '^shader binary code' out/compute_test.log | sed 's/^/code dumps: /'
+  grep -E '^(copy|add_f32|mul_mat_vec_q8_0|matmul_f32[_:]|PASS|FAIL)' out/ladder_jobs.log | sed 's/^/ladder: /'
+  cat out/mesa-build.txt; uname -r
   dpkg-query -W -f='mesa ${Version}\n' libegl-mesa0 2>/dev/null; } | tee out/RESULT.txt
 exit $rc

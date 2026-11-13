@@ -3,6 +3,7 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-11-13: Rung 1 jobs for the Linux guest (`tools/guest/files/ladder_jobs.c`): copy, `add_f32`, `mul_mat_vec_q8_0`, timed FP32 matrix product, bit-identical to the CPU on llvmpipe. Not run on the card.
 - 2026-11-12: S2 and S3 host work. Copy stage on the S1 channel. GR bring-up modelled from Nouveau and reproduced against the Linux trace (6,333 accesses), recorded as an op program with a native runner. Compute stage with write guard, packages s2, s3a, s3b, validators and run sheet. No link, rehearsal or card run yet.
 - 2026-11-12: Project resumed for S2 and S3 (decision 012). Run ladder for 2026-11-16, cloud work branch, tasks S2COPY, S3GR, S3CTX, S3LAUNCH, RTIOCTL and LADDER.
 - 2026-10-31: The project is on hold after S1 (decision 011). No task is active and no card run is approved.

@@ -40,7 +40,24 @@ at a time. A new guest for every run: the stages do not reset the GR engine.
 | 3 | `s2` | One more GPFIFO entry: copy class bind, 8 methods, launch | `PASS S2_COPY`: destination equals source | As rung 2; copy-engine launch error |
 | 4 | `s3a` | Power gating off, GR engine start, two microcode loads, golden context, context attach: the 6,253 ops of the program | `PASS S3_GOLDEN` | As rung 2; any expect, poll or idle failure of the program |
 | 5 | `s3b` | Rung 4 and one GPFIFO entry of 106 words: compute set-up and one launch | `PASS S3_COMPUTE`: 1024 of 1024 elements | As rung 4; GR interrupt or trap, FECS interrupt, wrong element |
-| 6 | Timed matrix product | Not prepared yet | Result equal to the CPU, time recorded | - |
+| 6 | Timed matrix product | Deferred until rung 5 passes: needs a GK110B matrix kernel and a stage variant. The Linux time comes from rung 1 | Result equal to the CPU, time recorded | - |
+
+## Rung 1 procedure
+
+The steps of `docs/PASSTHROUGH.md` 5 to 7, with two changes:
+
+1. In the guest shell: `cd files && ./run_test.sh --k40c`. It runs
+   `compute_test` (S3 reference job) and then `ladder_jobs` (copy, `add_f32`,
+   `mul_mat_vec_q8_0`, FP32 matrix product with N = 1024, 10 timed dispatches).
+   Every job compares its result with the CPU bit for bit. Expected in
+   `out/RESULT.txt`: `renderer: NVF1`, `PASS`, and the line
+   `ladder: PASS: 0 of 4 jobs differ from the CPU`.
+2. Copy `files/out/*` to a new folder `reference/linux-run-ladder/`, not to
+   `reference/linux-run/`. `make check` derives reports from the committed trace
+   in `reference/linux-run/`. A new trace there makes those checks fail.
+
+In the cloud container (llvmpipe, no card) the same script passes:
+`ladder: PASS: 0 of 4 jobs differ from the CPU`. That is not K40c evidence.
 
 After a stop: decision 012 allows one run of the prebuilt diagnostic variant of
 that rung.
@@ -61,7 +78,9 @@ Build and rehearse `s2d` with the other stages (preparation step 3).
 
 ## Known weak points, in order of risk
 
-1. Rung 5 push buffer: SOURCE_ONLY (Mesa), no trace. Rung 1 does not check it yet.
+1. Rung 5 push buffer: SOURCE_ONLY (Mesa), no trace. Rung 1 does not check it:
+   Mesa builds its own push buffer, and `mmiotrace` does not record push buffers
+   in VRAM or system memory.
 2. Rung 3 predicate needs the copy engine "not busy" (FINDINGS of S2COPY).
 3. Rung 4 and 5 reuse the generation memory as the channel context (S3LAUNCH PLAN).
 4. All four packages are unlinked and unrehearsed today.
