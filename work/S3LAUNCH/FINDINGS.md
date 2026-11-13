@@ -58,3 +58,21 @@ Open: NativeOwner integration and report lines, validator and package tools for
 stages s3a and s3b, T7610 build and rehearsal, review. The test does not prove
 that the compute class sequence is right for the card: it checks our own images
 against Mesa's sources and against an independent decode.
+
+## Status registers in the reference run (2026-11-13, KNOWN, from the mmiotrace)
+
+Checked because the pass rule of the stage requires zero GR interrupt, GR trap
+and FECS interrupt status, and no PBDMA interrupt.
+
+- Linux never read 0x400100, 0x400108 or 0x409c18 after the engine start: no GR
+  or FECS interrupt occurred in the reference run. It wrote 0xffffffff to
+  0x400100 and 0x400108 once at init (lines 616755, 616954), as the program does.
+- The GR engine status 0x002640 read 0 in all 8 reads.
+- One PBDMA interrupt occurred during the job: 0x002100 = 0x20000000 and
+  0x040108 = 0x00800000 (lines 895452-895460), acknowledged by Linux. INFERRED:
+  a method that the host passes to software (Mesa binds a software object on its
+  channel). Our push buffer has no such method. If rung 5 stops with
+  `pbdma=800000`, this is the first thing to look at: it would mean one of our
+  methods is handled by software under Linux.
+- 0x000100 read 0x100000 and 0x100 at times: pending bits of other units. The
+  stage records 0x000100 and does not use it in the pass rule.
