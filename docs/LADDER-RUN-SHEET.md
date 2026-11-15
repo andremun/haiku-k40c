@@ -18,6 +18,20 @@ needs the T7610. This sheet is a draft until the rehearsals pass.
 
    The build runs `tools/gr/program.py`, which checks the GR program against the
    reference trace again. A failure of any command is a stop: send the output.
+
+   Package folder and manifest of each stage:
+
+   | Stage | Package | Manifest (hash this file before the launch) |
+   |---|---|---|
+   | `s1` | `build/memstage/package-s1-ladder` | `work/LADDER/s1/package.json` |
+   | `s2` | `build/memstage/package-s2` | `work/S2COPY/package.json` |
+   | `s2d` | `build/memstage/package-s2d` | `work/S2COPY/diagnostic/package.json` |
+   | `s3a` | `build/memstage/package-s3a` | `work/S3GR/package.json` |
+   | `s3b` | `build/memstage/package-s3b` | `work/S3LAUNCH/package.json` |
+
+   `s1` does not use `package-s1c` and `work/S1CHANNEL3`: they hold the consumed
+   package of the S1 pass of 2026-10-31, and `build.py` and `run.py` refuse a
+   consumed package. Do not remove its `consumed.json`.
 4. Card: `~/llm-server/llm-mode.sh one`, `sudo scripts/passthrough.sh attach`,
    then the journal stream of `docs/REQUESTS.md` R5.
 5. `K40_MEM_STAGE=NAME python3 tools/memstage/run.py --host-check` for each stage.
@@ -30,7 +44,7 @@ branch before Monday, not on the card day.
 ## Rungs
 
 Each Haiku run: `K40_MEM_STAGE=NAME python3 tools/memstage/run.py --run-approved-batch1-once`.
-State the package SHA-256 (`work/<task>/package.json`) before the launch. One guest
+State the SHA-256 of the manifest of that stage (table in preparation step 3) before the launch. One guest
 at a time. A new guest for every run: the stages do not reset the GR engine.
 
 | Rung | Stage | Writes beyond the earlier rung | Pass | Stop conditions |

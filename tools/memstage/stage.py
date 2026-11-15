@@ -12,8 +12,11 @@ import os
 
 STAGES = {
     "s1": dict(
-        package="package-s1c",
-        work="S1CHANNEL3",
+        # Ladder rung 2 repeats S1 with a new package. package-s1c and
+        # work/S1CHANNEL3 hold the consumed package of the S1 pass of
+        # 2026-10-31: keep them unchanged (build.py refuses a consumed package).
+        package="package-s1-ladder",
+        work="LADDER/s1",
         copy=False,
         number=0,
         marker="PASS S1_CHANNEL_NOP",
