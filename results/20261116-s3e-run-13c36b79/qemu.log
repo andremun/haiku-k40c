@@ -1,0 +1,2 @@
+qemu-system-x86_64: vfio_err_notifier_handler(0000:04:00.0) Unrecoverable error detected. Please collect any data possible and then kill the guest
+qemu-system-x86_64: terminating on signal 15 from pid 366734 (python3)

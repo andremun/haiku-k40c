@@ -124,3 +124,11 @@ all three. Difference 4 (GPFIFO size) is left: one entry fits either size.
 - Rehearsal: `results/20261116-s3e-rehearsal-cc2e2a9c/README.md`, PASS_CARDLESS_NO_CARD.
 - Manifest `work/S3DIAG/s3e/package.json`, SHA-256
   `160e2355f6758236fe84f99013f753af8a57903a732da4032dc954e97d9c3040`.
+
+## 2026-11-16: s3e on the card (user yes)
+
+Run `results/20261116-s3e-run-13c36b79/README.md`, package `160e2355...`. STOPPED like s3c: a new AER CmpltTO
+on 0000:00:03.0 (kernel time 22828.40 s). Live lines: the image copy finished
+(`step=9 a=1 b=4ea00`), attach done, GP_PUT 1 written (`step=11 a=1`), no
+GP_GET poll line after. INFERRED: the context copy, PRIV PTEs and user channel
+are not the cause; the stop at the first GR schedule remains unexplained.

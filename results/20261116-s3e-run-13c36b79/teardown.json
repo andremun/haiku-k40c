@@ -1,0 +1,4 @@
+{
+  "bus_master_enable": false,
+  "host_pci_command_after": 2
+}
