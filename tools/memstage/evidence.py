@@ -336,10 +336,13 @@ GR_STAGES = {
     "S3D_A7_BAR1_GR_SETUP": ("setup", "S3_SETUP"),
     "S3B_A7_BAR1_GR_COMPUTE": ("full", "S3_COMPUTE"),
     "S3E_A7_BAR1_GR_BIND_ALIGNED": ("bind", "S3_BIND"),
+    "S3G_A7_BAR1_GR_IMAGE": ("none", "S3_IMAGE"),
 }
 # Stages aligned with the Linux reference run (gr::Align, work/S3DIAG/FINDINGS.md):
 # the channel context is a copy of the golden image in GrChanContext.
 GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED",)
+# Stages that print the golden image (gr::Compute print mode, work/S3DIAG/REPORT.md).
+GR_PRINT = ("S3G_A7_BAR1_GR_IMAGE",)
 IMAGE_BYTES = 0x4EA00  # tools/gr/program.py KNOWN[0x409804], trace 616433.
 GR_ROLES = tuple(range(17, 30))  # GrText..GrChanContext, VramArena.h.
 GR_UNWRITTEN = (18, 24, 25, 26)  # Tls, PagePool, Bundle, Attrib: allocated, never written by the host.
@@ -359,7 +362,21 @@ def gr_program():
     return {name: len(ops) for name, ops in stages.items()}, len(patches), module.launch.layout()
 
 
-def gr_phase(serial, events, byrole, mode, aligned=False):
+def image_lines(serial):
+    """The printed golden image: {byte offset: eight words}. Lines of zeros are not printed."""
+    rows = re.findall(r"^k40_mem: IMG ([0-9a-f]+)((?: [0-9a-f]+){8})\r?$", serial, re.M)
+    if serial.count("k40_mem: IMG") != len(rows):
+        raise ValueError("golden image line malformed")
+    lines, last = {}, -1
+    for offset, words in rows:
+        offset, words = int(offset, 16), [int(word, 16) for word in words.split()]
+        if offset <= last or offset % 32 or offset + 32 > IMAGE_BYTES or not any(words) or max(words) > 0xFFFFFFFF:
+            raise ValueError("golden image line out of order, out of range or empty")
+        lines[offset], last = words, offset
+    return lines
+
+
+def gr_phase(serial, events, byrole, mode, aligned=False, printed=False):
     """Validate an S3 run: program progress, context, submit, launch result, faults, teardown."""
     lengths, _, layout = gr_program()
     submit, launch = mode != "none", mode == "full"
@@ -404,6 +421,25 @@ def gr_phase(serial, events, byrole, mode, aligned=False):
     image = re.findall(r"^k40_mem: GR_IMAGE ((?:[0-9a-f]+ ){7}[0-9a-f]+)\r?$", serial, re.M)
     if len(image) != 1:
         raise ValueError("golden image words missing")
+    # Print mode: the whole image in IMG lines before the report, then one live line of
+    # the golden step with the count of words not zero and the sum of all words.
+    lines = image_lines(serial)
+    summary = [(int(a, 16), int(b, 16)) for a, b in
+               re.findall(r"^k40_mem: LIVE step=9 us=\d+ a=([0-9a-f]+) b=([0-9a-f]+)\r?$", serial, re.M)]
+    if printed:
+        words = [word for row in lines.values() for word in row]
+        blocks = [(e[2], e[3]) for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 27 and e[2] >= 0x80000 and e[3] > 32]
+        wanted = [(0x80000 + at, min(16384, IMAGE_BYTES - at)) for at in range(0, IMAGE_BYTES, 16384)]
+        if (
+            len(summary) != 2
+            or summary[1] != (sum(1 for word in words if word), sum(words) & 0xFFFFFFFF)
+            or lines.get(0, [0] * 8) != [int(word, 16) for word in image[0].split()]
+            or serial.rfind("k40_mem: IMG") > serial.find("k40_mem: GR step=")
+            or blocks != wanted
+        ):
+            raise ValueError("printed golden image, its summary line or its reads differ")
+    elif lines:
+        raise ValueError("golden image lines in a stage that does not print the image")
     chan = [e for e in events if e[0] >= 8]
     stages, done = [(e[2], e[3], e[8]) for e in chan if e[6] == 8], 0
     expected = []
@@ -428,6 +464,7 @@ def gr_phase(serial, events, byrole, mode, aligned=False):
         total_us=int(program[0][3]), launch=launch, entry=mode,
         context_va=layout["ChanContext"]["va"] if aligned else layout["Context"]["va"] + 0x80000,
         records=len(GR_ROLES), aligned=aligned,
+        image=dict(lines=len(lines), words_not_zero=summary[1][0], sum=summary[1][1]) if printed else None,
     )
 
 
@@ -728,9 +765,13 @@ def memory_final(serial, suite, request):
             full="S3: one compute job on the card, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
             "no fault, clean teardown; no host DMA payload proof",
         )
+        printed = suite.get("stage") in GR_PRINT
+        if printed:
+            scopes["none"] = ("S3g: as S3a, and the golden image read by slow window and printed; "
+                              "the comparison with the Linux reference image is tools/gr/golden.py; no compute job")
         return dict(
             scope=scopes[mode],
-            gr=gr_phase(serial, events, byrole, mode, suite.get("stage") in GR_ALIGNED),
+            gr=gr_phase(serial, events, byrole, mode, suite.get("stage") in GR_ALIGNED, printed),
             owner=owner,
             allocations=[dict(id=r[0], role=r[1], physical=r[2], bytes=r[3], generation=r[4]) for r in allocations],
             events=len(events),
@@ -738,6 +779,7 @@ def memory_final(serial, suite, request):
             S1_complete=False,
             S2_complete=False,
             S3_golden_complete=True,
+            S3_image_printed=printed,
             S3_bind_complete=mode != "none",
             S3_setup_complete=mode in ("setup", "full"),
             S3_complete=launch,

@@ -14,6 +14,7 @@ struct Report {
     uint64_t progressUs=0,resultUs=0,totalUs=0;
     uint32_t mc=0,fifoIntr=0,mmuPending=0,pbdmaIntr=0,pbdmaHce=0,state=0,grIntr=0,grTrap=0,fecsIntr=0,engineStatus=0;
     uint32_t image[8]{}; // First words of the golden context image.
+    uint32_t imageWords=0,imageSum=0,imageLines=0; // Print mode: words not zero, sum of all words, printed lines.
 };
 // What the one GPFIFO entry fetches (work/S3DIAG/PLAN.md): nothing (no submit),
 // the object bind, the set-up without the launch, or the whole job with its result.
@@ -28,9 +29,13 @@ struct Align {bool copy=false,priv=false,user=false;};
 class Progress {
 public:
     virtual void live(Step step,uint64_t microseconds,uint32_t a,uint32_t b)=0;
+    // Eight words of the golden image at a byte offset (print mode, work/S3DIAG/REPORT.md).
+    virtual void words(uint32_t offset,const uint32_t values[8])=0;
 protected:
     ~Progress()=default;
 };
+// With print, the golden image is read after its generation and given to the progress
+// sink in lines of eight words; lines of zeros are left out (work/S3DIAG/REPORT.md, approach A).
 // S3: the GR engine start, the golden context and, with launch, one compute
 // job on one channel of the GR runlist (work/S3LAUNCH/PLAN.md). Polling only.
 // Every register write is an op of the generated program (gr/Program.h) or one
@@ -38,8 +43,8 @@ protected:
 class Compute final:private Port {
 public:
     Compute(memstage::Io& io,memstage::Faults& faults,memstage::Journal& journal,memory::vram::Arena& arena,
-        memstage::Upload& upload,memstage::Mapper& mapper,uint64_t epoch,Launch launch,Progress* progress=nullptr,Align align={})
-        :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),mapper_(mapper),epoch_(epoch),launch_(launch),progress_(progress),align_(align),
+        memstage::Upload& upload,memstage::Mapper& mapper,uint64_t epoch,Launch launch,Progress* progress=nullptr,Align align={},bool print=false)
+        :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),mapper_(mapper),epoch_(epoch),launch_(launch),progress_(progress),align_(align),print_(print),
          runner_(*this),closer_(*this){}
     // True only when every step passed: without launch, the golden context and a
     // clean teardown; with a submit, also GP_GET 1; with the full job, also every
@@ -67,12 +72,13 @@ private:
     bool stage(const Stage& ops,Step step,unsigned number);
     bool contextPointer();
     bool copyContext();
+    bool printImage();
     bool submit();
     bool result();
     bool snapshot();
     bool teardown();
     memstage::Io& io_;memstage::Faults& faults_;memstage::Journal& journal_;memory::vram::Arena& arena_;
-    memstage::Upload& upload_;memstage::Mapper& mapper_;uint64_t epoch_=0;Launch launch_=Launch::None;Progress* progress_=nullptr;Align align_{};
+    memstage::Upload& upload_;memstage::Mapper& mapper_;uint64_t epoch_=0;Launch launch_=Launch::None;Progress* progress_=nullptr;Align align_{};bool print_=false;
     Runner runner_,closer_;Report report_{};
     uint64_t start_=0,last_=0;memstage::Phase phase_=memstage::Phase::ChannelBase;
     memstage::channel::Addresses addresses_{};

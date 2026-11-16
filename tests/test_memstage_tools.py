@@ -281,8 +281,26 @@ class Tests(unittest.TestCase):
         # work/S3DIAG/PLAN.md: prefixes of the push buffer, and the live lines.
         reports = {
             mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
-            for mode in ("bind", "setup", "aligned")
+            for mode in ("bind", "setup", "aligned", "image")
         }
+        # s3g: the golden context with the image printed (work/S3DIAG/REPORT.md, approach A).
+        suite["stage"] = "S3G_A7_BAR1_GR_IMAGE"
+        result = evidence.memory_final(reports["image"], suite, raw)
+        self.assertTrue(result["S3_golden_complete"] and result["S3_image_printed"] and not result["S3_bind_complete"])
+        self.assertGreater(result["gr"]["image"]["words_not_zero"], 0)
+        with self.assertRaises(ValueError):  # a golden report without the image lines
+            evidence.memory_final(golden, suite, raw)
+        first = re.search(r"^k40_mem: IMG [0-9a-f]+ ([0-9a-f]+) .*$", reports["image"], re.M)
+        for changed in (reports["image"].replace(first.group(0), "", 1),  # one line lost
+                        reports["image"].replace(first.group(0), first.group(0).replace(" " + first.group(1) + " ", " 1 ", 1), 1),
+                        reports["image"].replace(first.group(0), first.group(0) + "\n" + first.group(0), 1),  # repeated
+                        reports["image"].replace("PASS S3_IMAGE", "PASS S3_GOLDEN")):
+            self.assertNotEqual(changed, reports["image"])
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        suite["stage"] = "S3A_A7_BAR1_GR_GOLDEN"
+        with self.assertRaises(ValueError):  # image lines in a stage that does not print
+            evidence.memory_final(reports["image"].replace("PASS S3_IMAGE", "PASS S3_GOLDEN"), suite, raw)
         # s3e: the bind with the channel state of the Linux reference run (work/S3DIAG/FINDINGS.md).
         suite["stage"] = "S3E_A7_BAR1_GR_BIND_ALIGNED"
         result = evidence.memory_final(reports["aligned"], suite, raw)

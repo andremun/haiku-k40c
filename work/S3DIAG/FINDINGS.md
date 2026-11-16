@@ -154,3 +154,64 @@ No card run. Full text, sources and the next stages: `work/S3DIAG/REPORT.md`.
   `s3o` (poll through BAR0 after GP_PUT, no BAR1 read), `s3n` (host NOP on the
   GR runlist, without and with GR start). Root request R6 (`docs/REQUESTS.md`).
 
+## 2026-11-17: root port 0000:00:03.0 (request R6, `sudo lspci -vvv`, by the user)
+
+KNOWN (read with no guest running):
+- `DevCap2: Completion Timeout: Range BCD, TimeoutDis+`.
+  `DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-`. The timeout is on
+  and is 50 ms at most.
+- AER: `UESta` has no bit set, `UEMsk` masks nothing, `UESvrt` has `CmpltTO-`
+  (non-fatal, as the kernel line said). `HeaderLog` is all zero and
+  `HdrLogCap-`: the port holds no record of the request that timed out.
+  `ErrorSrc: ERR_FATAL/NONFATAL: 0018` (the port itself, 00:03.0).
+- `LnkSta: Speed 2.5GT/s (downgraded), Width x16`. Power state `D3`,
+  secondary status `<MAbort+`, `LaneErrStat` set for all 16 lanes. These are
+  the idle state of the port; if they matter during a run is UNKNOWN.
+
+What it means for the stop (INFERRED):
+- A read without completion returns after 50 ms at most. The s3e log shows the
+  start of one more `k40_mem:` line after the GP_PUT line. The possible lines
+  are the 100 ms poll line, a failure line or the status line.
+- Three cases remain. (1) BAR1 reads worked for some time and one failed near
+  100 ms. (2) GP_GET reached 1 and a later read failed (the GP_PUT readback or
+  a BAR0 status read). (3) The first two reads each timed out and QEMU stopped
+  the guest late. The timeout value does not decide between them. Stage `s3o`
+  (`REPORT.md`, approach B) does.
+
+## 2026-11-17: stage s3g (host), built and rehearsed
+
+Approach A of `REPORT.md`. `s3g` = `s3a` with the golden image printed.
+- `gr::Compute` print mode: after the golden stage, the image (0x4ea00 bytes at
+  GrContext + 0x80000) is read by slow window in 16 KiB blocks and given to the
+  progress sink in lines of eight words. Lines of zeros are left out. A live
+  line of the golden step then holds the count of words not zero (a) and the
+  sum of all words (b). No new register access; Guard and Policy are unchanged.
+- The owner prints `k40_mem: IMG <offset> <8 words>` (stage number 8, marker
+  `PASS S3_IMAGE`).
+- Validator (`tools/memstage/evidence.py`): stage `S3G_A7_BAR1_GR_IMAGE`; image
+  lines in order, in range, not empty; count and sum equal to the summary line;
+  line 0 equal to `GR_IMAGE`; the 20 block reads journaled; no image line in a
+  stage that does not print.
+- `tools/gr/golden.py`: builds the Linux image from the trace (MAP 26, lines
+  811578-892190; 80512 words, 56574 not zero, sum 0x087e8458) and compares a
+  serial log with it word by word. `--check` is part of `make check`.
+- Host tests: the simulated card now saves a pattern image at the context
+  unload; `tests/test_gr_compute.cpp` compares the printed lines with it word
+  for word; `tests/test_memstage_tools.py` validates and mutates the report.
+- `make check` passes. Regenerated: `docs/register-provenance.md`,
+  `work/S2COPY/host-check.json`.
+- Rehearsal: `results/20261117-s3g-rehearsal-e077691c/README.md`, PASS_CARDLESS_NO_CARD.
+  `build.py --check` and `run.py --host-check` pass.
+- Manifest `work/S3DIAG/s3g/package.json`, SHA-256
+  `b5867144ae6b586e7be9d350e40abba7ca3a7895da3f3c1fb86f0a36c80bb274`.
+
+Not verified: the time that the print needs on the card. A Linux-like image is
+about 7100 lines (about 650 KiB of serial text). The stage budget is 120 s
+(`src/gr/Compute.cpp` `budgetUs`). If the print is too slow, the run ends with
+a failure line, error Budget, and the normal teardown; the image lines printed
+until then stay usable with `golden.py`.
+
+Card run (needs the user's yes; not on the approved ladder):
+`K40_MEM_STAGE=s3g python3 tools/memstage/run.py --run-approved-batch1-once`,
+then `python3 tools/gr/golden.py --serial results/<run>/serial.log`.
+

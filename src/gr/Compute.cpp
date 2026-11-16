@@ -136,6 +136,28 @@ bool Compute::copyContext()
     live(Step::Golden,1,imageBytes); // a = 1: the copy is complete.
     return true;
 }
+bool Compute::printImage()
+{
+    // work/S3DIAG/REPORT.md approach A: the golden image for the host comparison with the
+    // image of the Linux reference run. Slow-window reads only, as the copy of the aligned stages.
+    Token from;
+    if(!token(Role::GrContext,from))return fail(MemError::Bounds);
+    constexpr uint32_t words=sizeof(copy_)/4; // no source: 16 KiB software blocks, as copyContext.
+    for(uint32_t at=0;at<imageBytes;at+=words*4) {
+        const uint32_t n=(imageBytes-at)/4<words?(imageBytes-at)/4:words;
+        if(!tick() || !upload_.load(from,reserved+at,n,copy_))return fail(upload_.error()==MemError::None?MemError::Read:upload_.error());
+        for(uint32_t k=0;k<n;k+=8) {
+            uint32_t line[8]{};bool any=false;
+            for(uint32_t j=0;j<8 && k+j<n;++j) {
+                line[j]=copy_[k+j];report_.imageSum+=line[j];
+                if(line[j]){any=true;++report_.imageWords;}
+            }
+            if(any){++report_.imageLines;if(progress_)progress_->words(at+k*4,line);}
+        }
+    }
+    live(Step::Golden,report_.imageWords,report_.imageSum); // a: words not zero; b: sum of all words.
+    return true;
+}
 bool Compute::hook(uint32_t number)
 {
     if(number==contextPointerHook)return contextPointer();
@@ -364,6 +386,7 @@ bool Compute::run()
         ok=token(Role::GrContext,context) && upload_.load(context,reserved,8,report_.image);
         if(!ok)fail(upload_.error()==MemError::None?MemError::Read:upload_.error());
     }
+    if(ok && print_)ok=printImage();
     if(ok && align_.copy)ok=copyContext();
     if(ok){ok=stage(gr::attach,Step::Attach,5);report_.attached=ok;}
     if(ok && launch_!=Launch::None)ok=submit() && (launch_!=Launch::Full || result());

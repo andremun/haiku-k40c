@@ -1,7 +1,7 @@
 # Status
 
 Current phase: S2 and S3 preparation, resumed 2026-11-12 (docs/decisions/012-resume-s2-s3.md).
-Current task: S3DIAG. Continuation report: work/S3DIAG/REPORT.md (2026-11-17). Next: stage `s3g` (golden image check), then `s3o` (observe the stop through BAR0), then `s3n` (host NOP on the GR runlist). No new stage is built yet.
+Current task: S3DIAG. Continuation report: work/S3DIAG/REPORT.md. Stage `s3g` (golden image printed, no submission) is built, rehearsed and checked; its card run waits for the user's yes. After it: `s3o` (observe the stop through BAR0), then `s3n` (host NOP on the GR runlist); neither is built.
 Last result: card day 2026-11-16 (work/LADDER/FINDINGS.md): rungs 1 to 4 PASS (S2 copy and S3a golden context on the card). Rung 5 (s3b), s3c and s3e STOPPED: one BAR1 read without completion within about 100 ms of GP_PUT on the GR-runlist channel (AER CmpltTO at the root port of 04:00.0). Cause unknown.
 Earlier: S1 PASSED on the card (2026-10-31, results/20261031-batch1-a7-bar1-d198d424/).
 Not done: S3 (compute job). Q7 and Q11 stay open.
