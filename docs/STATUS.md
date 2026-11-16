@@ -1,12 +1,12 @@
 # Status
 
 Current phase: S2 and S3 preparation, resumed 2026-11-12 (docs/decisions/012-resume-s2-s3.md).
-Current task: S3DIAG (work/S3DIAG/PLAN.md): live progress lines and a push-buffer bisect after the rung 5 stop. Packages s3c, s3d, s3b built and rehearsed; review and card runs pending.
-Last result: card day 2026-11-16 (work/LADDER/FINDINGS.md): rungs 1 to 4 PASS (S2 copy and S3a golden context on the card), rung 5 (s3b) STOPPED on a PCIe completion timeout at the root port of 04:00.0.
+Current task: S3DIAG. Continuation report: work/S3DIAG/REPORT.md (2026-11-17). Next: stage `s3g` (golden image check), then `s3o` (observe the stop through BAR0), then `s3n` (host NOP on the GR runlist). No new stage is built yet.
+Last result: card day 2026-11-16 (work/LADDER/FINDINGS.md): rungs 1 to 4 PASS (S2 copy and S3a golden context on the card). Rung 5 (s3b), s3c and s3e STOPPED: one BAR1 read without completion within about 100 ms of GP_PUT on the GR-runlist channel (AER CmpltTO at the root port of 04:00.0). Cause unknown.
 Earlier: S1 PASSED on the card (2026-10-31, results/20261031-batch1-a7-bar1-d198d424/).
 Not done: S3 (compute job). Q7 and Q11 stay open.
 Work place: T7610, branch `ccr-5d33feda-7ni61l`, full check scope. The card 04:00.0 stays on vfio-pci (boot-time reservation) until `detach`.
-Last updated: 2026-11-16
+Last updated: 2026-11-17
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
 

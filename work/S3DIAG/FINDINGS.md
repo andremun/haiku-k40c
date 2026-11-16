@@ -132,3 +132,25 @@ on 0000:00:03.0 (kernel time 22828.40 s). Live lines: the image copy finished
 (`step=9 a=1 b=4ea00`), attach done, GP_PUT 1 written (`step=11 a=1`), no
 GP_GET poll line after. INFERRED: the context copy, PRIV PTEs and user channel
 are not the cause; the stop at the first GR schedule remains unexplained.
+
+## 2026-11-17: read-only investigation, continuation report
+
+No card run. Full text, sources and the next stages: `work/S3DIAG/REPORT.md`.
+- KNOWN: after GP_PUT the driver reads only BAR1 (USERD GP_GET). QEMU stops the
+  guest at the first AER report. So the evidence is one BAR1 read without
+  completion; the state of BAR0 after it is UNKNOWN. This corrects "the card
+  stopped answering host reads" in the entries above.
+- KNOWN: the golden image was never checked on the card: `GR_IMAGE` holds 8
+  words, all 0 in the s3a pass, as in Linux. The trace holds the full Linux
+  image (MAP 26, lines 811578-892192, 56574 words not zero).
+- KNOWN (source): the first schedule runs FECS paths that golden generation
+  never ran (`engine/gr/fuc/hub.fuc:264-269,432-444,471-523,555-592`).
+- KNOWN: the `fifo`, `bind` and `attach` stages are S1 sequences rewritten for
+  runlist 0, not compared with the trace. Linux sets and serves the PBDMA 0
+  interrupts (trace lines 560983-561004, 895451-895465); we do not.
+- The libdrm-nouveau idea is dropped: user space cannot set the instance block,
+  page tables or GR context.
+- Next stages, in order: `s3g` (print and compare the golden image, no submit),
+  `s3o` (poll through BAR0 after GP_PUT, no BAR1 read), `s3n` (host NOP on the
+  GR runlist, without and with GR start). Root request R6 (`docs/REQUESTS.md`).
+
