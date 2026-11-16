@@ -215,3 +215,51 @@ Card run (needs the user's yes; not on the approved ladder):
 `K40_MEM_STAGE=s3g python3 tools/memstage/run.py --run-approved-batch1-once`,
 then `python3 tools/gr/golden.py --serial results/<run>/serial.log`.
 
+## 2026-11-17: s3g on the card (user yes)
+
+Run `results/20261117-s3g-run-c43c3085/README.md`, package `b5867144...`.
+Status: failed, "native phase failure". No AER line, no IOMMU or VFIO line
+(R5 before and after are equal). This is not the stop of s3b, s3c and s3e.
+
+KNOWN:
+- Steps 1 to 9 passed. The golden stage ended at 1.43 s. The print then gave
+  1676 image lines (offsets 0x100 to 0xffe0, the first four 16 KiB blocks).
+- At 28.25 s: `LIVE step=0 a=9 b=e`, error Authority in the golden step. Cause:
+  the aggregate deadline of 30 s in `NativeIo::active`
+  (`src/memnative/NativeIo.cpp:61-64`), not the 120 s stage budget. The print
+  is slow: about 16 ms for each image line (26.8 s for 1676 lines).
+- After the deadline the driver has no card access, so the attach and the
+  teardown did not run: `attached=0 closed=0`, `closure=1`. The channel stayed
+  bound and GR stayed started until the guest ended. The VFIO reset at the next
+  VM start is the recovery, as after the earlier stops.
+- The image is not empty and has the Linux layout. The first words are equal to
+  the Linux image: +0x100 0x0905090a, +0x104 0x00090b03, +0x108 1, +0x110
+  0x70000, +0x130 0xe000, +0x174 0xf800008f.
+
+Control: the image is not the same in two Linux runs.
+- KNOWN: the images of `reference/linux-run` and `reference/linux-run-ladder`
+  differ in 38464 of 80512 words (8614 of the first 16384). The two channel
+  contexts inside the ladder run are equal to each other. So about half of the
+  image is state that the generation does not set.
+- KNOWN, first 64 KiB (`python3 tools/gr/golden.py --serial <serial.log>`):
+  ours differs from `linux-run` in 7901 words and from `linux-run-ladder` in
+  3582 words. Of the 7770 words that agree in both Linux runs, ours differs
+  in 263. Examples: the two list words (written later, expected); +0x3d8 and
+  +0x3e0 (our record addresses, expected); single-bit differences such as
+  +0x2dd4 0x881020c1 against 0x881060c1.
+- `tools/gr/golden.py` now reads both traces and judges only the words that
+  agree in both.
+
+INFERRED: for the 20 % that was printed, our golden image is as near to a Linux
+image as two Linux images are to each other. An empty or grossly wrong image is
+ruled out for that part. The 263 words are not explained one by one: two Linux
+samples do not separate fixed words from state bits that change between runs.
+The other 80 % of the image was not printed.
+
+Lessons for the next stages:
+- One serial line costs about 8 to 16 ms on the card. Live lines in a poll loop
+  limit the time resolution to that.
+- All card work of a stage must end within 30 s (`NativeIo::active`). A long
+  print must happen after the teardown, from a copy in driver memory.
+- The package `package-s3g` is consumed.
+

@@ -213,3 +213,18 @@ Recorded in `docs/REQUESTS.md`:
 - Escalation rule: `s3b`, `s3c` and `s3e` are three attempts at the same stop.
   Approaches A to C observe; they do not retry the same guess. If the user
   prefers a formal escalation, write `escalations/ESC-NNN.md` from this report.
+
+## 6. Update after the s3g run (2026-11-17)
+
+Approach A ran once (`work/S3DIAG/FINDINGS.md`, entry "s3g on the card").
+- The golden image is not empty and has the Linux layout. For the first 64 KiB
+  it differs from a Linux image less than two Linux images differ from each
+  other. The cause "empty or grossly wrong image" is ruled out for that part.
+- A word-by-word comparison has limits: about half of the image changes between
+  two Linux runs. `tools/gr/golden.py` judges only the words that agree in both.
+- The run failed on the 30 s deadline of the driver during the print, without a
+  PCIe error. To print the full image, copy it to driver memory during the
+  stage and print it after the teardown.
+- Approach B (`s3o`) is now the next step. Keep its live lines few: one line
+  costs about 8 to 16 ms.
+
