@@ -1,0 +1,17 @@
+{
+  "DMA_payload_visibility": false,
+  "Q11": "open; A7 G1 observation only",
+  "Q7": "open",
+  "S1_complete": true,
+  "S2_complete": true,
+  "S2_diagnostic_complete": false,
+  "S3_complete": false,
+  "S3_golden_complete": false,
+  "allowed_kernel_lines": [],
+  "elapsed_seconds": 156.84,
+  "error": "",
+  "kernel_scope": "R5 selected classes; not a clean full kernel log",
+  "stage": "S2_A7_BAR1_CHANNEL_COPY",
+  "status": "pass",
+  "verification": "HARDWARE_VERIFIED under Haiku for this finite card/context only if status=pass"
+}
