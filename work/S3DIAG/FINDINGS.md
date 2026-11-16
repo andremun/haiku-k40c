@@ -31,3 +31,35 @@ Package manifests (SHA-256), in run order:
 
 Not done: review of the macro task, and the user's yes for each card run. None
 of these runs is on the approved ladder (decision 012).
+
+## 2026-11-16: s3c on the card (user yes, review skipped by the user)
+
+Run `results/20261116-s3c-run-bcaef9f5/README.md`, package `77bf0cd4...`.
+STOPPED by the launcher after 137 s: the same R5 line as rung 5, a new AER
+CmpltTO on root port 0000:00:03.0 (kernel time 13851.76 s; sysfs CmpltTO 2).
+
+KNOWN (live lines in `serial.log`): every step up to the attach finished
+(LIVE steps 1-10, last at 1286343 us), then `LIVE step=11 us=1300192 a=1`:
+GP_PUT 1 written. No GP_GET poll line followed; the first one was due 100 ms
+later. The GPFIFO entry held only the object bind (2 words).
+
+INFERRED: the card stopped answering host reads within 100 ms of the first
+GPFIFO entry on the GR runlist channel, before any compute method beyond the
+bind. The launch words of rung 5 are not the cause: the fault is in the first
+schedule of this channel on GR (context load by FECS, the patch list applied on
+first load, the channel or instance set-up). The S1 and S2 channels on the CE0
+runlist consumed their entries with the same USERD and GP_PUT path.
+
+`s3d` and `s3b` fetch a longer prefix of the same entry, so they would stop at
+the same point: not run.
+
+Difference found, not tested: Nouveau maps the page pool, the bundle buffer and
+the patch list ("mmio list") of each GR channel with PRIV set
+(`gf100.c:384,401,410,464`, `vmmgf100.c:259,315`); our PTEs never set PRIV
+(`src/memstage/ChannelImage.cpp` `userdPte`). PRIV restricts access, so this
+is an unlikely cause of a hang (INFERRED).
+
+Next (read-only, no card): compare the first GR channel submission of the
+rung 1 trace (`reference/linux-run-ladder/mmiotrace.txt.xz`) with our attach
+and submit: the context-switch registers and FECS methods Linux uses before or
+at its first GR channel schedule.
