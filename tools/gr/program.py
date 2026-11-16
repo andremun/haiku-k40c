@@ -305,7 +305,11 @@ def launch_cpp():
     lines.extend(blobs)
     lines.append("};")
     lines.append(f"const unsigned blobCount={len(blobs)};")
-    lines.append(f"const unsigned pushBytes={len(words) * 4},elements={launch.ELEMENTS};")
+    bind = 2  # header and class: the first method of nve4_compute.c:51-52.
+    if words[0] != launch.header(1, 1, 0) or words[1] != launch.CLASS or not bind < setup < len(words):
+        raise ValueError("push buffer prefixes differ from the S3DIAG plan")
+    lines.append(f"const unsigned pushBytes={len(words) * 4},pushBindBytes={bind * 4},pushSetupBytes={setup * 4},"
+                 f"elements={launch.ELEMENTS}; // work/S3DIAG/PLAN.md prefixes.")
     lines.append(f"const uint32_t inputMultiplier=0x{0x9E3779B1:x}; // launch.py input_word().")
     return lines
 

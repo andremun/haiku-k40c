@@ -13,6 +13,10 @@ constexpr Role channelRoles[7]={Role::ChanDirectory,Role::ChanSmall,Role::ChanIn
 constexpr uint64_t reserved=0x80000; // engine/gr/ctxgf100.c:1436 CB_RESERVED.
 constexpr uint64_t budgetUs=120000000; // no source: software budget of the whole stage, microseconds.
 constexpr uint64_t waitUs=2000000; // no source: 2 s progress bounds, as memstage/Channel.cpp.
+constexpr uint64_t liveUs=100000; // no source: one live poll line each 100 ms (work/S3DIAG/PLAN.md).
+// Bytes the one GPFIFO entry fetches in each mode: prefixes of pushWords (tools/gr/program.py).
+uint32_t entryBytes(Launch launch)
+{return launch==Launch::Bind?pushBindBytes:launch==Launch::Setup?pushSetupBytes:pushBytes;}
 // One mapped extent of the channel address space.
 struct Extent {uint64_t va,physical,bytes;bool writable;};
 // The small-page table of the channel from its first entry: 8 bytes for each
@@ -55,7 +59,10 @@ private:const Runner& runner_;
 }
 bool Compute::fail(MemError e)
 {
-    if(report_.error==MemError::None)report_.error=e;
+    if(report_.error==MemError::None) {
+        report_.error=e;
+        if(progress_)progress_->live(Step::None,last_>=start_?last_-start_:0,uint32_t(report_.step),uint32_t(e)); // Step None: a failed step a, error b.
+    }
     journal_.append({phase_,report_.error,uint32_t(report_.step),0,0,last_>=start_?last_-start_:0,Operation::Failure});return false;
 }
 bool Compute::tick()
@@ -158,8 +165,8 @@ bool Compute::memory()
     channel::Word words[16];const auto n=channel::image(Role::ChanInstance,addresses_,words,16);
     if(!n || n>16)return fail(MemError::Bounds);
     for(unsigned w=0;w<n;++w)if(!upload_.store(chan[2],words[w].offset,2,PairWords(words[w].value)))return fail(upload_.error());
-    // One GPFIFO entry for the whole push buffer (nouveau_dma.c:83-84), and the runlist entry.
-    if(!upload_.store(chan[4],0,2,PairWords((channel::pushVa&0xffffffff)|((uint64_t(channel::pushVa>>32)|(uint64_t(pushBytes)<<8))<<32))) // nouveau_dma.c:83-84.
+    // One GPFIFO entry for the push buffer or a prefix of it (nouveau_dma.c:83-84), and the runlist entry.
+    if(!upload_.store(chan[4],0,2,PairWords((channel::pushVa&0xffffffff)|((uint64_t(channel::pushVa>>32)|(uint64_t(entryBytes(launch_))<<8))<<32))) // nouveau_dma.c:83-84.
         || !upload_.store(chan[6],0,2,PairWords(chid)))return fail(upload_.error()); // fifo/gk104.c:454-455.
     // The run data of the program, then the constant images and the register list.
     uint64_t write=0,readPage=0;
@@ -210,6 +217,7 @@ bool Compute::stage(const Stage& ops,Step step,unsigned number)
 {
     report_.step=step;
     if(!tick())return false;
+    live(step);
     LockGuard lock(io_,Lock::Mmu);
     if(!lock.held())return fail(MemError::Budget);
     const auto begin=last_;
@@ -222,20 +230,21 @@ bool Compute::stage(const Stage& ops,Step step,unsigned number)
 }
 bool Compute::submit()
 {
-    report_.step=Step::Submit;phase(Phase::ChannelSubmit);
+    report_.step=Step::Submit;phase(Phase::ChannelSubmit);live(Step::Submit);
     LockGuard lock(io_,Lock::Mmu);
     if(!lock.held())return fail(MemError::Budget);
     uint32_t get=0,put=0;
     if(!io_.loadFence() || !io_.barRead32(gpGet,get) || !io_.barRead32(gpPut,put) || get || put)return fail(MemError::Dirty);
     if(!io_.storeFence() || !io_.barWrite32(gpPut,1))return fail(MemError::Write); // nouveau_dma.c:88-92.
-    report_.submitted=true;
+    report_.submitted=true;live(Step::Submit,1,0); // a: GP_PUT written.
     if(!journal_.append({phase_,MemError::None,gpPut,1,0,last_-start_,Operation::Write,uint8_t(Role::Userd),1}))return fail(MemError::Overflow);
-    const auto begin=last_;
+    const auto begin=last_;uint32_t liveCount=0;
     for(unsigned i=0;i<20000000;++i) { // no source: software poll-count bound above the time bound.
         if(!tick() || !io_.loadFence() || !io_.barRead32(gpGet,report_.getAfter))return fail(MemError::Read);
         if(!tick())return false;
         report_.polls=i+1;report_.progressUs=last_-begin;
         if(report_.getAfter==1 || report_.progressUs>=waitUs)break;
+        if(report_.progressUs>=liveUs*(liveCount+1)){++liveCount;live(Step::Submit,report_.getAfter,report_.polls);}
     }
     if(!io_.barRead32(gpPut,report_.putAfter))return fail(MemError::Read);
     report_.consumed=report_.getAfter==1 && report_.putAfter==1;
@@ -245,15 +254,16 @@ bool Compute::result()
 {
     // The entry is fetched; the job ends later. Read the last output element
     // until it has its value or the bound passes, then compare every element.
-    report_.step=Step::Result;
+    report_.step=Step::Result;live(Step::Result);
     Token output;
     if(!report_.consumed)return true;
     if(!token(Role::GrOutput,output))return fail(MemError::Bounds);
-    const auto begin=last_;uint32_t value=0;
+    const auto begin=last_;uint32_t value=0,liveCount=0;
     for(unsigned i=0;i<100000;++i) { // no source: software poll-count bound.
         if(!tick() || !upload_.load(output,(elements-1)*4,1,&value))return fail(upload_.error()==MemError::None?MemError::Read:upload_.error());
         report_.resultPolls=i+1;report_.resultUs=last_-begin;
         if(value==inputMultiplier*elements+1 || report_.resultUs>=waitUs)break;
+        if(report_.resultUs>=liveUs*(liveCount+1)){++liveCount;live(Step::Result,value,report_.resultPolls);}
         if(!delay(1000))return fail(MemError::Clock); // no source: 1 ms between result reads.
     }
     for(uint32_t at=0;at<elements;at+=64) {
@@ -264,12 +274,12 @@ bool Compute::result()
             ++report_.wrong;
         }
     }
-    report_.computed=report_.wrong==0;
+    report_.computed=report_.wrong==0;live(Step::Result,report_.wrong,elements);
     return true;
 }
 bool Compute::snapshot()
 {
-    report_.step=Step::Status;
+    report_.step=Step::Status;live(Step::Status);
     LockGuard lock(io_,Lock::Mmu);
     if(!lock.held())return fail(MemError::Budget);
     const uint32_t state=0x800004+chid*8; // fifo/gk104.c:44-77.
@@ -281,7 +291,7 @@ bool Compute::snapshot()
 }
 bool Compute::teardown()
 {
-    report_.step=Step::Teardown;phase(Phase::ChannelClosed);
+    report_.step=Step::Teardown;phase(Phase::ChannelClosed);live(Step::Teardown);
     bool ok=true;
     if(report_.bound) {
         LockGuard lock(io_,Lock::Mmu);
@@ -300,13 +310,13 @@ bool Compute::run()
     if(attempted_)return fail(MemError::Order);
     attempted_=true;
     if(!io_.now(start_))return fail(MemError::Clock);
-    last_=start_;phase(Phase::ChannelBase);report_.step=Step::Route;
+    last_=start_;phase(Phase::ChannelBase);begin(Step::Route);
     if(!faults_.capture(Phase::ChannelBase,epoch_))return fail(faults_.error());
-    report_.step=Step::Memory;
+    begin(Step::Memory);
     if(!route() || !memory())return false;
-    report_.step=Step::Tables;
+    begin(Step::Tables);
     if(!invalidate())return false;
-    report_.step=Step::Expose;phase(Phase::ChannelBar);
+    begin(Step::Expose);phase(Phase::ChannelBar);
     Token userd;
     if(!token(Role::Userd,userd) || !mapper_.exposeUserd(userd,Phase::ChannelBar))return fail(mapper_.error()==MemError::None?MemError::Bounds:mapper_.error());
     exposed_=true;
@@ -322,17 +332,19 @@ bool Compute::run()
         if(!ok)fail(upload_.error()==MemError::None?MemError::Read:upload_.error());
     }
     if(ok){ok=stage(gr::attach,Step::Attach,5);report_.attached=ok;}
-    if(ok && launch_)ok=submit() && result();
+    if(ok && launch_!=Launch::None)ok=submit() && (launch_!=Launch::Full || result());
     const bool sampled=snapshot();
+    if(sampled)live(Step::Status,report_.fifoIntr,report_.grIntr|report_.grTrap|report_.fecsIntr);
     const bool closed=teardown();
     uint64_t end;
     if(io_.now(end) && end>=start_)report_.totalUs=end-start_;
     if(!ok || !sampled || !closed)return false;
-    report_.step=Step::Done;
+    begin(Step::Done);
     // No MMU fault, no PBDMA interrupt, only the runlist and non-stall FIFO events
     // (fifo/gk104.c:654-718), no GR interrupt or trap, no FECS interrupt (engine/gr/gf100.c:1414,1570).
     const bool clean=!report_.mmuPending && !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&0x3fffffff) // fifo/gk104.c:654-718.
         && !report_.grIntr && !report_.grTrap && !report_.fecsIntr;
-    return report_.golden && report_.attached && clean && (!launch_ || (report_.consumed && report_.computed));
+    return report_.golden && report_.attached && clean && (launch_==Launch::None || report_.consumed)
+        && (launch_!=Launch::Full || report_.computed);
 }
 }

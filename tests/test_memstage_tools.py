@@ -4,6 +4,7 @@
 import copy
 from pathlib import Path
 import struct
+import re
 import subprocess
 import tempfile
 import threading
@@ -277,6 +278,39 @@ class Tests(unittest.TestCase):
         self.assertFalse(result["S3_complete"])
         with self.assertRaises(ValueError):
             evidence.memory_final(compute, suite, raw)
+        # work/S3DIAG/PLAN.md: prefixes of the push buffer, and the live lines.
+        reports = {
+            mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
+            for mode in ("bind", "setup")
+        }
+        for mode, stage_name, marker in (("bind", "S3C_A7_BAR1_GR_BIND", "PASS S3_BIND"),
+                                         ("setup", "S3D_A7_BAR1_GR_SETUP", "PASS S3_SETUP")):
+            with self.subTest(mode=mode):
+                serial = reports[mode]
+                suite["stage"] = stage_name
+                result = evidence.memory_final(serial, suite, raw)
+                self.assertTrue(result["S3_golden_complete"] and result["S3_bind_complete"])
+                self.assertEqual(result["S3_setup_complete"], mode == "setup")
+                self.assertFalse(result["S3_complete"])
+                self.assertEqual(result["gr"]["entry"], mode)
+                for other in (compute, golden, reports["setup" if mode == "bind" else "bind"]):
+                    with self.assertRaises(ValueError):  # another stage's report
+                        evidence.memory_final(other, suite, raw)
+                live = serial.index("k40_mem: LIVE step=15")
+                for changed in (
+                    serial.replace("k40_mem: LIVE", "k40_mem: LIVE_", 1),
+                    serial.replace("k40_mem: LIVE step=15", "k40_mem: LIVE step=0", 1),
+                    re.sub(r"(?m)^k40_mem: LIVE step=11 .*\n", "", serial),
+                    re.sub(r"(?m)^k40_mem: LIVE .*\n", "", serial),
+                    serial[:live] + serial[live:].replace("k40_mem: GR step=", "k40_mem: GR step=", 1).replace(
+                        "k40_mem: LIVE step=15", "k40_mem: LIVE step=14", 1) + "k40_mem: LIVE step=15 us=0 a=0 b=0\n",
+                    serial.replace("submitted=1 consumed=1", "submitted=1 consumed=0"),
+                    serial.replace("after=1/1", "after=0/1"),
+                    serial.replace(marker, "PASS S3_GOLDEN"),
+                ):
+                    self.assertNotEqual(changed, serial)
+                    with self.assertRaises(ValueError):
+                        evidence.memory_final(changed, suite, raw)
 
     def test_cardless_cannot_sign(self):
         with tempfile.TemporaryDirectory() as directory:

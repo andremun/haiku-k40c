@@ -40,6 +40,6 @@ extern const Stage gating,start,golden,fifo,bind,attach,teardown;
 extern const Patch patchList[];
 extern const Region regions[];
 extern const Blob blobs[];
-extern const unsigned patchCount,slotCount,regionCount,blobCount,chid,pushBytes,elements;
+extern const unsigned patchCount,slotCount,regionCount,blobCount,chid,pushBytes,pushBindBytes,pushSetupBytes,elements;
 extern const uint32_t inputMultiplier;
 }

@@ -15,6 +15,17 @@ struct Report {
     uint32_t mc=0,fifoIntr=0,mmuPending=0,pbdmaIntr=0,pbdmaHce=0,state=0,grIntr=0,grTrap=0,fecsIntr=0,engineStatus=0;
     uint32_t image[8]{}; // First words of the golden context image.
 };
+// What the one GPFIFO entry fetches (work/S3DIAG/PLAN.md): nothing (no submit),
+// the object bind, the set-up without the launch, or the whole job with its result.
+// The push buffer page holds the same words in every mode; only the entry length differs.
+enum class Launch:uint8_t {None,Bind,Setup,Full};
+// Host-side progress sink: the owner prints each call at once (no card access).
+class Progress {
+public:
+    virtual void live(Step step,uint64_t microseconds,uint32_t a,uint32_t b)=0;
+protected:
+    ~Progress()=default;
+};
 // S3: the GR engine start, the golden context and, with launch, one compute
 // job on one channel of the GR runlist (work/S3LAUNCH/PLAN.md). Polling only.
 // Every register write is an op of the generated program (gr/Program.h) or one
@@ -22,13 +33,14 @@ struct Report {
 class Compute final:private Port {
 public:
     Compute(memstage::Io& io,memstage::Faults& faults,memstage::Journal& journal,memory::vram::Arena& arena,
-        memstage::Upload& upload,memstage::Mapper& mapper,uint64_t epoch,bool launch)
-        :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),mapper_(mapper),epoch_(epoch),launch_(launch),
+        memstage::Upload& upload,memstage::Mapper& mapper,uint64_t epoch,Launch launch,Progress* progress=nullptr)
+        :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),mapper_(mapper),epoch_(epoch),launch_(launch),progress_(progress),
          runner_(*this),closer_(*this){}
     // True only when every step passed: without launch, the golden context and a
-    // clean teardown; with launch, also every output element equal to input + 1.
+    // clean teardown; with a submit, also GP_GET 1; with the full job, also every
+    // output element equal to input + 1.
     bool run();
-    bool launch() const{return launch_;}
+    Launch launch() const{return launch_;}
     const Report& report() const{return report_;}
 private:
     bool read32(uint32_t addr,uint32_t& value) override;
@@ -39,6 +51,8 @@ private:
     bool fail(memstage::Error);
     bool tick();
     void phase(memstage::Phase p){phase_=p;upload_.phase(p);}
+    void live(Step step,uint32_t a=0,uint32_t b=0){if(progress_)progress_->live(step,last_-start_,a,b);}
+    bool begin(Step step){report_.step=step;live(step);return true;}
     bool token(memory::vram::Role,memory::vram::Token&) const;
     bool physical(memory::vram::Role,uint64_t&) const;
     bool route();
@@ -51,7 +65,7 @@ private:
     bool snapshot();
     bool teardown();
     memstage::Io& io_;memstage::Faults& faults_;memstage::Journal& journal_;memory::vram::Arena& arena_;
-    memstage::Upload& upload_;memstage::Mapper& mapper_;uint64_t epoch_=0;bool launch_=false;
+    memstage::Upload& upload_;memstage::Mapper& mapper_;uint64_t epoch_=0;Launch launch_=Launch::None;Progress* progress_=nullptr;
     Runner runner_,closer_;Report report_{};
     uint64_t start_=0,last_=0;memstage::Phase phase_=memstage::Phase::ChannelBase;
     memstage::channel::Addresses addresses_{};

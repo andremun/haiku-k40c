@@ -9,13 +9,17 @@ using namespace memory::vram;
 NativeOwner::NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram,unsigned stage)
     :faults_(io_,journal_,epoch),policy_(arena_,faults_),upload_(io_,faults_,journal_,arena_),mapper_(io_,faults_,journal_,arena_,upload_,epoch),
      channel_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,stage==1 || stage==4,stage!=4),stage_(stage),guard_(arena_,policy_),
-     compute_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,stage==3)
+     compute_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,launchOf(stage),&live_)
 {
     io_.policy_=&policy_;
     std::memcpy(binding_.key,key,32);std::memcpy(binding_.nonce,nonce,32);std::memcpy(binding_.plan,plan,32);std::memcpy(binding_.challenge,challenge,16);
     binding_.epoch=binding_.owner=epoch;binding_.vram=vram;
     binding_.begin=256*1024+4096;binding_.end=vram-1048576; // ramgf100.c:497-498; no source: extra A7 scratch exclusion.
 }
+gr::Launch NativeOwner::launchOf(unsigned stage)
+{return stage==3?gr::Launch::Full:stage==5?gr::Launch::Bind:stage==6?gr::Launch::Setup:gr::Launch::None;}
+void NativeOwner::Live::live(gr::Step step,uint64_t microseconds,uint32_t a,uint32_t b)
+{dprintf("k40_mem: LIVE step=%u us=%llu a=%x b=%x\n",unsigned(step),(unsigned long long)microseconds,a,b);}
 status_t NativeOwner::observeLoad()
 {
     if(loads_>=16)return B_BUSY; // no source: bounded harmless client-load observation count.
@@ -59,7 +63,7 @@ bool NativeOwner::work()
     // guard decides the channel-phase accesses (gr/Guard.h).
     if(!experiment_ || !experiment_->run())return false;
     if(stage_<2 || stage_==4)return channel_.run();
-    if(stage_>3)return false;
+    if(!computeStage(stage_))return false;
     policy_.extend(&guard_);
     return compute_.run();
 }
@@ -81,7 +85,7 @@ void NativeOwner::drain()
             (unsigned long long)r.token.id,unsigned(r.role),(unsigned long long)r.physical.value,(unsigned long long)r.bytes,
             (unsigned long long)r.writeGeneration,r.staged,r.referenced,r.retained);
     }
-    if(stage_==2 || stage_==3) {
+    if(computeStage(stage_)) {
         const auto& g=compute_.report();
         dprintf("k40_mem: GR step=%u error=%u bound=%u started=%u golden=%u attached=%u submitted=%u consumed=%u computed=%u closed=%u\n",
             unsigned(g.step),unsigned(g.error),g.bound,g.started,g.golden,g.attached,g.submitted,g.consumed,g.computed,g.closed);
@@ -123,7 +127,7 @@ bool NativeOwner::execute()
     if(!passed)arena_.fail();
     drain();
     dprintf("k40_mem: %s faults=%u upload=%u mapper=%u closure=%u allocations=%u journal_overflow=%u\n",
-        !passed?"FAIL":stage_==3?"PASS S3_COMPUTE":stage_==2?"PASS S3_GOLDEN":stage_==1?"PASS S2_COPY":stage_==4?"PASS S2_COPY_DIAGNOSTIC":"PASS S1_CHANNEL_NOP",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
+        !passed?"FAIL":stage_==3?"PASS S3_COMPUTE":stage_==2?"PASS S3_GOLDEN":stage_==5?"PASS S3_BIND":stage_==6?"PASS S3_SETUP":stage_==1?"PASS S2_COPY":stage_==4?"PASS S2_COPY_DIAGNOSTIC":"PASS S1_CHANNEL_NOP",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
         unsigned(mapper_.closure()),arena_.count(),journal_.overflow());return passed;
 }
 }

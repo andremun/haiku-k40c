@@ -4,7 +4,9 @@
 
 The environment variable K40_MEM_STAGE selects it: "s1" (default), "s2", "s2d"
 (the diagnostic variant of s2), "s3a"
-(GR engine start and golden context) or "s3b" (also one compute job).
+(GR engine start and golden context) or "s3b" (also one compute job). "s3c" and
+"s3d" fetch only a prefix of the s3b push buffer: the object bind, or the set-up
+without the launch (work/S3DIAG/PLAN.md).
 One stage has one package folder, one work folder and one pass marker. The
 native owner receives the choice through the generated mem_config.h.
 """
@@ -55,8 +57,10 @@ STAGES = {
         scope="S3a: GR engine started, FECS and GPCCS running, golden context generated and attached to one channel of the GR runlist, no fault, clean teardown; no compute job",
     ),
     "s3b": dict(
-        package="package-s3b",
-        work="S3LAUNCH",
+        # The rung 5 package (package-s3b, work/S3LAUNCH) is consumed: keep it
+        # unchanged. This package adds the live progress lines (work/S3DIAG/PLAN.md).
+        package="package-s3b-diag",
+        work="S3DIAG/s3b",
         copy=False,
         number=3,
         marker="PASS S3_COMPUTE",
@@ -64,8 +68,28 @@ STAGES = {
         title="Combined S3 compute run",
         scope="S3: one compute job on the card, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, no fault, clean teardown; no host DMA payload proof",
     ),
+    "s3c": dict(
+        package="package-s3c",
+        work="S3DIAG/s3c",
+        copy=False,
+        number=5,
+        marker="PASS S3_BIND",
+        allocations=26,
+        title="Combined S3 object-bind run",
+        scope="S3c: as S3a, then one GPFIFO entry of 2 push words (compute object bind) consumed (GP_GET 0->1), no fault, clean teardown; no launch",
+    ),
+    "s3d": dict(
+        package="package-s3d",
+        work="S3DIAG/s3d",
+        copy=False,
+        number=6,
+        marker="PASS S3_SETUP",
+        allocations=26,
+        title="Combined S3 compute set-up run",
+        scope="S3d: as S3a, then one GPFIFO entry of the 100 set-up push words (no launch) consumed (GP_GET 0->1), no fault, clean teardown; no launch",
+    ),
 }
 NAME = os.environ.get("K40_MEM_STAGE", "s1")
 if NAME not in STAGES:
-    raise ValueError("K40_MEM_STAGE must be s1, s2, s2d, s3a or s3b")
+    raise ValueError("K40_MEM_STAGE must be one of: " + ", ".join(STAGES))
 CURRENT = STAGES[NAME]

@@ -1,14 +1,12 @@
 # Status
 
 Current phase: S2 and S3 preparation, resumed 2026-11-12 (docs/decisions/012-resume-s2-s3.md).
-Current task: LADDER (docs/tasks/LADDER.md, docs/LADDER-RUN-SHEET.md). No card run before the ladder of 2026-11-16.
-Last result: S1 PASSED on the card (2026-10-31). A native Haiku driver brought up
-the K40c (A7 POST), mapped VRAM through BAR1, and one channel on the CE0 runlist
-consumed one host NOP: GP_GET 0 -> 1 in 10 us, no fault, clean teardown. Evidence:
-results/20261031-batch1-a7-bar1-d198d424/ (HARDWARE_VERIFIED under Haiku).
-Not done: S2 (copy) and S3 (compute). Q7 and Q11 stay open.
-Work place: cloud container, branch `ccr-5d33feda-7ni61l`, CI check scope (decision 012).
-Last updated: 2026-11-12
+Current task: S3DIAG (work/S3DIAG/PLAN.md): live progress lines and a push-buffer bisect after the rung 5 stop. Packages s3c, s3d, s3b built and rehearsed; review and card runs pending.
+Last result: card day 2026-11-16 (work/LADDER/FINDINGS.md): rungs 1 to 4 PASS (S2 copy and S3a golden context on the card), rung 5 (s3b) STOPPED on a PCIe completion timeout at the root port of 04:00.0.
+Earlier: S1 PASSED on the card (2026-10-31, results/20261031-batch1-a7-bar1-d198d424/).
+Not done: S3 (compute job). Q7 and Q11 stay open.
+Work place: T7610, branch `ccr-5d33feda-7ni61l`, full check scope. The card 04:00.0 stays on vfio-pci (boot-time reservation) until `detach`.
+Last updated: 2026-11-16
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
 

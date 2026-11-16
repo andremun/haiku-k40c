@@ -329,7 +329,13 @@ def copy_phase(serial, chan, engine, require_idle=True):
 
 
 # S3 stages: the compute stage replaces the CE0 channel (src/gr/Compute.cpp).
-GR_STAGES = {"S3A_A7_BAR1_GR_GOLDEN": False, "S3B_A7_BAR1_GR_COMPUTE": True}  # value: with launch.
+# Value: what the one GPFIFO entry fetches (gr::Launch, work/S3DIAG/PLAN.md), and the pass marker.
+GR_STAGES = {
+    "S3A_A7_BAR1_GR_GOLDEN": ("none", "S3_GOLDEN"),
+    "S3C_A7_BAR1_GR_BIND": ("bind", "S3_BIND"),
+    "S3D_A7_BAR1_GR_SETUP": ("setup", "S3_SETUP"),
+    "S3B_A7_BAR1_GR_COMPUTE": ("full", "S3_COMPUTE"),
+}
 GR_ROLES = tuple(range(17, 29))  # GrText..GrMmioList, VramArena.h.
 GR_UNWRITTEN = (18, 24, 25, 26)  # Tls, PagePool, Bundle, Attrib: allocated, never written by the host.
 
@@ -348,15 +354,32 @@ def gr_program():
     return {name: len(ops) for name, ops in stages.items()}, len(patches), module.launch.layout()
 
 
-def gr_phase(serial, events, byrole, launch):
-    """Validate an S3 run: program progress, context, launch result, faults, teardown."""
+def gr_phase(serial, events, byrole, mode):
+    """Validate an S3 run: program progress, context, submit, launch result, faults, teardown."""
     lengths, _, layout = gr_program()
-    flag = "1" if launch else "0"
+    submit, launch = mode != "none", mode == "full"
+    flag, computed = "1" if submit else "0", "1" if launch else "0"
     if len(re.findall(
-        rf"^k40_mem: GR step=15 error=0 bound=1 started=1 golden=1 attached=1 submitted={flag} consumed={flag} computed={flag} closed=1\r?$",
+        rf"^k40_mem: GR step=15 error=0 bound=1 started=1 golden=1 attached=1 submitted={flag} consumed={flag} computed={computed} closed=1\r?$",
         serial, re.M,
     )) != 1:
         raise ValueError("GR report missing or stage not complete")
+    # Live progress lines (gr::Progress, work/S3DIAG/PLAN.md): printed during the work,
+    # so before the GR report of drain(); no failure line (step 0); Done once.
+    live = [(int(m.group(1)), m.start()) for m in
+            re.finditer(r"^k40_mem: LIVE step=(\d+) us=\d+ a=[0-9a-f]+ b=[0-9a-f]+\r?$", serial, re.M)]
+    steps = [step for step, _ in live]
+    report_at = serial.find("k40_mem: GR step=")
+    if (
+        serial.count("k40_mem: LIVE") != len(live)
+        or not live
+        or 0 in steps
+        or steps.count(15) != 1
+        or (11 in steps) != submit
+        or (12 in steps) != launch
+        or any(at > report_at for _, at in live)
+    ):
+        raise ValueError("live progress lines missing, malformed or with a failure")
     order = ("fifo", "bind", "gating", "start", "golden", "attach")
     total = sum(lengths[name] for name in order)
     program = re.findall(r"^k40_mem: GR_PROGRAM ops=(\d+) reads=\d+ writes=\d+ guard=(\d+)/(\d+) total_us=(\d+)\r?$", serial, re.M)
@@ -365,7 +388,7 @@ def gr_phase(serial, events, byrole, launch):
     if serial.count("k40_mem: GR_FAILURE runner=0 index=0 addr=0 value=0 expected=0 closing=0 closing_index=0") != 1:
         raise ValueError("GR failure record")
     got = re.findall(r"^k40_mem: GR_GET after=(\d+)/(\d+) polls=\d+ us=\d+ result_polls=\d+ result_us=\d+ wrong=(\d+) first=\d+ value=[0-9a-f]+\r?$", serial, re.M)
-    if len(got) != 1 or tuple(map(int, got[0])) != ((1, 1, 0) if launch else (0, 0, 0)):
+    if len(got) != 1 or tuple(map(int, got[0])) != ((1, 1, 0) if submit else (0, 0, 0)):
         raise ValueError("GP_GET progress or result compare differs")
     status = re.findall(
         r"^k40_mem: GR_STATUS mc=[0-9a-f]+ fifo=([0-9a-f]+) mmu=0 pbdma=0 hce=0 state=[0-9a-f]+ gr=0 trap=0 fecs=0 engine=([0-9a-f]+)\r?$",
@@ -387,7 +410,7 @@ def gr_phase(serial, events, byrole, launch):
     context = 0x80000000 | (byrole[5] >> 12)  # bar/gf100.c:56-58.
     writes = [(e[2], e[3]) for e in chan if e[6] == 1 and e[2] not in (WINDOW, FLUSH)]
     wanted = [(PDB, (byrole[3] >> 12) << 4), (INVALIDATE, 0x80000005), (CONTEXT, context)]
-    wanted += [(GP_PUT, 1)] if launch else []
+    wanted += [(GP_PUT, 1)] if submit else []
     wanted += [(CONTEXT, context & 0x7FFFFFFF)]
     if writes != wanted:
         raise ValueError("journaled mapping, GP_PUT or BAR1 context writes differ")
@@ -397,7 +420,7 @@ def gr_phase(serial, events, byrole, launch):
             raise ValueError("output buffer was not read completely")
     return dict(
         program_ops=total, guard_position=[6, lengths["teardown"]], golden_image_words=image[0].split(),
-        total_us=int(program[0][3]), launch=launch,
+        total_us=int(program[0][3]), launch=launch, entry=mode,
         context_va=layout["Context"]["va"] + 0x80000, records=len(GR_ROLES),
     )
 
@@ -519,14 +542,15 @@ def memory_final(serial, suite, request):
     diagnostic = suite.get("stage") == COPY_DIAGNOSTIC
     copy = suite.get("stage") == COPY_STAGE or diagnostic
     gr = suite.get("stage") in GR_STAGES
-    launch = GR_STAGES.get(suite.get("stage"), False)
+    mode, gr_marker = GR_STAGES.get(suite.get("stage"), ("none", ""))
+    launch = mode == "full"
     marker = (
         f"k40_mem: PASS {'S2_COPY_DIAGNOSTIC' if diagnostic else 'S2_COPY'} faults=0 upload=0 mapper=0 closure=2 allocations=16 journal_overflow=0"
         if copy
         else "k40_mem: PASS S1_CHANNEL_NOP faults=0 upload=0 mapper=0 closure=2 allocations=14 journal_overflow=0"
     )
     if gr:
-        marker = f"k40_mem: PASS {'S3_COMPUTE' if launch else 'S3_GOLDEN'} faults=0 upload=0 mapper=0 closure=2 allocations=26 journal_overflow=0"
+        marker = f"k40_mem: PASS {gr_marker} faults=0 upload=0 mapper=0 closure=2 allocations=26 journal_overflow=0"
     if serial.count("k40_mem: PASS ") != 1:
         raise ValueError("pass marker of another stage or repeated")
     if serial.count(marker) != 1 or serial.count("K40-MEM-END") != 1:
@@ -687,14 +711,16 @@ def memory_final(serial, suite, request):
     if gr:
         if "k40_mem: COPY" in serial:
             raise ValueError("copy report in an S3 run")
+        scopes = dict(
+            none="S3a: GR engine started, golden context generated and attached to one channel of the GR runlist, no fault, clean teardown; no compute job",
+            bind="S3c: as S3a, then the compute object bind (2 push words) consumed, GP_GET 0->1, no fault, clean teardown; no launch",
+            setup="S3d: as S3a, then the compute set-up (100 push words, no launch) consumed, GP_GET 0->1, no fault, clean teardown; no launch",
+            full="S3: one compute job on the card, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
+            "no fault, clean teardown; no host DMA payload proof",
+        )
         return dict(
-            scope=(
-                "S3: one compute job on the card, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
-                "no fault, clean teardown; no host DMA payload proof"
-                if launch
-                else "S3a: GR engine started, golden context generated and attached to one channel of the GR runlist, no fault, clean teardown; no compute job"
-            ),
-            gr=gr_phase(serial, events, byrole, launch),
+            scope=scopes[mode],
+            gr=gr_phase(serial, events, byrole, mode),
             owner=owner,
             allocations=[dict(id=r[0], role=r[1], physical=r[2], bytes=r[3], generation=r[4]) for r in allocations],
             events=len(events),
@@ -702,6 +728,8 @@ def memory_final(serial, suite, request):
             S1_complete=False,
             S2_complete=False,
             S3_golden_complete=True,
+            S3_bind_complete=mode != "none",
+            S3_setup_complete=mode in ("setup", "full"),
             S3_complete=launch,
         )
     if "k40_mem: GR" in serial:
