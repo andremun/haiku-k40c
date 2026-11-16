@@ -63,3 +63,37 @@ Next (read-only, no card): compare the first GR channel submission of the
 rung 1 trace (`reference/linux-run-ladder/mmiotrace.txt.xz`) with our attach
 and submit: the context-switch registers and FECS methods Linux uses before or
 at its first GR channel schedule.
+
+## 2026-11-16: the Linux trace around the first GR channel schedule
+
+Source: `reference/linux-run/mmiotrace.txt.xz` (S3 reference run; the job
+channel is channel 2, instance at BAR3 offset 0x103a3000, MAP 22).
+
+Same as ours (KNOWN):
+- Host registers. Between the golden-context unload (last 0x409b00 read, line
+  730273) and the attach (line 892359) Linux touches GR only to read 0x17e91c
+  and 0x17e920 for the patch list; the rest is timer and thermal interrupts.
+  After the attach it writes no GR or FIFO register before the job: only BAR3
+  page-table writes for Mesa's buffers.
+- Golden generation ends with the context unload (0x409b04 bit 31 cleared,
+  0x409000 = 0x100, poll 0x409b00), as `tools/gr/model.py` `generate()`.
+- The patch list: 36 pairs, the same registers in the same order as our
+  `patchList` (lines 811337-811410); header words 0x00 = 0x24 and
+  0x04 = list address >> 8 (lines 892191-892192), as our attach hook.
+- RAMFC words, except the two below (lines 615146-615160).
+
+Different (KNOWN), cause of the hang not shown:
+1. Context memory. Linux copies the golden image into a new buffer of 0x4f000
+   bytes (MAP 26) and points 0x210 at it (0x380004, line 892363). It zeroes
+   0x210/0x214 after generation (lines 810889-810890). We point the channel at
+   the generation memory itself (0x80000 reserved + image) and never zero it.
+2. Page-table entries. Linux maps the page pool, bundle buffer and patch list
+   with PRIV (`gf100.c:384,401,410,464`); the trace has 301 PTE writes with
+   valid and PRIV bits from line 618714. Ours never set PRIV.
+3. RAMFC 0xe4: Linux's user channel 0 (not privileged); ours 0x20 (privileged,
+   as the S1 kernel-channel image).
+4. RAMFC 0x4c GPFIFO limit: Linux 0xa (8 KiB), ours 9 (4 KiB). Size only.
+
+INFERRED: none of the four explains a stop of host reads on its own. Items 1
+and 2 touch what FECS reads on the first context load, which is where s3c
+stopped. The trace cannot show what the card reads from memory.
