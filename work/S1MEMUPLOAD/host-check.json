@@ -16,8 +16,8 @@
   "source_sha256": {
     "reference/nouveau/nvkm/subdev/bar/g84.c": "28fb3702c0ab41c1ab4ee5840f57d3c809b93ae9a779b2a57115164426c0f6ae",
     "reference/nouveau/nvkm/subdev/instmem/nv50.c": "0fd5655d95638a3df042c8e42d064e15be8cf44bb5211f4585dd4491f60c1b96",
-    "src/memory/VramArena.cpp": "8759b3a7ad94e151558ebc5bf1015b85c9b82ac51e504723d20328b709adb183",
-    "src/memory/VramArena.h": "c1f8f6aa4f203b189995f08ffddd4e84e8cdb9d676238f44b949abdaa9988b59",
+    "src/memory/VramArena.cpp": "5256d9d82f12c008e7f686b84e06e3965208b73298c718ea3893d75d159eaeac",
+    "src/memory/VramArena.h": "8744383905eb47c703698bdd521eab272613f9aede60bf0f78369d31552672f0",
     "src/memstage/Faults.h": "b77aec14d12007e47b6dbd3e82428b778b0767abbf3cfb3263498778b3490958",
     "src/memstage/Port.h": "a73c555afb34bec29bc5649abeb73bf049a301f3f65d4dc45e9a032e902e413e",
     "src/memstage/Upload.cpp": "e7b78e112e7bb0095716f1dc48fb0c8c61febfb2b7ef4035a12d3659e081b8a7",

@@ -126,13 +126,16 @@ bool Guard::data(const Record& r,uint64_t offset,uint32_t value)
             && memstage::channel::userdPte(userd.physical.value,entry) && value==uint32_t(entry>>((offset%8)*8));
     }
     const bool channel=r.role>=Role::ChanDirectory && r.role<=Role::Runlist;
-    const bool compute=r.role>=Role::GrText && r.role<=Role::GrMmioList;
+    const bool compute=r.role>=Role::GrText && r.role<=Role::GrChanContext;
     if(!channel && !compute)return false;
     if(!r.referenced)return stage_==0 && index_==0; // Images: before the first program write.
     // Later writes into referenced records: the context pointer words of the instance
     // block (fifo/gk104.c:134-170) and the two list words of the context image (engine/gr/gf100.c:336-338).
     if(r.role==Role::ChanInstance)return offset>=0x210 && offset<0x218; // fifo/gk104.c:138.
     if(r.role==Role::GrContext)return offset>=0x80000 && offset<0x80008; // engine/gr/ctxgf100.c:1436; engine/gr/gf100.c:337-338.
+    // The aligned stages (work/S3DIAG): the copy of the golden image and its two list words,
+    // after the golden stage and before the attach allows the channel again (engine/gr/gf100.c:320-351).
+    if(r.role==Role::GrChanContext){unsigned s=stage_,i=index_;return offset<0x4f000 && next(s,i) && s==attachStage;}
     return false;
 }
 bool Guard::barRead(uint64_t offset) const

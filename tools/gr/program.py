@@ -283,8 +283,12 @@ def launch_cpp():
     lines = [f"const unsigned chid={CHID};", "const Region regions[]={"]
     for index, name in enumerate(names):
         region = regions[name]
-        zero = name in ("Text", "Txc", "Aux", "Qmd", "Input", "Output", "Context", "MmioList")  # Linux zeroes the context (ctxgf100.c:1474); small pages by choice.
-        lines.append(f"{{{FIRST_ROLE + index},0x{region['bytes']:x},0x{region['va']:x}ull,{str(region['writable']).lower()},{str(zero).lower()}}}, // {name}")
+        zero = name in ("Text", "Txc", "Aux", "Qmd", "Input", "Output", "Context", "MmioList", "ChanContext")  # Linux zeroes the context (ctxgf100.c:1474); small pages by choice.
+        # Linux maps these per-channel GR buffers with PRIV and writable (gf100.c:384,401,410,464;
+        # vmmgf100.c:259,315; trace line 618714). Used only by the aligned stages (work/S3DIAG).
+        priv = name in ("PagePool", "Bundle", "MmioList")
+        lines.append(f"{{{FIRST_ROLE + index},0x{region['bytes']:x},0x{region['va']:x}ull,{str(region['writable']).lower()},{str(zero).lower()},"
+                     f"{str(priv).lower()}}}, // {name}")
     lines.append("};")
     lines.append(f"const unsigned regionCount={len(names)};")
     blobs = []
@@ -308,6 +312,7 @@ def launch_cpp():
     bind = 2  # header and class: the first method of nve4_compute.c:51-52.
     if words[0] != launch.header(1, 1, 0) or words[1] != launch.CLASS or not bind < setup < len(words):
         raise ValueError("push buffer prefixes differ from the S3DIAG plan")
+    lines.append(f"const unsigned imageBytes=0x{KNOWN[0x409804]:x}; // 0x409804 context size, KNOWN (trace 616433).")
     lines.append(f"const unsigned pushBytes={len(words) * 4},pushBindBytes={bind * 4},pushSetupBytes={setup * 4},"
                  f"elements={launch.ELEMENTS}; // work/S3DIAG/PLAN.md prefixes.")
     lines.append(f"const uint32_t inputMultiplier=0x{0x9E3779B1:x}; // launch.py input_word().")

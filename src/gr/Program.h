@@ -32,7 +32,8 @@ constexpr uint32_t attachHook=2; // no source: hook number of program.py; fifo/g
 // ((slot >> shift) & a) | b, or b alone when slot is noSlot.
 struct Patch {uint32_t addr;uint8_t slot,shift;uint32_t a,b;};
 // One owned record of the compute stage and its place in the channel address space.
-struct Region {uint8_t role;uint32_t bytes;uint64_t va;bool writable,zero;};
+// priv: Linux maps the record with PRIV and writable (used by the aligned stages only).
+struct Region {uint8_t role;uint32_t bytes;uint64_t va;bool writable,zero,priv;};
 // Constant words of one record, written before the channel is bound.
 struct Blob {uint8_t role;uint32_t offset;const uint32_t* words;uint32_t count;};
 // GR stages (verified against the trace), then the channel sequences on the GR runlist.
@@ -40,6 +41,6 @@ extern const Stage gating,start,golden,fifo,bind,attach,teardown;
 extern const Patch patchList[];
 extern const Region regions[];
 extern const Blob blobs[];
-extern const unsigned patchCount,slotCount,regionCount,blobCount,chid,pushBytes,pushBindBytes,pushSetupBytes,elements;
+extern const unsigned patchCount,slotCount,regionCount,blobCount,chid,pushBytes,pushBindBytes,pushSetupBytes,elements,imageBytes;
 extern const uint32_t inputMultiplier;
 }

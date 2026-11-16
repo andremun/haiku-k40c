@@ -20,8 +20,8 @@ using namespace k40::memnative;
 namespace ch=k40::memstage::channel;
 namespace gr=k40::gr;
 struct Access {char op;uint32_t addr,value;};
-enum Fault {None,NoLaunch,FecsSilent,WrongSum,Stall,ReadOnlyOutput,BindOnly,SetupOnly};
-static gr::Launch launchOf(Fault f){return f==NoLaunch?gr::Launch::None:f==BindOnly?gr::Launch::Bind:f==SetupOnly?gr::Launch::Setup:gr::Launch::Full;}
+enum Fault {None,NoLaunch,FecsSilent,WrongSum,Stall,ReadOnlyOutput,BindOnly,SetupOnly,AlignedBind};
+static gr::Launch launchOf(Fault f){return f==NoLaunch?gr::Launch::None:f==BindOnly || f==AlignedBind?gr::Launch::Bind:f==SetupOnly?gr::Launch::Setup:gr::Launch::Full;}
 // Records the live progress calls; with print, in the line format of memnative/NativeOwner.cpp.
 struct Live final:gr::Progress {
     std::vector<std::pair<unsigned,uint32_t>> steps;bool print=false;
@@ -32,7 +32,7 @@ struct Live final:gr::Progress {
 };
 struct Card:Device {
     Policy* policy=nullptr;Arena* arena=nullptr;Fault fault=None;unsigned denials=0;
-    std::vector<Access> trace;size_t next=0;bool follow=false,armed=false,mismatch=false,launched=false;
+    std::vector<Access> trace;size_t next=0;bool follow=false,armed=false,mismatch=false,launched=false,alignedSeen=false;
     std::map<uint32_t,uint32_t> regs{{0x2390,0x1},{0x2394,0x6e},{0x2398,0x10},{0x2a04,0x800003ff},{0x4013c,0xffffffff},
         {0x204,0x7},{0x200,0xe011212d}}; // trace 230517-230519, 560973, 46125.
     uint32_t runlistBase=0,entries=0;
@@ -120,7 +120,8 @@ struct Card:Device {
         const auto entry=word64(walk(inst,gp));const unsigned words=unsigned((entry>>42)&0x1fffff);
         const auto base=entry&0xffffffffffULL;std::map<uint32_t,uint32_t> m;uint32_t object=0;unsigned nonInc=0;
         // Bind, set-up or whole job: prefixes of the same push words (work/S3DIAG/PLAN.md).
-        assert(words==(fault==BindOnly?gr::pushBindBytes:fault==SetupOnly?gr::pushSetupBytes:gr::pushBytes)/4);
+        if(fault==AlignedBind)aligned(inst);
+        assert(words==(fault==BindOnly || fault==AlignedBind?gr::pushBindBytes:fault==SetupOnly?gr::pushSetupBytes:gr::pushBytes)/4);
         for(unsigned i=0;i<words;) {
             const auto header=at(inst,base+i*4);++i;
             const auto op=header>>29,count=(header>>16)&0x1fff,subc=(header>>13)&7,method=(header&0xfff)<<2;
@@ -134,9 +135,22 @@ struct Card:Device {
                 if(target==0x2bc){assert(value==3 && object==0xa1c0);launch(inst,m);}
             }
         }
-        if(fault==BindOnly)assert(words==2 && object==0xa1c0 && !launched && nonInc==0 && m.empty());
+        if(fault==BindOnly || fault==AlignedBind)assert(words==2 && object==0xa1c0 && !launched && nonInc==0 && m.empty());
         else if(fault==SetupOnly)assert(object==0xa1c0 && !launched && nonInc==64 && !m.count(0x2bc) && !m.count(0x2b4));
         else assert(launched && nonInc==64);
+    }
+    // work/S3DIAG/FINDINGS.md: the state Linux has at its first GR schedule, decoded on its own.
+    void aligned(uint64_t inst) {
+        assert(uint32_t(word64(inst+0xe0)>>32)==0); // RAMFC 0xe4: user channel (fifo/gk104.c:98).
+        const auto pointer=word64(inst+0x210);assert((pointer&7)==4);
+        const auto copy=pointer&~7ull;assert(copy==gr::regions[12].va); // the channel's own image.
+        assert(at(inst,copy)==gr::patchCount && at(inst,copy+4)==uint32_t(gr::regions[11].va>>8));
+        const auto golden=gr::regions[10].va+0x80000;
+        assert(at(inst,golden)!=gr::patchCount || at(inst,golden+4)!=uint32_t(gr::regions[11].va>>8)); // no list words in the generation memory
+        for(uint32_t o=8;o<gr::imageBytes;o+=4)assert(at(inst,copy+o)==at(inst,golden+o));
+        for(unsigned r:{7u,8u,11u}){const auto e=pte(inst,gr::regions[r].va);assert((e&7)==3);} // valid, PRIV, writable (vmmgf100.c:315).
+        for(unsigned r:{0u,9u,10u}){const auto e=pte(inst,gr::regions[r].va);assert(!(e&2));} // no PRIV elsewhere.
+        alignedSeen=true;
     }
     void launch(uint64_t inst,std::map<uint32_t,uint32_t>& m) {
         // Set-up state the launch depends on (nve4_compute.c:54-120).
@@ -183,7 +197,7 @@ static std::vector<Access> load(const char* path)
     }
     return rows;
 }
-struct Result {gr::Report report;unsigned denials=0,stage=0,index=0;bool mismatch=false,closed=false,launched=false;size_t next=0;std::vector<std::pair<unsigned,uint32_t>> live;};
+struct Result {gr::Report report;unsigned denials=0,stage=0,index=0;bool mismatch=false,closed=false,launched=false,aligned=false;size_t next=0;std::vector<std::pair<unsigned,uint32_t>> live;};
 static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bool dump=false,bool report=false)
 {
     using namespace k40::memstage;
@@ -192,7 +206,8 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
     PolicyProbe::aperture(policy,256*1048576);Upload upload(io,faults,journal,arena);Mapper mapper(io,faults,journal,arena,upload,2);
     Experiment experiment(io,faults,arena,upload,mapper,2,2,11520ULL*1048576,256*1048576);
     Live live;live.print=report;
-    gr::Compute compute(io,faults,journal,arena,upload,mapper,2,launchOf(fault),&live);
+    gr::Compute compute(io,faults,journal,arena,upload,mapper,2,launchOf(fault),&live,
+        fault==AlignedBind?gr::Align{true,true,true}:gr::Align{});
     assert(experiment.run());
     policy.extend(&guard);
     const bool passed=compute.run();
@@ -201,7 +216,7 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
         assert(!policy.write(reg,1,true,true));
     assert(!policy.barWrite(ch::gpPut,1,true) && !policy.barWrite(ch::gpPut,2,true));
     out.report=compute.report();out.denials=io.denials;out.mismatch=io.mismatch;out.closed=mapper.closure()==Closure::OwnedDisabled;
-    out.launched=io.launched;out.next=io.next;out.stage=guard.stage();out.index=guard.index();out.live=live.steps;
+    out.launched=io.launched;out.next=io.next;out.stage=guard.stage();out.index=guard.index();out.live=live.steps;out.aligned=io.alignedSeen;
     if(dump) {
         const auto& r=out.report;
         std::printf("passed=%d step=%u error=%u runner=%u@%u addr=%x value=%x expected=%x closing=%u denials=%u mismatch=%d next=%zu/%zu guard=%u/%u upload=%u mapper=%u\n",passed,unsigned(r.step),unsigned(r.error),
@@ -231,7 +246,7 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
             g.mmuPending,g.pbdmaIntr,g.pbdmaHce,g.state,g.grIntr,g.grTrap,g.fecsIntr,g.engineStatus);
         std::printf("k40_mem: GR_IMAGE %x %x %x %x %x %x %x %x\n",g.image[0],g.image[1],g.image[2],g.image[3],g.image[4],g.image[5],g.image[6],g.image[7]);
         std::printf("k40_mem: %s faults=0 upload=0 mapper=0 closure=2 allocations=%u journal_overflow=0\n",
-            !passed?"FAIL":fault==NoLaunch?"PASS S3_GOLDEN":fault==BindOnly?"PASS S3_BIND":fault==SetupOnly?"PASS S3_SETUP":"PASS S3_COMPUTE",arena.count());
+            !passed?"FAIL":fault==NoLaunch?"PASS S3_GOLDEN":fault==BindOnly || fault==AlignedBind?"PASS S3_BIND":fault==SetupOnly?"PASS S3_SETUP":"PASS S3_COMPUTE",arena.count());
         std::puts("k40_mem: SUBMIT result=0 state=3\nk40_mem: RETAINED owner=2 state=3\nK40-MEM-END");
     }
     return passed;
@@ -242,7 +257,7 @@ int main(int argc,char** argv)
     const auto trace=load(argv[1]);Result r;
     if(argc>2 && std::string(argv[2])=="--report") {
         const std::string mode=argc>3?argv[3]:"";
-        return scenario(trace,mode=="nolaunch"?NoLaunch:mode=="bind"?BindOnly:mode=="setup"?SetupOnly:None,r,false,true)?0:1;
+        return scenario(trace,mode=="nolaunch"?NoLaunch:mode=="bind"?BindOnly:mode=="aligned"?AlignedBind:mode=="setup"?SetupOnly:None,r,false,true)?0:1;
     }
     const bool first=scenario(trace,None,r,argc>2);
     assert(first);
@@ -257,6 +272,8 @@ int main(int argc,char** argv)
         assert(r.report.golden && r.report.attached && r.report.submitted && r.report.consumed && !r.report.computed);
         assert(!r.launched && r.closed && r.denials==0 && !r.mismatch && r.report.resultPolls==0 && has(11) && !has(12) && !has(0));
     }
+    assert(scenario(trace,AlignedBind,r)); // s3e: the channel state of the Linux reference run, then the bind
+    assert(r.aligned && r.report.consumed && !r.launched && r.closed && r.denials==0 && !r.mismatch && has(11) && !has(0));
     assert(scenario(trace,NoLaunch,r)); // rung 4: golden context and teardown, no submission
     assert(r.report.golden && r.report.attached && !r.report.submitted && !r.launched && r.closed && r.denials==0);
     const bool silent=scenario(trace,FecsSilent,r,argc>2);assert(!silent); // FECS never reports ready: stop, then teardown
@@ -268,5 +285,5 @@ int main(int argc,char** argv)
     assert(r.report.submitted && !r.report.consumed && r.closed && !r.launched);
     unsigned polls=0;for(auto& e:r.live)if(e.first==11 && e.second==0)++polls;
     assert(polls>=2); // GP_PUT line, then GP_GET 0 each 100 ms of the stall
-    std::puts("GR compute stage: golden context, attach, launch and result pass through Policy and Guard; no-launch, bind-only, set-up-only, silent FECS, wrong sum and stall cases pass; live lines checked; HOST_ONLY");
+    std::puts("GR compute stage: golden context, attach, launch and result pass through Policy and Guard; no-launch, bind-only, aligned bind, set-up-only, silent FECS, wrong sum and stall cases pass; live lines checked; HOST_ONLY");
 }

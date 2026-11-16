@@ -248,7 +248,7 @@ class Tests(unittest.TestCase):
         suite["stage"] = "S3B_A7_BAR1_GR_COMPUTE"
         result = evidence.memory_final(compute, suite, raw)
         self.assertTrue(result["S3_complete"])
-        self.assertEqual(len(result["allocations"]), 26)
+        self.assertEqual(len(result["allocations"]), 27)
         with self.assertRaises(ValueError):  # a golden-only report is not a compute report
             evidence.memory_final(golden, suite, raw)
         mutations = [
@@ -264,7 +264,7 @@ class Tests(unittest.TestCase):
             compute.replace("offset=28c value=1", "offset=28c value=2"),
             compute.replace("operation=8 role=0 detail=1", "operation=8 role=0 detail=0", 1),
             compute.replace("role=23 physical", "role=22 physical"),
-            compute.replace("allocations=26", "allocations=14"),
+            compute.replace("allocations=27", "allocations=14"),
             compute.replace("PASS S3_COMPUTE", "PASS S3_GOLDEN"),
         ]
         for index, changed in enumerate(mutations):
@@ -281,8 +281,20 @@ class Tests(unittest.TestCase):
         # work/S3DIAG/PLAN.md: prefixes of the push buffer, and the live lines.
         reports = {
             mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
-            for mode in ("bind", "setup")
+            for mode in ("bind", "setup", "aligned")
         }
+        # s3e: the bind with the channel state of the Linux reference run (work/S3DIAG/FINDINGS.md).
+        suite["stage"] = "S3E_A7_BAR1_GR_BIND_ALIGNED"
+        result = evidence.memory_final(reports["aligned"], suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and result["gr"]["aligned"])
+        self.assertEqual(len(result["allocations"]), 27)
+        with self.assertRaises(ValueError):  # the plain bind report has no image copy
+            evidence.memory_final(reports["bind"], suite, raw)
+        for changed in (reports["aligned"].replace("role=29 physical", "role=28 physical"),
+                        re.sub(r"(role=29 physical=[0-9a-f]+ bytes=\d+ generation=)\d+", r"\g<1>21", reports["aligned"])):
+            self.assertNotEqual(changed, reports["aligned"])
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
         for mode, stage_name, marker in (("bind", "S3C_A7_BAR1_GR_BIND", "PASS S3_BIND"),
                                          ("setup", "S3D_A7_BAR1_GR_SETUP", "PASS S3_SETUP")):
             with self.subTest(mode=mode):

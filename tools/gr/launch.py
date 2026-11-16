@@ -63,6 +63,9 @@ def layout():
         ("Aux", PAGE, False), ("Qmd", PAGE, False), ("Input", PAGE, False), ("Output", PAGE, True),
         ("PagePool", 0x8000, True), ("Bundle", 0x3000, True), ("Attrib", attrib, True),
         ("Context", context, True), ("MmioList", PAGE, False),
+        # The channel's own context: a copy of the golden image, as Linux makes one for each
+        # channel (gf100.c:320-351 gf100_gr_chan_bind; trace MAP 26, 0x4f000). work/S3DIAG/FINDINGS.md.
+        ("ChanContext", align(0x4EA00, PAGE), True),
     ]
     regions, va = {}, 0x10100000  # no source: software channel VA, above GPFIFO and push pages.
     for name, size, writable in sizes:

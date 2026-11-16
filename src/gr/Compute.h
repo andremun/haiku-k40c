@@ -19,6 +19,11 @@ struct Report {
 // the object bind, the set-up without the launch, or the whole job with its result.
 // The push buffer page holds the same words in every mode; only the entry length differs.
 enum class Launch:uint8_t {None,Bind,Setup,Full};
+// Differences from the Linux reference run that the aligned stages remove
+// (work/S3DIAG/FINDINGS.md, trace comparison): a copy of the golden image as the
+// channel's context, PRIV and writable PTEs for the page pool, bundle and register
+// list, and a channel that is not privileged (RAMFC 0xe4 = 0).
+struct Align {bool copy=false,priv=false,user=false;};
 // Host-side progress sink: the owner prints each call at once (no card access).
 class Progress {
 public:
@@ -33,14 +38,15 @@ protected:
 class Compute final:private Port {
 public:
     Compute(memstage::Io& io,memstage::Faults& faults,memstage::Journal& journal,memory::vram::Arena& arena,
-        memstage::Upload& upload,memstage::Mapper& mapper,uint64_t epoch,Launch launch,Progress* progress=nullptr)
-        :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),mapper_(mapper),epoch_(epoch),launch_(launch),progress_(progress),
+        memstage::Upload& upload,memstage::Mapper& mapper,uint64_t epoch,Launch launch,Progress* progress=nullptr,Align align={})
+        :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),mapper_(mapper),epoch_(epoch),launch_(launch),progress_(progress),align_(align),
          runner_(*this),closer_(*this){}
     // True only when every step passed: without launch, the golden context and a
     // clean teardown; with a submit, also GP_GET 1; with the full job, also every
     // output element equal to input + 1.
     bool run();
     Launch launch() const{return launch_;}
+    const Align& align() const{return align_;}
     const Report& report() const{return report_;}
 private:
     bool read32(uint32_t addr,uint32_t& value) override;
@@ -60,15 +66,17 @@ private:
     bool invalidate();
     bool stage(const Stage& ops,Step step,unsigned number);
     bool contextPointer();
+    bool copyContext();
     bool submit();
     bool result();
     bool snapshot();
     bool teardown();
     memstage::Io& io_;memstage::Faults& faults_;memstage::Journal& journal_;memory::vram::Arena& arena_;
-    memstage::Upload& upload_;memstage::Mapper& mapper_;uint64_t epoch_=0;Launch launch_=Launch::None;Progress* progress_=nullptr;
+    memstage::Upload& upload_;memstage::Mapper& mapper_;uint64_t epoch_=0;Launch launch_=Launch::None;Progress* progress_=nullptr;Align align_{};
     Runner runner_,closer_;Report report_{};
     uint64_t start_=0,last_=0;memstage::Phase phase_=memstage::Phase::ChannelBase;
     memstage::channel::Addresses addresses_{};
     bool attempted_=false,exposed_=false;
+    uint32_t copy_[4096]{}; // no source: software block of the golden-image copy (aligned stages).
 };
 }

@@ -52,6 +52,8 @@ bool Mapper::stage(Phase phase)
 }
 bool Mapper::poll(uint32_t mask)
 {
+    // The bound starts now: last_ may be older (work/S3DIAG/FINDINGS.md, aligned stages).
+    if(!tick())return false;
     const auto start=last_;
     for(unsigned i=0;i<100000;++i) { // no source: software poll-count bound.
         uint32_t value;

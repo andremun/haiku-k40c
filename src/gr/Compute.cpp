@@ -18,7 +18,7 @@ constexpr uint64_t liveUs=100000; // no source: one live poll line each 100 ms (
 uint32_t entryBytes(Launch launch)
 {return launch==Launch::Bind?pushBindBytes:launch==Launch::Setup?pushSetupBytes:pushBytes;}
 // One mapped extent of the channel address space.
-struct Extent {uint64_t va,physical,bytes;bool writable;};
+struct Extent {uint64_t va,physical,bytes;bool writable,priv;};
 // The small-page table of the channel from its first entry: 8 bytes for each
 // 4096-byte page (mmu/vmmgk104.c:39-43), read-only unless the GPU writes the record.
 class TableWords final:public WordSource {
@@ -29,6 +29,7 @@ public:
         for(unsigned i=0;i<count_;++i)if(va>=extents_[i].va && va-extents_[i].va<extents_[i].bytes) {
             uint64_t entry=0;const uint64_t page=extents_[i].physical+(va-extents_[i].va);
             const bool ok=extents_[i].writable?channel::userdPte(page,entry):tables::pte({page},entry);
+            if(extents_[i].priv)entry|=2; // vmmgf100.c:315 PRIV (aligned stages).
             return ok?uint32_t(entry>>((index&1)*32)):0;
         }
         return 0;
@@ -118,10 +119,37 @@ bool Compute::contextPointer()
     if(!context || !token(Role::ChanInstance,instance))return false;
     return upload_.store(instance,0x210,2,PairWords(context|4),true); // fifo/gk104.c:138,161-167.
 }
+bool Compute::copyContext()
+{
+    // engine/gr/ctxgf100.c:1551-1552 (done_inst): the generation pointer is cleared; then
+    // engine/gr/gf100.c:320-351: the channel gets its own copy of the golden image
+    // (Linux: trace lines 810889-810890, then MAP 26).
+    Token instance,from,to;
+    if(!token(Role::ChanInstance,instance) || !token(Role::GrContext,from) || !token(Role::GrChanContext,to))return fail(MemError::Bounds);
+    if(!upload_.store(instance,0x210,2,PairWords(0),true))return fail(upload_.error()); // engine/gr/ctxgf100.c:1551-1552.
+    constexpr uint32_t words=sizeof(copy_)/4; // no source: 16 KiB software blocks, few journal events, not on the kernel stack.
+    for(uint32_t at=0;at<imageBytes;at+=words*4) {
+        const uint32_t n=(imageBytes-at)/4<words?(imageBytes-at)/4:words;
+        if(!tick() || !upload_.load(from,reserved+at,n,copy_) || !upload_.store(to,at,n,ArrayWords(copy_),true))
+            return fail(upload_.error()==MemError::None?MemError::Read:upload_.error());
+    }
+    live(Step::Golden,1,imageBytes); // a = 1: the copy is complete.
+    return true;
+}
 bool Compute::hook(uint32_t number)
 {
     if(number==contextPointerHook)return contextPointer();
     if(number!=attachHook)return false;
+    if(align_.copy) { // engine/gr/gf100.c:336-338 list words, then fifo/gk104.c:134-170 pointer to the copy.
+        Token copy,instance;uint64_t list=0,va=0;
+        for(unsigned i=0;i<regionCount;++i) {
+            if(Role(regions[i].role)==Role::GrMmioList)list=regions[i].va;
+            if(Role(regions[i].role)==Role::GrChanContext)va=regions[i].va;
+        }
+        return list && va && token(Role::GrChanContext,copy) && token(Role::ChanInstance,instance)
+            && upload_.store(copy,0,2,PairWords(uint64_t(patchCount)|(uint64_t(uint32_t(list>>8))<<32)),true)
+            && upload_.store(instance,0x210,2,PairWords(va|4),true); // fifo/gk104.c:138,161-167.
+    }
     // The image now holds the golden context. Its first two words get the count and
     // the address of the register list of this channel (engine/gr/gf100.c:336-338).
     Token context;uint64_t list=0;
@@ -147,11 +175,12 @@ bool Compute::memory()
     for(unsigned i=0;i<regionCount;++i)if(regions[i].zero && !upload_.zero(region[i]))return fail(upload_.error());
     // Channel address space: GPFIFO and push pages as S1, then every record.
     Extent extents[34];unsigned count=0;uint64_t end=channel::pushVa+4096;
-    extents[count++]={channel::gpfifoVa,addresses_.gpfifo,4096,false};
-    extents[count++]={channel::pushVa,addresses_.push,4096,false};
+    extents[count++]={channel::gpfifoVa,addresses_.gpfifo,4096,false,false};
+    extents[count++]={channel::pushVa,addresses_.push,4096,false,false};
     for(unsigned i=0;i<regionCount;++i) {
         Record r;if(!arena_.describe(region[i],r))return fail(MemError::Bounds);
-        extents[count++]={regions[i].va,r.physical.value,regions[i].bytes,regions[i].writable};
+        const bool priv=align_.priv && regions[i].priv; // Linux: PRIV and writable (gf100.c:384,401,464).
+        extents[count++]={regions[i].va,r.physical.value,regions[i].bytes,regions[i].writable || priv,priv};
         if(regions[i].va+regions[i].bytes>end)end=regions[i].va+regions[i].bytes;
         if(regions[i].va<channel::gpfifoVa || (regions[i].va>>27)!=(channel::gpfifoVa>>27))return fail(MemError::Bounds); // mmu/vmmgk104.c:39-43 one table.
     }
@@ -164,7 +193,11 @@ bool Compute::memory()
     // Instance block: the RAMFC and address-space words of S1 (memstage/ChannelImage.cpp).
     channel::Word words[16];const auto n=channel::image(Role::ChanInstance,addresses_,words,16);
     if(!n || n>16)return fail(MemError::Bounds);
-    for(unsigned w=0;w<n;++w)if(!upload_.store(chan[2],words[w].offset,2,PairWords(words[w].value)))return fail(upload_.error());
+    for(unsigned w=0;w<n;++w) {
+        auto value=words[w].value;
+        if(align_.user && words[w].offset==0xe0)value&=0xffffffffull; // fifo/gk104.c:98 offset 0xe4 = 0: a user channel, as the reference run (trace 615156).
+        if(!upload_.store(chan[2],words[w].offset,2,PairWords(value)))return fail(upload_.error());
+    }
     // One GPFIFO entry for the push buffer or a prefix of it (nouveau_dma.c:83-84), and the runlist entry.
     if(!upload_.store(chan[4],0,2,PairWords((channel::pushVa&0xffffffff)|((uint64_t(channel::pushVa>>32)|(uint64_t(entryBytes(launch_))<<8))<<32))) // nouveau_dma.c:83-84.
         || !upload_.store(chan[6],0,2,PairWords(chid)))return fail(upload_.error()); // fifo/gk104.c:454-455.
@@ -331,6 +364,7 @@ bool Compute::run()
         ok=token(Role::GrContext,context) && upload_.load(context,reserved,8,report_.image);
         if(!ok)fail(upload_.error()==MemError::None?MemError::Read:upload_.error());
     }
+    if(ok && align_.copy)ok=copyContext();
     if(ok){ok=stage(gr::attach,Step::Attach,5);report_.attached=ok;}
     if(ok && launch_!=Launch::None)ok=submit() && (launch_!=Launch::Full || result());
     const bool sampled=snapshot();

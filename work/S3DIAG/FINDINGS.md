@@ -97,3 +97,30 @@ Different (KNOWN), cause of the hang not shown:
 INFERRED: none of the four explains a stop of host reads on its own. Items 1
 and 2 touch what FECS reads on the first context load, which is where s3c
 stopped. The trace cannot show what the card reads from memory.
+
+## 2026-11-16: aligned stage s3e (host), built and rehearsed
+
+`gr::Align` removes the differences 1-3 above; s3e = object bind (as s3c) with
+all three. Difference 4 (GPFIFO size) is left: one entry fits either size.
+- Copy: after the golden stage, 0x210/0x214 are cleared (`ctxgf100.c:1551-1552`),
+  the image (0x4ea00 bytes, 0x409804) is copied in 16 KiB blocks into the new
+  record GrChanContext (role 29, 0x4f000, zeroed first); the attach hook writes
+  the two list words into the copy and points 0x210 at it.
+- PTEs: page pool, bundle and register list valid + PRIV + writable (`(e&7)==3`).
+  Linux sets no read-only bit on any channel PTE; our other records keep theirs.
+- RAMFC 0xe4 = 0.
+- Every S3 stage now allocates 27 records (the layout gained GrChanContext);
+  only s3e uses it. The s3c, s3d and s3b-diag packages built earlier today
+  follow the old layout: superseded, not to be run.
+- Fix: `Mapper::poll` took the start of its 2 s bound from a stale clock value.
+  The longer zeroing made the first poll look late in the host test. It now
+  reads the clock first.
+- Guard: writes into GrChanContext only while the next program write is in the
+  attach stage. Validator: S3E stage, 27 records, generations of the copy.
+- Host test: the simulated card decodes the state at GP_PUT on its own (copy
+  equal to the golden image word for word, pointer, PTE bits, RAMFC 0xe4).
+- `make check` passes; regenerated source-hash records: register provenance,
+  S1MEMARENA, S1MEMMMU, S1MEMUPLOAD, S2COPY host checks.
+- Rehearsal: `results/20261116-s3e-rehearsal-cc2e2a9c/README.md`, PASS_CARDLESS_NO_CARD.
+- Manifest `work/S3DIAG/s3e/package.json`, SHA-256
+  `160e2355f6758236fe84f99013f753af8a57903a732da4032dc954e97d9c3040`.

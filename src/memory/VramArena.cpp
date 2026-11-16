@@ -49,6 +49,7 @@ uint64_t Arena::requiredBytes(Role role)
     case Role::GrBundle:return 0x3000; // ctxgk110b.c:84.
     case Role::GrAttrib:return 0x14f000; // engine/gr/ctxgf100.c:1067 for 15 TPCs, page aligned.
     case Role::GrContext:return 0xcf000; // engine/gr/ctxgf100.c:1436,1474: 0x80000 + image 0x4ea00, page aligned.
+    case Role::GrChanContext:return 0x4f000; // engine/gr/gf100.c:327 gr->size 0x4ea00, page aligned; trace MAP 26.
     default:return 0;
     }
 }
@@ -117,7 +118,7 @@ bool Arena::reference(Token token)
 bool Arena::update(Token token)
 {
     auto* r=find(token);
-    if(!healthy() || !r || !r->referenced || (r->role!=Role::ChanInstance && r->role!=Role::GrContext))return false;
+    if(!healthy() || !r || !r->referenced || (r->role!=Role::ChanInstance && r->role!=Role::GrContext && r->role!=Role::GrChanContext))return false;
     if(r->writeGeneration==UINT64_MAX){fail();return false;}
     ++r->writeGeneration;r->staged=false;return true;
 }

@@ -12,7 +12,8 @@ bool normalLayout(const Probe&,uint64_t expectedBytes,Layout&);
 enum class Role:uint8_t {None,DebugRead,DebugWrite,Directory,SmallTable,Instance,DataA,DataB,
     ChanDirectory,ChanSmall,ChanInstance,Userd,Gpfifo,Push,Runlist,CopySource,CopyDest,
     // S3 records, in the order of tools/gr/launch.py layout().
-    GrText,GrTls,GrTxc,GrAux,GrQmd,GrInput,GrOutput,GrPagePool,GrBundle,GrAttrib,GrContext,GrMmioList};
+    GrText,GrTls,GrTxc,GrAux,GrQmd,GrInput,GrOutput,GrPagePool,GrBundle,GrAttrib,GrContext,GrMmioList,
+    GrChanContext};
 struct Token {uint64_t owner=0,epoch=0,id=0;};
 struct Record {
     Token token{};Role role=Role::None;VramPhysical physical{0};uint64_t bytes=0,alignment=0;

@@ -335,8 +335,13 @@ GR_STAGES = {
     "S3C_A7_BAR1_GR_BIND": ("bind", "S3_BIND"),
     "S3D_A7_BAR1_GR_SETUP": ("setup", "S3_SETUP"),
     "S3B_A7_BAR1_GR_COMPUTE": ("full", "S3_COMPUTE"),
+    "S3E_A7_BAR1_GR_BIND_ALIGNED": ("bind", "S3_BIND"),
 }
-GR_ROLES = tuple(range(17, 29))  # GrText..GrMmioList, VramArena.h.
+# Stages aligned with the Linux reference run (gr::Align, work/S3DIAG/FINDINGS.md):
+# the channel context is a copy of the golden image in GrChanContext.
+GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED",)
+IMAGE_BYTES = 0x4EA00  # tools/gr/program.py KNOWN[0x409804], trace 616433.
+GR_ROLES = tuple(range(17, 30))  # GrText..GrChanContext, VramArena.h.
 GR_UNWRITTEN = (18, 24, 25, 26)  # Tls, PagePool, Bundle, Attrib: allocated, never written by the host.
 
 
@@ -354,7 +359,7 @@ def gr_program():
     return {name: len(ops) for name, ops in stages.items()}, len(patches), module.launch.layout()
 
 
-def gr_phase(serial, events, byrole, mode):
+def gr_phase(serial, events, byrole, mode, aligned=False):
     """Validate an S3 run: program progress, context, submit, launch result, faults, teardown."""
     lengths, _, layout = gr_program()
     submit, launch = mode != "none", mode == "full"
@@ -421,7 +426,8 @@ def gr_phase(serial, events, byrole, mode):
     return dict(
         program_ops=total, guard_position=[6, lengths["teardown"]], golden_image_words=image[0].split(),
         total_us=int(program[0][3]), launch=launch, entry=mode,
-        context_va=layout["Context"]["va"] + 0x80000, records=len(GR_ROLES),
+        context_va=layout["ChanContext"]["va"] if aligned else layout["Context"]["va"] + 0x80000,
+        records=len(GR_ROLES), aligned=aligned,
     )
 
 
@@ -550,7 +556,7 @@ def memory_final(serial, suite, request):
         else "k40_mem: PASS S1_CHANNEL_NOP faults=0 upload=0 mapper=0 closure=2 allocations=14 journal_overflow=0"
     )
     if gr:
-        marker = f"k40_mem: PASS {gr_marker} faults=0 upload=0 mapper=0 closure=2 allocations=26 journal_overflow=0"
+        marker = f"k40_mem: PASS {gr_marker} faults=0 upload=0 mapper=0 closure=2 allocations=27 journal_overflow=0"
     if serial.count("k40_mem: PASS ") != 1:
         raise ValueError("pass marker of another stage or repeated")
     if serial.count(marker) != 1 or serial.count("K40-MEM-END") != 1:
@@ -602,7 +608,11 @@ def memory_final(serial, suite, request):
         roles += GR_ROLES
         sizes.update({17 + index: region["bytes"] for index, region in enumerate(layout.values())})
         generations.update({8: 2, 9: 2, 10: 17, 11: 1, 12: 2, 13: 2, 14: 2,
-                            17: 2, 19: 1, 20: 2, 21: 2, 22: 2, 23: 1, 27: 2, 28: 2})
+                            17: 2, 19: 1, 20: 2, 21: 2, 22: 2, 23: 1, 27: 2, 28: 2, 29: 1})
+        if suite.get("stage") in GR_ALIGNED:
+            # Instance: one more pointer update (cleared after generation). Generation memory:
+            # zero only. Channel context: zero, the image copy in 16 KiB blocks, the list words.
+            generations.update({10: 18, 27: 1, 29: 1 + -(-IMAGE_BYTES // 16384) + 1})
         generations.update({role: 0 for role in GR_UNWRITTEN})
         flags = {role: (0, 0, 0) for role in GR_UNWRITTEN}
     cursor = 256 * 1024 + 4096
@@ -720,7 +730,7 @@ def memory_final(serial, suite, request):
         )
         return dict(
             scope=scopes[mode],
-            gr=gr_phase(serial, events, byrole, mode),
+            gr=gr_phase(serial, events, byrole, mode, suite.get("stage") in GR_ALIGNED),
             owner=owner,
             allocations=[dict(id=r[0], role=r[1], physical=r[2], bytes=r[3], generation=r[4]) for r in allocations],
             events=len(events),
