@@ -460,3 +460,58 @@ No card run yet.
   PASS_CARDLESS_NO_CARD. `make check` passes.
 - Manifest `work/S3DIAG/s3q/package.json`, SHA-256
   `49cdf005092f1e787faeb1f58fed7f922dc2839efedbdf52e6a698a09b123215`.
+
+## 2026-11-17: s3q on the card (one run, complete report, FAIL)
+
+Result folder `results/20261117-s3q-run-2458b8e9`. The run ended with the full
+report of the driver and no AER message (the two AER messages at kernel time
+101696 belong to the `s3p` run). Launcher: "native phase failure". The package
+`package-s3q` is consumed. The teardown did not end clean; the next VM start
+resets the card.
+
+KNOWN, from the serial log:
+
+| Register | Before GP_PUT | 24 samples after GP_PUT (2.0 to 4.0 s), all equal | After the failed teardown (6.1 s) |
+|---|---|---|---|
+| 0x00259c, 0x040108, 0x040148, GR and FECS interrupts | 0 | 0 | 0 |
+| channel state | 1 | 1 | 0 |
+| 0x002640 engine status | 0 | 0x00012001 | 0x8001c001 |
+| 0x409b00 FECS current channel | 0x00000124 | 0x80000124 | 0x80000124 |
+| 0x409b04 FECS next channel | 0x00000124 | 0x80000124 | 0x00000124 |
+| 0x409400 FECS signal | 0x300 | 0x300 | 0x1224 |
+| 0x40981c FECS trace word | 0 | 0 | 0x12 |
+| 0x040120 PBDMA 0 channel | 0x00000001 | 0x00002001 | 0x00000001 |
+| 0x001700 window selector | 0x10 | 0x10 | 0x10 |
+| 0x001704 BAR1 context | 0x800000d3 | 0x800000d3 | 0x000000d3 |
+| 0x100c80, FECS scratch 0, 1, 4, 5 | 0x208000, 0x80000000, 0x4ea00, 0, 0 | the same | the same |
+
+- Teardown: `GR_FAILURE closing=4 closing_index=2`. Op 2 of the teardown is
+  the poll of 0x002634 after the preempt (`tools/gr/program.py`, `stop`;
+  `fifo/gf100.c:372`). The preempt did not end within 2 s.
+- `GR_STATUS` after the samples: all interrupt and fault words 0.
+
+Decode:
+- FECS trace word 0 after GP_PUT: no routine is open (`fuc/macros.fuc:202-212`).
+  With the valid current channel this shows (INFERRED) that the first load
+  ended and FECS returned to its main loop.
+- After the preempt: engine status 0x8001c001 is busy, channel switch, save
+  and load bits set (`engine/fifo/gk104.c:204-232`). FECS trace word 0x12 is
+  T_AUTO and T_MMCTX: FECS is inside a context switch, in `mmctx_xfer`
+  (`fuc/com.fuc:184-232`), and does not leave it. The next channel has no
+  valid bit, so this is the save of our channel (`fuc/hub.fuc:253-262`).
+- The window selector and the BAR1 context did not change after the load. The
+  register list did not overwrite these two registers.
+
+INFERRED:
+- The load of our channel completes without any reported error. After it, the
+  engine is idle with our channel.
+- After the load, data does not move to or from VRAM: host reads get no
+  completion (`s3b` to `s3p`), and the save of the preempt stays in the
+  register transfer to memory (this run).
+- The entry was fetched by the PBDMA before that: the engine got the channel,
+  which needs a method from the push buffer. Not verified by GP_GET.
+- Steps that only a load runs, and that the golden generation never ran
+  (`fuc/hub.fuc:612-622,675-690`): `ctx_redswitch`, `ctx_load` after it, the
+  load direction of the GPC, strand and register transfers, and
+  `ctx_mmio_exec` (the register list). One of them, or the loaded state
+  itself, stops the memory path. Which one is UNKNOWN.

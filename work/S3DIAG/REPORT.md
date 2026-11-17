@@ -362,3 +362,29 @@ How to read the serial log:
   failed. Find the op with `tools/gr/program.py` (stage `teardown`).
 - The expected end is `FAIL` with a complete report, not an AER stop. An AER
   stop in this stage would be new: a register access without completion.
+
+## 12. Update after the s3q run (2026-11-17)
+
+Approach G ran once and ended with a complete report, without an AER message
+(`work/S3DIAG/FINDINGS.md`, entry "s3q on the card").
+- The first load of our channel completes: FECS trace word 0, current channel
+  valid, engine idle, no error, for 2 s.
+- The preempt of the teardown does not end: FECS stays in the register
+  transfer of the context save (trace word 0x12, engine status 0x8001c001).
+- The window selector and the BAR1 context are unchanged, so the register
+  list did not overwrite them.
+- Summary of all runs: after the first context load, data does not move
+  between the card and VRAM. Register access stays good.
+
+Next steps, in the recommended order:
+1. Approach H (`s3r`): the same stage with the list count 0 in word 0 of the
+   channel image, so that `ctx_mmio_exec` does not run. Use the `s3q` form
+   (no VRAM read during the samples), then, when the engine is idle, one
+   slow-window read of GP_GET before the teardown. A read that completes
+   shows that the register list is the cause.
+2. If H changes nothing: compare the load-only steps with the Linux run.
+   Approach D (PBDMA 0 and interrupt set-up of Linux, section 2.4) and a
+   Linux trace of a bind-only submission (approach E) give the reference.
+   Read more state after the load in a `s3q` variant: 0x409614 (red switch),
+   0x409a24 and the FECS memory registers that `ctx_load` and `ctx_mem` use
+   (`fuc/hub.fuc:471-483`).
