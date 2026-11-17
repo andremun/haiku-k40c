@@ -712,3 +712,22 @@ Not on the card yet. The consumed packages were built without the fix.
 Next: rebuild an earlier stage form with the full list and run it, for
 example `s3e` (aligned bind) or `s3q` (registers only, full report), then
 `s3b` (the compute job).
+
+## 2026-11-17: stage s3t built (whole list, with the fix)
+
+`s3t` is `s3r` with the whole register list (36 entries). The two LTC entries
+are written again after the golden stage (`Compute::listReads()`). No card run
+yet.
+
+- `LIVE step=10 a=2 b=24` reports the count (0x24 = 36). The live line is now
+  printed in every stage of the `s3r` form.
+- `evidence.py` checks the two writes of the LTC entries (list offsets 0x110
+  and 0x118, after the golden stage) and that the list record has 4 write
+  generations.
+- All else as `s3r`: registers only after GP_PUT, the teardown, one sample,
+  one slow-window read of GP_GET as the last action.
+- Host test: pass case, with the list record equal to the Linux list.
+- Cardless rehearsal: `results/20261117-s3t-rehearsal-60d9427d`,
+  PASS_CARDLESS_NO_CARD. `make check` passes.
+- Manifest `work/S3DIAG/s3t/package.json`, SHA-256
+  `f6e9e733ec17e06b483ef6cbc55f1bee9848bdbd280d64db6d7870aa2d30fad2`.

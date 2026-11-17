@@ -342,12 +342,13 @@ GR_STAGES = {
     "S3Q_A7_BAR1_GR_BIND_REPORT": ("bind", "S3_REPORT"),
     "S3R_A7_BAR1_GR_BIND_NO_LIST": ("bind", "S3_NO_LIST"),
     "S3S_A7_BAR1_GR_BIND_LIST34": ("bind", "S3_SHORT_LIST"),
+    "S3T_A7_BAR1_GR_BIND_FULL_LIST": ("bind", "S3_FULL_LIST"),
 }
 # Stages aligned with the Linux reference run (gr::Align, work/S3DIAG/FINDINGS.md):
 # the channel context is a copy of the golden image in GrChanContext.
 GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED", "S3O_A7_BAR1_GR_BIND_OBSERVED", "S3P_A7_BAR1_GR_BIND_REGISTERS",
               "S3Q_A7_BAR1_GR_BIND_REPORT", "S3R_A7_BAR1_GR_BIND_NO_LIST",
-              "S3S_A7_BAR1_GR_BIND_LIST34")
+              "S3S_A7_BAR1_GR_BIND_LIST34", "S3T_A7_BAR1_GR_BIND_FULL_LIST")
 # Stages that print the golden image (gr::Compute print mode, work/S3DIAG/REPORT.md).
 GR_PRINT = ("S3G_A7_BAR1_GR_IMAGE",)
 # Stages that observe the progress after GP_PUT without BAR1 access (gr::Compute observe mode,
@@ -359,7 +360,7 @@ GR_REGISTERS = ("S3P_A7_BAR1_GR_BIND_REGISTERS",)
 GR_REPORT = ("S3Q_A7_BAR1_GR_BIND_REPORT",)
 # Approach H: as approach G with list count 0, then one slow-window read as the last action.
 # Value: the list count (src/gr/Compute.h Align::list; 34 = all but the LTC pair).
-GR_NO_LIST = {"S3R_A7_BAR1_GR_BIND_NO_LIST": 0, "S3S_A7_BAR1_GR_BIND_LIST34": 34}
+GR_NO_LIST = {"S3R_A7_BAR1_GR_BIND_NO_LIST": 0, "S3S_A7_BAR1_GR_BIND_LIST34": 34, "S3T_A7_BAR1_GR_BIND_FULL_LIST": 36}
 OBSERVE_SAMPLES = 32  # src/gr/Compute.cpp observeSamples.
 IMAGE_BYTES = 0x4EA00  # tools/gr/program.py KNOWN[0x409804], trace 616433.
 GR_ROLES = tuple(range(17, 30))  # GrText..GrChanContext, VramArena.h.
@@ -558,6 +559,9 @@ def no_list_phase(serial, events, count=0):
     reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]
     if len(reads) != 2:
         raise ValueError("slow-window reads of USERD differ")
+    # src/gr/Compute.cpp listReads(): the LTC entries 34 and 35 written again after the golden stage.
+    if [(e[2], e[3]) for e in events if e[0] >= 8 and e[6] == 3 and e[7] == 28 and e[8] == 2] != [(0x110, 8), (0x118, 8)]:
+        raise ValueError("LTC list entries not written after the golden stage")
     return dict(samples=samples, idle_us=rows[-7][2], bar1_read=False, gp_get_read=True, list_count=count)
 
 
@@ -999,7 +1003,7 @@ def memory_final(serial, suite, request):
             S3_golden_complete=True,
             S3_image_printed=printed,
             S3_observed=observed or registers or unread or unlisted,
-            S3_register_list=not unlisted,
+            S3_register_list=not unlisted or GR_NO_LIST.get(suite.get("stage")) == 36,
             S3_list_count=GR_NO_LIST.get(suite.get("stage")) if unlisted else None,
             S3_bind_complete=mode != "none" and not unread,
             S3_setup_complete=mode in ("setup", "full"),

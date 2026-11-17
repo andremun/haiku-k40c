@@ -281,8 +281,19 @@ class Tests(unittest.TestCase):
         # work/S3DIAG/PLAN.md: prefixes of the push buffer, and the live lines.
         reports = {
             mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
-            for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report", "nolist", "list34")
+            for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report", "nolist", "list34", "full")
         }
+        # s3t: the whole list after the fix of its LTC entries.
+        suite["stage"] = "S3T_A7_BAR1_GR_BIND_FULL_LIST"
+        full = reports["full"]
+        result = evidence.memory_final(full, suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and result["S3_register_list"] and result["S3_list_count"] == 36)
+        for changed in (reports["list34"].replace("PASS S3_SHORT_LIST", "PASS S3_FULL_LIST"),  # 34 entries
+                        re.sub(r"(role=28 physical=[0-9a-f]+ bytes=\d+ generation=)4", r"\g<1>2", full),  # LTC entries not written again
+                        full.replace("offset=118 value=8 polls=0", "offset=120 value=8 polls=0")):
+            self.assertNotEqual(changed, full)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
         # s3s: the first 34 list entries (all but the LTC pair).
         suite["stage"] = "S3S_A7_BAR1_GR_BIND_LIST34"
         list34 = reports["list34"]

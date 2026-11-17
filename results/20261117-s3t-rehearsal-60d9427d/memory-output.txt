@@ -1,0 +1,1 @@
+MEM-OPEN-RESULT role=memory status=0x80006003

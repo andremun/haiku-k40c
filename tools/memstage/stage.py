@@ -12,7 +12,8 @@ observed without BAR1 access (work/S3DIAG/REPORT.md, approach B). "s3p" reads
 registers only after GP_PUT until the teardown ended (approach F). "s3q" is
 s3p without any read of VRAM after GP_PUT (approach G). "s3r" is s3q with no
 register list at the load and one slow-window read as the last action (approach H).
-"s3s" is s3r with the first 34 list entries (all but the LTC pair).
+"s3s" is s3r with the first 34 list entries (all but the LTC pair). "s3t" is s3r
+with the whole list, after the fix of its LTC entries.
 One stage has one package folder, one work folder and one pass marker. The
 native owner receives the choice through the generated mem_config.h.
 """
@@ -153,6 +154,16 @@ STAGES = {
         allocations=27,
         title="Combined S3 object-bind run with the register list without the LTC pair",
         scope="S3s: as S3r, with list count 34 (FECS runs every list entry except 0x17e91c and 0x17e920); after the teardown one slow-window read of GP_GET as the last action; object bind consumed (GP_GET 0->1), no fault, clean teardown; no launch",
+    ),
+    "s3t": dict(
+        package="package-s3t",
+        work="S3DIAG/s3t",
+        copy=False,
+        number=14,
+        marker="PASS S3_FULL_LIST",
+        allocations=27,
+        title="Combined S3 object-bind run with the whole register list",
+        scope="S3t: as S3r, with the whole register list (36 entries, the LTC entries written after the golden stage); after the teardown one slow-window read of GP_GET as the last action; object bind consumed (GP_GET 0->1), no fault, clean teardown; no launch",
     ),
     "s3d": dict(
         package="package-s3d",

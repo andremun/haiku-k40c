@@ -466,3 +466,16 @@ The two card-read list entries are now written in the attach hook, after the
 golden stage read them (`work/S3DIAG/FINDINGS.md`, entry "fix of the register
 list"). Host tests check the whole list against Linux. No card run with the
 fix yet.
+
+## 19. Stage s3t is built (2026-11-17)
+
+Ready for one card run (`work/S3DIAG/FINDINGS.md`, entry "stage s3t built").
+The run needs the user's explicit yes (ADR 006).
+
+Command, after the yes and with the card on `vfio-pci`:
+`K40_MEM_STAGE=s3t python3 tools/memstage/run.py --run-approved-batch1-once`
+
+- Pass (teardown passes, last read GP_GET 1): the fix works with the whole
+  list. Next: the compute job (`s3b` with the fix).
+- Fail like `s3q` (preempt does not end, or the last read gets no completion):
+  the LTC values are not the whole cause; compare the run with `s3s`.

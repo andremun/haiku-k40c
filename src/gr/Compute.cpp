@@ -188,7 +188,7 @@ bool Compute::hook(uint32_t number)
         const uint32_t count=align_.list<patchCount?align_.list:patchCount; // fuc/hub.fuc:686-690: a count of 0 skips ctx_mmio_exec.
         if(!list || !va || !token(Role::GrChanContext,copy) || !token(Role::ChanInstance,instance)
             || !upload_.store(copy,0,2,PairWords(uint64_t(count)|(uint64_t(uint32_t(list>>8))<<32)),true))return false;
-        if(align_.list!=allList)live(Step::Attach,2,count); // a = 2: the list words are written, b: the count.
+        if(align_.list!=allList || observe_==Observe::Last)live(Step::Attach,2,count); // a = 2: the list words are written, b: the count.
         return upload_.store(instance,0x210,2,PairWords(va|4),true); // fifo/gk104.c:138,161-167.
     }
     // The image now holds the golden context. Its first two words get the count and
