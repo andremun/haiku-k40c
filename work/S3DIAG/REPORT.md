@@ -502,3 +502,13 @@ Command, after the yes and with the card on `vfio-pci`:
   with a wrong set-up; compare the push buffer with the Linux run.
 - Stop at the BAR1 poll of GP_GET (AER): rebuild with the registers-only
   observation of `s3t` (approach H) and read the output after the teardown.
+
+## 22. s3u on the card: the job faults in GR (2026-11-18)
+
+`s3u` fetched the entry (GP_GET 1 by BAR1 after 27 ms, so BAR1 after GP_PUT
+works with the fix) but wrote no output: the last element read 0 for 2 s,
+and at the end an MMU fault of unit 0 (GR) was pending. No AER. The driver
+then failed on a full journal (the result poll journals every read), and the
+teardown did not run. The fault record was not read. Details in
+`work/S3DIAG/FINDINGS.md`, entry "s3u on the card". Next: read the fault
+record of the job (stage proposed there).

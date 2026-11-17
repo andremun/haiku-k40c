@@ -783,3 +783,44 @@ Risk (INFERRED): `s3u` reads GP_GET by BAR1 while the job runs, as `s3b`.
 If the job does not end, that read can get no completion (AER), as in `s3b`
 and `s3o`. `s3t` showed BAR0 and the slow window work after the bind with the
 fix; BAR1 after GP_PUT is not yet tested with the fix.
+
+## 2026-11-18: s3u on the card (FAIL: GR MMU fault, output not written)
+
+Result folder `results/20261118-s3u-run-0c5af407`. Launcher status `failed`
+("native phase failure"), driver `FAIL faults=0 upload=6 mapper=0 closure=1
+journal_overflow=1`. No new AER message. The package `package-s3u` is
+consumed. The card is still on `vfio-pci`.
+
+KNOWN, from the serial log:
+- Golden stage, image copy and attach passed (`LIVE step=9`, `step=10`).
+- The entry was fetched: the BAR1 poll read GP_GET 1, GP_PUT 1 after 26.6 ms
+  (`GR_GET after=1/1 polls=1`). BAR1 reads after GP_PUT work with the fix.
+- The last output element read 0 for 1715 slow-window reads over 2.0 s
+  (`result_polls=1715 result_us=1997802 value=0`). Slow-window reads of VRAM
+  stayed complete: no AER.
+- Status at the end: `mmu=1` (0x00259c bit 0, an MMU fault of unit 0, GR:
+  `nvkm/engine/fifo/gk104.c:474`), `fifo=50000000` (MMU fault and runlist
+  event bits), GR, trap and FECS interrupts 0, engine status 0. The fault
+  record (0x002800-0x00280c) was not read: s3u has no observe mode.
+- After the 2 s bound the output compare failed with error 6 (`Overflow`):
+  every result read is a journal event and the journal (4096 events,
+  `src/memstage/Port.h:26`) was full. The I/O was then inactive; the status
+  read of 0x040108 was refused (`IO_REJECT kind=2`), and the teardown did not
+  run (`closed=0`). The end of the guest and VFIO closed the device
+  (`teardown.json`: bus master off).
+
+INFERRED: the compute job started and its first memory access through the
+channel address space faulted, so no output element was written. Which
+address and access type (read of the input, the descriptor, the constant
+buffer or the code; write of the output) is UNKNOWN until the fault record is
+read.
+
+Defects of the driver shown by this run (not of the card):
+1. The result poll journals each read and can fill the journal before the
+   compare. Bound the poll by the journal space, or journal the poll once.
+2. The result poll does not stop on a pending MMU fault.
+3. After a failure in the result step the teardown did not run.
+
+Next (proposed): a stage that keeps the `s3u` set-up and launch, stops the
+result poll on a pending fault, reads and prints the fault record (as the
+observe modes do, group 4), then runs the teardown; journal the poll once.
