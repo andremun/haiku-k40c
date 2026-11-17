@@ -8,7 +8,8 @@ The environment variable K40_MEM_STAGE selects it: "s1" (default), "s2", "s2d"
 "s3d" fetch only a prefix of the s3b push buffer: the object bind, or the set-up
 without the launch (work/S3DIAG/PLAN.md). "s3g" is s3a with the golden image
 printed (work/S3DIAG/REPORT.md). "s3o" is s3e with the progress after GP_PUT
-observed without BAR1 access (work/S3DIAG/REPORT.md, approach B).
+observed without BAR1 access (work/S3DIAG/REPORT.md, approach B). "s3p" reads
+registers only after GP_PUT until the teardown ended (approach F).
 One stage has one package folder, one work folder and one pass marker. The
 native owner receives the choice through the generated mem_config.h.
 """
@@ -109,6 +110,16 @@ STAGES = {
         allocations=27,
         title="Combined S3 object-bind run, observed through BAR0",
         scope="S3o: as S3e, and after GP_PUT the progress read through BAR0 status registers and the slow window only, each group printed at once; one BAR1 read of GP_GET as the last action; object bind consumed (GP_GET 0->1), no fault, clean teardown; no launch",
+    ),
+    "s3p": dict(
+        package="package-s3p",
+        work="S3DIAG/s3p",
+        copy=False,
+        number=10,
+        marker="PASS S3_REGISTERS",
+        allocations=27,
+        title="Combined S3 object-bind run, observed through registers only",
+        scope="S3p: as S3e, and after GP_PUT status registers only (no BAR1, no slow window) until the teardown ended, each group printed at once; then one slow-window read of GP_GET; object bind consumed (GP_GET 0->1), no fault, clean teardown; no launch",
     ),
     "s3d": dict(
         package="package-s3d",

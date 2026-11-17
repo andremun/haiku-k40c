@@ -35,10 +35,11 @@ private:
     // 4 S2 copy diagnostic (engine busy bit recorded only), 5 S3 object bind, 6 S3 set-up without launch,
     // 7 S3 object bind aligned with the Linux reference run (work/S3DIAG/FINDINGS.md),
     // 8 S3 golden context with the image printed (work/S3DIAG/REPORT.md),
-    // 9 as 7, and after GP_PUT the progress observed without BAR1 access (work/S3DIAG/REPORT.md, approach B).
+    // 9 as 7, and after GP_PUT the progress observed without BAR1 access (work/S3DIAG/REPORT.md, approach B),
+    // 10 as 7, and after GP_PUT registers only until the teardown ended (work/S3DIAG/REPORT.md, approach F).
     static gr::Launch launchOf(unsigned stage);
-    static gr::Align alignOf(unsigned stage){return stage==7 || stage==9?gr::Align{true,true,true}:gr::Align{};}
-    static bool computeStage(unsigned stage){return stage==2 || stage==3 || stage==5 || stage==6 || stage==7 || stage==8 || stage==9;}
+    static gr::Align alignOf(unsigned stage){return stage==7 || stage==9 || stage==10?gr::Align{true,true,true}:gr::Align{};}
+    static bool computeStage(unsigned stage){return stage==2 || stage==3 || stage==5 || stage==6 || stage==7 || stage==8 || stage==9 || stage==10;}
     unsigned stage_=0;gr::Guard guard_;Live live_;gr::Compute compute_;
     memauth::Binding binding_;alignas(memauth::Session) uint8_t sessionStorage_[sizeof(memauth::Session)]{};
     memauth::Session* session_=nullptr;k40_a7_module* a7_=nullptr;

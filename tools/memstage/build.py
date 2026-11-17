@@ -33,7 +33,7 @@ INVENTORY = WORK / "write-inventory.json"
 STAGE = dict(s1="BATCH1_A7_BAR1_VRAM", s2="S2_A7_BAR1_CHANNEL_COPY", s2d="S2D_A7_BAR1_CHANNEL_COPY_DIAGNOSTIC", s3a="S3A_A7_BAR1_GR_GOLDEN",
              s3b="S3B_A7_BAR1_GR_COMPUTE", s3c="S3C_A7_BAR1_GR_BIND", s3d="S3D_A7_BAR1_GR_SETUP",
              s3e="S3E_A7_BAR1_GR_BIND_ALIGNED", s3g="S3G_A7_BAR1_GR_IMAGE",
-             s3o="S3O_A7_BAR1_GR_BIND_OBSERVED")[stage.NAME]
+             s3o="S3O_A7_BAR1_GR_BIND_OBSERVED", s3p="S3P_A7_BAR1_GR_BIND_REGISTERS")[stage.NAME]
 ROM = Path(
     os.environ.get(
         "K40_VBIOS",

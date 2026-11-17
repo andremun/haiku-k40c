@@ -281,8 +281,32 @@ class Tests(unittest.TestCase):
         # work/S3DIAG/PLAN.md: prefixes of the push buffer, and the live lines.
         reports = {
             mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
-            for mode in ("bind", "setup", "aligned", "image", "observe")
+            for mode in ("bind", "setup", "aligned", "image", "observe", "registers")
         }
+        # s3p: registers only after GP_PUT until the teardown ended (work/S3DIAG/REPORT.md, approach F).
+        suite["stage"] = "S3P_A7_BAR1_GR_BIND_REGISTERS"
+        regs = reports["registers"]
+        result = evidence.memory_final(regs, suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and result["S3_observed"] and not result["gr"]["observe"]["bar1_read"])
+        self.assertEqual(result["gr"]["observe"]["samples"], 4)
+        with self.assertRaises(ValueError):  # the s3o report has another form
+            evidence.memory_final(reports["observe"].replace("PASS S3_OBSERVE", "PASS S3_REGISTERS"), suite, raw)
+        line = re.search(r"^k40_mem: OBS n=2 g=7 .*\n", regs, re.M).group(0)
+        last = re.search(r"^k40_mem: OBS n=4 g=1 us=\d+ c=7 0 0 0 0 0 0 0", regs, re.M).group(0)
+        early = re.search(r"^k40_mem: OBS n=4 g=9 .*\n", regs, re.M).group(0)
+        down = re.search(r"^k40_mem: LIVE step=14 .*\n", regs, re.M).group(0)
+        for changed in (regs.replace(line, "", 1),  # one group lost
+                        regs.replace(line, line.replace("g=7", "g=3").replace("c=7", "c=2"), 1),  # a slow-window group after GP_PUT
+                        regs.replace(last, last[:-1] + "12001", 1),  # the engine not idle at the end
+                        regs.replace(last, last.replace("c=7 0 0 0", "c=7 0 0 1"), 1),  # MMU fault pending
+                        regs.replace(down + early, early + down, 1),  # the last read before the teardown
+                        re.sub(r"(OBS n=4 g=3 us=\d+ c=2) 1 1", r"\g<1> 0 1", regs),  # GP_GET 0 at the end
+                        regs.replace("bar=0 fault_units=0", "bar=1 fault_units=0"),
+                        regs.replace("GR_OBSERVE samples=4", "GR_OBSERVE samples=5"),
+                        regs.replace("PASS S3_REGISTERS", "PASS S3_OBSERVE")):
+            self.assertNotEqual(changed, regs)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
         # s3o: the aligned bind observed without BAR1 access (work/S3DIAG/REPORT.md, approach B).
         suite["stage"] = "S3O_A7_BAR1_GR_BIND_OBSERVED"
         observe = reports["observe"]

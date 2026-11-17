@@ -336,3 +336,38 @@ UNKNOWN:
 - Why host reads of VRAM stop after the engine starts the load.
 - If the load ends, and what FECS reports during it.
 - If a status appears later than 62 ms (the run stopped at the first AER).
+
+## 2026-11-17: stage s3p built (approach F of REPORT.md)
+
+`s3p` is `s3e` with the register-only observe mode (`gr::Observe::Registers`,
+`src/gr/Compute.cpp`). No card run yet.
+
+- Sample 0, before GP_PUT: groups 1 and 2 as `s3o`, the new groups 7 and 8,
+  and group 3 (slow window, which worked before GP_PUT in `s3o`).
+- After GP_PUT: no access to VRAM (no BAR1, no slow window). Each sample
+  prints groups 1, 2, 7 and 8; group 4 (fault record) when 0x00259c is not 0.
+  - g=7, FECS: 0x409b00 current channel, 0x409b04 next channel, 0x409400
+    signal, scratch 0x409800, 0x409804, 0x409810, 0x409814
+    (`engine/gr/gf100.c:746,754,1573,1579`; `fuc/macros.fuc:58,90,125-126`).
+  - g=8: 0x100c80 MMU status (`mmu/vmmgf100.c:199`); PBDMA 0 method address
+    0x0400c0, data 0x0400c4, channel 0x040120 (`fifo/gf100.c:316-318`).
+- The samples end when 0x002640 reads 0 in two samples in sequence (not before
+  sample 4), after 32 samples, or after 2 s.
+- Then the status snapshot and the teardown (registers only). Last action:
+  g=9 (printed before the read), one slow-window read of GP_GET and GP_PUT,
+  g=3 with the values.
+- New read addresses for Guard: 0x0400c0, 0x0400c4, 0x040120. The FECS
+  registers are in the PGRAPH range that Guard already allows for reads.
+  No new register write.
+- Not included, no source found in the references: the PBDMA copies of GP_GET
+  and GP_PUT.
+- Cost on the card (INFERRED from the `s3o` line times, about 19 ms for each
+  line): about 75 ms for each sample, so the 2 s bound ends the loop after
+  about 27 samples.
+- Host test: pass case (4 samples, no VRAM access between GP_PUT and the end
+  of the teardown) and a stall with engine status 0x00012001 (32 samples,
+  teardown, last read GP_GET 0). `evidence.py` accepts only the pass form.
+- Cardless rehearsal: `results/20261117-s3p-rehearsal-62f59825`,
+  PASS_CARDLESS_NO_CARD. `make check` passes.
+- Manifest `work/S3DIAG/s3p/package.json`, SHA-256
+  `0f7daf07fbe47d098399e3766415d2c81ac059c452c8624a3beef1f75c59d90f`.

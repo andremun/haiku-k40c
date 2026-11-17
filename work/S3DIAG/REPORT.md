@@ -286,3 +286,27 @@ Approach B ran once (`work/S3DIAG/FINDINGS.md`, entry "s3o on the card").
   card without a VM restart.
 - After the teardown, one slow-window read as the last action shows if host
   access to VRAM returns.
+
+## 9. Stage s3p is built (2026-11-17)
+
+Approach F is ready for one card run (`work/S3DIAG/FINDINGS.md`, entry "stage
+s3p built"). The run needs the user's explicit yes (ADR 006).
+
+Command, after the yes and with the card on `vfio-pci`:
+`K40_MEM_STAGE=s3p python3 tools/memstage/run.py --run-approved-batch1-once`
+
+How to read the serial log:
+- Lines `OBS n=<sample> g=<group>`: g=1 and g=2 as section 7; g=7 FECS
+  (current channel, next channel, signal, scratch 0, 1, 4, 5); g=8 MMU status
+  and PBDMA 0 method address, data, channel; g=4 a fault record.
+- The last value of each g=1 line is the engine status. 0 means idle; the
+  load bit is 0x2000.
+- `LIVE step=14` is the start of the teardown. The `GR` report line shows
+  `closed=1` when the teardown passed.
+- `OBS ... g=9` is printed before the last slow-window read. A log that ends
+  there, with an AER message, shows that host access to VRAM does not return
+  after the teardown.
+
+Difference from the plan of section 8: the PBDMA copies of GP_GET and GP_PUT
+are not read (no source in the references). The PBDMA 0 method address, data
+and channel are read in their place.

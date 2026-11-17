@@ -28,6 +28,10 @@ enum class Launch:uint8_t {None,Bind,Setup,Full};
 // channel's context, PRIV and writable PTEs for the page pool, bundle and register
 // list, and a channel that is not privileged (RAMFC 0xe4 = 0).
 struct Align {bool copy=false,priv=false,user=false;};
+// How the progress after GP_PUT is read (work/S3DIAG/REPORT.md): the BAR1 poll; approach B, BAR0
+// status registers and the slow window, BAR1 last; or approach F, registers only until the
+// teardown ended, then one slow-window read of USERD as the last action.
+enum class Observe:uint8_t {None,Window,Registers};
 // Host-side progress sink: the owner prints each call at once (no card access).
 class Progress {
 public:
@@ -50,7 +54,7 @@ protected:
 class Compute final:private Port {
 public:
     Compute(memstage::Io& io,memstage::Faults& faults,memstage::Journal& journal,memory::vram::Arena& arena,
-        memstage::Upload& upload,memstage::Mapper& mapper,uint64_t epoch,Launch launch,Progress* progress=nullptr,Align align={},bool print=false,bool observe=false)
+        memstage::Upload& upload,memstage::Mapper& mapper,uint64_t epoch,Launch launch,Progress* progress=nullptr,Align align={},bool print=false,Observe observe=Observe::None)
         :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),mapper_(mapper),epoch_(epoch),launch_(launch),progress_(progress),align_(align),print_(print),observe_(observe),
          runner_(*this),closer_(*this){}
     // True only when every step passed: without launch, the golden context and a
@@ -83,11 +87,12 @@ private:
     bool submit();
     bool sample(uint32_t number);
     bool observe();
+    bool lastRead();
     bool result();
     bool snapshot();
     bool teardown();
     memstage::Io& io_;memstage::Faults& faults_;memstage::Journal& journal_;memory::vram::Arena& arena_;
-    memstage::Upload& upload_;memstage::Mapper& mapper_;uint64_t epoch_=0;Launch launch_=Launch::None;Progress* progress_=nullptr;Align align_{};bool print_=false,observe_=false;
+    memstage::Upload& upload_;memstage::Mapper& mapper_;uint64_t epoch_=0;Launch launch_=Launch::None;Progress* progress_=nullptr;Align align_{};bool print_=false;Observe observe_=Observe::None;
     Runner runner_,closer_;Report report_{};
     uint64_t start_=0,last_=0;memstage::Phase phase_=memstage::Phase::ChannelBase;
     memstage::channel::Addresses addresses_{};

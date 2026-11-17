@@ -112,6 +112,7 @@ bool Guard::read(uint32_t reg) const
     if(reg>=0x002390 && reg<0x0023b0)return true; // fifo/gk104.c:392.
     if(reg>=0x002284 && reg<0x002284+16*8 && (reg-0x002284)%8==0)return true; // fifo/gk104.c:426.
     if(reg==0x04013c || reg==0x040108 || reg==0x040148)return true; // fifo/gf100.c:357-358; fifo/gk104.c:378, PBDMA 0.
+    if(reg==0x0400c0 || reg==0x0400c4 || reg==0x040120)return true; // fifo/gf100.c:316-318 PBDMA 0 method address, data, channel (status only).
     if(reg==0x800000+chid*8 || reg==0x800004+chid*8)return true; // fifo/gk104.c:44-77.
     if(reg==0x10a78c || reg==0x0206b4 || (reg>=0x020520 && reg<=0x020530))return true; // pmu/gk110.c:38-80.
     if(reg==0x17e91c || reg==0x17e920 || reg==0x17ea44)return true; // engine/gr/ctxgk104.c:867-868; ltc/gf100.c:59.
