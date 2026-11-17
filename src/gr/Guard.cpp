@@ -5,8 +5,8 @@
 namespace k40::gr {
 using namespace memory::vram;
 namespace {
-const Stage* const sequence[Guard::stages]={&fifo,&bind,&gating,&start,&golden,&attach,&teardown};
-constexpr unsigned attachStage=5,teardownStage=6,bindStage=1; // no source: indexes in sequence.
+const Stage* const sequence[Guard::stages]={&fifo,&bind,&gating,&start,&golden,&attach,&teardown,&recover};
+constexpr unsigned attachStage=5,teardownStage=6,recoverStage=7,bindStage=1; // no source: indexes in sequence.
 bool writes(Kind kind){return kind==Kind::Write || kind==Kind::WriteSlot || kind==Kind::Mask || kind==Kind::MaskSlot;}
 }
 bool Guard::record(Role role,Record& out) const
@@ -34,7 +34,9 @@ bool Guard::inputs()
 }
 bool Guard::next(unsigned& stage,unsigned& index) const
 {
-    for(;stage<stages;++stage,index=0)
+    // The normal order ends with the teardown; the recovery is entered only from write().
+    const unsigned end=stage==recoverStage?stages:teardownStage+1;
+    for(;stage<end;++stage,index=0)
         for(;index<sequence[stage]->count;++index)
             if(writes(sequence[stage]->ops[index].kind))return true;
     return false;
@@ -100,8 +102,12 @@ bool Guard::write(uint32_t reg,uint32_t value)
     // attach and teardown stages begin with the same three ops (stop, preempt).
     if(stage_<bindStage || (stage_==bindStage && index_<3))return false;
     unsigned t=teardownStage,at=(stage_==attachStage && index_<=3)?index_:0;
-    if(stage_==teardownStage)return false;
+    if(stage_==teardownStage || stage_==recoverStage)return false;
     if(next(t,at) && t==teardownStage && matches(sequence[t]->ops[at],reg,value)){stage_=t;index_=at+1;return true;}
+    // Teardown with a GR MMU fault pending (the last read of 0x00259c shows unit 0 only): the
+    // recovery program instead (fifo/gf100.c:534-610; fifo/gk104.c:474).
+    unsigned r=recoverStage,ri=0;
+    if(policy_.faultPending()==1 && next(r,ri) && r==recoverStage && matches(sequence[r]->ops[ri],reg,value)){stage_=r;index_=ri+1;return true;}
     return false;
 }
 bool Guard::read(uint32_t reg) const
@@ -109,6 +115,7 @@ bool Guard::read(uint32_t reg) const
     if((reg&3))return false;
     if(reg>=0x400000 && reg<0x528000)return true; // engine/gr/gf100.h:40-45 PGRAPH, 5 GPC units.
     if(reg==0x000200 || reg==0x000204 || reg==0x002a04 || reg==0x002634 || reg==0x002640)return true; // mc/nv04.c:120; fifo/gk104.c:206,739-740; fifo/gf100.c:372.
+    if(reg==0x002630)return true; // fifo/gk104.c:412,418 runlist block (recovery).
     if(reg>=0x002390 && reg<0x0023b0)return true; // fifo/gk104.c:392.
     if(reg>=0x002284 && reg<0x002284+16*8 && (reg-0x002284)%8==0)return true; // fifo/gk104.c:426.
     if(reg==0x04013c || reg==0x040108 || reg==0x040148)return true; // fifo/gf100.c:357-358; fifo/gk104.c:378, PBDMA 0.

@@ -201,6 +201,25 @@ def fifo_stages():
         attach=stop + [op("Hook", a=HOOK_ATTACH), op("Mask", STATE, 0x400, 0x400)],
         teardown=stop + [runlist(), op("Write", 0x002274, GR_RUNLIST << 20),
                          op("Poll", 0x002284 + GR_RUNLIST * 8, 0x00100000, 0), op("Write", CHAN, 0)],  # fifo/gk104.c:60.
+        # Teardown with a GR MMU fault pending (s3v: the preempt does not end). The recovery of
+        # Nouveau for one faulted channel on GK104 (fifo/gf100.c:534-610, runl.c:58-125): block the
+        # runlist, clear the fault, stop the channel, reset GR, commit the runlist without the
+        # channel, clear the runlist fault, allow the runlist. No runlist preempt on GK104 (no
+        # runl preempt function in fifo/gk104.c). Then the channel unbind of the teardown.
+        recover=[
+            op("Expect", 0x00259C, 0xFFFFFFFF, 0x1),  # fifo/gf100.c:723: only unit 0, GR (fifo/gk104.c:474).
+            op("Mask", 0x002630, 1 << GR_RUNLIST, 1 << GR_RUNLIST),  # fifo/gk104.c:418 block.
+            op("Write", 0x00259C, 0x1),  # fifo/gf100.c:728.
+            op("Mask", STATE, 0x800, 0x800),  # fifo/gk104.c:44 stop (runl.c:83 nvkm_chan_error).
+            op("Mask", 0x000200, 0x1000, 0),  # mc/base.c:74-77; mc/nv04.c:36; GR bit 12 (mc/gf100.c:31).
+            op("Mask", 0x000200, 0x1000, 0x1000),  # mc/nv04.c:44.
+            op("Expect", 0x000200, 0x1000, 0x1000),  # mc/nv04.c:45.
+            runlist(), op("Write", 0x002274, GR_RUNLIST << 20),  # runl.c:121; fifo/gk104.c:446-447.
+            op("Poll", 0x002284 + GR_RUNLIST * 8, 0x00100000, 0),  # runl.c:128; fifo/gk104.c:426.
+            op("Write", 0x00262C, 1 << GR_RUNLIST),  # runl.c:122-123; fifo/gk104.c:406.
+            op("Mask", 0x002630, 1 << GR_RUNLIST, 0),  # runl.c:126-127; fifo/gk104.c:412 allow.
+            op("Write", CHAN, 0),  # fifo/gk104.c:60.
+        ],
     )
 
 

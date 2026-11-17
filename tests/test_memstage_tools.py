@@ -282,7 +282,7 @@ class Tests(unittest.TestCase):
         reports = {
             mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
             for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report", "nolist", "list34", "full",
-                         "alignedfull", "faultmode")
+                         "alignedfull", "faultmode", "recover")
         }
         # s3u: the compute job with the channel set-up of s3e and the whole fixed list.
         suite["stage"] = "S3U_A7_BAR1_GR_COMPUTE_ALIGNED"
@@ -317,6 +317,25 @@ class Tests(unittest.TestCase):
         self.assertTrue(result["S3_complete"] and result["scope"].startswith("S3w:"))
         with self.assertRaises(ValueError):
             evidence.memory_final(job, suite, raw)  # no baseline sample
+        # s3x: the s3v fault on purpose, its record, then the recovery in the teardown.
+        suite["stage"] = "S3X_A7_BAR1_GR_RECOVER"
+        recover = reports["recover"]
+        result = evidence.memory_final(recover, suite, raw)
+        self.assertTrue(result["S3_recovered"] and not result["S3_complete"] and result["scope"].startswith("S3x:"))
+        self.assertEqual(result["gr"]["observe"]["fault"]["type"], 0x1DC6)
+        for changed in (checked,  # no fault, no recovery
+                        recover.replace("recovered=1", "recovered=0"),
+                        recover.replace("GR_RECOVER recovered=1 pending=0", "GR_RECOVER recovered=1 pending=1"),
+                        recover.replace("c=5 0 124 13e40000 0 1dc6", "c=5 0 124 13e60000 0 1dc6"),  # another address
+                        recover.replace("c=5 0 124 13e40000 0 1dc6", "c=5 0 124 13e40000 0 1d46"),  # a read
+                        recover.replace("guard=7/", "guard=6/"),
+                        recover.replace("PASS S3_RECOVER", "PASS S3_COMPUTE")):
+            self.assertNotEqual(changed, recover)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        suite["stage"] = "S3W_A7_BAR1_GR_COMPUTE_QMD"
+        with self.assertRaises(ValueError):  # a recovery report is not a compute report
+            evidence.memory_final(recover, suite, raw)
         # s3t: the whole list after the fix of its LTC entries.
         suite["stage"] = "S3T_A7_BAR1_GR_BIND_FULL_LIST"
         full = reports["full"]

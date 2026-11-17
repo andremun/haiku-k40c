@@ -16,7 +16,8 @@ register list at the load and one slow-window read as the last action (approach 
 with the whole list, after the fix of its LTC entries. "s3u" is the compute job
 of s3b with the channel set-up of s3e and the whole fixed list. "s3v" is s3u
 with the result poll stopped on a pending MMU fault and the fault record printed.
-"s3w" is s3v with the launch descriptor mapped writable.
+"s3w" is s3v with the launch descriptor mapped writable. "s3x" maps it read-only
+on purpose to cause the s3v fault and tests the recovery program in the teardown.
 One stage has one package folder, one work folder and one pass marker. The
 native owner receives the choice through the generated mem_config.h.
 """
@@ -197,6 +198,16 @@ STAGES = {
         allocations=27,
         title="Combined S3 compute run with a writable launch descriptor",
         scope="S3w: as S3v, with the launch descriptor (Qmd) mapped writable; one compute job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, no fault, clean teardown; no host DMA payload proof",
+    ),
+    "s3x": dict(
+        package="package-s3x",
+        work="S3DIAG/s3x",
+        copy=False,
+        number=18,
+        marker="PASS S3_RECOVER",
+        allocations=27,
+        title="Combined S3 run with a GR MMU fault and its recovery",
+        scope="S3x: as S3v with the launch descriptor read-only on purpose: the GR MMU fault of s3v, its record, then the recovery program in the teardown (block, clear, stop, GR reset, empty runlist, allow, unbind); after it no fault pending and GR not busy, clean teardown; no compute result",
     ),
     "s3d": dict(
         package="package-s3d",

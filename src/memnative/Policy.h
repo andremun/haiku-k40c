@@ -32,6 +32,7 @@ public:
     void extend(Extension* extension){extension_=extension;}
     uint32_t barContext() const{return expectedContext_;} // The owned BAR1 context value of batch 1.
     uint32_t invalidateStatus() const{return status_;}
+    uint32_t faultPending() const{return pending_;} // The last read of 0x00259c (fifo/gf100.c:723).
 private:
     friend class NativeIo;
 #ifndef _KERNEL_MODE

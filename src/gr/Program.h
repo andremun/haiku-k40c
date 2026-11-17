@@ -37,7 +37,7 @@ struct Region {uint8_t role;uint32_t bytes;uint64_t va;bool writable,zero,priv;}
 // Constant words of one record, written before the channel is bound.
 struct Blob {uint8_t role;uint32_t offset;const uint32_t* words;uint32_t count;};
 // GR stages (verified against the trace), then the channel sequences on the GR runlist.
-extern const Stage gating,start,golden,fifo,bind,attach,teardown;
+extern const Stage gating,start,golden,fifo,bind,attach,teardown,recover;
 extern const Patch patchList[];
 extern const Region regions[];
 extern const Blob blobs[];

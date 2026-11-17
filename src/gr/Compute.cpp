@@ -223,7 +223,8 @@ bool Compute::memory()
     for(unsigned i=0;i<regionCount;++i) {
         Record r;if(!arena_.describe(region[i],r))return fail(MemError::Bounds);
         const bool priv=align_.priv && regions[i].priv; // Linux: PRIV and writable (gf100.c:384,401,464).
-        extents[count++]={regions[i].va,r.physical.value,regions[i].bytes,regions[i].writable || priv,priv};
+        const bool readOnly=align_.qmdReadOnly && Role(regions[i].role)==Role::GrQmd; // s3x: the fault of s3v on purpose.
+        extents[count++]={regions[i].va,r.physical.value,regions[i].bytes,(regions[i].writable || priv) && !readOnly,priv};
         if(regions[i].va+regions[i].bytes>end)end=regions[i].va+regions[i].bytes;
         if(regions[i].va<channel::gpfifoVa || (regions[i].va>>27)!=(channel::gpfifoVa>>27))return fail(MemError::Bounds); // mmu/vmmgk104.c:39-43 one table.
     }
@@ -344,6 +345,7 @@ bool Compute::sample(uint32_t number)
             || !io_.read32(0x040108,v[3]) || !io_.read32(0x040148,v[4]) || !io_.read32(state,v[5]) // fifo/gf100.c:358; fifo/gk104.c:378.
             || !io_.read32(0x002640,v[6]))return fail(MemError::Read); // fifo/gk104.c:206.
         if(!tick())return false;
+        report_.lastPending=v[2];report_.lastEngine=v[6];
         if(progress_)progress_->observed(number,1,last_-start_,v,7);
         const uint32_t pending=v[2];uint32_t g[3]{};
         if(!io_.read32(0x400100,g[0]) || !io_.read32(0x400108,g[1]) || !io_.read32(0x409c18,g[2]))return fail(MemError::Read); // engine/gr/gf100.c:1414,1690,1570 status only.
@@ -503,7 +505,12 @@ bool Compute::teardown()
     if(report_.bound) {
         LockGuard lock(io_,Lock::Mmu);
         if(!lock.held())return fail(MemError::Budget);
-        ok=closer_.run(gr::teardown);
+        // A pending GR MMU fault (unit 0 only) stops the preempt of the teardown (s3v): run the
+        // recovery instead. Other faults keep the teardown (its recovery is not modelled).
+        uint32_t pending=0;
+        if(!io_.read32(0x00259c,pending))return fail(MemError::Read); // fifo/gf100.c:723.
+        report_.recovered=pending==1; // fifo/gk104.c:474 unit 0, GR.
+        ok=closer_.run(report_.recovered?gr::recover:gr::teardown);
         if(!ok){report_.closing=closer_.failure();fail(MemError::Preempt);}
     }
     if(exposed_) {
@@ -549,6 +556,7 @@ bool Compute::run()
     if(observe_==Observe::Registers && report_.submitted && !lastRead())ok=false;
     if(wide() && report_.submitted && !sample(report_.samples+1))ok=false; // One sample after the teardown.
     if(observe_==Observe::Last && report_.submitted && !lastRead())ok=false;
+    if(align_.qmdReadOnly && report_.submitted && !sample(report_.samples+1))ok=false; // The state after the recovery.
     uint64_t end;
     if(io_.now(end) && end>=start_)report_.totalUs=end-start_;
     if(!ok || !sampled || !closed)return false;
@@ -557,6 +565,11 @@ bool Compute::run()
     // (fifo/gk104.c:654-718), no GR interrupt or trap, no FECS interrupt (engine/gr/gf100.c:1414,1570).
     const bool clean=!report_.mmuPending && !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&0x3fffffff) // fifo/gk104.c:654-718.
         && !report_.grIntr && !report_.grTrap && !report_.fecsIntr;
+    if(align_.qmdReadOnly) { // s3x: the fault on purpose, its record, the recovery, then no fault and GR not busy.
+        return report_.golden && report_.attached && report_.consumed && report_.faultUnits==1 && report_.mmuPending==1
+            && !report_.computed && report_.recovered && report_.closed && !report_.lastPending && !(report_.lastEngine&0x80000000) // fifo/gk104.c:206,474.
+            && !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&~0x50000000u) && !report_.grIntr && !report_.grTrap && !report_.fecsIntr; // fifo/gk104.c:654-718.
+    }
     return report_.golden && report_.attached && clean && (launch_==Launch::None || report_.consumed || (observe_==Observe::Report && !(report_.engineStatus&0x80000000))) // fifo/gk104.c:206-208: not busy (s3q, s3r: a loaded channel stays in the status).
         && (launch_!=Launch::Full || report_.computed);
 }

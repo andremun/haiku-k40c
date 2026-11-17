@@ -20,7 +20,7 @@ public:
     bool barWrite(uint64_t offset,uint32_t value) override;
     unsigned stage() const{return stage_;}
     unsigned index() const{return index_;}
-    static constexpr unsigned stages=7; // no source: fifo, bind, gating, start, golden, attach, teardown.
+    static constexpr unsigned stages=8; // no source: fifo, bind, gating, start, golden, attach, teardown, recover.
 private:
     bool record(memory::vram::Role,memory::vram::Record&) const;
     bool inputs();

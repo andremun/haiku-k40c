@@ -18,6 +18,9 @@ struct Report {
     // Observe mode (work/S3DIAG/REPORT.md, approach B): samples after GP_PUT, GP_GET and GP_PUT of the last
     // slow-window read, MMU fault units whose record was read, and whether the last BAR1 read was made.
     uint32_t samples=0,windowGet=0,windowPut=0,faultUnits=0;bool barRead=false;
+    // Teardown: the recovery program ran (a fault was pending); the MMU fault status and the engine
+    // status of the last sample (group 1).
+    bool recovered=false;uint32_t lastPending=0,lastEngine=0;
 };
 // What the one GPFIFO entry fetches (work/S3DIAG/PLAN.md): nothing (no submit),
 // the object bind, the set-up without the launch, or the whole job with its result.
@@ -31,7 +34,9 @@ enum class Launch:uint8_t {None,Bind,Setup,Full};
 // prefix of the register list at the load; 0 runs none (fuc/hub.fuc:686-690; work/S3DIAG/REPORT.md,
 // approaches H and the bisection after it). allList: the whole list, as Linux.
 constexpr uint32_t allList=0xffffffff; // no source: software marker for "the whole list".
-struct Align {bool copy=false,priv=false,user=false;uint32_t list=allList;};
+// qmdReadOnly: map the launch descriptor read-only, as before s3w, to cause the GR MMU fault of s3v
+// on purpose and test the recovery in the teardown.
+struct Align {bool copy=false,priv=false,user=false;uint32_t list=allList;bool qmdReadOnly=false;};
 // How the progress after GP_PUT is read (work/S3DIAG/REPORT.md): the BAR1 poll; approach B, BAR0
 // status registers and the slow window, BAR1 last; or approach F, registers only until the
 // teardown ended, then one slow-window read of USERD as the last action.
