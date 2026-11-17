@@ -916,3 +916,31 @@ scratch buffer (`nve4_compute.c:751`). No card run yet.
 
 Expected: `PASS S3_COMPUTE` with `wrong=0`. If another region faults, the
 teardown will again not end (s3v); the record still prints first.
+
+## 2026-11-18: s3w on the card (PASS: the compute job ran)
+
+Result folder `results/20261118-s3w-run-c25fd943`. Launcher status `pass`
+(`S3_complete: true`), driver `PASS S3_COMPUTE faults=0 upload=0 mapper=0
+closure=2 allocations=27 journal_overflow=0`. No AER message. The package
+`package-s3w` is consumed. The card is still on `vfio-pci`.
+
+KNOWN, from the serial log:
+- Baseline before GP_PUT: no fault, no interrupt.
+- BAR1 poll: GP_GET 1, GP_PUT 1 after 50 ms.
+- Fault check before the result read: no fault pending (no sample after
+  GP_PUT, `GR_OBSERVE samples=0 ... fault_units=0`).
+- The first result read found the last element with its value (16 ms after
+  the poll began). Compare of all 1024 elements by slow-window readback:
+  `wrong=0` (`LIVE step=12 a=0 b=400`, `computed=1`).
+- Status at the end: fifo 0x40000000 (runlist event only), MMU, PBDMA, GR,
+  trap and FECS 0, engine status 0x00012001 (not busy).
+- Teardown passed (`closed=1`, closing 0). Live step 15 (Done).
+
+Result: one compute job, `out[i] = in[i] + 1` over 1024 elements, ran on the
+K40c under Haiku with every element right (rung 5, one run). The two causes
+of the S3 stops were our own: the register list uploaded before the golden
+stage read the LTC values (`s3q` to `s3t`), and the launch descriptor mapped
+read-only (`s3u`, `s3v`).
+
+Still open: the teardown does not end while a GR MMU fault is pending
+(`s3v`); Q7 and Q11; host DMA payload visibility.

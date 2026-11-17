@@ -550,3 +550,11 @@ Command, after the yes and with the card on `vfio-pci`:
 - Another fault: decode the printed record as in section 24.
 - No fault but output wrong or not written: compare the job set-up with the
   Linux run.
+
+## 26. The compute job passes on the card (2026-11-18)
+
+`s3w` passed: the entry was fetched, no fault, and all 1024 output elements
+of `out[i] = in[i] + 1` were right by slow-window readback; clean teardown,
+no AER. Rung 5 is reached with one run. Details in
+`work/S3DIAG/FINDINGS.md`, entry "s3w on the card". The S3DIAG questions
+are closed; still open: recovery from a pending GR fault in the teardown.
