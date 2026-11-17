@@ -449,3 +449,13 @@ Read the log as `s3r` (section 13):
 - Teardown fails on the preempt, or the last read gets no completion: the
   cause is in entries 0-33 or in the header write-back. Next: list count 1
   (entry 0 and the write-back), then halve.
+
+## 17. Cause found (2026-11-17)
+
+`s3s` passed on the card with list entries 0-33. Entries 34 and 35 (LTC
+registers 0x17e91c, 0x17e920) are written into the list record before the
+golden stage reads their values, so the list holds 0 for both. At the first
+load FECS writes 0 into the two L2 cache registers; after that, data no
+longer moves between the card and VRAM (INFERRED; it matches all runs from
+`s3b` to `s3s`). Details and the fix: `work/S3DIAG/FINDINGS.md`, entry "s3s on
+the card".

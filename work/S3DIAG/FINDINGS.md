@@ -648,3 +648,43 @@ earlier stages). No card run yet.
   PASS_CARDLESS_NO_CARD. `make check` passes.
 - Manifest `work/S3DIAG/s3s/package.json`, SHA-256
   `4dd6fef4235a876d40ffbe316fdc101aa6393ab875bf702b2f63e98b53b33b05`.
+
+## 2026-11-17: s3s on the card (PASS) and the cause of the stop
+
+Result folder `results/20261117-s3s-run-ea67afa5`. Launcher status `pass`,
+driver `PASS S3_SHORT_LIST`. No AER message (the kernel log still holds 7).
+The package `package-s3s` is consumed.
+
+KNOWN, from the serial log:
+- `LIVE step=10 a=2 b=22`: list count 34.
+- 24 samples after GP_PUT, equal to `s3r`: no fault, no interrupt, FECS trace
+  word 0, engine status 0x00012001.
+- Teardown passed (`closed=1`, `closing=0`). Last slow-window read: GP_GET 1,
+  GP_PUT 1.
+
+So with list entries 0-33 and the header write-back, the card keeps its
+access to VRAM. With all 36 entries (`s3q`) it does not. The difference is
+entries 34 and 35: the LTC registers 0x17e91c and 0x17e920.
+
+Cause (KNOWN from the code, shown on the host):
+- `Compute::memory()` writes the register list into its record
+  (`src/gr/Compute.cpp`, `upload_.store(list,...,PatchWords(runner_))`)
+  before the golden stage runs. The values of entries 34 and 35 are the slots
+  42 and 43, which the golden stage reads from 0x17e91c and 0x17e920 (golden
+  ops 445-446). At the time of the upload the slots are still 0.
+- Host check: with the Linux trace as the card, list words 68-71 are
+  0x17e91c, 0, 0x17e920, 0. Linux writes 0x0905090a and 0x00090b03
+  (trace lines 811405-811410).
+- So at the first load FECS writes 0 into the two LTC (L2 cache) registers.
+  INFERRED: this breaks the L2 path to VRAM, which explains every stop since
+  `s3b`: host reads of VRAM by BAR1 and by the slow window, and the context
+  save of the preempt. Register access does not use that path.
+- Why the earlier checks did not see it: `tools/gr/patchlist.py` treats the
+  two entries as "read from the card" and does not model when the list is
+  written; the host test does not compare the list record with the trace.
+
+Fix (not made yet): write the two LTC entries of the list after the golden
+stage (for example in the attach hook, as the list count), allow that write
+in `gr::Guard`, and add a host-test assertion that every list word equals the
+Linux list for the trace card. Then the full stages (`s3e` form, then `s3b`
+with the compute job) can run again.
