@@ -9,7 +9,7 @@ using namespace memory::vram;
 NativeOwner::NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram,unsigned stage)
     :faults_(io_,journal_,epoch),policy_(arena_,faults_),upload_(io_,faults_,journal_,arena_),mapper_(io_,faults_,journal_,arena_,upload_,epoch),
      channel_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,stage==1 || stage==4,stage!=4),stage_(stage),guard_(arena_,policy_),
-     compute_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,launchOf(stage),&live_,alignOf(stage),stage==8)
+     compute_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,launchOf(stage),&live_,alignOf(stage),stage==8,stage==9)
 {
     io_.policy_=&policy_;
     std::memcpy(binding_.key,key,32);std::memcpy(binding_.nonce,nonce,32);std::memcpy(binding_.plan,plan,32);std::memcpy(binding_.challenge,challenge,16);
@@ -17,11 +17,16 @@ NativeOwner::NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uin
     binding_.begin=256*1024+4096;binding_.end=vram-1048576; // ramgf100.c:497-498; no source: extra A7 scratch exclusion.
 }
 gr::Launch NativeOwner::launchOf(unsigned stage)
-{return stage==3?gr::Launch::Full:stage==5 || stage==7?gr::Launch::Bind:stage==6?gr::Launch::Setup:gr::Launch::None;}
+{return stage==3?gr::Launch::Full:stage==5 || stage==7 || stage==9?gr::Launch::Bind:stage==6?gr::Launch::Setup:gr::Launch::None;}
 void NativeOwner::Live::live(gr::Step step,uint64_t microseconds,uint32_t a,uint32_t b)
 {dprintf("k40_mem: LIVE step=%u us=%llu a=%x b=%x\n",unsigned(step),(unsigned long long)microseconds,a,b);}
 void NativeOwner::Live::words(uint32_t offset,const uint32_t values[8])
 {dprintf("k40_mem: IMG %x %x %x %x %x %x %x %x %x\n",offset,values[0],values[1],values[2],values[3],values[4],values[5],values[6],values[7]);}
+void NativeOwner::Live::observed(uint32_t sample,uint32_t group,uint64_t microseconds,const uint32_t* values,unsigned count)
+{
+    uint32_t v[7]{};for(unsigned i=0;i<count && i<7;++i)v[i]=values[i];
+    dprintf("k40_mem: OBS n=%u g=%u us=%llu c=%u %x %x %x %x %x %x %x\n",sample,group,(unsigned long long)microseconds,count,v[0],v[1],v[2],v[3],v[4],v[5],v[6]);
+}
 status_t NativeOwner::observeLoad()
 {
     if(loads_>=16)return B_BUSY; // no source: bounded harmless client-load observation count.
@@ -99,6 +104,7 @@ void NativeOwner::drain()
             g.polls,(unsigned long long)g.progressUs,g.resultPolls,(unsigned long long)g.resultUs,g.wrong,g.firstWrong,g.firstValue);
         dprintf("k40_mem: GR_STATUS mc=%x fifo=%x mmu=%x pbdma=%x hce=%x state=%x gr=%x trap=%x fecs=%x engine=%x\n",g.mc,g.fifoIntr,
             g.mmuPending,g.pbdmaIntr,g.pbdmaHce,g.state,g.grIntr,g.grTrap,g.fecsIntr,g.engineStatus);
+        if(stage_==9)dprintf("k40_mem: GR_OBSERVE samples=%u get=%u put=%u bar=%u fault_units=%x\n",g.samples,g.windowGet,g.windowPut,g.barRead,g.faultUnits);
         dprintf("k40_mem: GR_IMAGE %x %x %x %x %x %x %x %x\n",g.image[0],g.image[1],g.image[2],g.image[3],g.image[4],g.image[5],g.image[6],g.image[7]);
     }
     const auto& c=channel_.report();
@@ -129,7 +135,7 @@ bool NativeOwner::execute()
     if(!passed)arena_.fail();
     drain();
     dprintf("k40_mem: %s faults=%u upload=%u mapper=%u closure=%u allocations=%u journal_overflow=%u\n",
-        !passed?"FAIL":stage_==3?"PASS S3_COMPUTE":stage_==2?"PASS S3_GOLDEN":stage_==8?"PASS S3_IMAGE":stage_==5 || stage_==7?"PASS S3_BIND":stage_==6?"PASS S3_SETUP":stage_==1?"PASS S2_COPY":stage_==4?"PASS S2_COPY_DIAGNOSTIC":"PASS S1_CHANNEL_NOP",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
+        !passed?"FAIL":stage_==3?"PASS S3_COMPUTE":stage_==2?"PASS S3_GOLDEN":stage_==8?"PASS S3_IMAGE":stage_==9?"PASS S3_OBSERVE":stage_==5 || stage_==7?"PASS S3_BIND":stage_==6?"PASS S3_SETUP":stage_==1?"PASS S2_COPY":stage_==4?"PASS S2_COPY_DIAGNOSTIC":"PASS S1_CHANNEL_NOP",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
         unsigned(mapper_.closure()),arena_.count(),journal_.overflow());return passed;
 }
 }

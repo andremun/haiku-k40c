@@ -337,12 +337,17 @@ GR_STAGES = {
     "S3B_A7_BAR1_GR_COMPUTE": ("full", "S3_COMPUTE"),
     "S3E_A7_BAR1_GR_BIND_ALIGNED": ("bind", "S3_BIND"),
     "S3G_A7_BAR1_GR_IMAGE": ("none", "S3_IMAGE"),
+    "S3O_A7_BAR1_GR_BIND_OBSERVED": ("bind", "S3_OBSERVE"),
 }
 # Stages aligned with the Linux reference run (gr::Align, work/S3DIAG/FINDINGS.md):
 # the channel context is a copy of the golden image in GrChanContext.
-GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED",)
+GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED", "S3O_A7_BAR1_GR_BIND_OBSERVED")
 # Stages that print the golden image (gr::Compute print mode, work/S3DIAG/REPORT.md).
 GR_PRINT = ("S3G_A7_BAR1_GR_IMAGE",)
+# Stages that observe the progress after GP_PUT without BAR1 access (gr::Compute observe mode,
+# work/S3DIAG/REPORT.md, approach B).
+GR_OBSERVE = ("S3O_A7_BAR1_GR_BIND_OBSERVED",)
+OBSERVE_SAMPLES = 32  # src/gr/Compute.cpp observeSamples.
 IMAGE_BYTES = 0x4EA00  # tools/gr/program.py KNOWN[0x409804], trace 616433.
 GR_ROLES = tuple(range(17, 30))  # GrText..GrChanContext, VramArena.h.
 GR_UNWRITTEN = (18, 24, 25, 26)  # Tls, PagePool, Bundle, Attrib: allocated, never written by the host.
@@ -376,7 +381,56 @@ def image_lines(serial):
     return lines
 
 
-def gr_phase(serial, events, byrole, mode, aligned=False, printed=False):
+def observe_lines(serial):
+    """The observe lines in print order: (sample, group, microseconds, values, position)."""
+    rows = [(int(m.group(1)), int(m.group(2)), int(m.group(3)), [int(v, 16) for v in m.group(5).split()][:int(m.group(4))], m.start())
+            for m in re.finditer(r"^k40_mem: OBS n=(\d+) g=(\d+) us=(\d+) c=([0-7])((?: [0-9a-f]+){7})\r?$", serial, re.M)]
+    if serial.count("k40_mem: OBS") != len(rows):
+        raise ValueError("observe line malformed")
+    return rows
+
+
+def observe_phase(serial, events):
+    """A passing observe run (src/gr/Compute.cpp sample(), observe()).
+
+    Sample 0 is the baseline before GP_PUT. Each sample has group 1 (mc, fifo, mmu, pbdma,
+    hce, state, engine), group 2 (gr, trap, fecs) and group 3 (GP_GET, GP_PUT by slow window).
+    No MMU fault is pending in any sample, so no group 4 line exists. The last sample reads
+    GP_GET 1; groups 5 and 6 are the one pair of BAR1 reads after it.
+    """
+    rows = observe_lines(serial)
+    put_at = serial.find("k40_mem: LIVE step=11 us=")
+    put_at = serial.find("k40_mem: LIVE step=11 us=", put_at + 1)  # the second line: GP_PUT written.
+    report_at = serial.find("k40_mem: GR step=")
+    if len(rows) < 8 or put_at < 0 or any(row[4] > report_at for row in rows):
+        raise ValueError("observe lines missing or after the report")
+    samples = (len(rows) - 2) // 3 - 1
+    wanted = [(n, g) for n in range(samples + 1) for g in (1, 2, 3)] + [(samples, 5), (samples, 6)]
+    if [(row[0], row[1]) for row in rows] != wanted or not 1 <= samples <= OBSERVE_SAMPLES:
+        raise ValueError("observe samples or groups out of order")
+    if [len(row[3]) for row in rows] != [7, 3, 2] * (samples + 1) + [0, 2]:
+        raise ValueError("observe value counts differ")
+    if any(a[2] > b[2] for a, b in zip(rows, rows[1:])):
+        raise ValueError("observe times not monotonic")
+    if any(row[4] > put_at for row in rows[:3]) or any(row[4] < put_at for row in rows[3:]):
+        raise ValueError("baseline sample is not before GP_PUT, or a later sample is not after it")
+    window = [row[3] for row in rows if row[1] == 3]
+    if window[0] != [0, 0] or window[-1] != [1, 1] or rows[-1][3] != [1, 1]:
+        raise ValueError("GP_GET or GP_PUT of the observe samples differs")
+    if any(get not in (0, 1) or put != 1 for get, put in window[1:]) or [get for get, _ in window[1:-1]].count(1) > 1:
+        raise ValueError("observe samples after the fetch, or GP_PUT lost")
+    if any(row[3][2] or row[3][3] or row[3][4] for row in rows if row[1] == 1):
+        raise ValueError("MMU fault or PBDMA interrupt pending in an observe sample")  # fifo/gf100.c:723,358.
+    if serial.count(f"k40_mem: GR_OBSERVE samples={samples} get=1 put=1 bar=1 fault_units=0") != 1:
+        raise ValueError("observe report differs")
+    reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]
+    if len(reads) != samples + 1:
+        raise ValueError("slow-window reads of USERD differ from the samples")
+    return dict(samples=samples, fetched_us=next(row[2] for row in rows if row[1] == 3 and row[3] == [1, 1]),
+                bar1_read=True)
+
+
+def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observed=False):
     """Validate an S3 run: program progress, context, submit, launch result, faults, teardown."""
     lengths, _, layout = gr_program()
     submit, launch = mode != "none", mode == "full"
@@ -440,6 +494,10 @@ def gr_phase(serial, events, byrole, mode, aligned=False, printed=False):
             raise ValueError("printed golden image, its summary line or its reads differ")
     elif lines:
         raise ValueError("golden image lines in a stage that does not print the image")
+    if observed:
+        observation = observe_phase(serial, events)
+    elif "k40_mem: OBS" in serial or "k40_mem: GR_OBSERVE" in serial:
+        raise ValueError("observe lines in a stage that does not observe")
     chan = [e for e in events if e[0] >= 8]
     stages, done = [(e[2], e[3], e[8]) for e in chan if e[6] == 8], 0
     expected = []
@@ -465,6 +523,7 @@ def gr_phase(serial, events, byrole, mode, aligned=False, printed=False):
         context_va=layout["ChanContext"]["va"] if aligned else layout["Context"]["va"] + 0x80000,
         records=len(GR_ROLES), aligned=aligned,
         image=dict(lines=len(lines), words_not_zero=summary[1][0], sum=summary[1][1]) if printed else None,
+        observe=observation if observed else None,
     )
 
 
@@ -769,9 +828,13 @@ def memory_final(serial, suite, request):
         if printed:
             scopes["none"] = ("S3g: as S3a, and the golden image read by slow window and printed; "
                               "the comparison with the Linux reference image is tools/gr/golden.py; no compute job")
+        observed = suite.get("stage") in GR_OBSERVE
+        if observed:
+            scopes["bind"] = ("S3o: as S3e, and after GP_PUT the progress read through BAR0 status registers and the slow window, "
+                              "one BAR1 read of GP_GET as the last action; object bind consumed, GP_GET 0->1, no fault, clean teardown; no launch")
         return dict(
             scope=scopes[mode],
-            gr=gr_phase(serial, events, byrole, mode, suite.get("stage") in GR_ALIGNED, printed),
+            gr=gr_phase(serial, events, byrole, mode, suite.get("stage") in GR_ALIGNED, printed, observed),
             owner=owner,
             allocations=[dict(id=r[0], role=r[1], physical=r[2], bytes=r[3], generation=r[4]) for r in allocations],
             events=len(events),
@@ -780,6 +843,7 @@ def memory_final(serial, suite, request):
             S2_complete=False,
             S3_golden_complete=True,
             S3_image_printed=printed,
+            S3_observed=observed,
             S3_bind_complete=mode != "none",
             S3_setup_complete=mode in ("setup", "full"),
             S3_complete=launch,

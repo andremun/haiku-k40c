@@ -281,8 +281,35 @@ class Tests(unittest.TestCase):
         # work/S3DIAG/PLAN.md: prefixes of the push buffer, and the live lines.
         reports = {
             mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
-            for mode in ("bind", "setup", "aligned", "image")
+            for mode in ("bind", "setup", "aligned", "image", "observe")
         }
+        # s3o: the aligned bind observed without BAR1 access (work/S3DIAG/REPORT.md, approach B).
+        suite["stage"] = "S3O_A7_BAR1_GR_BIND_OBSERVED"
+        observe = reports["observe"]
+        result = evidence.memory_final(observe, suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and result["S3_observed"] and result["gr"]["aligned"])
+        self.assertEqual(result["gr"]["observe"]["samples"], 2)
+        with self.assertRaises(ValueError):  # the aligned bind report has no observe lines
+            evidence.memory_final(reports["aligned"].replace("PASS S3_BIND", "PASS S3_OBSERVE"), suite, raw)
+        line = re.search(r"^k40_mem: OBS n=1 g=2 .*\n", observe, re.M).group(0)
+        group1 = re.search(r"^k40_mem: OBS n=1 g=1 us=\d+ c=7 0 0 0", observe, re.M).group(0)
+        for changed in (observe.replace(line, "", 1),  # one group lost
+                        observe.replace(line, line + line, 1),  # repeated
+                        observe.replace(group1, group1[:-1] + "10", 1),  # MMU fault pending in a sample
+                        observe.replace("g=6 us=", "g=7 us="),
+                        re.sub(r"(OBS n=2 g=6 us=\d+ c=2) 1 1", r"\g<1> 0 1", observe),  # BAR1 reads GP_GET 0
+                        re.sub(r"(OBS n=0 g=3 us=\d+ c=2) 0 0", r"\g<1> 1 0", observe),  # GP_GET 1 before GP_PUT
+                        observe.replace("bar=1 fault_units=0", "bar=0 fault_units=0"),
+                        observe.replace("bar=1 fault_units=0", "bar=1 fault_units=10"),
+                        observe.replace("GR_OBSERVE samples=2", "GR_OBSERVE samples=3"),
+                        observe.replace("offset=288 value=8", "offset=288 value=4", 1),  # one slow-window read lost
+                        observe.replace("PASS S3_OBSERVE", "PASS S3_BIND")):
+            self.assertNotEqual(changed, observe)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        suite["stage"] = "S3E_A7_BAR1_GR_BIND_ALIGNED"
+        with self.assertRaises(ValueError):  # observe lines in a stage that does not observe
+            evidence.memory_final(observe.replace("PASS S3_OBSERVE", "PASS S3_BIND"), suite, raw)
         # s3g: the golden context with the image printed (work/S3DIAG/REPORT.md, approach A).
         suite["stage"] = "S3G_A7_BAR1_GR_IMAGE"
         result = evidence.memory_final(reports["image"], suite, raw)

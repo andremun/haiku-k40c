@@ -13,6 +13,7 @@ constexpr Role channelRoles[7]={Role::ChanDirectory,Role::ChanSmall,Role::ChanIn
 constexpr uint64_t reserved=0x80000; // engine/gr/ctxgf100.c:1436 CB_RESERVED.
 constexpr uint64_t budgetUs=120000000; // no source: software budget of the whole stage, microseconds.
 constexpr uint64_t waitUs=2000000; // no source: 2 s progress bounds, as memstage/Channel.cpp.
+constexpr unsigned observeSamples=32; // no source: software bound of the observe samples (work/S3DIAG/REPORT.md, approach B).
 constexpr uint64_t liveUs=100000; // no source: one live poll line each 100 ms (work/S3DIAG/PLAN.md).
 // Bytes the one GPFIFO entry fetches in each mode: prefixes of pushWords (tools/gr/program.py).
 uint32_t entryBytes(Launch launch)
@@ -293,6 +294,7 @@ bool Compute::submit()
     if(!io_.storeFence() || !io_.barWrite32(gpPut,1))return fail(MemError::Write); // nouveau_dma.c:88-92.
     report_.submitted=true;live(Step::Submit,1,0); // a: GP_PUT written.
     if(!journal_.append({phase_,MemError::None,gpPut,1,0,last_-start_,Operation::Write,uint8_t(Role::Userd),1}))return fail(MemError::Overflow);
+    if(observe_)return true; // observe() follows without the locks of this function.
     const auto begin=last_;uint32_t liveCount=0;
     for(unsigned i=0;i<20000000;++i) { // no source: software poll-count bound above the time bound.
         if(!tick() || !io_.loadFence() || !io_.barRead32(gpGet,report_.getAfter))return fail(MemError::Read);
@@ -304,6 +306,74 @@ bool Compute::submit()
     if(!io_.barRead32(gpPut,report_.putAfter))return fail(MemError::Read);
     report_.consumed=report_.getAfter==1 && report_.putAfter==1;
     return journal_.append({phase_,MemError::None,gpGet,report_.getAfter,report_.polls,report_.progressUs,Operation::Poll,uint8_t(Role::Userd),1}) || fail(MemError::Overflow);
+}
+bool Compute::sample(uint32_t number)
+{
+    // One observation without BAR1 access. Each group is printed after its reads: when a read
+    // gets no completion, the last printed group names the reads that did complete.
+    // Group 1: master, FIFO and PBDMA 0 status. Group 2: GR status. Group 3: GP_GET and GP_PUT
+    // of USERD by slow window. Group 4: the fault record of one MMU fault unit, once for each unit.
+    uint32_t v[7]{};
+    {
+        LockGuard lock(io_,Lock::Mmu);
+        if(!lock.held())return fail(MemError::Budget);
+        const uint32_t state=0x800004+chid*8; // fifo/gk104.c:44-77.
+        if(!tick() || !io_.read32(0x000100,v[0]) || !io_.read32(0x002100,v[1]) || !io_.read32(0x00259c,v[2]) // fb/gf100.c:37; fifo/gk104.c:658; fifo/gf100.c:723.
+            || !io_.read32(0x040108,v[3]) || !io_.read32(0x040148,v[4]) || !io_.read32(state,v[5]) // fifo/gf100.c:358; fifo/gk104.c:378.
+            || !io_.read32(0x002640,v[6]))return fail(MemError::Read); // fifo/gk104.c:206.
+        if(!tick())return false;
+        if(progress_)progress_->observed(number,1,last_-start_,v,7);
+        const uint32_t pending=v[2];uint32_t g[3]{};
+        if(!io_.read32(0x400100,g[0]) || !io_.read32(0x400108,g[1]) || !io_.read32(0x409c18,g[2]))return fail(MemError::Read); // engine/gr/gf100.c:1414,1690,1570 status only.
+        if(!tick())return false;
+        if(progress_)progress_->observed(number,2,last_-start_,g,3);
+        for(uint32_t unit=0;unit<32;++unit)if((pending&~report_.faultUnits)&(uint32_t(1)<<unit)) {
+            // fifo/gf100.c:699-702: instance, address low and high, type. Read only; the pending bit stays.
+            uint32_t f[5]{unit};const uint32_t base=0x002800+unit*0x10; // fifo/gf100.c:699.
+            if(!io_.read32(base,f[1]) || !io_.read32(base+4,f[2]) || !io_.read32(base+8,f[3]) || !io_.read32(base+12,f[4]))return fail(MemError::Read); // fifo/gf100.c:699-702.
+            report_.faultUnits|=uint32_t(1)<<unit;
+            if(!tick())return false;
+            if(progress_)progress_->observed(number,4,last_-start_,f,5);
+        }
+    }
+    Token userd;uint32_t w[2]{};
+    if(!token(Role::Userd,userd))return fail(MemError::Bounds);
+    if(!upload_.load(userd,gpGet,2,w))return fail(upload_.error()==MemError::None?MemError::Read:upload_.error()); // nouveau_dma.c:92; cla16f.h line 62.
+    if(!tick())return false;
+    report_.windowGet=w[0];report_.windowPut=w[1];
+    if(progress_)progress_->observed(number,3,last_-start_,w,2);
+    return true;
+}
+bool Compute::observe()
+{
+    // After GP_PUT: samples until the entry is fetched (one more sample after that), the
+    // sample bound or the time bound. The BAR1 read of GP_GET is the last action, and it is
+    // left out while an MMU fault is pending (a fault of unit BAR1 stalls BAR1 reads:
+    // fifo/gf100.c:573-577, bar/base.c:40-47), so that the teardown still runs.
+    const auto begin=last_;bool fetched=false;
+    for(uint32_t n=1;n<=observeSamples;++n) {
+        if(!sample(n))return false;
+        report_.samples=n;report_.progressUs=last_-begin;
+        if(fetched || report_.progressUs>=waitUs)break;
+        fetched=report_.windowGet==1;
+    }
+    report_.polls=report_.samples;report_.getAfter=report_.windowGet;report_.putAfter=report_.windowPut;
+    uint32_t pending=0;
+    {
+        LockGuard lock(io_,Lock::Mmu);
+        if(!lock.held())return fail(MemError::Budget);
+        if(!io_.read32(0x00259c,pending))return fail(MemError::Read); // fifo/gf100.c:723.
+        if(!pending) {
+            uint32_t b[2]{};
+            if(progress_)progress_->observed(report_.samples,5,last_-start_,b,0); // The BAR1 reads follow.
+            if(!tick() || !io_.loadFence() || !io_.barRead32(gpGet,b[0]) || !io_.barRead32(gpPut,b[1]))return fail(MemError::Read);
+            if(!tick())return false;
+            report_.barRead=true;report_.getAfter=b[0];report_.putAfter=b[1];
+            if(progress_)progress_->observed(report_.samples,6,last_-start_,b,2);
+        }
+    }
+    report_.consumed=report_.getAfter==1 && report_.putAfter==1 && report_.windowGet==1;
+    return journal_.append({phase_,MemError::None,gpGet,report_.getAfter,report_.samples,report_.progressUs,Operation::Poll,uint8_t(Role::Userd),uint8_t(report_.barRead?1:0)}) || fail(MemError::Overflow);
 }
 bool Compute::result()
 {
@@ -389,7 +459,8 @@ bool Compute::run()
     if(ok && print_)ok=printImage();
     if(ok && align_.copy)ok=copyContext();
     if(ok){ok=stage(gr::attach,Step::Attach,5);report_.attached=ok;}
-    if(ok && launch_!=Launch::None)ok=submit() && (launch_!=Launch::Full || result());
+    if(ok && observe_ && launch_!=Launch::None)ok=sample(0); // Baseline before GP_PUT.
+    if(ok && launch_!=Launch::None)ok=submit() && (!observe_ || observe()) && (launch_!=Launch::Full || result());
     const bool sampled=snapshot();
     if(sampled)live(Step::Status,report_.fifoIntr,report_.grIntr|report_.grTrap|report_.fecsIntr);
     const bool closed=teardown();

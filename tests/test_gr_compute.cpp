@@ -20,8 +20,9 @@ using namespace k40::memnative;
 namespace ch=k40::memstage::channel;
 namespace gr=k40::gr;
 struct Access {char op;uint32_t addr,value;};
-enum Fault {None,NoLaunch,FecsSilent,WrongSum,Stall,ReadOnlyOutput,BindOnly,SetupOnly,AlignedBind,PrintImage};
-static gr::Launch launchOf(Fault f){return f==NoLaunch || f==PrintImage?gr::Launch::None:f==BindOnly || f==AlignedBind?gr::Launch::Bind:f==SetupOnly?gr::Launch::Setup:gr::Launch::Full;}
+enum Fault {None,NoLaunch,FecsSilent,WrongSum,Stall,ReadOnlyOutput,BindOnly,SetupOnly,AlignedBind,PrintImage,Observe,ObserveFault,ObserveStall};
+static bool observes(Fault f){return f==Observe || f==ObserveFault || f==ObserveStall;}
+static gr::Launch launchOf(Fault f){return f==NoLaunch || f==PrintImage?gr::Launch::None:f==BindOnly || f==AlignedBind || observes(f)?gr::Launch::Bind:f==SetupOnly?gr::Launch::Setup:gr::Launch::Full;}
 // Records the live progress calls; with print, in the line format of memnative/NativeOwner.cpp.
 struct Live final:gr::Progress {
     std::vector<std::pair<unsigned,uint32_t>> steps;bool print=false;
@@ -34,13 +35,20 @@ struct Live final:gr::Progress {
         assert(!image.count(offset));image[offset].assign(values,values+8);
         if(print)std::printf("k40_mem: IMG %x %x %x %x %x %x %x %x %x\n",offset,values[0],values[1],values[2],values[3],values[4],values[5],values[6],values[7]);
     }
+    struct Group {uint32_t sample,group;std::vector<uint32_t> values;};
+    std::vector<Group> groups; // observe lines in call order
+    void observed(uint32_t sample,uint32_t group,uint64_t us,const uint32_t* values,unsigned count) override {
+        groups.push_back({sample,group,std::vector<uint32_t>(values,values+count)});
+        uint32_t v[7]{};for(unsigned i=0;i<count && i<7;++i)v[i]=values[i];
+        if(print)std::printf("k40_mem: OBS n=%u g=%u us=%llu c=%u %x %x %x %x %x %x %x\n",sample,group,(unsigned long long)us,count,v[0],v[1],v[2],v[3],v[4],v[5],v[6]);
+    }
 };
 struct Card:Device {
     Policy* policy=nullptr;Arena* arena=nullptr;Fault fault=None;unsigned denials=0;
     std::vector<Access> trace;size_t next=0;bool follow=false,armed=false,mismatch=false,launched=false,alignedSeen=false;
     std::map<uint32_t,uint32_t> regs{{0x2390,0x1},{0x2394,0x6e},{0x2398,0x10},{0x2a04,0x800003ff},{0x4013c,0xffffffff},
         {0x204,0x7},{0x200,0xe011212d}}; // trace 230517-230519, 560973, 46125.
-    uint32_t runlistBase=0,entries=0;
+    uint32_t runlistBase=0,entries=0;unsigned barReads=0,barReadsAfterPut=0;bool put=false;
     Card(){ram.resize(24*1024*1024);}
     uint64_t physical(Role role) const {Record r;for(unsigned i=0;i<arena->count();++i)if(arena->at(i,r) && r.role==role)return r.physical.value;assert(false);return 0;}
     uint64_t pte(uint64_t instance,uint64_t va) const {
@@ -117,6 +125,7 @@ struct Card:Device {
     bool storeFence() override{return true;}
     bool barRead32(uint64_t offset,uint32_t& value) override {
         if(!policy->barRead(offset,locks[1])){++denials;return false;}
+        ++barReads;if(put)++barReadsAfterPut;
         value=ram.at(bar(offset,false)/4);return true;
     }
     void compute(uint64_t inst) {
@@ -125,8 +134,8 @@ struct Card:Device {
         const auto entry=word64(walk(inst,gp));const unsigned words=unsigned((entry>>42)&0x1fffff);
         const auto base=entry&0xffffffffffULL;std::map<uint32_t,uint32_t> m;uint32_t object=0;unsigned nonInc=0;
         // Bind, set-up or whole job: prefixes of the same push words (work/S3DIAG/PLAN.md).
-        if(fault==AlignedBind)aligned(inst);
-        assert(words==(fault==BindOnly || fault==AlignedBind?gr::pushBindBytes:fault==SetupOnly?gr::pushSetupBytes:gr::pushBytes)/4);
+        if(fault==AlignedBind || observes(fault))aligned(inst);
+        assert(words==(fault==BindOnly || fault==AlignedBind || observes(fault)?gr::pushBindBytes:fault==SetupOnly?gr::pushSetupBytes:gr::pushBytes)/4);
         for(unsigned i=0;i<words;) {
             const auto header=at(inst,base+i*4);++i;
             const auto op=header>>29,count=(header>>16)&0x1fff,subc=(header>>13)&7,method=(header&0xfff)<<2;
@@ -140,7 +149,7 @@ struct Card:Device {
                 if(target==0x2bc){assert(value==3 && object==0xa1c0);launch(inst,m);}
             }
         }
-        if(fault==BindOnly || fault==AlignedBind)assert(words==2 && object==0xa1c0 && !launched && nonInc==0 && m.empty());
+        if(fault==BindOnly || fault==AlignedBind || observes(fault))assert(words==2 && object==0xa1c0 && !launched && nonInc==0 && m.empty());
         else if(fault==SetupOnly)assert(object==0xa1c0 && !launched && nonInc==64 && !m.count(0x2bc) && !m.count(0x2b4));
         else assert(launched && nonInc==64);
     }
@@ -196,7 +205,11 @@ struct Card:Device {
         const auto inst=uint64_t(regs[0x800000+ch::chid*8]&0x7fffffff)*4096;
         assert(value==1 && entries==1 && (regs[0x800000+ch::chid*8]&0x80000000) && next==trace.size());
         assert(ram.at(uint64_t(runlistBase)*4096/4)==ch::chid && word64(inst+8)==slot);
-        if(fault==Stall)return true;
+        put=true;
+        if(fault==Stall || fault==ObserveStall)return true;
+        if(fault==ObserveFault) { // A fault of unit 4, BAR1 (fifo/gk104.c:478), with a software fault record.
+            regs[0x259c]=0x10;regs[0x2840]=uint32_t(inst>>12);regs[0x2844]=0x1000;regs[0x2848]=0;regs[0x284c]=0x82;return true;
+        }
         compute(inst);
         ram.at((slot+0x88)/4)=1;return true;
     }
@@ -211,7 +224,7 @@ static std::vector<Access> load(const char* path)
     }
     return rows;
 }
-struct Result {gr::Report report;unsigned denials=0,stage=0,index=0;bool mismatch=false,closed=false,launched=false,aligned=false;size_t next=0;std::vector<std::pair<unsigned,uint32_t>> live;std::map<uint32_t,std::vector<uint32_t>> image;std::vector<uint32_t> golden;};
+struct Result {gr::Report report;unsigned denials=0,stage=0,index=0;bool mismatch=false,closed=false,launched=false,aligned=false;size_t next=0;std::vector<std::pair<unsigned,uint32_t>> live;std::map<uint32_t,std::vector<uint32_t>> image;std::vector<uint32_t> golden;std::vector<Live::Group> groups;unsigned barAfterPut=0;};
 static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bool dump=false,bool report=false)
 {
     using namespace k40::memstage;
@@ -221,7 +234,7 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
     Experiment experiment(io,faults,arena,upload,mapper,2,2,11520ULL*1048576,256*1048576);
     Live live;live.print=report;
     gr::Compute compute(io,faults,journal,arena,upload,mapper,2,launchOf(fault),&live,
-        fault==AlignedBind?gr::Align{true,true,true}:gr::Align{},fault==PrintImage);
+        fault==AlignedBind || observes(fault)?gr::Align{true,true,true}:gr::Align{},fault==PrintImage,observes(fault));
     assert(experiment.run());
     policy.extend(&guard);
     const bool passed=compute.run();
@@ -230,7 +243,7 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
         assert(!policy.write(reg,1,true,true));
     assert(!policy.barWrite(ch::gpPut,1,true) && !policy.barWrite(ch::gpPut,2,true));
     out.report=compute.report();out.denials=io.denials;out.mismatch=io.mismatch;out.closed=mapper.closure()==Closure::OwnedDisabled;
-    out.launched=io.launched;out.next=io.next;out.stage=guard.stage();out.index=guard.index();out.live=live.steps;out.aligned=io.alignedSeen;out.image=live.image;
+    out.launched=io.launched;out.next=io.next;out.stage=guard.stage();out.index=guard.index();out.live=live.steps;out.aligned=io.alignedSeen;out.image=live.image;out.groups=live.groups;out.barAfterPut=io.barReadsAfterPut;
     {const auto base=io.physical(Role::GrContext)+0x80000;out.golden.assign(io.ram.begin()+base/4,io.ram.begin()+(base+gr::imageBytes)/4);} // engine/gr/ctxgf100.c:1436 CB_RESERVED.
     if(dump) {
         const auto& r=out.report;
@@ -259,9 +272,10 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
             g.polls,(unsigned long long)g.progressUs,g.resultPolls,(unsigned long long)g.resultUs,g.wrong,g.firstWrong,g.firstValue);
         std::printf("k40_mem: GR_STATUS mc=%x fifo=%x mmu=%x pbdma=%x hce=%x state=%x gr=%x trap=%x fecs=%x engine=%x\n",g.mc,g.fifoIntr,
             g.mmuPending,g.pbdmaIntr,g.pbdmaHce,g.state,g.grIntr,g.grTrap,g.fecsIntr,g.engineStatus);
+        if(observes(fault))std::printf("k40_mem: GR_OBSERVE samples=%u get=%u put=%u bar=%u fault_units=%x\n",g.samples,g.windowGet,g.windowPut,g.barRead,g.faultUnits);
         std::printf("k40_mem: GR_IMAGE %x %x %x %x %x %x %x %x\n",g.image[0],g.image[1],g.image[2],g.image[3],g.image[4],g.image[5],g.image[6],g.image[7]);
         std::printf("k40_mem: %s faults=0 upload=0 mapper=0 closure=2 allocations=%u journal_overflow=0\n",
-            !passed?"FAIL":fault==NoLaunch?"PASS S3_GOLDEN":fault==PrintImage?"PASS S3_IMAGE":fault==BindOnly || fault==AlignedBind?"PASS S3_BIND":fault==SetupOnly?"PASS S3_SETUP":"PASS S3_COMPUTE",arena.count());
+            !passed?"FAIL":fault==NoLaunch?"PASS S3_GOLDEN":fault==PrintImage?"PASS S3_IMAGE":observes(fault)?"PASS S3_OBSERVE":fault==BindOnly || fault==AlignedBind?"PASS S3_BIND":fault==SetupOnly?"PASS S3_SETUP":"PASS S3_COMPUTE",arena.count());
         std::puts("k40_mem: SUBMIT result=0 state=3\nk40_mem: RETAINED owner=2 state=3\nK40-MEM-END");
     }
     return passed;
@@ -272,7 +286,7 @@ int main(int argc,char** argv)
     const auto trace=load(argv[1]);Result r;
     if(argc>2 && std::string(argv[2])=="--report") {
         const std::string mode=argc>3?argv[3]:"";
-        return scenario(trace,mode=="nolaunch"?NoLaunch:mode=="image"?PrintImage:mode=="bind"?BindOnly:mode=="aligned"?AlignedBind:mode=="setup"?SetupOnly:None,r,false,true)?0:1;
+        return scenario(trace,mode=="nolaunch"?NoLaunch:mode=="image"?PrintImage:mode=="observe"?Observe:mode=="bind"?BindOnly:mode=="aligned"?AlignedBind:mode=="setup"?SetupOnly:None,r,false,true)?0:1;
     }
     const bool first=scenario(trace,None,r,argc>2);
     assert(first);
@@ -305,6 +319,27 @@ int main(int argc,char** argv)
         bool summary=false;for(auto& e:r.live)summary=summary || (e.first==9 && e.second==count);
         assert(summary);
     }
+    assert(r.groups.empty()); // no observe line without the observe mode
+    assert(scenario(trace,Observe,r)); // s3o: no BAR1 access after GP_PUT until the last action (work/S3DIAG/REPORT.md, approach B)
+    assert(r.aligned && r.report.consumed && r.report.barRead && r.report.samples==2 && r.report.faultUnits==0 && r.closed && r.denials==0 && !r.mismatch && !has(0));
+    assert(r.barAfterPut==2 && r.report.windowGet==1 && r.report.windowPut==1); // GP_GET and GP_PUT once, at the end
+    {   // Baseline, two samples, then the BAR1 pair: groups 1, 2, 3 for each sample.
+        const unsigned wanted[][2]={{0,1},{0,2},{0,3},{1,1},{1,2},{1,3},{2,1},{2,2},{2,3},{2,5},{2,6}};
+        assert(r.groups.size()==11);
+        for(unsigned i=0;i<11;++i)assert(r.groups[i].sample==wanted[i][0] && r.groups[i].group==wanted[i][1]);
+        assert(r.groups[2].values==std::vector<uint32_t>({0,0}) && r.groups[5].values==std::vector<uint32_t>({1,1}));
+        assert(r.groups[0].values.size()==7 && r.groups[1].values.size()==3 && r.groups[10].values==std::vector<uint32_t>({1,1}));
+    }
+    assert(!scenario(trace,ObserveFault,r)); // an MMU fault of unit BAR1: its record is read once, and BAR1 is not read again
+    assert(r.report.submitted && !r.report.consumed && !r.report.barRead && r.barAfterPut==0 && r.report.faultUnits==0x10 && r.report.mmuPending==0x10);
+    assert(r.report.closed && r.closed && r.denials==0 && r.report.samples==32);
+    {   unsigned records=0;
+        for(auto& g:r.groups)if(g.group==4){++records;assert(g.sample==1 && g.values==std::vector<uint32_t>({4,r.groups[0].values.empty()?0:g.values[1],0x1000,0,0x82}));}
+        assert(records==1);
+        for(auto& g:r.groups)assert(g.group!=5 && g.group!=6);
+    }
+    assert(!scenario(trace,ObserveStall,r)); // entry never fetched, no fault: every sample, then the BAR1 pair
+    assert(r.report.submitted && !r.report.consumed && r.report.barRead && r.barAfterPut==2 && r.report.samples==32 && r.report.windowGet==0 && r.closed && r.denials==0);
     const bool silent=scenario(trace,FecsSilent,r,argc>2);assert(!silent); // FECS never reports ready: stop, then teardown
     assert(!r.report.started && r.report.runner.error==gr::Error::Poll && r.report.runner.addr==0x409800 && r.report.closed && r.closed && !r.launched);
     assert(has(0) && !has(11)); // the failed step is printed at once (step 0: a = step, b = error)
@@ -314,5 +349,5 @@ int main(int argc,char** argv)
     assert(r.report.submitted && !r.report.consumed && r.closed && !r.launched);
     unsigned polls=0;for(auto& e:r.live)if(e.first==11 && e.second==0)++polls;
     assert(polls>=2); // GP_PUT line, then GP_GET 0 each 100 ms of the stall
-    std::puts("GR compute stage: golden context, attach, launch and result pass through Policy and Guard; no-launch, image print, bind-only, aligned bind, set-up-only, silent FECS, wrong sum and stall cases pass; live lines checked; HOST_ONLY");
+    std::puts("GR compute stage: golden context, attach, launch and result pass through Policy and Guard; no-launch, image print, bind-only, aligned bind, observed bind (pass, BAR1 fault, stall), set-up-only, silent FECS, wrong sum and stall cases pass; live lines checked; HOST_ONLY");
 }

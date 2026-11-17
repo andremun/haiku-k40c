@@ -228,3 +228,34 @@ Approach A ran once (`work/S3DIAG/FINDINGS.md`, entry "s3g on the card").
 - Approach B (`s3o`) is now the next step. Keep its live lines few: one line
   costs about 8 to 16 ms.
 
+
+## 7. Stage s3o is built (2026-11-17)
+
+Approach B is ready for one card run (`work/S3DIAG/FINDINGS.md`, entry "stage
+s3o built"). The run needs the user's explicit yes (ADR 006).
+
+Command, after the yes and with the card on `vfio-pci`:
+`K40_MEM_STAGE=s3o python3 tools/memstage/run.py --run-approved-batch1-once`
+
+How to read the serial log. The last `k40_mem: OBS` line names the last group
+of reads that completed.
+
+| Log ends after | The read without completion | Meaning |
+|---|---|---|
+| `LIVE step=11 ... a=1` (GP_PUT) | a BAR0 status read of g=1 | The card stops all host access. Go to approach C |
+| `OBS ... g=1` | a GR status read of g=2 | GR registers stop; FIFO registers still answer |
+| `OBS ... g=2` | a fault-record read (g=4) or the slow window (g=3) | See the 0x00259c value of the g=1 line |
+| `OBS ... g=4` | the slow-window read (g=3) | The window stops after an MMU fault; the fault record is in the log |
+| `OBS ... g=3` | a BAR0 status read of the next sample | The card stops host access some time after GP_PUT; the earlier samples show the state before |
+| `OBS ... g=5` | the BAR1 read | Only BAR1 is stalled, without a pending MMU fault |
+| the run ends with a report | none | Read the g=1 values with the table of section 3, approach B |
+
+Values of a g=1 line, in order: 0x000100, 0x002100, 0x00259c (MMU fault units),
+0x040108 (PBDMA 0 interrupt), 0x040148, channel state, 0x002640 (engine
+status). A g=4 line holds: unit, instance, address low, address high, type
+(`engine/fifo/gf100.c:699-712`).
+
+Differences from the plan of section 3:
+- The fault record is read in this stage already (no second package).
+- 0x409b00 and 0x409b04 are not read.
+- The BAR1 read is left out while an MMU fault is pending.

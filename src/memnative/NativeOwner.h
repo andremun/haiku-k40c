@@ -29,14 +29,16 @@ private:
     public:
         void live(gr::Step step,uint64_t microseconds,uint32_t a,uint32_t b) override;
         void words(uint32_t offset,const uint32_t values[8]) override;
+        void observed(uint32_t sample,uint32_t group,uint64_t microseconds,const uint32_t* values,unsigned count) override;
     };
     // Stage of the package (tools/memstage/stage.py): 0 S1, 1 S2 copy, 2 S3 golden context, 3 S3 compute,
     // 4 S2 copy diagnostic (engine busy bit recorded only), 5 S3 object bind, 6 S3 set-up without launch,
     // 7 S3 object bind aligned with the Linux reference run (work/S3DIAG/FINDINGS.md),
-    // 8 S3 golden context with the image printed (work/S3DIAG/REPORT.md).
+    // 8 S3 golden context with the image printed (work/S3DIAG/REPORT.md),
+    // 9 as 7, and after GP_PUT the progress observed without BAR1 access (work/S3DIAG/REPORT.md, approach B).
     static gr::Launch launchOf(unsigned stage);
-    static gr::Align alignOf(unsigned stage){return stage==7?gr::Align{true,true,true}:gr::Align{};}
-    static bool computeStage(unsigned stage){return stage==2 || stage==3 || stage==5 || stage==6 || stage==7 || stage==8;}
+    static gr::Align alignOf(unsigned stage){return stage==7 || stage==9?gr::Align{true,true,true}:gr::Align{};}
+    static bool computeStage(unsigned stage){return stage==2 || stage==3 || stage==5 || stage==6 || stage==7 || stage==8 || stage==9;}
     unsigned stage_=0;gr::Guard guard_;Live live_;gr::Compute compute_;
     memauth::Binding binding_;alignas(memauth::Session) uint8_t sessionStorage_[sizeof(memauth::Session)]{};
     memauth::Session* session_=nullptr;k40_a7_module* a7_=nullptr;

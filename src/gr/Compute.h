@@ -15,6 +15,9 @@ struct Report {
     uint32_t mc=0,fifoIntr=0,mmuPending=0,pbdmaIntr=0,pbdmaHce=0,state=0,grIntr=0,grTrap=0,fecsIntr=0,engineStatus=0;
     uint32_t image[8]{}; // First words of the golden context image.
     uint32_t imageWords=0,imageSum=0,imageLines=0; // Print mode: words not zero, sum of all words, printed lines.
+    // Observe mode (work/S3DIAG/REPORT.md, approach B): samples after GP_PUT, GP_GET and GP_PUT of the last
+    // slow-window read, MMU fault units whose record was read, and whether the last BAR1 read was made.
+    uint32_t samples=0,windowGet=0,windowPut=0,faultUnits=0;bool barRead=false;
 };
 // What the one GPFIFO entry fetches (work/S3DIAG/PLAN.md): nothing (no submit),
 // the object bind, the set-up without the launch, or the whole job with its result.
@@ -31,11 +34,15 @@ public:
     virtual void live(Step step,uint64_t microseconds,uint32_t a,uint32_t b)=0;
     // Eight words of the golden image at a byte offset (print mode, work/S3DIAG/REPORT.md).
     virtual void words(uint32_t offset,const uint32_t values[8])=0;
+    // Observe mode: one group of status values of sample n (work/S3DIAG/REPORT.md, approach B).
+    virtual void observed(uint32_t sample,uint32_t group,uint64_t microseconds,const uint32_t* values,unsigned count)=0;
 protected:
     ~Progress()=default;
 };
 // With print, the golden image is read after its generation and given to the progress
 // sink in lines of eight words; lines of zeros are left out (work/S3DIAG/REPORT.md, approach A).
+// With observe, no BAR1 access follows GP_PUT until the last action: the progress is read through
+// BAR0 status registers and the slow window, each group printed at once (approach B).
 // S3: the GR engine start, the golden context and, with launch, one compute
 // job on one channel of the GR runlist (work/S3LAUNCH/PLAN.md). Polling only.
 // Every register write is an op of the generated program (gr/Program.h) or one
@@ -43,8 +50,8 @@ protected:
 class Compute final:private Port {
 public:
     Compute(memstage::Io& io,memstage::Faults& faults,memstage::Journal& journal,memory::vram::Arena& arena,
-        memstage::Upload& upload,memstage::Mapper& mapper,uint64_t epoch,Launch launch,Progress* progress=nullptr,Align align={},bool print=false)
-        :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),mapper_(mapper),epoch_(epoch),launch_(launch),progress_(progress),align_(align),print_(print),
+        memstage::Upload& upload,memstage::Mapper& mapper,uint64_t epoch,Launch launch,Progress* progress=nullptr,Align align={},bool print=false,bool observe=false)
+        :io_(io),faults_(faults),journal_(journal),arena_(arena),upload_(upload),mapper_(mapper),epoch_(epoch),launch_(launch),progress_(progress),align_(align),print_(print),observe_(observe),
          runner_(*this),closer_(*this){}
     // True only when every step passed: without launch, the golden context and a
     // clean teardown; with a submit, also GP_GET 1; with the full job, also every
@@ -74,11 +81,13 @@ private:
     bool copyContext();
     bool printImage();
     bool submit();
+    bool sample(uint32_t number);
+    bool observe();
     bool result();
     bool snapshot();
     bool teardown();
     memstage::Io& io_;memstage::Faults& faults_;memstage::Journal& journal_;memory::vram::Arena& arena_;
-    memstage::Upload& upload_;memstage::Mapper& mapper_;uint64_t epoch_=0;Launch launch_=Launch::None;Progress* progress_=nullptr;Align align_{};bool print_=false;
+    memstage::Upload& upload_;memstage::Mapper& mapper_;uint64_t epoch_=0;Launch launch_=Launch::None;Progress* progress_=nullptr;Align align_{};bool print_=false,observe_=false;
     Runner runner_,closer_;Report report_{};
     uint64_t start_=0,last_=0;memstage::Phase phase_=memstage::Phase::ChannelBase;
     memstage::channel::Addresses addresses_{};

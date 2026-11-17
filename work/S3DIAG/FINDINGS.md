@@ -263,3 +263,36 @@ Lessons for the next stages:
   print must happen after the teardown, from a copy in driver memory.
 - The package `package-s3g` is consumed.
 
+
+## 2026-11-17: stage s3o built (approach B of REPORT.md)
+
+`s3o` is `s3e` (aligned object bind) with the observe mode of `gr::Compute`
+(`src/gr/Compute.cpp`, `sample()` and `observe()`). No card run yet.
+
+- Sample 0 is the baseline before GP_PUT. After GP_PUT, up to 32 samples follow
+  without BAR1 access, until GP_GET is 1 (then one more sample) or 2 s pass.
+- Each sample prints one `k40_mem: OBS n=<sample> g=<group>` line after each
+  group of reads:
+  - g=1: 0x000100, 0x002100, 0x00259c, 0x040108, 0x040148, channel state,
+    0x002640 (the reads of `Compute::snapshot`, same citations).
+  - g=2: 0x400100, 0x400108, 0x409c18.
+  - g=4: only when 0x00259c is not zero, once for each unit: unit, then
+    0x002800 + unit*0x10 and the next three words (`engine/fifo/gf100.c:699-702`).
+    Read only; the pending bit is not cleared.
+  - g=3: GP_GET and GP_PUT of USERD by slow window.
+- Last action: g=5 (no values, printed before the read), then one BAR1 read of
+  GP_GET and GP_PUT, then g=6 with the values. The BAR1 read is left out while
+  0x00259c is not zero, so that the teardown still runs after an MMU fault.
+- No new register write. The fault-record reads were already allowed by
+  `Policy::read` for a pending unit (`src/memnative/Policy.cpp`), so Guard is
+  unchanged.
+- Cost on the card (INFERRED from the s3g line cost): about 30 to 45 ms for
+  each sample, at most about 1.5 s for 32 samples. The stage reached GP_PUT
+  about 1.9 s after its start in `s3e`, so the 30 s deadline is far.
+- Host test: pass case, a simulated fault of unit 4 (record read once, no BAR1
+  read, teardown runs) and a stall (32 samples, then the BAR1 pair).
+  `tools/memstage/evidence.py` accepts only the pass form.
+- Cardless rehearsal: `results/20261117-s3o-rehearsal-d91efc66`,
+  PASS_CARDLESS_NO_CARD. `make check` passes.
+- Manifest `work/S3DIAG/s3o/package.json`, SHA-256
+  `f8d3e1df60189dbe503274672369b292b0169821be9ffc782901b2cac8d98f67`.

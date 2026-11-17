@@ -7,7 +7,8 @@ The environment variable K40_MEM_STAGE selects it: "s1" (default), "s2", "s2d"
 (GR engine start and golden context) or "s3b" (also one compute job). "s3c" and
 "s3d" fetch only a prefix of the s3b push buffer: the object bind, or the set-up
 without the launch (work/S3DIAG/PLAN.md). "s3g" is s3a with the golden image
-printed (work/S3DIAG/REPORT.md).
+printed (work/S3DIAG/REPORT.md). "s3o" is s3e with the progress after GP_PUT
+observed without BAR1 access (work/S3DIAG/REPORT.md, approach B).
 One stage has one package folder, one work folder and one pass marker. The
 native owner receives the choice through the generated mem_config.h.
 """
@@ -98,6 +99,16 @@ STAGES = {
         allocations=27,
         title="Combined S3 golden-context run with the image printed",
         scope="S3g: as S3a, and the golden image (0x4ea00 bytes) read by slow window and printed for the comparison with the Linux reference image; no submission, no fault, clean teardown; no compute job",
+    ),
+    "s3o": dict(
+        package="package-s3o",
+        work="S3DIAG/s3o",
+        copy=False,
+        number=9,
+        marker="PASS S3_OBSERVE",
+        allocations=27,
+        title="Combined S3 object-bind run, observed through BAR0",
+        scope="S3o: as S3e, and after GP_PUT the progress read through BAR0 status registers and the slow window only, each group printed at once; one BAR1 read of GP_GET as the last action; object bind consumed (GP_GET 0->1), no fault, clean teardown; no launch",
     ),
     "s3d": dict(
         package="package-s3d",
