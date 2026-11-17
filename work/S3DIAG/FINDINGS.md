@@ -371,3 +371,68 @@ UNKNOWN:
   PASS_CARDLESS_NO_CARD. `make check` passes.
 - Manifest `work/S3DIAG/s3p/package.json`, SHA-256
   `0f7daf07fbe47d098399e3766415d2c81ac059c452c8624a3beef1f75c59d90f`.
+
+## 2026-11-17: s3p on the card (one run, stopped at the last read)
+
+Result folder `results/20261117-s3p-run-8b1fc545`. 25 samples of registers
+completed in the 2 s after GP_PUT. The teardown failed. The last slow-window
+read got no completion (AER messages of root port 00:03.0, QEMU stopped the
+guest), so the report lines of the driver were not printed. The package
+`package-s3p` is consumed.
+
+KNOWN, from the serial log (times from the stage start):
+
+| Register | Before GP_PUT (1.74 to 1.81 s) | Samples 1 to 25 (1.87 to 3.84 s), all equal |
+|---|---|---|
+| 0x000100, 0x00259c, 0x040108, 0x040148 | 0 | 0 |
+| 0x002100 | 0x40000000 | 0x40000000 |
+| channel state 0x80000c | 1 | 1 |
+| 0x002640 engine status | 0 | 0x00012001 |
+| 0x400100, 0x400108, 0x409c18 | 0 | 0 |
+| 0x409b00 FECS current channel | 0x00000124 | 0x80000124 |
+| 0x409b04 FECS next channel | 0x00000124 | 0x80000124 |
+| 0x409400 FECS signal | 0x300 | 0x300 |
+| 0x409800, 0x409804 scratch 0, 1 | 0x80000000, 0x4ea00 | the same |
+| 0x409810, 0x409814 scratch 4, 5 | 0, 0 | 0, 0 |
+| 0x100c80 MMU status | 0x00208000 | 0x00208000 |
+| 0x0400c0, 0x0400c4 PBDMA 0 method | 0, 0 | 0, 0 |
+| 0x040120 PBDMA 0 channel | 0x00000001 | 0x00002001 |
+
+- The slow window worked at 1.811 s, immediately before GP_PUT (GP_GET 0,
+  GP_PUT 0).
+- The first sample after GP_PUT was printed 54 ms after it. No value changed
+  in the next 2 s.
+- Teardown: started at 3.841 s, failed at 5.905 s with error 17 (Preempt) in
+  step 14. The teardown made register accesses for 2 s without an AER message.
+- The line `OBS n=25 g=9` was printed at 5.919 s. The slow-window read after
+  it got no completion.
+
+Decode:
+- 0x002640 = 0x00012001 (`engine/fifo/gk104.c:204-232`): not busy, no channel
+  switch, load bit set, previous channel 1, next channel 1. For this
+  combination Nouveau takes the previous channel as the channel of the engine.
+  Correction to the `s3o` entry: the value does not show a load in progress.
+  INFERRED: channel 1 is the current channel of the GR engine and the engine
+  is idle.
+- 0x409b00 with bit 31: FECS wrote it in `ctx_load` after the channel load
+  command (`fuc/hub.fuc:479-483`). INFERRED: FECS ran `ctx_load` for our
+  channel at least to that point. If the transfer of the image and the
+  register list (`fuc/hub.fuc:555-664`) ended is UNKNOWN.
+- Scratch 5 = 0: FECS reported no error code (`fuc/hub.fuc:55`).
+
+INFERRED:
+- No fault, no interrupt and no FECS error is visible in any register that was
+  read. The engine does not look stalled in a load.
+- After the first schedule of the channel on the GR engine, every access that
+  needs VRAM fails: host reads by BAR1 and by the slow window, and the preempt
+  of the teardown (INFERRED: the preempt needs a context save to VRAM).
+  Register access stays good for at least 4 s.
+- The teardown does not recover the card.
+
+UNKNOWN:
+- What stops access to VRAM. No register that shows the state of the memory
+  path was read.
+- Where FECS is. The trace word of FECS is scratch 7, 0x40981c
+  (`fuc/macros.fuc:253-261`, flags `fuc/macros.fuc:202-212`); it was not read.
+- If the PBDMA fetched the entry.
+- Which poll of the teardown failed (the report lines were not printed).

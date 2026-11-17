@@ -310,3 +310,36 @@ How to read the serial log:
 Difference from the plan of section 8: the PBDMA copies of GP_GET and GP_PUT
 are not read (no source in the references). The PBDMA 0 method address, data
 and channel are read in their place.
+
+## 10. Update after the s3p run (2026-11-17)
+
+Approach F ran once (`work/S3DIAG/FINDINGS.md`, entry "s3p on the card").
+- Registers stay readable for at least 4 s after GP_PUT, with one steady
+  state: no fault, no interrupt, no FECS error, channel 1 current on the GR
+  engine, engine not busy.
+- The preempt of the teardown fails after 2 s. The slow-window read after the
+  teardown gets no completion.
+- Correction: the engine status 0x00012001 is not "load in progress"
+  (section 8). It is "channel 1 loaded, engine idle" by the Nouveau decode.
+- So the first schedule of our channel on the GR engine ends in a state where
+  access to VRAM is lost, for the host and (INFERRED) for the context save.
+
+### G. `s3q`: end with a report, and read the FECS trace word (next step)
+
+- As `s3p`, without the last slow-window read. Then no access can time out,
+  the driver prints its report, and the journal shows which teardown poll
+  failed (`GR_FAILURE closing`, `closing_index`).
+- New status reads: FECS trace word 0x40981c (`fuc/macros.fuc:253-261`): it
+  names the FECS routine that runs (T_AUTO, T_CHAN, T_LOAD, T_SAVE, T_LCHAN,
+  T_LCTXH). Also 0x001700 and 0x001704 (window selector and BAR1 context):
+  a register list that FECS executes from wrong data can write any register.
+- Sample also during the teardown is not needed: take one sample after it.
+
+### H. `s3r`: the load without the register list (after G)
+
+- As G, with the list count in word 0 of the channel image set to 0, so that
+  FECS executes no register list (`fuc/hub.fuc:555-592`).
+- If access to VRAM stays good: the register list (its address, its mapping
+  or its content) is the cause. If not: the cause is in the image transfer or
+  outside the GR engine; then approach C (`s3n`, host NOP on the GR runlist
+  without a context) separates the two.
