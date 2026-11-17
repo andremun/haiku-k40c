@@ -91,6 +91,7 @@ private:
     bool stage(const Stage& ops,Step step,unsigned number);
     bool contextPointer();
     bool copyContext();
+    bool listReads();
     bool printImage();
     bool submit();
     bool sample(uint32_t number);

@@ -50,7 +50,7 @@
     "reference/nouveau/nvkm/subdev/mmu/gk104.c": "0a00f096c8a9f95a6f72a87d72d3868f31b22284823b842e57b83845da88492d",
     "reference/nouveau/nvkm/subdev/mmu/vmmgf100.c": "8485236819c37bfcbfae9824c4b03b767314b6e07156c3ed2e203f2447ad89ea",
     "reference/nouveau/nvkm/subdev/mmu/vmmgk104.c": "3f77d94f4f08546da6361e474c94fe13af23d41758ad5a1fd48b0e5a50ccdd97",
-    "src/memory/VramArena.cpp": "5256d9d82f12c008e7f686b84e06e3965208b73298c718ea3893d75d159eaeac",
+    "src/memory/VramArena.cpp": "9432d4dddab6a065e23ecb82bb2ee4060127f8276b4fd1a49fba19068451c609",
     "src/memory/VramArena.h": "8744383905eb47c703698bdd521eab272613f9aede60bf0f78369d31552672f0",
     "src/memstage/Faults.cpp": "8699fc95b096ee2014ef4d4d8d343fe66572bfc20c6026397349cdb5d7da9672",
     "src/memstage/Faults.h": "b77aec14d12007e47b6dbd3e82428b778b0767abbf3cfb3263498778b3490958",

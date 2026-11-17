@@ -364,36 +364,36 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/gr/Compute.cpp:130` | `if(!upload_.store(instance,0x210,2,PairWords(0),true))return fail(upload_.error());` | nvkm/engine/gr/ctxgf100.c:1551 | SOURCE_ONLY |
 | `src/gr/Compute.cpp:131` | `constexpr uint32_t words=sizeof(copy_)/4;` | no source: 16 KiB software blocks, few journal events, not on the kernel stack. | SOURCE_ONLY |
 | `src/gr/Compute.cpp:146` | `constexpr uint32_t words=sizeof(copy_)/4;` | no source: 16 KiB software blocks, as copyContext. | SOURCE_ONLY |
-| `src/gr/Compute.cpp:176` | `return upload_.store(instance,0x210,2,PairWords(va\|4),true);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:223` | `if(align_.user && words[w].offset==0xe0)value&=0xffffffffull;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:227` | `if(!upload_.store(chan[4],0,2,PairWords((channel::pushVa&0xffffffff)\|((uint64_t(channel::pushVa>>32)\|(uint64_t(entryBytes(launch_))<<8))<<32)))` | nouveau_dma.c:83 | SOURCE_ONLY |
-| `src/gr/Compute.cpp:262` | `if(i>=100000 \|\| !tick() \|\| !io_.read32(0x100c80,status))return fail(MemError::Invalidate);` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
-| `src/gr/Compute.cpp:263` | `if(status&0x00ff0000)break;` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
-| `src/gr/Compute.cpp:266` | `if(!io_.write32(0x100cb8,uint32_t((addresses_.directory>>12)<<4))` | nvkm/subdev/mmu/vmmgf100.c:216 | SOURCE_ONLY |
-| `src/gr/Compute.cpp:267` | `\|\| !io_.write32(0x100cbc,0x80000001))return fail(MemError::Invalidate);` | nvkm/subdev/mmu/vmmgf100.c:221 | SOURCE_ONLY |
-| `src/gr/Compute.cpp:269` | `if(i>=100000 \|\| !tick() \|\| !io_.read32(0x100c80,status))return fail(MemError::Invalidate);` | nvkm/subdev/mmu/vmmgf100.c:224 | SOURCE_ONLY |
-| `src/gr/Compute.cpp:270` | `if(status&0x00008000)return true;` | nvkm/subdev/mmu/vmmgf100.c:224 | SOURCE_ONLY |
-| `src/gr/Compute.cpp:324` | `const uint32_t state=0x800004+chid*8;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:325` | `if(!tick() \|\| !io_.read32(0x000100,v[0]) \|\| !io_.read32(0x002100,v[1]) \|\| !io_.read32(0x00259c,v[2])` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:326` | `\|\| !io_.read32(0x040108,v[3]) \|\| !io_.read32(0x040148,v[4]) \|\| !io_.read32(state,v[5])` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:327` | `\|\| !io_.read32(0x002640,v[6]))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:331` | `if(!io_.read32(0x400100,g[0]) \|\| !io_.read32(0x400108,g[1]) \|\| !io_.read32(0x409c18,g[2]))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:336` | `uint32_t f[5]{unit};const uint32_t base=0x002800+unit*0x10;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:346` | `if(!io_.read32(0x409b00,s[0]) \|\| !io_.read32(0x409b04,s[1]) \|\| !io_.read32(0x409400,s[2])` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:347` | `\|\| !io_.read32(0x409800,s[3]) \|\| !io_.read32(0x409804,s[4]) \|\| !io_.read32(0x409810,s[5])` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:348` | `\|\| !io_.read32(0x409814,s[6]))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:352` | `if(!io_.read32(0x100c80,m[0]) \|\| !io_.read32(0x0400c0,m[1]) \|\| !io_.read32(0x0400c4,m[2])` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
-| `src/gr/Compute.cpp:353` | `\|\| !io_.read32(0x040120,m[3]))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:356` | `if(wide() && (!io_.read32(0x40981c,m[4]) \|\| !io_.read32(0x001700,m[5])` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:357` | `\|\| !io_.read32(0x001704,m[6])))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:403` | `if(!io_.read32(0x00259c,pending))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:463` | `const uint32_t state=0x800004+chid*8;` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:465` | `return io_.read32(0x000100,report_.mc) && io_.read32(0x002100,report_.fifoIntr) && io_.read32(0x00259c,report_.mmuPending)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:466` | `&& io_.read32(0x040108,report_.pbdmaIntr) && io_.read32(0x040148,report_.pbdmaHce) && io_.read32(state,report_.state)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:467` | `&& io_.read32(0x400100,report_.grIntr) && io_.read32(0x400108,report_.grTrap)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:468` | `&& io_.read32(0x409c18,report_.fecsIntr) && io_.read32(0x002640,report_.engineStatus);` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:529` | `const bool clean=!report_.mmuPending && !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&0x3fffffff)` | no source: ambiguous citation | SOURCE_ONLY |
-| `src/gr/Compute.cpp:531` | `return report_.golden && report_.attached && clean && (launch_==Launch::None \|\| report_.consumed \|\| (observe_==Observe::Report && !(report_.engineStatus&0x80000000)))` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:192` | `return upload_.store(instance,0x210,2,PairWords(va\|4),true);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:239` | `if(align_.user && words[w].offset==0xe0)value&=0xffffffffull;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:243` | `if(!upload_.store(chan[4],0,2,PairWords((channel::pushVa&0xffffffff)\|((uint64_t(channel::pushVa>>32)\|(uint64_t(entryBytes(launch_))<<8))<<32)))` | nouveau_dma.c:83 | SOURCE_ONLY |
+| `src/gr/Compute.cpp:278` | `if(i>=100000 \|\| !tick() \|\| !io_.read32(0x100c80,status))return fail(MemError::Invalidate);` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
+| `src/gr/Compute.cpp:279` | `if(status&0x00ff0000)break;` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
+| `src/gr/Compute.cpp:282` | `if(!io_.write32(0x100cb8,uint32_t((addresses_.directory>>12)<<4))` | nvkm/subdev/mmu/vmmgf100.c:216 | SOURCE_ONLY |
+| `src/gr/Compute.cpp:283` | `\|\| !io_.write32(0x100cbc,0x80000001))return fail(MemError::Invalidate);` | nvkm/subdev/mmu/vmmgf100.c:221 | SOURCE_ONLY |
+| `src/gr/Compute.cpp:285` | `if(i>=100000 \|\| !tick() \|\| !io_.read32(0x100c80,status))return fail(MemError::Invalidate);` | nvkm/subdev/mmu/vmmgf100.c:224 | SOURCE_ONLY |
+| `src/gr/Compute.cpp:286` | `if(status&0x00008000)return true;` | nvkm/subdev/mmu/vmmgf100.c:224 | SOURCE_ONLY |
+| `src/gr/Compute.cpp:340` | `const uint32_t state=0x800004+chid*8;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:341` | `if(!tick() \|\| !io_.read32(0x000100,v[0]) \|\| !io_.read32(0x002100,v[1]) \|\| !io_.read32(0x00259c,v[2])` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:342` | `\|\| !io_.read32(0x040108,v[3]) \|\| !io_.read32(0x040148,v[4]) \|\| !io_.read32(state,v[5])` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:343` | `\|\| !io_.read32(0x002640,v[6]))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:347` | `if(!io_.read32(0x400100,g[0]) \|\| !io_.read32(0x400108,g[1]) \|\| !io_.read32(0x409c18,g[2]))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:352` | `uint32_t f[5]{unit};const uint32_t base=0x002800+unit*0x10;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:362` | `if(!io_.read32(0x409b00,s[0]) \|\| !io_.read32(0x409b04,s[1]) \|\| !io_.read32(0x409400,s[2])` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:363` | `\|\| !io_.read32(0x409800,s[3]) \|\| !io_.read32(0x409804,s[4]) \|\| !io_.read32(0x409810,s[5])` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:364` | `\|\| !io_.read32(0x409814,s[6]))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:368` | `if(!io_.read32(0x100c80,m[0]) \|\| !io_.read32(0x0400c0,m[1]) \|\| !io_.read32(0x0400c4,m[2])` | nvkm/subdev/mmu/vmmgf100.c:199 | SOURCE_ONLY |
+| `src/gr/Compute.cpp:369` | `\|\| !io_.read32(0x040120,m[3]))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:372` | `if(wide() && (!io_.read32(0x40981c,m[4]) \|\| !io_.read32(0x001700,m[5])` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:373` | `\|\| !io_.read32(0x001704,m[6])))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:419` | `if(!io_.read32(0x00259c,pending))return fail(MemError::Read);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:479` | `const uint32_t state=0x800004+chid*8;` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:481` | `return io_.read32(0x000100,report_.mc) && io_.read32(0x002100,report_.fifoIntr) && io_.read32(0x00259c,report_.mmuPending)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:482` | `&& io_.read32(0x040108,report_.pbdmaIntr) && io_.read32(0x040148,report_.pbdmaHce) && io_.read32(state,report_.state)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:483` | `&& io_.read32(0x400100,report_.grIntr) && io_.read32(0x400108,report_.grTrap)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:484` | `&& io_.read32(0x409c18,report_.fecsIntr) && io_.read32(0x002640,report_.engineStatus);` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:545` | `const bool clean=!report_.mmuPending && !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&0x3fffffff)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:547` | `return report_.golden && report_.attached && clean && (launch_==Launch::None \|\| report_.consumed \|\| (observe_==Observe::Report && !(report_.engineStatus&0x80000000)))` | no source: ambiguous citation | SOURCE_ONLY |
 
 ## src/gr/Compute.h
 
@@ -427,7 +427,7 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/gr/Guard.cpp:120` | `return reg==0x100800 \|\| reg==0x120074;` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/gr/Guard.cpp:136` | `if(r.role==Role::ChanInstance)return offset>=0x210 && offset<0x218;` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/gr/Guard.cpp:137` | `if(r.role==Role::GrContext)return offset>=0x80000 && offset<0x80008;` | nvkm/engine/gr/ctxgf100.c:1436 | SOURCE_ONLY |
-| `src/gr/Guard.cpp:140` | `if(r.role==Role::GrChanContext){unsigned s=stage_,i=index_;return offset<0x4f000 && next(s,i) && s==attachStage;}` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Guard.cpp:149` | `if(r.role==Role::GrChanContext){unsigned s=stage_,i=index_;return offset<0x4f000 && next(s,i) && s==attachStage;}` | no source: ambiguous citation | SOURCE_ONLY |
 
 ## src/gr/Guard.h
 
@@ -923,28 +923,28 @@ The following constant lines have no source citation:
 - src/gr/Compute.cpp:121 (no source: ambiguous citation)
 - src/gr/Compute.cpp:131 (no source: 16 KiB software blocks, few journal events, not on the kernel stack.)
 - src/gr/Compute.cpp:146 (no source: 16 KiB software blocks, as copyContext.)
-- src/gr/Compute.cpp:176 (no source: ambiguous citation)
-- src/gr/Compute.cpp:223 (no source: ambiguous citation)
-- src/gr/Compute.cpp:324 (no source: ambiguous citation)
-- src/gr/Compute.cpp:325 (no source: ambiguous citation)
-- src/gr/Compute.cpp:326 (no source: ambiguous citation)
-- src/gr/Compute.cpp:327 (no source: ambiguous citation)
-- src/gr/Compute.cpp:331 (no source: ambiguous citation)
-- src/gr/Compute.cpp:336 (no source: ambiguous citation)
-- src/gr/Compute.cpp:346 (no source: ambiguous citation)
+- src/gr/Compute.cpp:192 (no source: ambiguous citation)
+- src/gr/Compute.cpp:239 (no source: ambiguous citation)
+- src/gr/Compute.cpp:340 (no source: ambiguous citation)
+- src/gr/Compute.cpp:341 (no source: ambiguous citation)
+- src/gr/Compute.cpp:342 (no source: ambiguous citation)
+- src/gr/Compute.cpp:343 (no source: ambiguous citation)
 - src/gr/Compute.cpp:347 (no source: ambiguous citation)
-- src/gr/Compute.cpp:348 (no source: ambiguous citation)
-- src/gr/Compute.cpp:353 (no source: ambiguous citation)
-- src/gr/Compute.cpp:356 (no source: ambiguous citation)
-- src/gr/Compute.cpp:357 (no source: ambiguous citation)
-- src/gr/Compute.cpp:403 (no source: ambiguous citation)
-- src/gr/Compute.cpp:463 (no source: ambiguous citation)
-- src/gr/Compute.cpp:465 (no source: ambiguous citation)
-- src/gr/Compute.cpp:466 (no source: ambiguous citation)
-- src/gr/Compute.cpp:467 (no source: ambiguous citation)
-- src/gr/Compute.cpp:468 (no source: ambiguous citation)
-- src/gr/Compute.cpp:529 (no source: ambiguous citation)
-- src/gr/Compute.cpp:531 (no source: ambiguous citation)
+- src/gr/Compute.cpp:352 (no source: ambiguous citation)
+- src/gr/Compute.cpp:362 (no source: ambiguous citation)
+- src/gr/Compute.cpp:363 (no source: ambiguous citation)
+- src/gr/Compute.cpp:364 (no source: ambiguous citation)
+- src/gr/Compute.cpp:369 (no source: ambiguous citation)
+- src/gr/Compute.cpp:372 (no source: ambiguous citation)
+- src/gr/Compute.cpp:373 (no source: ambiguous citation)
+- src/gr/Compute.cpp:419 (no source: ambiguous citation)
+- src/gr/Compute.cpp:479 (no source: ambiguous citation)
+- src/gr/Compute.cpp:481 (no source: ambiguous citation)
+- src/gr/Compute.cpp:482 (no source: ambiguous citation)
+- src/gr/Compute.cpp:483 (no source: ambiguous citation)
+- src/gr/Compute.cpp:484 (no source: ambiguous citation)
+- src/gr/Compute.cpp:545 (no source: ambiguous citation)
+- src/gr/Compute.cpp:547 (no source: ambiguous citation)
 - src/gr/Compute.h:33 (no source: software marker for "".)
 - src/gr/Guard.cpp:9 (no source: indexes in sequence.)
 - src/gr/Guard.cpp:80 (no source: ambiguous citation)
@@ -960,7 +960,7 @@ The following constant lines have no source citation:
 - src/gr/Guard.cpp:118 (no source: ambiguous citation)
 - src/gr/Guard.cpp:120 (no source: ambiguous citation)
 - src/gr/Guard.cpp:136 (no source: ambiguous citation)
-- src/gr/Guard.cpp:140 (no source: ambiguous citation)
+- src/gr/Guard.cpp:149 (no source: ambiguous citation)
 - src/gr/Guard.h:23 (no source: fifo, bind, gating, start, golden, attach, teardown.)
 - src/gr/Program.h:27 (no source: software marker for "".)
 - src/gr/Program.h:28 (no source: software bound; program.py refuses more.)

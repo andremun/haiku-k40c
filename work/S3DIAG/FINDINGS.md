@@ -688,3 +688,27 @@ stage (for example in the attach hook, as the list count), allow that write
 in `gr::Guard`, and add a host-test assertion that every list word equals the
 Linux list for the trace card. Then the full stages (`s3e` form, then `s3b`
 with the compute job) can run again.
+
+## 2026-11-17: fix of the register list (host)
+
+- `Compute::listReads()` (`src/gr/Compute.cpp`): in the attach hook, before
+  the list count is written, the list entries whose value the golden stage
+  reads from the card (slots after the run inputs: 0x17e91c, 0x17e920) are
+  written again with the values read. `engine/gr/ctxgk104.c:863-872`.
+- `gr::Guard::data`: allows writes to the register list only in the attach
+  stage, only to such an entry, and only with the register and the value
+  computed from the slot values that Guard itself saw on the reads.
+- `Arena::update` (`src/memory/VramArena.cpp`): the register list record may
+  be written again after it is referenced (as the instance block and the
+  context images).
+- `evidence.py`: the register list record now has 4 write generations.
+- Host test: the list record must equal the Linux list for the trace card
+  (constants, our record addresses, the trace values 0x0905090a and
+  0x00090b03). Checked for the full job and the aligned bind. Without the fix
+  the check fails (tried, then restored).
+- `tools/gr/patchlist.py` documents that it does not model the order.
+
+Not on the card yet. The consumed packages were built without the fix.
+Next: rebuild an earlier stage form with the full list and run it, for
+example `s3e` (aligned bind) or `s3q` (registers only, full report), then
+`s3b` (the compute job).

@@ -843,7 +843,9 @@ def memory_final(serial, suite, request):
         roles += GR_ROLES
         sizes.update({17 + index: region["bytes"] for index, region in enumerate(layout.values())})
         generations.update({8: 2, 9: 2, 10: 17, 11: 1, 12: 2, 13: 2, 14: 2,
-                            17: 2, 19: 1, 20: 2, 21: 2, 22: 2, 23: 1, 27: 2, 28: 2, 29: 1})
+                            17: 2, 19: 1, 20: 2, 21: 2, 22: 2, 23: 1, 27: 2, 28: 4, 29: 1})
+        # 28 (register list): zero, the list, then the two LTC entries again after the golden stage
+        # (src/gr/Compute.cpp listReads, engine/gr/ctxgk104.c:863-872).
         if suite.get("stage") in GR_ALIGNED:
             # Instance: one more pointer update (cleared after generation). Generation memory:
             # zero only. Channel context: zero, the image copy in 16 KiB blocks, the list words.

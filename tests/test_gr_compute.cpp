@@ -230,7 +230,7 @@ static std::vector<Access> load(const char* path)
     }
     return rows;
 }
-struct Result {gr::Report report;unsigned denials=0,stage=0,index=0;bool mismatch=false,closed=false,launched=false,aligned=false;size_t next=0;std::vector<std::pair<unsigned,uint32_t>> live;std::map<uint32_t,std::vector<uint32_t>> image;std::vector<uint32_t> golden;std::vector<Live::Group> groups;unsigned barAfterPut=0,windowAfterPut=0;};
+struct Result {gr::Report report;unsigned denials=0,stage=0,index=0;bool mismatch=false,closed=false,launched=false,aligned=false;size_t next=0;std::vector<std::pair<unsigned,uint32_t>> live;std::map<uint32_t,std::vector<uint32_t>> image;std::vector<uint32_t> golden;std::vector<Live::Group> groups;unsigned barAfterPut=0,windowAfterPut=0;std::vector<uint32_t> list;};
 static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bool dump=false,bool report=false)
 {
     using namespace k40::memstage;
@@ -251,6 +251,7 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
     out.report=compute.report();out.denials=io.denials;out.mismatch=io.mismatch;out.closed=mapper.closure()==Closure::OwnedDisabled;
     out.launched=io.launched;out.next=io.next;out.stage=guard.stage();out.index=guard.index();out.live=live.steps;out.aligned=io.alignedSeen;out.image=live.image;out.groups=live.groups;out.barAfterPut=io.barReadsAfterPut;out.windowAfterPut=io.windowAfterPut;
     {const auto base=io.physical(Role::GrContext)+0x80000;out.golden.assign(io.ram.begin()+base/4,io.ram.begin()+(base+gr::imageBytes)/4);} // engine/gr/ctxgf100.c:1436 CB_RESERVED.
+    {const auto l=io.physical(Role::GrMmioList)/4;out.list.assign(io.ram.begin()+l,io.ram.begin()+l+gr::patchCount*2);}
     if(dump) {
         const auto& r=out.report;
         std::printf("passed=%d step=%u error=%u runner=%u@%u addr=%x value=%x expected=%x closing=%u denials=%u mismatch=%d next=%zu/%zu guard=%u/%u upload=%u mapper=%u\n",passed,unsigned(r.step),unsigned(r.error),
@@ -286,6 +287,24 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
     }
     return passed;
 }
+// work/S3DIAG/FINDINGS.md (s3s): the register list record equals the Linux list for the trace card:
+// constants, our record addresses, and the values the golden stage read from 0x17e91c and 0x17e920.
+static void listMatches(const std::vector<Access>& trace,const std::vector<uint32_t>& list)
+{
+    assert(list.size()==gr::patchCount*2);
+    for(unsigned i=0;i<gr::patchCount;++i) {
+        const auto& p=gr::patchList[i];uint32_t want=p.b;
+        assert(list[2*i]==p.addr);
+        if(p.slot!=gr::noSlot && p.slot<gr::InputCount) { // run inputs: page pool, bundle, attribute buffer
+            const unsigned region=p.slot==gr::PagePool?7:p.slot==gr::Bundle?8:9;
+            want=(uint32_t(gr::regions[region].va>>p.shift)&p.a)|p.b;
+        } else if(p.slot!=gr::noSlot) { // read by the golden stage: the trace value of that register
+            bool found=false;for(auto& a:trace)if(a.op=='R' && a.addr==p.addr){want=(a.value>>p.shift&p.a)|p.b;found=true;break;}
+            assert(found && want);
+        }
+        assert(list[2*i+1]==want);
+    }
+}
 int main(int argc,char** argv)
 {
     assert(argc>=2);setvbuf(stdout,nullptr,_IONBF,0);
@@ -298,6 +317,7 @@ int main(int argc,char** argv)
     assert(first);
     assert(r.report.golden && r.report.attached && r.report.consumed && r.report.computed && r.report.closed && r.closed);
     assert(r.launched && !r.mismatch && r.denials==0 && r.next==trace.size() && r.stage==6 && r.report.wrong==0);
+    listMatches(trace,r.list);
     // Live lines: every step from Route to Done in order, no failure line (step 0), the result poll.
     const auto has=[&](unsigned step){for(auto& e:r.live)if(e.first==step)return true;return false;};
     for(unsigned i=1;i<r.live.size();++i)assert(r.live[i].first>=r.live[i-1].first);
@@ -309,6 +329,7 @@ int main(int argc,char** argv)
     }
     assert(scenario(trace,AlignedBind,r)); // s3e: the channel state of the Linux reference run, then the bind
     assert(r.aligned && r.report.consumed && !r.launched && r.closed && r.denials==0 && !r.mismatch && has(11) && !has(0));
+    listMatches(trace,r.list);
     assert(scenario(trace,NoLaunch,r)); // rung 4: golden context and teardown, no submission
     assert(r.report.golden && r.report.attached && !r.report.submitted && !r.launched && r.closed && r.denials==0);
     assert(r.image.empty() && r.report.imageLines==0); // no image line without the print mode

@@ -56,7 +56,7 @@
     "src/memnative/NativeOwner.h": "73ca57129093a824aa44e3ef03c300fe4228c8949ba09d52b38587d84627e1bf",
     "src/memnative/Policy.cpp": "b24563858a29494aa471af34ddbfd7893b27e1a2da8d2a9e1d3257704548ec61",
     "src/memnative/Policy.h": "bad157994a9aa7448962b180b71996b78b5e43eb813b9e4ee9dfadf56cfc61ed",
-    "src/memory/VramArena.cpp": "5256d9d82f12c008e7f686b84e06e3965208b73298c718ea3893d75d159eaeac",
+    "src/memory/VramArena.cpp": "9432d4dddab6a065e23ecb82bb2ee4060127f8276b4fd1a49fba19068451c609",
     "src/memory/VramArena.h": "8744383905eb47c703698bdd521eab272613f9aede60bf0f78369d31552672f0",
     "src/memstage/Channel.cpp": "1b33f432281ddd0d425264744979d8312738a50b5d6c9e7c4d4e87726605c4ab",
     "src/memstage/Channel.h": "c1ed37b43520f7b24180e5116b0c26588bee108cd67cfe8a089c8d59de3c1ca0",

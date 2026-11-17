@@ -17,6 +17,11 @@ value the driver fills in at run time. Slot entries are of two kinds:
   ran with them on the card (s3g, s3q).
 - values read from the card (engine/gr/ctxgk104.c:863-872, LTC 0x17e91c, 0x17e920).
 
+The two card-read entries must be written after the golden stage reads them: the
+driver once wrote the list before, with 0 in both, and FECS wrote 0 into the L2
+cache registers at the first load (s3q, s3s; work/S3DIAG/FINDINGS.md). This tool
+does not model that order; tests/test_gr_compute.cpp checks the written list.
+
 --check exits 0 when the registers and their order are equal, every constant value
 is equal, and every slot entry is of a known kind. The default prints the table.
 HOST_ONLY: not card evidence.

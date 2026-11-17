@@ -118,7 +118,10 @@ bool Arena::reference(Token token)
 bool Arena::update(Token token)
 {
     auto* r=find(token);
-    if(!healthy() || !r || !r->referenced || (r->role!=Role::ChanInstance && r->role!=Role::GrContext && r->role!=Role::GrChanContext))return false;
+    // Referenced records that the S3 stage writes again: instance block, context images, and the
+    // register list entries read by the golden stage (engine/gr/ctxgk104.c:863-872).
+    if(!healthy() || !r || !r->referenced || (r->role!=Role::ChanInstance && r->role!=Role::GrContext && r->role!=Role::GrChanContext
+        && r->role!=Role::GrMmioList))return false;
     if(r->writeGeneration==UINT64_MAX){fail();return false;}
     ++r->writeGeneration;r->staged=false;return true;
 }

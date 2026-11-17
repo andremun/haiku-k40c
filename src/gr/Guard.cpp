@@ -135,6 +135,15 @@ bool Guard::data(const Record& r,uint64_t offset,uint32_t value)
     // block (fifo/gk104.c:134-170) and the two list words of the context image (engine/gr/gf100.c:336-338).
     if(r.role==Role::ChanInstance)return offset>=0x210 && offset<0x218; // fifo/gk104.c:138.
     if(r.role==Role::GrContext)return offset>=0x80000 && offset<0x80008; // engine/gr/ctxgf100.c:1436; engine/gr/gf100.c:337-338.
+    // The list entries that hold values read by the golden stage (engine/gr/ctxgk104.c:863-872): in the
+    // attach stage only, register and value exactly as the patch entry with the slot values Guard saw.
+    if(r.role==Role::GrMmioList) {
+        unsigned s=stage_,i=index_;const uint64_t index=offset/8;
+        if(!next(s,i) || s!=attachStage || index>=patchCount)return false;
+        const Patch& p=patchList[index];
+        if(p.slot==noSlot || p.slot<InputCount || p.slot>=maxSlots)return false;
+        return (offset&4)?value==((uint32_t(slots_[p.slot]>>p.shift)&p.a)|p.b):value==p.addr;
+    }
     // The aligned stages (work/S3DIAG): the copy of the golden image and its two list words,
     // after the golden stage and before the attach allows the channel again (engine/gr/gf100.c:320-351).
     if(r.role==Role::GrChanContext){unsigned s=stage_,i=index_;return offset<0x4f000 && next(s,i) && s==attachStage;}

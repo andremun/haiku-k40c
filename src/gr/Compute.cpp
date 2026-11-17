@@ -159,10 +159,26 @@ bool Compute::printImage()
     live(Step::Golden,report_.imageWords,report_.imageSum); // a: words not zero; b: sum of all words.
     return true;
 }
+bool Compute::listReads()
+{
+    // engine/gr/ctxgk104.c:863-872: the list entries whose value the golden stage reads from the
+    // card (LTC 0x17e91c, 0x17e920). memory() wrote the list before those reads, with 0 in
+    // these values; write them again now (work/S3DIAG/FINDINGS.md, s3s).
+    Token list;
+    if(!token(Role::GrMmioList,list))return false;
+    for(uint32_t i=0;i<patchCount;++i) {
+        const Patch& p=patchList[i];
+        if(p.slot==noSlot || p.slot<InputCount)continue; // constants and run inputs are known at the upload.
+        const uint64_t pair=uint64_t(p.addr)|(uint64_t(runner_.patchValue(p))<<32);
+        if(!upload_.store(list,uint64_t(i)*8,2,PairWords(pair),true))return false;
+    }
+    return true;
+}
 bool Compute::hook(uint32_t number)
 {
     if(number==contextPointerHook)return contextPointer();
     if(number!=attachHook)return false;
+    if(!listReads())return false;
     if(align_.copy) { // engine/gr/gf100.c:336-338 list words, then fifo/gk104.c:134-170 pointer to the copy.
         Token copy,instance;uint64_t list=0,va=0;
         for(unsigned i=0;i<regionCount;++i) {

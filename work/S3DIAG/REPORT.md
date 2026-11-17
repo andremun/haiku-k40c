@@ -459,3 +459,10 @@ load FECS writes 0 into the two L2 cache registers; after that, data no
 longer moves between the card and VRAM (INFERRED; it matches all runs from
 `s3b` to `s3s`). Details and the fix: `work/S3DIAG/FINDINGS.md`, entry "s3s on
 the card".
+
+## 18. List fix made (host, 2026-11-17)
+
+The two card-read list entries are now written in the attach hook, after the
+golden stage read them (`work/S3DIAG/FINDINGS.md`, entry "fix of the register
+list"). Host tests check the whole list against Linux. No card run with the
+fix yet.
