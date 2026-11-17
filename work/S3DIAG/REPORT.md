@@ -259,3 +259,30 @@ Differences from the plan of section 3:
 - The fault record is read in this stage already (no second package).
 - 0x409b00 and 0x409b04 are not read.
 - The BAR1 read is left out while an MMU fault is pending.
+
+## 8. Update after the s3o run (2026-11-17)
+
+Approach B ran once (`work/S3DIAG/FINDINGS.md`, entry "s3o on the card").
+- Outcome: none of the rows of the table of approach B in its plain form.
+  BAR0 register reads continue after GP_PUT. No fault and no interrupt is
+  pending. The engine status shows a load of channel 1 (0x002640 = 0x00012001).
+  The first host read of VRAM after GP_PUT (slow window) got no completion.
+- Thus the stop is not "BAR1 only" and not "all host access". It is host
+  access to VRAM (BAR1 and the slow window) while the engine loads the context.
+
+### F. `s3p`: observe with registers only (next step)
+
+- As `s3o`, but after GP_PUT make no access to VRAM at all: no BAR1, no slow
+  window. Poll registers only for about 2 s, then run the teardown. The
+  teardown and `closeUserd` use registers only, so a clean end is possible.
+- Read in each sample: the group 1 and group 2 registers of `s3o`, and new
+  status reads (each needs a Nouveau citation and a Guard entry before the
+  build): the FECS current and next context 0x409b00 and 0x409b04, the FECS
+  scratch registers that `hub.fuc` writes during a load, the MMU status
+  0x100c80, and PBDMA 0 GP_GET and GP_PUT registers (the PBDMA copy of the
+  USERD values) in place of the USERD read.
+- Questions it answers: does the load end; does a fault or an interrupt appear
+  after 62 ms; does the PBDMA fetch the entry; does the teardown recover the
+  card without a VM restart.
+- After the teardown, one slow-window read as the last action shows if host
+  access to VRAM returns.

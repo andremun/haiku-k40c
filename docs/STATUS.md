@@ -1,7 +1,7 @@
 # Status
 
 Current phase: S2 and S3 preparation, resumed 2026-11-12 (docs/decisions/012-resume-s2-s3.md).
-Current task: S3DIAG. Continuation report: work/S3DIAG/REPORT.md. `s3g` ran on the card (2026-11-17): the first 20 % of the golden image was printed and is plausible; the run then failed on the 30 s driver deadline during the print (no AER). `s3o` (observe the stop through BAR0, work/S3DIAG/REPORT.md section 7) is built and rehearsed cardless; its card run waits for the user's yes. Optional: `s3g` again with the print after the teardown.
+Current task: S3DIAG. Continuation report: work/S3DIAG/REPORT.md. `s3g` ran on the card (2026-11-17): the first 20 % of the golden image was printed and is plausible; the run then failed on the 30 s driver deadline during the print (no AER). `s3o` ran on the card (2026-11-17) and stopped with an AER message: BAR0 register reads continued 62 ms after GP_PUT with no fault pending and engine status 0x00012001 (load of channel 1); the first slow-window read of VRAM got no completion. Next: `s3p` (registers only after GP_PUT, work/S3DIAG/REPORT.md section 8), not built. Optional: `s3g` again with the print after the teardown.
 Last result: card day 2026-11-16 (work/LADDER/FINDINGS.md): rungs 1 to 4 PASS (S2 copy and S3a golden context on the card). Rung 5 (s3b), s3c and s3e STOPPED: one BAR1 read without completion within about 100 ms of GP_PUT on the GR-runlist channel (AER CmpltTO at the root port of 04:00.0). Cause unknown.
 Earlier: S1 PASSED on the card (2026-10-31, results/20261031-batch1-a7-bar1-d198d424/).
 Not done: S3 (compute job). Q7 and Q11 stay open.

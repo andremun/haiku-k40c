@@ -296,3 +296,43 @@ Lessons for the next stages:
   PASS_CARDLESS_NO_CARD. `make check` passes.
 - Manifest `work/S3DIAG/s3o/package.json`, SHA-256
   `f8d3e1df60189dbe503274672369b292b0169821be9ffc782901b2cac8d98f67`.
+
+## 2026-11-17: s3o on the card (one run, stopped)
+
+Result folder `results/20261117-s3o-run-931f12a4`. The launcher stopped on a
+new AER indication of root port 00:03.0 (two messages, 17 ms apart; QEMU
+`vfio_err_notifier_handler` twice). No teardown ran; the next VM start resets
+the card. The package `package-s3o` is consumed.
+
+KNOWN, from the serial log (times from the stage start):
+- Baseline before GP_PUT (1.737 s): 0x000100 = 0, 0x002100 = 0x40000000,
+  0x00259c = 0, 0x040108 = 0, 0x040148 = 0, channel state = 1, 0x002640 = 0.
+  GR status 0, 0, 0. GP_GET and GP_PUT by slow window: 0, 0. The slow window
+  worked at 1.771 s.
+- GP_PUT written at 1.771 s.
+- Sample 1, group 1, printed at 1.814 s (43 ms after GP_PUT): the seven BAR0
+  reads completed. Values as the baseline, but 0x002640 = 0x00012001.
+- Sample 1, group 2, printed at 1.833 s (62 ms after GP_PUT): 0x400100,
+  0x400108 and 0x409c18 completed, all 0.
+- The log ends there. 0x00259c was 0, so no fault record was read. The next
+  accesses were the slow-window read of USERD (write of 0x001700, then a read
+  in 0x700000).
+
+Decode of 0x002640 = 0x00012001 (`engine/fifo/gk104.c:204-215`): busy 0,
+faulted 0, next channel 1, chsw 0, save 0, load 1, previous channel 1. The
+Linux reference trace holds only the value 0 for this register (8 reads), so
+it has no value to compare.
+
+INFERRED:
+- BAR0 register reads (master, FIFO, PBDMA 0, GR, FECS interrupt) still
+  complete at least 62 ms after GP_PUT. The card does not stop all host access.
+- The read without completion is a read of VRAM through the host: BAR1 in
+  `s3b`, `s3c` and `s3e`, the slow window here. Both paths reach instance
+  memory. The slow window worked 62 ms before, immediately before GP_PUT.
+- No MMU fault, PBDMA interrupt, GR interrupt or FECS interrupt was pending
+  43 to 62 ms after GP_PUT. The engine shows the load of channel 1.
+
+UNKNOWN:
+- Why host reads of VRAM stop after the engine starts the load.
+- If the load ends, and what FECS reports during it.
+- If a status appears later than 62 ms (the run stopped at the first AER).
