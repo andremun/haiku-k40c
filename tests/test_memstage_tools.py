@@ -281,8 +281,23 @@ class Tests(unittest.TestCase):
         # work/S3DIAG/PLAN.md: prefixes of the push buffer, and the live lines.
         reports = {
             mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
-            for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report", "nolist", "list34", "full")
+            for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report", "nolist", "list34", "full",
+                         "alignedfull")
         }
+        # s3u: the compute job with the channel set-up of s3e and the whole fixed list.
+        suite["stage"] = "S3U_A7_BAR1_GR_COMPUTE_ALIGNED"
+        job = reports["alignedfull"]
+        result = evidence.memory_final(job, suite, raw)
+        self.assertTrue(result["S3_complete"] and result["S3_register_list"] and result["gr"]["aligned"])
+        self.assertTrue(result["scope"].startswith("S3u:"))
+        for changed in (compute,  # not aligned
+                        job.replace("wrong=0", "wrong=1"),
+                        job.replace("computed=1", "computed=0"),
+                        re.sub(r"(role=28 physical=[0-9a-f]+ bytes=\d+ generation=)4", r"\g<1>2", job),
+                        job.replace("offset=118 value=8 polls=0", "offset=120 value=8 polls=0")):
+            self.assertNotEqual(changed, job)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
         # s3t: the whole list after the fix of its LTC entries.
         suite["stage"] = "S3T_A7_BAR1_GR_BIND_FULL_LIST"
         full = reports["full"]

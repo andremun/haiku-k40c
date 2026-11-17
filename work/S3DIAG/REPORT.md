@@ -486,3 +486,19 @@ Command, after the yes and with the card on `vfio-pci`:
 golden stage, keeps access to VRAM; the preempt, the teardown and the last
 read of GP_GET (1) pass. This closes the S3DIAG question "why does the first
 GR channel submission stop the card". Next: the compute job with the fix.
+
+## 21. Stage s3u is built (2026-11-18)
+
+The compute job (`s3b`) with the channel set-up of `s3e` and the whole fixed
+register list (`work/S3DIAG/FINDINGS.md`, entry "stage s3u built"). Ready for
+one card run. The run needs the user's explicit yes (ADR 006).
+
+Command, after the yes and with the card on `vfio-pci`:
+`K40_MEM_STAGE=s3u python3 tools/memstage/run.py --run-approved-batch1-once`
+
+- Pass (`PASS S3_COMPUTE`, `wrong=0`, clean teardown): rung 5 reached, one
+  compute job on the card with every element checked.
+- GP_GET 1 but wrong elements, or the result poll to the bound: the job ran
+  with a wrong set-up; compare the push buffer with the Linux run.
+- Stop at the BAR1 poll of GP_GET (AER): rebuild with the registers-only
+  observation of `s3t` (approach H) and read the output after the teardown.

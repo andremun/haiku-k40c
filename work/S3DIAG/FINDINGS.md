@@ -755,3 +755,31 @@ in the `s3s` entry is confirmed on the card (one run each).
 The object bind on the GR runlist channel now works with the channel set-up
 of the Linux run, the whole register list and a clean teardown. Next: the
 compute job (`s3b` form) with the fix.
+
+## 2026-11-18: stage s3u built (compute job, aligned, whole fixed list)
+
+`s3u` (stage 15) is the compute job of `s3b` with the channel set-up of `s3e`
+and the whole register list, its LTC entries written after the golden stage.
+No card run yet.
+
+- Driver: `gr::Launch::Full`, `gr::Align{copy, priv, user, allList}`, no
+  observe mode. After GP_PUT the driver polls GP_GET by BAR1 (as `s3b`), then
+  reads the last output element until it holds its value and compares all
+  1024 elements by slow-window readback. Pass marker `PASS S3_COMPUTE`.
+- `evidence.py`: stage `S3U_A7_BAR1_GR_COMPUTE_ALIGNED` (full, aligned). The
+  check of the two LTC list writes (offsets 0x110, 0x118, after the golden
+  stage) now applies to every GR stage, not only to the `s3r` form.
+- Host test: the card model checks the aligned channel state and accepts the
+  channel's own image at the launch; the job passes with the list record
+  equal to the Linux list. Validator test with mutations (unaligned report,
+  one wrong element, `computed=0`, LTC entries not written again).
+- Host-check record `work/S2COPY/host-check.json`: source hashes only.
+- Cardless rehearsal: `results/20261118-s3u-rehearsal-b753c7dd`,
+  PASS_CARDLESS_NO_CARD.
+- Manifest `work/S3DIAG/s3u/package.json`, SHA-256
+  `d33c24d1a95cb27942e0ee4d20f64caa26bbda5d82b8dd72fc1fa58ab5e0c386`.
+
+Risk (INFERRED): `s3u` reads GP_GET by BAR1 while the job runs, as `s3b`.
+If the job does not end, that read can get no completion (AER), as in `s3b`
+and `s3o`. `s3t` showed BAR0 and the slow window work after the bind with the
+fix; BAR1 after GP_PUT is not yet tested with the fix.

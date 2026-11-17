@@ -343,12 +343,14 @@ GR_STAGES = {
     "S3R_A7_BAR1_GR_BIND_NO_LIST": ("bind", "S3_NO_LIST"),
     "S3S_A7_BAR1_GR_BIND_LIST34": ("bind", "S3_SHORT_LIST"),
     "S3T_A7_BAR1_GR_BIND_FULL_LIST": ("bind", "S3_FULL_LIST"),
+    "S3U_A7_BAR1_GR_COMPUTE_ALIGNED": ("full", "S3_COMPUTE"),
 }
 # Stages aligned with the Linux reference run (gr::Align, work/S3DIAG/FINDINGS.md):
 # the channel context is a copy of the golden image in GrChanContext.
 GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED", "S3O_A7_BAR1_GR_BIND_OBSERVED", "S3P_A7_BAR1_GR_BIND_REGISTERS",
               "S3Q_A7_BAR1_GR_BIND_REPORT", "S3R_A7_BAR1_GR_BIND_NO_LIST",
-              "S3S_A7_BAR1_GR_BIND_LIST34", "S3T_A7_BAR1_GR_BIND_FULL_LIST")
+              "S3S_A7_BAR1_GR_BIND_LIST34", "S3T_A7_BAR1_GR_BIND_FULL_LIST",
+              "S3U_A7_BAR1_GR_COMPUTE_ALIGNED")
 # Stages that print the golden image (gr::Compute print mode, work/S3DIAG/REPORT.md).
 GR_PRINT = ("S3G_A7_BAR1_GR_IMAGE",)
 # Stages that observe the progress after GP_PUT without BAR1 access (gr::Compute observe mode,
@@ -559,9 +561,6 @@ def no_list_phase(serial, events, count=0):
     reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]
     if len(reads) != 2:
         raise ValueError("slow-window reads of USERD differ")
-    # src/gr/Compute.cpp listReads(): the LTC entries 34 and 35 written again after the golden stage.
-    if [(e[2], e[3]) for e in events if e[0] >= 8 and e[6] == 3 and e[7] == 28 and e[8] == 2] != [(0x110, 8), (0x118, 8)]:
-        raise ValueError("LTC list entries not written after the golden stage")
     return dict(samples=samples, idle_us=rows[-7][2], bar1_read=False, gp_get_read=True, list_count=count)
 
 
@@ -649,6 +648,9 @@ def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observe
         expected.append((number, done, 1))
     if stages != expected:
         raise ValueError("program stage records differ")
+    # src/gr/Compute.cpp listReads(): the LTC entries 34 and 35 written again after the golden stage.
+    if [(e[2], e[3]) for e in chan if e[6] == 3 and e[7] == 28 and e[8] == 2] != [(0x110, 8), (0x118, 8)]:
+        raise ValueError("LTC list entries not written after the golden stage")
     context = 0x80000000 | (byrole[5] >> 12)  # bar/gf100.c:56-58.
     writes = [(e[2], e[3]) for e in chan if e[6] == 1 and e[2] not in (WINDOW, FLUSH)]
     wanted = [(PDB, (byrole[3] >> 12) << 4), (INVALIDATE, 0x80000005), (CONTEXT, context)]
@@ -969,6 +971,10 @@ def memory_final(serial, suite, request):
             full="S3: one compute job on the card, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
             "no fault, clean teardown; no host DMA payload proof",
         )
+        if suite.get("stage") == "S3U_A7_BAR1_GR_COMPUTE_ALIGNED":
+            scopes["full"] = ("S3u: as S3e with the whole register list (the LTC entries written after the golden stage), then one "
+                              "compute job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
+                              "no fault, clean teardown; no host DMA payload proof")
         printed = suite.get("stage") in GR_PRINT
         if printed:
             scopes["none"] = ("S3g: as S3a, and the golden image read by slow window and printed; "

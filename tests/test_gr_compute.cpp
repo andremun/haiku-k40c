@@ -20,7 +20,7 @@ using namespace k40::memnative;
 namespace ch=k40::memstage::channel;
 namespace gr=k40::gr;
 struct Access {char op;uint32_t addr,value;};
-enum Fault {None,NoLaunch,FecsSilent,WrongSum,Stall,ReadOnlyOutput,BindOnly,SetupOnly,AlignedBind,PrintImage,Observe,ObserveFault,ObserveStall,Registers,RegistersStall,ReportOnly,ReportStall,NoList,NoListStall,ShortList,FullList};
+enum Fault {None,NoLaunch,FecsSilent,WrongSum,Stall,ReadOnlyOutput,BindOnly,SetupOnly,AlignedBind,PrintImage,Observe,ObserveFault,ObserveStall,Registers,RegistersStall,ReportOnly,ReportStall,NoList,NoListStall,ShortList,FullList,AlignedFull};
 static bool unlisted(Fault f){return f==NoList || f==NoListStall || f==ShortList || f==FullList;}
 static uint32_t listOf(Fault f){return f==FullList?gr::allList:f==ShortList?34:unlisted(f)?0:gr::allList;}
 static bool reports(Fault f){return f==ReportOnly || f==ReportStall || unlisted(f);}
@@ -139,7 +139,7 @@ struct Card:Device {
         const auto entry=word64(walk(inst,gp));const unsigned words=unsigned((entry>>42)&0x1fffff);
         const auto base=entry&0xffffffffffULL;std::map<uint32_t,uint32_t> m;uint32_t object=0;unsigned nonInc=0;
         // Bind, set-up or whole job: prefixes of the same push words (work/S3DIAG/PLAN.md).
-        if(fault==AlignedBind || observes(fault))aligned(inst);
+        if(fault==AlignedBind || fault==AlignedFull || observes(fault))aligned(inst);
         assert(words==(fault==BindOnly || fault==AlignedBind || observes(fault)?gr::pushBindBytes:fault==SetupOnly?gr::pushSetupBytes:gr::pushBytes)/4);
         for(unsigned i=0;i<words;) {
             const auto header=at(inst,base+i*4);++i;
@@ -187,7 +187,7 @@ struct Card:Device {
         assert(text==gr::regions[0].va && tls==gr::regions[1].va);
         // Context: instance words 0x210/0x214, the two list words and the first list pair.
         const auto pointer=word64(inst+0x210);assert((pointer&7)==4);
-        const auto image=pointer&~7ull;assert(image==gr::regions[10].va+0x80000);
+        const auto image=pointer&~7ull;assert(image==(fault==AlignedFull?gr::regions[12].va:gr::regions[10].va+0x80000)); // s3u: the channel's own image.
         assert(at(inst,image)==gr::patchCount && at(inst,image+4)==uint32_t(gr::regions[11].va>>8));
         assert(at(inst,gr::regions[11].va)==0x40800c && at(inst,gr::regions[11].va+4)==uint32_t(gr::regions[7].va>>8));
         walk(inst,gr::regions[10].va+0xcefff,true);walk(inst,gr::regions[1].va+gr::regions[1].bytes-4,true);
@@ -240,7 +240,7 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
     Experiment experiment(io,faults,arena,upload,mapper,2,2,11520ULL*1048576,256*1048576);
     Live live;live.print=report;
     gr::Compute compute(io,faults,journal,arena,upload,mapper,2,launchOf(fault),&live,
-        fault==AlignedBind || observes(fault)?gr::Align{true,true,true,listOf(fault)}:gr::Align{},fault==PrintImage,unlisted(fault)?gr::Observe::Last:reports(fault)?gr::Observe::Report:registers(fault)?gr::Observe::Registers:observes(fault)?gr::Observe::Window:gr::Observe::None);
+        fault==AlignedBind || fault==AlignedFull || observes(fault)?gr::Align{true,true,true,listOf(fault)}:gr::Align{},fault==PrintImage,unlisted(fault)?gr::Observe::Last:reports(fault)?gr::Observe::Report:registers(fault)?gr::Observe::Registers:observes(fault)?gr::Observe::Window:gr::Observe::None);
     assert(experiment.run());
     policy.extend(&guard);
     const bool passed=compute.run();
@@ -311,7 +311,7 @@ int main(int argc,char** argv)
     const auto trace=load(argv[1]);Result r;
     if(argc>2 && std::string(argv[2])=="--report") {
         const std::string mode=argc>3?argv[3]:"";
-        return scenario(trace,mode=="nolaunch"?NoLaunch:mode=="image"?PrintImage:mode=="observe"?Observe:mode=="registers"?Registers:mode=="report"?ReportOnly:mode=="nolist"?NoList:mode=="list34"?ShortList:mode=="full"?FullList:mode=="bind"?BindOnly:mode=="aligned"?AlignedBind:mode=="setup"?SetupOnly:None,r,false,true)?0:1;
+        return scenario(trace,mode=="nolaunch"?NoLaunch:mode=="image"?PrintImage:mode=="observe"?Observe:mode=="registers"?Registers:mode=="report"?ReportOnly:mode=="nolist"?NoList:mode=="list34"?ShortList:mode=="full"?FullList:mode=="alignedfull"?AlignedFull:mode=="bind"?BindOnly:mode=="aligned"?AlignedBind:mode=="setup"?SetupOnly:None,r,false,true)?0:1;
     }
     const bool first=scenario(trace,None,r,argc>2);
     assert(first);
@@ -399,6 +399,10 @@ int main(int argc,char** argv)
     {bool count=false;for(auto& e:r.live)count=count || (e.first==10 && e.second==2);assert(count);}
     assert(scenario(trace,FullList,r)); // s3t: the whole list, its LTC entries written after the golden stage
     assert(r.aligned && r.report.consumed && r.barAfterPut==0 && r.windowAfterPut==0 && r.report.closed && r.closed && r.denials==0 && !r.mismatch && !has(0));
+    listMatches(trace,r.list);
+    assert(scenario(trace,AlignedFull,r)); // s3u: the channel set-up of s3e, the whole fixed list, then the compute job
+    assert(r.aligned && r.launched && r.report.consumed && r.report.computed && r.report.wrong==0 && r.report.closed && r.closed);
+    assert(r.denials==0 && !r.mismatch && !has(0) && has(11) && has(12) && r.groups.empty());
     listMatches(trace,r.list);
     assert(!scenario(trace,NoListStall,r)); // the engine never idle and the entry never fetched
     assert(r.report.submitted && !r.report.consumed && r.report.samples==32 && r.barAfterPut==0 && r.windowAfterPut==0 && r.report.closed && r.closed && r.denials==0);
