@@ -405,3 +405,20 @@ How to read the result:
 | `LIVE step=0 ... b=11` (preempt) | no completion (AER) | The list is not the cause. Next: approach D and E, and more FECS state after the load |
 | no `LIVE step=0` line | no completion (AER) | The save works, host reads of VRAM do not. Next: look at the host path (BAR1 and window) after a load |
 | `LIVE step=0 ... b=11` | completes | The host path is good, the save is not. Next: the GPC and strand transfers of the save |
+
+## 14. Update after the s3r run (2026-11-17)
+
+Approach H ran once. Row 1 of the table in section 13: the teardown passed and
+the last read completed with GP_GET 1. The driver printed `PASS S3_NO_LIST`.
+The launcher result is `failed` because a validator rule of mine ("engine
+status 0 at the end") is wrong; see `work/S3DIAG/FINDINGS.md`.
+
+Result: the register list that FECS executes at the first load is the cause
+(INFERRED from `s3q` against `s3r`). Also the first card proof that the GR
+runlist channel fetches its entry.
+
+Next steps:
+1. Fix the validator rule (busy bit clear, not status 0) for later stages.
+2. Host only: compare our 36 list entries with the list of the Linux run.
+3. If the comparison shows no clear difference: bisect on the card with a list
+   count of 18, then 9, and so on.

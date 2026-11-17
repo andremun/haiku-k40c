@@ -1,0 +1,23 @@
+{
+  "bytes": 4096,
+  "claim": "same-run structural coverage; IOVA=GPA INFERRED; no payload/visibility claim",
+  "container": 1,
+  "cutoff": 68,
+  "device_fd": 23,
+  "generation": 1,
+  "gpa": 22900736,
+  "group": 23,
+  "iova": 22900736,
+  "mapped_segments": [
+    {
+      "hva": 135270195265536,
+      "iova": 1048576,
+      "read": true,
+      "size": 2146435072,
+      "write": true
+    }
+  ],
+  "token": 1,
+  "trace_prefix_bytes": 20673,
+  "trace_prefix_sha256": "657bc9f52ca7199b80cc5a6e97db525198c37359a1e7c07fb6f128d2472a04cc"
+}

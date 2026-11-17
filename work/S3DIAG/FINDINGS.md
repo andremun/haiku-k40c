@@ -541,3 +541,46 @@ slow-window read as the last action (`gr::Observe::Last`). No card run yet.
   PASS_CARDLESS_NO_CARD. `make check` passes.
 - Manifest `work/S3DIAG/s3r/package.json`, SHA-256
   `1804d5651acc69e01b3f955e8df9616fff93c7b3680fb42427a664df11abf64e`.
+
+## 2026-11-17: s3r on the card (driver PASS, validator FAIL)
+
+Result folder `results/20261117-s3r-run-8ae785ae`. No AER message (the kernel
+log holds the same 7 AER messages as before the run). The driver printed
+`PASS S3_NO_LIST` with a complete report. The launcher result is `failed`:
+`tools/memstage/evidence.py` refused the log with "the engine not idle at the
+end". The package `package-s3r` is consumed.
+
+KNOWN, from the serial log:
+- `LIVE step=10 a=2 b=0`: the list count in the channel image was 0.
+- 25 samples in the 2 s after GP_PUT, all equal, and equal to `s3q`: no fault,
+  no interrupt, FECS trace word 0, FECS current channel 0x80000124, engine
+  status 0x00012001, PBDMA 0 channel 0x00002001.
+- Teardown: passed (`GR ... closed=1`, `GR_FAILURE ... closing=0`). The
+  preempt ended. In `s3q` it did not end within 2 s.
+- Sample after the teardown: channel state 0, engine status 0x00010001,
+  FECS current channel 0x00000124 (valid bit clear), BAR1 context 0x000000d3.
+- Last action: the slow-window read completed, GP_GET 1, GP_PUT 1. This is
+  the first proof on the card that the PBDMA fetched an entry of the GR
+  runlist channel (`GR ... consumed=1`).
+
+Why the validator refused: its rule "engine status 0 in the last two
+samples" is wrong. The rule was mine, from the one value (0) in the Linux
+trace, which was read at another time. After a load the engine keeps the
+loaded channel in the status word without the busy bit (`s3q`, `s3r`). The
+driver pass rule of this mode does not use the engine status. The rule must
+be "busy bit (0x80000000) clear" before the next stage uses it. I did not
+change the rule after the run, and the launcher result stays `failed`.
+
+INFERRED (one run each, same image, same channel set-up; only the list count
+differs between `s3q` and `s3r`):
+- The register list that FECS executes at the first load is the cause. With
+  the list, the save of the preempt stays in the register transfer and host
+  reads of VRAM get no completion. Without the list, the save ends and the
+  host reads VRAM.
+- Not tested in `s3r`: a host read of VRAM while the channel was loaded (the
+  read followed the teardown).
+
+Next: find the list entry. The list has 36 entries (`tools/gr/program.py`,
+`patchList`); Linux writes its list into the MMIO list record (trace). Compare
+the two lists entry by entry on the host first. Then, if needed, bisect on the
+card with a list count of 18.
