@@ -345,13 +345,15 @@ GR_STAGES = {
     "S3T_A7_BAR1_GR_BIND_FULL_LIST": ("bind", "S3_FULL_LIST"),
     "S3U_A7_BAR1_GR_COMPUTE_ALIGNED": ("full", "S3_COMPUTE"),
     "S3V_A7_BAR1_GR_COMPUTE_FAULT": ("full", "S3_COMPUTE"),
+    "S3W_A7_BAR1_GR_COMPUTE_QMD": ("full", "S3_COMPUTE"),
 }
 # Stages aligned with the Linux reference run (gr::Align, work/S3DIAG/FINDINGS.md):
 # the channel context is a copy of the golden image in GrChanContext.
 GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED", "S3O_A7_BAR1_GR_BIND_OBSERVED", "S3P_A7_BAR1_GR_BIND_REGISTERS",
               "S3Q_A7_BAR1_GR_BIND_REPORT", "S3R_A7_BAR1_GR_BIND_NO_LIST",
               "S3S_A7_BAR1_GR_BIND_LIST34", "S3T_A7_BAR1_GR_BIND_FULL_LIST",
-              "S3U_A7_BAR1_GR_COMPUTE_ALIGNED", "S3V_A7_BAR1_GR_COMPUTE_FAULT")
+              "S3U_A7_BAR1_GR_COMPUTE_ALIGNED", "S3V_A7_BAR1_GR_COMPUTE_FAULT",
+              "S3W_A7_BAR1_GR_COMPUTE_QMD")
 # Stages that print the golden image (gr::Compute print mode, work/S3DIAG/REPORT.md).
 GR_PRINT = ("S3G_A7_BAR1_GR_IMAGE",)
 # Stages that observe the progress after GP_PUT without BAR1 access (gr::Compute observe mode,
@@ -366,7 +368,7 @@ GR_REPORT = ("S3Q_A7_BAR1_GR_BIND_REPORT",)
 GR_NO_LIST = {"S3R_A7_BAR1_GR_BIND_NO_LIST": 0, "S3S_A7_BAR1_GR_BIND_LIST34": 34, "S3T_A7_BAR1_GR_BIND_FULL_LIST": 36}
 # s3v: the MMU fault status before each result read; a pending fault stops the poll after
 # one sample with its fault record (gr::Observe::Fault). A pass has the baseline sample only.
-GR_FAULT = ("S3V_A7_BAR1_GR_COMPUTE_FAULT",)
+GR_FAULT = ("S3V_A7_BAR1_GR_COMPUTE_FAULT", "S3W_A7_BAR1_GR_COMPUTE_QMD")
 OBSERVE_SAMPLES = 32  # src/gr/Compute.cpp observeSamples.
 IMAGE_BYTES = 0x4EA00  # tools/gr/program.py KNOWN[0x409804], trace 616433.
 GR_ROLES = tuple(range(17, 30))  # GrText..GrChanContext, VramArena.h.
@@ -993,7 +995,11 @@ def memory_final(serial, suite, request):
             "no fault, clean teardown; no host DMA payload proof",
         )
         faulted = suite.get("stage") in GR_FAULT
-        if faulted:
+        if suite.get("stage") == "S3W_A7_BAR1_GR_COMPUTE_QMD":
+            scopes["full"] = ("S3w: as S3v with the launch descriptor mapped writable, and before each result read the MMU fault "
+                              "status (no fault pending); one compute job, out[i] = in[i] + 1 for 1024 elements, every element "
+                              "checked by slow-window readback, no fault, clean teardown; no host DMA payload proof")
+        elif faulted:
             scopes["full"] = ("S3v: as S3u, and before each result read the MMU fault status (no fault pending); one compute "
                               "job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
                               "no fault, clean teardown; no host DMA payload proof")

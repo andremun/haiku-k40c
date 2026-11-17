@@ -311,6 +311,12 @@ class Tests(unittest.TestCase):
             self.assertNotEqual(changed, checked)
             with self.assertRaises(ValueError):
                 evidence.memory_final(changed, suite, raw)
+        # s3w: as s3v with the launch descriptor writable (the same report form).
+        suite["stage"] = "S3W_A7_BAR1_GR_COMPUTE_QMD"
+        result = evidence.memory_final(checked, suite, raw)
+        self.assertTrue(result["S3_complete"] and result["scope"].startswith("S3w:"))
+        with self.assertRaises(ValueError):
+            evidence.memory_final(job, suite, raw)  # no baseline sample
         # s3t: the whole list after the fix of its LTC entries.
         suite["stage"] = "S3T_A7_BAR1_GR_BIND_FULL_LIST"
         full = reports["full"]

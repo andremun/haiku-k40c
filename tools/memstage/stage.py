@@ -16,6 +16,7 @@ register list at the load and one slow-window read as the last action (approach 
 with the whole list, after the fix of its LTC entries. "s3u" is the compute job
 of s3b with the channel set-up of s3e and the whole fixed list. "s3v" is s3u
 with the result poll stopped on a pending MMU fault and the fault record printed.
+"s3w" is s3v with the launch descriptor mapped writable.
 One stage has one package folder, one work folder and one pass marker. The
 native owner receives the choice through the generated mem_config.h.
 """
@@ -186,6 +187,16 @@ STAGES = {
         allocations=27,
         title="Combined S3 compute run, aligned, with the fault record",
         scope="S3v: as S3u, and before each result read the MMU fault status; a pending fault stops the poll after one sample with its fault record; one compute job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, no fault, clean teardown; no host DMA payload proof",
+    ),
+    "s3w": dict(
+        package="package-s3w",
+        work="S3DIAG/s3w",
+        copy=False,
+        number=17,
+        marker="PASS S3_COMPUTE",
+        allocations=27,
+        title="Combined S3 compute run with a writable launch descriptor",
+        scope="S3w: as S3v, with the launch descriptor (Qmd) mapped writable; one compute job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, no fault, clean teardown; no host DMA payload proof",
     ),
     "s3d": dict(
         package="package-s3d",

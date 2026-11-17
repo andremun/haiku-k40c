@@ -536,3 +536,17 @@ reason RO_VIOLATION. No output written, no AER. With the fault pending the
 teardown preempt did not end. Details in `work/S3DIAG/FINDINGS.md`, entry
 "s3v on the card". Proposed next: map the descriptor writable, as Mesa's
 scratch buffer is on Linux, and run the job again with the fault mode.
+
+## 25. Stage s3w is built (2026-11-18)
+
+`s3v` with the launch descriptor mapped writable (`work/S3DIAG/FINDINGS.md`,
+entry "stage s3w built"). Ready for one card run. The run needs the user's
+explicit yes (ADR 006).
+
+Command, after the yes and with the card on `vfio-pci`:
+`K40_MEM_STAGE=s3w python3 tools/memstage/run.py --run-approved-batch1-once`
+
+- Pass (`PASS S3_COMPUTE`, `wrong=0`, clean teardown): rung 5 reached.
+- Another fault: decode the printed record as in section 24.
+- No fault but output wrong or not written: compare the job set-up with the
+  Linux run.

@@ -481,3 +481,5 @@ No Nouveau implementation body was copied and no runtime code changed.
 | `reference/nouveau/nvkm/falcon/v1.c` | MIT notice in file | Data and code load protocol | Semantic facts only |
 | `reference/nouveau/nvkm/subdev/ltc/gf100.c` | MIT notice in file | ZBC table registers | Semantic facts only |
 | `reference/nouveau/nvkm/engine/gr/ctxgf100.c`, `ctxgk104.c`, `ctxgk110.c`, `ctxgk110b.c`, `ctxgf117.c` | MIT notice in file | Golden context order, hooks, per-context register values | Semantic facts only |
+| `reference/nouveau/nvkm/engine/fifo/gf100.c` (699-716), `gk104.c` (474, 504-560) | MIT notice in file | Decode of the MMU fault record of the `s3v` run: fields, unit, reason and hub client names (`work/S3DIAG/FINDINGS.md`) | Semantic facts only |
+| `reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c` (748-800) | MIT notice in file | Where Mesa places the launch descriptor (its scratch buffer), for the writable Qmd mapping | Semantic facts only |

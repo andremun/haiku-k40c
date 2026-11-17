@@ -894,3 +894,25 @@ permission. Not checked in the Linux PTE trace.
 
 Next (proposed): map Qmd writable (one change, `tools/gr/launch.py`, with
 the Mesa citation), keep the fault mode of `s3v`, and run the job again.
+
+## 2026-11-18: stage s3w built (s3v with a writable launch descriptor)
+
+`s3w` (stage 17) is `s3v` with one change: the Qmd region (the launch
+descriptor, VA 0x13e40000) is mapped writable (`tools/gr/launch.py`
+`layout()`). Source: the `s3v` fault record (a write to offset 0 of the
+descriptor, RO_VIOLATION) and Mesa, which places the descriptor in its
+scratch buffer (`nve4_compute.c:751`). No card run yet.
+
+- The change is in the generated region table, so it applies to every GR
+  stage built from now on. The consumed packages keep their old table.
+- Aux, Input, Text and Txc stay read-only. If the job writes one of them,
+  the fault mode of `s3v` prints the record in the same run.
+- Host test: the card model checks the Qmd PTE writable and the Aux PTE
+  read-only (`vmmgf100.c:315`).
+- Cardless rehearsal: `results/20261118-s3w-rehearsal-a5fcb7fb`,
+  PASS_CARDLESS_NO_CARD.
+- Manifest `work/S3DIAG/s3w/package.json`, SHA-256
+  `0659d24164705bde75fe3244553a16607b6f4d64164b40530542f88379aa4f92`.
+
+Expected: `PASS S3_COMPUTE` with `wrong=0`. If another region faults, the
+teardown will again not end (s3v); the record still prints first.

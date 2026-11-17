@@ -60,7 +60,9 @@ def layout():
     context = align(0x80000 + 0x4EA00, PAGE)  # ctxgf100.c:1436,1474; context size KNOWN.
     sizes = [
         ("Text", 0x80000, False), ("Tls", tls_bytes(), True), ("Txc", 0x20000, False),
-        ("Aux", PAGE, False), ("Qmd", PAGE, False), ("Input", PAGE, False), ("Output", PAGE, True),
+        # Qmd writable: the card writes offset 0 of the descriptor during the launch (s3v fault record,
+        # work/S3DIAG/FINDINGS.md); Mesa places it in its writable scratch buffer (nve4_compute.c:751).
+        ("Aux", PAGE, False), ("Qmd", PAGE, True), ("Input", PAGE, False), ("Output", PAGE, True),
         ("PagePool", 0x8000, True), ("Bundle", 0x3000, True), ("Attrib", attrib, True),
         ("Context", context, True), ("MmioList", PAGE, False),
         # The channel's own context: a copy of the golden image, as Linux makes one for each

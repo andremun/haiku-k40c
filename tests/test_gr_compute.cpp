@@ -177,6 +177,7 @@ struct Card:Device {
         const auto golden=gr::regions[10].va+0x80000;
         assert(at(inst,golden)!=gr::patchCount || at(inst,golden+4)!=uint32_t(gr::regions[11].va>>8)); // no list words in the generation memory
         for(uint32_t o=8;o<gr::imageBytes;o+=4)assert(at(inst,copy+o)==at(inst,golden+o));
+        assert(!(pte(inst,gr::regions[4].va)&4) && (pte(inst,gr::regions[3].va)&4)); // Qmd writable (s3v), Aux read-only (vmmgf100.c:315).
         for(unsigned r:{7u,8u,11u}){const auto e=pte(inst,gr::regions[r].va);assert((e&7)==3);} // valid, PRIV, writable (vmmgf100.c:315).
         for(unsigned r:{0u,9u,10u}){const auto e=pte(inst,gr::regions[r].va);assert(!(e&2));} // no PRIV elsewhere.
         alignedSeen=true;
