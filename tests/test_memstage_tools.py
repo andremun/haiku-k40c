@@ -281,8 +281,28 @@ class Tests(unittest.TestCase):
         # work/S3DIAG/PLAN.md: prefixes of the push buffer, and the live lines.
         reports = {
             mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
-            for mode in ("bind", "setup", "aligned", "image", "observe", "registers")
+            for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report")
         }
+        # s3q: no read of VRAM after GP_PUT, so GP_GET is not known (work/S3DIAG/REPORT.md, approach G).
+        suite["stage"] = "S3Q_A7_BAR1_GR_BIND_REPORT"
+        rep = reports["report"]
+        result = evidence.memory_final(rep, suite, raw)
+        self.assertTrue(result["S3_observed"] and not result["S3_bind_complete"] and not result["gr"]["observe"]["gp_get_read"])
+        self.assertEqual(result["gr"]["observe"]["samples"], 4)
+        with self.assertRaises(ValueError):  # the s3p report has another form
+            evidence.memory_final(reports["registers"].replace("PASS S3_REGISTERS", "PASS S3_REPORT"), suite, raw)
+        line = re.search(r"^k40_mem: OBS n=5 g=8 .*\n", rep, re.M).group(0)
+        last = re.search(r"^k40_mem: OBS n=5 g=1 us=\d+ c=7 0 0 0 0 0 0 0", rep, re.M).group(0)
+        for changed in (rep.replace(line, "", 1),  # the sample after the teardown not complete
+                        rep.replace(line, line.replace("c=7", "c=4"), 1),
+                        rep.replace(last, last[:-1] + "12001", 1),  # the engine not idle at the end
+                        rep.replace("consumed=0", "consumed=1"),
+                        rep.replace("GR_OBSERVE samples=4 get=0", "GR_OBSERVE samples=4 get=1"),
+                        rep.replace("closed=1", "closed=0"),
+                        rep.replace("PASS S3_REPORT", "PASS S3_BIND")):
+            self.assertNotEqual(changed, rep)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
         # s3p: registers only after GP_PUT until the teardown ended (work/S3DIAG/REPORT.md, approach F).
         suite["stage"] = "S3P_A7_BAR1_GR_BIND_REGISTERS"
         regs = reports["registers"]

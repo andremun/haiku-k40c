@@ -436,3 +436,27 @@ UNKNOWN:
   (`fuc/macros.fuc:253-261`, flags `fuc/macros.fuc:202-212`); it was not read.
 - If the PBDMA fetched the entry.
 - Which poll of the teardown failed (the report lines were not printed).
+
+## 2026-11-17: stage s3q built (approach G of REPORT.md)
+
+`s3q` is `s3p` in the report mode (`gr::Observe::Report`, `src/gr/Compute.cpp`).
+No card run yet.
+
+- After GP_PUT no read of VRAM at all, also after the teardown. So no access
+  of the stage is expected to time out, and the driver prints its report
+  lines (`GR`, `GR_FAILURE`, `GR_STATUS`, the journal events).
+- Group 8 has seven values: 0x100c80, 0x0400c0, 0x0400c4, 0x040120, then the
+  FECS trace word 0x40981c (`fuc/macros.fuc:253-261`, flags
+  `fuc/macros.fuc:202-212`), the window selector 0x001700
+  (`instmem/nv50.c:68`) and the BAR1 context 0x001704 (`bar/gf100.c:46-58`).
+- One more sample (groups 1, 2, 7, 8) after the teardown.
+- GP_GET is not read, so the stage cannot prove the fetch. Its pass rule: no
+  fault, engine status 0, clean teardown. A pass is not an S3 bind pass
+  (`evidence.py`: `S3_bind_complete` false).
+- New read address for Guard: 0x001700. No new register write.
+- Host test: pass case and an engine that is never idle (32 samples, the
+  teardown, one more sample, a report). No VRAM read after GP_PUT in both.
+- Cardless rehearsal: `results/20261117-s3q-rehearsal-c10e39ee`,
+  PASS_CARDLESS_NO_CARD. `make check` passes.
+- Manifest `work/S3DIAG/s3q/package.json`, SHA-256
+  `49cdf005092f1e787faeb1f58fed7f922dc2839efedbdf52e6a698a09b123215`.

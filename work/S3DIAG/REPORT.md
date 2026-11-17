@@ -343,3 +343,22 @@ Approach F ran once (`work/S3DIAG/FINDINGS.md`, entry "s3p on the card").
   or its content) is the cause. If not: the cause is in the image transfer or
   outside the GR engine; then approach C (`s3n`, host NOP on the GR runlist
   without a context) separates the two.
+
+## 11. Stage s3q is built (2026-11-17)
+
+Approach G is ready for one card run (`work/S3DIAG/FINDINGS.md`, entry "stage
+s3q built"). The run needs the user's explicit yes (ADR 006).
+
+Command, after the yes and with the card on `vfio-pci`:
+`K40_MEM_STAGE=s3q python3 tools/memstage/run.py --run-approved-batch1-once`
+
+How to read the serial log:
+- `OBS ... g=8` values: MMU status, PBDMA 0 method address, data, channel,
+  FECS trace word, window selector, BAR1 context.
+- FECS trace word bits (`fuc/macros.fuc:202-212`): 0 WAIT, 1 MMCTX,
+  2 STRWAIT, 3 STRINIT, 4 AUTO, 5 CHAN, 6 LOAD, 7 SAVE, 8 LCHAN, 9 LCTXH,
+  10 STRTPC. A set bit names a routine that FECS entered and did not leave.
+- `GR_FAILURE ... closing=<error> closing_index=<n>`: the teardown op that
+  failed. Find the op with `tools/gr/program.py` (stage `teardown`).
+- The expected end is `FAIL` with a complete report, not an AER stop. An AER
+  stop in this stage would be new: a register access without completion.

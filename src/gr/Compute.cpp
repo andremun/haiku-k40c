@@ -337,10 +337,10 @@ bool Compute::sample(uint32_t number)
             if(!tick())return false;
             if(progress_)progress_->observed(number,4,last_-start_,f,5);
         }
-        if(observe_==Observe::Registers) {
+        if(observe_==Observe::Registers || observe_==Observe::Report) {
             // FECS: current and next channel (engine/gr/gf100.c:746; fuc/macros.fuc:125-126), signal
             // (fuc/macros.fuc:58), scratch 0, 1, 4 and 5 (fuc/macros.fuc:90; fuc/hub.fuc:55,213-216,350).
-            uint32_t s[7]{},m[4]{};
+            uint32_t s[7]{},m[7]{};
             if(!io_.read32(0x409b00,s[0]) || !io_.read32(0x409b04,s[1]) || !io_.read32(0x409400,s[2]) // engine/gr/gf100.c:746; fuc/macros.fuc:126,58.
                 || !io_.read32(0x409800,s[3]) || !io_.read32(0x409804,s[4]) || !io_.read32(0x409810,s[5]) // engine/gr/gf100.c:754,1579; fuc/macros.fuc:90.
                 || !io_.read32(0x409814,s[6]))return fail(MemError::Read); // engine/gr/gf100.c:1573.
@@ -349,8 +349,12 @@ bool Compute::sample(uint32_t number)
             // MMU status (mmu/vmmgf100.c:199); PBDMA 0 method address, data and channel (fifo/gf100.c:316-318).
             if(!io_.read32(0x100c80,m[0]) || !io_.read32(0x0400c0,m[1]) || !io_.read32(0x0400c4,m[2]) // mmu/vmmgf100.c:199; fifo/gf100.c:316-317.
                 || !io_.read32(0x040120,m[3]))return fail(MemError::Read); // fifo/gf100.c:318.
+            // Report mode: FECS trace word, scratch 7 (fuc/macros.fuc:253-261, flags fuc/macros.fuc:202-212);
+            // window selector (instmem/nv50.c:68) and BAR1 context (bar/gf100.c:46-58).
+            if(observe_==Observe::Report && (!io_.read32(0x40981c,m[4]) || !io_.read32(0x001700,m[5]) // engine/gr/gf100.c:1573 scratch block; instmem/nv50.c:68.
+                || !io_.read32(0x001704,m[6])))return fail(MemError::Read); // bar/gf100.c:46-58.
             if(!tick())return false;
-            if(progress_)progress_->observed(number,8,last_-start_,m,4);
+            if(progress_)progress_->observed(number,8,last_-start_,m,observe_==Observe::Report?7:4);
             report_.engineStatus=v[6];
             if(number)return true;
         }
@@ -370,7 +374,7 @@ bool Compute::observe()
     // left out while an MMU fault is pending (a fault of unit BAR1 stalls BAR1 reads:
     // fifo/gf100.c:573-577, bar/base.c:40-47), so that the teardown still runs.
     const auto begin=last_;bool fetched=false;
-    if(observe_==Observe::Registers) {
+    if(observe_==Observe::Registers || observe_==Observe::Report) {
         // Approach F: no access to VRAM. Samples until the engine status reads 0 in two samples
         // in sequence (not before the fourth sample), the sample bound or the time bound.
         unsigned idle=0;
@@ -512,6 +516,7 @@ bool Compute::run()
     if(sampled)live(Step::Status,report_.fifoIntr,report_.grIntr|report_.grTrap|report_.fecsIntr);
     const bool closed=teardown();
     if(observe_==Observe::Registers && report_.submitted && !lastRead())ok=false;
+    if(observe_==Observe::Report && report_.submitted && !sample(report_.samples+1))ok=false; // One sample after the teardown.
     uint64_t end;
     if(io_.now(end) && end>=start_)report_.totalUs=end-start_;
     if(!ok || !sampled || !closed)return false;
@@ -520,7 +525,7 @@ bool Compute::run()
     // (fifo/gk104.c:654-718), no GR interrupt or trap, no FECS interrupt (engine/gr/gf100.c:1414,1570).
     const bool clean=!report_.mmuPending && !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&0x3fffffff) // fifo/gk104.c:654-718.
         && !report_.grIntr && !report_.grTrap && !report_.fecsIntr;
-    return report_.golden && report_.attached && clean && (launch_==Launch::None || report_.consumed)
+    return report_.golden && report_.attached && clean && (launch_==Launch::None || report_.consumed || (observe_==Observe::Report && !report_.engineStatus)) // fifo/gk104.c:206: the Linux trace reads only 0.
         && (launch_!=Launch::Full || report_.computed);
 }
 }

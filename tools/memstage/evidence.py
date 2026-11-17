@@ -339,10 +339,12 @@ GR_STAGES = {
     "S3G_A7_BAR1_GR_IMAGE": ("none", "S3_IMAGE"),
     "S3O_A7_BAR1_GR_BIND_OBSERVED": ("bind", "S3_OBSERVE"),
     "S3P_A7_BAR1_GR_BIND_REGISTERS": ("bind", "S3_REGISTERS"),
+    "S3Q_A7_BAR1_GR_BIND_REPORT": ("bind", "S3_REPORT"),
 }
 # Stages aligned with the Linux reference run (gr::Align, work/S3DIAG/FINDINGS.md):
 # the channel context is a copy of the golden image in GrChanContext.
-GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED", "S3O_A7_BAR1_GR_BIND_OBSERVED", "S3P_A7_BAR1_GR_BIND_REGISTERS")
+GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED", "S3O_A7_BAR1_GR_BIND_OBSERVED", "S3P_A7_BAR1_GR_BIND_REGISTERS",
+              "S3Q_A7_BAR1_GR_BIND_REPORT")
 # Stages that print the golden image (gr::Compute print mode, work/S3DIAG/REPORT.md).
 GR_PRINT = ("S3G_A7_BAR1_GR_IMAGE",)
 # Stages that observe the progress after GP_PUT without BAR1 access (gr::Compute observe mode,
@@ -350,6 +352,8 @@ GR_PRINT = ("S3G_A7_BAR1_GR_IMAGE",)
 GR_OBSERVE = ("S3O_A7_BAR1_GR_BIND_OBSERVED",)
 # Approach F: registers only after GP_PUT until the teardown ended, then one slow-window read.
 GR_REGISTERS = ("S3P_A7_BAR1_GR_BIND_REGISTERS",)
+# Approach G: as approach F without any read of VRAM after GP_PUT; GP_GET is not read.
+GR_REPORT = ("S3Q_A7_BAR1_GR_BIND_REPORT",)
 OBSERVE_SAMPLES = 32  # src/gr/Compute.cpp observeSamples.
 IMAGE_BYTES = 0x4EA00  # tools/gr/program.py KNOWN[0x409804], trace 616433.
 GR_ROLES = tuple(range(17, 30))  # GrText..GrChanContext, VramArena.h.
@@ -473,13 +477,51 @@ def registers_phase(serial, events):
     return dict(samples=samples, idle_us=rows[-3][2], bar1_read=False)
 
 
-def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observed=False, registers=False):
+def report_phase(serial, events):
+    """A passing report run (src/gr/Compute.cpp, Observe::Report): no read of VRAM after GP_PUT.
+
+    Sample 0, before GP_PUT: groups 1, 2, 7, 8, 3. Samples 1..N after GP_PUT and sample N+1
+    after the teardown line: groups 1, 2, 7, 8. Group 8 has seven values: MMU status, PBDMA 0
+    method address, data and channel, FECS trace word, window selector, BAR1 context.
+    """
+    rows = observe_lines(serial)
+    put_at = serial.find("k40_mem: LIVE step=11 us=")
+    put_at = serial.find("k40_mem: LIVE step=11 us=", put_at + 1)
+    down_at = serial.find("k40_mem: LIVE step=14 us=")
+    report_at = serial.find("k40_mem: GR step=")
+    samples = (len(rows) - 5) // 4 - 1
+    wanted = [(0, g) for g in (1, 2, 7, 8, 3)] + [(n, g) for n in range(1, samples + 2) for g in (1, 2, 7, 8)]
+    if [(row[0], row[1]) for row in rows] != wanted or not 4 <= samples <= OBSERVE_SAMPLES:
+        raise ValueError("report samples or groups out of order")
+    counts = {1: 7, 2: 3, 7: 7, 8: 7, 3: 2}
+    if any(len(row[3]) != counts[row[1]] for row in rows) or any(a[2] > b[2] for a, b in zip(rows, rows[1:])):
+        raise ValueError("report value counts or times differ")
+    if (
+        put_at < 0 or down_at < put_at
+        or any(row[4] > put_at for row in rows[:5])
+        or any(not put_at < row[4] < down_at for row in rows[5:-4])
+        or any(not down_at < row[4] < report_at for row in rows[-4:])
+    ):
+        raise ValueError("report lines are not in their places around GP_PUT and the teardown")
+    group1 = [row[3] for row in rows if row[1] == 1]
+    if any(v[2] or v[3] or v[4] for v in group1) or group1[-1][6] or group1[-2][6]:
+        raise ValueError("MMU fault or PBDMA interrupt pending, or the engine not idle at the end")  # fifo/gf100.c:723,358; fifo/gk104.c:206.
+    if serial.count(f"k40_mem: GR_OBSERVE samples={samples} get=0 put=0 bar=0 fault_units=0") != 1:
+        raise ValueError("observe report differs")
+    reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]
+    if len(reads) != 1:
+        raise ValueError("slow-window read of USERD after GP_PUT, or the baseline read missing")
+    return dict(samples=samples, idle_us=rows[-5][2], bar1_read=False, gp_get_read=False)
+
+
+def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observed=False, registers=False, unread=False):
     """Validate an S3 run: program progress, context, submit, launch result, faults, teardown."""
     lengths, _, layout = gr_program()
     submit, launch = mode != "none", mode == "full"
     flag, computed = "1" if submit else "0", "1" if launch else "0"
+    fetched = "0" if unread else flag  # Report mode: GP_GET is not read.
     if len(re.findall(
-        rf"^k40_mem: GR step=15 error=0 bound=1 started=1 golden=1 attached=1 submitted={flag} consumed={flag} computed={computed} closed=1\r?$",
+        rf"^k40_mem: GR step=15 error=0 bound=1 started=1 golden=1 attached=1 submitted={flag} consumed={fetched} computed={computed} closed=1\r?$",
         serial, re.M,
     )) != 1:
         raise ValueError("GR report missing or stage not complete")
@@ -507,7 +549,7 @@ def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observe
     if serial.count("k40_mem: GR_FAILURE runner=0 index=0 addr=0 value=0 expected=0 closing=0 closing_index=0") != 1:
         raise ValueError("GR failure record")
     got = re.findall(r"^k40_mem: GR_GET after=(\d+)/(\d+) polls=\d+ us=\d+ result_polls=\d+ result_us=\d+ wrong=(\d+) first=\d+ value=[0-9a-f]+\r?$", serial, re.M)
-    if len(got) != 1 or tuple(map(int, got[0])) != ((1, 1, 0) if submit else (0, 0, 0)):
+    if len(got) != 1 or tuple(map(int, got[0])) != ((1, 1, 0) if submit and not unread else (0, 0, 0)):
         raise ValueError("GP_GET progress or result compare differs")
     status = re.findall(
         r"^k40_mem: GR_STATUS mc=[0-9a-f]+ fifo=([0-9a-f]+) mmu=0 pbdma=0 hce=0 state=[0-9a-f]+ gr=0 trap=0 fecs=0 engine=([0-9a-f]+)\r?$",
@@ -541,6 +583,8 @@ def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observe
         observation = observe_phase(serial, events)
     elif registers:
         observation = registers_phase(serial, events)
+    elif unread:
+        observation = report_phase(serial, events)
     elif "k40_mem: OBS" in serial or "k40_mem: GR_OBSERVE" in serial:
         raise ValueError("observe lines in a stage that does not observe")
     chan = [e for e in events if e[0] >= 8]
@@ -568,7 +612,7 @@ def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observe
         context_va=layout["ChanContext"]["va"] if aligned else layout["Context"]["va"] + 0x80000,
         records=len(GR_ROLES), aligned=aligned,
         image=dict(lines=len(lines), words_not_zero=summary[1][0], sum=summary[1][1]) if printed else None,
-        observe=observation if observed or registers else None,
+        observe=observation if observed or registers or unread else None,
     )
 
 
@@ -881,9 +925,13 @@ def memory_final(serial, suite, request):
         if registers:
             scopes["bind"] = ("S3p: as S3e, and after GP_PUT status registers only until the teardown ended, then one slow-window "
                               "read of GP_GET; object bind consumed, GP_GET 0->1, no fault, clean teardown; no launch")
+        unread = suite.get("stage") in GR_REPORT
+        if unread:
+            scopes["bind"] = ("S3q: as S3e, and after GP_PUT status registers only, also after the teardown; GP_GET is not read; "
+                              "no fault, engine idle, clean teardown; no proof that the entry was fetched; no launch")
         return dict(
             scope=scopes[mode],
-            gr=gr_phase(serial, events, byrole, mode, suite.get("stage") in GR_ALIGNED, printed, observed, registers),
+            gr=gr_phase(serial, events, byrole, mode, suite.get("stage") in GR_ALIGNED, printed, observed, registers, unread),
             owner=owner,
             allocations=[dict(id=r[0], role=r[1], physical=r[2], bytes=r[3], generation=r[4]) for r in allocations],
             events=len(events),
@@ -892,8 +940,8 @@ def memory_final(serial, suite, request):
             S2_complete=False,
             S3_golden_complete=True,
             S3_image_printed=printed,
-            S3_observed=observed or registers,
-            S3_bind_complete=mode != "none",
+            S3_observed=observed or registers or unread,
+            S3_bind_complete=mode != "none" and not unread,
             S3_setup_complete=mode in ("setup", "full"),
             S3_complete=launch,
         )

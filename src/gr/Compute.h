@@ -31,7 +31,10 @@ struct Align {bool copy=false,priv=false,user=false;};
 // How the progress after GP_PUT is read (work/S3DIAG/REPORT.md): the BAR1 poll; approach B, BAR0
 // status registers and the slow window, BAR1 last; or approach F, registers only until the
 // teardown ended, then one slow-window read of USERD as the last action.
-enum class Observe:uint8_t {None,Window,Registers};
+// Report (approach G): as Registers, with the FECS trace word, the window selector and the BAR1
+// context in group 8, one more sample after the teardown, and no read of VRAM after GP_PUT at
+// all. GP_GET is then not known: the stage passes on a clean state and a clean teardown.
+enum class Observe:uint8_t {None,Window,Registers,Report};
 // Host-side progress sink: the owner prints each call at once (no card access).
 class Progress {
 public:
