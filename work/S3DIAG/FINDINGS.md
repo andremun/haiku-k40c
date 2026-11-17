@@ -584,3 +584,49 @@ Next: find the list entry. The list has 36 entries (`tools/gr/program.py`,
 `patchList`); Linux writes its list into the MMIO list record (trace). Compare
 the two lists entry by entry on the host first. Then, if needed, bisect on the
 card with a list count of 18.
+
+## 2026-11-17: validator rule fixed; register list compared (host only)
+
+Validator rule (`tools/memstage/evidence.py`, three observe checks) and the
+driver pass rule of the report mode (`src/gr/Compute.cpp`): the engine must not
+be busy (0x002640 bit 31, `engine/fifo/gk104.c:206-208`) at the end, in place
+of "status 0". The sample loop still runs until status 0 or 2 s, so on the card
+it keeps sampling for 2 s. Host tests now use the busy value 0x8001c001 of
+`s3q` for the stall cases.
+
+Recheck of the `s3r` log with the fixed rule (after the run, so not the run
+result; `result.json` stays `failed`): `evidence.memory_final` accepts it,
+`S3_bind_complete` true, 25 samples, list count 0, GP_GET read 1.
+
+Register list (`tools/gr/patchlist.py`, in `make check`): our 36 entries
+against the Linux list (trace lines 811337-811410).
+- Registers and order: equal.
+- 28 constant values: equal.
+- 6 address entries (0x40800c, 0x419004 page pool; 0x408004, 0x418808
+  bundle; 0x418810, 0x419848 attribute buffer): different, because our records
+  are at other channel addresses. Our golden stage writes the same registers
+  with the same values (`tools/gr/program.py`, golden ops 411-422), and the
+  golden generation passed on the card with them.
+- 2 entries read from the card (0x17e91c, 0x17e920, LTC,
+  `engine/gr/ctxgk104.c:863-872`): our values are the ones the golden stage
+  reads; not printed on the card. Linux: 0x0905090a, 0x00090b03.
+
+INFERRED: the host comparison shows no value that differs from Linux in a way
+that the golden stage did not already use on the card. It does not explain the
+`s3q` result.
+
+Two notes for the next card stage:
+- A list count of 0 also skips the write of the 256-byte context header back
+  to VRAM at the end of `ctx_mmio_exec` (`fuc/hub.fuc:586-591`). So `s3r`
+  separates "list execution or its write-back" from the rest, not the list
+  content alone.
+- Not yet aligned with Linux: Linux maps the channel's GR context (our
+  GrChanContext) with PRIV (`engine/fifo/gk104.c:177-187`, `gk104_ectx_ctor`).
+  Ours has no PRIV. The save in `s3r` wrote that record without PRIV and
+  passed, so this is an unlikely cause (INFERRED).
+
+Proposed next card stage: `s3s`, as `s3r` with list count 34. The list is a
+prefix, so 34 runs every entry except the LTC pair at the end, and keeps the
+write-back. Pass: the LTC pair is the cause. Fail: the cause is in entries
+0-33 or in the write-back; then count 1 (one constant entry and the
+write-back) splits those.

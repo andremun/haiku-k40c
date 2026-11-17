@@ -393,6 +393,7 @@ Statuses: `SOURCE_ONLY` (from source code only, no hardware trace yet).
 | `src/gr/Compute.cpp:467` | `&& io_.read32(0x400100,report_.grIntr) && io_.read32(0x400108,report_.grTrap)` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/gr/Compute.cpp:468` | `&& io_.read32(0x409c18,report_.fecsIntr) && io_.read32(0x002640,report_.engineStatus);` | no source: ambiguous citation | SOURCE_ONLY |
 | `src/gr/Compute.cpp:529` | `const bool clean=!report_.mmuPending && !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&0x3fffffff)` | no source: ambiguous citation | SOURCE_ONLY |
+| `src/gr/Compute.cpp:531` | `return report_.golden && report_.attached && clean && (launch_==Launch::None \|\| report_.consumed \|\| (observe_==Observe::Report && !(report_.engineStatus&0x80000000)))` | no source: ambiguous citation | SOURCE_ONLY |
 
 ## src/gr/Guard.cpp
 
@@ -937,6 +938,7 @@ The following constant lines have no source citation:
 - src/gr/Compute.cpp:467 (no source: ambiguous citation)
 - src/gr/Compute.cpp:468 (no source: ambiguous citation)
 - src/gr/Compute.cpp:529 (no source: ambiguous citation)
+- src/gr/Compute.cpp:531 (no source: ambiguous citation)
 - src/gr/Guard.cpp:9 (no source: indexes in sequence.)
 - src/gr/Guard.cpp:80 (no source: ambiguous citation)
 - src/gr/Guard.cpp:84 (no source: ambiguous citation)

@@ -44,6 +44,7 @@ check:
 	python3 tools/memstage/host_check.py --check
 	python3 tools/gr/oracle.py --check
 	python3 tools/gr/golden.py --check
+	python3 tools/gr/patchlist.py --check
 	python3 tools/gr/launch.py --check
 
 test:

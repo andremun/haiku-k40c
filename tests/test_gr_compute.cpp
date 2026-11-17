@@ -210,7 +210,7 @@ struct Card:Device {
         assert(value==1 && entries==1 && (regs[0x800000+ch::chid*8]&0x80000000) && next==trace.size());
         assert(ram.at(uint64_t(runlistBase)*4096/4)==ch::chid && word64(inst+8)==slot);
         put=true;
-        if(fault==RegistersStall || fault==ReportStall || fault==NoListStall)regs[0x2640]=0x00012001; // the engine status of the s3o run: the load never ends.
+        if(fault==RegistersStall || fault==ReportStall || fault==NoListStall)regs[0x2640]=0x8001c001; // the engine status of the s3q run after the preempt: busy, never ends.
         if(fault==Stall || fault==ObserveStall || fault==RegistersStall || fault==ReportStall || fault==NoListStall)return true;
         if(fault==ObserveFault) { // A fault of unit 4, BAR1 (fifo/gk104.c:478), with a software fault record.
             regs[0x259c]=0x10;regs[0x2840]=uint32_t(inst>>12);regs[0x2844]=0x1000;regs[0x2848]=0;regs[0x284c]=0x82;return true;
@@ -367,7 +367,7 @@ int main(int argc,char** argv)
     assert(r.groups[8].values[6]&0x80000000); // and set before it (bar/gf100.c:58)
     assert(!scenario(trace,ReportStall,r)); // the engine never idle: every sample, the teardown, one more sample, a report
     assert(r.report.submitted && r.report.samples==32 && r.barAfterPut==0 && r.windowAfterPut==0 && r.report.closed && r.closed && r.denials==0);
-    assert(r.groups.back().sample==33 && r.report.engineStatus==0x00012001);
+    assert(r.groups.back().sample==33 && r.report.engineStatus==0x8001c001);
     assert(scenario(trace,NoList,r)); // s3r: list count 0, then one slow-window read after the teardown (approach H)
     assert(r.aligned && r.report.consumed && r.barAfterPut==0 && r.windowAfterPut==0 && r.report.closed && r.closed && r.denials==0 && !r.mismatch && !has(0));
     assert(r.groups.size()==5+5*4+2 && r.groups.back().group==3 && r.groups.back().values==std::vector<uint32_t>({1,1}) && r.groups[r.groups.size()-2].group==9);

@@ -470,8 +470,8 @@ def registers_phase(serial, events):
     if rows[4][3] != [0, 0] or rows[-1][3] != [1, 1]:
         raise ValueError("GP_GET or GP_PUT by slow window differs")
     group1 = [row[3] for row in rows if row[1] == 1]
-    if any(v[2] or v[3] or v[4] for v in group1) or group1[-1][6] or group1[-2][6]:
-        raise ValueError("MMU fault or PBDMA interrupt pending, or the engine not idle at the end")  # fifo/gf100.c:723,358; fifo/gk104.c:206.
+    if any(v[2] or v[3] or v[4] for v in group1) or (group1[-1][6] | group1[-2][6]) & 0x80000000:
+        raise ValueError("MMU fault or PBDMA interrupt pending, or the engine busy at the end")  # fifo/gf100.c:723,358; fifo/gk104.c:206,208 busy bit.
     if serial.count(f"k40_mem: GR_OBSERVE samples={samples} get=1 put=1 bar=0 fault_units=0") != 1:
         raise ValueError("observe report differs")
     reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]
@@ -507,8 +507,8 @@ def report_phase(serial, events):
     ):
         raise ValueError("report lines are not in their places around GP_PUT and the teardown")
     group1 = [row[3] for row in rows if row[1] == 1]
-    if any(v[2] or v[3] or v[4] for v in group1) or group1[-1][6] or group1[-2][6]:
-        raise ValueError("MMU fault or PBDMA interrupt pending, or the engine not idle at the end")  # fifo/gf100.c:723,358; fifo/gk104.c:206.
+    if any(v[2] or v[3] or v[4] for v in group1) or (group1[-1][6] | group1[-2][6]) & 0x80000000:
+        raise ValueError("MMU fault or PBDMA interrupt pending, or the engine busy at the end")  # fifo/gf100.c:723,358; fifo/gk104.c:206,208 busy bit.
     if serial.count(f"k40_mem: GR_OBSERVE samples={samples} get=0 put=0 bar=0 fault_units=0") != 1:
         raise ValueError("observe report differs")
     reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]
@@ -548,8 +548,8 @@ def no_list_phase(serial, events):
     if rows[4][3] != [0, 0] or rows[-1][3] != [1, 1]:
         raise ValueError("GP_GET or GP_PUT by slow window differs")
     group1 = [row[3] for row in rows if row[1] == 1]
-    if any(v[2] or v[3] or v[4] for v in group1) or group1[-1][6] or group1[-2][6]:
-        raise ValueError("MMU fault or PBDMA interrupt pending, or the engine not idle at the end")  # fifo/gf100.c:723,358; fifo/gk104.c:206.
+    if any(v[2] or v[3] or v[4] for v in group1) or (group1[-1][6] | group1[-2][6]) & 0x80000000:
+        raise ValueError("MMU fault or PBDMA interrupt pending, or the engine busy at the end")  # fifo/gf100.c:723,358; fifo/gk104.c:206,208 busy bit.
     if serial.count(f"k40_mem: GR_OBSERVE samples={samples} get=1 put=1 bar=0 fault_units=0") != 1:
         raise ValueError("observe report differs")
     reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]

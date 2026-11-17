@@ -422,3 +422,15 @@ Next steps:
 2. Host only: compare our 36 list entries with the list of the Linux run.
 3. If the comparison shows no clear difference: bisect on the card with a list
    count of 18, then 9, and so on.
+
+## 15. Validator fixed, list compared (2026-11-17)
+
+- The engine rule is now "not busy" (bit 31), in the validator and in the
+  report-mode pass rule. With it the `s3r` log validates (recheck after the
+  run; the run result stays `failed`).
+- `tools/gr/patchlist.py`: our register list equals the Linux list in order
+  and in all 28 constants. The 6 address entries hold our own record
+  addresses, which the golden stage already used on the card. No difference
+  explains the stop.
+- Next card stage (proposed, not built): `s3s`, list count 34 (all but the LTC
+  pair 0x17e91c, 0x17e920). See `work/S3DIAG/FINDINGS.md`.

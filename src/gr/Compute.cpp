@@ -383,7 +383,7 @@ bool Compute::observe()
         for(uint32_t n=1;n<=observeSamples;++n) {
             if(!sample(n))return false;
             report_.samples=n;report_.progressUs=last_-begin;
-            idle=report_.engineStatus?0:idle+1; // fifo/gk104.c:206.
+            idle=report_.engineStatus?0:idle+1; // fifo/gk104.c:206. Status 0, not only "not busy": on the card the loop runs to the time bound (s3q, s3r).
             if((n>=4 && idle>=2) || report_.progressUs>=waitUs)break;
         }
         report_.polls=report_.samples;
@@ -528,7 +528,7 @@ bool Compute::run()
     // (fifo/gk104.c:654-718), no GR interrupt or trap, no FECS interrupt (engine/gr/gf100.c:1414,1570).
     const bool clean=!report_.mmuPending && !report_.pbdmaIntr && !report_.pbdmaHce && !(report_.fifoIntr&0x3fffffff) // fifo/gk104.c:654-718.
         && !report_.grIntr && !report_.grTrap && !report_.fecsIntr;
-    return report_.golden && report_.attached && clean && (launch_==Launch::None || report_.consumed || (observe_==Observe::Report && !report_.engineStatus)) // fifo/gk104.c:206: the Linux trace reads only 0.
+    return report_.golden && report_.attached && clean && (launch_==Launch::None || report_.consumed || (observe_==Observe::Report && !(report_.engineStatus&0x80000000))) // fifo/gk104.c:206-208: not busy (s3q, s3r: a loaded channel stays in the status).
         && (launch_!=Launch::Full || report_.computed);
 }
 }

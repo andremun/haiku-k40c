@@ -312,7 +312,7 @@ class Tests(unittest.TestCase):
         last = re.search(r"^k40_mem: OBS n=5 g=1 us=\d+ c=7 0 0 0 0 0 0 0", rep, re.M).group(0)
         for changed in (rep.replace(line, "", 1),  # the sample after the teardown not complete
                         rep.replace(line, line.replace("c=7", "c=4"), 1),
-                        rep.replace(last, last[:-1] + "12001", 1),  # the engine not idle at the end
+                        rep.replace(last, last[:-1] + "8001c001", 1),  # the engine busy at the end
                         rep.replace("consumed=0", "consumed=1"),
                         rep.replace("GR_OBSERVE samples=4 get=0", "GR_OBSERVE samples=4 get=1"),
                         rep.replace("closed=1", "closed=0"),
@@ -334,7 +334,7 @@ class Tests(unittest.TestCase):
         down = re.search(r"^k40_mem: LIVE step=14 .*\n", regs, re.M).group(0)
         for changed in (regs.replace(line, "", 1),  # one group lost
                         regs.replace(line, line.replace("g=7", "g=3").replace("c=7", "c=2"), 1),  # a slow-window group after GP_PUT
-                        regs.replace(last, last[:-1] + "12001", 1),  # the engine not idle at the end
+                        regs.replace(last, last[:-1] + "8001c001", 1),  # the engine busy at the end
                         regs.replace(last, last.replace("c=7 0 0 0", "c=7 0 0 1"), 1),  # MMU fault pending
                         regs.replace(down + early, early + down, 1),  # the last read before the teardown
                         re.sub(r"(OBS n=4 g=3 us=\d+ c=2) 1 1", r"\g<1> 0 1", regs),  # GP_GET 0 at the end
