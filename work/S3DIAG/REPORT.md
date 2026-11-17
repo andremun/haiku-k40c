@@ -479,3 +479,10 @@ Command, after the yes and with the card on `vfio-pci`:
   list. Next: the compute job (`s3b` with the fix).
 - Fail like `s3q` (preempt does not end, or the last read gets no completion):
   the LTC values are not the whole cause; compare the run with `s3s`.
+
+## 20. The fix works on the card (2026-11-17)
+
+`s3t` passed: the whole register list, with its LTC entries written after the
+golden stage, keeps access to VRAM; the preempt, the teardown and the last
+read of GP_GET (1) pass. This closes the S3DIAG question "why does the first
+GR channel submission stop the card". Next: the compute job with the fix.

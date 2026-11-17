@@ -731,3 +731,27 @@ yet.
   PASS_CARDLESS_NO_CARD. `make check` passes.
 - Manifest `work/S3DIAG/s3t/package.json`, SHA-256
   `f6e9e733ec17e06b483ef6cbc55f1bee9848bdbd280d64db6d7870aa2d30fad2`.
+
+## 2026-11-17: s3t on the card (PASS with the whole fixed list)
+
+Result folder `results/20261117-s3t-run-77623986`. Launcher status `pass`,
+driver `PASS S3_FULL_LIST`. No AER message (the kernel log still holds 7).
+The package `package-s3t` is consumed.
+
+KNOWN, from the serial log:
+- `LIVE step=10 a=2 b=24`: the whole list, 36 entries.
+- Journal: the two LTC list entries (offsets 0x110, 0x118) were written in
+  phase 12, after the golden stage.
+- 24 samples after GP_PUT, equal to `s3r` and `s3s`: no fault, no interrupt,
+  FECS trace word 0, engine status 0x00012001.
+- Teardown passed (`closed=1`, `closing=0`). Last slow-window read: GP_GET 1,
+  GP_PUT 1 (`consumed=1`).
+
+Result: with the same stage form, the whole list stopped access to VRAM in
+`s3q` and does not in `s3t`. The only change between the two is that the LTC
+entries hold the values read from the card instead of 0. So the cause found
+in the `s3s` entry is confirmed on the card (one run each).
+
+The object bind on the GR runlist channel now works with the channel set-up
+of the Linux run, the whole register list and a clean teardown. Next: the
+compute job (`s3b` form) with the fix.
