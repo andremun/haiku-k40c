@@ -281,8 +281,18 @@ class Tests(unittest.TestCase):
         # work/S3DIAG/PLAN.md: prefixes of the push buffer, and the live lines.
         reports = {
             mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
-            for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report", "nolist")
+            for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report", "nolist", "list34")
         }
+        # s3s: the first 34 list entries (all but the LTC pair).
+        suite["stage"] = "S3S_A7_BAR1_GR_BIND_LIST34"
+        list34 = reports["list34"]
+        result = evidence.memory_final(list34, suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and result["S3_list_count"] == 34)
+        for changed in (reports["nolist"].replace("PASS S3_NO_LIST", "PASS S3_SHORT_LIST"),  # count 0 in a 34 stage
+                        re.sub(r"(LIVE step=10 us=\d+ a=2) b=22", r"\g<1> b=24", list34)):  # whole list
+            self.assertNotEqual(changed, list34)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
         # s3r: list count 0, one slow-window read after the teardown (work/S3DIAG/REPORT.md, approach H).
         suite["stage"] = "S3R_A7_BAR1_GR_BIND_NO_LIST"
         nolist = reports["nolist"]

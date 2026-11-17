@@ -35,7 +35,8 @@ STAGE = dict(s1="BATCH1_A7_BAR1_VRAM", s2="S2_A7_BAR1_CHANNEL_COPY", s2d="S2D_A7
              s3e="S3E_A7_BAR1_GR_BIND_ALIGNED", s3g="S3G_A7_BAR1_GR_IMAGE",
              s3o="S3O_A7_BAR1_GR_BIND_OBSERVED", s3p="S3P_A7_BAR1_GR_BIND_REGISTERS",
              s3q="S3Q_A7_BAR1_GR_BIND_REPORT",
-             s3r="S3R_A7_BAR1_GR_BIND_NO_LIST")[stage.NAME]
+             s3r="S3R_A7_BAR1_GR_BIND_NO_LIST",
+             s3s="S3S_A7_BAR1_GR_BIND_LIST34")[stage.NAME]
 ROM = Path(
     os.environ.get(
         "K40_VBIOS",

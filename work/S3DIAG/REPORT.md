@@ -434,3 +434,18 @@ Next steps:
   explains the stop.
 - Next card stage (proposed, not built): `s3s`, list count 34 (all but the LTC
   pair 0x17e91c, 0x17e920). See `work/S3DIAG/FINDINGS.md`.
+
+## 16. Stage s3s is built (2026-11-17)
+
+Ready for one card run (`work/S3DIAG/FINDINGS.md`, entry "stage s3s built").
+The run needs the user's explicit yes (ADR 006).
+
+Command, after the yes and with the card on `vfio-pci`:
+`K40_MEM_STAGE=s3s python3 tools/memstage/run.py --run-approved-batch1-once`
+
+Read the log as `s3r` (section 13):
+- Teardown passes and the last read gives GP_GET 1: the LTC pair (entries 34,
+  35) is the cause.
+- Teardown fails on the preempt, or the last read gets no completion: the
+  cause is in entries 0-33 or in the header write-back. Next: list count 1
+  (entry 0 and the write-back), then halve.

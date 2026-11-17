@@ -630,3 +630,21 @@ prefix, so 34 runs every entry except the LTC pair at the end, and keeps the
 write-back. Pass: the LTC pair is the cause. Fail: the cause is in entries
 0-33 or in the write-back; then count 1 (one constant entry and the
 write-back) splits those.
+
+## 2026-11-17: stage s3s built (list count 34)
+
+`s3s` is `s3r` with list count 34 in the channel image. `gr::Align::list`
+replaces the flag of `s3r` (0 for `s3r`, 34 for `s3s`, `gr::allList` for the
+earlier stages). No card run yet.
+
+- FECS runs list entries 0-33 at the load and then writes the context header
+  back (`fuc/hub.fuc:555-592`). Entries 34 and 35 (0x17e91c, 0x17e920, LTC)
+  are not run. `LIVE step=10 a=2 b=22` reports the count (0x22 = 34).
+- All else as `s3r`: registers only after GP_PUT, the teardown, one sample,
+  one slow-window read of GP_GET as the last action.
+- No new register access.
+- Host test: pass case. `evidence.py` checks the count of the stage.
+- Cardless rehearsal: `results/20261117-s3s-rehearsal-ea4b9025`,
+  PASS_CARDLESS_NO_CARD. `make check` passes.
+- Manifest `work/S3DIAG/s3s/package.json`, SHA-256
+  `4dd6fef4235a876d40ffbe316fdc101aa6393ab875bf702b2f63e98b53b33b05`.

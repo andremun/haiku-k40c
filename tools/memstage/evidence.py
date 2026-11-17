@@ -341,11 +341,13 @@ GR_STAGES = {
     "S3P_A7_BAR1_GR_BIND_REGISTERS": ("bind", "S3_REGISTERS"),
     "S3Q_A7_BAR1_GR_BIND_REPORT": ("bind", "S3_REPORT"),
     "S3R_A7_BAR1_GR_BIND_NO_LIST": ("bind", "S3_NO_LIST"),
+    "S3S_A7_BAR1_GR_BIND_LIST34": ("bind", "S3_SHORT_LIST"),
 }
 # Stages aligned with the Linux reference run (gr::Align, work/S3DIAG/FINDINGS.md):
 # the channel context is a copy of the golden image in GrChanContext.
 GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED", "S3O_A7_BAR1_GR_BIND_OBSERVED", "S3P_A7_BAR1_GR_BIND_REGISTERS",
-              "S3Q_A7_BAR1_GR_BIND_REPORT", "S3R_A7_BAR1_GR_BIND_NO_LIST")
+              "S3Q_A7_BAR1_GR_BIND_REPORT", "S3R_A7_BAR1_GR_BIND_NO_LIST",
+              "S3S_A7_BAR1_GR_BIND_LIST34")
 # Stages that print the golden image (gr::Compute print mode, work/S3DIAG/REPORT.md).
 GR_PRINT = ("S3G_A7_BAR1_GR_IMAGE",)
 # Stages that observe the progress after GP_PUT without BAR1 access (gr::Compute observe mode,
@@ -356,7 +358,8 @@ GR_REGISTERS = ("S3P_A7_BAR1_GR_BIND_REGISTERS",)
 # Approach G: as approach F without any read of VRAM after GP_PUT; GP_GET is not read.
 GR_REPORT = ("S3Q_A7_BAR1_GR_BIND_REPORT",)
 # Approach H: as approach G with list count 0, then one slow-window read as the last action.
-GR_NO_LIST = ("S3R_A7_BAR1_GR_BIND_NO_LIST",)
+# Value: the list count (src/gr/Compute.h Align::list; 34 = all but the LTC pair).
+GR_NO_LIST = {"S3R_A7_BAR1_GR_BIND_NO_LIST": 0, "S3S_A7_BAR1_GR_BIND_LIST34": 34}
 OBSERVE_SAMPLES = 32  # src/gr/Compute.cpp observeSamples.
 IMAGE_BYTES = 0x4EA00  # tools/gr/program.py KNOWN[0x409804], trace 616433.
 GR_ROLES = tuple(range(17, 30))  # GrText..GrChanContext, VramArena.h.
@@ -517,14 +520,14 @@ def report_phase(serial, events):
     return dict(samples=samples, idle_us=rows[-5][2], bar1_read=False, gp_get_read=False)
 
 
-def no_list_phase(serial, events):
-    """A passing run without the register list (src/gr/Compute.cpp, Align::noList, Observe::Last).
+def no_list_phase(serial, events, count=0):
+    """A passing run with a short register list (src/gr/Compute.cpp, Align::list, Observe::Last).
 
-    One live line of the attach step with a = 2 and the count 0. Then the groups of report_phase,
+    One live line of the attach step with a = 2 and the list count. Then the groups of report_phase,
     and after the sample that follows the teardown: group 9, then group 3 with GP_GET 1, GP_PUT 1.
     """
-    if len(re.findall(r"^k40_mem: LIVE step=10 us=\d+ a=2 b=0\r?$", serial, re.M)) != 1 or "k40_mem: LIVE step=10 us=" not in serial:
-        raise ValueError("list count 0 not reported")
+    if len(re.findall(rf"^k40_mem: LIVE step=10 us=\d+ a=2 b={count:x}\r?$", serial, re.M)) != 1 or serial.count("a=2 b=") != 1:
+        raise ValueError("list count not reported or not the count of the stage")
     rows = observe_lines(serial)
     put_at = serial.find("k40_mem: LIVE step=11 us=")
     put_at = serial.find("k40_mem: LIVE step=11 us=", put_at + 1)
@@ -555,11 +558,11 @@ def no_list_phase(serial, events):
     reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]
     if len(reads) != 2:
         raise ValueError("slow-window reads of USERD differ")
-    return dict(samples=samples, idle_us=rows[-7][2], bar1_read=False, gp_get_read=True, list_count=0)
+    return dict(samples=samples, idle_us=rows[-7][2], bar1_read=False, gp_get_read=True, list_count=count)
 
 
 def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observed=False, registers=False, unread=False,
-             unlisted=False):
+             unlisted=False, count=0):
     """Validate an S3 run: program progress, context, submit, launch result, faults, teardown."""
     lengths, _, layout = gr_program()
     submit, launch = mode != "none", mode == "full"
@@ -631,7 +634,7 @@ def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observe
     elif unread:
         observation = report_phase(serial, events)
     elif unlisted:
-        observation = no_list_phase(serial, events)
+        observation = no_list_phase(serial, events, count)
     elif "k40_mem: OBS" in serial or "k40_mem: GR_OBSERVE" in serial:
         raise ValueError("observe lines in a stage that does not observe")
     chan = [e for e in events if e[0] >= 8]
@@ -978,12 +981,13 @@ def memory_final(serial, suite, request):
                               "no fault, engine idle, clean teardown; no proof that the entry was fetched; no launch")
         unlisted = suite.get("stage") in GR_NO_LIST
         if unlisted:
-            scopes["bind"] = ("S3r: as S3q, with list count 0 (no register list at the load); after the teardown one slow-window "
-                              "read of GP_GET; object bind consumed, GP_GET 0->1, no fault, clean teardown; no launch")
+            scopes["bind"] = (f"S3r/S3s: as S3q, with list count {GR_NO_LIST[suite['stage']]} (that prefix of the register list at "
+                              "the load); after the teardown one slow-window read of GP_GET; object bind consumed, GP_GET 0->1, "
+                              "no fault, clean teardown; no launch")
         return dict(
             scope=scopes[mode],
             gr=gr_phase(serial, events, byrole, mode, suite.get("stage") in GR_ALIGNED, printed, observed, registers, unread,
-                        unlisted),
+                        unlisted, GR_NO_LIST.get(suite.get("stage"), 0)),
             owner=owner,
             allocations=[dict(id=r[0], role=r[1], physical=r[2], bytes=r[3], generation=r[4]) for r in allocations],
             events=len(events),
@@ -994,6 +998,7 @@ def memory_final(serial, suite, request):
             S3_image_printed=printed,
             S3_observed=observed or registers or unread or unlisted,
             S3_register_list=not unlisted,
+            S3_list_count=GR_NO_LIST.get(suite.get("stage")) if unlisted else None,
             S3_bind_complete=mode != "none" and not unread,
             S3_setup_complete=mode in ("setup", "full"),
             S3_complete=launch,

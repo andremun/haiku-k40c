@@ -20,8 +20,9 @@ using namespace k40::memnative;
 namespace ch=k40::memstage::channel;
 namespace gr=k40::gr;
 struct Access {char op;uint32_t addr,value;};
-enum Fault {None,NoLaunch,FecsSilent,WrongSum,Stall,ReadOnlyOutput,BindOnly,SetupOnly,AlignedBind,PrintImage,Observe,ObserveFault,ObserveStall,Registers,RegistersStall,ReportOnly,ReportStall,NoList,NoListStall};
-static bool unlisted(Fault f){return f==NoList || f==NoListStall;}
+enum Fault {None,NoLaunch,FecsSilent,WrongSum,Stall,ReadOnlyOutput,BindOnly,SetupOnly,AlignedBind,PrintImage,Observe,ObserveFault,ObserveStall,Registers,RegistersStall,ReportOnly,ReportStall,NoList,NoListStall,ShortList};
+static bool unlisted(Fault f){return f==NoList || f==NoListStall || f==ShortList;}
+static uint32_t listOf(Fault f){return f==ShortList?34:unlisted(f)?0:gr::allList;}
 static bool reports(Fault f){return f==ReportOnly || f==ReportStall || unlisted(f);}
 static bool registers(Fault f){return f==Registers || f==RegistersStall || reports(f);}
 static bool observes(Fault f){return f==Observe || f==ObserveFault || f==ObserveStall || registers(f);}
@@ -171,7 +172,7 @@ struct Card:Device {
         assert(uint32_t(word64(inst+0xe0)>>32)==0); // RAMFC 0xe4: user channel (fifo/gk104.c:98).
         const auto pointer=word64(inst+0x210);assert((pointer&7)==4);
         const auto copy=pointer&~7ull;assert(copy==gr::regions[12].va); // the channel's own image.
-        assert(at(inst,copy)==(unlisted(fault)?0:gr::patchCount) && at(inst,copy+4)==uint32_t(gr::regions[11].va>>8));
+        assert(at(inst,copy)==(unlisted(fault)?listOf(fault):gr::patchCount) && at(inst,copy+4)==uint32_t(gr::regions[11].va>>8));
         const auto golden=gr::regions[10].va+0x80000;
         assert(at(inst,golden)!=gr::patchCount || at(inst,golden+4)!=uint32_t(gr::regions[11].va>>8)); // no list words in the generation memory
         for(uint32_t o=8;o<gr::imageBytes;o+=4)assert(at(inst,copy+o)==at(inst,golden+o));
@@ -239,7 +240,7 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
     Experiment experiment(io,faults,arena,upload,mapper,2,2,11520ULL*1048576,256*1048576);
     Live live;live.print=report;
     gr::Compute compute(io,faults,journal,arena,upload,mapper,2,launchOf(fault),&live,
-        fault==AlignedBind || observes(fault)?gr::Align{true,true,true,unlisted(fault)}:gr::Align{},fault==PrintImage,unlisted(fault)?gr::Observe::Last:reports(fault)?gr::Observe::Report:registers(fault)?gr::Observe::Registers:observes(fault)?gr::Observe::Window:gr::Observe::None);
+        fault==AlignedBind || observes(fault)?gr::Align{true,true,true,listOf(fault)}:gr::Align{},fault==PrintImage,unlisted(fault)?gr::Observe::Last:reports(fault)?gr::Observe::Report:registers(fault)?gr::Observe::Registers:observes(fault)?gr::Observe::Window:gr::Observe::None);
     assert(experiment.run());
     policy.extend(&guard);
     const bool passed=compute.run();
@@ -280,7 +281,7 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
         if(observes(fault))std::printf("k40_mem: GR_OBSERVE samples=%u get=%u put=%u bar=%u fault_units=%x\n",g.samples,g.windowGet,g.windowPut,g.barRead,g.faultUnits);
         std::printf("k40_mem: GR_IMAGE %x %x %x %x %x %x %x %x\n",g.image[0],g.image[1],g.image[2],g.image[3],g.image[4],g.image[5],g.image[6],g.image[7]);
         std::printf("k40_mem: %s faults=0 upload=0 mapper=0 closure=2 allocations=%u journal_overflow=0\n",
-            !passed?"FAIL":fault==NoLaunch?"PASS S3_GOLDEN":fault==PrintImage?"PASS S3_IMAGE":unlisted(fault)?"PASS S3_NO_LIST":reports(fault)?"PASS S3_REPORT":registers(fault)?"PASS S3_REGISTERS":observes(fault)?"PASS S3_OBSERVE":fault==BindOnly || fault==AlignedBind?"PASS S3_BIND":fault==SetupOnly?"PASS S3_SETUP":"PASS S3_COMPUTE",arena.count());
+            !passed?"FAIL":fault==NoLaunch?"PASS S3_GOLDEN":fault==PrintImage?"PASS S3_IMAGE":fault==ShortList?"PASS S3_SHORT_LIST":unlisted(fault)?"PASS S3_NO_LIST":reports(fault)?"PASS S3_REPORT":registers(fault)?"PASS S3_REGISTERS":observes(fault)?"PASS S3_OBSERVE":fault==BindOnly || fault==AlignedBind?"PASS S3_BIND":fault==SetupOnly?"PASS S3_SETUP":"PASS S3_COMPUTE",arena.count());
         std::puts("k40_mem: SUBMIT result=0 state=3\nk40_mem: RETAINED owner=2 state=3\nK40-MEM-END");
     }
     return passed;
@@ -291,7 +292,7 @@ int main(int argc,char** argv)
     const auto trace=load(argv[1]);Result r;
     if(argc>2 && std::string(argv[2])=="--report") {
         const std::string mode=argc>3?argv[3]:"";
-        return scenario(trace,mode=="nolaunch"?NoLaunch:mode=="image"?PrintImage:mode=="observe"?Observe:mode=="registers"?Registers:mode=="report"?ReportOnly:mode=="nolist"?NoList:mode=="bind"?BindOnly:mode=="aligned"?AlignedBind:mode=="setup"?SetupOnly:None,r,false,true)?0:1;
+        return scenario(trace,mode=="nolaunch"?NoLaunch:mode=="image"?PrintImage:mode=="observe"?Observe:mode=="registers"?Registers:mode=="report"?ReportOnly:mode=="nolist"?NoList:mode=="list34"?ShortList:mode=="bind"?BindOnly:mode=="aligned"?AlignedBind:mode=="setup"?SetupOnly:None,r,false,true)?0:1;
     }
     const bool first=scenario(trace,None,r,argc>2);
     assert(first);
@@ -372,6 +373,9 @@ int main(int argc,char** argv)
     assert(r.aligned && r.report.consumed && r.barAfterPut==0 && r.windowAfterPut==0 && r.report.closed && r.closed && r.denials==0 && !r.mismatch && !has(0));
     assert(r.groups.size()==5+5*4+2 && r.groups.back().group==3 && r.groups.back().values==std::vector<uint32_t>({1,1}) && r.groups[r.groups.size()-2].group==9);
     {bool count=false;for(auto& e:r.live)count=count || (e.first==10 && e.second==2);assert(count);}
+    assert(scenario(trace,ShortList,r)); // s3s: the first 34 list entries (all but the LTC pair)
+    assert(r.aligned && r.report.consumed && r.barAfterPut==0 && r.windowAfterPut==0 && r.report.closed && r.closed && r.denials==0 && !r.mismatch && !has(0));
+    {bool count=false;for(auto& e:r.live)count=count || (e.first==10 && e.second==2);assert(count);}
     assert(!scenario(trace,NoListStall,r)); // the engine never idle and the entry never fetched
     assert(r.report.submitted && !r.report.consumed && r.report.samples==32 && r.barAfterPut==0 && r.windowAfterPut==0 && r.report.closed && r.closed && r.denials==0);
     assert(r.groups.back().group==3 && r.groups.back().values==std::vector<uint32_t>({0,1}));
@@ -384,5 +388,5 @@ int main(int argc,char** argv)
     assert(r.report.submitted && !r.report.consumed && r.closed && !r.launched);
     unsigned polls=0;for(auto& e:r.live)if(e.first==11 && e.second==0)++polls;
     assert(polls>=2); // GP_PUT line, then GP_GET 0 each 100 ms of the stall
-    std::puts("GR compute stage: golden context, attach, launch and result pass through Policy and Guard; no-launch, image print, bind-only, aligned bind, observed bind (pass, BAR1 fault, stall), register-only bind (pass, stall), report bind (pass, stall), no-list bind (pass, stall), set-up-only, silent FECS, wrong sum and stall cases pass; live lines checked; HOST_ONLY");
+    std::puts("GR compute stage: golden context, attach, launch and result pass through Policy and Guard; no-launch, image print, bind-only, aligned bind, observed bind (pass, BAR1 fault, stall), register-only bind (pass, stall), report bind (pass, stall), no-list bind (pass, stall), 34-entry list bind, set-up-only, silent FECS, wrong sum and stall cases pass; live lines checked; HOST_ONLY");
 }

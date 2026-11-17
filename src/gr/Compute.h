@@ -27,9 +27,11 @@ enum class Launch:uint8_t {None,Bind,Setup,Full};
 // (work/S3DIAG/FINDINGS.md, trace comparison): a copy of the golden image as the
 // channel's context, PRIV and writable PTEs for the page pool, bundle and register
 // list, and a channel that is not privileged (RAMFC 0xe4 = 0).
-// noList: the list count in word 0 of the copy is 0, so FECS runs no register list at the
-// load (fuc/hub.fuc:686-690; work/S3DIAG/REPORT.md, approach H).
-struct Align {bool copy=false,priv=false,user=false,noList=false;};
+// list: the list count in word 0 of the copy when it is below patchCount. FECS runs that
+// prefix of the register list at the load; 0 runs none (fuc/hub.fuc:686-690; work/S3DIAG/REPORT.md,
+// approaches H and the bisection after it). allList: the whole list, as Linux.
+constexpr uint32_t allList=0xffffffff; // no source: software marker for "the whole list".
+struct Align {bool copy=false,priv=false,user=false;uint32_t list=allList;};
 // How the progress after GP_PUT is read (work/S3DIAG/REPORT.md): the BAR1 poll; approach B, BAR0
 // status registers and the slow window, BAR1 last; or approach F, registers only until the
 // teardown ended, then one slow-window read of USERD as the last action.
