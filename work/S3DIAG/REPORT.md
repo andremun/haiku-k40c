@@ -527,3 +527,12 @@ Command, after the yes and with the card on `vfio-pci`:
   against the job's regions (`tools/gr/launch.py`) and the type against
   `fifo/gk104.c` fault tables.
 - Pass (`PASS S3_COMPUTE`): the job ran; `s3u` failed for another reason.
+
+## 24. s3v: the job writes its read-only launch descriptor (2026-11-18)
+
+The fault record of `s3v`: a write by the GR hub (client DFALCON) to VA
+0x13e40000, offset 0 of the launch descriptor (Qmd), which we map read-only;
+reason RO_VIOLATION. No output written, no AER. With the fault pending the
+teardown preempt did not end. Details in `work/S3DIAG/FINDINGS.md`, entry
+"s3v on the card". Proposed next: map the descriptor writable, as Mesa's
+scratch buffer is on Linux, and run the job again with the fault mode.

@@ -854,3 +854,43 @@ Expected on the card if `s3u` repeats: driver `FAIL` (job not computed),
 with the fault record printed and the teardown run. UNKNOWN: whether the
 teardown preempt ends while a GR MMU fault is pending (Nouveau recovers the
 fault first, `fifo/gk104.c` fault handling; we do not).
+
+## 2026-11-18: s3v on the card (the job writes its launch descriptor)
+
+Result folder `results/20261118-s3v-run-f91866bf`. Launcher status `failed`
+("native phase failure"), driver `FAIL faults=0 upload=0 mapper=0 closure=2
+journal_overflow=0`. No new AER message. The package `package-s3v` is
+consumed. The card is still on `vfio-pci`; bus master off after the run.
+
+KNOWN, from the serial log:
+- Baseline before GP_PUT: no fault, no interrupt (`OBS n=0`).
+- BAR1 poll: GP_GET 1, GP_PUT 1 after 44 ms.
+- First fault check before the first result read: 0x00259c = 1. Sample 1:
+  fifo intr 0x50000000, channel state 0x17000001, engine status 0xc0012001,
+  GR, trap and FECS interrupts 0.
+- Fault record of unit 0 (GR): instance 0x124 (0x124000, record 10, the
+  channel instance), address 0x0000000013e40000, type 0x1dc6.
+- Decoded (`nvkm/engine/fifo/gf100.c:699-716`; tables
+  `nvkm/engine/fifo/gk104.c:504-560`): gpc 0, client 0x1d (hub client
+  DFALCON), access 1 (write), hub 1, reason 6 (RO_VIOLATION).
+- 0x13e40000 is offset 0 of the Qmd region (the compute launch descriptor),
+  which `tools/gr/launch.py` `layout()` maps read-only, with no source for that
+  choice.
+- No output element written (`wrong=1024`, `first=0 value=0`). Slow window
+  reads complete.
+- Teardown: the preempt did not end with the fault pending (error 17
+  `Preempt`, closing step 4, op 5). So the open question of the `s3v` entry
+  is answered: our teardown does not end while a GR fault is pending.
+
+So: the card writes to the launch descriptor during the launch, and our
+read-only PTE turns that write into the fault. This is the stop of `s3u`
+and `s3v` (KNOWN for the address and the access; the meaning of the client
+name on GK110 is as Nouveau names it).
+
+INFERRED: on Linux the descriptor is writable. Mesa places it in its scratch
+buffer (`src/gallium/drivers/nouveau/nvc0/nve4_compute.c:751`);
+`NOUVEAU_BO_RD` at line 800 is a buffer-context use flag, not a page
+permission. Not checked in the Linux PTE trace.
+
+Next (proposed): map Qmd writable (one change, `tools/gr/launch.py`, with
+the Mesa citation), keep the fault mode of `s3v`, and run the job again.
