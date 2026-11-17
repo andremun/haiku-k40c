@@ -15,6 +15,8 @@ constexpr uint64_t budgetUs=120000000; // no source: software budget of the whol
 constexpr uint64_t waitUs=2000000; // no source: 2 s progress bounds, as memstage/Channel.cpp.
 constexpr unsigned observeSamples=32; // no source: software bound of the observe samples (work/S3DIAG/REPORT.md, approach B).
 constexpr uint64_t liveUs=100000; // no source: one live poll line each 100 ms (work/S3DIAG/PLAN.md).
+constexpr uint32_t resultDelayUs=10000; // no source: 10 ms between result reads, at most 200 journal events in the 2 s bound (s3u).
+constexpr unsigned journalReserve=256; // no source: journal events kept free for the compare and the teardown (s3u).
 // Bytes the one GPFIFO entry fetches in each mode: prefixes of pushWords (tools/gr/program.py).
 uint32_t entryBytes(Launch launch)
 {return launch==Launch::Bind?pushBindBytes:launch==Launch::Setup?pushSetupBytes:pushBytes;}
@@ -312,7 +314,7 @@ bool Compute::submit()
     if(!io_.storeFence() || !io_.barWrite32(gpPut,1))return fail(MemError::Write); // nouveau_dma.c:88-92.
     report_.submitted=true;live(Step::Submit,1,0); // a: GP_PUT written.
     if(!journal_.append({phase_,MemError::None,gpPut,1,0,last_-start_,Operation::Write,uint8_t(Role::Userd),1}))return fail(MemError::Overflow);
-    if(observe_!=Observe::None)return true; // observe() follows without the locks of this function.
+    if(observe_!=Observe::None && observe_!=Observe::Fault)return true; // observe() follows without the locks of this function.
     const auto begin=last_;uint32_t liveCount=0;
     for(unsigned i=0;i<20000000;++i) { // no source: software poll-count bound above the time bound.
         if(!tick() || !io_.loadFence() || !io_.barRead32(gpGet,report_.getAfter))return fail(MemError::Read);
@@ -454,11 +456,22 @@ bool Compute::result()
     if(!token(Role::GrOutput,output))return fail(MemError::Bounds);
     const auto begin=last_;uint32_t value=0,liveCount=0;
     for(unsigned i=0;i<100000;++i) { // no source: software poll-count bound.
+        if(observe_==Observe::Fault) {
+            // s3u: the job faulted in GR and the poll ran on. Before each read: a pending MMU
+            // fault stops the poll after one sample with the fault record of each pending unit.
+            uint32_t pending=0;
+            {
+                LockGuard lock(io_,Lock::Mmu);
+                if(!lock.held())return fail(MemError::Budget);
+                if(!io_.read32(0x00259c,pending))return fail(MemError::Read); // fifo/gf100.c:723.
+            }
+            if(pending){report_.samples=i+1;if(!sample(report_.samples))return false;break;}
+        }
         if(!tick() || !upload_.load(output,(elements-1)*4,1,&value))return fail(upload_.error()==MemError::None?MemError::Read:upload_.error());
         report_.resultPolls=i+1;report_.resultUs=last_-begin;
-        if(value==inputMultiplier*elements+1 || report_.resultUs>=waitUs)break;
+        if(value==inputMultiplier*elements+1 || report_.resultUs>=waitUs || journal_.count()+journalReserve>=memstage::Journal::capacity)break;
         if(report_.resultUs>=liveUs*(liveCount+1)){++liveCount;live(Step::Result,value,report_.resultPolls);}
-        if(!delay(1000))return fail(MemError::Clock); // no source: 1 ms between result reads.
+        if(!delay(resultDelayUs))return fail(MemError::Clock);
     }
     for(uint32_t at=0;at<elements;at+=64) {
         uint32_t block[64];
@@ -529,7 +542,7 @@ bool Compute::run()
     if(ok && align_.copy)ok=copyContext();
     if(ok){ok=stage(gr::attach,Step::Attach,5);report_.attached=ok;}
     if(ok && observe_!=Observe::None && launch_!=Launch::None)ok=sample(0); // Baseline before GP_PUT.
-    if(ok && launch_!=Launch::None)ok=submit() && (observe_==Observe::None || observe()) && (launch_!=Launch::Full || result());
+    if(ok && launch_!=Launch::None)ok=submit() && (observe_==Observe::None || observe_==Observe::Fault || observe()) && (launch_!=Launch::Full || result());
     const bool sampled=snapshot();
     if(sampled)live(Step::Status,report_.fifoIntr,report_.grIntr|report_.grTrap|report_.fecsIntr);
     const bool closed=teardown();

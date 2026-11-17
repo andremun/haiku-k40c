@@ -42,8 +42,8 @@ private:
     // 13 as 12 with the first 34 list entries, all but the LTC pair (work/S3DIAG/FINDINGS.md),
     // 14 as 12 with the whole list, after the fix of its LTC entries (work/S3DIAG/FINDINGS.md).
     static gr::Launch launchOf(unsigned stage);
-    static gr::Align alignOf(unsigned stage){return stage==7 || (stage>=9 && stage<=15)?gr::Align{true,true,true,stage==12?0u:stage==13?34u:gr::allList}:gr::Align{};}
-    static bool computeStage(unsigned stage){return stage==2 || stage==3 || stage==5 || stage==6 || stage==7 || stage==8 || stage==9 || stage==10 || stage==11 || stage==12 || stage==13 || stage==14 || stage==15;}
+    static gr::Align alignOf(unsigned stage){return stage==7 || (stage>=9 && stage<=16)?gr::Align{true,true,true,stage==12?0u:stage==13?34u:gr::allList}:gr::Align{};}
+    static bool computeStage(unsigned stage){return stage==2 || stage==3 || stage==5 || stage==6 || stage==7 || stage==8 || stage==9 || stage==10 || stage==11 || stage==12 || stage==13 || stage==14 || stage==15 || stage==16;}
     unsigned stage_=0;gr::Guard guard_;Live live_;gr::Compute compute_;
     memauth::Binding binding_;alignas(memauth::Session) uint8_t sessionStorage_[sizeof(memauth::Session)]{};
     memauth::Session* session_=nullptr;k40_a7_module* a7_=nullptr;

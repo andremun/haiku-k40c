@@ -344,13 +344,14 @@ GR_STAGES = {
     "S3S_A7_BAR1_GR_BIND_LIST34": ("bind", "S3_SHORT_LIST"),
     "S3T_A7_BAR1_GR_BIND_FULL_LIST": ("bind", "S3_FULL_LIST"),
     "S3U_A7_BAR1_GR_COMPUTE_ALIGNED": ("full", "S3_COMPUTE"),
+    "S3V_A7_BAR1_GR_COMPUTE_FAULT": ("full", "S3_COMPUTE"),
 }
 # Stages aligned with the Linux reference run (gr::Align, work/S3DIAG/FINDINGS.md):
 # the channel context is a copy of the golden image in GrChanContext.
 GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED", "S3O_A7_BAR1_GR_BIND_OBSERVED", "S3P_A7_BAR1_GR_BIND_REGISTERS",
               "S3Q_A7_BAR1_GR_BIND_REPORT", "S3R_A7_BAR1_GR_BIND_NO_LIST",
               "S3S_A7_BAR1_GR_BIND_LIST34", "S3T_A7_BAR1_GR_BIND_FULL_LIST",
-              "S3U_A7_BAR1_GR_COMPUTE_ALIGNED")
+              "S3U_A7_BAR1_GR_COMPUTE_ALIGNED", "S3V_A7_BAR1_GR_COMPUTE_FAULT")
 # Stages that print the golden image (gr::Compute print mode, work/S3DIAG/REPORT.md).
 GR_PRINT = ("S3G_A7_BAR1_GR_IMAGE",)
 # Stages that observe the progress after GP_PUT without BAR1 access (gr::Compute observe mode,
@@ -363,6 +364,9 @@ GR_REPORT = ("S3Q_A7_BAR1_GR_BIND_REPORT",)
 # Approach H: as approach G with list count 0, then one slow-window read as the last action.
 # Value: the list count (src/gr/Compute.h Align::list; 34 = all but the LTC pair).
 GR_NO_LIST = {"S3R_A7_BAR1_GR_BIND_NO_LIST": 0, "S3S_A7_BAR1_GR_BIND_LIST34": 34, "S3T_A7_BAR1_GR_BIND_FULL_LIST": 36}
+# s3v: the MMU fault status before each result read; a pending fault stops the poll after
+# one sample with its fault record (gr::Observe::Fault). A pass has the baseline sample only.
+GR_FAULT = ("S3V_A7_BAR1_GR_COMPUTE_FAULT",)
 OBSERVE_SAMPLES = 32  # src/gr/Compute.cpp observeSamples.
 IMAGE_BYTES = 0x4EA00  # tools/gr/program.py KNOWN[0x409804], trace 616433.
 GR_ROLES = tuple(range(17, 30))  # GrText..GrChanContext, VramArena.h.
@@ -564,8 +568,23 @@ def no_list_phase(serial, events, count=0):
     return dict(samples=samples, idle_us=rows[-7][2], bar1_read=False, gp_get_read=True, list_count=count)
 
 
+def fault_phase(serial, events):
+    """s3v pass: the baseline sample before GP_PUT (groups 1, 2, 3), no fault sample after it."""
+    rows = observe_lines(serial)
+    put_at = serial.find("k40_mem: LIVE step=11 us=")
+    if [(row[0], row[1]) for row in rows] != [(0, 1), (0, 2), (0, 3)] or put_at < 0 or any(row[4] > put_at for row in rows):
+        raise ValueError("fault-mode baseline differs or a sample after GP_PUT")
+    if [len(row[3]) for row in rows] != [7, 3, 2] or rows[2][3] != [0, 0]:
+        raise ValueError("fault-mode baseline values differ")
+    if rows[0][3][2] or rows[0][3][3] or rows[0][3][4]:
+        raise ValueError("MMU fault or PBDMA interrupt pending before GP_PUT")  # fifo/gf100.c:723,358.
+    if serial.count("k40_mem: GR_OBSERVE samples=0 get=0 put=0 bar=0 fault_units=0") != 1:
+        raise ValueError("fault-mode report differs")
+    return dict(samples=0, fault_units=0, baseline=True)
+
+
 def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observed=False, registers=False, unread=False,
-             unlisted=False, count=0):
+             unlisted=False, count=0, faulted=False):
     """Validate an S3 run: program progress, context, submit, launch result, faults, teardown."""
     lengths, _, layout = gr_program()
     submit, launch = mode != "none", mode == "full"
@@ -638,6 +657,8 @@ def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observe
         observation = report_phase(serial, events)
     elif unlisted:
         observation = no_list_phase(serial, events, count)
+    elif faulted:
+        observation = fault_phase(serial, events)
     elif "k40_mem: OBS" in serial or "k40_mem: GR_OBSERVE" in serial:
         raise ValueError("observe lines in a stage that does not observe")
     chan = [e for e in events if e[0] >= 8]
@@ -668,7 +689,7 @@ def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observe
         context_va=layout["ChanContext"]["va"] if aligned else layout["Context"]["va"] + 0x80000,
         records=len(GR_ROLES), aligned=aligned,
         image=dict(lines=len(lines), words_not_zero=summary[1][0], sum=summary[1][1]) if printed else None,
-        observe=observation if observed or registers or unread or unlisted else None,
+        observe=observation if observed or registers or unread or unlisted or faulted else None,
     )
 
 
@@ -971,6 +992,11 @@ def memory_final(serial, suite, request):
             full="S3: one compute job on the card, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
             "no fault, clean teardown; no host DMA payload proof",
         )
+        faulted = suite.get("stage") in GR_FAULT
+        if faulted:
+            scopes["full"] = ("S3v: as S3u, and before each result read the MMU fault status (no fault pending); one compute "
+                              "job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
+                              "no fault, clean teardown; no host DMA payload proof")
         if suite.get("stage") == "S3U_A7_BAR1_GR_COMPUTE_ALIGNED":
             scopes["full"] = ("S3u: as S3e with the whole register list (the LTC entries written after the golden stage), then one "
                               "compute job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
@@ -999,7 +1025,7 @@ def memory_final(serial, suite, request):
         return dict(
             scope=scopes[mode],
             gr=gr_phase(serial, events, byrole, mode, suite.get("stage") in GR_ALIGNED, printed, observed, registers, unread,
-                        unlisted, GR_NO_LIST.get(suite.get("stage"), 0)),
+                        unlisted, GR_NO_LIST.get(suite.get("stage"), 0), faulted),
             owner=owner,
             allocations=[dict(id=r[0], role=r[1], physical=r[2], bytes=r[3], generation=r[4]) for r in allocations],
             events=len(events),

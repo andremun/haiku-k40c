@@ -282,7 +282,7 @@ class Tests(unittest.TestCase):
         reports = {
             mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
             for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report", "nolist", "list34", "full",
-                         "alignedfull")
+                         "alignedfull", "faultmode")
         }
         # s3u: the compute job with the channel set-up of s3e and the whole fixed list.
         suite["stage"] = "S3U_A7_BAR1_GR_COMPUTE_ALIGNED"
@@ -296,6 +296,19 @@ class Tests(unittest.TestCase):
                         re.sub(r"(role=28 physical=[0-9a-f]+ bytes=\d+ generation=)4", r"\g<1>2", job),
                         job.replace("offset=118 value=8 polls=0", "offset=120 value=8 polls=0")):
             self.assertNotEqual(changed, job)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        # s3v: s3u with the fault status before each result read; a pass has the baseline sample only.
+        suite["stage"] = "S3V_A7_BAR1_GR_COMPUTE_FAULT"
+        checked = reports["faultmode"]
+        result = evidence.memory_final(checked, suite, raw)
+        self.assertTrue(result["S3_complete"] and result["gr"]["aligned"] and result["gr"]["observe"]["baseline"])
+        self.assertTrue(result["scope"].startswith("S3v:"))
+        for changed in (job,  # no baseline sample
+                        checked.replace("fault_units=0", "fault_units=1"),
+                        checked.replace("k40_mem: OBS n=0 g=3", "k40_mem: OBS n=1 g=3"),
+                        checked.replace("wrong=0", "wrong=1")):
+            self.assertNotEqual(changed, checked)
             with self.assertRaises(ValueError):
                 evidence.memory_final(changed, suite, raw)
         # s3t: the whole list after the fix of its LTC entries.

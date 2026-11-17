@@ -39,7 +39,7 @@ struct Align {bool copy=false,priv=false,user=false;uint32_t list=allList;};
 // context in group 8, one more sample after the teardown, and no read of VRAM after GP_PUT at
 // all. GP_GET is then not known: the stage passes on a clean state and a clean teardown.
 // Last (approach H): as Report, then one slow-window read of USERD as the last action.
-enum class Observe:uint8_t {None,Window,Registers,Report,Last};
+enum class Observe:uint8_t {None,Window,Registers,Report,Last,Fault};
 // Host-side progress sink: the owner prints each call at once (no card access).
 class Progress {
 public:

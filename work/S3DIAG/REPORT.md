@@ -512,3 +512,18 @@ then failed on a full journal (the result poll journals every read), and the
 teardown did not run. The fault record was not read. Details in
 `work/S3DIAG/FINDINGS.md`, entry "s3u on the card". Next: read the fault
 record of the job (stage proposed there).
+
+## 23. Stage s3v is built (2026-11-18)
+
+`s3u` with the fault record (`work/S3DIAG/FINDINGS.md`, entry "stage s3v
+built"). Ready for one card run. The run needs the user's explicit yes
+(ADR 006).
+
+Command, after the yes and with the card on `vfio-pci`:
+`K40_MEM_STAGE=s3v python3 tools/memstage/run.py --run-approved-batch1-once`
+
+- Fault again: the launcher reports `failed`; the serial log holds the fault
+  record (`OBS ... g=4`: unit, instance, address, type). Decode the address
+  against the job's regions (`tools/gr/launch.py`) and the type against
+  `fifo/gk104.c` fault tables.
+- Pass (`PASS S3_COMPUTE`): the job ran; `s3u` failed for another reason.

@@ -20,7 +20,8 @@ using namespace k40::memnative;
 namespace ch=k40::memstage::channel;
 namespace gr=k40::gr;
 struct Access {char op;uint32_t addr,value;};
-enum Fault {None,NoLaunch,FecsSilent,WrongSum,Stall,ReadOnlyOutput,BindOnly,SetupOnly,AlignedBind,PrintImage,Observe,ObserveFault,ObserveStall,Registers,RegistersStall,ReportOnly,ReportStall,NoList,NoListStall,ShortList,FullList,AlignedFull};
+enum Fault {None,NoLaunch,FecsSilent,WrongSum,Stall,ReadOnlyOutput,BindOnly,SetupOnly,AlignedBind,PrintImage,Observe,ObserveFault,ObserveStall,Registers,RegistersStall,ReportOnly,ReportStall,NoList,NoListStall,ShortList,FullList,AlignedFull,FaultMode,JobFault};
+static bool faultMode(Fault f){return f==FaultMode || f==JobFault;} // s3v: gr::Observe::Fault
 static bool unlisted(Fault f){return f==NoList || f==NoListStall || f==ShortList || f==FullList;}
 static uint32_t listOf(Fault f){return f==FullList?gr::allList:f==ShortList?34:unlisted(f)?0:gr::allList;}
 static bool reports(Fault f){return f==ReportOnly || f==ReportStall || unlisted(f);}
@@ -139,7 +140,7 @@ struct Card:Device {
         const auto entry=word64(walk(inst,gp));const unsigned words=unsigned((entry>>42)&0x1fffff);
         const auto base=entry&0xffffffffffULL;std::map<uint32_t,uint32_t> m;uint32_t object=0;unsigned nonInc=0;
         // Bind, set-up or whole job: prefixes of the same push words (work/S3DIAG/PLAN.md).
-        if(fault==AlignedBind || fault==AlignedFull || observes(fault))aligned(inst);
+        if(fault==AlignedBind || fault==AlignedFull || faultMode(fault) || observes(fault))aligned(inst);
         assert(words==(fault==BindOnly || fault==AlignedBind || observes(fault)?gr::pushBindBytes:fault==SetupOnly?gr::pushSetupBytes:gr::pushBytes)/4);
         for(unsigned i=0;i<words;) {
             const auto header=at(inst,base+i*4);++i;
@@ -187,7 +188,7 @@ struct Card:Device {
         assert(text==gr::regions[0].va && tls==gr::regions[1].va);
         // Context: instance words 0x210/0x214, the two list words and the first list pair.
         const auto pointer=word64(inst+0x210);assert((pointer&7)==4);
-        const auto image=pointer&~7ull;assert(image==(fault==AlignedFull?gr::regions[12].va:gr::regions[10].va+0x80000)); // s3u: the channel's own image.
+        const auto image=pointer&~7ull;assert(image==(fault==AlignedFull || faultMode(fault)?gr::regions[12].va:gr::regions[10].va+0x80000)); // s3u: the channel's own image.
         assert(at(inst,image)==gr::patchCount && at(inst,image+4)==uint32_t(gr::regions[11].va>>8));
         assert(at(inst,gr::regions[11].va)==0x40800c && at(inst,gr::regions[11].va+4)==uint32_t(gr::regions[7].va>>8));
         walk(inst,gr::regions[10].va+0xcefff,true);walk(inst,gr::regions[1].va+gr::regions[1].bytes-4,true);
@@ -200,6 +201,10 @@ struct Card:Device {
         assert(at(inst,aux+0x100)==block && at(inst,aux+0x10c)==width); // nvc0_context.h:128 grid information.
         const uint64_t in=at(inst,aux+0x2a0)|(uint64_t(at(inst,aux+0x2a4))<<32),out=at(inst,aux+0x2b0)|(uint64_t(at(inst,aux+0x2b4))<<32);
         assert(at(inst,aux+0x2a8)==width*block*4 && at(inst,aux+0x2b8)==width*block*4);
+        if(fault==JobFault) { // s3u: an MMU fault of unit 0, GR (fifo/gk104.c:474), with a software record; no output.
+            regs[0x259c]=1;regs[0x2800]=uint32_t(inst>>12);regs[0x2804]=uint32_t(out);regs[0x2808]=uint32_t(out>>32);regs[0x280c]=0x102;
+            launched=true;return;
+        }
         for(uint64_t i=0;i<width*block;++i)
             ram.at(walk(inst,out+i*4,fault!=ReadOnlyOutput)/4)=at(inst,in+i*4)+(fault==WrongSum && i==777?2:1);
         launched=true;
@@ -240,7 +245,7 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
     Experiment experiment(io,faults,arena,upload,mapper,2,2,11520ULL*1048576,256*1048576);
     Live live;live.print=report;
     gr::Compute compute(io,faults,journal,arena,upload,mapper,2,launchOf(fault),&live,
-        fault==AlignedBind || fault==AlignedFull || observes(fault)?gr::Align{true,true,true,listOf(fault)}:gr::Align{},fault==PrintImage,unlisted(fault)?gr::Observe::Last:reports(fault)?gr::Observe::Report:registers(fault)?gr::Observe::Registers:observes(fault)?gr::Observe::Window:gr::Observe::None);
+        fault==AlignedBind || fault==AlignedFull || faultMode(fault) || observes(fault)?gr::Align{true,true,true,listOf(fault)}:gr::Align{},fault==PrintImage,faultMode(fault)?gr::Observe::Fault:unlisted(fault)?gr::Observe::Last:reports(fault)?gr::Observe::Report:registers(fault)?gr::Observe::Registers:observes(fault)?gr::Observe::Window:gr::Observe::None);
     assert(experiment.run());
     policy.extend(&guard);
     const bool passed=compute.run();
@@ -279,7 +284,7 @@ static bool scenario(const std::vector<Access>& trace,Fault fault,Result& out,bo
             g.polls,(unsigned long long)g.progressUs,g.resultPolls,(unsigned long long)g.resultUs,g.wrong,g.firstWrong,g.firstValue);
         std::printf("k40_mem: GR_STATUS mc=%x fifo=%x mmu=%x pbdma=%x hce=%x state=%x gr=%x trap=%x fecs=%x engine=%x\n",g.mc,g.fifoIntr,
             g.mmuPending,g.pbdmaIntr,g.pbdmaHce,g.state,g.grIntr,g.grTrap,g.fecsIntr,g.engineStatus);
-        if(observes(fault))std::printf("k40_mem: GR_OBSERVE samples=%u get=%u put=%u bar=%u fault_units=%x\n",g.samples,g.windowGet,g.windowPut,g.barRead,g.faultUnits);
+        if(observes(fault) || faultMode(fault))std::printf("k40_mem: GR_OBSERVE samples=%u get=%u put=%u bar=%u fault_units=%x\n",g.samples,g.windowGet,g.windowPut,g.barRead,g.faultUnits);
         std::printf("k40_mem: GR_IMAGE %x %x %x %x %x %x %x %x\n",g.image[0],g.image[1],g.image[2],g.image[3],g.image[4],g.image[5],g.image[6],g.image[7]);
         std::printf("k40_mem: %s faults=0 upload=0 mapper=0 closure=2 allocations=%u journal_overflow=0\n",
             !passed?"FAIL":fault==NoLaunch?"PASS S3_GOLDEN":fault==PrintImage?"PASS S3_IMAGE":fault==FullList?"PASS S3_FULL_LIST":fault==ShortList?"PASS S3_SHORT_LIST":unlisted(fault)?"PASS S3_NO_LIST":reports(fault)?"PASS S3_REPORT":registers(fault)?"PASS S3_REGISTERS":observes(fault)?"PASS S3_OBSERVE":fault==BindOnly || fault==AlignedBind?"PASS S3_BIND":fault==SetupOnly?"PASS S3_SETUP":"PASS S3_COMPUTE",arena.count());
@@ -311,7 +316,7 @@ int main(int argc,char** argv)
     const auto trace=load(argv[1]);Result r;
     if(argc>2 && std::string(argv[2])=="--report") {
         const std::string mode=argc>3?argv[3]:"";
-        return scenario(trace,mode=="nolaunch"?NoLaunch:mode=="image"?PrintImage:mode=="observe"?Observe:mode=="registers"?Registers:mode=="report"?ReportOnly:mode=="nolist"?NoList:mode=="list34"?ShortList:mode=="full"?FullList:mode=="alignedfull"?AlignedFull:mode=="bind"?BindOnly:mode=="aligned"?AlignedBind:mode=="setup"?SetupOnly:None,r,false,true)?0:1;
+        return scenario(trace,mode=="nolaunch"?NoLaunch:mode=="image"?PrintImage:mode=="observe"?Observe:mode=="registers"?Registers:mode=="report"?ReportOnly:mode=="nolist"?NoList:mode=="list34"?ShortList:mode=="full"?FullList:mode=="alignedfull"?AlignedFull:mode=="faultmode"?FaultMode:mode=="bind"?BindOnly:mode=="aligned"?AlignedBind:mode=="setup"?SetupOnly:None,r,false,true)?0:1;
     }
     const bool first=scenario(trace,None,r,argc>2);
     assert(first);
@@ -404,6 +409,16 @@ int main(int argc,char** argv)
     assert(r.aligned && r.launched && r.report.consumed && r.report.computed && r.report.wrong==0 && r.report.closed && r.closed);
     assert(r.denials==0 && !r.mismatch && !has(0) && has(11) && has(12) && r.groups.empty());
     listMatches(trace,r.list);
+    assert(scenario(trace,FaultMode,r)); // s3v without a fault: the baseline sample only, then the job as s3u
+    assert(r.aligned && r.launched && r.report.computed && r.report.wrong==0 && r.report.samples==0 && r.report.faultUnits==0 && r.closed && r.denials==0 && !r.mismatch && !has(0));
+    assert(r.groups.size()==3 && r.groups[2].group==3 && r.groups[2].values==std::vector<uint32_t>({0,0}));
+    assert(!scenario(trace,JobFault,r)); // s3v with a fault of GR: one sample with the record, the compare, then the teardown
+    assert(r.launched && r.report.consumed && !r.report.computed && r.report.wrong==gr::elements && r.report.samples==1 && r.report.faultUnits==1);
+    assert(r.report.resultPolls==0 && r.report.closed && r.closed && r.denials==0 && !has(0));
+    {   unsigned records=0;
+        for(auto& g:r.groups)if(g.group==4){++records;assert(g.sample==1 && g.values.size()==5 && g.values[0]==0 && g.values[4]==0x102);}
+        assert(records==1 && r.groups.back().group==3 && r.groups.back().values==std::vector<uint32_t>({1,1}));
+    }
     assert(!scenario(trace,NoListStall,r)); // the engine never idle and the entry never fetched
     assert(r.report.submitted && !r.report.consumed && r.report.samples==32 && r.barAfterPut==0 && r.windowAfterPut==0 && r.report.closed && r.closed && r.denials==0);
     assert(r.groups.back().group==3 && r.groups.back().values==std::vector<uint32_t>({0,1}));

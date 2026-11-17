@@ -14,7 +14,8 @@ s3p without any read of VRAM after GP_PUT (approach G). "s3r" is s3q with no
 register list at the load and one slow-window read as the last action (approach H).
 "s3s" is s3r with the first 34 list entries (all but the LTC pair). "s3t" is s3r
 with the whole list, after the fix of its LTC entries. "s3u" is the compute job
-of s3b with the channel set-up of s3e and the whole fixed list.
+of s3b with the channel set-up of s3e and the whole fixed list. "s3v" is s3u
+with the result poll stopped on a pending MMU fault and the fault record printed.
 One stage has one package folder, one work folder and one pass marker. The
 native owner receives the choice through the generated mem_config.h.
 """
@@ -175,6 +176,16 @@ STAGES = {
         allocations=27,
         title="Combined S3 compute run, aligned, with the whole register list",
         scope="S3u: as S3e with the whole register list (the LTC entries written after the golden stage), then one compute job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, no fault, clean teardown; no host DMA payload proof",
+    ),
+    "s3v": dict(
+        package="package-s3v",
+        work="S3DIAG/s3v",
+        copy=False,
+        number=16,
+        marker="PASS S3_COMPUTE",
+        allocations=27,
+        title="Combined S3 compute run, aligned, with the fault record",
+        scope="S3v: as S3u, and before each result read the MMU fault status; a pending fault stops the poll after one sample with its fault record; one compute job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, no fault, clean teardown; no host DMA payload proof",
     ),
     "s3d": dict(
         package="package-s3d",

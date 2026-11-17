@@ -824,3 +824,33 @@ Defects of the driver shown by this run (not of the card):
 Next (proposed): a stage that keeps the `s3u` set-up and launch, stops the
 result poll on a pending fault, reads and prints the fault record (as the
 observe modes do, group 4), then runs the teardown; journal the poll once.
+
+## 2026-11-18: stage s3v built (s3u with the fault record)
+
+`s3v` (stage 16) is `s3u` with `gr::Observe::Fault`. No card run yet.
+
+- Before GP_PUT: one baseline sample (groups 1, 2 and 3: status, GR status,
+  GP_GET and GP_PUT by slow window).
+- After GP_PUT: GP_GET is polled by BAR1 as in `s3u`. Then, before each result
+  read, the driver reads 0x00259c (`fifo/gf100.c:723`). On a pending MMU fault
+  it prints one sample: groups 1 and 2, group 4 with the fault record of each
+  pending unit (0x002800 + 16 x unit: instance, address low and high, type;
+  `fifo/gf100.c:699-702`), and group 3. The poll then stops, all 1024
+  elements are compared (to show whether any were written), and the teardown
+  runs.
+- Result poll in every stage: 10 ms between reads (was 1 ms), and it stops
+  while 256 journal events are still free. So in `s3u` the journal can no
+  longer overflow before the compare and the teardown.
+- `GR_OBSERVE` line printed for stage 16.
+- Host tests: a pass case (baseline sample only, job computed) and a case
+  with a GR fault of unit 0 (one sample with the record, no output written,
+  `wrong=1024`, clean teardown, no denial). Validator test with mutations.
+- Cardless rehearsal: `results/20261118-s3v-rehearsal-57e15ed7`,
+  PASS_CARDLESS_NO_CARD.
+- Manifest `work/S3DIAG/s3v/package.json`, SHA-256
+  `7e5f57d8f9b7f33c91c2a2221f34246e796c378da86c972ecbc0d865033ecd80`.
+
+Expected on the card if `s3u` repeats: driver `FAIL` (job not computed),
+with the fault record printed and the teardown run. UNKNOWN: whether the
+teardown preempt ends while a GR MMU fault is pending (Nouveau recovers the
+fault first, `fifo/gk104.c` fault handling; we do not).
