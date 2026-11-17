@@ -558,3 +558,24 @@ of `out[i] = in[i] + 1` were right by slow-window readback; clean teardown,
 no AER. Rung 5 is reached with one run. Details in
 `work/S3DIAG/FINDINGS.md`, entry "s3w on the card". The S3DIAG questions
 are closed; still open: recovery from a pending GR fault in the teardown.
+
+## 27. GR fault recovery, stage s3x built (2026-11-18)
+
+The teardown now runs a recovery program when a GR MMU fault is pending,
+after Nouveau's GK104 recovery (`work/S3DIAG/FINDINGS.md`, entry "GR fault
+recovery and stage s3x built"). `s3x` causes the `s3v` fault on purpose and
+checks that the fault is cleared and GR is idle after the teardown. One card
+run needs the user's explicit yes (ADR 006).
+
+Command, after the yes and with the card on `vfio-pci`:
+`K40_MEM_STAGE=s3x python3 tools/memstage/run.py --run-approved-batch1-once`
+
+- Pass (`PASS S3_RECOVER`): the teardown recovers from a GR fault.
+- The recovery program fails (`closing` set): the failing op names the step
+  that does not end on the card.
+
+## 28. The teardown recovers from a GR fault (2026-11-18)
+
+`s3x` passed: the `s3v` fault on purpose, its record, then the recovery
+program; after it no fault pending, the channel unbound and GR not busy; no
+AER. Details in `work/S3DIAG/FINDINGS.md`, entry "s3x on the card".

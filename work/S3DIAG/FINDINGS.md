@@ -944,3 +944,77 @@ read-only (`s3u`, `s3v`).
 
 Still open: the teardown does not end while a GR MMU fault is pending
 (`s3v`); Q7 and Q11; host DMA payload visibility.
+
+## 2026-11-18: GR fault recovery and stage s3x built
+
+Open item from `s3v`: the teardown does not end while a GR MMU fault is
+pending. Now the teardown reads 0x00259c first (`fifo/gf100.c:723`). If only
+unit 0 (GR) is pending, it runs a new program, `recover`
+(`tools/gr/program.py`), instead of the normal teardown. The program follows
+the Nouveau recovery for one faulted channel on GK104
+(`nvkm/engine/fifo/runl.c:58-128`, `gf100.c:534-610,720-729`):
+
+1. Expect 0x00259c = 1 (only GR, `gk104.c:474`).
+2. Block runlist 0 (0x002630 bit 0, `gk104.c:418`).
+3. Clear the fault (write 0x00259c = 1, `gf100.c:728`).
+4. Stop the channel (state bit 0x800, `gk104.c:44`).
+5. Reset GR: 0x000200 bit 12 off, then on, then read (`mc/base.c:74-77`,
+   `mc/nv04.c:36,44-45`; GR bit 12: `mc/gf100.c:31`, and the reset in our
+   start program, trace).
+6. Commit runlist 0 with no entries and wait (`gk104.c:426,446-447`).
+7. Clear the runlist fault (0x00262c bit 0, `gk104.c:406`).
+8. Allow runlist 0 (0x002630 bit 0 clear, `gk104.c:412`).
+9. Unbind the channel (`gk104.c:60`).
+
+GK104 has no runlist preempt function, so Nouveau does not wait for the
+PBDMA there (`runl.c:86-97`); neither do we. Other fault units keep the old
+teardown (not modelled).
+
+Safety: `gr::Guard` is the 8th stage `recover`. The normal order never walks
+from the teardown into it. It is entered only by its first write and only
+while the last read of 0x00259c was exactly 1 (`Policy::faultPending`).
+Guard reads 0x002630 (Mask). Host test: with no fault, Guard refuses the first
+recovery write; with the check removed, that test fails (tried, then
+restored).
+
+Stage `s3x` (18): `s3v` with `Align::qmdReadOnly`, the launch descriptor mapped
+read-only on purpose, to cause the `s3v` fault. Pass (`PASS S3_RECOVER`):
+fault record of GR at the descriptor (write, RO_VIOLATION), the recovery
+program run (`guard=7/13`), and a sample after the teardown with no fault
+pending and GR not busy, clean teardown. The job writes no output.
+
+- Host model: the fault now comes from the read-only PTE of the descriptor;
+  the preempt never ends while a GR fault is pending (as `s3v`); a GR reset
+  ends the faulted context.
+- Validator: `recover_phase`, and mutations (no recovery, fault still
+  pending, other address, a read, normal teardown stage, wrong marker).
+- Cardless rehearsal: `results/20261118-s3x-rehearsal-c7e139b8`,
+  PASS_CARDLESS_NO_CARD.
+- Manifest `work/S3DIAG/s3x/package.json`, SHA-256
+  `2a4f267936f4d7afe3d26ffb7c6440bf38710e2bc92c4159ff0a05943c1296ee`.
+
+UNKNOWN until the card run: whether this sequence ends the faulted context
+on the K40c (INFERRED from Nouveau source; not seen in a Linux trace).
+
+## 2026-11-18: s3x on the card (PASS: recovery from a GR MMU fault)
+
+Result folder `results/20261118-s3x-run-2b7741b3`. Launcher status `pass`
+(`S3_recover_complete: true`), driver `PASS S3_RECOVER faults=0 upload=0
+mapper=0 closure=2 journal_overflow=0`. No AER message. The package
+`package-s3x` is consumed. The card is still on `vfio-pci`.
+
+KNOWN, from the serial log:
+- The fault of `s3v` again, on purpose: GP_GET 1 after 43 ms; then 0x00259c
+  = 1, record unit 0, instance 0x124, address 0x13e40000 (the read-only
+  descriptor), type 0x1dc6 (write, RO_VIOLATION). Engine status 0xc0012001,
+  channel state 0x17000001. No output written (`wrong=1024`).
+- The teardown ran the recovery program to its end (`guard=7/13`,
+  `closed=1`, closing 0).
+- Sample after the teardown: fifo intr 0x40000000 (the MMU fault bit 28 is
+  clear; bit 30 stays, as at the baseline), 0x00259c = 0, channel state 0,
+  engine status 0x00010001 (not busy), GR, trap and FECS interrupts 0.
+  `GR_RECOVER recovered=1 pending=0 engine=10001`.
+
+Result: the recovery program, after Nouveau's GK104 recovery, ends a GR MMU
+fault on the K40c: the fault is cleared, the channel is off the runlist and
+unbound, GR is not busy. The open item of `s3v` is closed (one run).
