@@ -27,14 +27,17 @@ enum class Launch:uint8_t {None,Bind,Setup,Full};
 // (work/S3DIAG/FINDINGS.md, trace comparison): a copy of the golden image as the
 // channel's context, PRIV and writable PTEs for the page pool, bundle and register
 // list, and a channel that is not privileged (RAMFC 0xe4 = 0).
-struct Align {bool copy=false,priv=false,user=false;};
+// noList: the list count in word 0 of the copy is 0, so FECS runs no register list at the
+// load (fuc/hub.fuc:686-690; work/S3DIAG/REPORT.md, approach H).
+struct Align {bool copy=false,priv=false,user=false,noList=false;};
 // How the progress after GP_PUT is read (work/S3DIAG/REPORT.md): the BAR1 poll; approach B, BAR0
 // status registers and the slow window, BAR1 last; or approach F, registers only until the
 // teardown ended, then one slow-window read of USERD as the last action.
 // Report (approach G): as Registers, with the FECS trace word, the window selector and the BAR1
 // context in group 8, one more sample after the teardown, and no read of VRAM after GP_PUT at
 // all. GP_GET is then not known: the stage passes on a clean state and a clean teardown.
-enum class Observe:uint8_t {None,Window,Registers,Report};
+// Last (approach H): as Report, then one slow-window read of USERD as the last action.
+enum class Observe:uint8_t {None,Window,Registers,Report,Last};
 // Host-side progress sink: the owner prints each call at once (no card access).
 class Progress {
 public:
@@ -91,6 +94,8 @@ private:
     bool sample(uint32_t number);
     bool observe();
     bool lastRead();
+    bool registersOnly() const{return observe_==Observe::Registers || observe_==Observe::Report || observe_==Observe::Last;}
+    bool wide() const{return observe_==Observe::Report || observe_==Observe::Last;}
     bool result();
     bool snapshot();
     bool teardown();

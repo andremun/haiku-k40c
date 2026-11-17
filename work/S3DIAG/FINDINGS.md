@@ -515,3 +515,29 @@ INFERRED:
   load direction of the GPC, strand and register transfers, and
   `ctx_mmio_exec` (the register list). One of them, or the loaded state
   itself, stops the memory path. Which one is UNKNOWN.
+
+## 2026-11-17: stage s3r built (approach H of REPORT.md)
+
+`s3r` is `s3q` with no register list at the load (`gr::Align::noList`) and one
+slow-window read as the last action (`gr::Observe::Last`). No card run yet.
+
+- Word 0 of the channel image (the list count) is 0; word 1 (the list
+  address) is unchanged. A count of 0 skips `ctx_mmio_exec`
+  (`fuc/hub.fuc:686-690`), and with it the write of the channel header back
+  to VRAM at its end (`fuc/hub.fuc:586-591`). One live line
+  `LIVE step=10 a=2 b=0` reports the count.
+- After GP_PUT: the samples of `s3q` (registers only, FECS trace word, window
+  selector, BAR1 context), the teardown, one more sample.
+- Last action: g=9 (printed before the read), one slow-window read of GP_GET
+  and GP_PUT, g=3 with the values.
+- Order differs from REPORT.md section 12: the read follows the teardown, not
+  the samples. So the teardown result (preempt) is in the log before the read,
+  even when the read gets no completion.
+- No new register access. The list words are a write into the channel image
+  that Guard already allows in the attach stage.
+- Host test: pass case and a stall (engine never idle, entry never fetched:
+  32 samples, teardown, one sample, last read GP_GET 0).
+- Cardless rehearsal: `results/20261117-s3r-rehearsal-6ec0cc2e`,
+  PASS_CARDLESS_NO_CARD. `make check` passes.
+- Manifest `work/S3DIAG/s3r/package.json`, SHA-256
+  `1804d5651acc69e01b3f955e8df9616fff93c7b3680fb42427a664df11abf64e`.

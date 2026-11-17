@@ -281,8 +281,25 @@ class Tests(unittest.TestCase):
         # work/S3DIAG/PLAN.md: prefixes of the push buffer, and the live lines.
         reports = {
             mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
-            for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report")
+            for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report", "nolist")
         }
+        # s3r: list count 0, one slow-window read after the teardown (work/S3DIAG/REPORT.md, approach H).
+        suite["stage"] = "S3R_A7_BAR1_GR_BIND_NO_LIST"
+        nolist = reports["nolist"]
+        result = evidence.memory_final(nolist, suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and not result["S3_register_list"] and result["gr"]["observe"]["gp_get_read"])
+        with self.assertRaises(ValueError):  # the s3q report has another form
+            evidence.memory_final(reports["report"].replace("PASS S3_REPORT", "PASS S3_NO_LIST"), suite, raw)
+        count = re.search(r"^k40_mem: LIVE step=10 us=\d+ a=2 b=0", nolist, re.M).group(0)
+        last = re.search(r"^k40_mem: OBS n=\d+ g=3 us=\d+ c=2 1 1", nolist.split("LIVE step=14")[1], re.M).group(0)
+        for changed in (nolist.replace(count, count[:-1] + "24", 1),  # list count not 0
+                        nolist.replace(count + "\n", "", 1),
+                        nolist.replace(last, last.replace("c=2 1 1", "c=2 0 1"), 1),  # GP_GET 0 at the end
+                        nolist.replace("bar=0 fault_units=0", "bar=1 fault_units=0"),
+                        nolist.replace("PASS S3_NO_LIST", "PASS S3_REPORT")):
+            self.assertNotEqual(changed, nolist)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
         # s3q: no read of VRAM after GP_PUT, so GP_GET is not known (work/S3DIAG/REPORT.md, approach G).
         suite["stage"] = "S3Q_A7_BAR1_GR_BIND_REPORT"
         rep = reports["report"]

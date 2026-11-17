@@ -10,7 +10,8 @@ without the launch (work/S3DIAG/PLAN.md). "s3g" is s3a with the golden image
 printed (work/S3DIAG/REPORT.md). "s3o" is s3e with the progress after GP_PUT
 observed without BAR1 access (work/S3DIAG/REPORT.md, approach B). "s3p" reads
 registers only after GP_PUT until the teardown ended (approach F). "s3q" is
-s3p without any read of VRAM after GP_PUT (approach G).
+s3p without any read of VRAM after GP_PUT (approach G). "s3r" is s3q with no
+register list at the load and one slow-window read as the last action (approach H).
 One stage has one package folder, one work folder and one pass marker. The
 native owner receives the choice through the generated mem_config.h.
 """
@@ -131,6 +132,16 @@ STAGES = {
         allocations=27,
         title="Combined S3 object-bind run, registers only, with the report",
         scope="S3q: as S3e, and after GP_PUT status registers only (no BAR1, no slow window), also after the teardown; GP_GET is not read; no fault, engine idle, clean teardown; no proof that the entry was fetched; no launch",
+    ),
+    "s3r": dict(
+        package="package-s3r",
+        work="S3DIAG/s3r",
+        copy=False,
+        number=12,
+        marker="PASS S3_NO_LIST",
+        allocations=27,
+        title="Combined S3 object-bind run without the register list",
+        scope="S3r: as S3q, with list count 0 in the channel image (FECS runs no register list at the load); after the teardown one slow-window read of GP_GET as the last action; object bind consumed (GP_GET 0->1), no fault, clean teardown; no launch",
     ),
     "s3d": dict(
         package="package-s3d",

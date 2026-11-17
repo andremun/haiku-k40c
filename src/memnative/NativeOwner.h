@@ -37,10 +37,11 @@ private:
     // 8 S3 golden context with the image printed (work/S3DIAG/REPORT.md),
     // 9 as 7, and after GP_PUT the progress observed without BAR1 access (work/S3DIAG/REPORT.md, approach B),
     // 10 as 7, and after GP_PUT registers only until the teardown ended (work/S3DIAG/REPORT.md, approach F),
-    // 11 as 10 without any read of VRAM after GP_PUT, so that the report is printed (approach G).
+    // 11 as 10 without any read of VRAM after GP_PUT, so that the report is printed (approach G),
+    // 12 as 11 with no register list at the load, then one slow-window read as the last action (approach H).
     static gr::Launch launchOf(unsigned stage);
-    static gr::Align alignOf(unsigned stage){return stage==7 || stage==9 || stage==10 || stage==11?gr::Align{true,true,true}:gr::Align{};}
-    static bool computeStage(unsigned stage){return stage==2 || stage==3 || stage==5 || stage==6 || stage==7 || stage==8 || stage==9 || stage==10 || stage==11;}
+    static gr::Align alignOf(unsigned stage){return stage==7 || (stage>=9 && stage<=12)?gr::Align{true,true,true,stage==12}:gr::Align{};}
+    static bool computeStage(unsigned stage){return stage==2 || stage==3 || stage==5 || stage==6 || stage==7 || stage==8 || stage==9 || stage==10 || stage==11 || stage==12;}
     unsigned stage_=0;gr::Guard guard_;Live live_;gr::Compute compute_;
     memauth::Binding binding_;alignas(memauth::Session) uint8_t sessionStorage_[sizeof(memauth::Session)]{};
     memauth::Session* session_=nullptr;k40_a7_module* a7_=nullptr;

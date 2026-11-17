@@ -169,9 +169,11 @@ bool Compute::hook(uint32_t number)
             if(Role(regions[i].role)==Role::GrMmioList)list=regions[i].va;
             if(Role(regions[i].role)==Role::GrChanContext)va=regions[i].va;
         }
-        return list && va && token(Role::GrChanContext,copy) && token(Role::ChanInstance,instance)
-            && upload_.store(copy,0,2,PairWords(uint64_t(patchCount)|(uint64_t(uint32_t(list>>8))<<32)),true)
-            && upload_.store(instance,0x210,2,PairWords(va|4),true); // fifo/gk104.c:138,161-167.
+        const uint32_t count=align_.noList?0:patchCount; // fuc/hub.fuc:686-690: a count of 0 skips ctx_mmio_exec.
+        if(!list || !va || !token(Role::GrChanContext,copy) || !token(Role::ChanInstance,instance)
+            || !upload_.store(copy,0,2,PairWords(uint64_t(count)|(uint64_t(uint32_t(list>>8))<<32)),true))return false;
+        if(align_.noList)live(Step::Attach,2,count); // a = 2: the list words are written, b: the count.
+        return upload_.store(instance,0x210,2,PairWords(va|4),true); // fifo/gk104.c:138,161-167.
     }
     // The image now holds the golden context. Its first two words get the count and
     // the address of the register list of this channel (engine/gr/gf100.c:336-338).
@@ -337,7 +339,7 @@ bool Compute::sample(uint32_t number)
             if(!tick())return false;
             if(progress_)progress_->observed(number,4,last_-start_,f,5);
         }
-        if(observe_==Observe::Registers || observe_==Observe::Report) {
+        if(registersOnly()) {
             // FECS: current and next channel (engine/gr/gf100.c:746; fuc/macros.fuc:125-126), signal
             // (fuc/macros.fuc:58), scratch 0, 1, 4 and 5 (fuc/macros.fuc:90; fuc/hub.fuc:55,213-216,350).
             uint32_t s[7]{},m[7]{};
@@ -351,10 +353,10 @@ bool Compute::sample(uint32_t number)
                 || !io_.read32(0x040120,m[3]))return fail(MemError::Read); // fifo/gf100.c:318.
             // Report mode: FECS trace word, scratch 7 (fuc/macros.fuc:253-261, flags fuc/macros.fuc:202-212);
             // window selector (instmem/nv50.c:68) and BAR1 context (bar/gf100.c:46-58).
-            if(observe_==Observe::Report && (!io_.read32(0x40981c,m[4]) || !io_.read32(0x001700,m[5]) // engine/gr/gf100.c:1573 scratch block; instmem/nv50.c:68.
+            if(wide() && (!io_.read32(0x40981c,m[4]) || !io_.read32(0x001700,m[5]) // engine/gr/gf100.c:1573 scratch block; instmem/nv50.c:68.
                 || !io_.read32(0x001704,m[6])))return fail(MemError::Read); // bar/gf100.c:46-58.
             if(!tick())return false;
-            if(progress_)progress_->observed(number,8,last_-start_,m,observe_==Observe::Report?7:4);
+            if(progress_)progress_->observed(number,8,last_-start_,m,wide()?7:4);
             report_.engineStatus=v[6];
             if(number)return true;
         }
@@ -374,7 +376,7 @@ bool Compute::observe()
     // left out while an MMU fault is pending (a fault of unit BAR1 stalls BAR1 reads:
     // fifo/gf100.c:573-577, bar/base.c:40-47), so that the teardown still runs.
     const auto begin=last_;bool fetched=false;
-    if(observe_==Observe::Registers || observe_==Observe::Report) {
+    if(registersOnly()) {
         // Approach F: no access to VRAM. Samples until the engine status reads 0 in two samples
         // in sequence (not before the fourth sample), the sample bound or the time bound.
         unsigned idle=0;
@@ -516,7 +518,8 @@ bool Compute::run()
     if(sampled)live(Step::Status,report_.fifoIntr,report_.grIntr|report_.grTrap|report_.fecsIntr);
     const bool closed=teardown();
     if(observe_==Observe::Registers && report_.submitted && !lastRead())ok=false;
-    if(observe_==Observe::Report && report_.submitted && !sample(report_.samples+1))ok=false; // One sample after the teardown.
+    if(wide() && report_.submitted && !sample(report_.samples+1))ok=false; // One sample after the teardown.
+    if(observe_==Observe::Last && report_.submitted && !lastRead())ok=false;
     uint64_t end;
     if(io_.now(end) && end>=start_)report_.totalUs=end-start_;
     if(!ok || !sampled || !closed)return false;

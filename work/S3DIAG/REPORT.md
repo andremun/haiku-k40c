@@ -388,3 +388,20 @@ Next steps, in the recommended order:
    Read more state after the load in a `s3q` variant: 0x409614 (red switch),
    0x409a24 and the FECS memory registers that `ctx_load` and `ctx_mem` use
    (`fuc/hub.fuc:471-483`).
+
+## 13. Stage s3r is built (2026-11-17)
+
+Approach H is ready for one card run (`work/S3DIAG/FINDINGS.md`, entry "stage
+s3r built"). The run needs the user's explicit yes (ADR 006).
+
+Command, after the yes and with the card on `vfio-pci`:
+`K40_MEM_STAGE=s3r python3 tools/memstage/run.py --run-approved-batch1-once`
+
+How to read the result:
+
+| Teardown (after `LIVE step=14`) | Last read (after `OBS ... g=9`) | Meaning |
+|---|---|---|
+| no `LIVE step=0` line | completes, GP_GET 1 | PASS: the register list is the cause. Next: check the list entries one by one against the Linux list |
+| `LIVE step=0 ... b=11` (preempt) | no completion (AER) | The list is not the cause. Next: approach D and E, and more FECS state after the load |
+| no `LIVE step=0` line | no completion (AER) | The save works, host reads of VRAM do not. Next: look at the host path (BAR1 and window) after a load |
+| `LIVE step=0 ... b=11` | completes | The host path is good, the save is not. Next: the GPC and strand transfers of the save |
