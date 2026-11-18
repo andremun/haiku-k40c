@@ -1,0 +1,1 @@
+MEM-OPEN-RESULT role=preflight status=0x00000000

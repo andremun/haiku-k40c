@@ -1018,3 +1018,22 @@ KNOWN, from the serial log:
 Result: the recovery program, after Nouveau's GK104 recovery, ends a GR MMU
 fault on the K40c: the fault is cleared, the channel is off the runlist and
 unbound, GR is not busy. The open item of `s3v` is closed (one run).
+
+## 2026-11-18: s3y on the card (PASS: the S3 result repeats)
+
+Result folder `results/20261118-s3y-run-27b46ec2`. Launcher status `pass`
+(`S3_complete: true`), driver `PASS S3_COMPUTE faults=0 upload=0 mapper=0
+closure=2 journal_overflow=0`. No AER message. The package `package-s3y` is
+consumed. The card is still on `vfio-pci`.
+
+`s3y` is `s3w` (driver stage 17) with a new package, built from the current
+driver (with the recovery program of `s3x`, which did not run: no fault).
+
+KNOWN: GP_GET 1 after 42 ms; no fault pending before the result read; the
+first result read found the last element (13 ms); all 1024 elements right
+(`wrong=0`, `computed=1`); end status fifo 0x40000000 only, MMU, PBDMA, GR,
+trap and FECS 0, engine 0x00012001 (not busy); normal teardown
+(`guard=6/7`, `closed=1`).
+
+Result: the S3 compute job passed twice on the card (`s3w`, `s3y`). S3 is
+complete to the designed scope (decision 013).

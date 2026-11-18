@@ -317,6 +317,13 @@ class Tests(unittest.TestCase):
         self.assertTrue(result["S3_complete"] and result["scope"].startswith("S3w:"))
         with self.assertRaises(ValueError):
             evidence.memory_final(job, suite, raw)  # no baseline sample
+        # s3y: the repeat of s3w (the same report form).
+        suite["stage"] = "S3Y_A7_BAR1_GR_COMPUTE_REPEAT"
+        result = evidence.memory_final(checked, suite, raw)
+        self.assertTrue(result["S3_complete"] and result["scope"].startswith("S3y:"))
+        for changed in (job, reports["recover"], checked.replace("wrong=0", "wrong=1")):
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
         # s3x: the s3v fault on purpose, its record, then the recovery in the teardown.
         suite["stage"] = "S3X_A7_BAR1_GR_RECOVER"
         recover = reports["recover"]

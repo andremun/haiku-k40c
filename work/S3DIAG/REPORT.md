@@ -579,3 +579,10 @@ Command, after the yes and with the card on `vfio-pci`:
 `s3x` passed: the `s3v` fault on purpose, its record, then the recovery
 program; after it no fault pending, the channel unbound and GR not busy; no
 AER. Details in `work/S3DIAG/FINDINGS.md`, entry "s3x on the card".
+
+## 29. The S3 result repeats; S3 complete (2026-11-18)
+
+`s3y`, a new package of the `s3w` form built from the current driver, passed:
+all 1024 elements right, no fault, normal teardown, no AER. S3 passed twice.
+The project is complete to its designed scope (`docs/decisions/013-s3-complete.md`).
+S3DIAG is closed.
