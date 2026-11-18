@@ -3,6 +3,9 @@
 One line for each milestone, task group or layout change. The task log in
 `docs/STATUS.md` and the commits hold the details.
 
+- 2026-11-18: S3 complete. The compute job `out[i] = in[i] + 1` ran on the K40c under Haiku with all 1024 elements right, twice (`s3w`, `s3y`). Causes of the earlier stops: register-list LTC entries written before the golden stage read them, and a read-only launch descriptor. The teardown recovers from a GR MMU fault (`s3x`). Project complete to its designed scope (decision 013); Q7 and Q11 stay open.
+- 2026-11-17: S3DIAG stages `s3g` to `s3t`: observation without BAR1, registers-only reports, register-list bisection. The whole fixed list passes the object bind (`s3t`).
+- 2026-11-16: Card day: rungs 1 to 4 pass (S2 copy and S3a golden context on the card); the first compute job (`s3b`) stops (work/LADDER/FINDINGS.md).
 - 2026-11-13: Rung 1 jobs for the Linux guest (`tools/guest/files/ladder_jobs.c`): copy, `add_f32`, `mul_mat_vec_q8_0`, timed FP32 matrix product, bit-identical to the CPU on llvmpipe. Not run on the card.
 - 2026-11-12: S2 and S3 host work. Copy stage on the S1 channel. GR bring-up modelled from Nouveau and reproduced against the Linux trace (6,333 accesses), recorded as an op program with a native runner. Compute stage with write guard, packages s2, s3a, s3b, validators and run sheet. No link, rehearsal or card run yet.
 - 2026-11-12: Project resumed for S2 and S3 (decision 012). Run ladder for 2026-11-16, cloud work branch, tasks S2COPY, S3GR, S3CTX, S3LAUNCH, RTIOCTL and LADDER.

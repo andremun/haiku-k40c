@@ -24,6 +24,10 @@ own, and the work may stop at any of them.
 S1 is the first success criterion of the project. S2 is the first real
 work done by the GPU. S3 is the goal of the design documents.
 
+State (2026-11-18): S1, S2 and S3 passed on the card. S3 passed twice
+(`s3w`, `s3y`); the project is complete to its designed scope
+(`docs/decisions/013-s3-complete.md`).
+
 Before S3 work starts on Haiku, the same job must run on this card under
 Linux with Nouveau and Mesa (task C5, in a Linux guest with the card
 passed through: `docs/PASSTHROUGH.md`). If it does not run there, there

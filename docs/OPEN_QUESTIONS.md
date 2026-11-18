@@ -18,3 +18,20 @@
 | Q11 | What are the readable semantics of the flush-target register after programming? | OPEN 2026-10-29. | KNOWN: A7 run7 and batch 1 post-POST readbacks were zero; no initial/post-rearm readback exists. Clearing, ignored programming and write-only/other read semantics are not distinguished. See the run7 report. | The accepted memory contract keeps readback observational and excludes D1/G2. Do not require an address echo in the channel batch. Source-supported semantics remain unresolved. |
 
 | Q12 | Can one standalone GK110B channel consume a host NOP without GR initialization and detach under the finite S1 contract? | OPEN 2026-10-30. | UNKNOWN. Batch 1 verifies BAR1, not channel translation or scheduling. The full Linux trace includes GR. Source selects a software-only group path but does not prove GR-free execution. See docs/S1-BATCH2-REVIEW.md. | Complete source/interrupt/closure contracts, implement and review the exact cardless-rehearsed package, then obtain one explicit approval for its finite hardware experiment. |
+
+## Q7 and Q11: evidence and proposed plan (2026-11-18)
+
+- Q11 evidence: the Linux reference run writes 0x100c10 twice (value 0x7fbff0,
+  `reference/linux-run/mmiotrace.txt.xz` lines 45505 and 114479) and never reads
+  it. envytools names it `PFFB.UNKC00.UNK08_SYSRAM_ADDR`, `shr=8`, with no access
+  attribute (`reference/envytools/rnndb/memory/gf100_pffb.xml:18-19`). So the
+  read semantics have no source; only a card run can show them. The value is
+  a host page address, so a write needs a real DMA page.
+- Proposed plan (not approved): one owned host DMA page (S1B2 DMA32
+  allocation), then D-a: program 0x100c10 with it and read it back (at once,
+  after a BAR flush, after teardown), check IOMMU and AER logs; D-b: copy
+  engine VRAM to the host page through a coherent system-memory PTE, host
+  checks the pattern; D-c: the reverse. Then a review of the protocol and
+  evidence for Q7. Needs a change of the memory contract
+  (`docs/S1-MEMORY-CONTRACT.md:54` excludes 0x100c10 writes).
+

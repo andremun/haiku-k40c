@@ -27,13 +27,22 @@ software and it may never reach the goal.
 
 ## State
 
-The project is on hold since 2026-10-31 (`docs/decisions/011-project-on-hold.md`).
+The project is complete to its designed scope since 2026-11-18
+(`docs/decisions/013-s3-complete.md`). All three success milestones passed on the card:
 
-Milestone S1 passed on the card. A native Haiku driver ran the card's start-up script
-(POST), reached VRAM through its own BAR1 page tables, and one channel on the copy-engine
-runlist consumed one host command: no fault, clean teardown
-(`results/20261031-batch1-a7-bar1-d198d424/`). The copy job (S2) and the compute job (S3)
-are not done. `docs/STATUS.md` has the details and the task log.
+- **S1** (2026-10-31): a native Haiku driver ran the card's start-up script (POST),
+  reached VRAM through its own BAR1 page tables, and one channel consumed one host
+  command (`results/20261031-batch1-a7-bar1-d198d424/`).
+- **S2** (2026-11-16): the copy engine copied a buffer in VRAM (`work/LADDER/FINDINGS.md`).
+- **S3** (2026-11-18): the goal. One compute job, `out[i] = in[i] + 1` over 1024
+  elements, ran on the K40c and the host checked every element, twice
+  (`results/20261118-s3w-run-c25fd943/`, `results/20261118-s3y-run-27b46ec2/`).
+
+Scope: Haiku runs as a QEMU guest with the card passed through by VFIO; the buffers are
+in VRAM owned by the driver; each run is a single-use package. Host DMA visibility (Q7)
+and the 0x100c10 readback (Q11) stay open (`docs/OPEN_QUESTIONS.md`). The diagnosis of
+the S3 stops is in `work/S3DIAG/REPORT.md`. `docs/STATUS.md` has the details and the
+task log.
 
 ## Tools that others can use
 
