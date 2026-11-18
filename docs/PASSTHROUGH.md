@@ -29,7 +29,8 @@ The same mechanism gives the Linux reference guest of task C5.
 | `tools/guest/linux-setup.sh` | Builds the Linux reference guest in `~/haiku-cross/linux-guest` | no |
 | `tools/guest/linux-run.sh [--gpu] [CMD]` | Starts the guest, copies `tools/guest/files`, runs a command | no |
 | `tools/guest/files/compute_test.c` | The reference job `output[i] = input[i] + 1` (GL ES 3.1 compute shader) | - |
-| `tools/guest/files/run_test.sh [--k40c]` | In the guest: build and run the job; with `--k40c` load Nouveau under `mmiotrace` first, and fail unless the renderer is Nouveau | - |
+| `tools/guest/files/ladder_jobs.c` | Rung 1 jobs: copy, `add_f32`, `mul_mat_vec_q8_0`, timed FP32 matrix product, each compared with the CPU bit for bit | - |
+| `tools/guest/files/run_test.sh [--k40c]` | In the guest: build and run the jobs; with `--k40c` load Nouveau under `mmiotrace` first, and fail unless the renderer is Nouveau | - |
 | `tools/guest/files/build_mesa_debug.sh` | In the guest, once, no GPU: a debug build of Mesa in `/opt/mesa-debug`, needed for the print of the shader code | - |
 
 The host has what it needs: the IOMMU is on (75 groups), `vfio-pci` is in

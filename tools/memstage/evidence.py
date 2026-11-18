@@ -210,6 +210,32 @@ CHID = 1  # memstage/ChannelImage.h; trace line 562290.
 GP_GET, GP_PUT = 0x288, 0x28C  # cla16f.h:62-63 in USERD slot CHID*0x200.
 GPFIFO_VA, PUSH_VA = 0x10000000, 0x10001000  # software channel VA layout.
 PB_ROLES = (8, 9, 10, 11, 12, 13, 14)  # ChanDirectory..Runlist, VramArena.h.
+# S2 (stage S2_A7_BAR1_CHANNEL_COPY): CopySource and CopyDest, one copy as
+# nouveau_boa0b5.c:37-71 on subchannel 4 (include/nvif/push906f.h:19).
+COPY_STAGE = "S2_A7_BAR1_CHANNEL_COPY"
+COPY_DIAGNOSTIC = "S2D_A7_BAR1_CHANNEL_COPY_DIAGNOSTIC"  # busy bit recorded only.
+COPY_ROLES = (15, 16)
+SOURCE_VA, DEST_VA = 0x10002000, 0x10003000  # software channel VA layout.
+COPY_BYTES = 4096  # one small page; nouveau_boa0b5.c:57-59 PAGE_SIZE.
+CE_INTR, CE_LAUNCHERR = 0x104908, 0x104F14  # ce/gk104.c:52,64-65, CE0.
+
+
+def header(op, count, subchannel, method):
+    # include/nvhw/class/cl906f.h:54-70: SEC_OP 31:29, count 28:16, subchannel 15:13, method/4 11:0.
+    return (op << 29) | (count << 16) | (subchannel << 13) | (method >> 2)
+
+
+def copy_words():
+    """The twelve 32-bit words of the copy sequence, from the class headers."""
+    launch = 2 | (1 << 2) | (1 << 7) | (1 << 8) | (1 << 9)  # cla0b5.h:38-61; nouveau_boa0b5.c:61-71.
+    return [
+        header(1, 1, 4, 0x0000), 0xA0B5,  # nouveau_boa0b5.c:85; nouveau_bo.c:937.
+        header(1, 8, 4, 0x0400),  # cla0b5.h:94 OFFSET_IN_UPPER.
+        (SOURCE_VA >> 32) & 0xFF, SOURCE_VA & 0xFFFFFFFF,  # cla0b5.h:94-97.
+        (DEST_VA >> 32) & 0xFF, DEST_VA & 0xFFFFFFFF,  # cla0b5.h:98-101.
+        COPY_BYTES, COPY_BYTES, COPY_BYTES, 1,  # cla0b5.h:102-109 pitches, line length, line count.
+        header(4, launch, 4, 0x0300),  # cla0b5.h:37 LAUNCH_DMA, immediate.
+    ]
 
 
 def pte(physical, writable=False):
@@ -217,7 +243,7 @@ def pte(physical, writable=False):
     return (physical >> 8) | (1 if writable else 5)
 
 
-def channel_image(byrole):
+def channel_image(byrole, copy=False):
     """Independent re-encoding of memstage/ChannelImage.cpp from pinned sources."""
     userd = byrole[11] + CHID * 0x200  # fifo/gk104.c:84,88-89,117.
     ramfc = [
@@ -236,6 +262,31 @@ def channel_image(byrole):
         (0x200, byrole[8]),  # vmmgf100.c:346-360.
         (0x208, (1 << 40) - 1),
     ]
+    if copy:
+        words = [(1 << 29) | (1 << 16) | (0x08 >> 2), 0, *copy_words()]
+        push = [
+            (index * 4, words[index] | (words[index + 1] << 32))
+            for index in range(0, len(words), 2)
+            if words[index] or words[index + 1]
+        ]
+        second = PUSH_VA + 8  # after the NOP.
+        return {
+            8: [((GPFIFO_VA >> 27) * 8, (byrole[9] << 24) | (1 << 32))],
+            9: [
+                (((GPFIFO_VA >> 12) & 32767) * 8, pte(byrole[12])),
+                (((PUSH_VA >> 12) & 32767) * 8, pte(byrole[13])),
+                (((SOURCE_VA >> 12) & 32767) * 8, pte(byrole[15])),
+                (((DEST_VA >> 12) & 32767) * 8, pte(byrole[16], True)),  # destination writable.
+            ],
+            10: ramfc,
+            11: [],
+            12: [
+                (0, (PUSH_VA & 0xFFFFFFFF) | (((PUSH_VA >> 32) | (8 << 8)) << 32)),
+                (8, (second & 0xFFFFFFFF) | (((second >> 32) | (48 << 8)) << 32)),  # nouveau_dma.c:83-84.
+            ],
+            13: push,
+            14: [(0, CHID)],
+        }
     return {
         8: [((GPFIFO_VA >> 27) * 8, (byrole[9] << 24) | (1 << 32))],  # vmmgf100.c:129-140.
         9: [
@@ -250,7 +301,441 @@ def channel_image(byrole):
     }
 
 
-def channel_phase(serial, events, byrole):
+def copy_phase(serial, chan, engine, require_idle=True):
+    """S2: second entry consumed, engine idle, no launch error, destination compared."""
+    line = re.findall(
+        r"^k40_mem: COPY engine=(\d+) submitted=1 get=2/2 polls=\d+ us=\d+ copied=1\r?$", serial, re.M
+    )
+    status = re.findall(
+        r"^k40_mem: COPY_STATUS engine=([0-9a-f]+) idle_polls=\d+ idle_us=\d+ ce_intr=([0-9a-f]+) launcherr=([0-9a-f]+)\r?$",
+        serial,
+        re.M,
+    )
+    if len(line) != 1 or len(status) != 1 or int(line[0]) != engine:
+        raise ValueError("copy report missing, repeated or not complete")
+    busy, intr, error = (int(x, 16) for x in status[0])
+    if (busy & 0x80000000 and require_idle) or intr & 4 or error & 15:
+        raise ValueError("copy engine busy or launch error")  # fifo/gk104.c:208; ce/gk104.c:52,76.
+    register = 0x2640 + engine * 8  # fifo/gk104.c:206.
+    if not any(e[6] == 2 and e[0] == 13 and e[2] == GP_GET and e[3] == 2 for e in chan):
+        raise ValueError("GP_GET poll for the copy entry missing")
+    if not any(e[6] == 2 and e[0] == 13 and e[2] == register and (not e[3] & 0x80000000 or not require_idle) for e in chan):
+        raise ValueError("engine idle poll missing")
+    for address, mask in ((CE_INTR, 4), (CE_LAUNCHERR, 15)):
+        values = [e[3] for e in chan if e[6] == 0 and e[0] == 13 and e[2] == address]
+        if len(values) != 1 or values[0] & mask:
+            raise ValueError("copy-engine status read missing or in error")
+    return dict(engine=engine, bytes=COPY_BYTES, source_va=SOURCE_VA, dest_va=DEST_VA)
+
+
+# S3 stages: the compute stage replaces the CE0 channel (src/gr/Compute.cpp).
+# Value: what the one GPFIFO entry fetches (gr::Launch, work/S3DIAG/PLAN.md), and the pass marker.
+GR_STAGES = {
+    "S3A_A7_BAR1_GR_GOLDEN": ("none", "S3_GOLDEN"),
+    "S3C_A7_BAR1_GR_BIND": ("bind", "S3_BIND"),
+    "S3D_A7_BAR1_GR_SETUP": ("setup", "S3_SETUP"),
+    "S3B_A7_BAR1_GR_COMPUTE": ("full", "S3_COMPUTE"),
+    "S3E_A7_BAR1_GR_BIND_ALIGNED": ("bind", "S3_BIND"),
+    "S3G_A7_BAR1_GR_IMAGE": ("none", "S3_IMAGE"),
+    "S3O_A7_BAR1_GR_BIND_OBSERVED": ("bind", "S3_OBSERVE"),
+    "S3P_A7_BAR1_GR_BIND_REGISTERS": ("bind", "S3_REGISTERS"),
+    "S3Q_A7_BAR1_GR_BIND_REPORT": ("bind", "S3_REPORT"),
+    "S3R_A7_BAR1_GR_BIND_NO_LIST": ("bind", "S3_NO_LIST"),
+    "S3S_A7_BAR1_GR_BIND_LIST34": ("bind", "S3_SHORT_LIST"),
+    "S3T_A7_BAR1_GR_BIND_FULL_LIST": ("bind", "S3_FULL_LIST"),
+    "S3U_A7_BAR1_GR_COMPUTE_ALIGNED": ("full", "S3_COMPUTE"),
+    "S3V_A7_BAR1_GR_COMPUTE_FAULT": ("full", "S3_COMPUTE"),
+    "S3W_A7_BAR1_GR_COMPUTE_QMD": ("full", "S3_COMPUTE"),
+    "S3X_A7_BAR1_GR_RECOVER": ("full", "S3_RECOVER"),
+    "S3Y_A7_BAR1_GR_COMPUTE_REPEAT": ("full", "S3_COMPUTE"),
+}
+# Stages aligned with the Linux reference run (gr::Align, work/S3DIAG/FINDINGS.md):
+# the channel context is a copy of the golden image in GrChanContext.
+GR_ALIGNED = ("S3E_A7_BAR1_GR_BIND_ALIGNED", "S3O_A7_BAR1_GR_BIND_OBSERVED", "S3P_A7_BAR1_GR_BIND_REGISTERS",
+              "S3Q_A7_BAR1_GR_BIND_REPORT", "S3R_A7_BAR1_GR_BIND_NO_LIST",
+              "S3S_A7_BAR1_GR_BIND_LIST34", "S3T_A7_BAR1_GR_BIND_FULL_LIST",
+              "S3U_A7_BAR1_GR_COMPUTE_ALIGNED", "S3V_A7_BAR1_GR_COMPUTE_FAULT",
+              "S3W_A7_BAR1_GR_COMPUTE_QMD", "S3X_A7_BAR1_GR_RECOVER",
+              "S3Y_A7_BAR1_GR_COMPUTE_REPEAT")
+# Stages that print the golden image (gr::Compute print mode, work/S3DIAG/REPORT.md).
+GR_PRINT = ("S3G_A7_BAR1_GR_IMAGE",)
+# Stages that observe the progress after GP_PUT without BAR1 access (gr::Compute observe mode,
+# work/S3DIAG/REPORT.md, approach B).
+GR_OBSERVE = ("S3O_A7_BAR1_GR_BIND_OBSERVED",)
+# Approach F: registers only after GP_PUT until the teardown ended, then one slow-window read.
+GR_REGISTERS = ("S3P_A7_BAR1_GR_BIND_REGISTERS",)
+# Approach G: as approach F without any read of VRAM after GP_PUT; GP_GET is not read.
+GR_REPORT = ("S3Q_A7_BAR1_GR_BIND_REPORT",)
+# Approach H: as approach G with list count 0, then one slow-window read as the last action.
+# Value: the list count (src/gr/Compute.h Align::list; 34 = all but the LTC pair).
+GR_NO_LIST = {"S3R_A7_BAR1_GR_BIND_NO_LIST": 0, "S3S_A7_BAR1_GR_BIND_LIST34": 34, "S3T_A7_BAR1_GR_BIND_FULL_LIST": 36}
+# s3v: the MMU fault status before each result read; a pending fault stops the poll after
+# one sample with its fault record (gr::Observe::Fault). A pass has the baseline sample only.
+GR_FAULT = ("S3V_A7_BAR1_GR_COMPUTE_FAULT", "S3W_A7_BAR1_GR_COMPUTE_QMD", "S3Y_A7_BAR1_GR_COMPUTE_REPEAT")
+# s3x: the s3v fault on purpose (descriptor read-only), its record, then the recovery program in
+# the teardown (src/gr/Compute.cpp teardown, tools/gr/program.py recover).
+GR_RECOVER = ("S3X_A7_BAR1_GR_RECOVER",)
+OBSERVE_SAMPLES = 32  # src/gr/Compute.cpp observeSamples.
+IMAGE_BYTES = 0x4EA00  # tools/gr/program.py KNOWN[0x409804], trace 616433.
+GR_ROLES = tuple(range(17, 30))  # GrText..GrChanContext, VramArena.h.
+GR_UNWRITTEN = (18, 24, 25, 26)  # Tls, PagePool, Bundle, Attrib: allocated, never written by the host.
+
+
+def gr_program():
+    """Stage lengths of the generated program, from the generator (not from the driver)."""
+    import importlib.util
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "gr/program.py"
+    spec = importlib.util.spec_from_file_location("k40_gr_program", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    stages, patches, _, _ = module.record()
+    stages.update(module.fifo_stages())
+    return {name: len(ops) for name, ops in stages.items()}, len(patches), module.launch.layout()
+
+
+def image_lines(serial):
+    """The printed golden image: {byte offset: eight words}. Lines of zeros are not printed."""
+    rows = re.findall(r"^k40_mem: IMG ([0-9a-f]+)((?: [0-9a-f]+){8})\r?$", serial, re.M)
+    if serial.count("k40_mem: IMG") != len(rows):
+        raise ValueError("golden image line malformed")
+    lines, last = {}, -1
+    for offset, words in rows:
+        offset, words = int(offset, 16), [int(word, 16) for word in words.split()]
+        if offset <= last or offset % 32 or offset + 32 > IMAGE_BYTES or not any(words) or max(words) > 0xFFFFFFFF:
+            raise ValueError("golden image line out of order, out of range or empty")
+        lines[offset], last = words, offset
+    return lines
+
+
+def observe_lines(serial):
+    """The observe lines in print order: (sample, group, microseconds, values, position)."""
+    rows = [(int(m.group(1)), int(m.group(2)), int(m.group(3)), [int(v, 16) for v in m.group(5).split()][:int(m.group(4))], m.start())
+            for m in re.finditer(r"^k40_mem: OBS n=(\d+) g=(\d+) us=(\d+) c=([0-7])((?: [0-9a-f]+){7})\r?$", serial, re.M)]
+    if serial.count("k40_mem: OBS") != len(rows):
+        raise ValueError("observe line malformed")
+    return rows
+
+
+def observe_phase(serial, events):
+    """A passing observe run (src/gr/Compute.cpp sample(), observe()).
+
+    Sample 0 is the baseline before GP_PUT. Each sample has group 1 (mc, fifo, mmu, pbdma,
+    hce, state, engine), group 2 (gr, trap, fecs) and group 3 (GP_GET, GP_PUT by slow window).
+    No MMU fault is pending in any sample, so no group 4 line exists. The last sample reads
+    GP_GET 1; groups 5 and 6 are the one pair of BAR1 reads after it.
+    """
+    rows = observe_lines(serial)
+    put_at = serial.find("k40_mem: LIVE step=11 us=")
+    put_at = serial.find("k40_mem: LIVE step=11 us=", put_at + 1)  # the second line: GP_PUT written.
+    report_at = serial.find("k40_mem: GR step=")
+    if len(rows) < 8 or put_at < 0 or any(row[4] > report_at for row in rows):
+        raise ValueError("observe lines missing or after the report")
+    samples = (len(rows) - 2) // 3 - 1
+    wanted = [(n, g) for n in range(samples + 1) for g in (1, 2, 3)] + [(samples, 5), (samples, 6)]
+    if [(row[0], row[1]) for row in rows] != wanted or not 1 <= samples <= OBSERVE_SAMPLES:
+        raise ValueError("observe samples or groups out of order")
+    if [len(row[3]) for row in rows] != [7, 3, 2] * (samples + 1) + [0, 2]:
+        raise ValueError("observe value counts differ")
+    if any(a[2] > b[2] for a, b in zip(rows, rows[1:])):
+        raise ValueError("observe times not monotonic")
+    if any(row[4] > put_at for row in rows[:3]) or any(row[4] < put_at for row in rows[3:]):
+        raise ValueError("baseline sample is not before GP_PUT, or a later sample is not after it")
+    window = [row[3] for row in rows if row[1] == 3]
+    if window[0] != [0, 0] or window[-1] != [1, 1] or rows[-1][3] != [1, 1]:
+        raise ValueError("GP_GET or GP_PUT of the observe samples differs")
+    if any(get not in (0, 1) or put != 1 for get, put in window[1:]) or [get for get, _ in window[1:-1]].count(1) > 1:
+        raise ValueError("observe samples after the fetch, or GP_PUT lost")
+    if any(row[3][2] or row[3][3] or row[3][4] for row in rows if row[1] == 1):
+        raise ValueError("MMU fault or PBDMA interrupt pending in an observe sample")  # fifo/gf100.c:723,358.
+    if serial.count(f"k40_mem: GR_OBSERVE samples={samples} get=1 put=1 bar=1 fault_units=0") != 1:
+        raise ValueError("observe report differs")
+    reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]
+    if len(reads) != samples + 1:
+        raise ValueError("slow-window reads of USERD differ from the samples")
+    return dict(samples=samples, fetched_us=next(row[2] for row in rows if row[1] == 3 and row[3] == [1, 1]),
+                bar1_read=True)
+
+
+def registers_phase(serial, events):
+    """A passing register-only observe run (src/gr/Compute.cpp sample(), observe(), lastRead()).
+
+    Sample 0, before GP_PUT: groups 1, 2, 7 (FECS state), 8 (MMU and PBDMA 0 state), 3 (slow
+    window). Samples 1..N after GP_PUT: groups 1, 2, 7, 8, no access to VRAM. After the
+    teardown line: group 9, then group 3 with GP_GET 1 and GP_PUT 1.
+    """
+    rows = observe_lines(serial)
+    put_at = serial.find("k40_mem: LIVE step=11 us=")
+    put_at = serial.find("k40_mem: LIVE step=11 us=", put_at + 1)
+    down_at = serial.find("k40_mem: LIVE step=14 us=")
+    report_at = serial.find("k40_mem: GR step=")
+    samples = (len(rows) - 7) // 4
+    wanted = [(0, g) for g in (1, 2, 7, 8, 3)] + [(n, g) for n in range(1, samples + 1) for g in (1, 2, 7, 8)]
+    wanted += [(samples, 9), (samples, 3)]
+    if [(row[0], row[1]) for row in rows] != wanted or not 4 <= samples <= OBSERVE_SAMPLES:
+        raise ValueError("register-only samples or groups out of order")
+    counts = {1: 7, 2: 3, 7: 7, 8: 4, 3: 2, 9: 0}
+    if any(len(row[3]) != counts[row[1]] for row in rows) or any(a[2] > b[2] for a, b in zip(rows, rows[1:])):
+        raise ValueError("register-only value counts or times differ")
+    if (
+        put_at < 0 or down_at < put_at
+        or any(row[4] > put_at for row in rows[:5])
+        or any(not put_at < row[4] < down_at for row in rows[5:-2])
+        or any(not down_at < row[4] < report_at for row in rows[-2:])
+    ):
+        raise ValueError("register-only lines are not in their places around GP_PUT and the teardown")
+    if rows[4][3] != [0, 0] or rows[-1][3] != [1, 1]:
+        raise ValueError("GP_GET or GP_PUT by slow window differs")
+    group1 = [row[3] for row in rows if row[1] == 1]
+    if any(v[2] or v[3] or v[4] for v in group1) or (group1[-1][6] | group1[-2][6]) & 0x80000000:
+        raise ValueError("MMU fault or PBDMA interrupt pending, or the engine busy at the end")  # fifo/gf100.c:723,358; fifo/gk104.c:206,208 busy bit.
+    if serial.count(f"k40_mem: GR_OBSERVE samples={samples} get=1 put=1 bar=0 fault_units=0") != 1:
+        raise ValueError("observe report differs")
+    reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]
+    if len(reads) != 2:
+        raise ValueError("slow-window reads of USERD differ")
+    return dict(samples=samples, idle_us=rows[-3][2], bar1_read=False)
+
+
+def report_phase(serial, events):
+    """A passing report run (src/gr/Compute.cpp, Observe::Report): no read of VRAM after GP_PUT.
+
+    Sample 0, before GP_PUT: groups 1, 2, 7, 8, 3. Samples 1..N after GP_PUT and sample N+1
+    after the teardown line: groups 1, 2, 7, 8. Group 8 has seven values: MMU status, PBDMA 0
+    method address, data and channel, FECS trace word, window selector, BAR1 context.
+    """
+    rows = observe_lines(serial)
+    put_at = serial.find("k40_mem: LIVE step=11 us=")
+    put_at = serial.find("k40_mem: LIVE step=11 us=", put_at + 1)
+    down_at = serial.find("k40_mem: LIVE step=14 us=")
+    report_at = serial.find("k40_mem: GR step=")
+    samples = (len(rows) - 5) // 4 - 1
+    wanted = [(0, g) for g in (1, 2, 7, 8, 3)] + [(n, g) for n in range(1, samples + 2) for g in (1, 2, 7, 8)]
+    if [(row[0], row[1]) for row in rows] != wanted or not 4 <= samples <= OBSERVE_SAMPLES:
+        raise ValueError("report samples or groups out of order")
+    counts = {1: 7, 2: 3, 7: 7, 8: 7, 3: 2}
+    if any(len(row[3]) != counts[row[1]] for row in rows) or any(a[2] > b[2] for a, b in zip(rows, rows[1:])):
+        raise ValueError("report value counts or times differ")
+    if (
+        put_at < 0 or down_at < put_at
+        or any(row[4] > put_at for row in rows[:5])
+        or any(not put_at < row[4] < down_at for row in rows[5:-4])
+        or any(not down_at < row[4] < report_at for row in rows[-4:])
+    ):
+        raise ValueError("report lines are not in their places around GP_PUT and the teardown")
+    group1 = [row[3] for row in rows if row[1] == 1]
+    if any(v[2] or v[3] or v[4] for v in group1) or (group1[-1][6] | group1[-2][6]) & 0x80000000:
+        raise ValueError("MMU fault or PBDMA interrupt pending, or the engine busy at the end")  # fifo/gf100.c:723,358; fifo/gk104.c:206,208 busy bit.
+    if serial.count(f"k40_mem: GR_OBSERVE samples={samples} get=0 put=0 bar=0 fault_units=0") != 1:
+        raise ValueError("observe report differs")
+    reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]
+    if len(reads) != 1:
+        raise ValueError("slow-window read of USERD after GP_PUT, or the baseline read missing")
+    return dict(samples=samples, idle_us=rows[-5][2], bar1_read=False, gp_get_read=False)
+
+
+def no_list_phase(serial, events, count=0):
+    """A passing run with a short register list (src/gr/Compute.cpp, Align::list, Observe::Last).
+
+    One live line of the attach step with a = 2 and the list count. Then the groups of report_phase,
+    and after the sample that follows the teardown: group 9, then group 3 with GP_GET 1, GP_PUT 1.
+    """
+    if len(re.findall(rf"^k40_mem: LIVE step=10 us=\d+ a=2 b={count:x}\r?$", serial, re.M)) != 1 or serial.count("a=2 b=") != 1:
+        raise ValueError("list count not reported or not the count of the stage")
+    rows = observe_lines(serial)
+    put_at = serial.find("k40_mem: LIVE step=11 us=")
+    put_at = serial.find("k40_mem: LIVE step=11 us=", put_at + 1)
+    down_at = serial.find("k40_mem: LIVE step=14 us=")
+    report_at = serial.find("k40_mem: GR step=")
+    samples = (len(rows) - 7) // 4 - 1
+    wanted = [(0, g) for g in (1, 2, 7, 8, 3)] + [(n, g) for n in range(1, samples + 2) for g in (1, 2, 7, 8)]
+    wanted += [(samples, 9), (samples, 3)]
+    if [(row[0], row[1]) for row in rows] != wanted or not 4 <= samples <= OBSERVE_SAMPLES:
+        raise ValueError("no-list samples or groups out of order")
+    counts = {1: 7, 2: 3, 7: 7, 8: 7, 3: 2, 9: 0}
+    if any(len(row[3]) != counts[row[1]] for row in rows) or any(a[2] > b[2] for a, b in zip(rows, rows[1:])):
+        raise ValueError("no-list value counts or times differ")
+    if (
+        put_at < 0 or down_at < put_at
+        or any(row[4] > put_at for row in rows[:5])
+        or any(not put_at < row[4] < down_at for row in rows[5:-6])
+        or any(not down_at < row[4] < report_at for row in rows[-6:])
+    ):
+        raise ValueError("no-list lines are not in their places around GP_PUT and the teardown")
+    if rows[4][3] != [0, 0] or rows[-1][3] != [1, 1]:
+        raise ValueError("GP_GET or GP_PUT by slow window differs")
+    group1 = [row[3] for row in rows if row[1] == 1]
+    if any(v[2] or v[3] or v[4] for v in group1) or (group1[-1][6] | group1[-2][6]) & 0x80000000:
+        raise ValueError("MMU fault or PBDMA interrupt pending, or the engine busy at the end")  # fifo/gf100.c:723,358; fifo/gk104.c:206,208 busy bit.
+    if serial.count(f"k40_mem: GR_OBSERVE samples={samples} get=1 put=1 bar=0 fault_units=0") != 1:
+        raise ValueError("observe report differs")
+    reads = [e for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 11 and (e[2], e[3]) == (GP_GET, 8)]
+    if len(reads) != 2:
+        raise ValueError("slow-window reads of USERD differ")
+    return dict(samples=samples, idle_us=rows[-7][2], bar1_read=False, gp_get_read=True, list_count=count)
+
+
+def fault_phase(serial, events):
+    """s3v pass: the baseline sample before GP_PUT (groups 1, 2, 3), no fault sample after it."""
+    rows = observe_lines(serial)
+    put_at = serial.find("k40_mem: LIVE step=11 us=")
+    if [(row[0], row[1]) for row in rows] != [(0, 1), (0, 2), (0, 3)] or put_at < 0 or any(row[4] > put_at for row in rows):
+        raise ValueError("fault-mode baseline differs or a sample after GP_PUT")
+    if [len(row[3]) for row in rows] != [7, 3, 2] or rows[2][3] != [0, 0]:
+        raise ValueError("fault-mode baseline values differ")
+    if rows[0][3][2] or rows[0][3][3] or rows[0][3][4]:
+        raise ValueError("MMU fault or PBDMA interrupt pending before GP_PUT")  # fifo/gf100.c:723,358.
+    if serial.count("k40_mem: GR_OBSERVE samples=0 get=0 put=0 bar=0 fault_units=0") != 1:
+        raise ValueError("fault-mode report differs")
+    return dict(samples=0, fault_units=0, baseline=True)
+
+
+def recover_phase(serial, byrole, layout):
+    """s3x: baseline; one sample with the fault record of GR at the descriptor; the recovery; one sample after it."""
+    rows = observe_lines(serial)
+    put_at = serial.find("k40_mem: LIVE step=11 us=")
+    down_at = serial.find("k40_mem: LIVE step=14 us=")
+    wanted = [(0, 1), (0, 2), (0, 3), (1, 1), (1, 2), (1, 4), (1, 3), (2, 1), (2, 2), (2, 3)]
+    if [(row[0], row[1]) for row in rows] != wanted or put_at < 0 or down_at < put_at:
+        raise ValueError("recovery samples or groups out of order")
+    if any(row[4] > put_at for row in rows[:3]) or any(not put_at < row[4] < down_at for row in rows[3:7]) \
+            or any(row[4] < down_at for row in rows[7:]):
+        raise ValueError("recovery samples are not in their places around GP_PUT and the teardown")
+    if [len(row[3]) for row in rows] != [7, 3, 2, 7, 3, 5, 2, 7, 3, 2] or rows[2][3] != [0, 0]:
+        raise ValueError("recovery sample values differ")
+    if rows[0][3][2] or rows[3][3][2] != 1 or rows[7][3][2] or rows[7][3][6] & 0x80000000:
+        raise ValueError("fault not pending at the sample, or pending or GR busy after the recovery")  # fifo/gf100.c:723; fifo/gk104.c:206.
+    unit, inst, low, high, kind = rows[5][3]
+    qmd = layout["Qmd"]["va"]
+    # fifo/gf100.c:699-716: instance, address, type; unit 0 GR (fifo/gk104.c:474); write, reason 6 RO_VIOLATION.
+    if (unit, inst, low | (high << 32)) != (0, byrole[10] >> 12, qmd) or not kind & 0x80 or kind & 0xF != 6:
+        raise ValueError("fault record is not the write of GR to the read-only descriptor")
+    if serial.count("k40_mem: GR_OBSERVE samples=1 get=1 put=1 bar=0 fault_units=1") != 1:
+        raise ValueError("recovery observe report differs")
+    line = re.findall(r"^k40_mem: GR_RECOVER recovered=1 pending=0 engine=([0-9a-f]+)\r?$", serial, re.M)
+    if len(line) != 1 or int(line[0], 16) & 0x80000000 or int(line[0], 16) != rows[7][3][6]:
+        raise ValueError("recovery report differs")
+    return dict(fault=dict(unit=unit, instance=inst, address=qmd, type=kind), engine_after=int(line[0], 16), recovered=True)
+
+
+def gr_phase(serial, events, byrole, mode, aligned=False, printed=False, observed=False, registers=False, unread=False,
+             unlisted=False, count=0, faulted=False, recovering=False):
+    """Validate an S3 run: program progress, context, submit, launch result, faults, teardown."""
+    lengths, _, layout = gr_program()
+    submit, launch = mode != "none", mode == "full"
+    flag, computed = "1" if submit else "0", "1" if launch and not recovering else "0"
+    fetched = "0" if unread else flag  # Report mode: GP_GET is not read.
+    if len(re.findall(
+        rf"^k40_mem: GR step=15 error=0 bound=1 started=1 golden=1 attached=1 submitted={flag} consumed={fetched} computed={computed} closed=1\r?$",
+        serial, re.M,
+    )) != 1:
+        raise ValueError("GR report missing or stage not complete")
+    # Live progress lines (gr::Progress, work/S3DIAG/PLAN.md): printed during the work,
+    # so before the GR report of drain(); no failure line (step 0); Done once.
+    live = [(int(m.group(1)), m.start()) for m in
+            re.finditer(r"^k40_mem: LIVE step=(\d+) us=\d+ a=[0-9a-f]+ b=[0-9a-f]+\r?$", serial, re.M)]
+    steps = [step for step, _ in live]
+    report_at = serial.find("k40_mem: GR step=")
+    if (
+        serial.count("k40_mem: LIVE") != len(live)
+        or not live
+        or 0 in steps
+        or steps.count(15) != 1
+        or (11 in steps) != submit
+        or (12 in steps) != launch
+        or any(at > report_at for _, at in live)
+    ):
+        raise ValueError("live progress lines missing, malformed or with a failure")
+    order = ("fifo", "bind", "gating", "start", "golden", "attach")
+    total = sum(lengths[name] for name in order)
+    program = re.findall(r"^k40_mem: GR_PROGRAM ops=(\d+) reads=\d+ writes=\d+ guard=(\d+)/(\d+) total_us=(\d+)\r?$", serial, re.M)
+    closer = (7, lengths["recover"]) if recovering else (6, lengths["teardown"])  # src/gr/Guard.cpp stages.
+    if len(program) != 1 or (int(program[0][0]), int(program[0][1]), int(program[0][2])) != (total, *closer):
+        raise ValueError("GR program progress or guard position differs")
+    if serial.count("k40_mem: GR_FAILURE runner=0 index=0 addr=0 value=0 expected=0 closing=0 closing_index=0") != 1:
+        raise ValueError("GR failure record")
+    got = re.findall(r"^k40_mem: GR_GET after=(\d+)/(\d+) polls=\d+ us=\d+ result_polls=\d+ result_us=\d+ wrong=(\d+) first=\d+ value=[0-9a-f]+\r?$", serial, re.M)
+    wrong = 1024 if recovering else 0  # s3x: no element written (launch.py ELEMENTS).
+    if len(got) != 1 or tuple(map(int, got[0])) != ((1, 1, wrong) if submit and not unread else (0, 0, 0)):
+        raise ValueError("GP_GET progress or result compare differs")
+    status = re.findall(
+        rf"^k40_mem: GR_STATUS mc=[0-9a-f]+ fifo=([0-9a-f]+) mmu={1 if recovering else 0} pbdma=0 hce=0 state=[0-9a-f]+ gr=0 trap=0 fecs=0 engine=([0-9a-f]+)\r?$",
+        serial, re.M,
+    )
+    if len(status) != 1 or int(status[0][0], 16) & (0x2FFFFFFF if recovering else 0x3FFFFFFF):
+        raise ValueError("GR, FECS, FIFO or MMU fault status")  # fifo/gk104.c:654-718; gr/gf100.c:1414,1570.
+    image = re.findall(r"^k40_mem: GR_IMAGE ((?:[0-9a-f]+ ){7}[0-9a-f]+)\r?$", serial, re.M)
+    if len(image) != 1:
+        raise ValueError("golden image words missing")
+    # Print mode: the whole image in IMG lines before the report, then one live line of
+    # the golden step with the count of words not zero and the sum of all words.
+    lines = image_lines(serial)
+    summary = [(int(a, 16), int(b, 16)) for a, b in
+               re.findall(r"^k40_mem: LIVE step=9 us=\d+ a=([0-9a-f]+) b=([0-9a-f]+)\r?$", serial, re.M)]
+    if printed:
+        words = [word for row in lines.values() for word in row]
+        blocks = [(e[2], e[3]) for e in events if e[0] >= 8 and e[6] == 4 and e[7] == 27 and e[2] >= 0x80000 and e[3] > 32]
+        wanted = [(0x80000 + at, min(16384, IMAGE_BYTES - at)) for at in range(0, IMAGE_BYTES, 16384)]
+        if (
+            len(summary) != 2
+            or summary[1] != (sum(1 for word in words if word), sum(words) & 0xFFFFFFFF)
+            or lines.get(0, [0] * 8) != [int(word, 16) for word in image[0].split()]
+            or serial.rfind("k40_mem: IMG") > serial.find("k40_mem: GR step=")
+            or blocks != wanted
+        ):
+            raise ValueError("printed golden image, its summary line or its reads differ")
+    elif lines:
+        raise ValueError("golden image lines in a stage that does not print the image")
+    if not recovering and "k40_mem: GR_RECOVER" in serial:
+        raise ValueError("recovery line in a stage without the recovery")
+    if observed:
+        observation = observe_phase(serial, events)
+    elif registers:
+        observation = registers_phase(serial, events)
+    elif unread:
+        observation = report_phase(serial, events)
+    elif unlisted:
+        observation = no_list_phase(serial, events, count)
+    elif faulted:
+        observation = fault_phase(serial, events)
+    elif recovering:
+        observation = recover_phase(serial, byrole, layout)
+    elif "k40_mem: OBS" in serial or "k40_mem: GR_OBSERVE" in serial:
+        raise ValueError("observe lines in a stage that does not observe")
+    chan = [e for e in events if e[0] >= 8]
+    stages, done = [(e[2], e[3], e[8]) for e in chan if e[6] == 8], 0
+    expected = []
+    for number, name in enumerate(order):
+        done += lengths[name]
+        expected.append((number, done, 1))
+    if stages != expected:
+        raise ValueError("program stage records differ")
+    # src/gr/Compute.cpp listReads(): the LTC entries 34 and 35 written again after the golden stage.
+    if [(e[2], e[3]) for e in chan if e[6] == 3 and e[7] == 28 and e[8] == 2] != [(0x110, 8), (0x118, 8)]:
+        raise ValueError("LTC list entries not written after the golden stage")
+    context = 0x80000000 | (byrole[5] >> 12)  # bar/gf100.c:56-58.
+    writes = [(e[2], e[3]) for e in chan if e[6] == 1 and e[2] not in (WINDOW, FLUSH)]
+    wanted = [(PDB, (byrole[3] >> 12) << 4), (INVALIDATE, 0x80000005), (CONTEXT, context)]
+    wanted += [(GP_PUT, 1)] if submit else []
+    wanted += [(CONTEXT, context & 0x7FFFFFFF)]
+    if writes != wanted:
+        raise ValueError("journaled mapping, GP_PUT or BAR1 context writes differ")
+    if launch:
+        blocks = [e for e in chan if e[6] == 4 and e[7] == 23 and e[3] == 256]
+        if len(blocks) != 16 or [e[2] for e in blocks] != [index * 256 for index in range(16)]:
+            raise ValueError("output buffer was not read completely")
+    return dict(
+        program_ops=total, guard_position=[6, lengths["teardown"]], golden_image_words=image[0].split(),
+        total_us=int(program[0][3]), launch=launch, entry=mode,
+        context_va=layout["ChanContext"]["va"] if aligned else layout["Context"]["va"] + 0x80000,
+        records=len(GR_ROLES), aligned=aligned,
+        image=dict(lines=len(lines), words_not_zero=summary[1][0], sum=summary[1][1]) if printed else None,
+        observe=observation if observed or registers or unread or unlisted or faulted or recovering else None,
+    )
+
+
+def channel_phase(serial, events, byrole, copy=False, require_idle=True):
     """Validate phases 8-14: exact write order, NOP progress, faults, teardown."""
     line = re.findall(
         r"^k40_mem: CHANNEL runlist=(\d+) pbdma=(\d+) mask=([0-9a-f]+) runm=([0-9a-f]+) bound=1 closed=1 progress=1 error=0 step=24\r?$",
@@ -277,7 +762,7 @@ def channel_phase(serial, events, byrole):
     chan = [e for e in events if e[0] >= 8]
     if [e[3] for e in chan if e[0] == 8 and e[2] == MC and e[6] == 0] != [0]:
         raise ValueError("channel baseline MC dirty")
-    image = channel_image(byrole)
+    image = channel_image(byrole, copy)
     patches = [(e[0], e[7], e[2], e[3]) for e in chan if e[6] == 5]
     expected = [(9, role, offset, value) for role in PB_ROLES for offset, value in image[role]]
     expected.append((10, 4, 0, pte(byrole[11], True)))  # BAR1 VA 0 -> USERD page.
@@ -285,8 +770,19 @@ def channel_phase(serial, events, byrole):
         raise ValueError("channel image serialization differs")
     bulk = [(e[6], e[7], e[8], e[3]) for e in chan if e[6] in (3, 4)]
     sizes = {8: 65536, 9: 262144}
-    if bulk != [(op, role, 0, sizes.get(role, 4096)) for role in PB_ROLES for op in (3, 4)]:
-        raise ValueError("channel zeroing protocol differs")
+    zeroed = PB_ROLES + (COPY_ROLES if copy else ())
+    expectedBulk = [(op, role, 0, sizes.get(role, 4096)) for role in zeroed for op in (3, 4)]
+    if copy:
+        # Source pattern written and verified before the bind; destination
+        # compared with the source pattern after the copy (image 1, Upload.cpp).
+        expectedBulk += [(3, 15, 1, COPY_BYTES), (4, 15, 1, COPY_BYTES), (4, 16, 1, COPY_BYTES)]
+    if bulk != expectedBulk:
+        raise ValueError("channel zeroing/pattern/compare protocol differs")
+    if copy:
+        final = [i for i, e in enumerate(chan) if e[6] == 4 and e[7] == 16 and e[8] == 1]
+        put = [i for i, e in enumerate(chan) if e[6] == 1 and e[2] == GP_PUT and e[3] == 2]
+        if len(final) != 1 or len(put) != 1 or final[0] < put[0]:
+            raise ValueError("destination compare is not after the copy submission")
     last, writes = {}, []
     for e in chan:
         if e[6] == 0:
@@ -314,6 +810,7 @@ def channel_phase(serial, events, byrole):
         (12, 0x2270, lambda r: byrole[14] >> 12),  # gk104.c:446.
         (12, 0x2274, lambda r: (rl << 20) | 1),  # gk104.c:447.
         (13, GP_PUT, lambda r: 1),  # nouveau_dma.c:92.
+        *([(13, GP_PUT, lambda r: 2)] if copy else []),  # second entry, S2 only.
         (14, state, lambda r: r[state] | 0x800),  # gk104.c:44.
         (14, 0x2634, lambda r: CHID),  # gf100.c:43.
         (14, 0x2270, lambda r: byrole[14] >> 12),
@@ -333,7 +830,18 @@ def channel_phase(serial, events, byrole):
     for phase, address in ((12, 0x2284 + rl * 8), (14, 0x2634), (14, 0x2284 + rl * 8)):
         if not any(e[6] == 2 and e[0] == phase and e[2] == address and not e[3] & 0x100000 for e in chan):
             raise ValueError("runlist/preempt completion poll missing")  # gk104.c:426; gf100.c:372.
-    return dict(runlist=rl, pbdma=pb, pbdma_mask=mask, writes=len(writes))
+    result = dict(runlist=rl, pbdma=pb, pbdma_mask=mask, writes=len(writes))
+    if copy:
+        engines = re.findall(
+            r"^k40_mem: ROUTE type=1 instance=0 address=[0-9a-f]+ fault=\S+ runlist=\S+ engine=1/(\d+)\r?$", serial, re.M
+        )
+        if len(engines) != 1:
+            raise ValueError("CE0 engine ID missing")  # top/gk104.c:55-56.
+        result["copy"] = copy_phase(serial, chan, int(engines[0]), require_idle)
+        result["copy"]["engine_idle_required"] = require_idle
+    elif "k40_mem: COPY" in serial:
+        raise ValueError("copy report in an S1 run")
+    return result
 
 
 def reads_of(events, address, phase):
@@ -341,7 +849,20 @@ def reads_of(events, address, phase):
 
 
 def memory_final(serial, suite, request):
-    marker = "k40_mem: PASS S1_CHANNEL_NOP faults=0 upload=0 mapper=0 closure=2 allocations=14 journal_overflow=0"
+    diagnostic = suite.get("stage") == COPY_DIAGNOSTIC
+    copy = suite.get("stage") == COPY_STAGE or diagnostic
+    gr = suite.get("stage") in GR_STAGES
+    mode, gr_marker = GR_STAGES.get(suite.get("stage"), ("none", ""))
+    launch = mode == "full"
+    marker = (
+        f"k40_mem: PASS {'S2_COPY_DIAGNOSTIC' if diagnostic else 'S2_COPY'} faults=0 upload=0 mapper=0 closure=2 allocations=16 journal_overflow=0"
+        if copy
+        else "k40_mem: PASS S1_CHANNEL_NOP faults=0 upload=0 mapper=0 closure=2 allocations=14 journal_overflow=0"
+    )
+    if gr:
+        marker = f"k40_mem: PASS {gr_marker} faults=0 upload=0 mapper=0 closure=2 allocations=27 journal_overflow=0"
+    if serial.count("k40_mem: PASS ") != 1:
+        raise ValueError("pass marker of another stage or repeated")
     if serial.count(marker) != 1 or serial.count("K40-MEM-END") != 1:
         raise ValueError("memory final pass/closure missing or repeated")
     owner = struct.unpack_from("<Q", request, 104)[0]
@@ -375,9 +896,34 @@ def memory_final(serial, suite, request):
     generations = {1: 1, 2: 1, 3: 2, 4: 6, 5: 3, 6: 3, 7: 3,
                    8: 2, 9: 3, 10: 15, 11: 1, 12: 2, 13: 2, 14: 2}
     roles = (1, 2, 6, 7, 3, 4, 5, *PB_ROLES)
+    if copy:
+        # Two more table entries, one more GPFIFO entry, six more push words;
+        # source: zero then pattern; destination: zero only (never written by the host again).
+        roles += COPY_ROLES
+        sizes.update({15: 4096, 16: 4096})
+        generations.update({9: 5, 12: 3, 13: 8, 15: 2, 16: 1})
+    flags = {}
+    if gr:
+        # Directory and table: zero and one bulk store. Instance: zero, 14 words, two
+        # context-pointer updates. One GPFIFO entry, the push words, one runlist entry.
+        from tools.gr import launch as images  # layout sizes, from the generator.
+
+        layout = images.layout()
+        roles += GR_ROLES
+        sizes.update({17 + index: region["bytes"] for index, region in enumerate(layout.values())})
+        generations.update({8: 2, 9: 2, 10: 17, 11: 1, 12: 2, 13: 2, 14: 2,
+                            17: 2, 19: 1, 20: 2, 21: 2, 22: 2, 23: 1, 27: 2, 28: 4, 29: 1})
+        # 28 (register list): zero, the list, then the two LTC entries again after the golden stage
+        # (src/gr/Compute.cpp listReads, engine/gr/ctxgk104.c:863-872).
+        if suite.get("stage") in GR_ALIGNED:
+            # Instance: one more pointer update (cleared after generation). Generation memory:
+            # zero only. Channel context: zero, the image copy in 16 KiB blocks, the list words.
+            generations.update({10: 18, 27: 1, 29: 1 + -(-IMAGE_BYTES // 16384) + 1})
+        generations.update({role: 0 for role in GR_UNWRITTEN})
+        flags = {role: (0, 0, 0) for role in GR_UNWRITTEN}
     cursor = 256 * 1024 + 4096
     byrole = {}
-    if len(allocations) != 14:
+    if len(allocations) != len(roles):
         raise ValueError("allocation ledger incomplete")
     for index, record in enumerate(allocations, 1):
         ident, role, address, size, generation, staged, referenced, retained = record
@@ -387,7 +933,7 @@ def memory_final(serial, suite, request):
             or address != cursor
             or size != sizes[role]
             or generation != generations[role]
-            or (staged, referenced, retained) != (1, 1, 1)
+            or (staged, referenced, retained) != flags.get(role, (1, 1, 1))
         ):
             raise ValueError("allocation extent/generation/retention differs")
         cursor += size
@@ -399,7 +945,7 @@ def memory_final(serial, suite, request):
             int(value, 16 if index in (2, 3) else 10)
             for index, value in enumerate(match.groups())
         )
-        if event[1] or event[0] > 14 or event[6] > 7:
+        if event[1] or event[0] > 14 or event[6] > (8 if gr else 7):
             raise ValueError("memory error/unknown diagnostic event")
         events.append(event)
     if not events or len(events) > 4096:
@@ -478,9 +1024,91 @@ def memory_final(serial, suite, request):
     if witnesses != expectedWitness:
         raise ValueError("BAR1 page/remap/readback witnesses differ")
 
-    channel = channel_phase(serial, events, byrole)
+    if gr:
+        if "k40_mem: COPY" in serial:
+            raise ValueError("copy report in an S3 run")
+        scopes = dict(
+            none="S3a: GR engine started, golden context generated and attached to one channel of the GR runlist, no fault, clean teardown; no compute job",
+            bind="S3c: as S3a, then the compute object bind (2 push words) consumed, GP_GET 0->1, no fault, clean teardown; no launch",
+            setup="S3d: as S3a, then the compute set-up (100 push words, no launch) consumed, GP_GET 0->1, no fault, clean teardown; no launch",
+            full="S3: one compute job on the card, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
+            "no fault, clean teardown; no host DMA payload proof",
+        )
+        faulted = suite.get("stage") in GR_FAULT
+        recovering = suite.get("stage") in GR_RECOVER
+        if recovering:
+            scopes["full"] = ("S3x: as S3v with the launch descriptor read-only on purpose: the GR MMU fault of s3v, its record, "
+                              "then the recovery program in the teardown (block, clear, stop, GR reset, empty runlist, allow, "
+                              "unbind); after it no fault pending and GR not busy, clean teardown; no compute result")
+        if suite.get("stage") == "S3Y_A7_BAR1_GR_COMPUTE_REPEAT":
+            scopes["full"] = ("S3y: repeat of S3w with the current driver; one compute job, out[i] = in[i] + 1 for 1024 "
+                              "elements, every element checked by slow-window readback, no fault, clean teardown; "
+                              "no host DMA payload proof")
+        elif suite.get("stage") == "S3W_A7_BAR1_GR_COMPUTE_QMD":
+            scopes["full"] = ("S3w: as S3v with the launch descriptor mapped writable, and before each result read the MMU fault "
+                              "status (no fault pending); one compute job, out[i] = in[i] + 1 for 1024 elements, every element "
+                              "checked by slow-window readback, no fault, clean teardown; no host DMA payload proof")
+        elif faulted:
+            scopes["full"] = ("S3v: as S3u, and before each result read the MMU fault status (no fault pending); one compute "
+                              "job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
+                              "no fault, clean teardown; no host DMA payload proof")
+        if suite.get("stage") == "S3U_A7_BAR1_GR_COMPUTE_ALIGNED":
+            scopes["full"] = ("S3u: as S3e with the whole register list (the LTC entries written after the golden stage), then one "
+                              "compute job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, "
+                              "no fault, clean teardown; no host DMA payload proof")
+        printed = suite.get("stage") in GR_PRINT
+        if printed:
+            scopes["none"] = ("S3g: as S3a, and the golden image read by slow window and printed; "
+                              "the comparison with the Linux reference image is tools/gr/golden.py; no compute job")
+        observed = suite.get("stage") in GR_OBSERVE
+        if observed:
+            scopes["bind"] = ("S3o: as S3e, and after GP_PUT the progress read through BAR0 status registers and the slow window, "
+                              "one BAR1 read of GP_GET as the last action; object bind consumed, GP_GET 0->1, no fault, clean teardown; no launch")
+        registers = suite.get("stage") in GR_REGISTERS
+        if registers:
+            scopes["bind"] = ("S3p: as S3e, and after GP_PUT status registers only until the teardown ended, then one slow-window "
+                              "read of GP_GET; object bind consumed, GP_GET 0->1, no fault, clean teardown; no launch")
+        unread = suite.get("stage") in GR_REPORT
+        if unread:
+            scopes["bind"] = ("S3q: as S3e, and after GP_PUT status registers only, also after the teardown; GP_GET is not read; "
+                              "no fault, engine idle, clean teardown; no proof that the entry was fetched; no launch")
+        unlisted = suite.get("stage") in GR_NO_LIST
+        if unlisted:
+            scopes["bind"] = (f"S3r/S3s: as S3q, with list count {GR_NO_LIST[suite['stage']]} (that prefix of the register list at "
+                              "the load); after the teardown one slow-window read of GP_GET; object bind consumed, GP_GET 0->1, "
+                              "no fault, clean teardown; no launch")
+        return dict(
+            scope=scopes[mode],
+            gr=gr_phase(serial, events, byrole, mode, suite.get("stage") in GR_ALIGNED, printed, observed, registers, unread,
+                        unlisted, GR_NO_LIST.get(suite.get("stage"), 0), faulted, recovering),
+            owner=owner,
+            allocations=[dict(id=r[0], role=r[1], physical=r[2], bytes=r[3], generation=r[4]) for r in allocations],
+            events=len(events),
+            closure="owned BAR1 disabled; channel unbound; GR engine left started; all storage retained until reviewed guest/VFIO end",
+            S1_complete=False,
+            S2_complete=False,
+            S3_golden_complete=True,
+            S3_image_printed=printed,
+            S3_observed=observed or registers or unread or unlisted,
+            S3_register_list=not unlisted or GR_NO_LIST.get(suite.get("stage")) == 36,
+            S3_list_count=GR_NO_LIST.get(suite.get("stage")) if unlisted else None,
+            S3_bind_complete=mode != "none" and not unread,
+            S3_setup_complete=mode in ("setup", "full"),
+            S3_complete=launch and not recovering,
+            S3_recovered=recovering,
+        )
+    if "k40_mem: GR" in serial:
+        raise ValueError("GR report in an S1 or S2 run")
+    channel = channel_phase(serial, events, byrole, copy, not diagnostic)
     return dict(
-        scope="S1: one host NOP consumed on one CE0-runlist channel (GP_GET 0->1), no fault, clean teardown; no DMA payload proof",
+        scope=(
+            "S2: after the S1 NOP, one 4096-byte copy between two owned VRAM pages on the same CE0-runlist channel, "
+            "destination equal to source by slow-window readback, no fault, clean teardown; no host DMA payload proof"
+            if copy
+            else "S1: one host NOP consumed on one CE0-runlist channel (GP_GET 0->1), no fault, clean teardown; no DMA payload proof"
+        ),
+        S2_complete=copy and not diagnostic,
+        S2_diagnostic_complete=diagnostic,
         channel=channel,
         owner=owner,
         allocations=[

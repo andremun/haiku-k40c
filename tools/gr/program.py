@@ -1,0 +1,397 @@
+#!/usr/bin/env python3
+# Copyright 2026 Mario Andres Munoz.
+# Distributed under the terms of the MIT License.
+"""Record the verified GR host model as an op program for the native driver.
+
+The model (tools/gr/model.py) runs once against a recorder. Each access becomes
+one op. Values that only the running driver knows (buffer addresses, register
+contents) stay symbolic: they are slots. The result is three stages (power
+gating off, engine start, golden context) and the per-channel patch list.
+
+  program.py --check         run the recorded program against the Linux trace
+  program.py --output DIR    write ProgramData.cpp and gr_trace.txt (test input)
+
+The generated C++ is build output. It is not stored in the repository: it holds
+the Nouveau register tables and the four microcode arrays (MIT, notice kept).
+HOST_ONLY: a trace match is not card evidence.
+"""
+import argparse
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import launch
+import model
+import oracle
+import tables
+
+KINDS = ("Write", "WriteSlot", "Read", "Expect", "Mask", "MaskSlot", "Poll", "WaitIdle", "Delay", "Hook")
+INPUTS = ("Instance", "PagePool", "Bundle", "Attrib", "MmuWrite", "MmuRead", "Runlist")
+NONE = 0xFF
+# Values that the reference run read on this card (KNOWN, trace lines 616417-616433,
+# 616554-616557, 618711). The driver stops when the card answers differently.
+KNOWN = {0x409604: 0x00060005, 0x40912C: 0x00081103, 0x409108: 0x20402050,
+         0x41A12C: 0x00081103, 0x41A108: 0x20201028, 0x409804: 0x0004EA00}
+for _gpc in range(5):
+    KNOWN[model.gpc_unit(_gpc, 0x2608)] = 0x00040003
+    KNOWN[model.gpc_unit(_gpc, 0x0C30)] = 0x5
+    KNOWN[model.gpc_unit(_gpc, 0x0C34)] = 0x2
+
+
+class Slot:
+    """A run-time value: ((slot >> shift) & and) | or, 32 bits."""
+
+    def __init__(self, index, shift=0, and_=0xFFFFFFFF, or_=0):
+        self.index, self.shift, self.and_, self.or_ = index, shift, and_, or_
+
+    def __rshift__(self, count):
+        if self.and_ != 0xFFFFFFFF or self.or_:
+            raise ValueError("shift after mask is not supported")
+        return Slot(self.index, self.shift + count)
+
+    def __and__(self, bits):
+        if self.or_:
+            raise ValueError("and after or is not supported")
+        return Slot(self.index, self.shift, self.and_ & bits)
+
+    def __or__(self, bits):
+        return Slot(self.index, self.shift, self.and_, self.or_ | bits)
+
+    __ror__ = __or__
+
+
+class Recorder:
+    def __init__(self):
+        self.ops, self.patches, self.slots = [], [], len(INPUTS)
+        self.falcon = {}  # Data-segment model of the two Falcons for the csdata reads.
+
+    def emit(self, kind, addr=0, a=0, b=0, slot=NONE, shift=0):
+        self.ops.append((kind, slot, shift, addr & 0xFFFFFFFF, a & 0xFFFFFFFF, b & 0xFFFFFFFF))
+
+    def new(self):
+        if self.slots >= 64:
+            raise ValueError("too many slots")
+        self.slots += 1
+        return Slot(self.slots - 1)
+
+    def data_port(self, addr):
+        base = addr & ~0xFFF
+        return self.falcon.setdefault(base, dict(pointer=0, flags=0, words={}))
+
+    def rd(self, addr):
+        if addr & 0xFFF == 0x1C4 and (addr & ~0xFFF) in (0x409000, 0x41A000):
+            port = self.data_port(addr)
+            value = port["words"].get(port["pointer"], 0)
+            if port["flags"] & 0x02000000:  # Read with increment (gf100.c:1716).
+                port["pointer"] += 4
+            self.emit("Expect", addr, 0xFFFFFFFF, value)
+            return value
+        if addr in KNOWN:
+            self.emit("Expect", addr, 0xFFFFFFFF, KNOWN[addr])
+            return KNOWN[addr]
+        slot = self.new()
+        self.emit("Read", addr, slot=slot.index)
+        return slot
+
+    def wr(self, addr, value):
+        if isinstance(value, Slot):
+            self.emit("WriteSlot", addr, value.and_, value.or_, value.index, value.shift)
+            return
+        if addr & 0xFFF == 0x1C0 and (addr & ~0xFFF) in (0x409000, 0x41A000):
+            port = self.data_port(addr)
+            port["pointer"], port["flags"] = value & 0xFFFC, value & 0xFF000000
+        if addr & 0xFFF == 0x1C4 and (addr & ~0xFFF) in (0x409000, 0x41A000):
+            port = self.data_port(addr)
+            port["words"][port["pointer"]] = value & 0xFFFFFFFF
+            if port["flags"] & 0x01000000:  # Write with increment (falcon/v1.c:76).
+                port["pointer"] += 4
+        self.emit("Write", addr, value)
+
+    def patch(self, addr, value):
+        self.wr(addr, value)
+        self.patches.append((addr, value))
+
+    def mask(self, addr, clear, value):
+        if isinstance(value, Slot):
+            if value.shift or value.and_ != 0xFFFFFFFF or value.or_:
+                raise ValueError("masked slot expression is not supported")
+            self.emit("MaskSlot", addr, clear, slot=value.index)
+            return None
+        old = self.new()
+        self.emit("Mask", addr, clear, value, old.index)
+        return old
+
+    def poll(self, addr, bits, want):
+        self.emit("Poll", addr, bits, want)
+
+    def wait_idle(self):
+        self.emit("WaitIdle")
+
+    def delay(self, microseconds):
+        self.emit("Delay", a=microseconds)
+
+    def context_pointer(self):
+        self.emit("Hook", a=1)
+
+
+def record():
+    """Return dict(stage -> ops), the patch list and the slot count."""
+    inits, packs = tables.parse()
+    inputs = {name: Slot(index) for index, name in enumerate(INPUTS)}
+    stages, recorder = {}, Recorder()
+
+    def stage(name):
+        stages[name] = recorder.ops
+        recorder.ops = []
+
+    model.pgob(recorder)
+    stage("gating")
+    topology = model.Topology(recorder)
+    for reg in (0x40912C, 0x409108, 0x41A12C, 0x41A108):
+        recorder.rd(reg)
+    model.init(recorder, topology, inits, packs, inputs["MmuWrite"], inputs["MmuRead"])
+    if model.ctxctl(recorder, inits, packs) != KNOWN[0x409804]:
+        raise ValueError("context size")
+    stage("start")
+    recorder.patches = []
+    model.generate(recorder, topology, inits, packs, inputs["Instance"], inputs["PagePool"],
+                   inputs["Bundle"], inputs["Attrib"])
+    stage("golden")
+    return stages, recorder.patches, recorder.slots, topology
+
+
+CHID = 1  # no source: software channel number, as memstage/ChannelImage.h.
+CHAN, STATE = 0x800000 + CHID * 8, 0x800004 + CHID * 8  # fifo/gk104.c:44-77.
+GR_RUNLIST, GR_PBDMA = 0, 0  # KNOWN: reference run, channel on runlist 0 (mmiotrace 615175); 0x2390 = 1 (230517).
+FIRST_ROLE = 17  # memory/VramArena.h: Role::GrText.
+HOOK_CONTEXT, HOOK_ATTACH = 1, 2
+
+
+def fifo_stages():
+    """The channel sequences of S1 (memstage/Channel.cpp, HARDWARE_VERIFIED on the CE0
+    runlist) for one channel on the GR runlist, as ops. Sources as in Channel.cpp."""
+    op = lambda kind, addr=0, a=0, b=0, slot=NONE, shift=0: (kind, slot, shift, addr, a & 0xFFFFFFFF, b & 0xFFFFFFFF)
+    inputs = {name: index for index, name in enumerate(INPUTS)}
+    runlist = lambda: op("WriteSlot", 0x002270, 0xFFFFFFFF, 0, inputs["Runlist"], 12)  # fifo/gk104.c:446.
+    stop = [op("Mask", STATE, 0x800, 0x800),  # fifo/gk104.c:44.
+            op("Write", 0x002634, CHID), op("Poll", 0x002634, 0x00100000, 0)]  # fifo/gf100.c:43,372.
+    return dict(
+        fifo=[
+            op("Write", 0x000200, 0xFFFFFFFF),  # mc/nv04.c:120.
+            op("Expect", 0x000200, 0x00001000, 0x00001000),  # GR unit enabled.
+            op("Write", 0x000204, 0xFFFFFFFF),  # fifo/gf100.c:927-934.
+            op("Expect", 0x000204, 0xFFFFFFFF, 0x7),  # KNOWN: three PBDMAs (S1 run, mask 7).
+            op("Write", 0x000204, 0x7),  # fifo/gk104.c:739.
+            op("Expect", 0x002390, 0xFFFFFFFF, 0x1),  # fifo/gk104.c:392: PBDMA 0 serves runlist 0 only (trace 230517).
+            op("Expect", 0x002394, 0x1, 0x0),
+            op("Expect", 0x002398, 0x1, 0x0),
+            op("Mask", 0x002A04, 0xBFFFFFFF, 0xBFFFFFFF),  # fifo/gk104.c:740.
+            op("Mask", 0x04013C + GR_PBDMA * 0x2000, 0x10000100, 0),  # fifo/gf100.c:357.
+            op("Write", 0x002254, 0x10000000),  # fifo/gk104.c:749 USERD at BAR1 VA 0.
+        ],
+        bind=[
+            op("Expect", CHAN, 0xFFFFFFFF, 0), op("Expect", STATE, 0xFFFFFFFF, 0),
+            op("Write", STATE, GR_RUNLIST << 16),  # fifo/gk104.c:77.
+            op("WriteSlot", CHAN, 0xFFFFFFFF, 0x80000000, inputs["Instance"], 12),  # fifo/gk104.c:68.
+            op("Mask", STATE, 0x400, 0x400),  # fifo/gk104.c:52.
+            runlist(), op("Write", 0x002274, (GR_RUNLIST << 20) | 1),  # fifo/gk104.c:447.
+            op("Poll", 0x002284 + GR_RUNLIST * 8, 0x00100000, 0),  # fifo/gk104.c:426.
+        ],
+        # chan.c:41-69 nvkm_chan_cctx_bind: block, preempt, context pointer, allow (trace step 11).
+        attach=stop + [op("Hook", a=HOOK_ATTACH), op("Mask", STATE, 0x400, 0x400)],
+        teardown=stop + [runlist(), op("Write", 0x002274, GR_RUNLIST << 20),
+                         op("Poll", 0x002284 + GR_RUNLIST * 8, 0x00100000, 0), op("Write", CHAN, 0)],  # fifo/gk104.c:60.
+        # Teardown with a GR MMU fault pending (s3v: the preempt does not end). The recovery of
+        # Nouveau for one faulted channel on GK104 (fifo/gf100.c:534-610, runl.c:58-125): block the
+        # runlist, clear the fault, stop the channel, reset GR, commit the runlist without the
+        # channel, clear the runlist fault, allow the runlist. No runlist preempt on GK104 (no
+        # runl preempt function in fifo/gk104.c). Then the channel unbind of the teardown.
+        recover=[
+            op("Expect", 0x00259C, 0xFFFFFFFF, 0x1),  # fifo/gf100.c:723: only unit 0, GR (fifo/gk104.c:474).
+            op("Mask", 0x002630, 1 << GR_RUNLIST, 1 << GR_RUNLIST),  # fifo/gk104.c:418 block.
+            op("Write", 0x00259C, 0x1),  # fifo/gf100.c:728.
+            op("Mask", STATE, 0x800, 0x800),  # fifo/gk104.c:44 stop (runl.c:83 nvkm_chan_error).
+            op("Mask", 0x000200, 0x1000, 0),  # mc/base.c:74-77; mc/nv04.c:36; GR bit 12 (mc/gf100.c:31).
+            op("Mask", 0x000200, 0x1000, 0x1000),  # mc/nv04.c:44.
+            op("Expect", 0x000200, 0x1000, 0x1000),  # mc/nv04.c:45.
+            runlist(), op("Write", 0x002274, GR_RUNLIST << 20),  # runl.c:121; fifo/gk104.c:446-447.
+            op("Poll", 0x002284 + GR_RUNLIST * 8, 0x00100000, 0),  # runl.c:128; fifo/gk104.c:426.
+            op("Write", 0x00262C, 1 << GR_RUNLIST),  # runl.c:122-123; fifo/gk104.c:406.
+            op("Mask", 0x002630, 1 << GR_RUNLIST, 0),  # runl.c:126-127; fifo/gk104.c:412 allow.
+            op("Write", CHAN, 0),  # fifo/gk104.c:60.
+        ],
+    )
+
+
+class Interpreter:
+    """Reference semantics of the ops; the native Runner (src/gr/Runner.cpp) is the same."""
+
+    def __init__(self, io, slots, inputs):
+        self.io, self.slots = io, [0] * slots
+        self.slots[: len(inputs)] = inputs
+
+    def run(self, ops):
+        io, slots = self.io, self.slots
+        for kind, slot, shift, addr, a, b in ops:
+            if kind == "Write":
+                io.wr(addr, a)
+            elif kind == "WriteSlot":
+                io.wr(addr, ((slots[slot] >> shift) & a) | b)
+            elif kind == "Read":
+                slots[slot] = io.rd(addr)
+            elif kind == "Expect":
+                value = io.rd(addr)
+                if value & a != b:
+                    raise AssertionError(f"expected {b:x} at {addr:06x}, read {value:x}")
+            elif kind == "Mask":
+                old = io.rd(addr)
+                io.wr(addr, (old & ~a & 0xFFFFFFFF) | b)
+                if slot != NONE:
+                    slots[slot] = old
+            elif kind == "MaskSlot":
+                io.wr(addr, (io.rd(addr) & ~a & 0xFFFFFFFF) | (slots[slot] & 0xFFFFFFFF))
+            elif kind == "Poll":
+                model.poll(io, addr, a, b, "poll")
+            elif kind == "WaitIdle":
+                model.wait_idle(io)
+            elif kind in ("Delay", "Hook"):
+                pass
+            else:
+                raise ValueError(kind)
+
+
+def trace_inputs():
+    """The run data of the reference run, in INPUTS order."""
+    def last(block, wanted):
+        # The context register lists write some of these registers first with
+        # table values; the run data is the last write of the block.
+        return {addr: value for _, op, addr, value in oracle.accesses(*block) if op == "W" and addr in wanted}
+
+    start = last(oracle.START, (0x4188B4, 0x4188B8))
+    golden = last(oracle.GOLDEN, (0x409500, 0x40800C, 0x408004, 0x418810))
+    return [(golden[0x409500] & 0x7FFFFFFF) << 12, golden[0x40800C] << 8, golden[0x408004] << 8,
+            (golden[0x418810] & 0x7FFFFFFF) << 12, start[0x4188B4] << 8, start[0x4188B8] << 8, 0]
+
+
+def blocks():
+    """Trace accesses per stage, in the order the program meets them."""
+    start = oracle.accesses(*oracle.ONEINIT) + oracle.accesses(*oracle.START)
+    return dict(gating=oracle.accesses(*oracle.PGOB[0]), start=start,
+                golden=oracle.accesses(*oracle.GOLDEN, gr_only=True))
+
+
+def check():
+    stages, patches, slots, _ = record()
+    inputs, total = trace_inputs(), 0
+    interpreter = None
+    for name, rows in blocks().items():
+        replay = oracle.Replay(rows)
+        if interpreter is None:
+            interpreter = Interpreter(replay, slots, inputs)
+        interpreter.io = replay
+        interpreter.run(stages[name])
+        replay.done()
+        total += len(rows)
+    return stages, patches, slots, total
+
+
+def launch_cpp():
+    """Regions and images of the first compute job (tools/gr/launch.py)."""
+    regions, words, setup, _, _ = launch.check()
+    names = list(regions)
+    lines = [f"const unsigned chid={CHID};", "const Region regions[]={"]
+    for index, name in enumerate(names):
+        region = regions[name]
+        zero = name in ("Text", "Txc", "Aux", "Qmd", "Input", "Output", "Context", "MmioList", "ChanContext")  # Linux zeroes the context (ctxgf100.c:1474); small pages by choice.
+        # Linux maps these per-channel GR buffers with PRIV and writable (gf100.c:384,401,410,464;
+        # vmmgf100.c:259,315; trace line 618714). Used only by the aligned stages (work/S3DIAG).
+        priv = name in ("PagePool", "Bundle", "MmioList")
+        lines.append(f"{{{FIRST_ROLE + index},0x{region['bytes']:x},0x{region['va']:x}ull,{str(region['writable']).lower()},{str(zero).lower()},"
+                     f"{str(priv).lower()}}}, // {name}")
+    lines.append("};")
+    lines.append(f"const unsigned regionCount={len(names)};")
+    blobs = []
+
+    def blob(label, role, offset, data):
+        lines.append(f"static const uint32_t {label}[]={{" + ",".join(f"0x{word:x}" for word in data) + "};")
+        blobs.append(f"{{{role},0x{offset:x},{label},{len(data)}}},")
+
+    blob("pushWords", 13, 0, words)  # Role::Push.
+    blob("qmdWords", FIRST_ROLE + names.index("Qmd"), 0, launch.descriptor(regions).words)
+    aux = launch.aux_words(regions)
+    first = min(aux)
+    blob("auxWords", FIRST_ROLE + names.index("Aux"), first, [aux.get(offset, 0) for offset in range(first, max(aux) + 4, 4)])
+    code = launch.code()
+    blob("codeWords", FIRST_ROLE + names.index("Text"), launch.CODE_OFFSET,
+         [int.from_bytes(code[index:index + 4], "little") for index in range(0, len(code), 4)])
+    lines.append("const Blob blobs[]={")
+    lines.extend(blobs)
+    lines.append("};")
+    lines.append(f"const unsigned blobCount={len(blobs)};")
+    bind = 2  # header and class: the first method of nve4_compute.c:51-52.
+    if words[0] != launch.header(1, 1, 0) or words[1] != launch.CLASS or not bind < setup < len(words):
+        raise ValueError("push buffer prefixes differ from the S3DIAG plan")
+    lines.append(f"const unsigned imageBytes=0x{KNOWN[0x409804]:x}; // 0x409804 context size, KNOWN (trace 616433).")
+    lines.append(f"const unsigned pushBytes={len(words) * 4},pushBindBytes={bind * 4},pushSetupBytes={setup * 4},"
+                 f"elements={launch.ELEMENTS}; // work/S3DIAG/PLAN.md prefixes.")
+    lines.append(f"const uint32_t inputMultiplier=0x{0x9E3779B1:x}; // launch.py input_word().")
+    return lines
+
+
+def cpp(stages, patches, slots):
+    lines = [
+        "// Generated by tools/gr/program.py. Do not edit. Build output, not repository content.",
+        "// Register tables and microcode words come from the Linux kernel Nouveau driver,",
+        "// drivers/gpu/drm/nouveau/nvkm/engine/gr (MIT License; Copyright Red Hat Inc. and others;",
+        "// microcode: Copyright 2013 Red Hat Inc., author Ben Skeggs). Pin: reference/MANIFEST.md.",
+        '#include "gr/Program.h"',
+        "namespace k40::gr {",
+        f"const unsigned slotCount={slots};",
+    ]
+    for name, ops in stages.items():
+        lines.append(f"static const Op {name}Ops[]={{")
+        for kind, slot, shift, addr, a, b in ops:
+            lines.append(f"{{Kind::{kind},{slot},{shift},0x{addr:x},0x{a:x},0x{b:x}}},")
+        lines.append("};")
+        lines.append(f"const Stage {name}={{{name}Ops,{len(ops)}}};")
+    lines.append("const Patch patchList[]={")
+    for addr, value in patches:
+        if isinstance(value, Slot):
+            lines.append(f"{{0x{addr:x},{value.index},{value.shift},0x{value.and_:x},0x{value.or_:x}}},")
+        else:
+            lines.append(f"{{0x{addr:x},{NONE},0,0,0x{value & 0xFFFFFFFF:x}}},")
+    lines.append("};")
+    lines.append(f"const unsigned patchCount={len(patches)};")
+    lines.extend(launch_cpp())
+    lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
+def fixture():
+    """Trace accesses and run data for the native Runner host test."""
+    lines = ["I " + " ".join(f"{value:x}" for value in trace_inputs())]
+    for name, rows in blocks().items():
+        lines.append("S " + name)
+        lines.extend(f"{op} {addr:x} {value:x}" for _, op, addr, value in rows)
+    return "\n".join(lines) + "\n"
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--check", action="store_true")
+    group.add_argument("--output", type=Path)
+    args = parser.parse_args()
+    stages, patches, slots, total = check()
+    count = sum(len(ops) for ops in stages.values())
+    stages.update(fifo_stages())
+    if args.output:
+        args.output.mkdir(parents=True, exist_ok=True)
+        (args.output / "ProgramData.cpp").write_text(cpp(stages, patches, slots))
+        (args.output / "gr_trace.txt").write_text(fixture())
+    print(f"GR program: {count} ops in 3 stages, {len(patches)} patch entries, {slots} slots; "
+          f"{total} trace accesses reproduced by the recorded program, 0 differences; HOST_ONLY")
+
+
+if __name__ == "__main__":
+    main()

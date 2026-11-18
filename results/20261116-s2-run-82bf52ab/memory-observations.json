@@ -1,0 +1,142 @@
+{
+  "S1_complete": true,
+  "S2_complete": true,
+  "S2_diagnostic_complete": false,
+  "allocations": [
+    {
+      "bytes": 131072,
+      "generation": 1,
+      "id": 1,
+      "physical": 266240,
+      "role": 1
+    },
+    {
+      "bytes": 131072,
+      "generation": 1,
+      "id": 2,
+      "physical": 397312,
+      "role": 2
+    },
+    {
+      "bytes": 4096,
+      "generation": 3,
+      "id": 3,
+      "physical": 528384,
+      "role": 6
+    },
+    {
+      "bytes": 4096,
+      "generation": 3,
+      "id": 4,
+      "physical": 532480,
+      "role": 7
+    },
+    {
+      "bytes": 65536,
+      "generation": 2,
+      "id": 5,
+      "physical": 536576,
+      "role": 3
+    },
+    {
+      "bytes": 262144,
+      "generation": 6,
+      "id": 6,
+      "physical": 602112,
+      "role": 4
+    },
+    {
+      "bytes": 4096,
+      "generation": 3,
+      "id": 7,
+      "physical": 864256,
+      "role": 5
+    },
+    {
+      "bytes": 65536,
+      "generation": 2,
+      "id": 8,
+      "physical": 868352,
+      "role": 8
+    },
+    {
+      "bytes": 262144,
+      "generation": 5,
+      "id": 9,
+      "physical": 933888,
+      "role": 9
+    },
+    {
+      "bytes": 4096,
+      "generation": 15,
+      "id": 10,
+      "physical": 1196032,
+      "role": 10
+    },
+    {
+      "bytes": 4096,
+      "generation": 1,
+      "id": 11,
+      "physical": 1200128,
+      "role": 11
+    },
+    {
+      "bytes": 4096,
+      "generation": 3,
+      "id": 12,
+      "physical": 1204224,
+      "role": 12
+    },
+    {
+      "bytes": 4096,
+      "generation": 8,
+      "id": 13,
+      "physical": 1208320,
+      "role": 13
+    },
+    {
+      "bytes": 4096,
+      "generation": 2,
+      "id": 14,
+      "physical": 1212416,
+      "role": 14
+    },
+    {
+      "bytes": 4096,
+      "generation": 2,
+      "id": 15,
+      "physical": 1216512,
+      "role": 15
+    },
+    {
+      "bytes": 4096,
+      "generation": 1,
+      "id": 16,
+      "physical": 1220608,
+      "role": 16
+    }
+  ],
+  "bar1_context_writes": [
+    2147483859,
+    211
+  ],
+  "bar_flush_count": 17,
+  "channel": {
+    "copy": {
+      "bytes": 4096,
+      "dest_va": 268447744,
+      "engine": 4,
+      "engine_idle_required": true,
+      "source_va": 268443648
+    },
+    "pbdma": 2,
+    "pbdma_mask": 7,
+    "runlist": 4,
+    "writes": 24
+  },
+  "closure": "owned BAR1 disabled; channel unbound; all storage retained until reviewed guest/VFIO end",
+  "events": 521,
+  "invalidation_count": 3,
+  "owner": 15566519756286549213,
+  "scope": "S2: after the S1 NOP, one 4096-byte copy between two owned VRAM pages on the same CE0-runlist channel, destination equal to source by slow-window readback, no fault, clean teardown; no host DMA payload proof"
+}

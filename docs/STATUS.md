@@ -1,14 +1,12 @@
 # Status
 
-Current phase: ON HOLD since 2026-10-31 (docs/decisions/011-project-on-hold.md).
-Current task: none. No card run is approved.
-Last result: S1 PASSED on the card (2026-10-31). A native Haiku driver brought up
-the K40c (A7 POST), mapped VRAM through BAR1, and one channel on the CE0 runlist
-consumed one host NOP: GP_GET 0 -> 1 in 10 us, no fault, clean teardown. Evidence:
-results/20261031-batch1-a7-bar1-d198d424/ (HARDWARE_VERIFIED under Haiku).
-Not done: S2 (copy) and S3 (compute). Q7 and Q11 stay open.
-To resume: read decision 011, "To resume".
-Last updated: 2026-11-02
+Current phase: complete to the designed scope since 2026-11-18 (docs/decisions/013-s3-complete.md). No task is active and no card run is approved.
+Current task: none. Last task: S3DIAG, closed (work/S3DIAG/REPORT.md sections 1-29).
+Last result: S3 PASSED on the card twice (2026-11-18, `s3w` results/20261118-s3w-run-c25fd943/ and repeat `s3y` results/20261118-s3y-run-27b46ec2/): one compute job, out[i] = in[i] + 1 over 1024 elements, every element right, clean teardown, no AER. The teardown recovers from a GR MMU fault (`s3x`). Earlier: S2 passed 2026-11-16 (work/LADDER/FINDINGS.md).
+Earlier: S1 PASSED on the card (2026-10-31, results/20261031-batch1-a7-bar1-d198d424/).
+S3 (compute job) passed twice on the card (`s3w`, `s3y`, 2026-11-18). Q7 and Q11 stay open. The teardown recovers from a GR MMU fault (`s3x` passed on the card 2026-11-18, work/S3DIAG/REPORT.md section 28). Q7 and Q11 are outside the completed scope; the proposed plan is in docs/OPEN_QUESTIONS.md (not approved).
+Work place: T7610, branch `ccr-5d33feda-7ni61l`, full check scope. The card 04:00.0 stays on vfio-pci (boot-time reservation) until `detach`.
+Last updated: 2026-11-18
 
 Setup from 2026-10-23: task work with Claude Code or Codex (cloud models). Driver card: K40c 0000:04:00.0. The K40c at 0000:03:00.0 runs `llm-server` in mode `one`. See `docs/decisions/003-end-local-agent-experiment.md`.
 
@@ -144,3 +142,8 @@ A cardless result is not K40c evidence.
 | S1CHANNEL2 run | STOPPED (NOP not consumed) | 2026-10-31 | All channel steps and teardown ran; GP_GET 0, GP_PUT 1; no fault. Likely missing post-POST unit enable (mc/nv04.c:120). No retry. |
 | S1CHANNEL3 run | **S1 PASS** | 2026-10-31 | GP_GET 0->1 in 10 us on channel 1, runlist 4 (CE0), PBDMA 2; no fault; clean teardown; validator accepted. See results/20261031-batch1-a7-bar1-d198d424/README.md. |
 | CI-CHECK | INCOMPLETE (local full check blocked) | 2026-11-02 | The missing memory host probe is built during `--check`; Actions fetches its pinned Ed25519 source. Targeted check passes. Local `make check` could not restore Mesa because GitLab was unreachable. New Actions runs require approval and have no jobs. See work/CI-CHECK/RESULT.md. |
+| S2COPY | DONE (host only; native build, package and review pending) | 2026-11-12 | Copy sequence of `nouveau_boa0b5.c` on the S1 channel, second GPFIFO entry, slow-window compare. Host test with independent copy-engine simulation, 4 source and 14 report mutations refused. No card run. See work/S2COPY/RESULT.md. |
+| S3GR, S3CTX | DONE (host only; link, package and review pending) | 2026-11-12 | Host model of power gating, engine start and golden context reproduces the reference trace (6,333 accesses, 0 differences); recorded op program and native runner. See work/S3GR/RESULT.md. |
+| S3LAUNCH | DONE for rungs 4 and 5 (host only; link, package, rehearsal and review pending) | 2026-11-12 | Launch images from Mesa, native stage with op-by-op guard, owner stages s3a and s3b, validator. Compute sequence SOURCE_ONLY. Rung 6 not prepared. See work/S3LAUNCH/RESULT.md. |
+| RTIOCTL | DONE (design proposal and header; no implementation) | 2026-11-13 | Q2 to Q5 answered in `docs/RUNTIME-INTERFACE.md`; shared header `src/runtime/k40_ioctl.h`. The device node is not implemented. |
+| LADDER (rung 1 jobs) | DONE (host; llvmpipe only) | 2026-11-13 | `tools/guest/files/ladder_jobs.c`: copy, `add_f32`, `mul_mat_vec_q8_0`, FP32 matrix product with time, bit-identical to the CPU on llvmpipe (inputs make every product exact, so FMA fusion does not change the bits). Run sheet: rung 1 output goes to `reference/linux-run-ladder/`. Not K40c evidence. |

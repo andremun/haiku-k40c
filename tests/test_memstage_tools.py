@@ -4,6 +4,7 @@
 import copy
 from pathlib import Path
 import struct
+import re
 import subprocess
 import tempfile
 import threading
@@ -194,6 +195,321 @@ class Tests(unittest.TestCase):
         for changed in mutations:
             with self.assertRaises(ValueError):
                 evidence.memory_final(changed, suite, raw)
+
+    def test_copy_trace_and_mutations(self):
+        raw, suite, unused = frame()
+        suite["plan"]["A7_guest_artifacts"] = {}
+        serial = subprocess.check_output(
+            [str(ROOT / "build/tests/test_mem_copy"), "--dump"], text=True, timeout=30
+        )
+        # An S2 report is refused as S1, and the S1 report as S2.
+        with self.assertRaises(ValueError):
+            evidence.memory_final(serial, suite, raw)
+        s1 = subprocess.check_output(
+            [str(ROOT / "build/tests/test_mem_channel"), "--dump"], text=True, timeout=30
+        )
+        suite["stage"] = evidence.COPY_STAGE
+        with self.assertRaises(ValueError):
+            evidence.memory_final(s1, suite, raw)
+        result = evidence.memory_final(serial, suite, raw)
+        self.assertTrue(result["S2_complete"])
+        self.assertEqual(result["channel"]["copy"]["engine"], 4)
+        self.assertEqual(len(result["allocations"]), 16)
+        mutations = [
+            serial.replace("copied=1", "copied=0"),
+            serial.replace("get=2/2", "get=1/2"),
+            serial.replace("launcherr=0", "launcherr=2"),
+            serial.replace("ce_intr=0", "ce_intr=4"),
+            serial.replace("COPY_STATUS engine=0", "COPY_STATUS engine=80000000"),
+            serial.replace("engine=1/4", "engine=1/5"),
+            serial.replace("offset=28c value=2", "offset=28c value=3"),
+            serial.replace("operation=4 role=16 detail=1", "operation=4 role=16 detail=0"),
+            serial.replace("operation=3 role=15 detail=1", "operation=3 role=15 detail=2"),
+            serial.replace("value=a0b520018000", "value=a0b520018001"),  # object bind header.
+            serial.replace("value=838680c000000001", "value=838280c000000001"),  # launch without FLUSH.
+            serial.replace("value=100000001000", "value=100000000ffc"),  # pitch or line length.
+            serial.replace("generation=8", "generation=7"),
+            serial.replace("allocations=16", "allocations=14"),
+        ]
+        for index, changed in enumerate(mutations):
+            with self.subTest(index=index):
+                self.assertNotEqual(changed, serial)
+                with self.assertRaises(ValueError):
+                    evidence.memory_final(changed, suite, raw)
+
+    def test_gr_trace_and_mutations(self):
+        raw, suite, unused = frame()
+        suite["plan"]["A7_guest_artifacts"] = {}
+        binary, fixture = str(ROOT / "build/tests/test_gr_compute"), str(ROOT / "build/tests/gr/gr_trace.txt")
+        compute = subprocess.check_output([binary, fixture, "--report"], text=True, timeout=300)
+        golden = subprocess.check_output([binary, fixture, "--report", "nolaunch"], text=True, timeout=300)
+        with self.assertRaises(ValueError):  # an S3 report is not an S1 report
+            evidence.memory_final(compute, suite, raw)
+        suite["stage"] = "S3B_A7_BAR1_GR_COMPUTE"
+        result = evidence.memory_final(compute, suite, raw)
+        self.assertTrue(result["S3_complete"])
+        self.assertEqual(len(result["allocations"]), 27)
+        with self.assertRaises(ValueError):  # a golden-only report is not a compute report
+            evidence.memory_final(golden, suite, raw)
+        mutations = [
+            compute.replace("computed=1", "computed=0"),
+            compute.replace("wrong=0", "wrong=1"),
+            compute.replace("after=1/1", "after=0/1"),
+            compute.replace("trap=0", "trap=1"),
+            compute.replace("fecs=0", "fecs=4"),
+            compute.replace("gr=0", "gr=100000"),
+            compute.replace("guard=6/", "guard=5/"),
+            compute.replace("golden=1", "golden=0"),
+            compute.replace("closing=0", "closing=1"),
+            compute.replace("offset=28c value=1", "offset=28c value=2"),
+            compute.replace("operation=8 role=0 detail=1", "operation=8 role=0 detail=0", 1),
+            compute.replace("role=23 physical", "role=22 physical"),
+            compute.replace("allocations=27", "allocations=14"),
+            compute.replace("PASS S3_COMPUTE", "PASS S3_GOLDEN"),
+        ]
+        for index, changed in enumerate(mutations):
+            with self.subTest(index=index):
+                self.assertNotEqual(changed, compute)
+                with self.assertRaises(ValueError):
+                    evidence.memory_final(changed, suite, raw)
+        suite["stage"] = "S3A_A7_BAR1_GR_GOLDEN"
+        result = evidence.memory_final(golden, suite, raw)
+        self.assertTrue(result["S3_golden_complete"])
+        self.assertFalse(result["S3_complete"])
+        with self.assertRaises(ValueError):
+            evidence.memory_final(compute, suite, raw)
+        # work/S3DIAG/PLAN.md: prefixes of the push buffer, and the live lines.
+        reports = {
+            mode: subprocess.check_output([binary, fixture, "--report", mode], text=True, timeout=300)
+            for mode in ("bind", "setup", "aligned", "image", "observe", "registers", "report", "nolist", "list34", "full",
+                         "alignedfull", "faultmode", "recover")
+        }
+        # s3u: the compute job with the channel set-up of s3e and the whole fixed list.
+        suite["stage"] = "S3U_A7_BAR1_GR_COMPUTE_ALIGNED"
+        job = reports["alignedfull"]
+        result = evidence.memory_final(job, suite, raw)
+        self.assertTrue(result["S3_complete"] and result["S3_register_list"] and result["gr"]["aligned"])
+        self.assertTrue(result["scope"].startswith("S3u:"))
+        for changed in (compute,  # not aligned
+                        job.replace("wrong=0", "wrong=1"),
+                        job.replace("computed=1", "computed=0"),
+                        re.sub(r"(role=28 physical=[0-9a-f]+ bytes=\d+ generation=)4", r"\g<1>2", job),
+                        job.replace("offset=118 value=8 polls=0", "offset=120 value=8 polls=0")):
+            self.assertNotEqual(changed, job)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        # s3v: s3u with the fault status before each result read; a pass has the baseline sample only.
+        suite["stage"] = "S3V_A7_BAR1_GR_COMPUTE_FAULT"
+        checked = reports["faultmode"]
+        result = evidence.memory_final(checked, suite, raw)
+        self.assertTrue(result["S3_complete"] and result["gr"]["aligned"] and result["gr"]["observe"]["baseline"])
+        self.assertTrue(result["scope"].startswith("S3v:"))
+        for changed in (job,  # no baseline sample
+                        checked.replace("fault_units=0", "fault_units=1"),
+                        checked.replace("k40_mem: OBS n=0 g=3", "k40_mem: OBS n=1 g=3"),
+                        checked.replace("wrong=0", "wrong=1")):
+            self.assertNotEqual(changed, checked)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        # s3w: as s3v with the launch descriptor writable (the same report form).
+        suite["stage"] = "S3W_A7_BAR1_GR_COMPUTE_QMD"
+        result = evidence.memory_final(checked, suite, raw)
+        self.assertTrue(result["S3_complete"] and result["scope"].startswith("S3w:"))
+        with self.assertRaises(ValueError):
+            evidence.memory_final(job, suite, raw)  # no baseline sample
+        # s3y: the repeat of s3w (the same report form).
+        suite["stage"] = "S3Y_A7_BAR1_GR_COMPUTE_REPEAT"
+        result = evidence.memory_final(checked, suite, raw)
+        self.assertTrue(result["S3_complete"] and result["scope"].startswith("S3y:"))
+        for changed in (job, reports["recover"], checked.replace("wrong=0", "wrong=1")):
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        # s3x: the s3v fault on purpose, its record, then the recovery in the teardown.
+        suite["stage"] = "S3X_A7_BAR1_GR_RECOVER"
+        recover = reports["recover"]
+        result = evidence.memory_final(recover, suite, raw)
+        self.assertTrue(result["S3_recovered"] and not result["S3_complete"] and result["scope"].startswith("S3x:"))
+        self.assertEqual(result["gr"]["observe"]["fault"]["type"], 0x1DC6)
+        for changed in (checked,  # no fault, no recovery
+                        recover.replace("recovered=1", "recovered=0"),
+                        recover.replace("GR_RECOVER recovered=1 pending=0", "GR_RECOVER recovered=1 pending=1"),
+                        recover.replace("c=5 0 124 13e40000 0 1dc6", "c=5 0 124 13e60000 0 1dc6"),  # another address
+                        recover.replace("c=5 0 124 13e40000 0 1dc6", "c=5 0 124 13e40000 0 1d46"),  # a read
+                        recover.replace("guard=7/", "guard=6/"),
+                        recover.replace("PASS S3_RECOVER", "PASS S3_COMPUTE")):
+            self.assertNotEqual(changed, recover)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        suite["stage"] = "S3W_A7_BAR1_GR_COMPUTE_QMD"
+        with self.assertRaises(ValueError):  # a recovery report is not a compute report
+            evidence.memory_final(recover, suite, raw)
+        # s3t: the whole list after the fix of its LTC entries.
+        suite["stage"] = "S3T_A7_BAR1_GR_BIND_FULL_LIST"
+        full = reports["full"]
+        result = evidence.memory_final(full, suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and result["S3_register_list"] and result["S3_list_count"] == 36)
+        for changed in (reports["list34"].replace("PASS S3_SHORT_LIST", "PASS S3_FULL_LIST"),  # 34 entries
+                        re.sub(r"(role=28 physical=[0-9a-f]+ bytes=\d+ generation=)4", r"\g<1>2", full),  # LTC entries not written again
+                        full.replace("offset=118 value=8 polls=0", "offset=120 value=8 polls=0")):
+            self.assertNotEqual(changed, full)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        # s3s: the first 34 list entries (all but the LTC pair).
+        suite["stage"] = "S3S_A7_BAR1_GR_BIND_LIST34"
+        list34 = reports["list34"]
+        result = evidence.memory_final(list34, suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and result["S3_list_count"] == 34)
+        for changed in (reports["nolist"].replace("PASS S3_NO_LIST", "PASS S3_SHORT_LIST"),  # count 0 in a 34 stage
+                        re.sub(r"(LIVE step=10 us=\d+ a=2) b=22", r"\g<1> b=24", list34)):  # whole list
+            self.assertNotEqual(changed, list34)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        # s3r: list count 0, one slow-window read after the teardown (work/S3DIAG/REPORT.md, approach H).
+        suite["stage"] = "S3R_A7_BAR1_GR_BIND_NO_LIST"
+        nolist = reports["nolist"]
+        result = evidence.memory_final(nolist, suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and not result["S3_register_list"] and result["gr"]["observe"]["gp_get_read"])
+        with self.assertRaises(ValueError):  # the s3q report has another form
+            evidence.memory_final(reports["report"].replace("PASS S3_REPORT", "PASS S3_NO_LIST"), suite, raw)
+        count = re.search(r"^k40_mem: LIVE step=10 us=\d+ a=2 b=0", nolist, re.M).group(0)
+        last = re.search(r"^k40_mem: OBS n=\d+ g=3 us=\d+ c=2 1 1", nolist.split("LIVE step=14")[1], re.M).group(0)
+        for changed in (nolist.replace(count, count[:-1] + "24", 1),  # list count not 0
+                        nolist.replace(count + "\n", "", 1),
+                        nolist.replace(last, last.replace("c=2 1 1", "c=2 0 1"), 1),  # GP_GET 0 at the end
+                        nolist.replace("bar=0 fault_units=0", "bar=1 fault_units=0"),
+                        nolist.replace("PASS S3_NO_LIST", "PASS S3_REPORT")):
+            self.assertNotEqual(changed, nolist)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        # s3q: no read of VRAM after GP_PUT, so GP_GET is not known (work/S3DIAG/REPORT.md, approach G).
+        suite["stage"] = "S3Q_A7_BAR1_GR_BIND_REPORT"
+        rep = reports["report"]
+        result = evidence.memory_final(rep, suite, raw)
+        self.assertTrue(result["S3_observed"] and not result["S3_bind_complete"] and not result["gr"]["observe"]["gp_get_read"])
+        self.assertEqual(result["gr"]["observe"]["samples"], 4)
+        with self.assertRaises(ValueError):  # the s3p report has another form
+            evidence.memory_final(reports["registers"].replace("PASS S3_REGISTERS", "PASS S3_REPORT"), suite, raw)
+        line = re.search(r"^k40_mem: OBS n=5 g=8 .*\n", rep, re.M).group(0)
+        last = re.search(r"^k40_mem: OBS n=5 g=1 us=\d+ c=7 0 0 0 0 0 0 0", rep, re.M).group(0)
+        for changed in (rep.replace(line, "", 1),  # the sample after the teardown not complete
+                        rep.replace(line, line.replace("c=7", "c=4"), 1),
+                        rep.replace(last, last[:-1] + "8001c001", 1),  # the engine busy at the end
+                        rep.replace("consumed=0", "consumed=1"),
+                        rep.replace("GR_OBSERVE samples=4 get=0", "GR_OBSERVE samples=4 get=1"),
+                        rep.replace("closed=1", "closed=0"),
+                        rep.replace("PASS S3_REPORT", "PASS S3_BIND")):
+            self.assertNotEqual(changed, rep)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        # s3p: registers only after GP_PUT until the teardown ended (work/S3DIAG/REPORT.md, approach F).
+        suite["stage"] = "S3P_A7_BAR1_GR_BIND_REGISTERS"
+        regs = reports["registers"]
+        result = evidence.memory_final(regs, suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and result["S3_observed"] and not result["gr"]["observe"]["bar1_read"])
+        self.assertEqual(result["gr"]["observe"]["samples"], 4)
+        with self.assertRaises(ValueError):  # the s3o report has another form
+            evidence.memory_final(reports["observe"].replace("PASS S3_OBSERVE", "PASS S3_REGISTERS"), suite, raw)
+        line = re.search(r"^k40_mem: OBS n=2 g=7 .*\n", regs, re.M).group(0)
+        last = re.search(r"^k40_mem: OBS n=4 g=1 us=\d+ c=7 0 0 0 0 0 0 0", regs, re.M).group(0)
+        early = re.search(r"^k40_mem: OBS n=4 g=9 .*\n", regs, re.M).group(0)
+        down = re.search(r"^k40_mem: LIVE step=14 .*\n", regs, re.M).group(0)
+        for changed in (regs.replace(line, "", 1),  # one group lost
+                        regs.replace(line, line.replace("g=7", "g=3").replace("c=7", "c=2"), 1),  # a slow-window group after GP_PUT
+                        regs.replace(last, last[:-1] + "8001c001", 1),  # the engine busy at the end
+                        regs.replace(last, last.replace("c=7 0 0 0", "c=7 0 0 1"), 1),  # MMU fault pending
+                        regs.replace(down + early, early + down, 1),  # the last read before the teardown
+                        re.sub(r"(OBS n=4 g=3 us=\d+ c=2) 1 1", r"\g<1> 0 1", regs),  # GP_GET 0 at the end
+                        regs.replace("bar=0 fault_units=0", "bar=1 fault_units=0"),
+                        regs.replace("GR_OBSERVE samples=4", "GR_OBSERVE samples=5"),
+                        regs.replace("PASS S3_REGISTERS", "PASS S3_OBSERVE")):
+            self.assertNotEqual(changed, regs)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        # s3o: the aligned bind observed without BAR1 access (work/S3DIAG/REPORT.md, approach B).
+        suite["stage"] = "S3O_A7_BAR1_GR_BIND_OBSERVED"
+        observe = reports["observe"]
+        result = evidence.memory_final(observe, suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and result["S3_observed"] and result["gr"]["aligned"])
+        self.assertEqual(result["gr"]["observe"]["samples"], 2)
+        with self.assertRaises(ValueError):  # the aligned bind report has no observe lines
+            evidence.memory_final(reports["aligned"].replace("PASS S3_BIND", "PASS S3_OBSERVE"), suite, raw)
+        line = re.search(r"^k40_mem: OBS n=1 g=2 .*\n", observe, re.M).group(0)
+        group1 = re.search(r"^k40_mem: OBS n=1 g=1 us=\d+ c=7 0 0 0", observe, re.M).group(0)
+        for changed in (observe.replace(line, "", 1),  # one group lost
+                        observe.replace(line, line + line, 1),  # repeated
+                        observe.replace(group1, group1[:-1] + "10", 1),  # MMU fault pending in a sample
+                        observe.replace("g=6 us=", "g=7 us="),
+                        re.sub(r"(OBS n=2 g=6 us=\d+ c=2) 1 1", r"\g<1> 0 1", observe),  # BAR1 reads GP_GET 0
+                        re.sub(r"(OBS n=0 g=3 us=\d+ c=2) 0 0", r"\g<1> 1 0", observe),  # GP_GET 1 before GP_PUT
+                        observe.replace("bar=1 fault_units=0", "bar=0 fault_units=0"),
+                        observe.replace("bar=1 fault_units=0", "bar=1 fault_units=10"),
+                        observe.replace("GR_OBSERVE samples=2", "GR_OBSERVE samples=3"),
+                        observe.replace("offset=288 value=8", "offset=288 value=4", 1),  # one slow-window read lost
+                        observe.replace("PASS S3_OBSERVE", "PASS S3_BIND")):
+            self.assertNotEqual(changed, observe)
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        suite["stage"] = "S3E_A7_BAR1_GR_BIND_ALIGNED"
+        with self.assertRaises(ValueError):  # observe lines in a stage that does not observe
+            evidence.memory_final(observe.replace("PASS S3_OBSERVE", "PASS S3_BIND"), suite, raw)
+        # s3g: the golden context with the image printed (work/S3DIAG/REPORT.md, approach A).
+        suite["stage"] = "S3G_A7_BAR1_GR_IMAGE"
+        result = evidence.memory_final(reports["image"], suite, raw)
+        self.assertTrue(result["S3_golden_complete"] and result["S3_image_printed"] and not result["S3_bind_complete"])
+        self.assertGreater(result["gr"]["image"]["words_not_zero"], 0)
+        with self.assertRaises(ValueError):  # a golden report without the image lines
+            evidence.memory_final(golden, suite, raw)
+        first = re.search(r"^k40_mem: IMG [0-9a-f]+ ([0-9a-f]+) .*$", reports["image"], re.M)
+        for changed in (reports["image"].replace(first.group(0), "", 1),  # one line lost
+                        reports["image"].replace(first.group(0), first.group(0).replace(" " + first.group(1) + " ", " 1 ", 1), 1),
+                        reports["image"].replace(first.group(0), first.group(0) + "\n" + first.group(0), 1),  # repeated
+                        reports["image"].replace("PASS S3_IMAGE", "PASS S3_GOLDEN")):
+            self.assertNotEqual(changed, reports["image"])
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        suite["stage"] = "S3A_A7_BAR1_GR_GOLDEN"
+        with self.assertRaises(ValueError):  # image lines in a stage that does not print
+            evidence.memory_final(reports["image"].replace("PASS S3_IMAGE", "PASS S3_GOLDEN"), suite, raw)
+        # s3e: the bind with the channel state of the Linux reference run (work/S3DIAG/FINDINGS.md).
+        suite["stage"] = "S3E_A7_BAR1_GR_BIND_ALIGNED"
+        result = evidence.memory_final(reports["aligned"], suite, raw)
+        self.assertTrue(result["S3_bind_complete"] and result["gr"]["aligned"])
+        self.assertEqual(len(result["allocations"]), 27)
+        with self.assertRaises(ValueError):  # the plain bind report has no image copy
+            evidence.memory_final(reports["bind"], suite, raw)
+        for changed in (reports["aligned"].replace("role=29 physical", "role=28 physical"),
+                        re.sub(r"(role=29 physical=[0-9a-f]+ bytes=\d+ generation=)\d+", r"\g<1>21", reports["aligned"])):
+            self.assertNotEqual(changed, reports["aligned"])
+            with self.assertRaises(ValueError):
+                evidence.memory_final(changed, suite, raw)
+        for mode, stage_name, marker in (("bind", "S3C_A7_BAR1_GR_BIND", "PASS S3_BIND"),
+                                         ("setup", "S3D_A7_BAR1_GR_SETUP", "PASS S3_SETUP")):
+            with self.subTest(mode=mode):
+                serial = reports[mode]
+                suite["stage"] = stage_name
+                result = evidence.memory_final(serial, suite, raw)
+                self.assertTrue(result["S3_golden_complete"] and result["S3_bind_complete"])
+                self.assertEqual(result["S3_setup_complete"], mode == "setup")
+                self.assertFalse(result["S3_complete"])
+                self.assertEqual(result["gr"]["entry"], mode)
+                for other in (compute, golden, reports["setup" if mode == "bind" else "bind"]):
+                    with self.assertRaises(ValueError):  # another stage's report
+                        evidence.memory_final(other, suite, raw)
+                live = serial.index("k40_mem: LIVE step=15")
+                for changed in (
+                    serial.replace("k40_mem: LIVE", "k40_mem: LIVE_", 1),
+                    serial.replace("k40_mem: LIVE step=15", "k40_mem: LIVE step=0", 1),
+                    re.sub(r"(?m)^k40_mem: LIVE step=11 .*\n", "", serial),
+                    re.sub(r"(?m)^k40_mem: LIVE .*\n", "", serial),
+                    serial[:live] + serial[live:].replace("k40_mem: GR step=", "k40_mem: GR step=", 1).replace(
+                        "k40_mem: LIVE step=15", "k40_mem: LIVE step=14", 1) + "k40_mem: LIVE step=15 us=0 a=0 b=0\n",
+                    serial.replace("submitted=1 consumed=1", "submitted=1 consumed=0"),
+                    serial.replace("after=1/1", "after=0/1"),
+                    serial.replace(marker, "PASS S3_GOLDEN"),
+                ):
+                    self.assertNotEqual(changed, serial)
+                    with self.assertRaises(ValueError):
+                        evidence.memory_final(changed, suite, raw)
 
     def test_cardless_cannot_sign(self):
         with tempfile.TemporaryDirectory() as directory:

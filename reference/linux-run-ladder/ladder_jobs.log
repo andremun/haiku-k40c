@@ -1,0 +1,4282 @@
+device: /dev/dri/renderD128
+dumping HDR for type 1
+HDR[00] = 0x00020861
+HDR[04] = 0x06000000
+HDR[08] = 0x01000000
+HDR[0c] = 0x00000000
+HDR[10] = 0x000ff000
+HDR[14] = 0x00000000
+HDR[18] = 0x00000000
+HDR[1c] = 0x00000000
+HDR[20] = 0x00000000
+HDR[24] = 0x00000000
+HDR[28] = 0x00000000
+HDR[2c] = 0x00000000
+HDR[30] = 0x00000000
+HDR[34] = 0x00000000
+HDR[38] = 0x00000000
+HDR[3c] = 0x00000000
+HDR[40] = 0x00000000
+HDR[44] = 0x00000000
+HDR[48] = 0x00000000
+HDR[4c] = 0x00000000
+HDR[50] = 0x00000000
+HDR[54] = 0x00000000
+HDR[58] = 0x00000000
+HDR[5c] = 0x00000000
+HDR[60] = 0x00000000
+HDR[64] = 0x00000000
+HDR[68] = 0x00000000
+HDR[6c] = 0x00000000
+HDR[70] = 0x00000000
+HDR[74] = 0x00000000
+HDR[78] = 0x00000000
+HDR[7c] = 0x00000000
+shader binary code (0x10 bytes):
+000000b8 08000000 001c003c 18000000 
+shader: MESA_SHADER_COMPUTE
+source_blake3: {0x6ebe9f00, 0x2a2323d8, 0x1ce5f9c4, 0x2f87d4b6, 0x7eda61cd, 0x83dfbfd1, 0xba8405dc, 0xd0a28191}
+name: GLSL2
+workgroup_size: 64, 1, 1
+num_ubos: 1
+num_ssbos: 3
+system_values_read: 0x00000000'00000000'00008400'00000000
+subgroup_size: 1
+bit_sizes_float: 0x20
+bit_sizes_int: 0x20
+first_ubo_is_default_ubo: true
+flrp_lowered: true
+writes_memory: true
+uniforms: 1
+decl_var uniform INTERP_MODE_NONE none highp uint n (3, 0, 0)
+decl_var ubo INTERP_MODE_NONE none vec4[1] uniform_0 (0, 0, 0)
+decl_var ssbo INTERP_MODE_NONE writeonly Y y (2, 2, 2)
+decl_var ssbo INTERP_MODE_NONE readonly B b (1, 1, 1)
+decl_var ssbo INTERP_MODE_NONE readonly A a (0, 0, 0)
+decl_function main () (entrypoint)
+
+impl main {
+    block b0:   // preds:
+    32x3   %0 = @load_workgroup_id
+    32x3   %1 = @load_local_invocation_id
+    32     %2 = load_const (0x00000006)
+    32     %3 = ishl %0.x, %2 (0x6)
+    32     %4 = iadd %3, %1.x
+    32     %5 = load_const (0x00000000)
+    32     %6 = @load_ubo (%5 (0x0), %5 (0x0)) (access=none, align_mul=1073741824, align_offset=0, range_base=0, range=16)
+    32     %7 = ult32 %4, %6
+                // succs: b1 b2
+    if %7 {
+        block b1:   // preds: b0
+        32     %8 = load_const (0x00000002)
+        32     %9 = ishl %4, %8 (0x2)
+        32    %10 = @load_ssbo (%5 (0x0), %9) (access=readonly|reorderable, align_mul=4, align_offset=0)
+        32    %11 = load_const (0x00000001 = 0.000000)
+        32    %12 = @load_ssbo (%11 (0x1), %9) (access=readonly|reorderable, align_mul=4, align_offset=0)
+        32    %13 = fadd %10, %12
+                    @store_ssbo (%13, %8 (0x2), %9) (wrmask=x, access=writeonly, align_mul=4, align_offset=0)
+                    // succs: b3
+    } else {
+        block b2:  // preds: b0, succs: b3
+    }
+    block b3:  // preds: b1 b2, succs: b4
+    block b4:
+}
+
+renderer: NVF1
+version: OpenGL ES 3.2 Mesa 25.2.8
+copy: bytes 1048576, different words 0, PASS
+
+MAIN:-1 ()
+BB:0 (7 instructions) - df = { }
+ -> BB:3 (tree)
+ -> BB:2 (tree)
+  0: rdsv u32 %r34 sv[CTAID:0] (0)
+  1: rdsv u32 %r38 sv[TID:0] (0)
+  2: shl (SUBOP:1) s32 %r42 %r34 6 (0)
+  3: add s32 %r43 %r42 %r38 (0)
+  4: joinat BB:4 (0)
+  5: set u8 %p46 lt u32 %r43 c0[0x0] (0)
+  6: not %p46 bra BB:3 (0)
+BB:2 (17 instructions) - idom = BB:0, df = { BB:4 }
+ -> BB:4 (forward)
+  7: shl (SUBOP:1) s32 %r48 %r43 2 (0)
+  8: add u64 %r52d %r48 c7[0x2a0] (0)
+  9: add u32 %r53 %r48 0x00000004 (0)
+ 10: set u8 %p54 gt u32 %r53 c7[0x2a8] (0)
+ 11: not %p54 ld  u32 %r55 g[%r52d+0x0] (0)
+ 12: %p54 mov u32 %r56 0x00000000 (0)
+ 13: union u32 %r57 %r55 %r56 (0)
+ 14: add u64 %r61d %r48 c7[0x2b0] (0)
+ 15: set u8 %p63 gt u32 %r53 c7[0x2b8] (0)
+ 16: not %p63 ld  u32 %r64 g[%r61d+0x0] (0)
+ 17: %p63 mov u32 %r65 0x00000000 (0)
+ 18: union u32 %r66 %r64 %r65 (0)
+ 19: add f32 %r67 %r57 %r66 (0)
+ 20: add u64 %r71d %r48 c7[0x2c0] (0)
+ 21: set u8 %p73 gt u32 %r53 c7[0x2c8] (0)
+ 22: not %p73 st  u32 # g[%r71d+0x0] %r67 (0)
+ 23: bra BB:4 (0)
+BB:3 (1 instructions) - idom = BB:0, df = { BB:4 }
+ -> BB:4 (forward)
+ 24: bra BB:4 (0)
+BB:4 (1 instructions) - idom = BB:0, df = { }
+ -> BB:1 (tree)
+ 25: join (0)
+BB:1 (1 instructions) - idom = BB:4, df = { }
+ 26: exit - # (0)
+
+MAIN:-1 ()
+BB:0 (7 instructions) - df = { }
+ -> BB:3 (tree)
+ -> BB:2 (tree)
+  0: rdsv u32 $r0 sv[CTAID:0] (8)
+  1: rdsv u32 $r1 sv[TID:0] (8)
+  2: shl (SUBOP:1) s32 $r0 $r0 6 (8)
+  3: add s32 $r0 $r0 $r1 (8)
+  4: joinat BB:4 (8)
+  5: set u8 $p0 lt u32 $r0 c0[0x0] (8)
+  6: not $p0 join BB:4 (8)
+BB:2 (18 instructions) - idom = BB:0, df = { BB:4 }
+ -> BB:4 (forward)
+  7: shl (SUBOP:1) s32 $r2 $r0 2 (8)
+  8: add u32 { $r0 $c0 } $r2 c7[0x2a0] (8)
+  9: add u32 $r1 $r255 c7[0x2a4] $c0 (8)
+ 10: add u32 $r3 $r2 0x00000004 (8)
+ 11: set u8 $p0 gt u32 $r3 c7[0x2a8] (8)
+ 12: not $p0 ld  u32 $r4 g[$r0d+0x0] (8)
+ 13: $p0 mov u32 $r4 0x00000000 (8)
+ 14: add u32 { $r0 $c0 } $r2 c7[0x2b0] (8)
+ 15: add u32 $r1 $r255 c7[0x2b4] $c0 (8)
+ 16: set u8 $p0 gt u32 $r3 c7[0x2b8] (8)
+ 17: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+ 18: $p0 mov u32 $r0 0x00000000 (8)
+ 19: add f32 $r4 $r4 $r0 (8)
+ 20: add u32 { $r0 $c0 } $r2 c7[0x2c0] (8)
+ 21: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+ 22: set u8 $p0 gt u32 $r3 c7[0x2c8] (8)
+ 23: not $p0 st  u32 # g[$r0d+0x0] $r4 (8)
+ 24: join BB:4 (8)
+BB:3 (0 instructions) - idom = BB:0, df = { BB:4 }
+ -> BB:4 (forward)
+BB:4 (0 instructions) - idom = BB:0, df = { }
+ -> BB:1 (tree)
+BB:1 (1 instructions) - idom = BB:4, df = { }
+ 25: exit - # (8)
+shader binary code (0xf0 bytes):
+10a09c80 0800b0a0 129c0002 86400000 109c0006 86400000 031c0001 c2400400 
+009c0002 e0800000 5c000000 14800000 001c001e 5b101c00 00603c02 85800000 
+a010b0a0 081080b0 011c0009 c2400400 541c0802 608400e0 549ffc06 608040e0 
+021c080d c0800000 551c0c1e 5b401ce0 00200010 c4800000 0003c012 74000000 
+80b010b0 08b010a0 561c0802 608400e0 569ffc06 608040e0 571c0c1e 5b401ce0 
+00200000 c4800000 0003c002 74000000 001c1012 e2c00000 581c0802 608400e0 
+0010b010 080000b8 589ffc06 608040e0 591c0c1e 5b401ce0 00200010 e4800000 
+005c3c02 85800000 001c003c 18000000 
+dumping HDR for type 4
+HDR[00] = 0x00021462
+HDR[04] = 0x00000000
+HDR[08] = 0x00000000
+HDR[0c] = 0x00000000
+HDR[10] = 0x00000000
+HDR[14] = 0x80000000
+HDR[18] = 0x00000000
+HDR[1c] = 0x00000000
+HDR[20] = 0x00000000
+HDR[24] = 0x00000000
+HDR[28] = 0x00000000
+HDR[2c] = 0x00000000
+HDR[30] = 0x00000000
+HDR[34] = 0x00000000
+HDR[38] = 0x00000000
+HDR[3c] = 0x00000000
+HDR[40] = 0x00000000
+HDR[44] = 0x00000000
+HDR[48] = 0x0000000f
+HDR[4c] = 0x00000000
+HDR[50] = 0x00000000
+HDR[54] = 0x00000000
+HDR[58] = 0x00000000
+HDR[5c] = 0x00000000
+HDR[60] = 0x00000000
+HDR[64] = 0x00000000
+HDR[68] = 0x00000000
+HDR[6c] = 0x00000000
+HDR[70] = 0x00000000
+HDR[74] = 0x00000000
+HDR[78] = 0x00000000
+HDR[7c] = 0x00000000
+shader binary code (0x20 bytes):
+00b88080 08000000 001ffc02 7ca80000 041ffc0a 7ca80000 001c003c 18000000 
+dumping HDR for type 0
+HDR[00] = 0x00020461
+HDR[04] = 0x00000000
+HDR[08] = 0x00000000
+HDR[0c] = 0x00000000
+HDR[10] = 0x000ff000
+HDR[14] = 0x00000000
+HDR[18] = 0x0000000f
+HDR[1c] = 0x00000000
+HDR[20] = 0x00000000
+HDR[24] = 0x00000000
+HDR[28] = 0x00000000
+HDR[2c] = 0x00000000
+HDR[30] = 0x00000000
+HDR[34] = 0x0000f000
+HDR[38] = 0x00000000
+HDR[3c] = 0x00000000
+HDR[40] = 0x00000000
+HDR[44] = 0x00000000
+HDR[48] = 0x00000000
+HDR[4c] = 0x00000000
+HDR[50] = 0x00000000
+HDR[54] = 0x00000000
+HDR[58] = 0x00000000
+HDR[5c] = 0x00000000
+HDR[60] = 0x00000000
+HDR[64] = 0x00000000
+HDR[68] = 0x00000000
+HDR[6c] = 0x00000000
+HDR[70] = 0x00000000
+HDR[74] = 0x00000000
+HDR[78] = 0x00000000
+HDR[7c] = 0x00000000
+shader binary code (0xb0 bytes):
+108010dc 0880109c 401ffc02 7ecffc00 001c0012 63408000 009c0016 63408000 
+011c001a 63408000 019c0002 63408000 021c0412 4d001000 029c0416 4d001400 
+80109c10 08109c10 031c041a 4d001800 039c0402 4d000000 041c0806 4d001000 
+049c0812 4d001400 051c0816 4d001800 059c081a 4d000000 061c0c02 4d000400 
+80a01080 08000138 069c0c06 4d001000 071c0c0a 4d001400 079c0c0e 4d001800 
+381ffc02 7f0ffc00 001c003c 18000000 
+shader binary code (0xf0 bytes):
+10a09c80 0800b0a0 129c0002 86400000 109c0006 86400000 031c0001 c2400400 
+009c0002 e0800000 5c000000 14800000 001c001e 5b101c00 00603c02 85800000 
+a010b0a0 081080b0 011c0009 c2400400 541c0802 608400e0 549ffc06 608040e0 
+021c080d c0800000 551c0c1e 5b401ce0 00200010 c4800000 0003c012 74000000 
+80b010b0 08b010a0 561c0802 608400e0 569ffc06 608040e0 571c0c1e 5b401ce0 
+00200000 c4800000 0003c002 74000000 001c1012 e2c00000 581c0802 608400e0 
+0010b010 080000b8 589ffc06 608040e0 591c0c1e 5b401ce0 00200010 e4800000 
+005c3c02 85800000 001c003c 18000000 
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7f100
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x400
+   CTA_RASTER_HEIGHT                   : 0x1
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x40
+   CTA_THREAD_DIMENSION1               : 0x1
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x5
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+shader: MESA_SHADER_COMPUTE
+source_blake3: {0x7421a4a8, 0x6c4a9bde, 0x79bec005, 0x40da6656, 0x448d5b0a, 0x07f86935, 0x4d6e7a1d, 0x2d6b9801}
+name: GLSL4
+workgroup_size: 64, 1, 1
+num_ubos: 1
+num_ssbos: 3
+system_values_read: 0x00000000'00000000'00008400'00000000
+subgroup_size: 1
+bit_sizes_float: 0x20
+bit_sizes_int: 0x20
+first_ubo_is_default_ubo: true
+flrp_lowered: true
+writes_memory: true
+uniforms: 3
+decl_var uniform INTERP_MODE_NONE none highp uint ncols (3, 0, 0)
+decl_var uniform INTERP_MODE_NONE none highp uint nrows (4, 1, 0)
+decl_var uniform INTERP_MODE_NONE none highp uint rowBytes (5, 2, 0)
+decl_var ubo INTERP_MODE_NONE none vec4[3] uniform_0 (0, 0, 0)
+decl_var ssbo INTERP_MODE_NONE writeonly Y y (1, 1, 2)
+decl_var ssbo INTERP_MODE_NONE readonly X x (0, 0, 1)
+decl_var ssbo INTERP_MODE_NONE readonly W w (2, 2, 0)
+decl_function main () (entrypoint)
+
+impl main {
+    block b0:    // preds:
+    32      %0 = @decl_reg (num_components=1, num_array_elems=0, bit_size=32, divergent=0)
+    32      %1 = @decl_reg (num_components=1, num_array_elems=0, bit_size=32, divergent=1)
+    32x3    %2 = @load_workgroup_id
+    32x3    %3 = @load_local_invocation_id
+    32      %4 = load_const (0x00000006)
+    32      %5 = ishl %2.x, %4 (0x6)
+    32      %6 = iadd %5, %3.x
+    32      %7 = load_const (0x00000010 = 16)
+    32      %8 = load_const (0x00000000)
+    32      %9 = @load_ubo (%8 (0x0), %7 (0x10)) (access=none, align_mul=1073741824, align_offset=16, range_base=16, range=16)
+    32     %10 = ult32 %6, %9
+                 // succs: b1 b7
+    if %10 {
+        block b1:    // preds: b0
+        32     %11 = load_const (0x00000020 = 32)
+        32     %12 = @load_ubo (%8 (0x0), %11 (0x20)) (access=none, align_mul=1073741824, align_offset=32, range_base=32, range=16)
+        32     %13 = imul %6, %12
+        32     %14 = load_const (0x00000005)
+        32     %15 = load_const (0x00000022 = 34)
+        32     %16 = load_const (0x00000001)
+        32     %17 = load_const (0x00000008)
+        32     %18 = load_const (0x00000002)
+        32     %19 = load_const (0x00000018 = 24)
+        32     %20 = load_const (0x00000040 = 64)
+        32     %21 = load_const (0x00000004)
+                     @store_reg (%8 (0x0), %0) (base=0, wrmask=x, legacy_fsat=0)
+                     @store_reg (%8 (0x0), %1) (base=0, wrmask=x, legacy_fsat=0)
+                     // succs: b2
+        loop {
+            block b2:    // preds: b1 b5
+            32     %22 = @load_ubo (%8 (0x0), %8 (0x0)) (access=none, align_mul=1073741824, align_offset=0, range_base=0, range=16)
+            32     %23 = ushr %22, %14 (0x5)
+            32     %24 = @load_reg (%0) (base=0, legacy_fabs=0, legacy_fneg=0)
+            32     %25 = uge32 %24, %23
+                         // succs: b3 b4
+            if %25 {
+                block b3:// preds: b2
+                break
+                // succs: b6
+            } else {
+                block b4:  // preds: b2, succs: b5
+            }
+            block b5:    // preds: b4
+            32     %26 = @load_reg (%0) (base=0, legacy_fabs=0, legacy_fneg=0)
+            32     %27 = imul %26, %15 (0x22)
+            32     %28 = iadd %13, %27
+            32     %29 = load_const (0xfffffffc = -4 = 4294967292)
+            32     %30 = iand %28, %29 (0xfffffffc)
+            32     %31 = @load_ssbo (%18 (0x2), %30) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32     %32 = load_const (0x00000003)
+            32     %33 = ishl %28, %32 (0x3)
+            32     %34 = ushr %31, %33
+            32     %35 = load_const (0x000000ff = 255)
+            32     %36 = iand %34, %35 (0xff)
+            32     %37 = iadd %28, %16 (0x1)
+            32     %38 = iand %37, %29 (0xfffffffc)
+            32     %39 = @load_ssbo (%18 (0x2), %38) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32     %40 = iadd %33, %17 (0x8)
+            32     %41 = ushr %39, %40
+            32     %42 = iand %41, %35 (0xff)
+            32     %43 = ishl %42, %17 (0x8)
+            32     %44 = ior %36, %43
+            32     %45 = unpack_half_2x16_split_x %44
+            32     %46 = iadd %28, %18 (0x2)
+            32     %47 = iand %46, %29 (0xfffffffc)
+            32     %48 = @load_ssbo (%18 (0x2), %47) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32     %49 = iadd %33, %7 (0x10)
+            32     %50 = ushr %48, %49
+            32     %51 = ishl %50, %19 (0x18)
+            32     %52 = ishr %51, %19 (0x18)
+            32     %53 = i2f32 %52
+            32     %54 = load_const (0x00000007)
+            32     %55 = @load_reg (%0) (base=0, legacy_fabs=0, legacy_fneg=0)
+            32     %56 = ishl %55, %54 (0x7)
+            32x4   %57 = @load_ssbo (%8 (0x0), %56) (access=readonly|reorderable, align_mul=128, align_offset=0)
+            32     %58 = fmul %53, %57.x
+            32     %59 = iadd %32 (0x3), %28
+            32     %60 = iand %59, %29 (0xfffffffc)
+            32     %61 = @load_ssbo (%18 (0x2), %60) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32     %62 = iadd %33, %19 (0x18)
+            32     %63 = ushr %61, %62
+            32     %64 = ishl %63, %19 (0x18)
+            32     %65 = ishr %64, %19 (0x18)
+            32     %66 = i2f32 %65
+            32     %67 = ffma %66, %57.y, %58
+            32     %68 = iadd %30, %21 (0x4)
+            32     %69 = @load_ssbo (%18 (0x2), %68) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32     %70 = iadd %11 (0x20), %33
+            32     %71 = ushr %69, %70
+            32     %72 = ishl %71, %19 (0x18)
+            32     %73 = ishr %72, %19 (0x18)
+            32     %74 = i2f32 %73
+            32     %75 = ffma %74, %57.z, %67
+            32     %76 = iadd %14 (0x5), %28
+            32     %77 = iand %76, %29 (0xfffffffc)
+            32     %78 = @load_ssbo (%18 (0x2), %77) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32     %79 = load_const (0x00000028 = 40)
+            32     %80 = iadd %79 (0x28), %33
+            32     %81 = ushr %78, %80
+            32     %82 = ishl %81, %19 (0x18)
+            32     %83 = ishr %82, %19 (0x18)
+            32     %84 = i2f32 %83
+            32     %85 = ffma %84, %57.w, %75
+            32     %86 = iadd %4 (0x6), %28
+            32     %87 = iand %86, %29 (0xfffffffc)
+            32     %88 = @load_ssbo (%18 (0x2), %87) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32     %89 = load_const (0x00000030 = 48)
+            32     %90 = iadd %89 (0x30), %33
+            32     %91 = ushr %88, %90
+            32     %92 = ishl %91, %19 (0x18)
+            32     %93 = ishr %92, %19 (0x18)
+            32     %94 = i2f32 %93
+            32     %95 = iadd %56, %7 (0x10)
+            32x4   %96 = @load_ssbo (%8 (0x0), %95) (access=readonly|reorderable, align_mul=128, align_offset=16)
+            32     %97 = ffma %94, %96.x, %85
+            32     %98 = iadd %54 (0x7), %28
+            32     %99 = iand %98, %29 (0xfffffffc)
+            32    %100 = @load_ssbo (%18 (0x2), %99) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %101 = load_const (0x00000038 = 56)
+            32    %102 = iadd %101 (0x38), %33
+            32    %103 = ushr %100, %102
+            32    %104 = ishl %103, %19 (0x18)
+            32    %105 = ishr %104, %19 (0x18)
+            32    %106 = i2f32 %105
+            32    %107 = ffma %106, %96.y, %97
+            32    %108 = iadd %30, %17 (0x8)
+            32    %109 = @load_ssbo (%18 (0x2), %108) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %110 = iadd %20 (0x40), %33
+            32    %111 = ushr %109, %110
+            32    %112 = ishl %111, %19 (0x18)
+            32    %113 = ishr %112, %19 (0x18)
+            32    %114 = i2f32 %113
+            32    %115 = ffma %114, %96.z, %107
+            32    %116 = load_const (0x00000009)
+            32    %117 = iadd %116 (0x9), %28
+            32    %118 = iand %117, %29 (0xfffffffc)
+            32    %119 = @load_ssbo (%18 (0x2), %118) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %120 = load_const (0x00000048 = 72)
+            32    %121 = iadd %120 (0x48), %33
+            32    %122 = ushr %119, %121
+            32    %123 = ishl %122, %19 (0x18)
+            32    %124 = ishr %123, %19 (0x18)
+            32    %125 = i2f32 %124
+            32    %126 = ffma %125, %96.w, %115
+            32    %127 = load_const (0x0000000a = 10)
+            32    %128 = iadd %127 (0xa), %28
+            32    %129 = iand %128, %29 (0xfffffffc)
+            32    %130 = @load_ssbo (%18 (0x2), %129) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %131 = load_const (0x00000050 = 80)
+            32    %132 = iadd %131 (0x50), %33
+            32    %133 = ushr %130, %132
+            32    %134 = ishl %133, %19 (0x18)
+            32    %135 = ishr %134, %19 (0x18)
+            32    %136 = i2f32 %135
+            32    %137 = iadd %56, %11 (0x20)
+            32x4  %138 = @load_ssbo (%8 (0x0), %137) (access=readonly|reorderable, align_mul=128, align_offset=32)
+            32    %139 = ffma %136, %138.x, %126
+            32    %140 = load_const (0x0000000b = 11)
+            32    %141 = iadd %140 (0xb), %28
+            32    %142 = iand %141, %29 (0xfffffffc)
+            32    %143 = @load_ssbo (%18 (0x2), %142) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %144 = load_const (0x00000058 = 88)
+            32    %145 = iadd %144 (0x58), %33
+            32    %146 = ushr %143, %145
+            32    %147 = ishl %146, %19 (0x18)
+            32    %148 = ishr %147, %19 (0x18)
+            32    %149 = i2f32 %148
+            32    %150 = ffma %149, %138.y, %139
+            32    %151 = load_const (0x0000000c = 12)
+            32    %152 = iadd %30, %151 (0xc)
+            32    %153 = @load_ssbo (%18 (0x2), %152) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %154 = load_const (0x00000060 = 96)
+            32    %155 = iadd %154 (0x60), %33
+            32    %156 = ushr %153, %155
+            32    %157 = ishl %156, %19 (0x18)
+            32    %158 = ishr %157, %19 (0x18)
+            32    %159 = i2f32 %158
+            32    %160 = ffma %159, %138.z, %150
+            32    %161 = load_const (0x0000000d = 13)
+            32    %162 = iadd %161 (0xd), %28
+            32    %163 = iand %162, %29 (0xfffffffc)
+            32    %164 = @load_ssbo (%18 (0x2), %163) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %165 = load_const (0x00000068 = 104)
+            32    %166 = iadd %165 (0x68), %33
+            32    %167 = ushr %164, %166
+            32    %168 = ishl %167, %19 (0x18)
+            32    %169 = ishr %168, %19 (0x18)
+            32    %170 = i2f32 %169
+            32    %171 = ffma %170, %138.w, %160
+            32    %172 = load_const (0x0000000e = 14)
+            32    %173 = iadd %172 (0xe), %28
+            32    %174 = iand %173, %29 (0xfffffffc)
+            32    %175 = @load_ssbo (%18 (0x2), %174) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %176 = load_const (0x00000070 = 112)
+            32    %177 = iadd %176 (0x70), %33
+            32    %178 = ushr %175, %177
+            32    %179 = ishl %178, %19 (0x18)
+            32    %180 = ishr %179, %19 (0x18)
+            32    %181 = i2f32 %180
+            32    %182 = iadd %56, %89 (0x30)
+            32x4  %183 = @load_ssbo (%8 (0x0), %182) (access=readonly|reorderable, align_mul=128, align_offset=48)
+            32    %184 = ffma %181, %183.x, %171
+            32    %185 = load_const (0x0000000f = 15)
+            32    %186 = iadd %185 (0xf), %28
+            32    %187 = iand %186, %29 (0xfffffffc)
+            32    %188 = @load_ssbo (%18 (0x2), %187) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %189 = load_const (0x00000078 = 120)
+            32    %190 = iadd %189 (0x78), %33
+            32    %191 = ushr %188, %190
+            32    %192 = ishl %191, %19 (0x18)
+            32    %193 = ishr %192, %19 (0x18)
+            32    %194 = i2f32 %193
+            32    %195 = ffma %194, %183.y, %184
+            32    %196 = iadd %30, %7 (0x10)
+            32    %197 = @load_ssbo (%18 (0x2), %196) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %198 = load_const (0x00000080 = 128)
+            32    %199 = iadd %198 (0x80), %33
+            32    %200 = ushr %197, %199
+            32    %201 = ishl %200, %19 (0x18)
+            32    %202 = ishr %201, %19 (0x18)
+            32    %203 = i2f32 %202
+            32    %204 = ffma %203, %183.z, %195
+            32    %205 = load_const (0x00000011 = 17)
+            32    %206 = iadd %205 (0x11), %28
+            32    %207 = iand %206, %29 (0xfffffffc)
+            32    %208 = @load_ssbo (%18 (0x2), %207) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %209 = load_const (0x00000088 = 136)
+            32    %210 = iadd %209 (0x88), %33
+            32    %211 = ushr %208, %210
+            32    %212 = ishl %211, %19 (0x18)
+            32    %213 = ishr %212, %19 (0x18)
+            32    %214 = i2f32 %213
+            32    %215 = ffma %214, %183.w, %204
+            32    %216 = load_const (0x00000012 = 18)
+            32    %217 = iadd %216 (0x12), %28
+            32    %218 = iand %217, %29 (0xfffffffc)
+            32    %219 = @load_ssbo (%18 (0x2), %218) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %220 = load_const (0x00000090 = 144)
+            32    %221 = iadd %220 (0x90), %33
+            32    %222 = ushr %219, %221
+            32    %223 = ishl %222, %19 (0x18)
+            32    %224 = ishr %223, %19 (0x18)
+            32    %225 = i2f32 %224
+            32    %226 = iadd %56, %20 (0x40)
+            32x4  %227 = @load_ssbo (%8 (0x0), %226) (access=readonly|reorderable, align_mul=128, align_offset=64)
+            32    %228 = ffma %225, %227.x, %215
+            32    %229 = load_const (0x00000013 = 19)
+            32    %230 = iadd %229 (0x13), %28
+            32    %231 = iand %230, %29 (0xfffffffc)
+            32    %232 = @load_ssbo (%18 (0x2), %231) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %233 = load_const (0x00000098 = 152)
+            32    %234 = iadd %233 (0x98), %33
+            32    %235 = ushr %232, %234
+            32    %236 = ishl %235, %19 (0x18)
+            32    %237 = ishr %236, %19 (0x18)
+            32    %238 = i2f32 %237
+            32    %239 = ffma %238, %227.y, %228
+            32    %240 = load_const (0x00000014 = 20)
+            32    %241 = iadd %30, %240 (0x14)
+            32    %242 = @load_ssbo (%18 (0x2), %241) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %243 = load_const (0x000000a0 = 160)
+            32    %244 = iadd %243 (0xa0), %33
+            32    %245 = ushr %242, %244
+            32    %246 = ishl %245, %19 (0x18)
+            32    %247 = ishr %246, %19 (0x18)
+            32    %248 = i2f32 %247
+            32    %249 = ffma %248, %227.z, %239
+            32    %250 = load_const (0x00000015 = 21)
+            32    %251 = iadd %250 (0x15), %28
+            32    %252 = iand %251, %29 (0xfffffffc)
+            32    %253 = @load_ssbo (%18 (0x2), %252) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %254 = load_const (0x000000a8 = 168)
+            32    %255 = iadd %254 (0xa8), %33
+            32    %256 = ushr %253, %255
+            32    %257 = ishl %256, %19 (0x18)
+            32    %258 = ishr %257, %19 (0x18)
+            32    %259 = i2f32 %258
+            32    %260 = ffma %259, %227.w, %249
+            32    %261 = load_const (0x00000016 = 22)
+            32    %262 = iadd %261 (0x16), %28
+            32    %263 = iand %262, %29 (0xfffffffc)
+            32    %264 = @load_ssbo (%18 (0x2), %263) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %265 = load_const (0x000000b0 = 176)
+            32    %266 = iadd %265 (0xb0), %33
+            32    %267 = ushr %264, %266
+            32    %268 = ishl %267, %19 (0x18)
+            32    %269 = ishr %268, %19 (0x18)
+            32    %270 = i2f32 %269
+            32    %271 = iadd %56, %131 (0x50)
+            32x4  %272 = @load_ssbo (%8 (0x0), %271) (access=readonly|reorderable, align_mul=128, align_offset=80)
+            32    %273 = ffma %270, %272.x, %260
+            32    %274 = load_const (0x00000017 = 23)
+            32    %275 = iadd %274 (0x17), %28
+            32    %276 = iand %275, %29 (0xfffffffc)
+            32    %277 = @load_ssbo (%18 (0x2), %276) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %278 = load_const (0x000000b8 = 184)
+            32    %279 = iadd %278 (0xb8), %33
+            32    %280 = ushr %277, %279
+            32    %281 = ishl %280, %19 (0x18)
+            32    %282 = ishr %281, %19 (0x18)
+            32    %283 = i2f32 %282
+            32    %284 = ffma %283, %272.y, %273
+            32    %285 = iadd %30, %19 (0x18)
+            32    %286 = @load_ssbo (%18 (0x2), %285) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %287 = load_const (0x000000c0 = 192)
+            32    %288 = iadd %287 (0xc0), %33
+            32    %289 = ushr %286, %288
+            32    %290 = ishl %289, %19 (0x18)
+            32    %291 = ishr %290, %19 (0x18)
+            32    %292 = i2f32 %291
+            32    %293 = ffma %292, %272.z, %284
+            32    %294 = load_const (0x00000019 = 25)
+            32    %295 = iadd %294 (0x19), %28
+            32    %296 = iand %295, %29 (0xfffffffc)
+            32    %297 = @load_ssbo (%18 (0x2), %296) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %298 = load_const (0x000000c8 = 200)
+            32    %299 = iadd %298 (0xc8), %33
+            32    %300 = ushr %297, %299
+            32    %301 = ishl %300, %19 (0x18)
+            32    %302 = ishr %301, %19 (0x18)
+            32    %303 = i2f32 %302
+            32    %304 = ffma %303, %272.w, %293
+            32    %305 = load_const (0x0000001a = 26)
+            32    %306 = iadd %305 (0x1a), %28
+            32    %307 = iand %306, %29 (0xfffffffc)
+            32    %308 = @load_ssbo (%18 (0x2), %307) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %309 = load_const (0x000000d0 = 208)
+            32    %310 = iadd %309 (0xd0), %33
+            32    %311 = ushr %308, %310
+            32    %312 = ishl %311, %19 (0x18)
+            32    %313 = ishr %312, %19 (0x18)
+            32    %314 = i2f32 %313
+            32    %315 = iadd %56, %154 (0x60)
+            32x4  %316 = @load_ssbo (%8 (0x0), %315) (access=readonly|reorderable, align_mul=128, align_offset=96)
+            32    %317 = ffma %314, %316.x, %304
+            32    %318 = load_const (0x0000001b = 27)
+            32    %319 = iadd %318 (0x1b), %28
+            32    %320 = iand %319, %29 (0xfffffffc)
+            32    %321 = @load_ssbo (%18 (0x2), %320) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %322 = load_const (0x000000d8 = 216)
+            32    %323 = iadd %322 (0xd8), %33
+            32    %324 = ushr %321, %323
+            32    %325 = ishl %324, %19 (0x18)
+            32    %326 = ishr %325, %19 (0x18)
+            32    %327 = i2f32 %326
+            32    %328 = ffma %327, %316.y, %317
+            32    %329 = load_const (0x0000001c = 28)
+            32    %330 = iadd %30, %329 (0x1c)
+            32    %331 = @load_ssbo (%18 (0x2), %330) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %332 = load_const (0x000000e0 = 224)
+            32    %333 = iadd %332 (0xe0), %33
+            32    %334 = ushr %331, %333
+            32    %335 = ishl %334, %19 (0x18)
+            32    %336 = ishr %335, %19 (0x18)
+            32    %337 = i2f32 %336
+            32    %338 = ffma %337, %316.z, %328
+            32    %339 = load_const (0x0000001d = 29)
+            32    %340 = iadd %339 (0x1d), %28
+            32    %341 = iand %340, %29 (0xfffffffc)
+            32    %342 = @load_ssbo (%18 (0x2), %341) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %343 = load_const (0x000000e8 = 232)
+            32    %344 = iadd %343 (0xe8), %33
+            32    %345 = ushr %342, %344
+            32    %346 = ishl %345, %19 (0x18)
+            32    %347 = ishr %346, %19 (0x18)
+            32    %348 = i2f32 %347
+            32    %349 = ffma %348, %316.w, %338
+            32    %350 = load_const (0x0000001e = 30)
+            32    %351 = iadd %350 (0x1e), %28
+            32    %352 = iand %351, %29 (0xfffffffc)
+            32    %353 = @load_ssbo (%18 (0x2), %352) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %354 = load_const (0x000000f0 = 240)
+            32    %355 = iadd %354 (0xf0), %33
+            32    %356 = ushr %353, %355
+            32    %357 = ishl %356, %19 (0x18)
+            32    %358 = ishr %357, %19 (0x18)
+            32    %359 = i2f32 %358
+            32    %360 = iadd %56, %176 (0x70)
+            32x4  %361 = @load_ssbo (%8 (0x0), %360) (access=readonly|reorderable, align_mul=128, align_offset=112)
+            32    %362 = ffma %359, %361.x, %349
+            32    %363 = load_const (0x0000001f = 31)
+            32    %364 = iadd %363 (0x1f), %28
+            32    %365 = iand %364, %29 (0xfffffffc)
+            32    %366 = @load_ssbo (%18 (0x2), %365) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %367 = load_const (0x000000f8 = 248)
+            32    %368 = iadd %367 (0xf8), %33
+            32    %369 = ushr %366, %368
+            32    %370 = ishl %369, %19 (0x18)
+            32    %371 = ishr %370, %19 (0x18)
+            32    %372 = i2f32 %371
+            32    %373 = ffma %372, %361.y, %362
+            32    %374 = iadd %30, %11 (0x20)
+            32    %375 = @load_ssbo (%18 (0x2), %374) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %376 = load_const (0x00000100 = 256)
+            32    %377 = iadd %376 (0x100), %33
+            32    %378 = ushr %375, %377
+            32    %379 = ishl %378, %19 (0x18)
+            32    %380 = ishr %379, %19 (0x18)
+            32    %381 = i2f32 %380
+            32    %382 = ffma %381, %361.z, %373
+            32    %383 = load_const (0x00000021 = 33)
+            32    %384 = iadd %383 (0x21), %28
+            32    %385 = iand %384, %29 (0xfffffffc)
+            32    %386 = @load_ssbo (%18 (0x2), %385) (access=readonly|reorderable, align_mul=4, align_offset=0)
+            32    %387 = load_const (0x00000108 = 264)
+            32    %388 = iadd %387 (0x108), %33
+            32    %389 = ushr %386, %388
+            32    %390 = ishl %389, %19 (0x18)
+            32    %391 = ishr %390, %19 (0x18)
+            32    %392 = i2f32 %391
+            32    %393 = ffma %392, %361.w, %382
+            32    %394 = @load_reg (%1) (base=0, legacy_fabs=0, legacy_fneg=0)
+            32    %395 = ffma %45, %393, %394
+                         @store_reg (%395, %1) (base=0, wrmask=x, legacy_fsat=0)
+            32    %396 = @load_reg (%0) (base=0, legacy_fabs=0, legacy_fneg=0)
+            32    %397 = iadd %396, %16 (0x1)
+                         @store_reg (%397, %0) (base=0, wrmask=x, legacy_fsat=0)
+                         // succs: b2
+        }
+        block b6:    // preds: b3
+        32    %398 = ishl %6, %18 (0x2)
+        32    %399 = @load_reg (%1) (base=0, legacy_fabs=0, legacy_fneg=0)
+                     @store_ssbo (%399, %16 (0x1), %398) (wrmask=x, access=writeonly, align_mul=4, align_offset=0)
+                     // succs: b8
+    } else {
+        block b7:  // preds: b0, succs: b8
+    }
+    block b8:  // preds: b6 b7, succs: b9
+    block b9:
+}
+
+add_f32: elements 65536, different 0, max relative error 0, PASS
+
+MAIN:-1 ()
+BB:0 (7 instructions) - df = { }
+ -> BB:3 (tree)
+ -> BB:2 (tree)
+  0: rdsv u32 %r804 sv[CTAID:0] (0)
+  1: rdsv u32 %r808 sv[TID:0] (0)
+  2: shl (SUBOP:1) s32 %r812 %r804 6 (0)
+  3: add s32 %r813 %r812 %r808 (0)
+  4: joinat BB:9 (0)
+  5: set u8 %p816 lt u32 %r813 c0[0x10] (0)
+  6: not %p816 bra BB:3 (0)
+BB:2 (3 instructions) - idom = BB:0, df = { BB:9 }
+ -> BB:4 (tree)
+  7: mul u32 %r818 %r813 c0[0x20] (0)
+  8: mov u32 %r819 0x00000000 (0)
+  9: prebreak BB:5 (0)
+BB:4 (7 instructions) - idom = BB:2, df = { BB:9 BB:4 }
+ -> BB:7 (tree)
+ -> BB:6 (tree)
+ 10: phi u32 %r823 %r1696 %r819 (0)
+ 11: phi u32 %r824 %r1692 %r819 (0)
+ 12: precont BB:4 (0)
+ 13: ld  u32 %r825 c0[0x0] (0)
+ 14: shr (SUBOP:1) u32 %r827 %r825 0x00000005 (0)
+ 15: set u8 %p830 ge u32 %r823 %r827 (0)
+ 16: not %p830 bra BB:7 (0)
+BB:6 (1 instructions) - idom = BB:4, df = { BB:9 }
+ -> BB:5 (cross)
+ 17: break BB:5 (0)
+BB:7 (1 instructions) - idom = BB:4, df = { BB:4 }
+ -> BB:8 (forward)
+ 18: bra BB:8 (0)
+BB:8 (469 instructions) - idom = BB:7, df = { BB:4 }
+ -> BB:4 (back)
+ 19: mul u32 %r842 %r823 0x00000022 (0)
+ 20: add s32 %r843 %r818 %r842 (0)
+ 21: and u32 %r845 %r843 0xfffffffc (0)
+ 22: add u64 %r849d %r845 c7[0x2c0] (0)
+ 23: add u32 %r850 %r845 0x00000004 (0)
+ 24: set u8 %p851 gt u32 %r850 c7[0x2c8] (0)
+ 25: not %p851 ld  u32 %r852 g[%r849d+0x0] (0)
+ 26: %p851 mov u32 %r853 0x00000000 (0)
+ 27: union u32 %r854 %r852 %r853 (0)
+ 28: shl (SUBOP:1) s32 %r856 %r843 3 (0)
+ 29: shr (SUBOP:1) u32 %r857 %r854 %r856 (0)
+ 30: and u32 %r859 %r857 0x000000ff (0)
+ 31: add s32 %r861 %r843 1 (0)
+ 32: and u32 %r863 %r861 0xfffffffc (0)
+ 33: add u64 %r867d %r863 c7[0x2c0] (0)
+ 34: add u32 %r868 %r863 0x00000004 (0)
+ 35: set u8 %p869 gt u32 %r868 c7[0x2c8] (0)
+ 36: not %p869 ld  u32 %r870 g[%r867d+0x0] (0)
+ 37: %p869 mov u32 %r871 0x00000000 (0)
+ 38: union u32 %r872 %r870 %r871 (0)
+ 39: add s32 %r874 %r856 8 (0)
+ 40: shr (SUBOP:1) u32 %r875 %r872 %r874 (0)
+ 41: and u32 %r877 %r875 0x000000ff (0)
+ 42: shl (SUBOP:1) s32 %r879 %r877 8 (0)
+ 43: or u32 %r880 %r859 %r879 (0)
+ 44: cvt f32 %r881 f16 %r880 (0)
+ 45: add s32 %r883 %r843 2 (0)
+ 46: and u32 %r885 %r883 0xfffffffc (0)
+ 47: add u64 %r889d %r885 c7[0x2c0] (0)
+ 48: add u32 %r890 %r885 0x00000004 (0)
+ 49: set u8 %p891 gt u32 %r890 c7[0x2c8] (0)
+ 50: not %p891 ld  u32 %r892 g[%r889d+0x0] (0)
+ 51: %p891 mov u32 %r893 0x00000000 (0)
+ 52: union u32 %r894 %r892 %r893 (0)
+ 53: add s32 %r896 %r856 16 (0)
+ 54: shr (SUBOP:1) u32 %r897 %r894 %r896 (0)
+ 55: cvt f32 %r902 s8 %r897 (0)
+ 56: shl (SUBOP:1) s32 %r905 %r823 7 (0)
+ 57: add u64 %r909d %r905 c7[0x2a0] (0)
+ 58: add u32 %r910 %r905 0x00000010 (0)
+ 59: set u8 %p911 gt u32 %r910 c7[0x2a8] (0)
+ 60: not %p911 ld  b128 %r912q g[%r909d+0x0] (0)
+ 61: %p911 mov b128 %r913q 0x0000000000000000 (0)
+ 62: union b128 %r914q %r912q %r913q (0)
+ 63: split b128 { %r915 %r916 %r917 %r918 } %r914q (0)
+ 64: mul f32 %r919 %r902 %r915 (0)
+ 65: add s32 %r921 %r843 3 (0)
+ 66: and u32 %r923 %r921 0xfffffffc (0)
+ 67: add u64 %r927d %r923 c7[0x2c0] (0)
+ 68: add u32 %r928 %r923 0x00000004 (0)
+ 69: set u8 %p929 gt u32 %r928 c7[0x2c8] (0)
+ 70: not %p929 ld  u32 %r930 g[%r927d+0x0] (0)
+ 71: %p929 mov u32 %r931 0x00000000 (0)
+ 72: union u32 %r932 %r930 %r931 (0)
+ 73: add s32 %r934 %r856 24 (0)
+ 74: shr (SUBOP:1) u32 %r935 %r932 %r934 (0)
+ 75: cvt f32 %r940 s8 %r935 (0)
+ 76: fma f32 %r941 %r940 %r916 %r919 (0)
+ 77: add s32 %r943 %r845 4 (0)
+ 78: add u64 %r947d %r943 c7[0x2c0] (0)
+ 79: add u32 %r948 %r943 0x00000004 (0)
+ 80: set u8 %p949 gt u32 %r948 c7[0x2c8] (0)
+ 81: not %p949 ld  u32 %r950 g[%r947d+0x0] (0)
+ 82: %p949 mov u32 %r951 0x00000000 (0)
+ 83: union u32 %r952 %r950 %r951 (0)
+ 84: add s32 %r954 %r856 32 (0)
+ 85: shr (SUBOP:1) u32 %r955 %r952 %r954 (0)
+ 86: cvt f32 %r960 s8 %r955 (0)
+ 87: fma f32 %r961 %r960 %r917 %r941 (0)
+ 88: add s32 %r963 %r843 5 (0)
+ 89: and u32 %r965 %r963 0xfffffffc (0)
+ 90: add u64 %r969d %r965 c7[0x2c0] (0)
+ 91: add u32 %r970 %r965 0x00000004 (0)
+ 92: set u8 %p971 gt u32 %r970 c7[0x2c8] (0)
+ 93: not %p971 ld  u32 %r972 g[%r969d+0x0] (0)
+ 94: %p971 mov u32 %r973 0x00000000 (0)
+ 95: union u32 %r974 %r972 %r973 (0)
+ 96: add s32 %r976 %r856 40 (0)
+ 97: shr (SUBOP:1) u32 %r977 %r974 %r976 (0)
+ 98: cvt f32 %r982 s8 %r977 (0)
+ 99: fma f32 %r983 %r982 %r918 %r961 (0)
+100: add s32 %r985 %r843 6 (0)
+101: and u32 %r987 %r985 0xfffffffc (0)
+102: add u64 %r991d %r987 c7[0x2c0] (0)
+103: add u32 %r992 %r987 0x00000004 (0)
+104: set u8 %p993 gt u32 %r992 c7[0x2c8] (0)
+105: not %p993 ld  u32 %r994 g[%r991d+0x0] (0)
+106: %p993 mov u32 %r995 0x00000000 (0)
+107: union u32 %r996 %r994 %r995 (0)
+108: add s32 %r998 %r856 48 (0)
+109: shr (SUBOP:1) u32 %r999 %r996 %r998 (0)
+110: cvt f32 %r1004 s8 %r999 (0)
+111: add s32 %r1006 %r905 16 (0)
+112: add u64 %r1010d %r1006 c7[0x2a0] (0)
+113: add u32 %r1011 %r1006 0x00000010 (0)
+114: set u8 %p1012 gt u32 %r1011 c7[0x2a8] (0)
+115: not %p1012 ld  b128 %r1013q g[%r1010d+0x0] (0)
+116: %p1012 mov b128 %r1014q 0x0000000000000000 (0)
+117: union b128 %r1015q %r1013q %r1014q (0)
+118: split b128 { %r1016 %r1017 %r1018 %r1019 } %r1015q (0)
+119: fma f32 %r1020 %r1004 %r1016 %r983 (0)
+120: add s32 %r1022 %r843 7 (0)
+121: and u32 %r1024 %r1022 0xfffffffc (0)
+122: add u64 %r1028d %r1024 c7[0x2c0] (0)
+123: add u32 %r1029 %r1024 0x00000004 (0)
+124: set u8 %p1030 gt u32 %r1029 c7[0x2c8] (0)
+125: not %p1030 ld  u32 %r1031 g[%r1028d+0x0] (0)
+126: %p1030 mov u32 %r1032 0x00000000 (0)
+127: union u32 %r1033 %r1031 %r1032 (0)
+128: add s32 %r1035 %r856 56 (0)
+129: shr (SUBOP:1) u32 %r1036 %r1033 %r1035 (0)
+130: cvt f32 %r1041 s8 %r1036 (0)
+131: fma f32 %r1042 %r1041 %r1017 %r1020 (0)
+132: add s32 %r1044 %r845 8 (0)
+133: add u64 %r1048d %r1044 c7[0x2c0] (0)
+134: add u32 %r1049 %r1044 0x00000004 (0)
+135: set u8 %p1050 gt u32 %r1049 c7[0x2c8] (0)
+136: not %p1050 ld  u32 %r1051 g[%r1048d+0x0] (0)
+137: %p1050 mov u32 %r1052 0x00000000 (0)
+138: union u32 %r1053 %r1051 %r1052 (0)
+139: add s32 %r1055 %r856 64 (0)
+140: shr (SUBOP:1) u32 %r1056 %r1053 %r1055 (0)
+141: cvt f32 %r1061 s8 %r1056 (0)
+142: fma f32 %r1062 %r1061 %r1018 %r1042 (0)
+143: add s32 %r1064 %r843 9 (0)
+144: and u32 %r1066 %r1064 0xfffffffc (0)
+145: add u64 %r1070d %r1066 c7[0x2c0] (0)
+146: add u32 %r1071 %r1066 0x00000004 (0)
+147: set u8 %p1072 gt u32 %r1071 c7[0x2c8] (0)
+148: not %p1072 ld  u32 %r1073 g[%r1070d+0x0] (0)
+149: %p1072 mov u32 %r1074 0x00000000 (0)
+150: union u32 %r1075 %r1073 %r1074 (0)
+151: add s32 %r1077 %r856 72 (0)
+152: shr (SUBOP:1) u32 %r1078 %r1075 %r1077 (0)
+153: cvt f32 %r1083 s8 %r1078 (0)
+154: fma f32 %r1084 %r1083 %r1019 %r1062 (0)
+155: add s32 %r1086 %r843 10 (0)
+156: and u32 %r1088 %r1086 0xfffffffc (0)
+157: add u64 %r1092d %r1088 c7[0x2c0] (0)
+158: add u32 %r1093 %r1088 0x00000004 (0)
+159: set u8 %p1094 gt u32 %r1093 c7[0x2c8] (0)
+160: not %p1094 ld  u32 %r1095 g[%r1092d+0x0] (0)
+161: %p1094 mov u32 %r1096 0x00000000 (0)
+162: union u32 %r1097 %r1095 %r1096 (0)
+163: add s32 %r1099 %r856 80 (0)
+164: shr (SUBOP:1) u32 %r1100 %r1097 %r1099 (0)
+165: cvt f32 %r1105 s8 %r1100 (0)
+166: add s32 %r1107 %r905 32 (0)
+167: add u64 %r1111d %r1107 c7[0x2a0] (0)
+168: add u32 %r1112 %r1107 0x00000010 (0)
+169: set u8 %p1113 gt u32 %r1112 c7[0x2a8] (0)
+170: not %p1113 ld  b128 %r1114q g[%r1111d+0x0] (0)
+171: %p1113 mov b128 %r1115q 0x0000000000000000 (0)
+172: union b128 %r1116q %r1114q %r1115q (0)
+173: split b128 { %r1117 %r1118 %r1119 %r1120 } %r1116q (0)
+174: fma f32 %r1121 %r1105 %r1117 %r1084 (0)
+175: add s32 %r1123 %r843 11 (0)
+176: and u32 %r1125 %r1123 0xfffffffc (0)
+177: add u64 %r1129d %r1125 c7[0x2c0] (0)
+178: add u32 %r1130 %r1125 0x00000004 (0)
+179: set u8 %p1131 gt u32 %r1130 c7[0x2c8] (0)
+180: not %p1131 ld  u32 %r1132 g[%r1129d+0x0] (0)
+181: %p1131 mov u32 %r1133 0x00000000 (0)
+182: union u32 %r1134 %r1132 %r1133 (0)
+183: add s32 %r1136 %r856 88 (0)
+184: shr (SUBOP:1) u32 %r1137 %r1134 %r1136 (0)
+185: cvt f32 %r1142 s8 %r1137 (0)
+186: fma f32 %r1143 %r1142 %r1118 %r1121 (0)
+187: add s32 %r1145 %r845 12 (0)
+188: add u64 %r1149d %r1145 c7[0x2c0] (0)
+189: add u32 %r1150 %r1145 0x00000004 (0)
+190: set u8 %p1151 gt u32 %r1150 c7[0x2c8] (0)
+191: not %p1151 ld  u32 %r1152 g[%r1149d+0x0] (0)
+192: %p1151 mov u32 %r1153 0x00000000 (0)
+193: union u32 %r1154 %r1152 %r1153 (0)
+194: add s32 %r1156 %r856 96 (0)
+195: shr (SUBOP:1) u32 %r1157 %r1154 %r1156 (0)
+196: cvt f32 %r1162 s8 %r1157 (0)
+197: fma f32 %r1163 %r1162 %r1119 %r1143 (0)
+198: add s32 %r1165 %r843 13 (0)
+199: and u32 %r1167 %r1165 0xfffffffc (0)
+200: add u64 %r1171d %r1167 c7[0x2c0] (0)
+201: add u32 %r1172 %r1167 0x00000004 (0)
+202: set u8 %p1173 gt u32 %r1172 c7[0x2c8] (0)
+203: not %p1173 ld  u32 %r1174 g[%r1171d+0x0] (0)
+204: %p1173 mov u32 %r1175 0x00000000 (0)
+205: union u32 %r1176 %r1174 %r1175 (0)
+206: add s32 %r1178 %r856 104 (0)
+207: shr (SUBOP:1) u32 %r1179 %r1176 %r1178 (0)
+208: cvt f32 %r1184 s8 %r1179 (0)
+209: fma f32 %r1185 %r1184 %r1120 %r1163 (0)
+210: add s32 %r1187 %r843 14 (0)
+211: and u32 %r1189 %r1187 0xfffffffc (0)
+212: add u64 %r1193d %r1189 c7[0x2c0] (0)
+213: add u32 %r1194 %r1189 0x00000004 (0)
+214: set u8 %p1195 gt u32 %r1194 c7[0x2c8] (0)
+215: not %p1195 ld  u32 %r1196 g[%r1193d+0x0] (0)
+216: %p1195 mov u32 %r1197 0x00000000 (0)
+217: union u32 %r1198 %r1196 %r1197 (0)
+218: add s32 %r1200 %r856 112 (0)
+219: shr (SUBOP:1) u32 %r1201 %r1198 %r1200 (0)
+220: cvt f32 %r1206 s8 %r1201 (0)
+221: add s32 %r1208 %r905 48 (0)
+222: add u64 %r1212d %r1208 c7[0x2a0] (0)
+223: add u32 %r1213 %r1208 0x00000010 (0)
+224: set u8 %p1214 gt u32 %r1213 c7[0x2a8] (0)
+225: not %p1214 ld  b128 %r1215q g[%r1212d+0x0] (0)
+226: %p1214 mov b128 %r1216q 0x0000000000000000 (0)
+227: union b128 %r1217q %r1215q %r1216q (0)
+228: split b128 { %r1218 %r1219 %r1220 %r1221 } %r1217q (0)
+229: fma f32 %r1222 %r1206 %r1218 %r1185 (0)
+230: add s32 %r1224 %r843 15 (0)
+231: and u32 %r1226 %r1224 0xfffffffc (0)
+232: add u64 %r1230d %r1226 c7[0x2c0] (0)
+233: add u32 %r1231 %r1226 0x00000004 (0)
+234: set u8 %p1232 gt u32 %r1231 c7[0x2c8] (0)
+235: not %p1232 ld  u32 %r1233 g[%r1230d+0x0] (0)
+236: %p1232 mov u32 %r1234 0x00000000 (0)
+237: union u32 %r1235 %r1233 %r1234 (0)
+238: add s32 %r1237 %r856 120 (0)
+239: shr (SUBOP:1) u32 %r1238 %r1235 %r1237 (0)
+240: cvt f32 %r1243 s8 %r1238 (0)
+241: fma f32 %r1244 %r1243 %r1219 %r1222 (0)
+242: add s32 %r1246 %r845 16 (0)
+243: add u64 %r1250d %r1246 c7[0x2c0] (0)
+244: add u32 %r1251 %r1246 0x00000004 (0)
+245: set u8 %p1252 gt u32 %r1251 c7[0x2c8] (0)
+246: not %p1252 ld  u32 %r1253 g[%r1250d+0x0] (0)
+247: %p1252 mov u32 %r1254 0x00000000 (0)
+248: union u32 %r1255 %r1253 %r1254 (0)
+249: add s32 %r1257 %r856 128 (0)
+250: shr (SUBOP:1) u32 %r1258 %r1255 %r1257 (0)
+251: cvt f32 %r1263 s8 %r1258 (0)
+252: fma f32 %r1264 %r1263 %r1220 %r1244 (0)
+253: add s32 %r1266 %r843 17 (0)
+254: and u32 %r1268 %r1266 0xfffffffc (0)
+255: add u64 %r1272d %r1268 c7[0x2c0] (0)
+256: add u32 %r1273 %r1268 0x00000004 (0)
+257: set u8 %p1274 gt u32 %r1273 c7[0x2c8] (0)
+258: not %p1274 ld  u32 %r1275 g[%r1272d+0x0] (0)
+259: %p1274 mov u32 %r1276 0x00000000 (0)
+260: union u32 %r1277 %r1275 %r1276 (0)
+261: add s32 %r1279 %r856 136 (0)
+262: shr (SUBOP:1) u32 %r1280 %r1277 %r1279 (0)
+263: cvt f32 %r1285 s8 %r1280 (0)
+264: fma f32 %r1286 %r1285 %r1221 %r1264 (0)
+265: add s32 %r1288 %r843 18 (0)
+266: and u32 %r1290 %r1288 0xfffffffc (0)
+267: add u64 %r1294d %r1290 c7[0x2c0] (0)
+268: add u32 %r1295 %r1290 0x00000004 (0)
+269: set u8 %p1296 gt u32 %r1295 c7[0x2c8] (0)
+270: not %p1296 ld  u32 %r1297 g[%r1294d+0x0] (0)
+271: %p1296 mov u32 %r1298 0x00000000 (0)
+272: union u32 %r1299 %r1297 %r1298 (0)
+273: add s32 %r1301 %r856 144 (0)
+274: shr (SUBOP:1) u32 %r1302 %r1299 %r1301 (0)
+275: cvt f32 %r1307 s8 %r1302 (0)
+276: add s32 %r1309 %r905 64 (0)
+277: add u64 %r1313d %r1309 c7[0x2a0] (0)
+278: add u32 %r1314 %r1309 0x00000010 (0)
+279: set u8 %p1315 gt u32 %r1314 c7[0x2a8] (0)
+280: not %p1315 ld  b128 %r1316q g[%r1313d+0x0] (0)
+281: %p1315 mov b128 %r1317q 0x0000000000000000 (0)
+282: union b128 %r1318q %r1316q %r1317q (0)
+283: split b128 { %r1319 %r1320 %r1321 %r1322 } %r1318q (0)
+284: fma f32 %r1323 %r1307 %r1319 %r1286 (0)
+285: add s32 %r1325 %r843 19 (0)
+286: and u32 %r1327 %r1325 0xfffffffc (0)
+287: add u64 %r1331d %r1327 c7[0x2c0] (0)
+288: add u32 %r1332 %r1327 0x00000004 (0)
+289: set u8 %p1333 gt u32 %r1332 c7[0x2c8] (0)
+290: not %p1333 ld  u32 %r1334 g[%r1331d+0x0] (0)
+291: %p1333 mov u32 %r1335 0x00000000 (0)
+292: union u32 %r1336 %r1334 %r1335 (0)
+293: add s32 %r1338 %r856 152 (0)
+294: shr (SUBOP:1) u32 %r1339 %r1336 %r1338 (0)
+295: cvt f32 %r1344 s8 %r1339 (0)
+296: fma f32 %r1345 %r1344 %r1320 %r1323 (0)
+297: add s32 %r1347 %r845 20 (0)
+298: add u64 %r1351d %r1347 c7[0x2c0] (0)
+299: add u32 %r1352 %r1347 0x00000004 (0)
+300: set u8 %p1353 gt u32 %r1352 c7[0x2c8] (0)
+301: not %p1353 ld  u32 %r1354 g[%r1351d+0x0] (0)
+302: %p1353 mov u32 %r1355 0x00000000 (0)
+303: union u32 %r1356 %r1354 %r1355 (0)
+304: add s32 %r1358 %r856 160 (0)
+305: shr (SUBOP:1) u32 %r1359 %r1356 %r1358 (0)
+306: cvt f32 %r1364 s8 %r1359 (0)
+307: fma f32 %r1365 %r1364 %r1321 %r1345 (0)
+308: add s32 %r1367 %r843 21 (0)
+309: and u32 %r1369 %r1367 0xfffffffc (0)
+310: add u64 %r1373d %r1369 c7[0x2c0] (0)
+311: add u32 %r1374 %r1369 0x00000004 (0)
+312: set u8 %p1375 gt u32 %r1374 c7[0x2c8] (0)
+313: not %p1375 ld  u32 %r1376 g[%r1373d+0x0] (0)
+314: %p1375 mov u32 %r1377 0x00000000 (0)
+315: union u32 %r1378 %r1376 %r1377 (0)
+316: add s32 %r1380 %r856 168 (0)
+317: shr (SUBOP:1) u32 %r1381 %r1378 %r1380 (0)
+318: cvt f32 %r1386 s8 %r1381 (0)
+319: fma f32 %r1387 %r1386 %r1322 %r1365 (0)
+320: add s32 %r1389 %r843 22 (0)
+321: and u32 %r1391 %r1389 0xfffffffc (0)
+322: add u64 %r1395d %r1391 c7[0x2c0] (0)
+323: add u32 %r1396 %r1391 0x00000004 (0)
+324: set u8 %p1397 gt u32 %r1396 c7[0x2c8] (0)
+325: not %p1397 ld  u32 %r1398 g[%r1395d+0x0] (0)
+326: %p1397 mov u32 %r1399 0x00000000 (0)
+327: union u32 %r1400 %r1398 %r1399 (0)
+328: add s32 %r1402 %r856 176 (0)
+329: shr (SUBOP:1) u32 %r1403 %r1400 %r1402 (0)
+330: cvt f32 %r1408 s8 %r1403 (0)
+331: add s32 %r1410 %r905 80 (0)
+332: add u64 %r1414d %r1410 c7[0x2a0] (0)
+333: add u32 %r1415 %r1410 0x00000010 (0)
+334: set u8 %p1416 gt u32 %r1415 c7[0x2a8] (0)
+335: not %p1416 ld  b128 %r1417q g[%r1414d+0x0] (0)
+336: %p1416 mov b128 %r1418q 0x0000000000000000 (0)
+337: union b128 %r1419q %r1417q %r1418q (0)
+338: split b128 { %r1420 %r1421 %r1422 %r1423 } %r1419q (0)
+339: fma f32 %r1424 %r1408 %r1420 %r1387 (0)
+340: add s32 %r1426 %r843 23 (0)
+341: and u32 %r1428 %r1426 0xfffffffc (0)
+342: add u64 %r1432d %r1428 c7[0x2c0] (0)
+343: add u32 %r1433 %r1428 0x00000004 (0)
+344: set u8 %p1434 gt u32 %r1433 c7[0x2c8] (0)
+345: not %p1434 ld  u32 %r1435 g[%r1432d+0x0] (0)
+346: %p1434 mov u32 %r1436 0x00000000 (0)
+347: union u32 %r1437 %r1435 %r1436 (0)
+348: add s32 %r1439 %r856 184 (0)
+349: shr (SUBOP:1) u32 %r1440 %r1437 %r1439 (0)
+350: cvt f32 %r1445 s8 %r1440 (0)
+351: fma f32 %r1446 %r1445 %r1421 %r1424 (0)
+352: add s32 %r1448 %r845 24 (0)
+353: add u64 %r1452d %r1448 c7[0x2c0] (0)
+354: add u32 %r1453 %r1448 0x00000004 (0)
+355: set u8 %p1454 gt u32 %r1453 c7[0x2c8] (0)
+356: not %p1454 ld  u32 %r1455 g[%r1452d+0x0] (0)
+357: %p1454 mov u32 %r1456 0x00000000 (0)
+358: union u32 %r1457 %r1455 %r1456 (0)
+359: add s32 %r1459 %r856 192 (0)
+360: shr (SUBOP:1) u32 %r1460 %r1457 %r1459 (0)
+361: cvt f32 %r1465 s8 %r1460 (0)
+362: fma f32 %r1466 %r1465 %r1422 %r1446 (0)
+363: add s32 %r1468 %r843 25 (0)
+364: and u32 %r1470 %r1468 0xfffffffc (0)
+365: add u64 %r1474d %r1470 c7[0x2c0] (0)
+366: add u32 %r1475 %r1470 0x00000004 (0)
+367: set u8 %p1476 gt u32 %r1475 c7[0x2c8] (0)
+368: not %p1476 ld  u32 %r1477 g[%r1474d+0x0] (0)
+369: %p1476 mov u32 %r1478 0x00000000 (0)
+370: union u32 %r1479 %r1477 %r1478 (0)
+371: add s32 %r1481 %r856 200 (0)
+372: shr (SUBOP:1) u32 %r1482 %r1479 %r1481 (0)
+373: cvt f32 %r1487 s8 %r1482 (0)
+374: fma f32 %r1488 %r1487 %r1423 %r1466 (0)
+375: add s32 %r1490 %r843 26 (0)
+376: and u32 %r1492 %r1490 0xfffffffc (0)
+377: add u64 %r1496d %r1492 c7[0x2c0] (0)
+378: add u32 %r1497 %r1492 0x00000004 (0)
+379: set u8 %p1498 gt u32 %r1497 c7[0x2c8] (0)
+380: not %p1498 ld  u32 %r1499 g[%r1496d+0x0] (0)
+381: %p1498 mov u32 %r1500 0x00000000 (0)
+382: union u32 %r1501 %r1499 %r1500 (0)
+383: add s32 %r1503 %r856 208 (0)
+384: shr (SUBOP:1) u32 %r1504 %r1501 %r1503 (0)
+385: cvt f32 %r1509 s8 %r1504 (0)
+386: add s32 %r1511 %r905 96 (0)
+387: add u64 %r1515d %r1511 c7[0x2a0] (0)
+388: add u32 %r1516 %r1511 0x00000010 (0)
+389: set u8 %p1517 gt u32 %r1516 c7[0x2a8] (0)
+390: not %p1517 ld  b128 %r1518q g[%r1515d+0x0] (0)
+391: %p1517 mov b128 %r1519q 0x0000000000000000 (0)
+392: union b128 %r1520q %r1518q %r1519q (0)
+393: split b128 { %r1521 %r1522 %r1523 %r1524 } %r1520q (0)
+394: fma f32 %r1525 %r1509 %r1521 %r1488 (0)
+395: add s32 %r1527 %r843 27 (0)
+396: and u32 %r1529 %r1527 0xfffffffc (0)
+397: add u64 %r1533d %r1529 c7[0x2c0] (0)
+398: add u32 %r1534 %r1529 0x00000004 (0)
+399: set u8 %p1535 gt u32 %r1534 c7[0x2c8] (0)
+400: not %p1535 ld  u32 %r1536 g[%r1533d+0x0] (0)
+401: %p1535 mov u32 %r1537 0x00000000 (0)
+402: union u32 %r1538 %r1536 %r1537 (0)
+403: add s32 %r1540 %r856 216 (0)
+404: shr (SUBOP:1) u32 %r1541 %r1538 %r1540 (0)
+405: cvt f32 %r1546 s8 %r1541 (0)
+406: fma f32 %r1547 %r1546 %r1522 %r1525 (0)
+407: add s32 %r1549 %r845 28 (0)
+408: add u64 %r1553d %r1549 c7[0x2c0] (0)
+409: add u32 %r1554 %r1549 0x00000004 (0)
+410: set u8 %p1555 gt u32 %r1554 c7[0x2c8] (0)
+411: not %p1555 ld  u32 %r1556 g[%r1553d+0x0] (0)
+412: %p1555 mov u32 %r1557 0x00000000 (0)
+413: union u32 %r1558 %r1556 %r1557 (0)
+414: add s32 %r1560 %r856 224 (0)
+415: shr (SUBOP:1) u32 %r1561 %r1558 %r1560 (0)
+416: cvt f32 %r1566 s8 %r1561 (0)
+417: fma f32 %r1567 %r1566 %r1523 %r1547 (0)
+418: add s32 %r1569 %r843 29 (0)
+419: and u32 %r1571 %r1569 0xfffffffc (0)
+420: add u64 %r1575d %r1571 c7[0x2c0] (0)
+421: add u32 %r1576 %r1571 0x00000004 (0)
+422: set u8 %p1577 gt u32 %r1576 c7[0x2c8] (0)
+423: not %p1577 ld  u32 %r1578 g[%r1575d+0x0] (0)
+424: %p1577 mov u32 %r1579 0x00000000 (0)
+425: union u32 %r1580 %r1578 %r1579 (0)
+426: add s32 %r1582 %r856 232 (0)
+427: shr (SUBOP:1) u32 %r1583 %r1580 %r1582 (0)
+428: cvt f32 %r1588 s8 %r1583 (0)
+429: fma f32 %r1589 %r1588 %r1524 %r1567 (0)
+430: add s32 %r1591 %r843 30 (0)
+431: and u32 %r1593 %r1591 0xfffffffc (0)
+432: add u64 %r1597d %r1593 c7[0x2c0] (0)
+433: add u32 %r1598 %r1593 0x00000004 (0)
+434: set u8 %p1599 gt u32 %r1598 c7[0x2c8] (0)
+435: not %p1599 ld  u32 %r1600 g[%r1597d+0x0] (0)
+436: %p1599 mov u32 %r1601 0x00000000 (0)
+437: union u32 %r1602 %r1600 %r1601 (0)
+438: add s32 %r1604 %r856 240 (0)
+439: shr (SUBOP:1) u32 %r1605 %r1602 %r1604 (0)
+440: cvt f32 %r1610 s8 %r1605 (0)
+441: add s32 %r1612 %r905 112 (0)
+442: add u64 %r1616d %r1612 c7[0x2a0] (0)
+443: add u32 %r1617 %r1612 0x00000010 (0)
+444: set u8 %p1618 gt u32 %r1617 c7[0x2a8] (0)
+445: not %p1618 ld  b128 %r1619q g[%r1616d+0x0] (0)
+446: %p1618 mov b128 %r1620q 0x0000000000000000 (0)
+447: union b128 %r1621q %r1619q %r1620q (0)
+448: split b128 { %r1622 %r1623 %r1624 %r1625 } %r1621q (0)
+449: fma f32 %r1626 %r1610 %r1622 %r1589 (0)
+450: add s32 %r1628 %r843 31 (0)
+451: and u32 %r1630 %r1628 0xfffffffc (0)
+452: add u64 %r1634d %r1630 c7[0x2c0] (0)
+453: add u32 %r1635 %r1630 0x00000004 (0)
+454: set u8 %p1636 gt u32 %r1635 c7[0x2c8] (0)
+455: not %p1636 ld  u32 %r1637 g[%r1634d+0x0] (0)
+456: %p1636 mov u32 %r1638 0x00000000 (0)
+457: union u32 %r1639 %r1637 %r1638 (0)
+458: add s32 %r1641 %r856 248 (0)
+459: shr (SUBOP:1) u32 %r1642 %r1639 %r1641 (0)
+460: cvt f32 %r1647 s8 %r1642 (0)
+461: fma f32 %r1648 %r1647 %r1623 %r1626 (0)
+462: add s32 %r1650 %r845 32 (0)
+463: add u64 %r1654d %r1650 c7[0x2c0] (0)
+464: add u32 %r1655 %r1650 0x00000004 (0)
+465: set u8 %p1656 gt u32 %r1655 c7[0x2c8] (0)
+466: not %p1656 ld  u32 %r1657 g[%r1654d+0x0] (0)
+467: %p1656 mov u32 %r1658 0x00000000 (0)
+468: union u32 %r1659 %r1657 %r1658 (0)
+469: add s32 %r1661 %r856 256 (0)
+470: shr (SUBOP:1) u32 %r1662 %r1659 %r1661 (0)
+471: cvt f32 %r1667 s8 %r1662 (0)
+472: fma f32 %r1668 %r1667 %r1624 %r1648 (0)
+473: add s32 %r1670 %r843 33 (0)
+474: and u32 %r1672 %r1670 0xfffffffc (0)
+475: add u64 %r1676d %r1672 c7[0x2c0] (0)
+476: add u32 %r1677 %r1672 0x00000004 (0)
+477: set u8 %p1678 gt u32 %r1677 c7[0x2c8] (0)
+478: not %p1678 ld  u32 %r1679 g[%r1676d+0x0] (0)
+479: %p1678 mov u32 %r1680 0x00000000 (0)
+480: union u32 %r1681 %r1679 %r1680 (0)
+481: add s32 %r1683 %r856 264 (0)
+482: shr (SUBOP:1) u32 %r1684 %r1681 %r1683 (0)
+483: cvt f32 %r1689 s8 %r1684 (0)
+484: fma f32 %r1690 %r1689 %r1625 %r1668 (0)
+485: fma f32 %r1692 %r881 %r1690 %r824 (0)
+486: add s32 %r1696 %r823 1 (0)
+487: cont BB:4 (0)
+BB:3 (1 instructions) - idom = BB:0, df = { BB:9 }
+ -> BB:9 (forward)
+488: bra BB:9 (0)
+BB:5 (7 instructions) - idom = BB:6, df = { BB:9 }
+ -> BB:9 (forward)
+489: shl (SUBOP:1) s32 %r832 %r813 2 (0)
+490: mov u32 %r833 %r824 (0)
+491: add u64 %r837d %r832 c7[0x2b0] (0)
+492: add u32 %r838 %r832 0x00000004 (0)
+493: set u8 %p839 gt u32 %r838 c7[0x2b8] (0)
+494: not %p839 st  u32 # g[%r837d+0x0] %r833 (0)
+495: bra BB:9 (0)
+BB:9 (1 instructions) - idom = BB:0, df = { }
+ -> BB:1 (tree)
+496: join (0)
+BB:1 (1 instructions) - idom = BB:9, df = { }
+497: exit - # (0)
+
+MAIN:-1 ()
+BB:0 (7 instructions) - df = { }
+ -> BB:3 (tree)
+ -> BB:2 (tree)
+  0: rdsv u32 $r0 sv[CTAID:0] (8)
+  1: rdsv u32 $r1 sv[TID:0] (8)
+  2: shl (SUBOP:1) s32 $r0 $r0 6 (8)
+  3: add s32 $r3 $r0 $r1 (8)
+  4: joinat BB:9 (8)
+  5: set u8 $p0 lt u32 $r3 c0[0x10] (8)
+  6: not $p0 join BB:9 (8)
+BB:2 (4 instructions) - idom = BB:0, df = { BB:9 }
+ -> BB:4 (tree)
+  7: mul u32 $r8 $r3 c0[0x20] (8)
+  8: mov u32 $r2 0x00000000 (8)
+  9: prebreak BB:5 (8)
+ 10: mov u32 $r9 $r2 (8)
+BB:4 (3 instructions) - idom = BB:2, df = { BB:9 BB:4 }
+ -> BB:7 (tree)
+ -> BB:6 (tree)
+ 11: ld  u32 $r0 c0[0x0] (8)
+ 12: shr (SUBOP:1) u32 $r0 $r0 0x00000005 (8)
+ 13: set u8 $p0 ge u32 $r9 $r0 (8)
+BB:6 (1 instructions) - idom = BB:4, df = { BB:9 }
+ -> BB:5 (cross)
+ 14: $p0 break BB:5 (8)
+BB:7 (0 instructions) - idom = BB:4, df = { BB:4 }
+ -> BB:8 (forward)
+BB:8 (461 instructions) - idom = BB:7, df = { BB:4 }
+ -> BB:4 (back)
+ 15: mul u32 $r0 $r9 0x00000022 (8)
+ 16: add s32 $r10 $r8 $r0 (8)
+ 17: and u32 $r12 $r10 0xfffffffc (8)
+ 18: add u32 { $r0 $c0 } $r12 c7[0x2c0] (8)
+ 19: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+ 20: add u32 $r4 $r12 0x00000004 (8)
+ 21: set u8 $p0 gt u32 $r4 c7[0x2c8] (8)
+ 22: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+ 23: $p0 mov u32 $r0 0x00000000 (8)
+ 24: shl (SUBOP:1) s32 $r11 $r10 3 (8)
+ 25: shr (SUBOP:1) u32 $r0 $r0 $r11 (8)
+ 26: and u32 $r4 $r0 0x000000ff (8)
+ 27: add s32 $r0 $r10 1 (8)
+ 28: and u32 $r5 $r0 0xfffffffc (8)
+ 29: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+ 30: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+ 31: add u32 $r5 $r5 0x00000004 (8)
+ 32: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+ 33: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+ 34: $p0 mov u32 $r0 0x00000000 (8)
+ 35: add s32 $r1 $r11 8 (8)
+ 36: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+ 37: and u32 $r0 $r0 0x000000ff (8)
+ 38: shl (SUBOP:1) s32 $r0 $r0 8 (8)
+ 39: or u32 $r0 $r4 $r0 (8)
+ 40: cvt f32 $r13 f16 $r0 (8)
+ 41: add s32 $r0 $r10 2 (8)
+ 42: and u32 $r4 $r0 0xfffffffc (8)
+ 43: add u32 { $r0 $c0 } $r4 c7[0x2c0] (8)
+ 44: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+ 45: add u32 $r4 $r4 0x00000004 (8)
+ 46: set u8 $p0 gt u32 $r4 c7[0x2c8] (8)
+ 47: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+ 48: $p0 mov u32 $r0 0x00000000 (8)
+ 49: add s32 $r1 $r11 16 (8)
+ 50: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+ 51: cvt f32 $r15 s8 $r0 (8)
+ 52: shl (SUBOP:1) s32 $r14 $r9 7 (8)
+ 53: add u32 { $r0 $c0 } $r14 c7[0x2a0] (8)
+ 54: add u32 $r1 $r255 c7[0x2a4] $c0 (8)
+ 55: add u32 $r4 $r14 0x00000010 (8)
+ 56: set u8 $p0 gt u32 $r4 c7[0x2a8] (8)
+ 57: not $p0 ld  b128 $r4q g[$r0d+0x0] (8)
+ 58: $p0 mov b128 $r4q 0x0000000000000000 (8)
+ 59: mul f32 $r4 $r15 $r4 (8)
+ 60: add s32 $r0 $r10 3 (8)
+ 61: and u32 $r15 $r0 0xfffffffc (8)
+ 62: add u32 { $r0 $c0 } $r15 c7[0x2c0] (8)
+ 63: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+ 64: add u32 $r15 $r15 0x00000004 (8)
+ 65: set u8 $p0 gt u32 $r15 c7[0x2c8] (8)
+ 66: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+ 67: $p0 mov u32 $r0 0x00000000 (8)
+ 68: add s32 $r1 $r11 24 (8)
+ 69: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+ 70: cvt f32 $r0 s8 $r0 (8)
+ 71: fma f32 $r4 $r0 $r5 $r4 (8)
+ 72: add s32 $r5 $r12 4 (8)
+ 73: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+ 74: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+ 75: add u32 $r5 $r5 0x00000004 (8)
+ 76: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+ 77: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+ 78: $p0 mov u32 $r0 0x00000000 (8)
+ 79: add s32 $r1 $r11 32 (8)
+ 80: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+ 81: cvt f32 $r0 s8 $r0 (8)
+ 82: fma f32 $r4 $r0 $r6 $r4 (8)
+ 83: add s32 $r0 $r10 5 (8)
+ 84: and u32 $r5 $r0 0xfffffffc (8)
+ 85: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+ 86: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+ 87: add u32 $r5 $r5 0x00000004 (8)
+ 88: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+ 89: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+ 90: $p0 mov u32 $r0 0x00000000 (8)
+ 91: add s32 $r1 $r11 40 (8)
+ 92: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+ 93: cvt f32 $r0 s8 $r0 (8)
+ 94: fma f32 $r15 $r0 $r7 $r4 (8)
+ 95: add s32 $r0 $r10 6 (8)
+ 96: and u32 $r4 $r0 0xfffffffc (8)
+ 97: add u32 { $r0 $c0 } $r4 c7[0x2c0] (8)
+ 98: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+ 99: add u32 $r4 $r4 0x00000004 (8)
+100: set u8 $p0 gt u32 $r4 c7[0x2c8] (8)
+101: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+102: $p0 mov u32 $r0 0x00000000 (8)
+103: add s32 $r1 $r11 48 (8)
+104: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+105: cvt f32 $r16 s8 $r0 (8)
+106: add s32 $r4 $r14 16 (8)
+107: add u32 { $r0 $c0 } $r4 c7[0x2a0] (8)
+108: add u32 $r1 $r255 c7[0x2a4] $c0 (8)
+109: add u32 $r4 $r4 0x00000010 (8)
+110: set u8 $p0 gt u32 $r4 c7[0x2a8] (8)
+111: not $p0 ld  b128 $r4q g[$r0d+0x0] (8)
+112: $p0 mov b128 $r4q 0x0000000000000000 (8)
+113: fma f32 $r4 $r16 $r4 $r15 (8)
+114: add s32 $r0 $r10 7 (8)
+115: and u32 $r15 $r0 0xfffffffc (8)
+116: add u32 { $r0 $c0 } $r15 c7[0x2c0] (8)
+117: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+118: add u32 $r15 $r15 0x00000004 (8)
+119: set u8 $p0 gt u32 $r15 c7[0x2c8] (8)
+120: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+121: $p0 mov u32 $r0 0x00000000 (8)
+122: add s32 $r1 $r11 56 (8)
+123: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+124: cvt f32 $r0 s8 $r0 (8)
+125: fma f32 $r4 $r0 $r5 $r4 (8)
+126: add s32 $r5 $r12 8 (8)
+127: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+128: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+129: add u32 $r5 $r5 0x00000004 (8)
+130: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+131: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+132: $p0 mov u32 $r0 0x00000000 (8)
+133: add s32 $r1 $r11 64 (8)
+134: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+135: cvt f32 $r0 s8 $r0 (8)
+136: fma f32 $r4 $r0 $r6 $r4 (8)
+137: add s32 $r0 $r10 9 (8)
+138: and u32 $r5 $r0 0xfffffffc (8)
+139: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+140: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+141: add u32 $r5 $r5 0x00000004 (8)
+142: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+143: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+144: $p0 mov u32 $r0 0x00000000 (8)
+145: add s32 $r1 $r11 72 (8)
+146: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+147: cvt f32 $r0 s8 $r0 (8)
+148: fma f32 $r15 $r0 $r7 $r4 (8)
+149: add s32 $r0 $r10 10 (8)
+150: and u32 $r4 $r0 0xfffffffc (8)
+151: add u32 { $r0 $c0 } $r4 c7[0x2c0] (8)
+152: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+153: add u32 $r4 $r4 0x00000004 (8)
+154: set u8 $p0 gt u32 $r4 c7[0x2c8] (8)
+155: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+156: $p0 mov u32 $r0 0x00000000 (8)
+157: add s32 $r1 $r11 80 (8)
+158: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+159: cvt f32 $r16 s8 $r0 (8)
+160: add s32 $r4 $r14 32 (8)
+161: add u32 { $r0 $c0 } $r4 c7[0x2a0] (8)
+162: add u32 $r1 $r255 c7[0x2a4] $c0 (8)
+163: add u32 $r4 $r4 0x00000010 (8)
+164: set u8 $p0 gt u32 $r4 c7[0x2a8] (8)
+165: not $p0 ld  b128 $r4q g[$r0d+0x0] (8)
+166: $p0 mov b128 $r4q 0x0000000000000000 (8)
+167: fma f32 $r4 $r16 $r4 $r15 (8)
+168: add s32 $r0 $r10 11 (8)
+169: and u32 $r15 $r0 0xfffffffc (8)
+170: add u32 { $r0 $c0 } $r15 c7[0x2c0] (8)
+171: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+172: add u32 $r15 $r15 0x00000004 (8)
+173: set u8 $p0 gt u32 $r15 c7[0x2c8] (8)
+174: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+175: $p0 mov u32 $r0 0x00000000 (8)
+176: add s32 $r1 $r11 88 (8)
+177: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+178: cvt f32 $r0 s8 $r0 (8)
+179: fma f32 $r4 $r0 $r5 $r4 (8)
+180: add s32 $r5 $r12 12 (8)
+181: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+182: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+183: add u32 $r5 $r5 0x00000004 (8)
+184: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+185: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+186: $p0 mov u32 $r0 0x00000000 (8)
+187: add s32 $r1 $r11 96 (8)
+188: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+189: cvt f32 $r0 s8 $r0 (8)
+190: fma f32 $r4 $r0 $r6 $r4 (8)
+191: add s32 $r0 $r10 13 (8)
+192: and u32 $r5 $r0 0xfffffffc (8)
+193: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+194: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+195: add u32 $r5 $r5 0x00000004 (8)
+196: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+197: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+198: $p0 mov u32 $r0 0x00000000 (8)
+199: add s32 $r1 $r11 104 (8)
+200: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+201: cvt f32 $r0 s8 $r0 (8)
+202: fma f32 $r15 $r0 $r7 $r4 (8)
+203: add s32 $r0 $r10 14 (8)
+204: and u32 $r4 $r0 0xfffffffc (8)
+205: add u32 { $r0 $c0 } $r4 c7[0x2c0] (8)
+206: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+207: add u32 $r4 $r4 0x00000004 (8)
+208: set u8 $p0 gt u32 $r4 c7[0x2c8] (8)
+209: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+210: $p0 mov u32 $r0 0x00000000 (8)
+211: add s32 $r1 $r11 112 (8)
+212: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+213: cvt f32 $r16 s8 $r0 (8)
+214: add s32 $r4 $r14 48 (8)
+215: add u32 { $r0 $c0 } $r4 c7[0x2a0] (8)
+216: add u32 $r1 $r255 c7[0x2a4] $c0 (8)
+217: add u32 $r4 $r4 0x00000010 (8)
+218: set u8 $p0 gt u32 $r4 c7[0x2a8] (8)
+219: not $p0 ld  b128 $r4q g[$r0d+0x0] (8)
+220: $p0 mov b128 $r4q 0x0000000000000000 (8)
+221: fma f32 $r4 $r16 $r4 $r15 (8)
+222: add s32 $r0 $r10 15 (8)
+223: and u32 $r15 $r0 0xfffffffc (8)
+224: add u32 { $r0 $c0 } $r15 c7[0x2c0] (8)
+225: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+226: add u32 $r15 $r15 0x00000004 (8)
+227: set u8 $p0 gt u32 $r15 c7[0x2c8] (8)
+228: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+229: $p0 mov u32 $r0 0x00000000 (8)
+230: add s32 $r1 $r11 120 (8)
+231: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+232: cvt f32 $r0 s8 $r0 (8)
+233: fma f32 $r4 $r0 $r5 $r4 (8)
+234: add s32 $r5 $r12 16 (8)
+235: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+236: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+237: add u32 $r5 $r5 0x00000004 (8)
+238: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+239: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+240: $p0 mov u32 $r0 0x00000000 (8)
+241: add s32 $r1 $r11 128 (8)
+242: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+243: cvt f32 $r0 s8 $r0 (8)
+244: fma f32 $r4 $r0 $r6 $r4 (8)
+245: add s32 $r0 $r10 17 (8)
+246: and u32 $r5 $r0 0xfffffffc (8)
+247: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+248: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+249: add u32 $r5 $r5 0x00000004 (8)
+250: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+251: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+252: $p0 mov u32 $r0 0x00000000 (8)
+253: add s32 $r1 $r11 136 (8)
+254: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+255: cvt f32 $r0 s8 $r0 (8)
+256: fma f32 $r15 $r0 $r7 $r4 (8)
+257: add s32 $r0 $r10 18 (8)
+258: and u32 $r4 $r0 0xfffffffc (8)
+259: add u32 { $r0 $c0 } $r4 c7[0x2c0] (8)
+260: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+261: add u32 $r4 $r4 0x00000004 (8)
+262: set u8 $p0 gt u32 $r4 c7[0x2c8] (8)
+263: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+264: $p0 mov u32 $r0 0x00000000 (8)
+265: add s32 $r1 $r11 144 (8)
+266: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+267: cvt f32 $r16 s8 $r0 (8)
+268: add s32 $r4 $r14 64 (8)
+269: add u32 { $r0 $c0 } $r4 c7[0x2a0] (8)
+270: add u32 $r1 $r255 c7[0x2a4] $c0 (8)
+271: add u32 $r4 $r4 0x00000010 (8)
+272: set u8 $p0 gt u32 $r4 c7[0x2a8] (8)
+273: not $p0 ld  b128 $r4q g[$r0d+0x0] (8)
+274: $p0 mov b128 $r4q 0x0000000000000000 (8)
+275: fma f32 $r4 $r16 $r4 $r15 (8)
+276: add s32 $r0 $r10 19 (8)
+277: and u32 $r15 $r0 0xfffffffc (8)
+278: add u32 { $r0 $c0 } $r15 c7[0x2c0] (8)
+279: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+280: add u32 $r15 $r15 0x00000004 (8)
+281: set u8 $p0 gt u32 $r15 c7[0x2c8] (8)
+282: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+283: $p0 mov u32 $r0 0x00000000 (8)
+284: add s32 $r1 $r11 152 (8)
+285: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+286: cvt f32 $r0 s8 $r0 (8)
+287: fma f32 $r4 $r0 $r5 $r4 (8)
+288: add s32 $r5 $r12 20 (8)
+289: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+290: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+291: add u32 $r5 $r5 0x00000004 (8)
+292: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+293: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+294: $p0 mov u32 $r0 0x00000000 (8)
+295: add s32 $r1 $r11 160 (8)
+296: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+297: cvt f32 $r0 s8 $r0 (8)
+298: fma f32 $r4 $r0 $r6 $r4 (8)
+299: add s32 $r0 $r10 21 (8)
+300: and u32 $r5 $r0 0xfffffffc (8)
+301: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+302: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+303: add u32 $r5 $r5 0x00000004 (8)
+304: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+305: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+306: $p0 mov u32 $r0 0x00000000 (8)
+307: add s32 $r1 $r11 168 (8)
+308: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+309: cvt f32 $r0 s8 $r0 (8)
+310: fma f32 $r15 $r0 $r7 $r4 (8)
+311: add s32 $r0 $r10 22 (8)
+312: and u32 $r4 $r0 0xfffffffc (8)
+313: add u32 { $r0 $c0 } $r4 c7[0x2c0] (8)
+314: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+315: add u32 $r4 $r4 0x00000004 (8)
+316: set u8 $p0 gt u32 $r4 c7[0x2c8] (8)
+317: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+318: $p0 mov u32 $r0 0x00000000 (8)
+319: add s32 $r1 $r11 176 (8)
+320: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+321: cvt f32 $r16 s8 $r0 (8)
+322: add s32 $r4 $r14 80 (8)
+323: add u32 { $r0 $c0 } $r4 c7[0x2a0] (8)
+324: add u32 $r1 $r255 c7[0x2a4] $c0 (8)
+325: add u32 $r4 $r4 0x00000010 (8)
+326: set u8 $p0 gt u32 $r4 c7[0x2a8] (8)
+327: not $p0 ld  b128 $r4q g[$r0d+0x0] (8)
+328: $p0 mov b128 $r4q 0x0000000000000000 (8)
+329: fma f32 $r4 $r16 $r4 $r15 (8)
+330: add s32 $r0 $r10 23 (8)
+331: and u32 $r15 $r0 0xfffffffc (8)
+332: add u32 { $r0 $c0 } $r15 c7[0x2c0] (8)
+333: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+334: add u32 $r15 $r15 0x00000004 (8)
+335: set u8 $p0 gt u32 $r15 c7[0x2c8] (8)
+336: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+337: $p0 mov u32 $r0 0x00000000 (8)
+338: add s32 $r1 $r11 184 (8)
+339: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+340: cvt f32 $r0 s8 $r0 (8)
+341: fma f32 $r4 $r0 $r5 $r4 (8)
+342: add s32 $r5 $r12 24 (8)
+343: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+344: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+345: add u32 $r5 $r5 0x00000004 (8)
+346: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+347: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+348: $p0 mov u32 $r0 0x00000000 (8)
+349: add s32 $r1 $r11 192 (8)
+350: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+351: cvt f32 $r0 s8 $r0 (8)
+352: fma f32 $r4 $r0 $r6 $r4 (8)
+353: add s32 $r0 $r10 25 (8)
+354: and u32 $r5 $r0 0xfffffffc (8)
+355: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+356: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+357: add u32 $r5 $r5 0x00000004 (8)
+358: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+359: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+360: $p0 mov u32 $r0 0x00000000 (8)
+361: add s32 $r1 $r11 200 (8)
+362: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+363: cvt f32 $r0 s8 $r0 (8)
+364: fma f32 $r15 $r0 $r7 $r4 (8)
+365: add s32 $r0 $r10 26 (8)
+366: and u32 $r4 $r0 0xfffffffc (8)
+367: add u32 { $r0 $c0 } $r4 c7[0x2c0] (8)
+368: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+369: add u32 $r4 $r4 0x00000004 (8)
+370: set u8 $p0 gt u32 $r4 c7[0x2c8] (8)
+371: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+372: $p0 mov u32 $r0 0x00000000 (8)
+373: add s32 $r1 $r11 208 (8)
+374: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+375: cvt f32 $r16 s8 $r0 (8)
+376: add s32 $r4 $r14 96 (8)
+377: add u32 { $r0 $c0 } $r4 c7[0x2a0] (8)
+378: add u32 $r1 $r255 c7[0x2a4] $c0 (8)
+379: add u32 $r4 $r4 0x00000010 (8)
+380: set u8 $p0 gt u32 $r4 c7[0x2a8] (8)
+381: not $p0 ld  b128 $r4q g[$r0d+0x0] (8)
+382: $p0 mov b128 $r4q 0x0000000000000000 (8)
+383: fma f32 $r4 $r16 $r4 $r15 (8)
+384: add s32 $r0 $r10 27 (8)
+385: and u32 $r15 $r0 0xfffffffc (8)
+386: add u32 { $r0 $c0 } $r15 c7[0x2c0] (8)
+387: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+388: add u32 $r15 $r15 0x00000004 (8)
+389: set u8 $p0 gt u32 $r15 c7[0x2c8] (8)
+390: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+391: $p0 mov u32 $r0 0x00000000 (8)
+392: add s32 $r1 $r11 216 (8)
+393: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+394: cvt f32 $r0 s8 $r0 (8)
+395: fma f32 $r4 $r0 $r5 $r4 (8)
+396: add s32 $r5 $r12 28 (8)
+397: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+398: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+399: add u32 $r5 $r5 0x00000004 (8)
+400: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+401: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+402: $p0 mov u32 $r0 0x00000000 (8)
+403: add s32 $r1 $r11 224 (8)
+404: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+405: cvt f32 $r0 s8 $r0 (8)
+406: fma f32 $r4 $r0 $r6 $r4 (8)
+407: add s32 $r0 $r10 29 (8)
+408: and u32 $r5 $r0 0xfffffffc (8)
+409: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+410: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+411: add u32 $r5 $r5 0x00000004 (8)
+412: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+413: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+414: $p0 mov u32 $r0 0x00000000 (8)
+415: add s32 $r1 $r11 232 (8)
+416: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+417: cvt f32 $r0 s8 $r0 (8)
+418: fma f32 $r15 $r0 $r7 $r4 (8)
+419: add s32 $r0 $r10 30 (8)
+420: and u32 $r4 $r0 0xfffffffc (8)
+421: add u32 { $r0 $c0 } $r4 c7[0x2c0] (8)
+422: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+423: add u32 $r4 $r4 0x00000004 (8)
+424: set u8 $p0 gt u32 $r4 c7[0x2c8] (8)
+425: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+426: $p0 mov u32 $r0 0x00000000 (8)
+427: add s32 $r1 $r11 240 (8)
+428: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+429: cvt f32 $r16 s8 $r0 (8)
+430: add s32 $r4 $r14 112 (8)
+431: add u32 { $r0 $c0 } $r4 c7[0x2a0] (8)
+432: add u32 $r1 $r255 c7[0x2a4] $c0 (8)
+433: add u32 $r4 $r4 0x00000010 (8)
+434: set u8 $p0 gt u32 $r4 c7[0x2a8] (8)
+435: not $p0 ld  b128 $r4q g[$r0d+0x0] (8)
+436: $p0 mov b128 $r4q 0x0000000000000000 (8)
+437: fma f32 $r4 $r16 $r4 $r15 (8)
+438: add s32 $r0 $r10 31 (8)
+439: and u32 $r14 $r0 0xfffffffc (8)
+440: add u32 { $r0 $c0 } $r14 c7[0x2c0] (8)
+441: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+442: add u32 $r14 $r14 0x00000004 (8)
+443: set u8 $p0 gt u32 $r14 c7[0x2c8] (8)
+444: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+445: $p0 mov u32 $r0 0x00000000 (8)
+446: add s32 $r1 $r11 248 (8)
+447: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+448: cvt f32 $r0 s8 $r0 (8)
+449: fma f32 $r4 $r0 $r5 $r4 (8)
+450: add s32 $r5 $r12 32 (8)
+451: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+452: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+453: add u32 $r5 $r5 0x00000004 (8)
+454: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+455: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+456: $p0 mov u32 $r0 0x00000000 (8)
+457: add s32 $r1 $r11 256 (8)
+458: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+459: cvt f32 $r0 s8 $r0 (8)
+460: fma f32 $r4 $r0 $r6 $r4 (8)
+461: add s32 $r0 $r10 33 (8)
+462: and u32 $r5 $r0 0xfffffffc (8)
+463: add u32 { $r0 $c0 } $r5 c7[0x2c0] (8)
+464: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+465: add u32 $r5 $r5 0x00000004 (8)
+466: set u8 $p0 gt u32 $r5 c7[0x2c8] (8)
+467: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+468: $p0 mov u32 $r0 0x00000000 (8)
+469: add s32 $r1 $r11 264 (8)
+470: shr (SUBOP:1) u32 $r0 $r0 $r1 (8)
+471: cvt f32 $r0 s8 $r0 (8)
+472: fma f32 $r0 $r0 $r7 $r4 (8)
+473: fma f32 $r2 $r13 $r0 $r2 (8)
+474: add s32 $r9 $r9 1 (8)
+475: bra BB:4 (8)
+BB:3 (0 instructions) - idom = BB:0, df = { BB:9 }
+ -> BB:9 (forward)
+BB:5 (7 instructions) - idom = BB:6, df = { BB:9 }
+ -> BB:9 (forward)
+476: shl (SUBOP:1) s32 $r3 $r3 2 (8)
+477: add u32 { $r0 $c0 } $r3 c7[0x2b0] (8)
+478: add u32 $r1 $r255 c7[0x2b4] $c0 (8)
+479: add u32 $r3 $r3 0x00000004 (8)
+480: set u8 $p0 gt u32 $r3 c7[0x2b8] (8)
+481: not $p0 st  u32 # g[$r0d+0x0] $r2 (8)
+482: join BB:9 (8)
+BB:9 (0 instructions) - idom = BB:0, df = { }
+ -> BB:1 (tree)
+BB:1 (1 instructions) - idom = BB:9, df = { }
+483: exit - # (8)
+shader binary code (0x1150 bytes):
+10a09c80 0800b0a0 129c0002 86400000 109c0006 86400000 031c0001 c2400400 
+009c000e e0800000 8c000000 14800008 021c0c1e 5b101c00 00603c02 85800000 
+109c8010 08b0a0a0 041c0c22 61c00000 001fc00a 74000000 54000000 15000008 
+011c0026 e4c03c00 001c0002 64c03c00 029c0001 c1400400 001c241e db601c00 
+a0a0b880 08a010b0 0000003c 1a000000 111c2401 c1c00000 001c202a e0800000 
+fe1c2831 ca0003ff 581c3002 608400e0 589ffc06 608040e0 021c3011 c0800000 
+a01080b0 08a010a0 591c101e 5b401ce0 00200000 c4800000 0003c002 74000000 
+019c282d c2400400 059c0002 e1400400 7f9c0011 c2000000 009c2801 c0800000 
+a010b0a0 081080b0 fe1c0015 ca0003ff 581c1402 608400e0 589ffc06 608040e0 
+021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+a0a0a0a0 08a010a0 041c2c05 c0800000 009c0002 e1400400 7f9c0001 c2000000 
+041c0001 c2400400 001c1002 e2001000 001c1836 e5400000 011c2801 c0800000 
+a010b0a0 081080b0 fe1c0011 ca0003ff 581c1002 608400e0 589ffc06 608040e0 
+021c1011 c0800000 591c101e 5b401ce0 00200000 c4800000 0003c002 74000000 
+a010a0a0 08a010b0 081c2c05 c0800000 009c0002 e1400400 001c883e e5c00000 
+039c2439 c2400400 541c3802 608400e0 549ffc06 608040e0 081c3811 c0800000 
+10a080b0 08b0a0a0 551c101e 5b401ce0 00200010 c6800000 0003c012 74000000 
+021c3c12 e3400000 019c2801 c0800000 fe1c003d ca0003ff 581c3c02 608400e0 
+80b0a010 08a0a010 589ffc06 608040e0 021c3c3d c0800000 591c3c1e 5b401ce0 
+00200000 c4800000 0003c002 74000000 0c1c2c05 c0800000 009c0002 e1400400 
+b0a010a0 08b0a010 001c8802 e5c00000 029c0012 cc001000 021c3015 c0800000 
+581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 
+a0a01080 08a010a0 00200000 c4800000 0003c002 74000000 101c2c05 c0800000 
+009c0002 e1400400 001c8802 e5c00000 031c0012 cc001000 029c2801 c0800000 
+a010b0a0 081080b0 fe1c0015 ca0003ff 581c1402 608400e0 589ffc06 608040e0 
+021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+10a0a0a0 08b0a0a0 141c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+039c003e cc001000 031c2801 c0800000 fe1c0011 ca0003ff 581c1002 608400e0 
+80b0a010 08a0a010 589ffc06 608040e0 021c1011 c0800000 591c101e 5b401ce0 
+00200000 c4800000 0003c002 74000000 181c2c05 c0800000 009c0002 e1400400 
+10b0a010 0880b0a0 001c8842 e5c00000 081c3811 c0800000 541c1002 608400e0 
+549ffc06 608040e0 081c1011 c0800000 551c101e 5b401ce0 00200010 c6800000 
+a0a010a0 08a010b0 0003c012 74000000 021c4012 cc003c00 039c2801 c0800000 
+fe1c003d ca0003ff 581c3c02 608400e0 589ffc06 608040e0 021c3c3d c0800000 
+a01080b0 0810a0a0 591c3c1e 5b401ce0 00200000 c4800000 0003c002 74000000 
+1c1c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 029c0012 cc001000 
+a010b0a0 081080b0 041c3015 c0800000 581c1402 608400e0 589ffc06 608040e0 
+021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+10a0a0a0 08b0a0a0 201c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+031c0012 cc001000 049c2801 c0800000 fe1c0015 ca0003ff 581c1402 608400e0 
+80b0a010 08a0a010 589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 
+00200000 c4800000 0003c002 74000000 241c2c05 c0800000 009c0002 e1400400 
+a0a010a0 08a010b0 001c8802 e5c00000 039c003e cc001000 051c2801 c0800000 
+fe1c0011 ca0003ff 581c1002 608400e0 589ffc06 608040e0 021c1011 c0800000 
+a01080b0 08a010a0 591c101e 5b401ce0 00200000 c4800000 0003c002 74000000 
+281c2c05 c0800000 009c0002 e1400400 001c8842 e5c00000 101c3811 c0800000 
+b0a010b0 0810a080 541c1002 608400e0 549ffc06 608040e0 081c1011 c0800000 
+551c101e 5b401ce0 00200010 c6800000 0003c012 74000000 021c4012 cc003c00 
+10b0a0a0 0880b0a0 059c2801 c0800000 fe1c003d ca0003ff 581c3c02 608400e0 
+589ffc06 608040e0 021c3c3d c0800000 591c3c1e 5b401ce0 00200000 c4800000 
+a0a0a010 08b0a010 0003c002 74000000 2c1c2c05 c0800000 009c0002 e1400400 
+001c8802 e5c00000 029c0012 cc001000 061c3015 c0800000 581c1402 608400e0 
+80b0a010 08a0a010 589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 
+00200000 c4800000 0003c002 74000000 301c2c05 c0800000 009c0002 e1400400 
+a0a010a0 08a010b0 001c8802 e5c00000 031c0012 cc001000 069c2801 c0800000 
+fe1c0015 ca0003ff 581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 
+a01080b0 0810a0a0 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+341c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 039c003e cc001000 
+10b0a0a0 0880b0a0 071c2801 c0800000 fe1c0011 ca0003ff 581c1002 608400e0 
+589ffc06 608040e0 021c1011 c0800000 591c101e 5b401ce0 00200000 c4800000 
+10a0a010 0810b0a0 0003c002 74000000 381c2c05 c0800000 009c0002 e1400400 
+001c8842 e5c00000 181c3811 c0800000 541c1002 608400e0 549ffc06 608040e0 
+a080b0a0 08a0a010 081c1011 c0800000 551c101e 5b401ce0 00200010 c6800000 
+0003c012 74000000 021c4012 cc003c00 079c2801 c0800000 fe1c003d ca0003ff 
+b0a010b0 08a01080 581c3c02 608400e0 589ffc06 608040e0 021c3c3d c0800000 
+591c3c1e 5b401ce0 00200000 c4800000 0003c002 74000000 3c1c2c05 c0800000 
+a010a0a0 08a010b0 009c0002 e1400400 001c8802 e5c00000 029c0012 cc001000 
+081c3015 c0800000 581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 
+a01080b0 0810a0a0 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+401c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 031c0012 cc001000 
+10b0a0a0 0880b0a0 089c2801 c0800000 fe1c0015 ca0003ff 581c1402 608400e0 
+589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 
+a0a0a010 08a0a010 0003c002 74000000 441c2c05 c0800000 009c0002 e1400400 
+001c8802 e5c00000 039c003e cc001000 091c2801 c0800000 fe1c0011 ca0003ff 
+b0a010b0 08a01080 581c1002 608400e0 589ffc06 608040e0 021c1011 c0800000 
+591c101e 5b401ce0 00200000 c4800000 0003c002 74000000 481c2c05 c0800000 
+b0a010a0 08b0a010 009c0002 e1400400 001c8842 e5c00000 201c3811 c0800000 
+541c1002 608400e0 549ffc06 608040e0 081c1011 c0800000 551c101e 5b401ce0 
+a010a080 0810b0a0 00200010 c6800000 0003c012 74000000 021c4012 cc003c00 
+099c2801 c0800000 fe1c003d ca0003ff 581c3c02 608400e0 589ffc06 608040e0 
+1080b0a0 08a0a0a0 021c3c3d c0800000 591c3c1e 5b401ce0 00200000 c4800000 
+0003c002 74000000 4c1c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+10b0a010 0880b0a0 029c0012 cc001000 0a1c3015 c0800000 581c1402 608400e0 
+589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 
+a0a0a010 08a0a010 0003c002 74000000 501c2c05 c0800000 009c0002 e1400400 
+001c8802 e5c00000 031c0012 cc001000 0a9c2801 c0800000 fe1c0015 ca0003ff 
+b0a010b0 08a01080 581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 
+591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 541c2c05 c0800000 
+a010a0a0 0810b0a0 009c0002 e1400400 001c8802 e5c00000 039c003e cc001000 
+0b1c2801 c0800000 fe1c0011 ca0003ff 581c1002 608400e0 589ffc06 608040e0 
+1080b0a0 0810a0a0 021c1011 c0800000 591c101e 5b401ce0 00200000 c4800000 
+0003c002 74000000 581c2c05 c0800000 009c0002 e1400400 001c8842 e5c00000 
+a010b0a0 08a080b0 281c3811 c0800000 541c1002 608400e0 549ffc06 608040e0 
+081c1011 c0800000 551c101e 5b401ce0 00200010 c6800000 0003c012 74000000 
+b0a0a010 08b0a010 021c4012 cc003c00 0b9c2801 c0800000 fe1c003d ca0003ff 
+581c3c02 608400e0 589ffc06 608040e0 021c3c3d c0800000 591c3c1e 5b401ce0 
+a0a01080 08a010a0 00200000 c4800000 0003c002 74000000 5c1c2c05 c0800000 
+009c0002 e1400400 001c8802 e5c00000 029c0012 cc001000 0c1c3015 c0800000 
+b0a010b0 08a01080 581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 
+591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 601c2c05 c0800000 
+a010a0a0 0810b0a0 009c0002 e1400400 001c8802 e5c00000 031c0012 cc001000 
+0c9c2801 c0800000 fe1c0015 ca0003ff 581c1402 608400e0 589ffc06 608040e0 
+1080b0a0 08a0a0a0 021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 
+0003c002 74000000 641c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+b0a0a010 08b0a010 039c003e cc001000 0d1c2801 c0800000 fe1c0011 ca0003ff 
+581c1002 608400e0 589ffc06 608040e0 021c1011 c0800000 591c101e 5b401ce0 
+a0a01080 08b0a010 00200000 c4800000 0003c002 74000000 681c2c05 c0800000 
+009c0002 e1400400 001c8842 e5c00000 301c3811 c0800000 541c1002 608400e0 
+80b0a010 08a010a0 549ffc06 608040e0 081c1011 c0800000 551c101e 5b401ce0 
+00200010 c6800000 0003c012 74000000 021c4012 cc003c00 0d9c2801 c0800000 
+a010b0a0 081080b0 fe1c003d ca0003ff 581c3c02 608400e0 589ffc06 608040e0 
+021c3c3d c0800000 591c3c1e 5b401ce0 00200000 c4800000 0003c002 74000000 
+10a0a0a0 0810b0a0 6c1c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+029c0012 cc001000 0e1c3015 c0800000 581c1402 608400e0 589ffc06 608040e0 
+1080b0a0 08a0a0a0 021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 
+0003c002 74000000 701c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+b0a0a010 08b0a010 031c0012 cc001000 0e9c2801 c0800000 fe1c0015 ca0003ff 
+581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 
+a0a01080 08a010a0 00200000 c4800000 0003c002 74000000 741c2c05 c0800000 
+009c0002 e1400400 001c8802 e5c00000 039c003e cc001000 0f1c2801 c0800000 
+a010b0a0 081080b0 fe1c0011 ca0003ff 581c1002 608400e0 589ffc06 608040e0 
+021c1011 c0800000 591c101e 5b401ce0 00200000 c4800000 0003c002 74000000 
+a010a0a0 08a010b0 781c2c05 c0800000 009c0002 e1400400 001c8842 e5c00000 
+381c3811 c0800000 541c1002 608400e0 549ffc06 608040e0 081c1011 c0800000 
+10a080b0 08b0a0a0 551c101e 5b401ce0 00200010 c6800000 0003c012 74000000 
+021c4012 cc003c00 0f9c2801 c0800000 fe1c0039 ca0003ff 581c3802 608400e0 
+80b0a010 08a0a010 589ffc06 608040e0 021c3839 c0800000 591c381e 5b401ce0 
+00200000 c4800000 0003c002 74000000 7c1c2c05 c0800000 009c0002 e1400400 
+b0a010a0 08b0a010 001c8802 e5c00000 029c0012 cc001000 101c3015 c0800000 
+581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 
+a0a01080 08a010a0 00200000 c4800000 0003c002 74000000 801c2c05 c0800000 
+009c0002 e1400400 001c8802 e5c00000 031c0012 cc001000 109c2801 c0800000 
+a010b0a0 081080b0 fe1c0015 ca0003ff 581c1402 608400e0 589ffc06 608040e0 
+021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+a0a0a0a0 08808010 841c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+039c0002 cc001000 001c340a cc000800 009c2425 c0800000 b41c003c 12007ff7 
+a010b0a0 080010b0 011c0c0d c2400400 561c0c02 608400e0 569ffc06 608040e0 
+021c0c0d c0800000 571c0c1e 5b401ce0 00200008 e4800000 005c3c02 85800000 
+000000b8 08000000 001c003c 18000000 
+shader binary code (0x1150 bytes):
+10a09c80 0800b0a0 129c0002 86400000 109c0006 86400000 031c0001 c2400400 
+009c000e e0800000 8c000000 14800008 021c0c1e 5b101c00 00603c02 85800000 
+109c8010 08b0a0a0 041c0c22 61c00000 001fc00a 74000000 54000000 15000008 
+011c0026 e4c03c00 001c0002 64c03c00 029c0001 c1400400 001c241e db601c00 
+a0a0b880 08a010b0 0000003c 1a000000 111c2401 c1c00000 001c202a e0800000 
+fe1c2831 ca0003ff 581c3002 608400e0 589ffc06 608040e0 021c3011 c0800000 
+a01080b0 08a010a0 591c101e 5b401ce0 00200000 c4800000 0003c002 74000000 
+019c282d c2400400 059c0002 e1400400 7f9c0011 c2000000 009c2801 c0800000 
+a010b0a0 081080b0 fe1c0015 ca0003ff 581c1402 608400e0 589ffc06 608040e0 
+021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+a0a0a0a0 08a010a0 041c2c05 c0800000 009c0002 e1400400 7f9c0001 c2000000 
+041c0001 c2400400 001c1002 e2001000 001c1836 e5400000 011c2801 c0800000 
+a010b0a0 081080b0 fe1c0011 ca0003ff 581c1002 608400e0 589ffc06 608040e0 
+021c1011 c0800000 591c101e 5b401ce0 00200000 c4800000 0003c002 74000000 
+a010a0a0 08a010b0 081c2c05 c0800000 009c0002 e1400400 001c883e e5c00000 
+039c2439 c2400400 541c3802 608400e0 549ffc06 608040e0 081c3811 c0800000 
+10a080b0 08b0a0a0 551c101e 5b401ce0 00200010 c6800000 0003c012 74000000 
+021c3c12 e3400000 019c2801 c0800000 fe1c003d ca0003ff 581c3c02 608400e0 
+80b0a010 08a0a010 589ffc06 608040e0 021c3c3d c0800000 591c3c1e 5b401ce0 
+00200000 c4800000 0003c002 74000000 0c1c2c05 c0800000 009c0002 e1400400 
+b0a010a0 08b0a010 001c8802 e5c00000 029c0012 cc001000 021c3015 c0800000 
+581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 
+a0a01080 08a010a0 00200000 c4800000 0003c002 74000000 101c2c05 c0800000 
+009c0002 e1400400 001c8802 e5c00000 031c0012 cc001000 029c2801 c0800000 
+a010b0a0 081080b0 fe1c0015 ca0003ff 581c1402 608400e0 589ffc06 608040e0 
+021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+10a0a0a0 08b0a0a0 141c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+039c003e cc001000 031c2801 c0800000 fe1c0011 ca0003ff 581c1002 608400e0 
+80b0a010 08a0a010 589ffc06 608040e0 021c1011 c0800000 591c101e 5b401ce0 
+00200000 c4800000 0003c002 74000000 181c2c05 c0800000 009c0002 e1400400 
+10b0a010 0880b0a0 001c8842 e5c00000 081c3811 c0800000 541c1002 608400e0 
+549ffc06 608040e0 081c1011 c0800000 551c101e 5b401ce0 00200010 c6800000 
+a0a010a0 08a010b0 0003c012 74000000 021c4012 cc003c00 039c2801 c0800000 
+fe1c003d ca0003ff 581c3c02 608400e0 589ffc06 608040e0 021c3c3d c0800000 
+a01080b0 0810a0a0 591c3c1e 5b401ce0 00200000 c4800000 0003c002 74000000 
+1c1c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 029c0012 cc001000 
+a010b0a0 081080b0 041c3015 c0800000 581c1402 608400e0 589ffc06 608040e0 
+021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+10a0a0a0 08b0a0a0 201c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+031c0012 cc001000 049c2801 c0800000 fe1c0015 ca0003ff 581c1402 608400e0 
+80b0a010 08a0a010 589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 
+00200000 c4800000 0003c002 74000000 241c2c05 c0800000 009c0002 e1400400 
+a0a010a0 08a010b0 001c8802 e5c00000 039c003e cc001000 051c2801 c0800000 
+fe1c0011 ca0003ff 581c1002 608400e0 589ffc06 608040e0 021c1011 c0800000 
+a01080b0 08a010a0 591c101e 5b401ce0 00200000 c4800000 0003c002 74000000 
+281c2c05 c0800000 009c0002 e1400400 001c8842 e5c00000 101c3811 c0800000 
+b0a010b0 0810a080 541c1002 608400e0 549ffc06 608040e0 081c1011 c0800000 
+551c101e 5b401ce0 00200010 c6800000 0003c012 74000000 021c4012 cc003c00 
+10b0a0a0 0880b0a0 059c2801 c0800000 fe1c003d ca0003ff 581c3c02 608400e0 
+589ffc06 608040e0 021c3c3d c0800000 591c3c1e 5b401ce0 00200000 c4800000 
+a0a0a010 08b0a010 0003c002 74000000 2c1c2c05 c0800000 009c0002 e1400400 
+001c8802 e5c00000 029c0012 cc001000 061c3015 c0800000 581c1402 608400e0 
+80b0a010 08a0a010 589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 
+00200000 c4800000 0003c002 74000000 301c2c05 c0800000 009c0002 e1400400 
+a0a010a0 08a010b0 001c8802 e5c00000 031c0012 cc001000 069c2801 c0800000 
+fe1c0015 ca0003ff 581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 
+a01080b0 0810a0a0 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+341c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 039c003e cc001000 
+10b0a0a0 0880b0a0 071c2801 c0800000 fe1c0011 ca0003ff 581c1002 608400e0 
+589ffc06 608040e0 021c1011 c0800000 591c101e 5b401ce0 00200000 c4800000 
+10a0a010 0810b0a0 0003c002 74000000 381c2c05 c0800000 009c0002 e1400400 
+001c8842 e5c00000 181c3811 c0800000 541c1002 608400e0 549ffc06 608040e0 
+a080b0a0 08a0a010 081c1011 c0800000 551c101e 5b401ce0 00200010 c6800000 
+0003c012 74000000 021c4012 cc003c00 079c2801 c0800000 fe1c003d ca0003ff 
+b0a010b0 08a01080 581c3c02 608400e0 589ffc06 608040e0 021c3c3d c0800000 
+591c3c1e 5b401ce0 00200000 c4800000 0003c002 74000000 3c1c2c05 c0800000 
+a010a0a0 08a010b0 009c0002 e1400400 001c8802 e5c00000 029c0012 cc001000 
+081c3015 c0800000 581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 
+a01080b0 0810a0a0 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+401c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 031c0012 cc001000 
+10b0a0a0 0880b0a0 089c2801 c0800000 fe1c0015 ca0003ff 581c1402 608400e0 
+589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 
+a0a0a010 08a0a010 0003c002 74000000 441c2c05 c0800000 009c0002 e1400400 
+001c8802 e5c00000 039c003e cc001000 091c2801 c0800000 fe1c0011 ca0003ff 
+b0a010b0 08a01080 581c1002 608400e0 589ffc06 608040e0 021c1011 c0800000 
+591c101e 5b401ce0 00200000 c4800000 0003c002 74000000 481c2c05 c0800000 
+b0a010a0 08b0a010 009c0002 e1400400 001c8842 e5c00000 201c3811 c0800000 
+541c1002 608400e0 549ffc06 608040e0 081c1011 c0800000 551c101e 5b401ce0 
+a010a080 0810b0a0 00200010 c6800000 0003c012 74000000 021c4012 cc003c00 
+099c2801 c0800000 fe1c003d ca0003ff 581c3c02 608400e0 589ffc06 608040e0 
+1080b0a0 08a0a0a0 021c3c3d c0800000 591c3c1e 5b401ce0 00200000 c4800000 
+0003c002 74000000 4c1c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+10b0a010 0880b0a0 029c0012 cc001000 0a1c3015 c0800000 581c1402 608400e0 
+589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 
+a0a0a010 08a0a010 0003c002 74000000 501c2c05 c0800000 009c0002 e1400400 
+001c8802 e5c00000 031c0012 cc001000 0a9c2801 c0800000 fe1c0015 ca0003ff 
+b0a010b0 08a01080 581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 
+591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 541c2c05 c0800000 
+a010a0a0 0810b0a0 009c0002 e1400400 001c8802 e5c00000 039c003e cc001000 
+0b1c2801 c0800000 fe1c0011 ca0003ff 581c1002 608400e0 589ffc06 608040e0 
+1080b0a0 0810a0a0 021c1011 c0800000 591c101e 5b401ce0 00200000 c4800000 
+0003c002 74000000 581c2c05 c0800000 009c0002 e1400400 001c8842 e5c00000 
+a010b0a0 08a080b0 281c3811 c0800000 541c1002 608400e0 549ffc06 608040e0 
+081c1011 c0800000 551c101e 5b401ce0 00200010 c6800000 0003c012 74000000 
+b0a0a010 08b0a010 021c4012 cc003c00 0b9c2801 c0800000 fe1c003d ca0003ff 
+581c3c02 608400e0 589ffc06 608040e0 021c3c3d c0800000 591c3c1e 5b401ce0 
+a0a01080 08a010a0 00200000 c4800000 0003c002 74000000 5c1c2c05 c0800000 
+009c0002 e1400400 001c8802 e5c00000 029c0012 cc001000 0c1c3015 c0800000 
+b0a010b0 08a01080 581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 
+591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 601c2c05 c0800000 
+a010a0a0 0810b0a0 009c0002 e1400400 001c8802 e5c00000 031c0012 cc001000 
+0c9c2801 c0800000 fe1c0015 ca0003ff 581c1402 608400e0 589ffc06 608040e0 
+1080b0a0 08a0a0a0 021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 
+0003c002 74000000 641c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+b0a0a010 08b0a010 039c003e cc001000 0d1c2801 c0800000 fe1c0011 ca0003ff 
+581c1002 608400e0 589ffc06 608040e0 021c1011 c0800000 591c101e 5b401ce0 
+a0a01080 08b0a010 00200000 c4800000 0003c002 74000000 681c2c05 c0800000 
+009c0002 e1400400 001c8842 e5c00000 301c3811 c0800000 541c1002 608400e0 
+80b0a010 08a010a0 549ffc06 608040e0 081c1011 c0800000 551c101e 5b401ce0 
+00200010 c6800000 0003c012 74000000 021c4012 cc003c00 0d9c2801 c0800000 
+a010b0a0 081080b0 fe1c003d ca0003ff 581c3c02 608400e0 589ffc06 608040e0 
+021c3c3d c0800000 591c3c1e 5b401ce0 00200000 c4800000 0003c002 74000000 
+10a0a0a0 0810b0a0 6c1c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+029c0012 cc001000 0e1c3015 c0800000 581c1402 608400e0 589ffc06 608040e0 
+1080b0a0 08a0a0a0 021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 
+0003c002 74000000 701c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+b0a0a010 08b0a010 031c0012 cc001000 0e9c2801 c0800000 fe1c0015 ca0003ff 
+581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 
+a0a01080 08a010a0 00200000 c4800000 0003c002 74000000 741c2c05 c0800000 
+009c0002 e1400400 001c8802 e5c00000 039c003e cc001000 0f1c2801 c0800000 
+a010b0a0 081080b0 fe1c0011 ca0003ff 581c1002 608400e0 589ffc06 608040e0 
+021c1011 c0800000 591c101e 5b401ce0 00200000 c4800000 0003c002 74000000 
+a010a0a0 08a010b0 781c2c05 c0800000 009c0002 e1400400 001c8842 e5c00000 
+381c3811 c0800000 541c1002 608400e0 549ffc06 608040e0 081c1011 c0800000 
+10a080b0 08b0a0a0 551c101e 5b401ce0 00200010 c6800000 0003c012 74000000 
+021c4012 cc003c00 0f9c2801 c0800000 fe1c0039 ca0003ff 581c3802 608400e0 
+80b0a010 08a0a010 589ffc06 608040e0 021c3839 c0800000 591c381e 5b401ce0 
+00200000 c4800000 0003c002 74000000 7c1c2c05 c0800000 009c0002 e1400400 
+b0a010a0 08b0a010 001c8802 e5c00000 029c0012 cc001000 101c3015 c0800000 
+581c1402 608400e0 589ffc06 608040e0 021c1415 c0800000 591c141e 5b401ce0 
+a0a01080 08a010a0 00200000 c4800000 0003c002 74000000 801c2c05 c0800000 
+009c0002 e1400400 001c8802 e5c00000 031c0012 cc001000 109c2801 c0800000 
+a010b0a0 081080b0 fe1c0015 ca0003ff 581c1402 608400e0 589ffc06 608040e0 
+021c1415 c0800000 591c141e 5b401ce0 00200000 c4800000 0003c002 74000000 
+a0a0a0a0 08808010 841c2c05 c0800000 009c0002 e1400400 001c8802 e5c00000 
+039c0002 cc001000 001c340a cc000800 009c2425 c0800000 b41c003c 12007ff7 
+a010b0a0 080010b0 011c0c0d c2400400 561c0c02 608400e0 569ffc06 608040e0 
+021c0c0d c0800000 571c0c1e 5b401ce0 00200008 e4800000 005c3c02 85800000 
+000000b8 08000000 001c003c 18000000 
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7df00
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x8
+   CTA_RASTER_HEIGHT                   : 0x1
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x40
+   CTA_THREAD_DIMENSION1               : 0x1
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x11
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+shader: MESA_SHADER_COMPUTE
+source_blake3: {0x79146527, 0xb8078d3d, 0xb4cf9750, 0x7aec35c0, 0x9ef1bab9, 0xb517feb7, 0x2d5bdc9c, 0x4dffda0d}
+name: GLSL6
+workgroup_size: 16, 16, 1
+num_ubos: 1
+num_ssbos: 3
+system_values_read: 0x00000000'00000000'00008400'00000000
+subgroup_size: 1
+bit_sizes_float: 0x20
+bit_sizes_int: 0x20
+first_ubo_is_default_ubo: true
+flrp_lowered: true
+writes_memory: true
+uniforms: 1
+decl_var uniform INTERP_MODE_NONE none highp uint n (3, 0, 0)
+decl_var ubo INTERP_MODE_NONE none vec4[1] uniform_0 (0, 0, 0)
+decl_var ssbo INTERP_MODE_NONE writeonly C c (0, 0, 2)
+decl_var ssbo INTERP_MODE_NONE readonly B b (1, 1, 1)
+decl_var ssbo INTERP_MODE_NONE readonly A a (2, 2, 0)
+decl_function main () (entrypoint)
+
+impl main {
+    block b0:   // preds:
+    32     %0 = @decl_reg (num_components=1, num_array_elems=0, bit_size=32, divergent=0)
+    32     %1 = @decl_reg (num_components=1, num_array_elems=0, bit_size=32, divergent=1)
+    32x3   %2 = @load_workgroup_id
+    32x3   %3 = @load_local_invocation_id
+    32     %4 = load_const (0x00000004)
+    32     %5 = ishl %2.x, %4 (0x4)
+    32     %6 = ishl %2.y, %4 (0x4)
+    32     %7 = iadd %5, %3.x
+    32     %8 = iadd %6, %3.y
+    32     %9 = load_const (0x00000000)
+    32    %10 = load_const (0x00000001)
+                @store_reg (%9 (0x0), %0) (base=0, wrmask=x, legacy_fsat=0)
+                @store_reg (%9 (0x0), %1) (base=0, wrmask=x, legacy_fsat=0)
+                // succs: b1
+    loop {
+        block b1:   // preds: b0 b4
+        32    %11 = @load_ubo (%9 (0x0), %9 (0x0)) (access=none, align_mul=1073741824, align_offset=0, range_base=0, range=16)
+        32    %12 = @load_reg (%0) (base=0, legacy_fabs=0, legacy_fneg=0)
+        32    %13 = uge32 %12, %11
+                    // succs: b2 b3
+        if %13 {
+            block b2:// preds: b1
+            break
+            // succs: b5
+        } else {
+            block b3:  // preds: b1, succs: b4
+        }
+        block b4:   // preds: b3
+        32    %14 = imul %8, %11
+        32    %15 = @load_reg (%0) (base=0, legacy_fabs=0, legacy_fneg=0)
+        32    %16 = iadd %14, %15
+        32    %17 = load_const (0x00000002)
+        32    %18 = ishl %16, %17 (0x2)
+        32    %19 = @load_ssbo (%17 (0x2), %18) (access=readonly|reorderable, align_mul=4, align_offset=0)
+        32    %20 = @load_reg (%0) (base=0, legacy_fabs=0, legacy_fneg=0)
+        32    %21 = imul %20, %11
+        32    %22 = iadd %7, %21
+        32    %23 = ishl %22, %17 (0x2)
+        32    %24 = @load_ssbo (%10 (0x1), %23) (access=readonly|reorderable, align_mul=4, align_offset=0)
+        32    %25 = @load_reg (%1) (base=0, legacy_fabs=0, legacy_fneg=0)
+        32    %26 = ffma %19, %24, %25
+                    @store_reg (%26, %1) (base=0, wrmask=x, legacy_fsat=0)
+        32    %27 = @load_reg (%0) (base=0, legacy_fabs=0, legacy_fneg=0)
+        32    %28 = iadd %27, %10 (0x1)
+                    @store_reg (%28, %0) (base=0, wrmask=x, legacy_fsat=0)
+                    // succs: b1
+    }
+    block b5:   // preds: b2
+    32    %29 = imul %8, %11
+    32    %30 = iadd %7, %29
+    32    %31 = load_const (0x00000002)
+    32    %32 = ishl %30, %31 (0x2)
+    32    %33 = @load_reg (%1) (base=0, legacy_fabs=0, legacy_fneg=0)
+                @store_ssbo (%33, %9 (0x0), %32) (wrmask=x, access=writeonly, align_mul=4, align_offset=0)
+                // succs: b6
+    block b6:
+}
+
+mul_mat_vec_q8_0: elements 512, different 0, max relative error 0, PASS
+
+MAIN:-1 ()
+BB:0 (11 instructions) - df = { }
+ -> BB:2 (tree)
+  0: rdsv u32 %r60 sv[CTAID:0] (0)
+  1: rdsv u32 %r61 sv[CTAID:1] (0)
+  2: rdsv u32 %r63 sv[COMBINED_TID:0] (0)
+  3: extbf u32 %r64 %r63 0x00001000 (0)
+  4: extbf u32 %r66 %r63 0x00000a10 (0)
+  5: shl (SUBOP:1) s32 %r69 %r60 4 (0)
+  6: shl (SUBOP:1) s32 %r71 %r61 4 (0)
+  7: add s32 %r72 %r69 %r64 (0)
+  8: add s32 %r73 %r71 %r66 (0)
+  9: mov u32 %r74 0x00000000 (0)
+ 10: prebreak BB:3 (0)
+BB:2 (5 instructions) - idom = BB:0, df = { BB:2 }
+ -> BB:5 (tree)
+ -> BB:4 (tree)
+ 11: phi u32 %r78 %r128 %r74 (0)
+ 12: phi u32 %r79 %r124 %r74 (0)
+ 13: precont BB:2 (0)
+ 14: set u8 %p83 ge u32 %r78 c0[0x0] (0)
+ 15: not %p83 bra BB:5 (0)
+BB:4 (1 instructions) - idom = BB:2, df = { }
+ -> BB:3 (cross)
+ 16: break BB:3 (0)
+BB:5 (1 instructions) - idom = BB:2, df = { BB:2 }
+ -> BB:6 (forward)
+ 17: bra BB:6 (0)
+BB:6 (20 instructions) - idom = BB:5, df = { BB:2 }
+ -> BB:2 (back)
+ 18: mov u32 %r96 %r78 (0)
+ 19: mad u32 %r97 %r73 c0[0x0] %r96 (0)
+ 20: shl (SUBOP:1) s32 %r99 %r97 2 (0)
+ 21: add u64 %r103d %r99 c7[0x2c0] (0)
+ 22: add u32 %r104 %r99 0x00000004 (0)
+ 23: set u8 %p105 gt u32 %r104 c7[0x2c8] (0)
+ 24: not %p105 ld  u32 %r106 g[%r103d+0x0] (0)
+ 25: %p105 mov u32 %r107 0x00000000 (0)
+ 26: union u32 %r108 %r106 %r107 (0)
+ 27: mad u32 %r111 %r78 c0[0x0] %r72 (0)
+ 28: shl (SUBOP:1) s32 %r113 %r111 2 (0)
+ 29: add u64 %r117d %r113 c7[0x2b0] (0)
+ 30: add u32 %r118 %r113 0x00000004 (0)
+ 31: set u8 %p119 gt u32 %r118 c7[0x2b8] (0)
+ 32: not %p119 ld  u32 %r120 g[%r117d+0x0] (0)
+ 33: %p119 mov u32 %r121 0x00000000 (0)
+ 34: union u32 %r122 %r120 %r121 (0)
+ 35: fma f32 %r124 %r108 %r122 %r79 (0)
+ 36: add s32 %r128 %r78 1 (0)
+ 37: cont BB:2 (0)
+BB:3 (7 instructions) - idom = BB:4, df = { }
+ -> BB:1 (tree)
+ 38: mad u32 %r85 %r73 c0[0x0] %r72 (0)
+ 39: shl (SUBOP:1) s32 %r87 %r85 2 (0)
+ 40: mov u32 %r88 %r79 (0)
+ 41: add u64 %r92d %r87 c7[0x2a0] (0)
+ 42: add u32 %r93 %r87 0x00000004 (0)
+ 43: set u8 %p94 gt u32 %r93 c7[0x2a8] (0)
+ 44: not %p94 st  u32 # g[%r92d+0x0] %r88 (0)
+BB:1 (1 instructions) - idom = BB:3, df = { }
+ 45: exit - # (0)
+
+MAIN:-1 ()
+BB:0 (12 instructions) - df = { }
+ -> BB:2 (tree)
+  0: rdsv u32 $r0 sv[CTAID:0] (8)
+  1: rdsv u32 $r1 sv[CTAID:1] (8)
+  2: rdsv u32 $r2 sv[COMBINED_TID:0] (8)
+  3: extbf u32 $r3 $r2 0x00001000 (8)
+  4: extbf u32 $r2 $r2 0x00000a10 (8)
+  5: shl (SUBOP:1) s32 $r0 $r0 4 (8)
+  6: shl (SUBOP:1) s32 $r1 $r1 4 (8)
+  7: add s32 $r3 $r0 $r3 (8)
+  8: add s32 $r2 $r1 $r2 (8)
+  9: mov u32 $r5 0x00000000 (8)
+ 10: prebreak BB:3 (8)
+ 11: mov u32 $r4 $r5 (8)
+BB:2 (1 instructions) - idom = BB:0, df = { BB:2 }
+ -> BB:5 (tree)
+ -> BB:4 (tree)
+ 12: set u8 $p0 ge u32 $r4 c0[0x0] (8)
+BB:4 (1 instructions) - idom = BB:2, df = { }
+ -> BB:3 (cross)
+ 13: $p0 break BB:3 (8)
+BB:5 (0 instructions) - idom = BB:2, df = { BB:2 }
+ -> BB:6 (forward)
+BB:6 (20 instructions) - idom = BB:5, df = { BB:2 }
+ -> BB:2 (back)
+ 14: mov u32 $r0 $r4 (8)
+ 15: mad u32 $r0 $r2 c0[0x0] $r0 (8)
+ 16: shl (SUBOP:1) s32 $r6 $r0 2 (8)
+ 17: add u32 { $r0 $c0 } $r6 c7[0x2c0] (8)
+ 18: add u32 $r1 $r255 c7[0x2c4] $c0 (8)
+ 19: add u32 $r6 $r6 0x00000004 (8)
+ 20: set u8 $p0 gt u32 $r6 c7[0x2c8] (8)
+ 21: not $p0 ld  u32 $r6 g[$r0d+0x0] (8)
+ 22: $p0 mov u32 $r6 0x00000000 (8)
+ 23: mad u32 $r0 $r4 c0[0x0] $r3 (8)
+ 24: shl (SUBOP:1) s32 $r7 $r0 2 (8)
+ 25: add u32 { $r0 $c0 } $r7 c7[0x2b0] (8)
+ 26: add u32 $r1 $r255 c7[0x2b4] $c0 (8)
+ 27: add u32 $r7 $r7 0x00000004 (8)
+ 28: set u8 $p0 gt u32 $r7 c7[0x2b8] (8)
+ 29: not $p0 ld  u32 $r0 g[$r0d+0x0] (8)
+ 30: $p0 mov u32 $r0 0x00000000 (8)
+ 31: fma f32 $r5 $r6 $r0 $r5 (8)
+ 32: add s32 $r4 $r4 1 (8)
+ 33: bra BB:2 (8)
+BB:3 (7 instructions) - idom = BB:4, df = { }
+ -> BB:1 (tree)
+ 34: mad u32 $r0 $r2 c0[0x0] $r3 (8)
+ 35: shl (SUBOP:1) s32 $r2 $r0 2 (8)
+ 36: add u32 { $r0 $c0 } $r2 c7[0x2a0] (8)
+ 37: add u32 $r1 $r255 c7[0x2a4] $c0 (8)
+ 38: add u32 $r2 $r2 0x00000004 (8)
+ 39: set u8 $p0 gt u32 $r2 c7[0x2a8] (8)
+ 40: not $p0 st  u32 # g[$r0d+0x0] $r5 (8)
+BB:1 (1 instructions) - idom = BB:3, df = { }
+ 41: exit - # (8)
+shader binary code (0x180 bytes):
+80a08080 089c8010 129c0002 86400000 131c0006 86400000 101c000a 86400000 
+001c080d c0000008 081c0809 c0000005 021c0001 c2400400 021c0405 c2400400 
+9c801080 0880b0a0 019c000e e0800000 011c040a e0800000 001fc016 74000000 
+68000000 15000000 029c0012 e4c03c00 001c101e 5b601c00 0000003c 1a000000 
+b0a0a0a0 08b0a010 021c0002 e4c03c00 001c0802 50000000 011c0019 c2400400 
+581c1802 608400e0 589ffc06 608040e0 021c1819 c0800000 591c181e 5b401ce0 
+a0a01080 08a010b0 00200018 c4800000 0003c01a 74000000 001c1002 50000c00 
+011c001d c2400400 561c1c02 608400e0 569ffc06 608040e0 021c1c1d c0800000 
+10a080b0 08a09c80 571c1c1e 5b401ce0 00200000 c4800000 0003c002 74000000 
+001c1816 cc001400 009c1011 c0800000 9c1c003c 12007fff 001c0802 50000c00 
+a010b0a0 08b810b0 011c0009 c2400400 541c0802 608400e0 549ffc06 608040e0 
+021c0809 c0800000 551c081e 5b401ce0 00200014 e4800000 001c003c 18000000 
+shader binary code (0x180 bytes):
+80a08080 089c8010 129c0002 86400000 131c0006 86400000 101c000a 86400000 
+001c080d c0000008 081c0809 c0000005 021c0001 c2400400 021c0405 c2400400 
+9c801080 0880b0a0 019c000e e0800000 011c040a e0800000 001fc016 74000000 
+68000000 15000000 029c0012 e4c03c00 001c101e 5b601c00 0000003c 1a000000 
+b0a0a0a0 08b0a010 021c0002 e4c03c00 001c0802 50000000 011c0019 c2400400 
+581c1802 608400e0 589ffc06 608040e0 021c1819 c0800000 591c181e 5b401ce0 
+a0a01080 08a010b0 00200018 c4800000 0003c01a 74000000 001c1002 50000c00 
+011c001d c2400400 561c1c02 608400e0 569ffc06 608040e0 021c1c1d c0800000 
+10a080b0 08a09c80 571c1c1e 5b401ce0 00200000 c4800000 0003c002 74000000 
+001c1816 cc001400 009c1011 c0800000 9c1c003c 12007fff 001c0802 50000c00 
+a010b0a0 08b810b0 011c0009 c2400400 541c0802 608400e0 549ffc06 608040e0 
+021c0809 c0800000 551c081e 5b401ce0 00200014 e4800000 001c003c 18000000 
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7dd80
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x40
+   CTA_RASTER_HEIGHT                   : 0x40
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x10
+   CTA_THREAD_DIMENSION1               : 0x10
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x8
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7dd80
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x40
+   CTA_RASTER_HEIGHT                   : 0x40
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x10
+   CTA_THREAD_DIMENSION1               : 0x10
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x8
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7dd80
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x40
+   CTA_RASTER_HEIGHT                   : 0x40
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x10
+   CTA_THREAD_DIMENSION1               : 0x10
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x8
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7dd80
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x40
+   CTA_RASTER_HEIGHT                   : 0x40
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x10
+   CTA_THREAD_DIMENSION1               : 0x10
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x8
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7dd80
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x40
+   CTA_RASTER_HEIGHT                   : 0x40
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x10
+   CTA_THREAD_DIMENSION1               : 0x10
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x8
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7dd80
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x40
+   CTA_RASTER_HEIGHT                   : 0x40
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x10
+   CTA_THREAD_DIMENSION1               : 0x10
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x8
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7dd80
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x40
+   CTA_RASTER_HEIGHT                   : 0x40
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x10
+   CTA_THREAD_DIMENSION1               : 0x10
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x8
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7dd80
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x40
+   CTA_RASTER_HEIGHT                   : 0x40
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x10
+   CTA_THREAD_DIMENSION1               : 0x10
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x8
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7dd80
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x40
+   CTA_RASTER_HEIGHT                   : 0x40
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x10
+   CTA_THREAD_DIMENSION1               : 0x10
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x8
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7dd80
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x40
+   CTA_RASTER_HEIGHT                   : 0x40
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x10
+   CTA_THREAD_DIMENSION1               : 0x10
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x8
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+Queue Meta Data:
+   QMD_RESERVED_V1_A                   : 0x0
+   QMD_RESERVED_V1_B                   : 0x0
+   QMD_RESERVED_V1_C                   : 0x0
+   QMD_RESERVED_V1_D                   : 0x0
+   QMD_RESERVED_V1_E                   : 0x0
+   QMD_RESERVED_V1_F                   : 0x0
+   QMD_RESERVED_V1_G                   : 0x0
+   QMD_RESERVED_V1_H                   : 0x0
+   QMD_RESERVED_A_A                    : 0x0
+   QMD_RESERVED_V1_I                   : 0x0
+   QMD_RESERVED_V1_J                   : 0x0
+   QMD_RESERVED_A                      : 0x0
+   QMD_RESERVED_V1_K                   : FALSE
+   QMD_RESERVED_V1_L                   : FALSE
+   SEMAPHORE_RELEASE_ENABLE0           : FALSE
+   SEMAPHORE_RELEASE_ENABLE1           : FALSE
+   QMD_RESERVED_B                      : 0x0
+   QMD_RESERVED_V1_M                   : 0x0
+   QMD_RESERVED_V1_N                   : FALSE
+   QMD_RESERVED_V1_O                   : 0x0
+   QMD_RESERVED_C                      : 0x0
+   INVALIDATE_TEXTURE_HEADER_CACHE     : TRUE
+   INVALIDATE_TEXTURE_SAMPLER_CACHE    : TRUE
+   INVALIDATE_TEXTURE_DATA_CACHE       : TRUE
+   INVALIDATE_SHADER_DATA_CACHE        : TRUE
+   INVALIDATE_INSTRUCTION_CACHE        : FALSE
+   INVALIDATE_SHADER_CONSTANT_CACHE    : TRUE
+   PROGRAM_OFFSET                      : 0x7dd80
+   QMD_RESERVED_V1_P                   : 0x0
+   QMD_RESERVED_V1_Q                   : 0x0
+   QMD_RESERVED_D                      : 0x0
+   QMD_RESERVED_V1_R                   : 0x0
+   QMD_RESERVED_V1_S                   : 0x0
+   QMD_RESERVED_E                      : 0x0
+   RELEASE_MEMBAR_TYPE                 : FE_SYSMEMBAR
+   CWD_MEMBAR_TYPE                     : L1_SYSMEMBAR
+   QMD_RESERVED_V1_T                   : FALSE
+   QMD_RESERVED_V1_U                   : FALSE
+   THROTTLED                           : FALSE
+   QMD_RESERVED_E2_A                   : 0x0
+   QMD_RESERVED_E2_B                   : 0x0
+   API_VISIBLE_CALL_LIMIT              : NO_CHECK
+   SHARED_MEMORY_BANK_MAPPING          : FOUR_BYTES_PER_BANK
+   SAMPLER_INDEX                       : INDEPENDENTLY
+   QMD_RESERVED_E3_A                   : 0x0
+   CTA_RASTER_WIDTH                    : 0x40
+   CTA_RASTER_HEIGHT                   : 0x40
+   CTA_RASTER_DEPTH                    : 0x1
+   CTA_RASTER_WIDTH_RESUME             : 0x0
+   CTA_RASTER_HEIGHT_RESUME            : 0x0
+   CTA_RASTER_DEPTH_RESUME             : 0x0
+   QMD_RESERVED_V1_V                   : 0x0
+   QMD_RESERVED_F                      : 0x0
+   QMD_RESERVED_V1_W                   : FALSE
+   SHARED_MEMORY_SIZE                  : 0x0
+   QMD_RESERVED_G                      : 0x0
+   QMD_VERSION                         : 0x0
+   QMD_MAJOR_VERSION                   : 0x0
+   QMD_RESERVED_H                      : 0x0
+   CTA_THREAD_DIMENSION0               : 0x10
+   CTA_THREAD_DIMENSION1               : 0x10
+   CTA_THREAD_DIMENSION2               : 0x1
+   CONSTANT_BUFFER_VALID(0)            : TRUE
+   CONSTANT_BUFFER_VALID(1)            : FALSE
+   CONSTANT_BUFFER_VALID(2)            : FALSE
+   CONSTANT_BUFFER_VALID(3)            : FALSE
+   CONSTANT_BUFFER_VALID(4)            : FALSE
+   CONSTANT_BUFFER_VALID(5)            : FALSE
+   CONSTANT_BUFFER_VALID(6)            : FALSE
+   CONSTANT_BUFFER_VALID(7)            : TRUE
+   QMD_RESERVED_I                      : 0x0
+   L1_CONFIGURATION                    : DIRECTLY_ADDRESSABLE_MEMORY_SIZE_16KB
+   QMD_RESERVED_V1_X                   : 0x0
+   QMD_RESERVED_V1_Y                   : 0x0
+   RELEASE0_ADDRESS_LOWER              : 0x0
+   RELEASE0_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_J                      : 0x0
+   RELEASE0_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_K                      : 0x0
+   RELEASE0_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE0_REDUCTION_ENABLE           : FALSE
+   RELEASE0_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE0_PAYLOAD                    : 0x0
+   RELEASE1_ADDRESS_LOWER              : 0x0
+   RELEASE1_ADDRESS_UPPER              : 0x0
+   QMD_RESERVED_L                      : 0x0
+   RELEASE1_REDUCTION_OP               : RED_ADD
+   QMD_RESERVED_M                      : 0x0
+   RELEASE1_REDUCTION_FORMAT           : UNSIGNED_32
+   RELEASE1_REDUCTION_ENABLE           : FALSE
+   RELEASE1_STRUCTURE_SIZE             : FOUR_WORDS
+   RELEASE1_PAYLOAD                    : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(0)       : 0x4b0000
+   CONSTANT_BUFFER_ADDR_UPPER(0)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(0)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(0)       : FALSE
+   CONSTANT_BUFFER_SIZE(0)             : 0x10000
+   CONSTANT_BUFFER_ADDR_LOWER(1)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(1)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(1)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(1)       : FALSE
+   CONSTANT_BUFFER_SIZE(1)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(2)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(2)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(2)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(2)       : FALSE
+   CONSTANT_BUFFER_SIZE(2)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(3)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(3)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(3)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(3)       : FALSE
+   CONSTANT_BUFFER_SIZE(3)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(4)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(4)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(4)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(4)       : FALSE
+   CONSTANT_BUFFER_SIZE(4)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(5)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(5)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(5)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(5)       : FALSE
+   CONSTANT_BUFFER_SIZE(5)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(6)       : 0x0
+   CONSTANT_BUFFER_ADDR_UPPER(6)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(6)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(6)       : FALSE
+   CONSTANT_BUFFER_SIZE(6)             : 0x0
+   CONSTANT_BUFFER_ADDR_LOWER(7)       : 0x510000
+   CONSTANT_BUFFER_ADDR_UPPER(7)       : 0x0
+   CONSTANT_BUFFER_RESERVED_ADDR(7)    : 0x0
+   CONSTANT_BUFFER_INVALIDATE(7)       : FALSE
+   CONSTANT_BUFFER_SIZE(7)             : 0x800
+   SHADER_LOCAL_MEMORY_LOW_SIZE        : 0x0
+   QMD_RESERVED_N                      : 0x0
+   BARRIER_COUNT                       : 0x0
+   SHADER_LOCAL_MEMORY_HIGH_SIZE       : 0x0
+   REGISTER_COUNT                      : 0x8
+   SHADER_LOCAL_MEMORY_CRS_SIZE        : 0x800
+   SASS_VERSION                        : 0x30
+   QMD_SPARE_A                         : 0x0
+   QMD_SPARE_B                         : 0x0
+   QMD_SPARE_C                         : 0x0
+   QMD_SPARE_D                         : 0x0
+   QMD_SPARE_E                         : 0x0
+   QMD_SPARE_F                         : 0x0
+   QMD_SPARE_G                         : 0x0
+   QMD_SPARE_H                         : 0x0
+   QMD_SPARE_I                         : 0x0
+   QMD_SPARE_J                         : 0x0
+   QMD_SPARE_K                         : 0x0
+   QMD_SPARE_L                         : 0x0
+   QMD_SPARE_M                         : 0x0
+   QMD_SPARE_N                         : 0x0
+   DEBUG_ID_UPPER                      : 0x0
+   DEBUG_ID_LOWER                      : 0x0
+matmul_f32: n 1024, median 0.135658 s (min 0.135550, max 0.136250) over 10, 15.83 GFLOP/s; cpu reference 81.875 s
+matmul_f32_1024: elements 1048576, different 0, max relative error 0, PASS
+PASS: 0 of 4 jobs differ from the CPU

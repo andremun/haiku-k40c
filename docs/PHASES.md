@@ -24,6 +24,10 @@ own, and the work may stop at any of them.
 S1 is the first success criterion of the project. S2 is the first real
 work done by the GPU. S3 is the goal of the design documents.
 
+State (2026-11-18): S1, S2 and S3 passed on the card. S3 passed twice
+(`s3w`, `s3y`); the project is complete to its designed scope
+(`docs/decisions/013-s3-complete.md`).
+
 Before S3 work starts on Haiku, the same job must run on this card under
 Linux with Nouveau and Mesa (task C5, in a Linux guest with the card
 passed through: `docs/PASSTHROUGH.md`). If it does not run there, there
@@ -148,3 +152,14 @@ No second-batch runtime/package or hardware approval exists.
 | S1CHANCLOSE | Finite detach and retention | `docs/tasks/S1CHANCLOSE.md` |
 | S1CHANSUBMIT | One native host-NOP experiment | `docs/tasks/S1CHANSUBMIT.md` |
 | S1CHANPACKAGE | Immutable package and cardless rehearsal | `docs/tasks/S1CHANPACKAGE.md` |
+
+## S2 and S3 (resumed 2026-11-12, decision 012)
+
+| Task | Title | Text |
+|---|---|---|
+| S2COPY | One copy between two VRAM buffers on the S1 channel | `docs/tasks/S2COPY.md` |
+| S3GR | Start the GR engine and its two microcode programs | `docs/tasks/S3GR.md` |
+| S3CTX | Golden context, GR context of one channel, GR runlist | `docs/tasks/S3CTX.md` |
+| S3LAUNCH | One compute job, then one timed matrix product | `docs/tasks/S3LAUNCH.md` |
+| RTIOCTL | The first user interface of the driver | `docs/tasks/RTIOCTL.md` |
+| LADDER | Packages, rehearsals and the run sheet for 2026-11-16 | `docs/tasks/LADDER.md` |

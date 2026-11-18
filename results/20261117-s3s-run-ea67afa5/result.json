@@ -1,0 +1,21 @@
+{
+  "DMA_payload_visibility": false,
+  "Q11": "open; A7 G1 observation only",
+  "Q7": "open",
+  "S1_complete": false,
+  "S2_complete": false,
+  "S2_diagnostic_complete": false,
+  "S3_bind_complete": true,
+  "S3_complete": false,
+  "S3_golden_complete": true,
+  "S3_image_complete": false,
+  "S3_observe_complete": true,
+  "S3_setup_complete": false,
+  "allowed_kernel_lines": [],
+  "elapsed_seconds": 164.25,
+  "error": "",
+  "kernel_scope": "R5 selected classes; not a clean full kernel log",
+  "stage": "S3S_A7_BAR1_GR_BIND_LIST34",
+  "status": "pass",
+  "verification": "HARDWARE_VERIFIED under Haiku for this finite card/context only if status=pass"
+}

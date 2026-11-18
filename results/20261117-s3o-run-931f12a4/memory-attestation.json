@@ -1,0 +1,44 @@
+{
+  "a7_grant_sha256": "40ab61e74e2c65328ff1619e4a27f70421ec83a3b42e687b3648d83151da957c",
+  "a7_request_sha256": "5d738aecf040903e26601948d44f40fdae9645e35417397151e8f5283b9b91c2",
+  "a7_serial_prefix_sha256": "d50205e467311829637578d28b40ab35b96308a79149de2ca944cd66134f487e",
+  "cutoff_sha256": "78c4ea5fa6c4b6083c8a2b74b523378c511554d562d2cc1da5d52f02604cf2f5",
+  "kernel_selected_sha256": "0bff9c1405618d7faacb860b97b4da5707596bcb92a87432417d7b8a771b5622",
+  "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+  "mapping_generation": 1,
+  "memory_request_sha256": "cf65a9ecf26c31e89b91b2a524487d0ee990982c990da23a86278845ead9ab79",
+  "native": {
+    "bar0": 3238002688,
+    "bar0_bytes": 16777216,
+    "bar1": 34359738368,
+    "bar1_bytes": 268435456,
+    "begin": 266240,
+    "end": 12078546944,
+    "epoch": 14528994716104370556,
+    "owner": 14528994716104370556,
+    "prefix_bytes": 8192,
+    "vram": 12079595520
+  },
+  "pci": {
+    "bars": {
+      "0": {
+        "address": 3238002688,
+        "bytes": 16777216,
+        "mem_type_64": false
+      },
+      "1": {
+        "address": 34359738368,
+        "bytes": 268435456,
+        "mem_type_64": true
+      }
+    },
+    "bus": 0,
+    "function": 0,
+    "slot": 3
+  },
+  "pci_raw_sha256": "52413ad89ee3569a4d0bea6e9e34e439e36bdc450af4bb973d045e347d4de5df",
+  "plan_sha256": "11028c068b4102a35c2bfec08f7b3cd0e3a1634cb437ce5c6caed3f8fcf89a43",
+  "stage": "S3O_A7_BAR1_GR_BIND_OBSERVED",
+  "trace_prefix_bytes": 21465,
+  "trace_prefix_sha256": "c616158885799390e5ce78d304932dc71303c807bb4597cebfbcec163761a540"
+}

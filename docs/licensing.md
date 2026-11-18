@@ -456,3 +456,32 @@ No Nouveau implementation body was copied and no runtime code changed.
 | `reference/nouveau/nouveau_dma.c` | MIT notice in file | GPFIFO entry, GP_PUT | Semantic facts only |
 | `reference/open-gpu-doc/classes/host/cla16f.h` | MIT notice in file | USERD layout, NOP method | Facts only |
 | `reference/envytools/docs/hw/fifo/dma-pusher.rst`, `rnndb/fifo/gf100_pfifo.xml` | MIT | Method header format, BAR1_BASE | Facts only |
+
+## S2COPY (2026-11-12)
+
+| Source file consulted | License | Used for | Copied material |
+|---|---|---|---|
+| `reference/nouveau/nouveau_boa0b5.c` | MIT notice in file | Copy method sequence and launch flags | Semantic facts only |
+| `reference/nouveau/nouveau_bo.c` | MIT notice in file | Copy class, subchannel and object handle | Semantic facts only |
+| `reference/nouveau/include/nvhw/class/cla0b5.h` | MIT notice in file (NVIDIA) | Method offsets and LAUNCH_DMA fields | Facts only |
+| `reference/nouveau/include/nvhw/class/cl906f.h` | MIT notice in file (NVIDIA) | Method header fields | Facts only |
+| `reference/nouveau/include/nvif/push906f.h` | MIT | Subchannel of the copy class, header macros | Facts only |
+| `reference/nouveau/nvkm/engine/ce/gk104.c` | MIT notice in file | Interrupt status, launch error code | Semantic facts only |
+| `reference/nouveau/nvkm/engine/fifo/gk104.c` | MIT notice in file | Engine status register, copy-engine functions without context | Semantic facts only |
+
+## S3GR (2026-11-12)
+
+| Source file consulted | License | Used for | Copied material |
+|---|---|---|---|
+| `reference/nouveau/nvkm/engine/gr/gf100.c`, `gf100.h` | MIT notice in file | Order of engine start, hooks, ZBC, context-control start, unit address macros | Semantic facts only |
+| `reference/nouveau/nvkm/engine/gr/gk104.c`, `gk110.c`, `gk110b.c`, `gf117.c` | MIT notice in file | GK110B hook functions and function table | Semantic facts only |
+| `reference/nouveau/nvkm/engine/gr/*.c` register tables | MIT notice in files | Register address and value tables, read at run time by `tools/gr/tables.py` | None in this repository: the tool reads the pinned tree |
+| `reference/nouveau/nvkm/engine/gr/fuc/hubgk110.fuc3.h`, `gpcgk110.fuc3.h` | MIT (Red Hat) | The four microcode arrays, read at run time by `tools/gr/model.py` | None yet; the native build will embed them with their notice |
+| `reference/nouveau/nvkm/engine/gr/fuc/hub.fuc` | MIT (Red Hat) | Read to learn what the FECS program does at a first context load (`work/S3DIAG/REPORT.md`) | None: no code or data taken |
+| `reference/nouveau/nvkm/falcon/v1.c` | MIT notice in file | Data and code load protocol | Semantic facts only |
+| `reference/nouveau/nvkm/subdev/ltc/gf100.c` | MIT notice in file | ZBC table registers | Semantic facts only |
+| `reference/nouveau/nvkm/engine/gr/ctxgf100.c`, `ctxgk104.c`, `ctxgk110.c`, `ctxgk110b.c`, `ctxgf117.c` | MIT notice in file | Golden context order, hooks, per-context register values | Semantic facts only |
+| `reference/nouveau/nvkm/engine/fifo/gf100.c` (699-716), `gk104.c` (474, 504-560) | MIT notice in file | Decode of the MMU fault record of the `s3v` run: fields, unit, reason and hub client names (`work/S3DIAG/FINDINGS.md`) | Semantic facts only |
+| `reference/mesa/src/gallium/drivers/nouveau/nvc0/nve4_compute.c` (748-800) | MIT notice in file | Where Mesa places the launch descriptor (its scratch buffer), for the writable Qmd mapping | Semantic facts only |
+| `reference/nouveau/nvkm/engine/fifo/runl.c` (40-140), `gf100.c` (534-610, 720-729), `gk104.c` (40-60, 404-430), `gk110.c` (57-68) | MIT notice in file | The recovery of a faulted channel on GK104 (block, clear, stop, engine reset, runlist update, fault clear, allow) for the `recover` program | Semantic facts only |
+| `reference/nouveau/nvkm/subdev/mc/base.c` (40-95), `nv04.c` (28-46), `gf100.c` (27-35), `gk104.c` (25-30), `subdev/top/gk104.c` (64) | MIT notice in file | The PMC reset of the GR unit (bit 12) | Semantic facts only |

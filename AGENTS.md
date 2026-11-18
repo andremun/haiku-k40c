@@ -125,7 +125,8 @@ under the terms of the MIT License." Record every consulted Nouveau file in
 ## Git
 
 Use only `main`. Do not create task branches. Commit small working steps after `make check` passes.
-Never push. The user pushes. Never rewrite history or delete `reference/`.
+Never push. The user pushes. Exception: a cloud session commits and pushes to its assigned
+work branch, and the user merges it (decision 012). Never rewrite history or delete `reference/`.
 Do not use the rejected A3 attempt, retained only as tag `archive/task-a3`.
 `reference/HAIKU-TOOLS.json` in `haiku-k40c-llm` may be re-pinned after shared-tool changes.
 Other `reference/` content remains read-only.

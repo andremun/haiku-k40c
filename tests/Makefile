@@ -21,6 +21,7 @@ OWNER_POST_HEADERS := $(wildcard ../src/devinit/*.h)
 CXX_TESTS := test_mem_experiment:memstage+memory \
              test_mem_policy:memnative+memstage+memory \
              test_mem_channel:memnative+memstage+memory \
+             test_mem_copy:memnative+memstage+memory \
              test_mem_mmu:memstage+memory \
              test_mem_upload:memstage+memory \
              test_mem_faults:memstage+memory \
@@ -42,8 +43,10 @@ PY_TESTS  := $(if $(wildcard ../tools/compare_register_traces.py),$(wildcard tes
 PROGRAMS := $(foreach t,$(CXX_TESTS),$(BUILDDIR)/$(firstword $(subst :, ,$(t))))
 
 .PHONY: all clean
-all: $(BUILDDIR)/test_mem_client $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(BUILDDIR)/owner_post_probe $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
+all: $(BUILDDIR)/test_gr_runner $(BUILDDIR)/test_gr_compute $(BUILDDIR)/test_mem_client $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(BUILDDIR)/owner_post_probe $(PROGRAMS) $(BUILDDIR)/post_probe $(BUILDDIR)/board_probe $(BUILDDIR)/devinit_rom_sim $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe
 	@for p in $(BUILDDIR)/test_mem_client $(BUILDDIR)/test_a7_native $(BUILDDIR)/test_a7_client $(BUILDDIR)/test_map_owner_probe $(PROGRAMS) $(BUILDDIR)/test_haiku_backend $(BUILDDIR)/test_identity_probe $(BUILDDIR)/test_haiku_memory $(BUILDDIR)/test_native_owner $(BUILDDIR)/test_owner_probe; do $$p || exit 1; done
+	@$(BUILDDIR)/test_gr_runner $(BUILDDIR)/gr/gr_trace.txt
+	@$(BUILDDIR)/test_gr_compute $(BUILDDIR)/gr/gr_trace.txt
 	@for t in $(PY_TESTS); do (cd .. && python3 tests/$$t) || exit 1; done
 
 $(BUILDDIR)/test_a7_diagnostics: ../src/a7/PostDiagnostics.h
@@ -56,6 +59,17 @@ $(foreach t,$(CXX_TESTS),$(eval $(call RULE,$(firstword $(subst :, ,$(t))),$(las
 
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
+
+# GR program runner: the op tables and the trace fixture are generated from the
+# pinned Nouveau sources and the reference trace (tools/gr/program.py).
+GR_TOOLS := $(wildcard ../tools/gr/*.py)
+$(BUILDDIR)/gr/ProgramData.cpp: $(GR_TOOLS) | $(BUILDDIR)
+	cd .. && python3 tools/gr/program.py --output build/tests/gr >/dev/null
+GR_STAGE := ../src/gr/Compute.cpp ../src/gr/Guard.cpp ../src/gr/Runner.cpp $(wildcard ../src/memnative/Policy.cpp ../src/memstage/*.cpp ../src/memory/*.cpp)
+$(BUILDDIR)/test_gr_compute: test_gr_compute.cpp memstage_device.h $(GR_STAGE) $(wildcard ../src/gr/*.h ../src/memstage/*.h ../src/memnative/Policy.h ../src/memory/*.h) $(BUILDDIR)/gr/ProgramData.cpp | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -O1 test_gr_compute.cpp $(GR_STAGE) $(BUILDDIR)/gr/ProgramData.cpp -o $@
+$(BUILDDIR)/test_gr_runner: test_gr_runner.cpp ../src/gr/Runner.cpp ../src/gr/Runner.h ../src/gr/Program.h $(BUILDDIR)/gr/ProgramData.cpp | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) test_gr_runner.cpp ../src/gr/Runner.cpp $(BUILDDIR)/gr/ProgramData.cpp -o $@
 
 clean:
 	rm -rf $(BUILDDIR)
@@ -104,7 +118,7 @@ $(BUILDDIR)/test_a7_native: test_a7_native.cpp ../src/a7/NativePlatform.cpp ../s
 $(BUILDDIR)/test_a7_client: test_a7_client.cpp ../tools/haiku/selftest/a7_client.cpp ../src/a7/Module.h $(wildcard a7_shim/*.h os_shim/*.h) | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) -Ia7_shim -Ios_shim test_a7_client.cpp ../tools/haiku/selftest/a7_client.cpp -o $@
 
-$(BUILDDIR)/test_mem_mmu $(BUILDDIR)/test_mem_policy $(BUILDDIR)/test_mem_experiment $(BUILDDIR)/test_mem_channel: memstage_device.h
+$(BUILDDIR)/test_mem_mmu $(BUILDDIR)/test_mem_policy $(BUILDDIR)/test_mem_experiment $(BUILDDIR)/test_mem_channel $(BUILDDIR)/test_mem_copy: memstage_device.h memstage_fifo.h
 
 $(BUILDDIR)/test_mem_client: test_mem_client.cpp ../tools/haiku/selftest/memory_client.cpp ../src/memnative/Module.h $(wildcard a7_shim/*.h os_shim/*.h) | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) -D_KERNEL_MODE -Ia7_shim -Ios_shim test_mem_client.cpp ../tools/haiku/selftest/memory_client.cpp -o $@

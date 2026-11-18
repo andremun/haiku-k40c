@@ -6,14 +6,26 @@
 #include <new>
 namespace k40::memnative {
 using namespace memory::vram;
-NativeOwner::NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram)
+NativeOwner::NativeOwner(const uint8_t key[32],const uint8_t nonce[32],const uint8_t plan[32],const uint8_t challenge[16],uint64_t epoch,uint64_t vram,unsigned stage)
     :faults_(io_,journal_,epoch),policy_(arena_,faults_),upload_(io_,faults_,journal_,arena_),mapper_(io_,faults_,journal_,arena_,upload_,epoch),
-     channel_(io_,faults_,journal_,arena_,upload_,mapper_,epoch)
+     channel_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,stage==1 || stage==4,stage!=4),stage_(stage),guard_(arena_,policy_),
+     compute_(io_,faults_,journal_,arena_,upload_,mapper_,epoch,launchOf(stage),&live_,alignOf(stage),stage==8,stage==9?gr::Observe::Window:stage==10?gr::Observe::Registers:stage==11?gr::Observe::Report:stage>=12 && stage<=14?gr::Observe::Last:stage>=16 && stage<=18?gr::Observe::Fault:gr::Observe::None)
 {
     io_.policy_=&policy_;
     std::memcpy(binding_.key,key,32);std::memcpy(binding_.nonce,nonce,32);std::memcpy(binding_.plan,plan,32);std::memcpy(binding_.challenge,challenge,16);
     binding_.epoch=binding_.owner=epoch;binding_.vram=vram;
     binding_.begin=256*1024+4096;binding_.end=vram-1048576; // ramgf100.c:497-498; no source: extra A7 scratch exclusion.
+}
+gr::Launch NativeOwner::launchOf(unsigned stage)
+{return stage==3 || (stage>=15 && stage<=18)?gr::Launch::Full:stage==5 || stage==7 || (stage>=9 && stage<=14)?gr::Launch::Bind:stage==6?gr::Launch::Setup:gr::Launch::None;}
+void NativeOwner::Live::live(gr::Step step,uint64_t microseconds,uint32_t a,uint32_t b)
+{dprintf("k40_mem: LIVE step=%u us=%llu a=%x b=%x\n",unsigned(step),(unsigned long long)microseconds,a,b);}
+void NativeOwner::Live::words(uint32_t offset,const uint32_t values[8])
+{dprintf("k40_mem: IMG %x %x %x %x %x %x %x %x %x\n",offset,values[0],values[1],values[2],values[3],values[4],values[5],values[6],values[7]);}
+void NativeOwner::Live::observed(uint32_t sample,uint32_t group,uint64_t microseconds,const uint32_t* values,unsigned count)
+{
+    uint32_t v[7]{};for(unsigned i=0;i<count && i<7;++i)v[i]=values[i];
+    dprintf("k40_mem: OBS n=%u g=%u us=%llu c=%u %x %x %x %x %x %x %x\n",sample,group,(unsigned long long)microseconds,count,v[0],v[1],v[2],v[3],v[4],v[5],v[6]);
 }
 status_t NativeOwner::observeLoad()
 {
@@ -52,8 +64,15 @@ status_t NativeOwner::detach(uint64 lease)
 }
 bool NativeOwner::work()
 {
-    // S1: the unchanged batch-1 memory/BAR1 gates first, then one channel.
-    return experiment_ && experiment_->run() && channel_.run();
+    // The unchanged batch-1 memory/BAR1 gates first, then one channel: S1 (host
+    // NOP), or S2 (NOP, then one copy) when the package was built for the copy stage.
+    // S3 (stages 2 and 3): the compute stage replaces the CE0 channel, and its
+    // guard decides the channel-phase accesses (gr/Guard.h).
+    if(!experiment_ || !experiment_->run())return false;
+    if(stage_<2 || stage_==4)return channel_.run();
+    if(!computeStage(stage_))return false;
+    policy_.extend(&guard_);
+    return compute_.run();
 }
 void NativeOwner::drain()
 {
@@ -73,6 +92,22 @@ void NativeOwner::drain()
             (unsigned long long)r.token.id,unsigned(r.role),(unsigned long long)r.physical.value,(unsigned long long)r.bytes,
             (unsigned long long)r.writeGeneration,r.staged,r.referenced,r.retained);
     }
+    if(computeStage(stage_)) {
+        const auto& g=compute_.report();
+        dprintf("k40_mem: GR step=%u error=%u bound=%u started=%u golden=%u attached=%u submitted=%u consumed=%u computed=%u closed=%u\n",
+            unsigned(g.step),unsigned(g.error),g.bound,g.started,g.golden,g.attached,g.submitted,g.consumed,g.computed,g.closed);
+        dprintf("k40_mem: GR_PROGRAM ops=%u reads=%u writes=%u guard=%u/%u total_us=%llu\n",g.ops,g.reads,g.writes,
+            guard_.stage(),guard_.index(),(unsigned long long)g.totalUs);
+        dprintf("k40_mem: GR_FAILURE runner=%u index=%u addr=%x value=%x expected=%x closing=%u closing_index=%u\n",unsigned(g.runner.error),
+            g.runner.index,g.runner.addr,g.runner.value,g.runner.expected,unsigned(g.closing.error),g.closing.index);
+        dprintf("k40_mem: GR_GET after=%u/%u polls=%u us=%llu result_polls=%u result_us=%llu wrong=%u first=%u value=%x\n",g.getAfter,g.putAfter,
+            g.polls,(unsigned long long)g.progressUs,g.resultPolls,(unsigned long long)g.resultUs,g.wrong,g.firstWrong,g.firstValue);
+        dprintf("k40_mem: GR_STATUS mc=%x fifo=%x mmu=%x pbdma=%x hce=%x state=%x gr=%x trap=%x fecs=%x engine=%x\n",g.mc,g.fifoIntr,
+            g.mmuPending,g.pbdmaIntr,g.pbdmaHce,g.state,g.grIntr,g.grTrap,g.fecsIntr,g.engineStatus);
+        if((stage_>=9 && stage_<=14) || (stage_>=16 && stage_<=18))dprintf("k40_mem: GR_OBSERVE samples=%u get=%u put=%u bar=%u fault_units=%x\n",g.samples,g.windowGet,g.windowPut,g.barRead,g.faultUnits);
+        if(stage_==18)dprintf("k40_mem: GR_RECOVER recovered=%u pending=%x engine=%x\n",unsigned(g.recovered),g.lastPending,g.lastEngine);
+        dprintf("k40_mem: GR_IMAGE %x %x %x %x %x %x %x %x\n",g.image[0],g.image[1],g.image[2],g.image[3],g.image[4],g.image[5],g.image[6],g.image[7]);
+    }
     const auto& c=channel_.report();
     dprintf("k40_mem: CHANNEL runlist=%u pbdma=%u mask=%x runm=%x bound=%u closed=%u progress=%u error=%u step=%u\n",
         c.runlist,c.pbdma,c.pbdmaMask,c.runm,c.bound,c.closed,unsigned(c.progress),unsigned(channel_.error()),policy_.channelStep());
@@ -80,6 +115,12 @@ void NativeOwner::drain()
         c.getAfter,c.putAfter,c.polls,(unsigned long long)c.progressUs);
     dprintf("k40_mem: CHANNEL_STATUS mc=%x fifo=%x mmu=%x pbdma=%x hce=%x state=%x\n",
         c.mc,c.fifoIntr,c.mmuPending,c.pbdmaIntr,c.pbdmaHce,c.state);
+    if(channel_.copy()) {
+        dprintf("k40_mem: COPY engine=%u submitted=%u get=%u/%u polls=%u us=%llu copied=%u\n",c.engine,c.copySubmitted,
+            c.copyGet,c.copyPut,c.copyPolls,(unsigned long long)c.copyUs,c.copied);
+        dprintf("k40_mem: COPY_STATUS engine=%x idle_polls=%u idle_us=%llu ce_intr=%x launcherr=%x\n",c.engineStatus,
+            c.idlePolls,(unsigned long long)c.idleUs,c.ceIntr,c.ceLaunchErr);
+    }
     dprintf("k40_mem: ROUTES count=%u\n",faults_.routeCount());
     for(unsigned i=0;i<faults_.routeCount();++i) {
         memstage::Routing r;if(!faults_.route(i,r))continue;
@@ -95,7 +136,7 @@ bool NativeOwner::execute()
     if(!passed)arena_.fail();
     drain();
     dprintf("k40_mem: %s faults=%u upload=%u mapper=%u closure=%u allocations=%u journal_overflow=%u\n",
-        passed?"PASS S1_CHANNEL_NOP":"FAIL",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
+        !passed?"FAIL":stage_==18?"PASS S3_RECOVER":stage_==3 || (stage_>=15 && stage_<=17)?"PASS S3_COMPUTE":stage_==2?"PASS S3_GOLDEN":stage_==8?"PASS S3_IMAGE":stage_==9?"PASS S3_OBSERVE":stage_==10?"PASS S3_REGISTERS":stage_==11?"PASS S3_REPORT":stage_==12?"PASS S3_NO_LIST":stage_==13?"PASS S3_SHORT_LIST":stage_==14?"PASS S3_FULL_LIST":stage_==5 || stage_==7?"PASS S3_BIND":stage_==6?"PASS S3_SETUP":stage_==1?"PASS S2_COPY":stage_==4?"PASS S2_COPY_DIAGNOSTIC":"PASS S1_CHANNEL_NOP",unsigned(faults_.error()),unsigned(upload_.error()),unsigned(mapper_.error()),
         unsigned(mapper_.closure()),arena_.count(),journal_.overflow());return passed;
 }
 }

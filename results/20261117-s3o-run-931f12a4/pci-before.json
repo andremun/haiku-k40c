@@ -1,0 +1,260 @@
+[
+  {
+    "bus": 0,
+    "devices": [
+      {
+        "bus": 0,
+        "class_info": {
+          "class": 1536,
+          "desc": "Host bridge"
+        },
+        "function": 0,
+        "id": {
+          "device": 10688,
+          "subsystem": 4352,
+          "subsystem-vendor": 6900,
+          "vendor": 32902
+        },
+        "irq_pin": 0,
+        "qdev_id": "",
+        "regions": [],
+        "slot": 0
+      },
+      {
+        "bus": 0,
+        "class_info": {
+          "class": 768,
+          "desc": "VGA controller"
+        },
+        "function": 0,
+        "id": {
+          "device": 4369,
+          "subsystem": 4352,
+          "subsystem-vendor": 6900,
+          "vendor": 4660
+        },
+        "irq_pin": 0,
+        "qdev_id": "",
+        "regions": [
+          {
+            "address": 3221225472,
+            "bar": 0,
+            "mem_type_64": false,
+            "prefetch": true,
+            "size": 16777216,
+            "type": "memory"
+          },
+          {
+            "address": 3255439360,
+            "bar": 2,
+            "mem_type_64": false,
+            "prefetch": false,
+            "size": 4096,
+            "type": "memory"
+          },
+          {
+            "address": -1,
+            "bar": 6,
+            "mem_type_64": false,
+            "prefetch": false,
+            "size": 65536,
+            "type": "memory"
+          }
+        ],
+        "slot": 1
+      },
+      {
+        "bus": 0,
+        "class_info": {
+          "class": 3075,
+          "desc": "USB controller"
+        },
+        "function": 0,
+        "id": {
+          "device": 13,
+          "subsystem": 4352,
+          "subsystem-vendor": 6900,
+          "vendor": 6966
+        },
+        "irq": 22,
+        "irq_pin": 1,
+        "qdev_id": "",
+        "regions": [
+          {
+            "address": 34661728256,
+            "bar": 0,
+            "mem_type_64": true,
+            "prefetch": false,
+            "size": 16384,
+            "type": "memory"
+          }
+        ],
+        "slot": 2
+      },
+      {
+        "bus": 0,
+        "class_info": {
+          "class": 770,
+          "desc": "3D controller"
+        },
+        "function": 0,
+        "id": {
+          "device": 4132,
+          "subsystem": 2435,
+          "subsystem-vendor": 4318,
+          "vendor": 4318
+        },
+        "irq": 23,
+        "irq_pin": 1,
+        "qdev_id": "",
+        "regions": [
+          {
+            "address": 3238002688,
+            "bar": 0,
+            "mem_type_64": false,
+            "prefetch": false,
+            "size": 16777216,
+            "type": "memory"
+          },
+          {
+            "address": 34359738368,
+            "bar": 1,
+            "mem_type_64": true,
+            "prefetch": true,
+            "size": 268435456,
+            "type": "memory"
+          },
+          {
+            "address": 34628173824,
+            "bar": 3,
+            "mem_type_64": true,
+            "prefetch": true,
+            "size": 33554432,
+            "type": "memory"
+          }
+        ],
+        "slot": 3
+      },
+      {
+        "bus": 0,
+        "class_info": {
+          "class": 512,
+          "desc": "Ethernet controller"
+        },
+        "function": 0,
+        "id": {
+          "device": 4110,
+          "subsystem": 4352,
+          "subsystem-vendor": 6900,
+          "vendor": 32902
+        },
+        "irq": 20,
+        "irq_pin": 1,
+        "qdev_id": "",
+        "regions": [
+          {
+            "address": 3255304192,
+            "bar": 0,
+            "mem_type_64": false,
+            "prefetch": false,
+            "size": 131072,
+            "type": "memory"
+          },
+          {
+            "address": 24640,
+            "bar": 1,
+            "size": 64,
+            "type": "io"
+          },
+          {
+            "address": -1,
+            "bar": 6,
+            "mem_type_64": false,
+            "prefetch": false,
+            "size": 524288,
+            "type": "memory"
+          }
+        ],
+        "slot": 4
+      },
+      {
+        "bus": 0,
+        "class_info": {
+          "class": 1537,
+          "desc": "ISA bridge"
+        },
+        "function": 0,
+        "id": {
+          "device": 10520,
+          "subsystem": 4352,
+          "subsystem-vendor": 6900,
+          "vendor": 32902
+        },
+        "irq_pin": 0,
+        "qdev_id": "",
+        "regions": [],
+        "slot": 31
+      },
+      {
+        "bus": 0,
+        "class_info": {
+          "class": 262,
+          "desc": "SATA controller"
+        },
+        "function": 2,
+        "id": {
+          "device": 10530,
+          "subsystem": 4352,
+          "subsystem-vendor": 6900,
+          "vendor": 32902
+        },
+        "irq": 16,
+        "irq_pin": 1,
+        "qdev_id": "",
+        "regions": [
+          {
+            "address": -1,
+            "bar": 4,
+            "size": 32,
+            "type": "io"
+          },
+          {
+            "address": 3255435264,
+            "bar": 5,
+            "mem_type_64": false,
+            "prefetch": false,
+            "size": 4096,
+            "type": "memory"
+          }
+        ],
+        "slot": 31
+      },
+      {
+        "bus": 0,
+        "class_info": {
+          "class": 3077,
+          "desc": "SMBus"
+        },
+        "function": 3,
+        "id": {
+          "device": 10544,
+          "subsystem": 4352,
+          "subsystem-vendor": 6900,
+          "vendor": 32902
+        },
+        "irq": 16,
+        "irq_pin": 1,
+        "qdev_id": "",
+        "regions": [
+          {
+            "address": 24576,
+            "bar": 4,
+            "size": 64,
+            "type": "io"
+          }
+        ],
+        "slot": 31
+      }
+    ]
+  }
+]

@@ -1,0 +1,15 @@
+device: /dev/dri/renderD128
+renderer: NVF1
+version: OpenGL ES 3.2 Mesa 25.2.8
+elements: 1024, wrong: 0
+PASS
+code dumps: 5
+ladder: copy: bytes 1048576, different words 0, PASS
+ladder: add_f32: elements 65536, different 0, max relative error 0, PASS
+ladder: mul_mat_vec_q8_0: elements 512, different 0, max relative error 0, PASS
+ladder: matmul_f32: n 1024, median 0.135658 s (min 0.135550, max 0.136250) over 10, 15.83 GFLOP/s; cpu reference 81.875 s
+ladder: matmul_f32_1024: elements 1048576, different 0, max relative error 0, PASS
+ladder: PASS: 0 of 4 jobs differ from the CPU
+mesa: debug build in /opt/mesa-debug
+6.8.0-146-generic
+mesa 25.2.8-0ubuntu0.24.04.4

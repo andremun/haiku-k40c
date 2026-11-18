@@ -18,11 +18,14 @@ bool resolve(const Arena& arena,Addresses& out)
         case Role::Gpfifo:slot=&out.gpfifo;break;
         case Role::Push:slot=&out.push;break;
         case Role::Runlist:slot=&out.runlist;break;
+        case Role::CopySource:slot=&out.source;break;
+        case Role::CopyDest:slot=&out.dest;break;
         default:break;
         }
         if(slot){if(*slot)return false;*slot=r.physical.value;++found;}
     }
-    return found==7;
+    out.copy=out.source && out.dest;
+    return found==(out.copy?9u:7u) && bool(out.source)==bool(out.dest);
 }
 bool userdPte(uint64_t physical,uint64_t& out)
 {
@@ -43,7 +46,14 @@ unsigned image(Role role,const Addresses& a,Word out[],unsigned capacity)
         if(!tables::pte({a.gpfifo},value))return 0;
         add(uint32_t((gpfifoVa>>12)&32767)*8,value); // vmmgk104.c:39-43 SPT index.
         if(!tables::pte({a.push},value))return 0;
-        add(uint32_t((pushVa>>12)&32767)*8,value);break;
+        add(uint32_t((pushVa>>12)&32767)*8,value);
+        if(a.copy) { // Source read-only like the other pages; destination writable (RO bit 2 clear).
+            if(!tables::pte({a.source},value))return 0;
+            add(uint32_t((sourceVa>>12)&32767)*8,value);
+            if(!userdPte(a.dest,value))return 0; // vmmgf100.c:313-316 valid, VRAM, writable.
+            add(uint32_t((destVa>>12)&32767)*8,value);
+        }
+        break;
     case Role::ChanInstance: {
         // fifo/gk104.c:88-102 RAMFC; values match trace lines 562271-562285.
         const uint64_t userd=a.userd+userdSlot;
@@ -64,8 +74,25 @@ unsigned image(Role role,const Addresses& a,Word out[],unsigned capacity)
         add(0x200,base);add(0x208,limit);break; // mmu/vmmgf100.c:346-360.
     }
     case Role::Gpfifo:
-        add(0,(pushVa&0xffffffff)|((uint64_t(pushVa>>32)|(8u<<8))<<32));break; // nouveau_dma.c:83-84, 8 bytes.
-    case Role::Push:add(0,nopHeader);break; // second word, NOP data, stays 0.
+        add(0,(pushVa&0xffffffff)|((uint64_t(pushVa>>32)|(8u<<8))<<32)); // nouveau_dma.c:83-84, 8 bytes.
+        if(a.copy) { // Second entry: the 48 bytes after the NOP.
+            const uint64_t va=pushVa+copyPushOffset;
+            add(8,(va&0xffffffff)|((uint64_t(va>>32)|(copyPushBytes<<8))<<32)); // nouveau_dma.c:83-84.
+        }
+        break;
+    case Role::Push: {
+        add(0,nopHeader); // second word, NOP data, stays 0.
+        if(!a.copy)break;
+        const auto pair=[](uint32_t low,uint32_t high){return uint64_t(low)|(uint64_t(high)<<32);};
+        // nouveau_boa0b5.c:85 object; :48-59 eight methods from OFFSET_IN_UPPER; :61 immediate LAUNCH_DMA.
+        add(8,pair(methodHeader(1,1,copySubchannel,0),copyClass)); // nouveau_boa0b5.c:85.
+        add(16,pair(methodHeader(1,8,copySubchannel,copyOffsetIn),uint32_t(sourceVa>>32)&0xff)); // cla0b5.h:95 UPPER 7:0.
+        add(24,pair(uint32_t(sourceVa),uint32_t(destVa>>32)&0xff)); // cla0b5.h:96-99.
+        add(32,pair(uint32_t(destVa),copyBytes)); // cla0b5.h:100-102 OFFSET_OUT_LOWER, PITCH_IN.
+        add(40,pair(copyBytes,copyBytes)); // cla0b5.h:104-106 PITCH_OUT, LINE_LENGTH_IN.
+        add(48,pair(1,methodHeader(4,copyLaunch,copySubchannel,copyLaunchMethod))); // cla0b5.h:108 LINE_COUNT 1; nouveau_boa0b5.c:61.
+        break;
+    }
     case Role::Runlist:add(0,chid);break; // fifo/gk104.c:454-455 channel ID, then 0.
     case Role::Userd:break; // all zero: GP_GET and GP_PUT start at 0 (gf100_chan_userd_clear).
     default:return 0;

@@ -19,15 +19,29 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools/haiku"))
 from tools.a7 import build as a7, crypto_sources, runtime_export
 from tools.a7.guest_job import job as a7_job
-from tools.memstage import contract, pci
+from tools.memstage import contract, pci, stage
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
-PACKAGE = ROOT / "build/memstage/package-s1c"
-PUBLIC = ROOT / "work/S1CHANNEL3/package.json"
-PLAN = ROOT / "work/S1CHANNEL3/phase-plan.json"
-INVENTORY = ROOT / "work/S1CHANNEL3/write-inventory.json"
-STAGE = "BATCH1_A7_BAR1_VRAM"
+# K40_MEM_STAGE selects the stage (tools/memstage/stage.py). Each stage has its
+# own package, key, nonce and records. The S1 names stay as they were.
+PACKAGE = ROOT / "build/memstage" / stage.CURRENT["package"]
+WORK = ROOT / "work" / stage.CURRENT["work"]
+PUBLIC = WORK / "package.json"
+PLAN = WORK / "phase-plan.json"
+INVENTORY = WORK / "write-inventory.json"
+STAGE = dict(s1="BATCH1_A7_BAR1_VRAM", s2="S2_A7_BAR1_CHANNEL_COPY", s2d="S2D_A7_BAR1_CHANNEL_COPY_DIAGNOSTIC", s3a="S3A_A7_BAR1_GR_GOLDEN",
+             s3b="S3B_A7_BAR1_GR_COMPUTE", s3c="S3C_A7_BAR1_GR_BIND", s3d="S3D_A7_BAR1_GR_SETUP",
+             s3e="S3E_A7_BAR1_GR_BIND_ALIGNED", s3g="S3G_A7_BAR1_GR_IMAGE",
+             s3o="S3O_A7_BAR1_GR_BIND_OBSERVED", s3p="S3P_A7_BAR1_GR_BIND_REGISTERS",
+             s3q="S3Q_A7_BAR1_GR_BIND_REPORT",
+             s3r="S3R_A7_BAR1_GR_BIND_NO_LIST",
+             s3s="S3S_A7_BAR1_GR_BIND_LIST34",
+             s3t="S3T_A7_BAR1_GR_BIND_FULL_LIST", s3u="S3U_A7_BAR1_GR_COMPUTE_ALIGNED",
+             s3v="S3V_A7_BAR1_GR_COMPUTE_FAULT",
+             s3w="S3W_A7_BAR1_GR_COMPUTE_QMD",
+             s3x="S3X_A7_BAR1_GR_RECOVER",
+             s3y="S3Y_A7_BAR1_GR_COMPUTE_REPEAT")[stage.NAME]
 ROM = Path(
     os.environ.get(
         "K40_VBIOS",
@@ -40,9 +54,13 @@ CORE = tuple(
     p.relative_to(ROOT).as_posix()
     for p in sorted((ROOT / "src/memstage").glob("*.cpp"))
 )
+# The S3 stage: runner, guard and stage sources. The op tables and launch images
+# (ProgramData.cpp) are generated into the package folder by tools/gr/program.py.
+GR = tuple(p.relative_to(ROOT).as_posix() for p in sorted((ROOT / "src/gr").glob("*.cpp")))
 OWNER = (
     "src/memory/VramArena.cpp",
     *CORE,
+    *GR,
     "src/memauth/Session.cpp",
     "src/memnative/Policy.cpp",
     "src/memnative/NativeIo.cpp",
@@ -121,12 +139,14 @@ def source_names():
         for p in (ROOT / "tests").glob("*mem*")
         if p.suffix in (".cpp", ".h", ".py")
     )
-    for directory in ("src/memory", "src/memauth", "src/memnative", "src/memstage"):
+    for directory in ("src/memory", "src/memauth", "src/memnative", "src/memstage", "src/gr"):
         names.update(
             p.relative_to(ROOT).as_posix()
             for p in (ROOT / directory).glob("*")
             if p.suffix in (".h", ".cpp")
         )
+    names.update(p.relative_to(ROOT).as_posix() for p in (ROOT / "tools/gr").glob("*.py"))
+    names.update(("firmware/compute_add1.bin", "analysis/linux_run_shader.json", "reference/linux-run/mmiotrace.txt.xz"))
     names.update(
         p.relative_to(ROOT).as_posix()
         for p in (ROOT / "tools/memstage").glob("*")
@@ -338,7 +358,7 @@ def plan(child, sources):
             poll_us=2000000,
             polls=100000,
             events=4096,
-            arena_records=16,
+            arena_records=32,
         ),
         exclusions=[
             "BAR2",
@@ -371,6 +391,7 @@ def config(public, nonce, digest, vram):
         + array("memoryNonce", nonce)
         + array("memoryPlan", digest)
         + f"static const uint64_t memoryVram={vram}ULL;\n"
+        + f"static const unsigned memoryStage={stage.CURRENT['number']};\n"
     )
 
 
@@ -444,8 +465,13 @@ def build():
     (PACKAGE / "mem_config.h").write_text(
         config(memoryPublic, memoryNonce, digest, total)
     )
+    # The GR program: generated from the pinned Nouveau and Mesa trees and checked
+    # against the reference trace by the generator itself, on every build.
+    subprocess.run([sys.executable, "tools/gr/program.py", "--output", str(PACKAGE / "gr")], cwd=ROOT, check=True)
     paths = dict(
-        memory_owner=compile_driver("k40_batch_mem_owner", [*OWNER, *crypto], PACKAGE),
+        memory_owner=compile_driver(
+            "k40_batch_mem_owner", [*OWNER, str(PACKAGE / "gr/ProgramData.cpp"), *crypto], PACKAGE
+        ),
         memory_client=compile_driver(
             "k40_batch_mem_stage", ["tools/haiku/selftest/memory_client.cpp"], PACKAGE
         ),
@@ -509,6 +535,7 @@ def build():
         or contract.frozen() != frozen
     ):
         raise ValueError("sources changed during build")
+    WORK.mkdir(parents=True, exist_ok=True)
     PUBLIC.write_text(dump(suite))
     PLAN.write_text(dump(compiledPlan))
     INVENTORY.write_text(dump(generated_inventory(data)))

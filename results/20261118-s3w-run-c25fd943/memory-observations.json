@@ -1,0 +1,236 @@
+{
+  "S1_complete": false,
+  "S2_complete": false,
+  "S3_bind_complete": true,
+  "S3_complete": true,
+  "S3_golden_complete": true,
+  "S3_image_printed": false,
+  "S3_list_count": null,
+  "S3_observed": false,
+  "S3_register_list": true,
+  "S3_setup_complete": true,
+  "allocations": [
+    {
+      "bytes": 131072,
+      "generation": 1,
+      "id": 1,
+      "physical": 266240,
+      "role": 1
+    },
+    {
+      "bytes": 131072,
+      "generation": 1,
+      "id": 2,
+      "physical": 397312,
+      "role": 2
+    },
+    {
+      "bytes": 4096,
+      "generation": 3,
+      "id": 3,
+      "physical": 528384,
+      "role": 6
+    },
+    {
+      "bytes": 4096,
+      "generation": 3,
+      "id": 4,
+      "physical": 532480,
+      "role": 7
+    },
+    {
+      "bytes": 65536,
+      "generation": 2,
+      "id": 5,
+      "physical": 536576,
+      "role": 3
+    },
+    {
+      "bytes": 262144,
+      "generation": 6,
+      "id": 6,
+      "physical": 602112,
+      "role": 4
+    },
+    {
+      "bytes": 4096,
+      "generation": 3,
+      "id": 7,
+      "physical": 864256,
+      "role": 5
+    },
+    {
+      "bytes": 65536,
+      "generation": 2,
+      "id": 8,
+      "physical": 868352,
+      "role": 8
+    },
+    {
+      "bytes": 262144,
+      "generation": 2,
+      "id": 9,
+      "physical": 933888,
+      "role": 9
+    },
+    {
+      "bytes": 4096,
+      "generation": 18,
+      "id": 10,
+      "physical": 1196032,
+      "role": 10
+    },
+    {
+      "bytes": 4096,
+      "generation": 1,
+      "id": 11,
+      "physical": 1200128,
+      "role": 11
+    },
+    {
+      "bytes": 4096,
+      "generation": 2,
+      "id": 12,
+      "physical": 1204224,
+      "role": 12
+    },
+    {
+      "bytes": 4096,
+      "generation": 2,
+      "id": 13,
+      "physical": 1208320,
+      "role": 13
+    },
+    {
+      "bytes": 4096,
+      "generation": 2,
+      "id": 14,
+      "physical": 1212416,
+      "role": 14
+    },
+    {
+      "bytes": 524288,
+      "generation": 2,
+      "id": 15,
+      "physical": 1216512,
+      "role": 17
+    },
+    {
+      "bytes": 63438848,
+      "generation": 0,
+      "id": 16,
+      "physical": 1740800,
+      "role": 18
+    },
+    {
+      "bytes": 131072,
+      "generation": 1,
+      "id": 17,
+      "physical": 65179648,
+      "role": 19
+    },
+    {
+      "bytes": 4096,
+      "generation": 2,
+      "id": 18,
+      "physical": 65310720,
+      "role": 20
+    },
+    {
+      "bytes": 4096,
+      "generation": 2,
+      "id": 19,
+      "physical": 65314816,
+      "role": 21
+    },
+    {
+      "bytes": 4096,
+      "generation": 2,
+      "id": 20,
+      "physical": 65318912,
+      "role": 22
+    },
+    {
+      "bytes": 4096,
+      "generation": 1,
+      "id": 21,
+      "physical": 65323008,
+      "role": 23
+    },
+    {
+      "bytes": 32768,
+      "generation": 0,
+      "id": 22,
+      "physical": 65327104,
+      "role": 24
+    },
+    {
+      "bytes": 12288,
+      "generation": 0,
+      "id": 23,
+      "physical": 65359872,
+      "role": 25
+    },
+    {
+      "bytes": 1372160,
+      "generation": 0,
+      "id": 24,
+      "physical": 65372160,
+      "role": 26
+    },
+    {
+      "bytes": 847872,
+      "generation": 1,
+      "id": 25,
+      "physical": 66744320,
+      "role": 27
+    },
+    {
+      "bytes": 4096,
+      "generation": 4,
+      "id": 26,
+      "physical": 67592192,
+      "role": 28
+    },
+    {
+      "bytes": 323584,
+      "generation": 22,
+      "id": 27,
+      "physical": 67596288,
+      "role": 29
+    }
+  ],
+  "closure": "owned BAR1 disabled; channel unbound; GR engine left started; all storage retained until reviewed guest/VFIO end",
+  "events": 702,
+  "gr": {
+    "aligned": true,
+    "context_va": 336855040,
+    "entry": "full",
+    "golden_image_words": [
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    "guard_position": [
+      6,
+      7
+    ],
+    "image": null,
+    "launch": true,
+    "observe": {
+      "baseline": true,
+      "fault_units": 0,
+      "samples": 0
+    },
+    "program_ops": 6277,
+    "records": 13,
+    "total_us": 1929744
+  },
+  "owner": 1635910833493794877,
+  "scope": "S3w: as S3v with the launch descriptor mapped writable, and before each result read the MMU fault status (no fault pending); one compute job, out[i] = in[i] + 1 for 1024 elements, every element checked by slow-window readback, no fault, clean teardown; no host DMA payload proof"
+}

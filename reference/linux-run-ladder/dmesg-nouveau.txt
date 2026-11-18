@@ -1,0 +1,21 @@
+[    1.623185] ACPI: bus type drm_connector registered
+[    1.714425] [drm] Initialized simpledrm 1.0.0 20200625 for simple-framebuffer.0 on minor 0
+[    1.727867] simple-framebuffer simple-framebuffer.0: [drm] fb0: simpledrmdrmfb frame buffer device
+[    2.283435] bochs-drm 0000:00:01.0: vgaarb: deactivate vga console
+[    2.287227] [drm] Found bochs VGA, ID 0xb0c5.
+[    2.288827] [drm] Framebuffer size 16384 kB @ 0xc0000000, mmio @ 0xc2083000.
+[    2.296349] [drm] Found EDID data blob.
+[    2.315098] [drm] Initialized bochs-drm 1.0.0 20130925 for 0000:00:01.0 on minor 0
+[    2.333035] fbcon: bochs-drmdrmfb (fb0) is primary device
+[    2.363711] bochs-drm 0000:00:01.0: [drm] fb0: bochs-drmdrmfb frame buffer device
+[    4.354952] systemd[1]: Starting modprobe@drm.service - Load Kernel Module drm...
+[   14.840896] nouveau 0000:00:03.0: NVIDIA GK110B (0f1240a1)
+[   15.399408] nouveau 0000:00:03.0: bios: version 80.80.65.00.01
+[   15.518210] nouveau 0000:00:03.0: fb: 11520 MiB GDDR5
+[   16.984512] nouveau 0000:00:03.0: DRM: VRAM: 11520 MiB
+[   16.984525] nouveau 0000:00:03.0: DRM: GART: 1048576 MiB
+[   16.984531] nouveau 0000:00:03.0: DRM: TMDS table version 2.0
+[   19.435837] nouveau 0000:00:03.0: DRM: MM: using COPY for buffer copies
+[   19.450357] [drm] Initialized nouveau 1.4.0 20120801 for 0000:00:03.0 on minor 1
+[   19.511559] nouveau 0000:00:03.0: [drm] No compatible format found
+[   19.511564] nouveau 0000:00:03.0: [drm] Cannot find any crtc or sizes

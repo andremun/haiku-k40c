@@ -1,0 +1,196 @@
+[  705.771231] uld-jvnhw22.mobility.unimelb.net.au kernel: audit: type=1400 audit(1794793938.943:138): apparmor="ALLOWED" operation="open" class="file" profile="/usr/sbin/sssd" name="/etc/selinux/semanage.conf" pid=25822 comm="selinux_child" requested_mask="r" denied_mask="r" fsuid=0 ouid=0
+[    0.014904] uld-jvnhw22.mobility.unimelb.net.au kernel: ACPI: DMAR 0x0000000028FFF170 000108 (v01 A M I  OEMDMAR  00000001 INTL 00000001)
+[    0.014930] uld-jvnhw22.mobility.unimelb.net.au kernel: ACPI: Reserving DMAR table memory at [mem 0x28fff170-0x28fff277]
+[    0.615803] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: Host address width 46
+[    0.615805] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: DRHD base: 0x000000fbffe000 flags: 0x0
+[    0.615819] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: dmar0: reg_base_addr fbffe000 ver 1:0 cap d2078c106f0466 ecap f020de
+[    0.615822] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: DRHD base: 0x000000c3ffc000 flags: 0x1
+[    0.615827] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: dmar1: reg_base_addr c3ffc000 ver 1:0 cap d2078c106f0466 ecap f020de
+[    0.615830] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: RMRR base: 0x0000002c6c2000 end: 0x0000002c6e8fff
+[    0.615833] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: ATSR flags: 0x0
+[    0.615836] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: RHSA base: 0x000000fbffe000 proximity domain: 0x1
+[    0.615838] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: RHSA base: 0x000000c3ffc000 proximity domain: 0x0
+[    0.615842] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR-IR: IOAPIC id 3 under DRHD base  0xfbffe000 IOMMU 0
+[    0.615845] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR-IR: IOAPIC id 0 under DRHD base  0xc3ffc000 IOMMU 1
+[    0.615847] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR-IR: IOAPIC id 2 under DRHD base  0xc3ffc000 IOMMU 1
+[    0.615849] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR-IR: HPET id 0 under DRHD base 0xc3ffc000
+[    0.615851] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR-IR: Queued invalidation will be enabled to support x2apic and Intr-remapping.
+[    0.616837] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR-IR: Enabled IRQ remapping in x2apic mode
+[    1.027434] uld-jvnhw22.mobility.unimelb.net.au kernel: acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug AER PCIeCapability]
+[    1.032773] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:04:00.0: [10de:1024] type 00 class 0x030200 PCIe Endpoint
+[    1.032801] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:04:00.0: BAR 0 [mem 0xc1000000-0xc1ffffff]
+[    1.032805] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:04:00.0: BAR 1 [mem 0x20fc0000000-0x20fcfffffff 64bit pref]
+[    1.032809] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:04:00.0: BAR 3 [mem 0x20fd0000000-0x20fd1ffffff 64bit pref]
+[    1.032818] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:04:00.0: enabling Extended Tags
+[    1.032910] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:04:00.0: 32.000 Gb/s available PCIe bandwidth, limited by 2.5 GT/s PCIe x16 link at 0000:00:03.0 (capable of 126.016 Gb/s with 8.0 GT/s PCIe x16 link)
+[    1.035578] uld-jvnhw22.mobility.unimelb.net.au kernel: acpi PNP0A03:00: _OSC: OS now controls [PCIeHotplug SHPCHotplug PME AER PCIeCapability LTR DPC]
+[    1.040411] uld-jvnhw22.mobility.unimelb.net.au kernel: acpi PNP0A08:01: _OSC: OS now controls [PCIeHotplug AER PCIeCapability]
+[    1.042626] uld-jvnhw22.mobility.unimelb.net.au kernel: acpi PNP0A03:01: _OSC: OS now controls [PCIeHotplug SHPCHotplug PME AER PCIeCapability LTR DPC]
+[    1.052817] uld-jvnhw22.mobility.unimelb.net.au kernel: iommu: Default domain type: Translated
+[    1.052820] uld-jvnhw22.mobility.unimelb.net.au kernel: iommu: DMA domain TLB invalidation policy: lazy mode
+[    1.131015] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: No SATC found
+[    1.131020] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: dmar0: Using Queued invalidation
+[    1.131038] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: dmar1: Using Queued invalidation
+[    1.131176] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:80:02.0: Adding to iommu group 0
+[    1.131213] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:80:03.0: Adding to iommu group 1
+[    1.131298] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:81:00.0: Adding to iommu group 2
+[    1.131344] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:81:00.1: Adding to iommu group 2
+[    1.132637] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:00.0: Adding to iommu group 3
+[    1.132675] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:01.0: Adding to iommu group 4
+[    1.132712] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:01.1: Adding to iommu group 5
+[    1.132746] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:02.0: Adding to iommu group 6
+[    1.132779] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:03.0: Adding to iommu group 7
+[    1.132812] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:05.0: Adding to iommu group 8
+[    1.132850] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:05.2: Adding to iommu group 9
+[    1.132883] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:05.4: Adding to iommu group 10
+[    1.132916] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:11.0: Adding to iommu group 11
+[    1.132975] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:16.0: Adding to iommu group 12
+[    1.133007] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:19.0: Adding to iommu group 13
+[    1.133039] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:1a.0: Adding to iommu group 14
+[    1.133071] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:1b.0: Adding to iommu group 15
+[    1.133105] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:1c.0: Adding to iommu group 16
+[    1.133147] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:1c.1: Adding to iommu group 17
+[    1.133200] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:1d.0: Adding to iommu group 18
+[    1.133243] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:1e.0: Adding to iommu group 19
+[    1.133360] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:1f.0: Adding to iommu group 20
+[    1.133394] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:1f.2: Adding to iommu group 20
+[    1.133427] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:00:1f.3: Adding to iommu group 20
+[    1.133461] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:01:00.0: Adding to iommu group 21
+[    1.133497] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:03:00.0: Adding to iommu group 22
+[    1.133531] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:04:00.0: Adding to iommu group 23
+[    1.133564] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:06:00.0: Adding to iommu group 24
+[    1.133600] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:07:00.0: Adding to iommu group 25
+[    1.133658] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:08.0: Adding to iommu group 26
+[    1.133715] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:09.0: Adding to iommu group 27
+[    1.133847] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0a.0: Adding to iommu group 28
+[    1.133885] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0a.1: Adding to iommu group 28
+[    1.133921] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0a.2: Adding to iommu group 28
+[    1.133956] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0a.3: Adding to iommu group 28
+[    1.134038] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0b.0: Adding to iommu group 29
+[    1.134074] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0b.3: Adding to iommu group 29
+[    1.134275] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0c.0: Adding to iommu group 30
+[    1.134313] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0c.1: Adding to iommu group 30
+[    1.134349] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0c.2: Adding to iommu group 30
+[    1.134385] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0c.3: Adding to iommu group 30
+[    1.134421] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0c.4: Adding to iommu group 30
+[    1.134457] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0c.5: Adding to iommu group 30
+[    1.134641] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0d.0: Adding to iommu group 31
+[    1.134679] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0d.1: Adding to iommu group 31
+[    1.134715] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0d.2: Adding to iommu group 31
+[    1.134752] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0d.3: Adding to iommu group 31
+[    1.134791] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0d.4: Adding to iommu group 31
+[    1.134828] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0d.5: Adding to iommu group 31
+[    1.134912] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0e.0: Adding to iommu group 32
+[    1.134950] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0e.1: Adding to iommu group 32
+[    1.134983] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0f.0: Adding to iommu group 33
+[    1.135015] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0f.1: Adding to iommu group 34
+[    1.135049] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0f.2: Adding to iommu group 35
+[    1.135082] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0f.3: Adding to iommu group 36
+[    1.135114] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0f.4: Adding to iommu group 37
+[    1.135154] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:0f.5: Adding to iommu group 38
+[    1.135189] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:10.0: Adding to iommu group 39
+[    1.135222] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:10.1: Adding to iommu group 40
+[    1.135258] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:10.2: Adding to iommu group 41
+[    1.135294] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:10.3: Adding to iommu group 42
+[    1.135326] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:10.4: Adding to iommu group 43
+[    1.135359] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:10.5: Adding to iommu group 44
+[    1.135391] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:10.6: Adding to iommu group 45
+[    1.135426] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:10.7: Adding to iommu group 46
+[    1.135558] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:13.0: Adding to iommu group 47
+[    1.135600] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:13.1: Adding to iommu group 47
+[    1.135641] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:13.4: Adding to iommu group 47
+[    1.135682] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:13.5: Adding to iommu group 47
+[    1.135798] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:16.0: Adding to iommu group 48
+[    1.135842] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:16.1: Adding to iommu group 48
+[    1.135883] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:16.2: Adding to iommu group 48
+[    1.135965] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1c.0: Adding to iommu group 49
+[    1.136007] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1c.1: Adding to iommu group 49
+[    1.136044] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1d.0: Adding to iommu group 50
+[    1.136077] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1d.1: Adding to iommu group 51
+[    1.136109] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1d.2: Adding to iommu group 52
+[    1.136160] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1d.3: Adding to iommu group 53
+[    1.136194] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1d.4: Adding to iommu group 54
+[    1.136229] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1d.5: Adding to iommu group 55
+[    1.136262] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1e.0: Adding to iommu group 56
+[    1.136295] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1e.1: Adding to iommu group 57
+[    1.136327] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1e.2: Adding to iommu group 58
+[    1.136362] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1e.3: Adding to iommu group 59
+[    1.136395] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1e.4: Adding to iommu group 60
+[    1.136427] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1e.5: Adding to iommu group 61
+[    1.136462] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1e.6: Adding to iommu group 62
+[    1.136495] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:7f:1e.7: Adding to iommu group 63
+[    1.136530] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:80:05.0: Adding to iommu group 64
+[    1.136565] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:80:05.2: Adding to iommu group 65
+[    1.136598] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:80:05.4: Adding to iommu group 66
+[    1.136656] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:08.0: Adding to iommu group 67
+[    1.136713] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:09.0: Adding to iommu group 68
+[    1.136848] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0a.0: Adding to iommu group 69
+[    1.136894] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0a.1: Adding to iommu group 69
+[    1.136940] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0a.2: Adding to iommu group 69
+[    1.136986] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0a.3: Adding to iommu group 69
+[    1.137068] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0b.0: Adding to iommu group 70
+[    1.137115] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0b.3: Adding to iommu group 70
+[    1.137307] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0c.0: Adding to iommu group 71
+[    1.137355] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0c.1: Adding to iommu group 71
+[    1.137402] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0c.2: Adding to iommu group 71
+[    1.137450] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0c.3: Adding to iommu group 71
+[    1.137497] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0c.4: Adding to iommu group 71
+[    1.137544] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0c.5: Adding to iommu group 71
+[    1.137729] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0d.0: Adding to iommu group 72
+[    1.137777] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0d.1: Adding to iommu group 72
+[    1.137826] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0d.2: Adding to iommu group 72
+[    1.137874] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0d.3: Adding to iommu group 72
+[    1.137922] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0d.4: Adding to iommu group 72
+[    1.137970] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0d.5: Adding to iommu group 72
+[    1.138057] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0e.0: Adding to iommu group 73
+[    1.138108] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0e.1: Adding to iommu group 73
+[    1.138148] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0f.0: Adding to iommu group 74
+[    1.138181] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0f.1: Adding to iommu group 75
+[    1.138216] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0f.2: Adding to iommu group 76
+[    1.138249] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0f.3: Adding to iommu group 77
+[    1.138281] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0f.4: Adding to iommu group 78
+[    1.138315] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:0f.5: Adding to iommu group 79
+[    1.138348] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:10.0: Adding to iommu group 80
+[    1.138381] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:10.1: Adding to iommu group 81
+[    1.138413] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:10.2: Adding to iommu group 82
+[    1.138448] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:10.3: Adding to iommu group 83
+[    1.138480] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:10.4: Adding to iommu group 84
+[    1.138513] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:10.5: Adding to iommu group 85
+[    1.138547] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:10.6: Adding to iommu group 86
+[    1.138580] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:10.7: Adding to iommu group 87
+[    1.138716] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:13.0: Adding to iommu group 88
+[    1.138767] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:13.1: Adding to iommu group 88
+[    1.138819] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:13.4: Adding to iommu group 88
+[    1.138874] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:13.5: Adding to iommu group 88
+[    1.138984] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:16.0: Adding to iommu group 89
+[    1.139036] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:16.1: Adding to iommu group 89
+[    1.139088] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:16.2: Adding to iommu group 89
+[    1.139178] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1c.0: Adding to iommu group 90
+[    1.139233] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1c.1: Adding to iommu group 90
+[    1.139266] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1d.0: Adding to iommu group 91
+[    1.139299] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1d.1: Adding to iommu group 92
+[    1.139331] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1d.2: Adding to iommu group 93
+[    1.139366] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1d.3: Adding to iommu group 94
+[    1.139398] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1d.4: Adding to iommu group 95
+[    1.139431] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1d.5: Adding to iommu group 96
+[    1.139465] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1e.0: Adding to iommu group 97
+[    1.139498] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1e.1: Adding to iommu group 98
+[    1.139530] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1e.2: Adding to iommu group 99
+[    1.139563] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1e.3: Adding to iommu group 100
+[    1.139597] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1e.4: Adding to iommu group 101
+[    1.139630] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1e.5: Adding to iommu group 102
+[    1.139662] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1e.6: Adding to iommu group 103
+[    1.139696] uld-jvnhw22.mobility.unimelb.net.au kernel: pci 0000:ff:1e.7: Adding to iommu group 104
+[    1.192065] uld-jvnhw22.mobility.unimelb.net.au kernel: DMAR: Intel(R) Virtualization Technology for Directed I/O
+[    1.214471] uld-jvnhw22.mobility.unimelb.net.au kernel: pcieport 0000:00:01.0: AER: enabled with IRQ 25
+[    1.214862] uld-jvnhw22.mobility.unimelb.net.au kernel: pcieport 0000:00:01.1: AER: enabled with IRQ 26
+[    1.215247] uld-jvnhw22.mobility.unimelb.net.au kernel: pcieport 0000:00:02.0: AER: enabled with IRQ 28
+[    1.215606] uld-jvnhw22.mobility.unimelb.net.au kernel: pcieport 0000:00:03.0: AER: enabled with IRQ 30
+[    1.215924] uld-jvnhw22.mobility.unimelb.net.au kernel: pcieport 0000:00:11.0: AER: enabled with IRQ 31
+[    1.216871] uld-jvnhw22.mobility.unimelb.net.au kernel: pcieport 0000:80:02.0: AER: enabled with IRQ 33
+[    1.217299] uld-jvnhw22.mobility.unimelb.net.au kernel: pcieport 0000:80:03.0: AER: enabled with IRQ 35
+[    2.745063] uld-jvnhw22.mobility.unimelb.net.au kernel: VFIO - User Level meta-driver version: 0.3
+[  764.033489] uld-jvnhw22.mobility.unimelb.net.au kernel: vfio-pci 0000:04:00.0: enabling device (0000 -> 0002)
+[ 4311.314765] uld-jvnhw22.mobility.unimelb.net.au kernel: pcieport 0000:00:03.0: AER: Uncorrectable (Non-Fatal) error message received from 0000:00:03.0
+[ 4311.314783] uld-jvnhw22.mobility.unimelb.net.au kernel: pcieport 0000:00:03.0: PCIe Bus Error: severity=Uncorrectable (Non-Fatal), type=Transaction Layer, (Requester ID)
+[ 4311.314860] uld-jvnhw22.mobility.unimelb.net.au kernel: pcieport 0000:00:03.0: AER: device recovery successful

@@ -1,0 +1,88 @@
+{
+  "binding": {
+    "A7_artifacts": {
+      "client": {
+        "bytes": 7552,
+        "sha256": "d11b0d3773e8f1a206a98b79b85a1c6e7c73948dbe096001d472ef0ee66ee122"
+      },
+      "helper": {
+        "bytes": 3888,
+        "sha256": "58bec7c51730bf95f541c61c8ed9b8379b97f1c2b335702de0f9542698914977"
+      },
+      "identity": {
+        "bytes": 8696,
+        "sha256": "8c45ec7bf2a2a16f3981431a3d0e5ee3588cfa9df63429ea51b01cc93fdf9d2f"
+      },
+      "owner": {
+        "bytes": 368672,
+        "sha256": "d3ee65b22e26e9ae747aeea8a6f6cf0adb27f40126d828e1019e47f4a253304d"
+      }
+    },
+    "A7_job_sha256": "98cc3bd91f6f89fa084e58d85a78ba30c626f37eb496b5800893212fe9455554",
+    "guest_artifacts": {
+      "memory_client": {
+        "bytes": 7560,
+        "sha256": "04848c9711e9b373b55e70d1e9b9b8c7d8995b42f69a53c0cffad57d9750172e"
+      },
+      "memory_helper": {
+        "bytes": 3912,
+        "sha256": "bfcd73611a07737593597e7622f93d335455b73a6560f23caad9c450cbe00d3f"
+      },
+      "memory_owner": {
+        "bytes": 294432,
+        "sha256": "ebf577ef9ebd466a7557c645b2db77f836d9d33814ba1f07ec70b2285480432f"
+      },
+      "preflight": {
+        "bytes": 6424,
+        "sha256": "e5df732100e12bc34778beee436dd50101bf6140e065d8fc2ca38c1fcbc83ab5"
+      },
+      "preflight_helper": {
+        "bytes": 3936,
+        "sha256": "55ade2fbc1bc0a695a4c5e32a7c33ba18c21fd5c3c4aea54ae4fedc35dcc59d1"
+      }
+    },
+    "job_sha256": "2889c5ece504c0c1477183a3c9963c09abfe22dd67c359c63fb26649bfdd4de8",
+    "kernel_sha256": "2da9a5b98719b40a61893836fb9c9e393e92e44f470e8af2024e76d50e2d2c62",
+    "package_sha256": "2099b719d54ec5feecc8c034e71a72a3ffcc06813b4f0fee6a75c899c7007db8",
+    "plan_sha256": "1c831656bf8f2e272a7db7e2b92b43cb0c44c7195ec08a4168d443aed64800f3"
+  },
+  "capture_sha256": {
+    "README.md": "f0539d1bfaccff6dff529b77363089038ec8b4270f3ff3233cc5c7cf5edc484b",
+    "a7-serial-prefix.txt": "55ea9177b0f6979f1309962be6da6742f03669d430b215028fd59415d4880532",
+    "a7/environment.txt": "6fceaa9d8ef1adb95f3361a95a75113317ec281f58ec8d7214e87b19ff29bb41",
+    "a7/http.log": "10e5091c32874b1ca98b9cb6ce4dc0aa0c0b41a4816ddfafa690a1e52bb48c20",
+    "a7/job-output.txt": "3cb4b74458defd4a8c191dfc0f5cd683994bd8e3d3066339880ffe521fdc964e",
+    "a7/job.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "a7/job.sh": "8313e0dcf50364952d20118b493c5dfdb346b0d4b40592e396240ac621339d7e",
+    "a7/kernel.sha256": "9da8819b72502746d3f1db5eb718c2febc3685799a4a9248d82b362282bb1f7c",
+    "a7/serial.log": "a3cbaccc11a9f6e519dbe77c8708a1eff552066905ba26510ce7aa7fab8077be",
+    "child-result.txt": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "http.log": "fa5a61902e9fb790208f9e96c537802a3e6a64256807999f0e71aec1b54fce3b",
+    "job-output.txt": "44192b91bc00f07bb8bdb9b497fb97f45f655df54f3a83b09003ee16156ba083",
+    "job.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "job.sh": "19c0647be94fdd034c900163a49a6f3e76f5c68afe3f917a28b4a8d590baae1b",
+    "launch.json": "1c35a8d21a0ea39084744771a22a12c3af44cbeabd0b5f44d37127ff3c2955f6",
+    "memory-exit.txt": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "memory-install.txt": "c313682a33f549770cd6a889538f66cf23774b1c59c25350dd2d81bba1be09e7",
+    "memory-output.txt": "f4b5f39cd201d4af36dd7607de9d9ae8399883c1ae783e0965cfbc94437b113d",
+    "pci-cardless.json": "8fc94059fb9fd27d5e901cfceb8f6306a0ae6b049daebbeda70b5ce7ebcc5800",
+    "preflight-exit.txt": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "preflight-install.txt": "30fb1565e43c48fc4f820f64aaa835ac73b9003d4cd600a2dd1ff21963d9a954",
+    "preflight-output.txt": "5b5e997f166ec3dc0a70affacee0951ed29df859bb0af5d79d855e7c4b3c4e85",
+    "qemu.log": "591be09ffe8df18a4f3bfa24156b6d5879c74c5fd2747f92320fee9267b7de17",
+    "result.json": "154a21ee0ba5387485da3218b9ab7be0763eb18629632698204573e3827258d8",
+    "serial.log": "a3cbaccc11a9f6e519dbe77c8708a1eff552066905ba26510ce7aa7fab8077be"
+  },
+  "folder": "results/20261116-s3d-rehearsal-4b15227a",
+  "load_counts": {
+    "A7_client": 2,
+    "A7_owner": 1,
+    "identity": 2,
+    "memory_client": 2,
+    "memory_owner": 1,
+    "preflight": 2
+  },
+  "reload_command": "echo K40-BATCH-RELOAD-BEGIN > /dev/dprintf; touch /boot/system/non-packaged/add-ons/kernel/drivers/bin/k40_identity_probe /boot/system/non-packaged/add-ons/kernel/drivers/bin/k40_a7_stage /boot/system/non-packaged/add-ons/kernel/drivers/bin/k40_mem_stage; for pass in 1 2 3 4; do ls /dev/misc >/dev/null; sleep 1; done; echo K40-BATCH-RELOAD-END > /dev/dprintf",
+  "scope": "CARDLESS_ONLY install/open/no-card/reload; no physical mapping, DMA or BAR1 proof",
+  "status": "PASS_CARDLESS_NO_CARD"
+}
